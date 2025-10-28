@@ -1,0 +1,24 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"
+        API 5: POST /api/searchProduct with 'search_product=top'.
+        NOTE: Based on manual observation, the API returns a 400 responseCode in the body
+        with a ""parameter missing"" message, even when the parameter is provided.
+        This test reflects the CURRENT, potentially unexpected, API behavior.
+        ","375","Search product with valid parameter, but API returns 'Bad Request' (API 5)","tests","Mon Oct 27 12:49:00 IST 2025","passed","Mon Oct 27 12:49:00 IST 2025","TestProductSearchAPI","test_search","",""
+"API 4: PUT /api/brandsList → 405 Method Not Allowed (indicated in response body).","337","Attempt PUT to /api/brandsList - Method Not Allowed (API 4)","tests","Mon Oct 27 12:48:59 IST 2025","passed","Mon Oct 27 12:48:59 IST 2025","TestBrandAPI","test_brands","",""
+"API 9: DELETE /verifyLogin → 405 Method Not Allowed (indicated in response body).","348","Attempt DELETE to /api/verifyLogin - Method Not Allowed (API 9)","tests","Mon Oct 27 12:48:58 IST 2025","passed","Mon Oct 27 12:48:58 IST 2025","TestAuthenticationAPI","test_auth","",""
+"
+        API 11: POST /createAccount → 200/201 User created!
+        NOTE: Current API behavior appears to return a 'Bad request, name parameter is missing'
+        even when 'name' is provided in the payload. This test reflects that observed behavior.
+        ","1182","Create new user account (API 11) - Observing current API behavior","tests","Mon Oct 27 12:48:56 IST 2025","passed","Mon Oct 27 12:48:57 IST 2025","TestAuthenticationAPI","test_auth","",""
+"API 1: GET /api/productsList → 200 with products list.","419","Get all products list successfully (API 1)","tests","Mon Oct 27 12:48:59 IST 2025","passed","Mon Oct 27 12:48:59 IST 2025","TestProductAPI","test_products","",""
+"API 3: GET /api/brandsList → 200 with brands list.","357","Get all brands list successfully (API 3)","tests","Mon Oct 27 12:48:58 IST 2025","passed","Mon Oct 27 12:48:59 IST 2025","TestBrandAPI","test_brands","",""
+"
+        API 7: POST /verifyLogin with specific invalid creds (test@example.com)
+        → 200 HTTP, 400 application code for 'Bad request, email or password parameter is missing'.
+        ","373","Verify login with known invalid credentials (test@example.com) (API 7)","tests","Mon Oct 27 12:48:57 IST 2025","passed","Mon Oct 27 12:48:57 IST 2025","TestAuthenticationAPI","test_auth","",""
+"API 10: POST /verifyLogin with invalid creds → Check application-level error.","351","Verify login with arbitrary invalid credentials (API 10)","tests","Mon Oct 27 12:48:57 IST 2025","passed","Mon Oct 27 12:48:58 IST 2025","TestAuthenticationAPI","test_auth","",""
+"API 2: POST /api/productsList → 405 Method Not Allowed (indicated in response body).","344","Attempt POST to /api/productsList - Method Not Allowed (API 2)","tests","Mon Oct 27 12:48:59 IST 2025","passed","Mon Oct 27 12:49:00 IST 2025","TestProductAPI","test_products","",""
+"API 6: POST /api/searchProduct without param → 400 (indicated in response body).","330","Search product with missing 'search_product' parameter (API 6)","tests","Mon Oct 27 12:49:00 IST 2025","passed","Mon Oct 27 12:49:00 IST 2025","TestProductSearchAPI","test_search","",""
+"API 8: POST /verifyLogin without email → 400 Bad request.","346","Verify login with missing email parameter (API 8)","tests","Mon Oct 27 12:48:58 IST 2025","passed","Mon Oct 27 12:48:58 IST 2025","TestAuthenticationAPI","test_auth","",""

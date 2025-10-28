@@ -1,0 +1,2 @@
+API Response for test@example.com: {'responseCode': 400, 'message': 'Bad request, email or password parameter is missing in POST request.'}
+Test passed: API correctly returned bad request for 'test@example.com'.

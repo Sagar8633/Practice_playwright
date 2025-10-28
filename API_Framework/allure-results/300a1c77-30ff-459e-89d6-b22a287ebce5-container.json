@@ -1,0 +1,1 @@
+{"uuid": "49f5504f-c060-4d01-911f-7a271fc2830c", "children": ["64c3a593-d0d5-499b-ad9c-1f27d58611c4"], "befores": [{"name": "api_with_allure_logging", "status": "passed", "start": 1761293399832, "stop": 1761293399832}], "start": 1761293399832, "stop": 1761293400187}

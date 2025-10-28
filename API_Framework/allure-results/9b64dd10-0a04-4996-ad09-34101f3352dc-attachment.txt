@@ -1,0 +1,1 @@
+Test passed: API returned expected bad request message for invalid login.

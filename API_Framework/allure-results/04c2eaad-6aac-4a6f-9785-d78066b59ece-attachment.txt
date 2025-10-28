@@ -1,0 +1,6 @@
+Status: 200 OK
+URL: https://automationexercise.com/api/verifyLogin
+Response Body (partial): {
+  "responseCode": 405,
+  "message": "This request method is not supported."
+}...

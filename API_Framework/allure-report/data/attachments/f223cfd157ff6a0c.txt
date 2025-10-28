@@ -1,0 +1,3 @@
+URL: /api/searchProduct1
+Method: POST
+Data (form/body): {'search_product': 'topicana_sagar'}

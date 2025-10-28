@@ -1,0 +1,3 @@
+URL: /api/verifyLogin
+Method: POST
+Data (form/body): {'email': 'fake@invalid.com', 'password': 'wrongpass'}

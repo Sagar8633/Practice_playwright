@@ -1,0 +1,31 @@
+Status: 200 OK
+URL: https://automationexercise.com/api/productsList
+Response Body (partial): {
+  "responseCode": 200,
+  "products": [
+    {
+      "id": 1,
+      "name": "Blue Top",
+      "price": "Rs. 500",
+      "brand": "Polo",
+      "category": {
+        "usertype": {
+          "usertype": "Women"
+        },
+        "category": "Tops"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Men Tshirt",
+      "price": "Rs. 400",
+      "brand": "H&M",
+      "category": {
+        "usertype": {
+          "usertype": "Men"
+        },
+        "category": "Tshirts"
+      }
+    },
+    {
+      "id...

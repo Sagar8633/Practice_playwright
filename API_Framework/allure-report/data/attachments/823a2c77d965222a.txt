@@ -1,0 +1,2 @@
+URL: /api/productsList
+Method: GET

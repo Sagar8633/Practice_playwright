@@ -1,0 +1,3 @@
+URL: /api/createAccount
+Method: POST
+Data (form/body): {'name': 'John Doe', 'email': 'test_86cd001e81@example.com', 'password': 'Pass123!', 'title': 'Mr', 'first_name': 'John', 'last_name': 'Doe', 'company': 'Test Inc', 'address1': '123 Main St', 'address2': '', 'country': 'United States', 'state': 'NY', 'city': 'New York', 'zipcode': '10001', 'mobile_number': '1234567890', 'dob': '1990-05-05'}

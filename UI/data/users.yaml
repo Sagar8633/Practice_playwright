@@ -1,0 +1,93 @@
+users:
+  - test_name: "register_new_user"
+    name: "Test User"
+    email: "testuser+001@example.com"
+    title: "Mr"
+    password: "Password123"
+    dob:
+      day: "10"
+      month: "May"
+      year: "1990"
+    newsletter: true
+    offers: true
+    first_name: "Test"
+    last_name: "User"
+    company: "Automation Inc"
+    address1: "123 Main Street"
+    address2: "Apt 4B"
+    country: "United States"
+    state: "California"
+    city: "Los Angeles"
+    zipcode: "90001"
+    mobile_number: "+1234567890"
+
+login_users:
+  - test_name: "login_user_correct_credentials"
+    name: "Login User"
+    email_prefix: "testuser.login"
+    title: "Mr"
+    password: "Password123"
+    dob:
+      day: "15"
+      month: "June"
+      year: "1992"
+    newsletter: false
+    offers: false
+    first_name: "Login"
+    last_name: "User"
+    company: "Automation Inc"
+    address1: "456 Elm Street"
+    address2: "Suite 100"
+    country: "United States"
+    state: "California"
+    city: "San Francisco"
+    zipcode: "94105"
+    mobile_number: "+1234567891"
+
+invalid_login_users:
+  - test_name: "login_user_incorrect_credentials"
+    email: "invalid_user@example.com"
+    password: "WrongPassword123"
+
+invalid_signup_users:
+  - test_name: "register_user_existing_email"
+    name: "Existing Email User"
+    email_prefix: "testuser.existing"
+    title: "Mr"
+    password: "Password123"
+    dob:
+      day: "20"
+      month: "July"
+      year: "1991"
+    newsletter: false
+    offers: false
+    first_name: "Existing"
+    last_name: "User"
+    company: "Automation Inc"
+    address1: "789 Oak Avenue"
+    address2: "Suite 200"
+    country: "United States"
+    state: "New York"
+    city: "New York"
+    zipcode: "10001"
+    mobile_number: "+1234567892"
+
+contact_us_users:
+  - test_name: "contact_us_form"
+    name: "Contact Test User"
+    email: "contacttest@example.com"
+    subject: "Test Subject"
+    message: "This is a test message for contact us form submission."
+    file_name: "test_file.txt"
+
+search_products:
+  - test_name: "search_product_tshirt"
+    product_name: "Tshirt"
+  - test_name: "search_product_jean"
+    product_name: "Jean"
+
+subscription_emails:
+  - test_name: "subscribe_email_001"
+    email: "subscription_test_001@example.com"
+  - test_name: "subscribe_email_002"
+    email: "subscription_test_002@example.com"

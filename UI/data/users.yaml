@@ -43,6 +43,7 @@ login_users:
     city: "San Francisco"
     zipcode: "94105"
     mobile_number: "+1234567891"
+    comment: "Please deliver during business hours. Handle with care."
 
 invalid_login_users:
   - test_name: "login_user_incorrect_credentials"
@@ -91,3 +92,35 @@ subscription_emails:
     email: "subscription_test_001@example.com"
   - test_name: "subscribe_email_002"
     email: "subscription_test_002@example.com"
+
+checkout_users:
+  - test_name: "place_order_register_before_checkout"
+    name: "Checkout Test User"
+    email_prefix: "testuser.checkout"
+    title: "Mr"
+    password: "Password123"
+    dob:
+      day: "12"
+      month: "March"
+      year: "1993"
+    newsletter: true
+    offers: true
+    first_name: "Checkout"
+    last_name: "User"
+    company: "Test Automation Inc"
+    address1: "123 Commerce Street"
+    address2: "Suite 500"
+    country: "United States"
+    state: "Texas"
+    city: "Houston"
+    zipcode: "77001"
+    mobile_number: "+1987654321"
+    comment: "Please deliver during business hours."
+
+payment_data:
+  - test_name: "valid_payment_info"
+    name_on_card: "Test User"
+    card_number: "4111111111111111"
+    cvc: "123"
+    expiry_month: "12"
+    expiry_year: "2026"

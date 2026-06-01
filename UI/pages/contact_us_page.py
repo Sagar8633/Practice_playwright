@@ -42,11 +42,6 @@ class ContactUsPage(BasePage):
             print("Inner HTML:", locator.inner_html())
             print("Outer HTML:", locator.evaluate("e => e.outerHTML"))
 
-        self.page.screenshot(
-            path="success_debug.png",
-            full_page=True
-        )
-
         # Wait for success message to appear and be visible (30 second timeout)
         expect(locator).to_be_visible(timeout=30000)
 
@@ -73,11 +68,6 @@ class ContactUsPage(BasePage):
 
     def click_submit(self):
         print("Before Submit Click")
-
-        self.page.screenshot(
-            path="01_before_submit.png",
-            full_page=True
-        )
 
         self.click(self.submit_button)
 

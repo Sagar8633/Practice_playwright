@@ -9,7 +9,6 @@ WHAT THIS FILE COVERS
 KEY TECHNIQUES DEMONSTRATED (useful reference for new engineers)
     - Navigation to test cases page via button click
     - Verification of page URL and heading
-    - Screenshots are saved at key points for evidence/debugging
     - report_steps entries are surfaced in reports/report.html by conftest's
       pytest_runtest_makereport hook.
 """
@@ -38,12 +37,10 @@ def test_verify_test_cases_page(page, base_url, report_steps):
     home_page.verify_home_is_visible()
     # Match on domain only: base_url is http:// but the site redirects to https.
     assert "automationexercise.com" in page.url, f"Did not land on home page, got: {page.url}"
-    page.screenshot(path="01_home_page.png", full_page=True)
 
     report_steps.append("2. Click 'Test Cases' button to navigate")
     test_cases_page.navigate_to_test_cases()
     page.wait_for_load_state("domcontentloaded")
-    page.screenshot(path="02_test_cases_page.png", full_page=True)
 
     # --- Assert: Verify Test Cases page loaded ---------------------------
     report_steps.append("3. Verify navigation to test cases page was successful")

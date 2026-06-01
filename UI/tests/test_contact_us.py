@@ -12,7 +12,6 @@ KEY TECHNIQUES DEMONSTRATED (useful reference for new engineers)
       box. A native dialog BLOCKS the page until dismissed, so we must register a
       handler with page.once("dialog", ...) BEFORE clicking. (Note: Playwright
       Python has no page.expect_dialog() - that is the JS/TS API only.)
-    - Screenshots are saved at key points for evidence/debugging.
     - report_steps entries are surfaced in reports/report.html by conftest's
       pytest_runtest_makereport hook.
 """
@@ -52,7 +51,6 @@ def test_contact_us_form(page, base_url, contact_us_user, report_steps):
     page.wait_for_load_state("domcontentloaded")
     # Proven, stable assertion: the URL must now be the contact_us page.
     assert "contact_us" in page.url, f"Expected contact_us URL, got: {page.url}"
-    page.screenshot(path="01_contact_us_page.png", full_page=True)
 
     report_steps.append("3. EXPECT the 'GET IN TOUCH' form is visible")
     contact_us_page.verify_get_in_touch_visible()
@@ -73,7 +71,6 @@ def test_contact_us_form(page, base_url, contact_us_user, report_steps):
     # message here is far easier to debug than a Playwright timeout later.
     assert os.path.exists(file_path), f"Upload file not found: {file_path}"
     contact_us_page.upload_file(file_path)
-    page.screenshot(path="02_after_upload.png", full_page=True)
 
     # --- Act: submit and accept the JS confirm dialog ---------------------
     report_steps.append("6. Submit the form and accept the confirmation dialog")
@@ -94,8 +91,6 @@ def test_contact_us_form(page, base_url, contact_us_user, report_steps):
     expect(
         page.locator(".status.alert.alert-success")
     ).to_be_visible()
-    
-    page.screenshot(path="03_after_submit.png", full_page=True)
 
     # --- Assert: success message ------------------------------------------
     report_steps.append("7. EXPECT the success message to be visible")
@@ -105,6 +100,5 @@ def test_contact_us_form(page, base_url, contact_us_user, report_steps):
     report_steps.append("8. Click 'Home' and EXPECT the home page again")
     contact_us_page.click_home_button()
     home_page.verify_home_is_visible()
-    page.screenshot(path="04_home_page.png", full_page=True)
 
     print("========== TEST PASSED ==========")

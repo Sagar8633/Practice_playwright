@@ -1,0 +1,237 @@
+[
+{
+  "id": "L1-Q01", "level": 1, "difficulty": "beginner",
+  "title": "Every camera, by name",
+  "scenario": "Operations asks for the current camera list to cross-check against their site walk-through sheet.",
+  "task": "Return the Name and Ip of every camera, sorted by Name.",
+  "tables": ["VideoSources"],
+  "skills": ["SELECT", "ORDER BY", "quoted identifiers"],
+  "expected": "42 rows, two columns, alphabetical by camera name.",
+  "orderMatters": true,
+  "hints": [
+    "Every identifier in this schema was created with double quotes and mixed case, so it must be referenced with double quotes.",
+    "SELECT \"Name\", \"Ip\" FROM \"VideoSources\" — note the quotes around both the columns and the table.",
+    "Sorting alphabetically is ORDER BY \"Name\".",
+    "Without quotes PostgreSQL folds the identifier to lowercase and cannot find videosources."
+  ],
+  "solution": "SELECT \"Name\", \"Ip\"\nFROM \"VideoSources\"\nORDER BY \"Name\";",
+  "explanation": {
+    "breakdown": "SELECT chooses columns, FROM chooses the table, ORDER BY sorts the result.",
+    "why": "PostgreSQL folds unquoted identifiers to lower case. Because this schema was created with quoted PascalCase names, the stored name is VideoSources, and only \"VideoSources\" matches it.",
+    "commonMistake": "SELECT Name FROM VideoSources fails with 'relation videosources does not exist'. This single rule causes more wasted time on this database than anything else.",
+    "qaRelevance": "Getting the quoting habit right immediately is what makes you productive on this schema rather than fighting it."
+  }
+},
+{
+  "id": "L1-Q02", "level": 1, "difficulty": "beginner",
+  "title": "What kinds of event exist",
+  "scenario": "You are writing a test matrix and need the definitive list of event types the system actually emits — not the list in the requirements document.",
+  "task": "Return the distinct EventName values present in Events, sorted alphabetically.",
+  "tables": ["Events"],
+  "skills": ["SELECT", "DISTINCT", "ORDER BY"],
+  "expected": "One row per distinct event name, around 25 of them.",
+  "orderMatters": true,
+  "hints": [
+    "You want each value once, however many times it occurs.",
+    "DISTINCT goes immediately after SELECT.",
+    "SELECT DISTINCT \"EventName\" FROM \"Events\".",
+    "Add ORDER BY \"EventName\" to sort."
+  ],
+  "solution": "SELECT DISTINCT \"EventName\"\nFROM \"Events\"\nORDER BY \"EventName\";",
+  "explanation": {
+    "breakdown": "DISTINCT de-duplicates the entire selected row, which here is a single column.",
+    "why": "The requirements list many possible event types; only the ones present here are actually being produced. The difference between those two lists is itself a finding.",
+    "commonMistake": "Writing DISTINCT(\"EventName\") as if it were a function. DISTINCT is a modifier on the whole select list — with two columns, SELECT DISTINCT a, b de-duplicates the pair, not each column separately.",
+    "qaRelevance": "Comparing the emitted event vocabulary against the configured ReportDetail list in SystemConfig is a genuine consistency test."
+  }
+},
+{
+  "id": "L1-Q03", "level": 1, "difficulty": "beginner",
+  "title": "Cameras on the north subnet",
+  "scenario": "The north plant uses IP addresses in the 192.168.7.12x range. You need to confirm which cameras are on it.",
+  "task": "Return Name and Ip for every camera whose Ip starts with '192.168.7.12'. Sort by Ip.",
+  "tables": ["VideoSources"],
+  "skills": ["WHERE", "LIKE", "ORDER BY"],
+  "expected": "The ten cameras from 192.168.7.120 to 192.168.7.129.",
+  "orderMatters": true,
+  "hints": [
+    "Matching the beginning of a string calls for a pattern, not equality.",
+    "LIKE with a % wildcard at the end matches any string with that prefix.",
+    "\"Ip\" LIKE '192.168.7.12%'",
+    "The % must be at the end only — a leading % would also match addresses ending in those digits."
+  ],
+  "solution": "SELECT \"Name\", \"Ip\"\nFROM \"VideoSources\"\nWHERE \"Ip\" LIKE '192.168.7.12%'\nORDER BY \"Ip\";",
+  "explanation": {
+    "breakdown": "LIKE performs pattern matching: % matches any run of characters, _ matches exactly one.",
+    "why": "A prefix pattern ('abc%') can use a B-tree index; a pattern with a leading wildcard ('%abc') cannot and forces a full scan.",
+    "commonMistake": "Using = for a prefix, or reaching for a regular expression when LIKE is enough.",
+    "alternative": "ILIKE is the case-insensitive form. For real network work, PostgreSQL's inet type supports proper subnet containment — but Ip here is plain text.",
+    "qaRelevance": "IP-range checks are how you confirm a camera is physically where the asset register claims."
+  }
+},
+{
+  "id": "L1-Q04", "level": 1, "difficulty": "easy",
+  "title": "Cameras never linked to a VMS",
+  "scenario": "Some cameras are pulled directly over RTSP; others come from an external VMS. You need the list of direct ones.",
+  "task": "Return Name for every camera whose ExternalSourceId is not set. Sort by Name.",
+  "tables": ["VideoSources"],
+  "skills": ["WHERE", "IS NULL", "ORDER BY"],
+  "expected": "The cameras with no external source — roughly two thirds of the fleet.",
+  "orderMatters": true,
+  "hints": [
+    "'Not set' means NULL.",
+    "NULL is not a value; it is the absence of one. Comparing to it with = never matches anything.",
+    "Use IS NULL rather than = NULL.",
+    "WHERE \"ExternalSourceId\" IS NULL"
+  ],
+  "solution": "SELECT \"Name\"\nFROM \"VideoSources\"\nWHERE \"ExternalSourceId\" IS NULL\nORDER BY \"Name\";",
+  "explanation": {
+    "breakdown": "IS NULL is the only correct way to test for absence of a value.",
+    "why": "In SQL's three-valued logic, anything = NULL evaluates to UNKNOWN, and WHERE keeps only rows that are TRUE. So = NULL silently returns zero rows — no error, no warning.",
+    "commonMistake": "WHERE \"ExternalSourceId\" = NULL. It runs, returns nothing, and looks like a legitimate 'no results' answer.",
+    "qaRelevance": "A test that passes because it returned zero rows for the wrong reason is worse than a failing test. Always confirm an empty result is empty for the reason you think."
+  }
+},
+{
+  "id": "L1-Q05", "level": 1, "difficulty": "easy",
+  "title": "High resolution cameras",
+  "scenario": "GPU decode load is dominated by high resolution streams. You need the cameras processing above 1080p height.",
+  "task": "Return Name, ProcessingWidth and ProcessingHeight for cameras whose ProcessingHeight is greater than 1080. Sort by ProcessingHeight descending, then Name.",
+  "tables": ["VideoSources"],
+  "skills": ["WHERE", "comparison operators", "ORDER BY"],
+  "expected": "The 2688x1520 cameras.",
+  "orderMatters": true,
+  "hints": [
+    "A simple numeric comparison in the WHERE clause.",
+    "Greater than is >, not >=, so 1080 itself is excluded.",
+    "Two sort keys are separated by a comma in ORDER BY.",
+    "ORDER BY \"ProcessingHeight\" DESC, \"Name\" — DESC applies only to the column it follows."
+  ],
+  "solution": "SELECT \"Name\", \"ProcessingWidth\", \"ProcessingHeight\"\nFROM \"VideoSources\"\nWHERE \"ProcessingHeight\" > 1080\nORDER BY \"ProcessingHeight\" DESC, \"Name\";",
+  "explanation": {
+    "breakdown": "ORDER BY applies each key in turn; the second breaks ties in the first.",
+    "why": "A second sort key makes the result deterministic. Without one, rows tied on height could come back in any order, and a test asserting exact output would be flaky.",
+    "commonMistake": "Writing ORDER BY \"ProcessingHeight\", \"Name\" DESC and expecting both to be descending. DESC binds only to the key immediately before it.",
+    "qaRelevance": "Non-deterministic ordering is a classic source of intermittently failing automated tests."
+  }
+},
+{
+  "id": "L1-Q06", "level": 1, "difficulty": "easy",
+  "title": "Servers on the standard REST port",
+  "scenario": "You are checking that every analytic server is reachable on the expected management port and belongs to a known type.",
+  "task": "Return Name, Ip, RestPort and Type for analytic servers whose Type is 0 or 2, sorted by Name.",
+  "tables": ["AnalyticServers"],
+  "skills": ["WHERE", "IN", "ORDER BY"],
+  "expected": "The standard and edge servers, excluding the failover-typed one.",
+  "orderMatters": true,
+  "hints": [
+    "Two acceptable values for one column.",
+    "You could write Type = 0 OR Type = 2, but there is a shorter form.",
+    "IN takes a list of values.",
+    "WHERE \"Type\" IN (0, 2)"
+  ],
+  "solution": "SELECT \"Name\", \"Ip\", \"RestPort\", \"Type\"\nFROM \"AnalyticServers\"\nWHERE \"Type\" IN (0, 2)\nORDER BY \"Name\";",
+  "explanation": {
+    "breakdown": "IN is shorthand for a chain of OR comparisons against the same column.",
+    "why": "It is more readable and less error-prone than repeating the column name, and PostgreSQL plans it identically.",
+    "commonMistake": "Writing WHERE \"Type\" = 0 OR 2 — valid syntax in some languages, wrong here: it evaluates 2 as a standalone truthy expression.",
+    "alternative": "NOT IN (1) is equivalent here, but only while no NULL Types exist. NOT IN with NULLs is a trap covered in Level 4.",
+    "qaRelevance": "Type and state columns are untyped integers in this schema. Knowing which values are legal is a prerequisite for validating them."
+  }
+},
+{
+  "id": "L1-Q07", "level": 1, "difficulty": "easy",
+  "title": "Mid-range camera IDs",
+  "scenario": "The NormalizedId is the sequential, human-friendly camera number used in operator screens. You need a specific block of them.",
+  "task": "Return NormalizedId and Name for cameras whose NormalizedId is between 10 and 20 inclusive, sorted by NormalizedId.",
+  "tables": ["VideoSources"],
+  "skills": ["WHERE", "BETWEEN", "ORDER BY"],
+  "expected": "Eleven rows — BETWEEN includes both endpoints.",
+  "orderMatters": true,
+  "hints": [
+    "A range test on a numeric column.",
+    "BETWEEN a AND b is inclusive at both ends.",
+    "WHERE \"NormalizedId\" BETWEEN 10 AND 20",
+    "That is exactly equivalent to >= 10 AND <= 20."
+  ],
+  "solution": "SELECT \"NormalizedId\", \"Name\"\nFROM \"VideoSources\"\nWHERE \"NormalizedId\" BETWEEN 10 AND 20\nORDER BY \"NormalizedId\";",
+  "explanation": {
+    "breakdown": "BETWEEN is inclusive: it expands to >= low AND <= high.",
+    "why": "Inclusivity is the detail people get wrong. Eleven rows, not nine and not ten.",
+    "commonMistake": "Assuming BETWEEN is exclusive, or reversing the bounds — BETWEEN 20 AND 10 returns nothing rather than erroring.",
+    "performance": "BETWEEN on an indexed column is a clean range scan.",
+    "qaRelevance": "Boundary inclusivity is the single most common off-by-one in date filtering, which Level 6 revisits at length."
+  }
+},
+{
+  "id": "L1-Q08", "level": 1, "difficulty": "medium",
+  "title": "Cameras that claim a config but are unconfigured",
+  "scenario": "The configurationsAdded flag drives a green tick in the operator UI. You suspect it does not always reflect reality, and you want a first look at the flag on its own.",
+  "task": "Return Name and configurationsAdded for cameras where configurationsAdded is false, sorted by Name.",
+  "tables": ["VideoSources"],
+  "skills": ["WHERE", "boolean", "ORDER BY"],
+  "expected": "Two cameras: SAFETY-Chem-33 and FIRE-Genset-36.",
+  "orderMatters": true,
+  "hints": [
+    "The column is already a boolean, so it needs no comparison operator at all.",
+    "WHERE \"configurationsAdded\" = false works, and so does WHERE NOT \"configurationsAdded\".",
+    "Note this column is lower-camelCase, unlike most in the schema — it is \"configurationsAdded\", not \"ConfigurationsAdded\".",
+    "SELECT \"Name\", \"configurationsAdded\" FROM \"VideoSources\" WHERE NOT \"configurationsAdded\"."
+  ],
+  "solution": "SELECT \"Name\", \"configurationsAdded\"\nFROM \"VideoSources\"\nWHERE \"configurationsAdded\" = false\nORDER BY \"Name\";",
+  "explanation": {
+    "breakdown": "A boolean column is already a truth value and can be used directly as a predicate.",
+    "why": "This flag is metadata about data elsewhere. Level 3 checks it against the actual contents of VideoSourceConfigs — and they do not agree.",
+    "commonMistake": "Mis-casing the column. Most of this schema is PascalCase but a few columns, this one included, are camelCase. The catalog is the only reliable guide.",
+    "qaRelevance": "Denormalised status flags drift from the data they describe. Any such flag is a test target: verify it against the underlying rows rather than trusting it."
+  }
+},
+{
+  "id": "L1-Q09", "level": 1, "difficulty": "medium",
+  "title": "Starred events that are not vehicle related",
+  "scenario": "Operators star events for follow-up. You want the starred ones that are not ANPR, to see what else is being escalated.",
+  "task": "Return EventName and Description for events where Starred is true and EventName is not 'ANPR'. Sort by EventName then Description. Limit to 20 rows.",
+  "tables": ["Events"],
+  "skills": ["WHERE", "AND", "NOT", "LIMIT", "ORDER BY"],
+  "expected": "Up to 20 starred non-ANPR events.",
+  "orderMatters": true,
+  "hints": [
+    "Two conditions joined with AND.",
+    "Inequality is <> in standard SQL (!= also works in PostgreSQL).",
+    "LIMIT caps the number of rows returned and goes at the very end, after ORDER BY.",
+    "WHERE \"Starred\" AND \"EventName\" <> 'ANPR' ... ORDER BY ... LIMIT 20."
+  ],
+  "solution": "SELECT \"EventName\", \"Description\"\nFROM \"Events\"\nWHERE \"Starred\" = true\n  AND \"EventName\" <> 'ANPR'\nORDER BY \"EventName\", \"Description\"\nLIMIT 20;",
+  "explanation": {
+    "breakdown": "LIMIT is applied last, after WHERE and ORDER BY. Without ORDER BY, which 20 rows you get is arbitrary.",
+    "why": "LIMIT without ORDER BY is non-deterministic. PostgreSQL may return different rows on different runs depending on the plan.",
+    "commonMistake": "Using LIMIT to 'sample' data and then asserting on the result in a test. Always pair LIMIT with a total ordering.",
+    "alternative": "PostgreSQL also supports FETCH FIRST 20 ROWS ONLY, the SQL-standard spelling. SQL Server would use TOP 20 — a dialect difference worth knowing.",
+    "qaRelevance": "Sampling without ordering produces tests that pass locally and fail in CI."
+  }
+},
+{
+  "id": "L1-Q10", "level": 1, "difficulty": "medium",
+  "title": "Readable server inventory",
+  "scenario": "You are producing a short inventory table for a release document. It needs friendly column headings, not raw schema names.",
+  "task": "From AnalyticServers return Name as server, Ip as address, RestPort as rest_port, and IsFailoverOnly as failover_only. Sort by server.",
+  "tables": ["AnalyticServers"],
+  "skills": ["aliases", "SELECT", "ORDER BY"],
+  "expected": "Seven rows with the four renamed columns.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Renaming an output column is done with AS.",
+    "SELECT \"Name\" AS server, ... — the alias itself does not need quotes if it is lower case with no spaces.",
+    "You can sort by the alias: ORDER BY server works in PostgreSQL.",
+    "Aliases are lower case here, so no double quotes are needed on them."
+  ],
+  "solution": "SELECT \"Name\"           AS server,\n       \"Ip\"             AS address,\n       \"RestPort\"       AS rest_port,\n       \"IsFailoverOnly\" AS failover_only\nFROM \"AnalyticServers\"\nORDER BY server;",
+  "explanation": {
+    "breakdown": "AS renames a column in the output. The alias exists only in the result, not in the table.",
+    "why": "ORDER BY can refer to an output alias because it is evaluated after the select list. WHERE cannot, because it is evaluated before — that asymmetry surprises people regularly.",
+    "commonMistake": "Trying to use an alias in WHERE. WHERE server = 'AS-GPU-01' fails; you must repeat the expression or wrap the query.",
+    "qaRelevance": "Clear aliases make a query self-documenting, which matters when a test failure message is the only thing a colleague sees at 2am."
+  }
+}
+]

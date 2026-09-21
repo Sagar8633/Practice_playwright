@@ -1,0 +1,354 @@
+// ============================================================================
+//  SECTION 11 : RISK PLAN  -  f_riskPlan(), the ONLY stop / TP / RR function
+//
+//  DELIBERATELY ABOVE THE SCORE. SECTION 12 carries an R:R modifier and must be
+//  able to call this, so the planner is declared first. SECTION 12 calls it with
+//  entryPx = close for a PROVISIONAL qRr; SECTION 14 calls it once more on the
+//  signal bar to freeze the real plan. On the signal bar both calls pass
+//  entryPx = close, so they agree by construction rather than by coincidence.
+//
+//  f_riskPlan IS PURE. It reads globals (aRef, costRt, tick, the inputs, and the
+//  liquidity map) and assigns to NONE of them. Pine forbids writing a global
+//  from inside a function anyway; the point here is that calling it twice on the
+//  same bar with the same arguments is guaranteed to be free of side effects.
+//
+//  ── THE STOP ANCHOR, AND WHY IT IS THE NEAREST AND NOT THE FURTHEST ────────
+//  "Most protective = the candidate furthest from entry" sounds right and is
+//  wrong. The three candidates are monotone in a real sweep-then-absorption
+//  setup - the sweep runs the liquidity below the zone, and the pivot swing sits
+//  at or beyond the sweep - so "furthest" resolved to the lagged pivot on every
+//  single trade. Three consequences followed: the absorption and sweep anchors
+//  became dead inputs, the pivot's confirmation lag applied to every stop, and
+//  the stop inflated to multiple ATR, at which point the module rejected its own
+//  trade as too wide. The thesis of this system is that the sweep extreme WAS
+//  the liquidity grab, so the stop belongs just beyond THAT, not beyond an older
+//  unrelated pivot. Hence:
+//      anchor = NEAREST of the non-na absorption bound and sweep extreme
+//      the structural swing is consulted ONLY when both of those are na
+//  The retest module's invalidation anchor joins as a fallback above the swing,
+//  and as a floor: the stop may never sit INSIDE the price whose breach already
+//  kills the thesis, because a stop nearer than that gets taken by the ordinary
+//  noise at that very level.
+//
+//  ── WHY THE R:R GATE CAN ACTUALLY FIRE ────────────────────────────────────
+//  A target ladder floored at its own R multiple makes rr2 >= i_tp2R by
+//  construction, so a gate of `rr2 >= i_rrMin` with i_tp2R == i_rrMin is dead
+//  code that rejects nothing but mintick rounding. Two things fix it here:
+//    1. i_tp2R is 2.4 against a 2.0 gate, and the comparison carries a one-tick
+//       tolerance, so rounding alone can never fire it.
+//    2. The gate additionally reads the FIRST meaningful opposing level in front
+//       of the trade with NO minimum distance. A target ladder can only ever
+//       push targets further out; the nearest shelf is the thing that actually
+//       ends the move, and if it sits closer than the minimum R then the R:R is
+//       genuinely poor however far the plotted TP2 is. That is the only path in
+//       this module that ever rejects a setup for reward, and it is the honest
+//       one.
+// ============================================================================
+
+GRK = "11 - Risk Plan"
+
+i_slMode      = input.string("Structure + ATR", "Stop anchor mode",
+     options = ["Structure + ATR", "Structure", "ATR"], group = GRK,
+     tooltip = "STRUCTURE + ATR (default): one ATR buffer beyond the structural " +
+               "anchor, which clears the routine overshoot wick. STRUCTURE: one " +
+               "spread beyond the anchor - tightest, and stopped out by any " +
+               "overshoot. ATR: a pure multiple of ATR from entry, ignoring " +
+               "structure entirely; this is also the automatic fallback whenever " +
+               "no anchor survives on the adverse side of entry.",
+     display = display.none)
+
+i_slBufAtr    = input.float(0.25, "Structure buffer (x ATR)",
+     minval = 0.0, maxval = 1.50, step = 0.05, group = GRK,
+     tooltip = "Room added beyond the anchor in Structure + ATR mode, routed " +
+               "through f_tol() so it can never collapse below one spread. At 0 " +
+               "the stop sits one spread off the anchor and the routine overshoot " +
+               "takes it; above ~0.5 you are paying for protection the R:R gate " +
+               "then rejects.",
+     display = display.none)
+
+i_slAtrMult   = input.float(1.20, "ATR stop multiple",
+     minval = 0.30, maxval = 5.0, step = 0.10, group = GRK,
+     tooltip = "Used by ATR mode and as the no-anchor fallback. 1.2 ATR sits just " +
+               "outside ordinary XAUUSD noise on 1M-15M. Below ~0.8 the stop is " +
+               "inside the noise; above ~2.0 nothing clears the R:R gate.",
+     display = display.none)
+
+i_slMaxAtr    = input.float(2.20, "Max stop distance (x ATR)",
+     minval = 0.50, maxval = 6.0, step = 0.10, group = GRK,
+     tooltip = "Hard rejection: a wider stop is discarded as STOP TOO WIDE, " +
+               "because clearing the minimum R:R would then need a session-sized " +
+               "move. The minimum-stop floor is CLAMPED below this, so the module " +
+               "can never widen a stop past its own gate and then reject the trade " +
+               "for being too wide. At the maximum the gate stops filtering.",
+     display = display.none)
+
+i_useLiqTp    = input.bool(true, "Use liquidity-map targets", group = GRK,
+     tooltip = "ON: each target independently takes the nearest level from the " +
+               "liquidity map when that level is at least this leg's minimum R " +
+               "away and inside its cap, otherwise it falls back to the R " +
+               "multiple. OFF: pure R multiples. A missing or empty map is never " +
+               "an error - it just means every target falls back.",
+     display = display.none)
+
+i_tp1R        = input.float(1.0, "TP1 (R)", minval = 0.5, maxval = 3.0, step = 0.1,
+     group = GRK,
+     tooltip = "The de-risking leg. At 1.0R the partial taken here exactly pays " +
+               "for a full stop-out on the remainder, which is the entire reason " +
+               "it exists. Below 1.0R it does not, and the scale-out stops being " +
+               "risk reduction.",
+     display = display.none)
+
+i_tp2R        = input.float(2.4, "TP2 (R)", minval = 1.0, maxval = 6.0, step = 0.1,
+     group = GRK,
+     tooltip = "The gated leg and the one the position is really sized for. Kept " +
+               "deliberately ABOVE the minimum R:R in SECTION 0 (2.4 against 2.0): " +
+               "setting it equal to the gate makes the gate unreachable, because " +
+               "an R-multiple fallback then passes its own test by construction " +
+               "and the only thing left to reject is mintick rounding.",
+     display = display.none)
+
+i_tp3R        = input.float(3.6, "TP3 (R)", minval = 1.5, maxval = 10.0, step = 0.1,
+     group = GRK,
+     tooltip = "The runner. It is only the last quarter of the position, so it can " +
+               "afford a further, lower-frequency objective. Past ~4R on 5M gold " +
+               "it is a session-sized move and the trailing stop, not the limit, " +
+               "will take it.",
+     display = display.none)
+
+i_tpLiqCap    = input.float(2.0, "Liquidity target cap (x nominal R)",
+     minval = 1.0, maxval = 4.0, step = 0.1, group = GRK,
+     tooltip = "A liquidity level further than this multiple of its leg's nominal " +
+               "R is ignored rather than promoted into a target. Without the cap " +
+               "one distant level - yesterday's high, say - manufactures a 6R plan " +
+               "that never fills. At the maximum the cap effectively stops binding.",
+     display = display.none)
+
+i_rkBlockQual = input.float(0.45, "Blocking level: minimum quality (0..1)",
+     minval = 0.0, maxval = 1.0, step = 0.05, group = GRK,
+     tooltip = "Only levels at least this good are allowed to veto a setup for " +
+               "poor R:R when they sit in front of the trade. Level quality is " +
+               "kind x touch count: a fresh previous-day extreme scores ~0.50 and " +
+               "a bare untested swing ~0.30, so 0.45 listens to major levels and " +
+               "ignores minor ones. At 0 EVERY level can veto and almost nothing " +
+               "trades; at 1.0 the veto is off and the R:R gate goes back to being " +
+               "unreachable.",
+     display = display.none)
+
+i_tp1Pct      = input.float(40, "Close at TP1 (%)", minval = 20, maxval = 50, step = 5,
+     group = GRK,
+     tooltip = "Percentage of the INITIAL position closed at TP1. Pine applies " +
+               "qty_percent to the initial size, so the three legs sum to 100 " +
+               "directly - do not compensate for the remaining size the way " +
+               "pre-2022 guides tell you to.",
+     display = display.none)
+
+i_tp2Pct      = input.float(35, "Close at TP2 (%)", minval = 20, maxval = 40, step = 5,
+     group = GRK,
+     tooltip = "Also a percentage of the initial position. The maxima here and on " +
+               "TP1 sum to 90, so the runner leg is always at least 10% and no " +
+               "renormalisation is ever needed.",
+     display = display.none)
+
+// The runner. Guaranteed to land in [10, 60] by the two maxvals above.
+tp3Pct = 100.0 - i_tp1Pct - i_tp2Pct
+
+// ------------------------------------------------------------- PURE HELPERS
+// ONE rounding rule for every price this module produces: round DOWN for a long
+// and UP for a short. Applied to a stop that can only make it WIDER (never
+// inside the structure it protects); applied to a target it can only pull it
+// NEARER (a limit in front of the shelf fills, one behind it may not). The
+// second round_to_mintick cleans the binary residue so labels print exactly.
+// The 1e-9 nudges absorb binary residue so a price that IS already on a tick
+// boundary is not shifted a whole tick by floor()/ceil().
+f_rkSnap(float px, int dir) =>
+    na(px) ? na : math.round_to_mintick(dir > 0 ? math.floor(px / tick + 1e-9) * tick
+                                                 : math.ceil(px / tick - 1e-9) * tick)
+
+// A stop anchor that is not on the adverse side of entry is not a stop at all -
+// it is a sign error that math.abs() would then hide inside a plausible-looking
+// positive risk number. Reject it here rather than discover it in the backtest.
+f_rkAdverse(int dir, float c, float ref) =>
+    na(c) ? na : (dir > 0 ? (c < ref ? c : na) : (c > ref ? c : na))
+
+// na-skipping fold. f_rkNear(d, a, b) is math.max when d > 0 and math.min when
+// d < 0 - that is ALL it is, and the CALLER owns the polarity, because the two
+// sides of entry invert it:
+//   ADVERSE side (stops - a long's candidates sit BELOW entry)
+//        f_rkNear( dir, ..) = NEAREST entry     f_rkNear(-dir, ..) = FURTHEST
+//   TARGET side (TPs - a long's candidates sit ABOVE entry)  <- INVERTED
+//        f_rkNear( dir, ..) = FURTHEST from entry, i.e. the BINDING FLOOR
+// Taking -dir on a target floor returns the NEARER price, which collapses TP2 to
+// roughly 1R and makes the R:R gate reject every plan on both sides, so every
+// call below states which side of entry it is folding.
+f_rkNear(int dir, float a, float b) =>
+    na(a) ? b : na(b) ? a : (dir > 0 ? math.max(a, b) : math.min(a, b))
+
+// ONE linear scan of the liquidity map, used for both target selection and the
+// blocking test. Returns the level nearest to refPx inside [minLvl, capLvl]
+// (the band inverts for shorts) that also clears minQual, or na when nothing
+// qualifies. No sort, no allocation, no per-bar array churn.
+//
+// TARGET eligibility deliberately does NOT test LiquidityLevel.side. `side` is
+// about which way a level ACTS as a barrier when price arrives from the other
+// direction; a previous-day LOW sitting above a long entry is every bit as much
+// of a magnet and a wall as a previous-day high. What matters for a target is
+// only that resting liquidity sits in front of the trade.
+f_rkScan(int dir, float refPx, float minLvl, float capLvl, float minQual) =>
+    float best = na
+    if not na(levels)
+        int n = array.size(levels)
+        if n > 0                       // `for 0 to -1` counts DOWN in Pine and throws
+            for i = 0 to n - 1
+                LiquidityLevel L = array.get(levels, i)
+                if L.active and not na(L.price) and L.quality() >= minQual
+                    bool inBand = dir > 0 ? (L.price >= minLvl and L.price <= capLvl)
+                                          : (L.price <= minLvl and L.price >= capLvl)
+                    if inBand
+                        if na(best) or math.abs(L.price - refPx) < math.abs(best - refPx)
+                            best := L.price
+    best
+
+// Cost-aware break-even, moved after TP1 fills. A stop exactly at entry is a
+// GUARANTEED small loss because the round turn is still paid on the way out, so
+// the level is offset by whichever of the cost and a small ATR fraction is
+// larger, and snapped in the PROTECTIVE direction (-dir) so the offset can never
+// round back under the cost it exists to cover.
+f_bePrice(int dir, float entryPx) =>
+    na(entryPx) ? na : f_rkSnap(entryPx + dir * math.max(costRt, 0.05 * aRef), -dir)
+
+// ============================================================================
+//  f_riskPlan - one stop, three targets, one verdict. Pure.
+//
+//  absLo/absHi : absorption-zone bounds   swpLo/swpHi : sweep extreme
+//  swgLo/swgHi : structural swing         invAnchor   : SECTION 10's kill price
+//  Only the bound matching `dir` is ever read from each pair; the mirror is
+//  present so one signature serves both sides and callers never branch.
+// ============================================================================
+f_riskPlan(int dir, float entryPx, float absLo, float absHi, float swpLo, float swpHi,
+           float swgLo, float swgHi, float invAnchor) =>
+    RiskPlan p = RiskPlan.new()
+    p.dir   := dir
+    p.entry := entryPx
+
+    // aRef, not atr: aRef is the na-safe ATR with a spread floor, and the two are
+    // identical whenever atr exceeds one spread, which is every bar the system is
+    // allowed to trade. Using atr raw would make every number here na during
+    // warm-up and hand the gate a silent, unexplained blackout.
+    float cost    = costRt
+    float maxStop = i_slMaxAtr * aRef
+    // The cost term is the one that matters on 1M: a structural anchor 0.30 USD
+    // away next to a 0.45 USD round turn is not a stop, it is a rounding error.
+    // CLAMPED below maxStop so the floor can never manufacture the very width the
+    // gate below then rejects - that inversion produces a 100% rejection rate
+    // labelled with the wrong reason, and it is invisible in the output.
+    float minStop = math.min(math.max(0.30 * aRef, 2.0 * cost), maxStop)
+
+    // ---- 1. ANCHOR ---------------------------------------------------------
+    float cAbs = f_rkAdverse(dir, dir > 0 ? absLo : absHi, entryPx)
+    float cSwp = f_rkAdverse(dir, dir > 0 ? swpLo : swpHi, entryPx)
+    float cInv = f_rkAdverse(dir, invAnchor,               entryPx)
+    float cSwg = f_rkAdverse(dir, dir > 0 ? swgLo : swgHi, entryPx)
+    // NEAREST of the zone bound and the sweep extreme - see the banner.
+    float base = f_rkNear(dir, cAbs, cSwp)
+    // The swing is consulted ONLY when both of those are missing, and the retest
+    // module's kill price ranks ahead of it: it is a live, event-driven level
+    // rather than a pivot that is already i_pivotRight bars old when it appears.
+    base := na(base) ? (na(cInv) ? cSwg : cInv) : base
+    // ...and the stop is never placed INSIDE the price whose breach already kills
+    // the setup. f_rkNear(-dir, ...) is the FURTHEST of the two.
+    float anchor = na(base) or na(cInv) ? base : f_rkNear(-dir, base, cInv)
+
+    // ---- 2. STOP -----------------------------------------------------------
+    // Structure mode buffers by exactly one spread: f_tol(0.0) == i_spreadUsd.
+    // Nothing here is denominated in ticks - mintick is 0.01 on most XAUUSD
+    // feeds and 0.001 on others, so a tick-denominated buffer mis-scales 10x.
+    float buf   = i_slMode == "Structure" ? f_tol(0.0) : f_tol(i_slBufAtr)
+    float slRaw = (i_slMode == "ATR" or na(anchor)) ? entryPx - dir * i_slAtrMult * aRef
+                                                     : anchor - dir * buf
+    float stopDist = math.max(math.abs(entryPx - slRaw), minStop)
+    p.stop  := f_rkSnap(entryPx - dir * stopDist, dir)
+    // Re-derive from the SNAPPED stop so the printed level, the risk and every
+    // R multiple below describe one number rather than three near-misses.
+    stopDist := math.abs(entryPx - p.stop)
+    // ONE TICK of tolerance, for the same reason rrEps exists below: f_rkSnap
+    // moves the stop AWAY from entry, so a plan built to land exactly on maxStop
+    // (which is what the minStop clamp above deliberately produces in dead tape)
+    // would otherwise be rejected by the rounding artefact the clamp exists to
+    // prevent - a 100% rejection rate carrying the wrong reason.
+    bool tooWide = stopDist > maxStop + tick
+
+    // Stopped out => you lose the distance AND the cost. The one-tick floor only
+    // ever binds in a degenerate configuration (zero spread, zero slippage and a
+    // pre-warmup ATR); it exists so nothing below can divide by zero.
+    float rNet = math.max(stopDist + cost, tick)
+    p.risk := rNet
+
+    // ---- 3. TARGETS --------------------------------------------------------
+    // TPn_rr = entry + dir*(R*riskNet + cost) makes the NET R multiple exactly R:
+    // (R*riskNet + cost - cost) / riskNet = R. A target labelled 2.4R genuinely
+    // nets 2.4R after spread and slippage, which is the only version of the
+    // number worth quoting to anyone.
+    float gap   = f_tol(0.25)          // minimum separation between the three legs
+    float rr1Px = entryPx + dir * (i_tp1R * rNet + cost)
+    float rr2Px = entryPx + dir * (i_tp2R * rNet + cost)
+    float rr3Px = entryPx + dir * (i_tp3R * rNet + cost)
+    float cap1  = entryPx + dir * (i_tpLiqCap * i_tp1R * rNet + cost)
+    float cap2  = entryPx + dir * (i_tpLiqCap * i_tp2R * rNet + cost)
+    float cap3  = entryPx + dir * (i_tpLiqCap * i_tp3R * rNet + cost)
+
+    // TP1 may never be a sub-1R "de-risk" leg: below 1R the partial cannot pay
+    // for a stop-out on the remainder, which is the whole reason it is taken.
+    float minL1 = rr1Px
+    float lv1   = i_useLiqTp ? f_rkScan(dir, entryPx, minL1, cap1, 0.0) : na
+    float t1    = na(lv1) ? rr1Px : lv1
+
+    // TP2's floor is the GATE itself, not i_tp2R - that is what lets a liquidity
+    // shelf at 2.1R be taken in preference to an arithmetic 2.4R, while a shelf
+    // at 1.6R is refused and the plan falls back.
+    // TARGET side: f_rkNear(dir, ..) is the FURTHER of the two, i.e. the floor
+    // that binds - the gate price, or TP1 plus one separation, whichever is deeper.
+    float minL2 = f_rkNear(dir, entryPx + dir * (i_rrMin * rNet + cost), t1 + dir * gap)
+    float lv2   = i_useLiqTp ? f_rkScan(dir, entryPx, minL2, cap2, 0.0) : na
+    float t2    = na(lv2) ? f_rkNear(dir, rr2Px, minL2) : lv2   // TARGET side
+
+    float minL3 = f_rkNear(dir, rr3Px, t2 + dir * gap)          // TARGET side
+    float lv3   = i_useLiqTp ? f_rkScan(dir, entryPx, minL3, cap3, 0.0) : na
+    float t3    = na(lv3) ? minL3 : lv3
+
+    p.tp1 := f_rkSnap(t1, dir)
+    p.tp2 := f_rkSnap(t2, dir)
+    p.tp3 := f_rkSnap(t3, dir)
+
+    // Cost charged ONCE per outcome: added to risk above, subtracted from reward
+    // here. Charging it twice is how a 2R plan quietly becomes a 1.6R plan.
+    p.rr1 := (math.abs(p.tp1 - entryPx) - cost) / rNet
+    p.rr2 := (math.abs(p.tp2 - entryPx) - cost) / rNet
+    p.rr3 := (math.abs(p.tp3 - entryPx) - cost) / rNet
+
+    // ---- 4. GATE -----------------------------------------------------------
+    // One tick of tolerance: the targets are snapped TOWARDS entry, so a plan
+    // built to land exactly on the floor can otherwise be rejected by a rounding
+    // artefact worth 0.002R. That would make rounding the only thing the gate
+    // ever rejects, which is worse than having no gate.
+    float rrEps = tick / rNet + 1e-9
+    // The first meaningful opposing level in front of the trade, with NO minimum
+    // distance. The ladder above can only push targets further out; this is the
+    // only thing that can pull the verdict in.
+    float blk   = f_rkScan(dir, entryPx, entryPx + dir * tick,
+                           dir > 0 ? 1e12 : -1e12, i_rkBlockQual)
+    float rrBlk = na(blk) ? na : (math.abs(blk - entryPx) - cost) / rNet
+    bool  poorRr = p.rr2 < i_rrMin - rrEps or (not na(rrBlk) and rrBlk < i_rrMin - rrEps)
+
+    // Width first: it is the more upstream cause, and a too-wide stop makes every
+    // R number downstream of it meaningless anyway.
+    p.ok  := not tooWide and not poorRr
+    p.why := tooWide ? NoTradeReason.wideStop :
+             poorRr  ? NoTradeReason.poorRr   : NoTradeReason.ok
+
+    // ---- 5. qRr : 0..1 for the score modifier, never a probability ---------
+    // Graded on the REACHABLE R, not the plotted one: if a wall sits nearer than
+    // TP2 then the honest reward is the wall. 0 at the gate floor, 1 at double it.
+    float rrEff = na(rrBlk) ? p.rr2 : math.min(p.rr2, rrBlk)
+    p.qRr := nz(f_ramp(rrEff, i_rrMin, 2.0 * i_rrMin), 0.0)
+    p
+// ========================= END SECTION 11 ===================================

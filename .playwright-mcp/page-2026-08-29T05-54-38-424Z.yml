@@ -1,0 +1,925 @@
+- generic [active] [ref=f8e1]:
+  - navigation [ref=f8e2]:
+    - link "← Index" [ref=f8e3] [cursor=pointer]:
+      - /url: index.html
+    - link "60-Day Plan" [ref=f8e4] [cursor=pointer]:
+      - /url: 60-day-plan.html
+    - link "Skill Manual" [ref=f8e5] [cursor=pointer]:
+      - /url: skill-manual.html
+  - banner [ref=f8e6]:
+    - generic [ref=f8e7]:
+      - generic [ref=f8e8]: 60-day plan · 29 Aug – 27 Oct 2026
+      - heading "SDET Reforge Sixty days, six phases." [level=1] [ref=f8e9]: SDET ReforgeSixty days, six phases.
+      - paragraph [ref=f8e10]: "Built from your own scan data: 571 job posts, 60 deeply-parsed JDs and a 598-question interview bank. Every phase below closes a gap the data actually found — not a generic syllabus."
+      - generic [ref=f8e11]:
+        - generic [ref=f8e12]:
+          - generic [ref=f8e13]: "571"
+          - generic [ref=f8e14]: Jobs scanned
+        - generic [ref=f8e15]:
+          - generic [ref=f8e16]: "60"
+          - generic [ref=f8e17]: JDs analysed
+        - generic [ref=f8e18]:
+          - generic [ref=f8e19]: "598"
+          - generic [ref=f8e20]: Banked questions
+        - generic [ref=f8e21]:
+          - generic [ref=f8e22]: "39"
+          - generic [ref=f8e23]: Skill gaps found
+        - generic [ref=f8e24]:
+          - generic [ref=f8e25]: "252"
+          - generic [ref=f8e26]: Study hours
+      - generic [ref=f8e27]:
+        - generic [ref=f8e28]: Sagar Jadhav · Software Test Engineer, i2v System
+        - generic [ref=f8e29]: 6 yrs 3 mo · Pune
+        - generic [ref=f8e30]: ₹15.75L → target ₹20L
+        - generic [ref=f8e31]: 2-month notice
+  - navigation [ref=f8e32]:
+    - generic [ref=f8e33]:
+      - link "The read" [ref=f8e34] [cursor=pointer]:
+        - /url: "#read"
+      - link "Demand vs you" [ref=f8e35] [cursor=pointer]:
+        - /url: "#demand"
+      - link "1 · Base" [ref=f8e36] [cursor=pointer]:
+        - /url: "#p1"
+      - link "2 · TypeScript" [ref=f8e37] [cursor=pointer]:
+        - /url: "#p2"
+      - link "3 · Java" [ref=f8e38] [cursor=pointer]:
+        - /url: "#p3"
+      - link "4 · Pipelines" [ref=f8e39] [cursor=pointer]:
+        - /url: "#p4"
+      - link "5 · Non-functional" [ref=f8e40] [cursor=pointer]:
+        - /url: "#p5"
+      - link "6 · Narrative" [ref=f8e41] [cursor=pointer]:
+        - /url: "#p6"
+      - link "Daily rhythm" [ref=f8e42] [cursor=pointer]:
+        - /url: "#rhythm"
+      - link "Apply gates" [ref=f8e43] [cursor=pointer]:
+        - /url: "#gates"
+      - link "What I cut" [ref=f8e44] [cursor=pointer]:
+        - /url: "#cut"
+  - main [ref=f8e45]:
+    - generic [ref=f8e46]:
+      - generic [ref=f8e47]:
+        - generic [ref=f8e48]: Diagnosis
+        - heading "Your problem is not craft. It is stack coverage and articulation." [level=2] [ref=f8e49]
+        - paragraph [ref=f8e50]:
+          - text: The eight most-demanded skills in the market you are scanning are already yours — all eight rated
+          - emphasis [ref=f8e51]: strong
+          - text: in every one of the six analysis runs. What removes you from shortlists is a language you do not write, a pipeline platform you have not touched, a non-functional discipline with no tool behind it, and stories you have not rehearsed.
+      - generic [ref=f8e52]:
+        - generic [ref=f8e53]:
+          - generic [ref=f8e54]: Already won · 8 of top 8
+          - heading "Playwright, Python, Selenium, REST API, CI/CD, Git, Agile, exploratory testing" [level=3] [ref=f8e55]
+          - paragraph [ref=f8e56]:
+            - text: Every one of these sits above 48% demand and every one is rated strong. Do not spend the 60 days re-learning them — spend it making them
+            - emphasis [ref=f8e57]: demonstrable
+            - text: in public repos.
+        - generic [ref=f8e58]:
+          - generic [ref=f8e59]: Blocker 1 · 42% demand
+          - heading "Stakeholder communication" [level=3] [ref=f8e60]
+          - paragraph [ref=f8e61]:
+            - text: The single highest-demand item marked
+            - emphasis [ref=f8e62]: gap
+            - text: in all six runs, and 24 questions in your bank. It is also the cheapest to fix — it costs rehearsal, not learning. Lead roles are lost here, not on syntax.
+        - generic [ref=f8e63]:
+          - generic [ref=f8e64]: Blocker 2 · 42% demand
+          - heading "Java + TestNG + REST Assured + Maven" [level=3] [ref=f8e65]
+          - paragraph [ref=f8e66]: A hard gate on roughly a third of postings, where a live Java coding round is standard. The most expensive gap on the board — it gets 15 days, the largest single allocation.
+        - generic [ref=f8e67]:
+          - generic [ref=f8e68]: Blocker 3 · 35% / 25% demand
+          - heading "JavaScript & TypeScript" [level=3] [ref=f8e69]
+          - paragraph [ref=f8e70]:
+            - text: Highest leverage per hour on the whole plan. You already know Playwright deeply; only the language changes. 15 postings are literally titled
+            - emphasis [ref=f8e71]: Playwright Automation Engineer
+            - text: and most of them specify TS.
+        - generic [ref=f8e72]:
+          - generic [ref=f8e73]: Blocker 4 · 33% demand
+          - heading "Azure & Azure DevOps" [level=3] [ref=f8e74]
+          - paragraph [ref=f8e75]:
+            - text: You own Jenkins and GitHub Actions. This is a vocabulary and YAML-dialect gap, not a concepts gap — but it reads as a hard
+            - emphasis [ref=f8e76]: "no"
+            - text: on a CV filter, so it needs one real pipeline behind it.
+        - generic [ref=f8e77]:
+          - generic [ref=f8e78]: Blocker 5 · 28% demand
+          - heading "Performance testing" [level=3] [ref=f8e79]
+          - paragraph [ref=f8e80]: Your resume claims performance and load testing but names no tool, which is worse than claiming nothing. One k6 script and one JMeter plan closes it permanently.
+    - generic [ref=f8e81]:
+      - generic [ref=f8e82]:
+        - generic [ref=f8e83]: Evidence
+        - heading "What the market asked for, against where you stand" [level=2] [ref=f8e84]
+        - paragraph [ref=f8e85]: Demand is the share of analysed JDs naming the skill, averaged across all six scan runs. Status is your profile match as the gap analysis scored it, run after run.
+      - table [ref=f8e87]:
+        - rowgroup [ref=f8e88]:
+          - row [ref=f8e89]:
+            - columnheader "Skill" [ref=f8e90]
+            - columnheader "Demand" [ref=f8e91]
+            - columnheader [ref=f8e92]
+            - columnheader "Your status" [ref=f8e93]
+            - columnheader "Verdict for the 60 days" [ref=f8e94]
+        - rowgroup [ref=f8e95]:
+          - row [ref=f8e96]:
+            - cell "Manual & exploratory testing" [ref=f8e97]
+            - cell "60%" [ref=f8e98]
+            - cell [ref=f8e99]
+            - cell "Strong" [ref=f8e102]
+            - cell "Hold. Sharpen technique vocabulary only." [ref=f8e104]
+          - row [ref=f8e105]:
+            - cell "CI/CD" [ref=f8e106]
+            - cell "58%" [ref=f8e107]
+            - cell [ref=f8e108]
+            - cell "Strong" [ref=f8e111]
+            - cell "Broaden to a second and third platform." [ref=f8e113]
+          - row [ref=f8e114]:
+            - cell "Playwright" [ref=f8e115]
+            - cell "57%" [ref=f8e116]
+            - cell [ref=f8e117]
+            - cell "Strong" [ref=f8e120]
+            - cell "Re-express in TypeScript. Phase 2." [ref=f8e122]
+          - row [ref=f8e123]:
+            - cell "Selenium" [ref=f8e124]
+            - cell "55%" [ref=f8e125]
+            - cell [ref=f8e126]
+            - cell "Strong" [ref=f8e129]
+            - cell "Rebuild once in Java. Phase 3." [ref=f8e131]
+          - row [ref=f8e132]:
+            - cell "REST API testing" [ref=f8e133]
+            - cell "55%" [ref=f8e134]
+            - cell [ref=f8e135]
+            - cell "Strong" [ref=f8e138]
+            - cell "Add contract testing and auth depth." [ref=f8e140]
+          - row [ref=f8e141]:
+            - cell "Python" [ref=f8e142]
+            - cell "52%" [ref=f8e143]
+            - cell [ref=f8e144]
+            - cell "Strong" [ref=f8e147]
+            - cell "Deepen to library-author level. Phase 1." [ref=f8e149]
+          - row [ref=f8e150]:
+            - cell "Agile / Scrum" [ref=f8e151]
+            - cell "50%" [ref=f8e152]
+            - cell [ref=f8e153]
+            - cell "Strong" [ref=f8e156]
+            - cell "Hold." [ref=f8e158]
+          - row [ref=f8e159]:
+            - cell "Git" [ref=f8e160]
+            - cell "48%" [ref=f8e161]
+            - cell [ref=f8e162]
+            - cell "Strong" [ref=f8e165]
+            - cell "One day on rebase, bisect, reflog." [ref=f8e167]
+          - row [ref=f8e168]:
+            - cell "Stakeholder communication" [ref=f8e169]
+            - cell "42%" [ref=f8e170]
+            - cell [ref=f8e171]
+            - cell "Gap 6/6" [ref=f8e174]
+            - cell [ref=f8e176]:
+              - strong [ref=f8e177]: Highest ROI on the board.
+              - text: Daily habit + Phase 6.
+          - row [ref=f8e178]:
+            - cell "Java" [ref=f8e179]
+            - cell "42%" [ref=f8e180]
+            - cell [ref=f8e181]
+            - cell "Gap 6/6" [ref=f8e184]
+            - cell "15 days. Largest allocation. Phase 3." [ref=f8e186]
+          - row [ref=f8e187]:
+            - cell "JavaScript" [ref=f8e188]
+            - cell "35%" [ref=f8e189]
+            - cell [ref=f8e190]
+            - cell "Gap 6/6" [ref=f8e193]
+            - cell "Phase 2, days 11–12." [ref=f8e195]
+          - row [ref=f8e196]:
+            - cell "Test automation framework design" [ref=f8e197]
+            - cell "33%" [ref=f8e198]
+            - cell [ref=f8e199]
+            - cell "Moderate" [ref=f8e202]
+            - cell [ref=f8e204]:
+              - text: You build them; you must also
+              - emphasis [ref=f8e205]: architect
+              - text: them aloud. Phase 6.
+          - row [ref=f8e206]:
+            - cell "Jenkins" [ref=f8e207]
+            - cell "33%" [ref=f8e208]
+            - cell [ref=f8e209]
+            - cell "Strong" [ref=f8e212]
+            - cell "Add shared libraries and declarative depth." [ref=f8e214]
+          - row [ref=f8e215]:
+            - cell "Azure" [ref=f8e216]
+            - cell "33%" [ref=f8e217]
+            - cell [ref=f8e218]
+            - cell "Gap 6/6" [ref=f8e221]
+            - cell "QA-facing vocabulary only. Phase 4." [ref=f8e223]
+          - row [ref=f8e224]:
+            - cell "Azure DevOps" [ref=f8e225]
+            - cell "32%" [ref=f8e226]
+            - cell [ref=f8e227]
+            - cell "Gap 6/6" [ref=f8e230]
+            - cell "One real pipeline YAML. Phase 4." [ref=f8e232]
+          - row [ref=f8e233]:
+            - cell "GitHub Actions" [ref=f8e234]
+            - cell "30%" [ref=f8e235]
+            - cell [ref=f8e236]
+            - cell "Strong" [ref=f8e239]
+            - cell "Use it as the bridge to explain the others." [ref=f8e241]
+          - row [ref=f8e242]:
+            - cell "GitLab CI" [ref=f8e243]
+            - cell "30%" [ref=f8e244]
+            - cell [ref=f8e245]
+            - cell "Gap 3/6" [ref=f8e248]
+            - cell "Half a day. It is a dialect, not a discipline." [ref=f8e250]
+          - row [ref=f8e251]:
+            - cell "Performance testing" [ref=f8e252]
+            - cell "28%" [ref=f8e253]
+            - cell [ref=f8e254]
+            - cell "Gap 6/6" [ref=f8e257]
+            - cell "k6 + JMeter, both shipped. Phase 5." [ref=f8e259]
+          - row [ref=f8e260]:
+            - cell "Postman" [ref=f8e261]
+            - cell "27%" [ref=f8e262]
+            - cell [ref=f8e263]
+            - cell "Moderate" [ref=f8e266]
+            - cell "One collection with Newman in CI." [ref=f8e268]
+          - row [ref=f8e269]:
+            - cell "TypeScript" [ref=f8e270]
+            - cell "25%" [ref=f8e271]
+            - cell [ref=f8e272]
+            - cell "Gap 6/6" [ref=f8e275]
+            - cell "Unblocks the best-fit roles. Phase 2." [ref=f8e277]
+          - row [ref=f8e278]:
+            - cell "SQL" [ref=f8e279]
+            - cell "25%" [ref=f8e280]
+            - cell [ref=f8e281]
+            - cell "Moderate" [ref=f8e284]
+            - cell "Listed but unevidenced. Live-coded often. Phase 1." [ref=f8e286]
+          - row [ref=f8e287]:
+            - cell "Cucumber / BDD" [ref=f8e288]
+            - cell "25%" [ref=f8e289]
+            - cell [ref=f8e290]
+            - cell "Moderate" [ref=f8e293]
+            - cell "Real feature files in both stacks. Phase 3." [ref=f8e295]
+          - row [ref=f8e296]:
+            - cell "TestNG" [ref=f8e297]
+            - cell "25%" [ref=f8e298]
+            - cell [ref=f8e299]
+            - cell "Gap 4/6" [ref=f8e302]
+            - cell "Map annotation-for-annotation to pytest. Phase 3." [ref=f8e304]
+          - row [ref=f8e305]:
+            - cell "REST Assured" [ref=f8e306]
+            - cell "23%" [ref=f8e307]
+            - cell [ref=f8e308]
+            - cell "Gap 6/6" [ref=f8e311]
+            - cell "Compounds the Java gap. Phase 3." [ref=f8e313]
+          - row [ref=f8e314]:
+            - cell "Cypress" [ref=f8e315]
+            - cell "20%" [ref=f8e316]
+            - cell [ref=f8e317]
+            - cell "Gap 6/6" [ref=f8e320]
+            - cell "One day. Comparison answers only." [ref=f8e322]
+          - row [ref=f8e323]:
+            - cell "JMeter" [ref=f8e324]
+            - cell "20%" [ref=f8e325]
+            - cell [ref=f8e326]
+            - cell "Gap 5/6" [ref=f8e329]
+            - cell "One headless test plan. Phase 5." [ref=f8e331]
+          - row [ref=f8e332]:
+            - cell "JUnit" [ref=f8e333]
+            - cell "20%" [ref=f8e334]
+            - cell [ref=f8e335]
+            - cell "Gap 4/6" [ref=f8e338]
+            - cell "Learn as the delta from TestNG." [ref=f8e340]
+          - row [ref=f8e341]:
+            - cell "Docker" [ref=f8e342]
+            - cell "20%" [ref=f8e343]
+            - cell [ref=f8e344]
+            - cell "Strong" [ref=f8e347]
+            - cell "Push into compose test environments." [ref=f8e349]
+          - row [ref=f8e350]:
+            - cell "AI / LLM testing" [ref=f8e351]
+            - cell "18%" [ref=f8e352]
+            - cell [ref=f8e353]
+            - cell "Strong" [ref=f8e356]
+            - cell [ref=f8e358]:
+              - strong [ref=f8e359]: Your differentiator.
+              - text: 26 banked questions. Phase 6.
+          - row [ref=f8e360]:
+            - cell "Test data management" [ref=f8e361]
+            - cell "18%" [ref=f8e362]
+            - cell [ref=f8e363]
+            - cell "Gap 5/6" [ref=f8e366]
+            - cell "Parallel-safe strategy. Phase 5." [ref=f8e368]
+          - row [ref=f8e369]:
+            - cell "AWS" [ref=f8e370]
+            - cell "18%" [ref=f8e371]
+            - cell [ref=f8e372]
+            - cell "Gap 5/6" [ref=f8e375]
+            - cell "Six services at one paragraph each." [ref=f8e377]
+          - row [ref=f8e378]:
+            - cell "Kubernetes" [ref=f8e379]
+            - cell "16%" [ref=f8e380]
+            - cell [ref=f8e381]
+            - cell "Gap 5/6" [ref=f8e384]
+            - cell "Enough kubectl to debug a dead test env." [ref=f8e386]
+      - generic [ref=f8e387]:
+        - generic [ref=f8e388]:
+          - generic [ref=f8e389]: Strong
+          - text: evidenced in resume & projects
+        - generic [ref=f8e390]:
+          - generic [ref=f8e391]: Moderate
+          - text: listed but not evidenced
+        - generic [ref=f8e392]:
+          - generic [ref=f8e393]: Gap
+          - text: absent —
+          - emphasis [ref=f8e394]: "n"
+          - text: /6 = runs it was flagged in
+    - generic [ref=f8e395]:
+      - generic [ref=f8e396]:
+        - generic [ref=f8e397]: The plan
+        - heading "Six phases, sequenced by leverage — not by syllabus order" [level=2] [ref=f8e398]
+        - paragraph [ref=f8e399]: Cheap-and-decisive first (TypeScript, where you already own the tool), expensive-and-gating in the middle (Java, which needs runway), narrative last so it is fresh when you interview. Every phase ends with something public you can put a link to.
+      - generic [ref=f8e400]:
+        - article [ref=f8e401]:
+          - generic [ref=f8e402]: "1"
+          - generic [ref=f8e404]:
+            - generic [ref=f8e405]:
+              - heading "Rebuild the base" [level=3] [ref=f8e406]
+              - generic [ref=f8e407]: Days 1–10
+              - generic [ref=f8e408]: Sat 29 Aug – Mon 7 Sep
+            - paragraph [ref=f8e409]: Before adding two languages, make the one you own airtight. This phase also closes SQL, which is on your skill list with nothing behind it and gets live-coded in a quarter of interviews.
+            - generic [ref=f8e410]:
+              - generic [ref=f8e411]:
+                - generic [ref=f8e412]: Days 1–2 · Baseline
+                - heading "Audit & Python data model" [level=4] [ref=f8e413]
+                - list [ref=f8e414]:
+                  - listitem [ref=f8e415]: Record yourself answering 10 bank questions cold — this is your before-tape
+                  - listitem [ref=f8e416]: "Dunder methods, descriptors, `__slots__`"
+                  - listitem [ref=f8e417]: "Decorators with arguments, `functools.wraps`"
+                  - listitem [ref=f8e418]: Context managers, generators, iterators
+                  - listitem [ref=f8e419]: "Type hints, `Protocol`, mypy strict"
+              - generic [ref=f8e420]:
+                - generic [ref=f8e421]: Days 3–4 · Pytest
+                - heading "Beyond writing tests — extending the runner" [level=4] [ref=f8e422]
+                - list [ref=f8e423]:
+                  - listitem [ref=f8e424]: "Fixture scopes, `yield` teardown, conftest layering"
+                  - listitem [ref=f8e425]: "`parametrize`, indirect parametrisation, `ids`"
+                  - listitem [ref=f8e426]: "Markers, `pytest_collection_modifyitems` hooks"
+                  - listitem [ref=f8e427]: "xdist: how workers split, what breaks"
+                  - listitem [ref=f8e428]: Write and publish one real pytest plugin
+              - generic [ref=f8e429]:
+                - generic [ref=f8e430]: Days 5–6 · SQL
+                - heading "From joins to window functions" [level=4] [ref=f8e431]
+                - list [ref=f8e432]:
+                  - listitem [ref=f8e433]: INNER / LEFT / SELF joins, three-table joins
+                  - listitem [ref=f8e434]: GROUP BY, HAVING, aggregate rules
+                  - listitem [ref=f8e435]: "Window functions: ROW_NUMBER, RANK, LAG/LEAD"
+                  - listitem [ref=f8e436]: CTEs, correlated subqueries, EXISTS vs IN
+                  - listitem [ref=f8e437]: Indexes and reading an EXPLAIN plan
+                  - listitem [ref=f8e438]: 30 problems, then assert DB state from inside pytest
+              - generic [ref=f8e439]:
+                - generic [ref=f8e440]: Day 7 · Git
+                - heading "The commands you get asked about" [level=4] [ref=f8e441]
+                - list [ref=f8e442]:
+                  - listitem [ref=f8e443]: Rebase vs merge, interactive rebase, squash
+                  - listitem [ref=f8e444]: "`bisect` to find a breaking commit"
+                  - listitem [ref=f8e445]: "`reflog` recovery, cherry-pick, stash"
+                  - listitem [ref=f8e446]: Hooks; branching strategy for a test repo
+              - generic [ref=f8e447]:
+                - generic [ref=f8e448]: Day 8 · Linux
+                - heading "Debugging a box you did not build" [level=4] [ref=f8e449]
+                - list [ref=f8e450]:
+                  - listitem [ref=f8e451]: ps / top / lsof / netstat, signals
+                  - listitem [ref=f8e452]: grep, awk, sed, find, xargs, pipes
+                  - listitem [ref=f8e453]: journalctl and log triage, systemd units
+                  - listitem [ref=f8e454]: ssh, scp, permissions, cron
+              - generic [ref=f8e455]:
+                - generic [ref=f8e456]: Days 9–10 · Theory
+                - heading "Testing fundamentals, properly" [level=4] [ref=f8e457]
+                - list [ref=f8e458]:
+                  - listitem [ref=f8e459]: Pyramid vs trophy; where each layer earns its cost
+                  - listitem [ref=f8e460]: Equivalence, boundary, decision table, state transition, pairwise
+                  - listitem [ref=f8e461]: Risk-based testing, entry/exit criteria
+                  - listitem [ref=f8e462]: "RCA: 5-whys, fishbone, defect taxonomy"
+                  - listitem [ref=f8e463]: "Metrics: coverage, defect leakage, MTTD, flake rate, ROI"
+            - generic [ref=f8e464]:
+              - generic [ref=f8e465]: Ship by day 10
+              - paragraph [ref=f8e466]:
+                - text: Repo
+                - code [ref=f8e467]: sdet-core
+                - text: — a published pytest plugin plus a SQL-assertion helper used inside real tests. Plus your recorded baseline answers, saved for comparison on day 59.
+        - article [ref=f8e468]:
+          - generic [ref=f8e469]: "2"
+          - generic [ref=f8e471]:
+            - generic [ref=f8e472]:
+              - heading "JavaScript → TypeScript → Playwright" [level=3] [ref=f8e473]
+              - generic [ref=f8e474]: Days 11–21
+              - generic [ref=f8e475]: Tue 8 Sep – Fri 18 Sep
+            - paragraph [ref=f8e476]: The highest leverage per hour anywhere in the plan. You are not learning Playwright — you already know it better than most candidates. You are only changing the language it is written in, and that single move unblocks the roles that fit you best.
+            - generic [ref=f8e477]:
+              - generic [ref=f8e478]:
+                - generic [ref=f8e479]: Days 11–12 · JavaScript
+                - heading "Enough to be dangerous, then some" [level=4] [ref=f8e480]
+                - list [ref=f8e481]:
+                  - listitem [ref=f8e482]: "let/const/var, hoisting, closures, `this` binding"
+                  - listitem [ref=f8e483]: Prototypes and the class sugar over them
+                  - listitem [ref=f8e484]: Event loop, macro vs microtasks
+                  - listitem [ref=f8e485]: "Promises, async/await, `Promise.all` vs `allSettled`"
+                  - listitem [ref=f8e486]: "Array methods: map/filter/reduce/find/some"
+                  - listitem [ref=f8e487]: Destructuring, spread, optional chaining
+                  - listitem [ref=f8e488]: ESM vs CommonJS, package.json, npm scripts
+              - generic [ref=f8e489]:
+                - generic [ref=f8e490]: Days 13–14 · TypeScript
+                - heading "The type system a test author actually uses" [level=4] [ref=f8e491]
+                - list [ref=f8e492]:
+                  - listitem [ref=f8e493]: type vs interface, when each wins
+                  - listitem [ref=f8e494]: Unions, literal types, narrowing, guards
+                  - listitem [ref=f8e495]: Generics — including generic fixtures
+                  - listitem [ref=f8e496]: "Utility types: Partial, Pick, Omit, Record, Awaited"
+                  - listitem [ref=f8e497]: "`tsconfig.json` under `strict`"
+                  - listitem [ref=f8e498]: Typing async page objects end to end
+              - generic [ref=f8e499]:
+                - generic [ref=f8e500]: Days 15–16 · Playwright TS
+                - heading "Port your Python suite, spec for spec" [level=4] [ref=f8e501]
+                - list [ref=f8e502]:
+                  - listitem [ref=f8e503]: "`playwright.config.ts`: projects, retries, reporters, webServer"
+                  - listitem [ref=f8e504]: "`test.extend` custom fixtures — your conftest, in TS"
+                  - listitem [ref=f8e505]: Page Object classes with typed locators
+                  - listitem [ref=f8e506]: "Locator strategy, auto-waiting, web-first `expect`"
+                  - listitem [ref=f8e507]: "`storageState` auth reuse"
+              - generic [ref=f8e508]:
+                - generic [ref=f8e509]: Days 17–18 · Playwright depth
+                - heading "The things that separate senior from scripted" [level=4] [ref=f8e510]
+                - list [ref=f8e511]:
+                  - listitem [ref=f8e512]: "`request` fixture for API tests beside the UI"
+                  - listitem [ref=f8e513]: "`route()` interception, mocking, HAR replay"
+                  - listitem [ref=f8e514]: Workers, sharding, fully-parallel mode
+                  - listitem [ref=f8e515]: Trace viewer, video, screenshots on failure
+                  - listitem [ref=f8e516]: Visual snapshots; component testing awareness
+                  - listitem [ref=f8e517]: "`codegen` — and why you rewrite what it gives you"
+              - generic [ref=f8e518]:
+                - generic [ref=f8e519]: Day 19 · Cypress
+                - heading "One day, comparison-grade" [level=4] [ref=f8e520]
+                - list [ref=f8e521]:
+                  - listitem [ref=f8e522]: In-browser execution model vs Playwright's out-of-process
+                  - listitem [ref=f8e523]: Command queue and retry-ability
+                  - listitem [ref=f8e524]: Historic multi-tab / cross-origin limits
+                  - listitem [ref=f8e525]: Write three real specs so the answer is first-hand
+              - generic [ref=f8e526]:
+                - generic [ref=f8e527]: Days 20–21 · CI
+                - heading "Wire it up and prove it runs" [level=4] [ref=f8e528]
+                - list [ref=f8e529]:
+                  - listitem [ref=f8e530]: "GitHub Actions matrix: chromium / firefox / webkit"
+                  - listitem [ref=f8e531]: Shard across runners, merge reports
+                  - listitem [ref=f8e532]: Upload HTML report + traces as artifacts
+                  - listitem [ref=f8e533]: Cache node_modules and browsers
+                  - listitem [ref=f8e534]: Write the README a hiring manager will actually read
+            - generic [ref=f8e535]:
+              - generic [ref=f8e536]: Ship by day 21
+              - paragraph [ref=f8e537]:
+                - text: Public repo
+                - code [ref=f8e538]: playwright-ts-framework
+                - text: . This is the single most valuable artifact in the plan — 15 scanned postings are titled
+                - emphasis [ref=f8e539]: Playwright Automation Engineer
+                - text: ", and most specify TypeScript. Link it on Naukri and LinkedIn the day it is green."
+        - article [ref=f8e540]:
+          - generic [ref=f8e541]: "3"
+          - generic [ref=f8e543]:
+            - generic [ref=f8e544]:
+              - heading "The Java stack" [level=3] [ref=f8e545]
+              - generic [ref=f8e546]: Days 22–36
+              - generic [ref=f8e547]: Sat 19 Sep – Sat 3 Oct
+            - paragraph [ref=f8e548]: "Fifteen days — the largest block — because this is four gaps that compound: Java, TestNG, REST Assured and Maven all fall together. Expect a live coding round in these interviews, so the goal is writing Java under observation, not reading it."
+            - generic [ref=f8e549]:
+              - generic [ref=f8e550]:
+                - generic [ref=f8e551]: Days 22–24 · Java core
+                - heading "Language, from scratch" [level=4] [ref=f8e552]
+                - list [ref=f8e553]:
+                  - listitem [ref=f8e554]: JVM / JDK / JRE, compilation, classpath
+                  - listitem [ref=f8e555]: Primitives vs wrappers, autoboxing, String pool
+                  - listitem [ref=f8e556]: OOP four pillars; interface vs abstract class
+                  - listitem [ref=f8e557]: static, final, access modifiers
+                  - listitem [ref=f8e558]: Checked vs unchecked exceptions, try-with-resources
+                  - listitem [ref=f8e559]: "Collections: List / Set / Map and when each"
+                  - listitem [ref=f8e560]: Streams, lambdas, Optional, generics
+                  - listitem [ref=f8e561]: "`equals`/`hashCode` contract"
+              - generic [ref=f8e562]:
+                - generic [ref=f8e563]: Days 25–26 · Maven
+                - heading "The build, because you will be asked" [level=4] [ref=f8e564]
+                - list [ref=f8e565]:
+                  - listitem [ref=f8e566]: "Lifecycle phases: validate → compile → test → package → install"
+                  - listitem [ref=f8e567]: pom.xml anatomy, dependency scopes
+                  - listitem [ref=f8e568]: Surefire vs Failsafe
+                  - listitem [ref=f8e569]: "Profiles, properties, `-Dgroups=`"
+                  - listitem [ref=f8e570]: Gradle at awareness level only
+              - generic [ref=f8e571]:
+                - generic [ref=f8e572]: Days 27–29 · Selenium 4 (Java)
+                - heading "Rebuild what you know, in the other stack" [level=4] [ref=f8e573]
+                - list [ref=f8e574]:
+                  - listitem [ref=f8e575]: WebDriver architecture and the W3C protocol
+                  - listitem [ref=f8e576]: Locators, relative locators, CSS vs XPath trade-offs
+                  - listitem [ref=f8e577]: Implicit / explicit / fluent waits — and why mixing them is a bug
+                  - listitem [ref=f8e578]: Actions class, frames, windows, alerts
+                  - listitem [ref=f8e579]: ChromeOptions, headless, remote WebDriver, Grid
+                  - listitem [ref=f8e580]: "StaleElementReference: cause and correct fix"
+                  - listitem [ref=f8e581]: POM without PageFactory, and why
+              - generic [ref=f8e582]:
+                - generic [ref=f8e583]: Days 30–31 · TestNG & JUnit
+                - heading "Map every annotation to its pytest twin" [level=4] [ref=f8e584]
+                - list [ref=f8e585]:
+                  - listitem [ref=f8e586]: "@BeforeSuite → @AfterMethod lifecycle order"
+                  - listitem [ref=f8e587]: priority, dependsOnMethods, groups
+                  - listitem [ref=f8e588]: "@DataProvider ≈ parametrize"
+                  - listitem [ref=f8e589]: testng.xml, parallel by methods/classes/tests
+                  - listitem [ref=f8e590]: ITestListener, IRetryAnalyzer
+                  - listitem [ref=f8e591]: "JUnit 5 as a delta: @Test, @ParameterizedTest, extensions"
+              - generic [ref=f8e592]:
+                - generic [ref=f8e593]: Days 32–34 · REST Assured
+                - heading "API automation in Java" [level=4] [ref=f8e594]
+                - list [ref=f8e595]:
+                  - listitem [ref=f8e596]: given / when / then fluent syntax
+                  - listitem [ref=f8e597]: Path params, query params, request bodies
+                  - listitem [ref=f8e598]: "Auth: basic, bearer, OAuth2 client credentials"
+                  - listitem [ref=f8e599]: JsonPath and XmlPath assertions
+                  - listitem [ref=f8e600]: JSON schema validation
+                  - listitem [ref=f8e601]: RequestSpecification / ResponseSpecification reuse
+                  - listitem [ref=f8e602]: POJO serialisation with Jackson
+                  - listitem [ref=f8e603]: Filters and request/response logging
+              - generic [ref=f8e604]:
+                - generic [ref=f8e605]: Days 35–36 · BDD & Jenkins
+                - heading "Cucumber-JVM, then run it in a pipeline" [level=4] [ref=f8e606]
+                - list [ref=f8e607]:
+                  - listitem [ref=f8e608]: Feature files, step definitions, glue
+                  - listitem [ref=f8e609]: Hooks, tags, data tables, Scenario Outline
+                  - listitem [ref=f8e610]: Runner class and Cucumber reports
+                  - listitem [ref=f8e611]: pytest-bdd side by side — one honest opinion on where BDD earns its keep
+                  - listitem [ref=f8e612]: Jenkins declarative pipeline running the Maven suite
+            - generic [ref=f8e613]:
+              - generic [ref=f8e614]: Ship by day 36
+              - paragraph [ref=f8e615]:
+                - text: Public repo
+                - code [ref=f8e616]: java-sdet-framework
+                - text: — Selenium 4 + TestNG + REST Assured + Cucumber on Maven, green in Jenkins and GitHub Actions. Now you can say
+                - emphasis [ref=f8e617]: “my production stack is Python; here is the same framework I built in Java”
+                - text: and hand over a link.
+        - article [ref=f8e618]:
+          - generic [ref=f8e619]: "4"
+          - generic [ref=f8e621]:
+            - generic [ref=f8e622]:
+              - heading "Pipelines, containers, cloud" [level=3] [ref=f8e623]
+              - generic [ref=f8e624]: Days 37–45
+              - generic [ref=f8e625]: Sun 4 Oct – Mon 12 Oct
+            - paragraph [ref=f8e626]: You already understand CI deeply — this phase is about dialect coverage so no CV filter can screen you out on a platform name, plus enough cloud vocabulary to navigate an environment you are asked to test.
+            - generic [ref=f8e627]:
+              - generic [ref=f8e628]:
+                - generic [ref=f8e629]: Days 37–38 · Jenkins
+                - heading "Past the job you inherited" [level=4] [ref=f8e630]
+                - list [ref=f8e631]:
+                  - listitem [ref=f8e632]: Declarative vs scripted pipeline syntax
+                  - listitem [ref=f8e633]: Agents, tools, environment, credentials binding
+                  - listitem [ref=f8e634]: Parallel stages, matrix, post blocks
+                  - listitem [ref=f8e635]: "Shared libraries — `vars/`, `src/`"
+                  - listitem [ref=f8e636]: Publishing Allure / HTML reports
+              - generic [ref=f8e637]:
+                - generic [ref=f8e638]: Days 39–40 · Azure DevOps
+                - heading "Highest-value platform gap" [level=4] [ref=f8e639]
+                - list [ref=f8e640]:
+                  - listitem [ref=f8e641]: "azure-pipelines.yml: trigger, pool, variables"
+                  - listitem [ref=f8e642]: Stages → jobs → steps; templates for reuse
+                  - listitem [ref=f8e643]: Variable groups and service connections
+                  - listitem [ref=f8e644]: PublishTestResults + PublishBuildArtifacts
+                  - listitem [ref=f8e645]: Environments, approvals, gates
+                  - listitem [ref=f8e646]: Azure Test Plans and Boards at a working level
+                  - listitem [ref=f8e647]: Map it block-by-block to your GH Actions file
+              - generic [ref=f8e648]:
+                - generic [ref=f8e649]: Day 41 · GitLab CI
+                - heading "A dialect, half a day each way" [level=4] [ref=f8e650]
+                - list [ref=f8e651]:
+                  - listitem [ref=f8e652]: .gitlab-ci.yml stages, jobs, runners
+                  - listitem [ref=f8e653]: artifacts, cache, rules vs only/except
+                  - listitem [ref=f8e654]: "`needs` for DAG pipelines"
+              - generic [ref=f8e655]:
+                - generic [ref=f8e656]: Days 42–43 · Docker & K8s
+                - heading "Own the test environment" [level=4] [ref=f8e657]
+                - list [ref=f8e658]:
+                  - listitem [ref=f8e659]: Dockerfile layering, cache, multi-stage builds
+                  - listitem [ref=f8e660]: "compose: a full test env in one file"
+                  - listitem [ref=f8e661]: Networks, volumes, healthchecks
+                  - listitem [ref=f8e662]: Selenium Grid and Playwright images in compose
+                  - listitem [ref=f8e663]: "K8s: pods, deployments, services, configmaps, secrets"
+                  - listitem [ref=f8e664]: kubectl get / logs / describe / exec / port-forward
+                  - listitem [ref=f8e665]: Debug a test environment that is down
+              - generic [ref=f8e666]:
+                - generic [ref=f8e667]: Days 44–45 · Cloud
+                - heading "Vocabulary a tester is expected to have" [level=4] [ref=f8e668]
+                - list [ref=f8e669]:
+                  - listitem [ref=f8e670]: "Azure: App Service, Key Vault, Application Insights, Blob, AKS"
+                  - listitem [ref=f8e671]: "AWS: EC2, S3, Lambda, CloudWatch, RDS, DynamoDB, EKS"
+                  - listitem [ref=f8e672]: Read CloudWatch / App Insights logs to triage a failure
+                  - listitem [ref=f8e673]: Where secrets live and how tests get them
+                  - listitem [ref=f8e674]: GCP at name-recognition level only
+            - generic [ref=f8e675]:
+              - generic [ref=f8e676]: Ship by day 45
+              - paragraph [ref=f8e677]:
+                - text: One suite, three pipelines — Jenkins, GitHub Actions and Azure DevOps — plus a
+                - code [ref=f8e678]: docker-compose.yml
+                - text: that stands the whole test environment up from cold. Screenshot all three green for the README.
+        - article [ref=f8e679]:
+          - generic [ref=f8e680]: "5"
+          - generic [ref=f8e682]:
+            - generic [ref=f8e683]:
+              - heading "Non-functional & distributed systems" [level=3] [ref=f8e684]
+              - generic [ref=f8e685]: Days 46–53
+              - generic [ref=f8e686]: Tue 13 Oct – Tue 20 Oct
+            - paragraph [ref=f8e687]: Your resume claims performance and load testing without naming a tool — an interviewer will find that in one question. This phase converts every unbacked claim into something you have actually run, and adds the distributed-systems reasoning that senior rounds probe.
+            - generic [ref=f8e688]:
+              - generic [ref=f8e689]:
+                - generic [ref=f8e690]: Days 46–47 · Performance
+                - heading "Concepts, then k6" [level=4] [ref=f8e691]
+                - list [ref=f8e692]:
+                  - listitem [ref=f8e693]: Load vs stress vs soak vs spike vs breakpoint
+                  - listitem [ref=f8e694]: Throughput, latency, p50 / p95 / p99 — why average lies
+                  - listitem [ref=f8e695]: Little's Law, ramp profiles, think time
+                  - listitem [ref=f8e696]: Thresholds and SLOs as pass/fail gates
+                  - listitem [ref=f8e697]: Write a k6 script with stages + thresholds, run it in CI
+              - generic [ref=f8e698]:
+                - generic [ref=f8e699]: Day 48 · JMeter
+                - heading "The tool the JDs name" [level=4] [ref=f8e700]
+                - list [ref=f8e701]:
+                  - listitem [ref=f8e702]: Thread group, HTTP sampler, config elements
+                  - listitem [ref=f8e703]: CSV Data Set Config for data-driven load
+                  - listitem [ref=f8e704]: Assertions, listeners, aggregate report
+                  - listitem [ref=f8e705]: Correlation with a regex extractor
+                  - listitem [ref=f8e706]: "Headless: `jmeter -n -t plan.jmx -l out.jtl`"
+              - generic [ref=f8e707]:
+                - generic [ref=f8e708]: Day 49 · Security
+                - heading "What a tester is expected to catch" [level=4] [ref=f8e709]
+                - list [ref=f8e710]:
+                  - listitem [ref=f8e711]: OWASP Top 10 through a testing lens
+                  - listitem [ref=f8e712]: Authentication vs authorisation
+                  - listitem [ref=f8e713]: "JWT structure, claims, expiry, `alg:none`"
+                  - listitem [ref=f8e714]: OAuth2 flows — which one, when
+                  - listitem [ref=f8e715]: IDOR / broken object-level authorisation cases
+                  - listitem [ref=f8e716]: ZAP baseline scan as a CI job; secrets hygiene
+              - generic [ref=f8e717]:
+                - generic [ref=f8e718]: Day 50 · API depth
+                - heading "Contracts and virtualisation" [level=4] [ref=f8e719]
+                - list [ref=f8e720]:
+                  - listitem [ref=f8e721]: OpenAPI / Swagger as a test source
+                  - listitem [ref=f8e722]: "Pact: consumer test → broker → provider verify → can-i-deploy"
+                  - listitem [ref=f8e723]: WireMock and service virtualisation
+                  - listitem [ref=f8e724]: Idempotency, pagination, rate limits, versioning
+                  - listitem [ref=f8e725]: SOAP envelope and WSDL shape, for legacy questions
+              - generic [ref=f8e726]:
+                - generic [ref=f8e727]: Day 51 · Distributed
+                - heading "Event-driven systems and Kafka" [level=4] [ref=f8e728]
+                - list [ref=f8e729]:
+                  - listitem [ref=f8e730]: Correlation IDs and distributed tracing
+                  - listitem [ref=f8e731]: Eventual consistency; polling with backoff, not sleeps
+                  - listitem [ref=f8e732]: Saga and compensating transactions
+                  - listitem [ref=f8e733]: "Kafka in Docker: topics, partitions, consumer groups, offsets"
+                  - listitem [ref=f8e734]: Assert that a message actually landed
+              - generic [ref=f8e735]:
+                - generic [ref=f8e736]: Day 52 · Test data
+                - heading "The thing that breaks parallel suites" [level=4] [ref=f8e737]
+                - list [ref=f8e738]:
+                  - listitem [ref=f8e739]: Factories and builders vs static fixtures
+                  - listitem [ref=f8e740]: Seed data, synthetic data, PII masking
+                  - listitem [ref=f8e741]: "DB reset strategies: transaction rollback, truncate, restore"
+                  - listitem [ref=f8e742]: Parallel-safe data ownership per worker
+                  - listitem [ref=f8e743]: Environment config and secret injection
+              - generic [ref=f8e744]:
+                - generic [ref=f8e745]: Day 53 · Data & a11y
+                - heading "ETL checks, then accessibility" [level=4] [ref=f8e746]
+                - list [ref=f8e747]:
+                  - listitem [ref=f8e748]: Source-to-target mapping
+                  - listitem [ref=f8e749]: Count, completeness, transformation, duplicate, null checks
+                  - listitem [ref=f8e750]: SCD type 1 vs type 2
+                  - listitem [ref=f8e751]: pandas script reconciling two extracts
+                  - listitem [ref=f8e752]: axe + WCAG AA basics; visual regression as a bonus
+            - generic [ref=f8e753]:
+              - generic [ref=f8e754]: Ship by day 53
+              - paragraph [ref=f8e755]:
+                - text: Repo
+                - code [ref=f8e756]: nonfunctional-toolkit
+                - text: — a k6 script with thresholds, a headless JMeter plan, a ZAP baseline CI job, a Pact consumer/provider pair and a pandas reconciler. Every previously-unbacked resume claim now has a file behind it.
+        - article [ref=f8e757]:
+          - generic [ref=f8e758]: "6"
+          - generic [ref=f8e760]:
+            - generic [ref=f8e761]:
+              - heading "Architecture, narrative, interviews" [level=3] [ref=f8e762]
+              - generic [ref=f8e763]: Days 54–60
+              - generic [ref=f8e764]: Wed 21 Oct – Tue 27 Oct
+            - paragraph [ref=f8e765]: Last, so it is fresh. This is the phase that converts everything above into offers — and it addresses the highest-demand gap on the whole board, which is not a technology at all.
+            - generic [ref=f8e766]:
+              - generic [ref=f8e767]:
+                - generic [ref=f8e768]: Days 54–55 · Architecture
+                - heading "Design frameworks aloud, on a whiteboard" [level=4] [ref=f8e769]
+                - list [ref=f8e770]:
+                  - listitem [ref=f8e771]: "Draw the i2v framework in two minutes: layers, config, fixtures, data, reporting, CI hooks"
+                  - listitem [ref=f8e772]: Name one decision you would now make differently — and why
+                  - listitem [ref=f8e773]: "Design cold: automation strategy for a microservices e-commerce platform"
+                  - listitem [ref=f8e774]: "Design cold: test strategy for an AI/LLM feature"
+                  - listitem [ref=f8e775]: "Design cold: cut a 4-hour suite to 20 minutes"
+                  - listitem [ref=f8e776]: "Flakiness engineering: locator strategy, isolation, quarantine, retry-vs-fix"
+              - generic [ref=f8e777]:
+                - generic [ref=f8e778]: Day 56 · Metrics
+                - heading "Numbers you can define and defend" [level=4] [ref=f8e779]
+                - list [ref=f8e780]:
+                  - listitem [ref=f8e781]: Automation coverage — and its honest limits
+                  - listitem [ref=f8e782]: Defect leakage / escape rate
+                  - listitem [ref=f8e783]: Test stability index, flake rate
+                  - listitem [ref=f8e784]: Pipeline MTTR, release readiness
+                  - listitem [ref=f8e785]: Automation ROI, stated without hand-waving
+                  - listitem [ref=f8e786]: Mock up a one-page quality dashboard
+              - generic [ref=f8e787]:
+                - generic [ref=f8e788]: Day 57 · Stakeholders
+                - heading "The 42% gap — build the story bank" [level=4] [ref=f8e789]
+                - list [ref=f8e790]:
+                  - listitem [ref=f8e791]: Reporting release readiness under pressure
+                  - listitem [ref=f8e792]: Negotiating pass/fail thresholds with the ML team
+                  - listitem [ref=f8e793]: Escalating a defect that threatened a release date
+                  - listitem [ref=f8e794]: Mentoring a junior who was struggling
+                  - listitem [ref=f8e795]: Saying no to a deadline, with evidence
+                  - listitem [ref=f8e796]: A call you got wrong and what changed after
+                  - listitem [ref=f8e797]: 12 STAR stories, each rehearsed to two minutes, recorded
+              - generic [ref=f8e798]:
+                - generic [ref=f8e799]: Day 58 · Differentiator
+                - heading "Your AI/LLM testing edge, sharpened" [level=4] [ref=f8e800]
+                - list [ref=f8e801]:
+                  - listitem [ref=f8e802]: Scoring non-deterministic output
+                  - listitem [ref=f8e803]: Prompt regression suites and golden datasets
+                  - listitem [ref=f8e804]: Tool-call verification for agentic flows
+                  - listitem [ref=f8e805]: Grounding and hallucination checks
+                  - listitem [ref=f8e806]: LLM-as-judge with explicit rubrics
+                  - listitem [ref=f8e807]: Latency and cost budgets; model version drift
+                  - listitem [ref=f8e808]: Compress to two minutes — 26 banked questions live here
+              - generic [ref=f8e809]:
+                - generic [ref=f8e810]: Day 59 · Mock loop
+                - heading "A full interview day, recorded" [level=4] [ref=f8e811]
+                - list [ref=f8e812]:
+                  - listitem [ref=f8e813]: Screening round — 30 min
+                  - listitem [ref=f8e814]: Live coding in Python, then in Java
+                  - listitem [ref=f8e815]: Framework design round, whiteboard
+                  - listitem [ref=f8e816]: Behavioural round from the story bank
+                  - listitem [ref=f8e817]: Watch it back against the day-1 tape
+              - generic [ref=f8e818]:
+                - generic [ref=f8e819]: Day 60 · Relaunch
+                - heading "Rewrite the profile the market reads" [level=4] [ref=f8e820]
+                - list [ref=f8e821]:
+                  - listitem [ref=f8e822]: New headline and summary carrying Java, TypeScript, Azure DevOps, performance
+                  - listitem [ref=f8e823]: Key skills reordered to the demand table above
+                  - listitem [ref=f8e824]: IT skills updated — currently only two entries
+                  - listitem [ref=f8e825]: Add all four repos as work samples on Naukri and LinkedIn
+                  - listitem [ref=f8e826]: Re-run the scanner and apply to the full shortlist
+            - generic [ref=f8e827]:
+              - generic [ref=f8e828]: Ship by day 60
+              - paragraph [ref=f8e829]: Four public repos, twelve rehearsed stories, a rewritten profile, and a before/after tape that proves the sixty days moved something. Your work-sample section goes from one link to five.
+    - generic [ref=f8e830]:
+      - generic [ref=f8e831]:
+        - generic [ref=f8e832]: Operating rhythm
+        - heading "252 hours, and the habit that carries them" [level=2] [ref=f8e833]
+        - paragraph [ref=f8e834]: 42 weekdays at three hours and 18 weekend days at seven. That budget is what the phases above are costed against — if a week slips, cut breadth from Phase 4, never the daily habit.
+      - generic [ref=f8e835]:
+        - generic [ref=f8e836]:
+          - heading "Weekday · 3 hours" [level=3] [ref=f8e837]
+          - generic [ref=f8e838]:
+            - generic [ref=f8e839]: 45 min
+            - generic [ref=f8e840]:
+              - strong [ref=f8e841]: Theory
+              - generic [ref=f8e842]: Read or watch, notes in your own words. No passive video.
+          - generic [ref=f8e843]:
+            - generic [ref=f8e844]: 90 min
+            - generic [ref=f8e845]:
+              - strong [ref=f8e846]: Hands-on
+              - generic [ref=f8e847]: Code that ends up committed. A day with no commit did not happen.
+          - generic [ref=f8e848]:
+            - generic [ref=f8e849]: 30 min
+            - generic [ref=f8e850]:
+              - strong [ref=f8e851]: Bank drill
+              - generic [ref=f8e852]:
+                - text: 10 questions from
+                - code [ref=f8e853]: bank.json
+                - text: ", answered out loud, standing up."
+          - generic [ref=f8e854]:
+            - generic [ref=f8e855]: 15 min
+            - generic [ref=f8e856]:
+              - strong [ref=f8e857]: Log
+              - generic [ref=f8e858]: What broke, what you would say about it in an interview.
+        - generic [ref=f8e859]:
+          - heading "Weekend · 7 hours" [level=3] [ref=f8e860]
+          - generic [ref=f8e861]:
+            - generic [ref=f8e862]: 4 hrs
+            - generic [ref=f8e863]:
+              - strong [ref=f8e864]: Project block
+              - generic [ref=f8e865]: Uninterrupted build on that phase's shipped artifact.
+          - generic [ref=f8e866]:
+            - generic [ref=f8e867]: 90 min
+            - generic [ref=f8e868]:
+              - strong [ref=f8e869]: Wire to CI
+              - generic [ref=f8e870]: Nothing counts until it runs green in a pipeline.
+          - generic [ref=f8e871]:
+            - generic [ref=f8e872]: 60 min
+            - generic [ref=f8e873]:
+              - strong [ref=f8e874]: README
+              - generic [ref=f8e875]: Write it as if a hiring manager is the only reader. They are.
+          - generic [ref=f8e876]:
+            - generic [ref=f8e877]: 30 min
+            - generic [ref=f8e878]:
+              - strong [ref=f8e879]: Retro
+              - generic [ref=f8e880]: What can I demo today that I could not last Sunday?
+      - generic [ref=f8e881]:
+        - generic [ref=f8e882]:
+          - heading "The non-negotiable" [level=3] [ref=f8e883]
+          - list [ref=f8e884]:
+            - listitem [ref=f8e885]:
+              - text: Your bank holds
+              - strong [ref=f8e886]: 598 questions
+              - text: . Ten a day for sixty days covers it
+              - strong [ref=f8e887]: 1.5 times over
+              - text: .
+            - listitem [ref=f8e888]:
+              - text: Answer
+              - strong [ref=f8e889]: out loud
+              - text: . Reading an answer you already agree with is not practice.
+            - listitem [ref=f8e890]:
+              - text: Weight the drill toward the current phase, but keep two questions daily on
+              - strong [ref=f8e891]: stakeholder communication
+              - text: — 24 of them are waiting and it is your biggest gap by demand.
+            - listitem [ref=f8e892]:
+              - text: Any question you cannot answer in ninety seconds goes into a
+              - strong [ref=f8e893]: redo list
+              - text: for the next weekend.
+        - generic [ref=f8e894]:
+          - heading "If a week goes wrong" [level=3] [ref=f8e895]
+          - list [ref=f8e896]:
+            - listitem [ref=f8e897]:
+              - strong [ref=f8e898]: Protect
+              - text: Phase 2 and Phase 3 in full. They are the two gaps that gate the most roles.
+            - listitem [ref=f8e899]:
+              - strong [ref=f8e900]: Compress
+              - text: Phase 4 first — GitLab CI, GCP and AWS breadth are the cheapest days to lose.
+            - listitem [ref=f8e901]:
+              - strong [ref=f8e902]: Never cut
+              - text: Day 57 or Day 59. The story bank and the mock loop are what convert study into offers.
+            - listitem [ref=f8e903]:
+              - strong [ref=f8e904]: Never cut
+              - text: the daily bank drill, even on a zero-study day.
+    - generic [ref=f8e905]:
+      - generic [ref=f8e906]:
+        - generic [ref=f8e907]: Timing
+        - heading "Apply while you learn — do not wait for day 60" [level=2] [ref=f8e908]
+        - paragraph [ref=f8e909]: Your scanner already runs daily and your notice period is two months, so an offer accepted in November means a start in January. Interviewing from week three onward is free practice with real stakes; each gate below unlocks a class of role you could not credibly claim the week before.
+      - generic [ref=f8e910]:
+        - generic [ref=f8e911]:
+          - generic [ref=f8e912]: From day 1
+          - heading "Python & Playwright roles" [level=4] [ref=f8e913]
+          - paragraph [ref=f8e914]: You are already competitive. Keep applying throughout — these need no new skill, just your existing strength stated better.
+        - generic [ref=f8e915]:
+          - generic [ref=f8e916]: After day 21
+          - heading "Playwright / TypeScript roles" [level=4] [ref=f8e917]
+          - paragraph [ref=f8e918]: The best-fit cluster in your whole scan, and the one you were being screened out of on language alone. Repo link in the first message.
+        - generic [ref=f8e919]:
+          - generic [ref=f8e920]: After day 36
+          - heading "Java Selenium & SDET roles" [level=4] [ref=f8e921]
+          - paragraph [ref=f8e922]: "Roughly a third of postings open up. Frame honestly: production stack is Python, Java framework built and public, ask what ramp-up they expect."
+        - generic [ref=f8e923]:
+          - generic [ref=f8e924]: After day 45
+          - heading "Automation Lead & ₹20L+ roles" [level=4] [ref=f8e925]
+          - paragraph [ref=f8e926]: The 20–35L band wants architecture, multi-platform CI and mentoring. With three pipelines and two frameworks shipped, that claim is now evidenced.
+    - generic [ref=f8e927]:
+      - generic [ref=f8e928]:
+        - generic [ref=f8e929]: Scope
+        - heading "What I deliberately left out" [level=2] [ref=f8e930]
+        - paragraph [ref=f8e931]: Sixty days does not cover thirty-nine gaps. These appeared in the data and were cut on purpose — knowing why you skipped something is itself an interview answer.
+      - generic [ref=f8e932]:
+        - generic [ref=f8e933]:
+          - generic [ref=f8e934]:
+            - text: C# / .NET
+            - emphasis [ref=f8e935]: 18%
+          - generic [ref=f8e936]: Every posting naming C# also accepts Python or Java. Costs you thirty minutes of “which would I pick and why”, not a week.
+        - generic [ref=f8e937]:
+          - generic [ref=f8e938]:
+            - text: Appium & mobile
+            - emphasis [ref=f8e939]: 13%
+          - generic [ref=f8e940]: Concept level only — it speaks the WebDriver protocol, locator strategies and driver lifecycle mirror Selenium. Device fragmentation is the interesting answer, not the API.
+        - generic [ref=f8e941]:
+          - generic [ref=f8e942]:
+            - text: GCP
+            - emphasis [ref=f8e943]: 18%
+          - generic [ref=f8e944]: Azure is nearly double the demand and gets the real days. GCP gets name recognition inside the Phase 4 cloud block.
+        - generic [ref=f8e945]:
+          - generic [ref=f8e946]:
+            - text: LoadRunner, Gatling
+            - emphasis [ref=f8e947]: <10%
+          - generic [ref=f8e948]: k6 and JMeter cover the concepts and the vocabulary transfers. Learning a third load tool buys nothing.
+        - generic [ref=f8e949]:
+          - generic [ref=f8e950]: Tosca, TestComplete, Robot Framework
+          - generic [ref=f8e951]: Single-posting outliers. Learn one only if that specific interview lands, and learn it that week.
+        - generic [ref=f8e952]:
+          - generic [ref=f8e953]: Mainframe, Dialogflow CX, SailPoint/IAM
+          - generic [ref=f8e954]: Each is one posting with a hard domain gate. High-paying but structurally closed inside sixty days — skip without regret.
+        - generic [ref=f8e955]:
+          - generic [ref=f8e956]: Deep DSA
+          - generic [ref=f8e957]: SDET loops rarely go past easy/medium string and collection manipulation. Covered incidentally by the Java and Python phases.
+        - generic [ref=f8e958]:
+          - generic [ref=f8e959]:
+            - text: Domain depth
+            - emphasis [ref=f8e960]: banking, healthcare, retail
+          - generic [ref=f8e961]: Learned per interview, not in advance. One payment flow end to end is a better hour than a week of domain reading.
+    - generic [ref=f8e962]:
+      - generic [ref=f8e963]: Built from naukri_profile/data — 6 scan runs, 21–29 Aug 2026 · 571 unique postings across Naukri and LinkedIn · 598-question bank · 60 JDs with per-skill gap scoring.
+      - generic [ref=f8e964]: Demand figures are the share of analysed JDs naming each skill, averaged across runs. Status reflects the gap analysis already in your prep files.

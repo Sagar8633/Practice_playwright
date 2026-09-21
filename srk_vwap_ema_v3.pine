@@ -1,0 +1,56 @@
+//@version=6
+// SRK VWAP+EMA Regime v3  — based on SSRN 6650958 (regime-filtered intraday gold)
+//  Regime filter : 200-EMA sets allowed direction; trade only WITH it.
+//  Location filter: price must be on the correct side of session VWAP.
+//  Entry         : pullback-and-rejection at the 50-EMA
+//                  long  = bar dips to/below 50-EMA (low<=ema50) but CLOSES back
+//                          above it (close>ema50) as a bullish candle (close>open)
+//                  short = mirror.
+//  Exit          : 50-EMA CLOSE-based trailing stop (exit when a candle CLOSES
+//                  through the 50-EMA) + initial structural stop at rejection low/high.
+//  Note: close-based (not wick) exit is the paper's key edge — gold's wicks blow
+//        out fixed stops; requiring a full close beyond the EMA survives them.
+strategy("SRK VWAP+EMA Regime v3", overlay=true, initial_capital=100000,
+     default_qty_type=strategy.percent_of_equity, default_qty_value=10,
+     commission_type=strategy.commission.percent, commission_value=0.03,
+     pyramiding=0, calc_on_every_tick=false)
+
+emaPullLen = input.int(50,  "Pullback / exit EMA", group="EMAs")
+emaRegLen  = input.int(200, "Regime EMA",          group="EMAs")
+useVwap    = input.bool(true,"Require correct side of session VWAP", group="Filter")
+
+ema50  = ta.ema(close, emaPullLen)
+ema200 = ta.ema(close, emaRegLen)
+vwap   = ta.vwap(hlc3)
+
+plot(ema50,  "EMA50",  color=color.orange, linewidth=2)
+plot(ema200, "EMA200", color=color.blue,   linewidth=2)
+plot(vwap,   "VWAP",   color=color.purple)
+
+longRegime  = close > ema200 and (not useVwap or close > vwap)
+shortRegime = close < ema200 and (not useVwap or close < vwap)
+
+longRej  = longRegime  and low  <= ema50 and close > ema50 and close > open
+shortRej = shortRegime and high >= ema50 and close < ema50 and close < open
+
+var float initStop = na
+
+if longRej and strategy.position_size == 0
+    initStop := low
+    strategy.entry("L", strategy.long)
+if shortRej and strategy.position_size == 0
+    initStop := high
+    strategy.entry("S", strategy.short)
+
+if strategy.position_size > 0
+    strategy.exit("L-stop", from_entry="L", stop=initStop)
+    if close < ema50
+        strategy.close("L", comment="EMA50 close exit")
+if strategy.position_size < 0
+    strategy.exit("S-stop", from_entry="S", stop=initStop)
+    if close > ema50
+        strategy.close("S", comment="EMA50 close exit")
+
+plotshape(longRej  and strategy.position_size==0, "L", shape.triangleup,   location.belowbar, color.new(color.green,0), size=size.small)
+plotshape(shortRej and strategy.position_size==0, "S", shape.triangledown, location.abovebar, color.new(color.red,0),   size=size.small)
+bgcolor(longRegime ? color.new(color.green,95) : shortRegime ? color.new(color.red,95) : na)

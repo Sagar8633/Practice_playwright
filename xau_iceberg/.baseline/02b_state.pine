@@ -1,0 +1,43 @@
+// ============================================================================
+//  SECTION 2B : SHARED MUTABLE STATE
+//  Pine demands declaration before use, but two pairs of sections read each
+//  other: SECTION 13 (Filters) gates on the loss streak that SECTION 15
+//  (Failure Analysis) writes, and SECTION 16 (Presentation) draws the ids that
+//  SECTION 6 and SECTION 14 mint. Rather than forward-declare inside a module -
+//  which is how the same counter ends up existing twice under two names - every
+//  cross-section variable is declared exactly once, here.
+//
+//  READ/WRITE OWNERSHIP IS FIXED:
+//    lastSigBar*/lastLossBar*/lossStreak*  written by S15, read by S13
+//    dupLvl*/dupBar*                       written by S14, read by S13
+//    zoneSeq / setupSeq                    written by S6 / S14
+//  Within a bar S13 runs BEFORE S15, so S13 necessarily reads the values as of
+//  the previous bar. That is deterministic and it is the intended behaviour: a
+//  loss booked on this bar must not retro-gate a signal already evaluated on it.
+// ============================================================================
+
+// --- per-direction signal / loss memory (index 0 = LONG, 1 = SHORT) ---------
+// Per-direction on purpose. A global cooldown lets a stopped-out long suppress
+// shorts for the next 100 minutes, which deletes the failed-absorption reversal -
+// the single highest-value setup this model has.
+var array<int> lastSigBar  = array.new<int>(2, na)
+var array<int> lastLossBar = array.new<int>(2, na)
+var array<int> lossStreak  = array.new<int>(2, 0)
+
+// --- per-direction duplicate memory: identity of the level last traded -------
+var array<float> dupLvl = array.new<float>(2, na)
+var array<int>   dupBar = array.new<int>(2, na)
+
+// dir (+1/-1) -> array slot (0/1). The ONLY place this mapping is written.
+f_slot(int dir) => dir > 0 ? 0 : 1
+
+// --- monotonic ids ----------------------------------------------------------
+var int zoneSeq  = 0
+var int setupSeq = 0
+
+// --- signal plumbing filled by S14 and consumed by S16/S17/S18 -------------
+var RiskPlan sigPlanL = na
+var RiskPlan sigPlanS = na
+var float    sigScoreL = na
+var float    sigScoreS = na
+// ========================= END SECTION 2B ===================================

@@ -1,0 +1,377 @@
+// ============================================================================
+//  SECTION 13 : FILTERS  --  THE GATE LAYER
+//
+//  One fixed, first-match-wins priority order, most-upstream cause first, so
+//  the panel narrates the chain instead of reporting whichever gate happened to
+//  be tested last. Every branch emits exactly one member of the SECTION 1
+//  NoTradeReason enum - the panel, the failure histogram and the alert payload
+//  all speak that one vocabulary.
+//
+//  THIS SECTION CONSUMES, IT DOES NOT RECOMPUTE:
+//     chopScore / isChoppy .......... SECTION 3
+//     midRange / noMansLand / vwapS . SECTION 4   (via vwapExtAtr, SECTION 12)
+//     levels / f_nearestLevel / f_atMeaningful .. SECTION 4
+//     zone liveness ................. SECTION 6
+//     sessSel / edgeOk / f_htfAllow / warmupOk / atrPrev / costRt .. SECTION 0
+//     the risk plan ................. SECTION 11 (through SECTION 12's call)
+//     the score and conflictNow ..... SECTION 12
+//  Its own arithmetic is limited to the environment measures nothing else owns:
+//  the volatility-spike proxy, the dead-tape floor, the participation regime,
+//  the leg-extension measure and the cooldown / duplicate rules.
+//
+//  DELETED, DELIBERATELY, AND NOT TO BE RESURRECTED:
+//   * The atr / SMA(atr, 150) ceiling. ta.atr is an RMA: one bar must carry a
+//     range of 17.8x ATR to drag a 14-period ATR to 2.2x its own 150-bar mean.
+//     No such gold bar exists. It could only ever block the REGIME, 20-30
+//     minutes after the event, which is the failure mode it was chosen to
+//     avoid, and it duplicated the bar-range spike test below. The series
+//     atrRatio survives as a DIAGNOSTIC because SECTION 15 reads it.
+//   * The "too close to VWAP" floor. The merged taxonomy has no code for it and
+//     SECTION 4's midRange / noMansLand already covers the same failure (price
+//     in the neutral middle with no liquidity to trade against).
+//
+//  EVERY COUNTER IS PER DIRECTION, through the SECTION 2B arrays and f_slot().
+//  A global cooldown lets a stopped-out long suppress shorts for the next 100
+//  minutes at 5M, which deletes the failed-absorption reversal - the single
+//  highest-value setup this model has, and the one that is most informative at
+//  exactly the moment a global brake would be freshest.
+//
+//  WRITE OWNERSHIP (fixed in SECTION 2B, restated here because it is easy to
+//  get wrong): this section READS lastSigBar / lastLossBar / lossStreak (S15
+//  writes them) and dupLvl / dupBar (S14 writes them). It owns the RULES, not
+//  the writes. The only state it writes is its own lastSpikeBar.
+// ============================================================================
+
+// ---------------------------------------------------------------- 13.0 GROUPS
+G13E = "13 - Filters: Environment"
+G13N = "13 - Filters: Volatility Spike Guard"
+G13L = "13 - Filters: Location"
+G13C = "13 - Filters: Cooldown & Duplicates"
+
+// ------------------------------------------------------- 13.1 ENVIRONMENT
+i_minAtrUsd   = input.float(0.80, "Dead-tape floor: min ATR (USD/oz)", minval = 0.0,
+     maxval = 50.0, step = 0.05, group = G13E,
+     tooltip = "Absolute ATR floor in QUOTE CURRENCY, never in ticks - mintick is 0.01 on most XAUUSD feeds and 0.001 on others, so a tick-denominated floor mis-scales tenfold between brokers. Presets: 1M 0.35 / 5M 0.80 / 15M 1.50. At 0 only the cost floor below can bind.",
+     display = display.none)
+i_atrCostMult = input.float(2.0, "Dead-tape floor: x round-turn cost", minval = 0.0,
+     maxval = 20.0, step = 0.25, group = G13E,
+     tooltip = "The second floor: ATR must be at least this multiple of costRt (spread + 2x slippage = 0.45 USD at defaults), so 2.0 demands ATR >= 0.90. Whichever floor is higher binds. Be honest about what this means: at 1M gold on a 0.25 spread it blocks most of the session, and that is the correct answer rather than a bug. Raise it to 3-4 to demand that the round turn stay under ~10% of a 1.2-ATR stop; 0 disables the cost floor and leaves the absolute one.",
+     display = display.none)
+i_minRvol     = input.float(0.80, "Min relative volume", minval = 0.0, maxval = 5.0,
+     step = 0.05, group = G13E,
+     tooltip = "Blocks when relative volume is under this. Absorption needs participation: a displacement bar on half-average volume is usually a liquidity void, not aggression being absorbed. BYPASSED ENTIRELY when the feed reports no usable volume - a volumeless gold feed must not become a 100% kill switch. 0 disables.",
+     display = display.none)
+i_volFastLen  = input.int(20, "Participation regime: fast length", minval = 2, maxval = 200,
+     group = G13E,
+     tooltip = "Numerator length of the participation regime, SMA(volume, fast) / SMA(volume, slow). This is NOT relative volume: rvol self-normalises and therefore cannot see a slow global collapse in participation, which is exactly what the rollover void and the Asian lunch are.",
+     display = display.none)
+i_volSlowLen  = input.int(200, "Participation regime: slow length", minval = 10, maxval = 1000,
+     group = G13E,
+     tooltip = "Denominator length of the participation regime. Longer = a longer memory of what normal participation looks like, and a slower forgiveness of a dead stretch.",
+     display = display.none)
+i_deadSessRatio = input.float(0.50, "Min participation regime ratio", minval = 0.0,
+     maxval = 2.0, step = 0.05, group = G13E,
+     tooltip = "Blocks when fast/slow volume falls under this. 0.50 means the recent tape is running at half its own longer-run participation. At 0 the gate is off; above ~0.9 it blocks most of the day, because the ratio oscillates around 1.0 by construction.",
+     display = display.none)
+i_chopVotes   = input.int(2, "Chop votes required to block", minval = 1, maxval = 3,
+     group = G13E,
+     tooltip = "SECTION 3 owns the chop measurement and publishes chopScore in {0,1,2,3} - one vote each from the Kaufman efficiency ratio, ADX and swing overlap. This gate blocks at or above this many votes. 1 is strict (any single vote blocks), 3 demands unanimity. This section deliberately does not own an efficiency ratio of its own: two thresholds on one concept is how a file ends up disagreeing with itself.",
+     display = display.none)
+i_atrRegimeLen = input.int(150, "ATR regime baseline (bars)", minval = 20, maxval = 500,
+     group = G13E,
+     tooltip = "Baseline length for the DIAGNOSTIC series atrRatio = ATR / SMA(ATR, N). It is reported, not gated on: an RMA-based ATR cannot move far enough in one bar for a ratio ceiling to catch an event, so the spike guard below does that job instead. SECTION 15 reads this series when bucketing failures by volatility regime.",
+     display = display.none)
+
+// -------------------------------------------------- 13.2 SPIKE GUARD INPUTS
+i_spikeRangeAtr = input.float(3.0, "Spike: bar range (x prior ATR)", minval = 1.0,
+     maxval = 20.0, step = 0.1, group = G13N,
+     tooltip = "A single bar whose range exceeds this multiple of the PRIOR bar's ATR starts the blackout. The reference is deliberately lagged: measured against the current ATR, a spike bar inflates its own denominator and hides from the very test built to catch it. Low values block routine expansion; above ~6 nothing short of a limit move fires.",
+     display = display.none)
+i_spikeGapAtr   = input.float(1.5, "Spike: open gap (x prior ATR)", minval = 0.1,
+     maxval = 20.0, step = 0.1, group = G13N,
+     tooltip = "Blackout when the bar opens this far from the previous close - the Sunday reopen and headline-driven repricing, where the quote is wide and the first prints are not tradeable.",
+     display = display.none)
+i_spikeVelLen   = input.int(4, "Spike: velocity window (bars)", minval = 1, maxval = 50,
+     group = G13N,
+     tooltip = "Lookback for the velocity test. It catches the event signature no single bar reveals: a multi-bar rip where each individual bar looks ordinary. This replaces a separate same-direction 'staircase' detector, which measures the same event over the same window while additionally demanding identical bar signs.",
+     display = display.none)
+i_spikeVelAtr   = input.float(3.5, "Spike: velocity (x prior ATR)", minval = 0.5,
+     maxval = 30.0, step = 0.1, group = G13N,
+     tooltip = "Blackout when price travels this many prior-ATRs over the velocity window. Lower = more of the session blocked; measure the duty cycle on your own feed before trusting a number here.",
+     display = display.none)
+i_spikeHoldBars = input.int(6, "Spike blackout length (bars)", minval = 0, maxval = 200,
+     group = G13N,
+     tooltip = "Bars of blackout AFTER a spike is detected. Gold's post-event volatility and spread widening last 15-45 minutes, far beyond the spike bar. The block is forward-only - it is written on the bar the spike is confirmed and applies from there, so it can never revise a past signal. 0 blocks the spike bar alone. Note this is a VOLATILITY PROXY: Pine cannot read an economic calendar, and a proxy reacts only AFTER the first violent bar.",
+     display = display.none)
+
+// ----------------------------------------------------------- 13.3 LOCATION
+i_legLen        = input.int(30, "Extension: leg lookback (bars)", minval = 2, maxval = 500,
+     group = G13L,
+     tooltip = "Window whose extreme defines the origin of the current leg. Presets ~ 40 / 30 / 20 for 1M / 5M / 15M, i.e. comparable clock windows.",
+     display = display.none)
+i_maxLegAtr     = input.float(4.0, "Extension: max leg travel (x ATR)", minval = 0.5,
+     maxval = 50.0, step = 0.1, group = G13L,
+     tooltip = "Blocks when price has already travelled this many ATRs from the leg origin in the trade's direction - the anti-chase gate, answering 'how much of this move have I already missed?'. An RSI overbought veto is NOT used here and is not equivalent: a true displacement leg, precisely the event this system trades, pins RSI above 80, so an RSI veto would reject the best setups and keep the weak ones. Low values reject every momentum entry.",
+     display = display.none)
+i_useSessOpenExt = input.bool(false, "Extension: also measure from session open",
+     group = G13L,
+     tooltip = "Adds a second extension test against the open of the CURRENT active session (never the chart-day open, which on a gold CFD rolls at 17:00/18:00 New York and is 8-9 hours stale by the London open). Genuinely useful in the first ~90 minutes of London while VWAP is still noisy; decays into irrelevance by New York, which is why it is off by default.",
+     display = display.none)
+i_maxSessOpenAtr = input.float(6.0, "Extension: max move from session open (x ATR)",
+     minval = 0.5, maxval = 60.0, step = 0.5, group = G13L,
+     tooltip = "Only used when the session-open test above is enabled. Scale it with how many ATRs a session spans on your timeframe: roughly 12 / 6 / 4 for 1M / 5M / 15M.",
+     display = display.none)
+i_vwapMaxAtr    = input.float(2.5, "Max distance from VWAP (x ATR)", minval = 0.1,
+     maxval = 30.0, step = 0.1, group = G13L,
+     tooltip = "Directional anti-chase ceiling: blocks a long this far ABOVE session VWAP and a short this far BELOW it. Being far below VWAP is no obstacle to a long, and that per-direction asymmetry is exactly what makes the gate symmetric overall. FAILS OPEN when no VWAP is available. Low values refuse every entry away from fair value.",
+     display = display.none)
+
+// ------------------------------------------------ 13.4 COOLDOWN / DUPLICATES
+i_cooldownBars     = input.int(8, "Cooldown after a signal (bars)", minval = 0,
+     maxval = 500, group = G13C,
+     tooltip = "PER DIRECTION. A long signal never suppresses a short. Presets ~ 15 / 8 / 5 bars for 1M / 5M / 15M. 0 disables.",
+     display = display.none)
+i_lossCooldownBars = input.int(20, "Cooldown after a loss (bars)", minval = 0,
+     maxval = 1000, group = G13C,
+     tooltip = "PER DIRECTION, counted from the virtual trade SECTION 15 booked as a loss - not from broker fills, so the indicator and the strategy gate on identical state and therefore take identical trades. Presets ~ 45 / 20 / 12 bars. 0 disables.",
+     display = display.none)
+i_maxLossStreak    = input.int(3, "Halt a direction after N consecutive losses",
+     minval = 0, maxval = 20, group = G13C,
+     tooltip = "PER DIRECTION halt. The pause lasts this many loss-cooldowns and then expires on its own, so no counter needs resetting anywhere. 0 disables the halt entirely.",
+     display = display.none)
+i_dupBars          = input.int(60, "Duplicate memory (bars)", minval = 0, maxval = 2000,
+     group = G13C,
+     tooltip = "PER DIRECTION. How long a level stays 'already traded' for that direction. The memory keys on the level's IDENTITY (its birth bar), not on a float price, so a brand-new level that happens to form at the same price as a level traded an hour ago is not born suppressed - and on gold, where levels cluster on round numbers, identical prices are the normal case rather than an edge case. 0 disables.",
+     display = display.none)
+
+// ============================== 13.5 GLOBAL SERIES ==========================
+// Every ta.* call in this section sits here, at global scope, unconditional, on
+// its own line, and is referenced by name below. v6 evaluates and/or LAZILY, so
+// a ta.* call placed inside a condition would skip bars and silently corrupt
+// its own history.
+fltAtrRegime = ta.sma(atr, i_atrRegimeLen)
+fltVolFast   = ta.sma(vol, i_volFastLen)
+fltVolSlow   = ta.sma(vol, i_volSlowLen)
+fltLegLow    = ta.lowest(low,  i_legLen)
+fltLegHigh   = ta.highest(high, i_legLen)
+
+// DIAGNOSTIC ONLY - exported for SECTION 15's regime buckets, never gated on.
+atrRatio  = na(fltAtrRegime) or fltAtrRegime <= 0.0 ? 1.0 : atr / fltAtrRegime
+
+// --------------------------------------------- 13.6 VOLATILITY SPIKE PROXY
+// A volatility PROXY, never "news detection": Pine has no economic calendar.
+// Three detectors, because gold's event signature is not one-dimensional - a
+// CPI print is one enormous bar, a headline or a Sunday reopen is a gap, and an
+// NFP rip is often five bars of which none looks individually extreme.
+spikeRange = barRange > i_spikeRangeAtr * atrPrev
+spikeGap   = math.abs(open - nz(close[1], open)) > i_spikeGapAtr * atrPrev
+spikeVel   = math.abs(close - nz(close[i_spikeVelLen], close)) > i_spikeVelAtr * atrPrev
+spikeNow   = spikeRange or spikeGap or spikeVel
+
+var int lastSpikeBar = na
+if confirmed and warmupOk and spikeNow
+    lastSpikeBar := bar_index
+// Forward-only: written on the confirmed spike bar, applied from that bar on.
+blkNews = not na(lastSpikeBar) and (bar_index - lastSpikeBar) <= i_spikeHoldBars
+
+// ------------------------------------------------ 13.7 DEAD TAPE / CHOP
+// Two floors, whichever binds. The absolute floor says there is not enough
+// range to pay for a stop; the cost floor says the round turn is too large a
+// fraction of any move this tape can produce. Both are USD, never ticks.
+fltAtrFloor    = math.max(i_minAtrUsd, i_atrCostMult * costRt)
+blkDeadTape = not na(atr) and atr < fltAtrFloor
+
+blkChop = chopScore >= i_chopVotes
+
+// ------------------------------------------------- 13.8 PARTICIPATION
+// ONE na policy, SECTION 0's: a hard volume gate is written `not hasVol or ...`
+// and BYPASSES when participation is unknown. na(rvol) is the same unknown
+// state as no feed at all and bypasses identically. Never 0 (which would make a
+// volumeless gold feed a permanent kill switch), never 1 (which would fabricate
+// average participation out of nothing).
+fltVolPass = not hasVol or na(rvol) or rvol >= i_minRvol
+volRegime = not hasVol or na(fltVolFast) or na(fltVolSlow) or fltVolSlow <= 0.0 ? na : fltVolFast / fltVolSlow
+fltRegPass   = na(volRegime) or volRegime >= i_deadSessRatio
+blkLowVol = not fltVolPass or not fltRegPass
+
+// ------------------------------------------------ 13.9 LEVEL IDENTITY
+// Called once per direction at global scope. f_nearestLevel returns a tuple, so
+// it must be destructured; doing it here also keeps a single evaluation per
+// direction per bar.
+[fltLvlPxL, fltLvlDistL, fltLvlQualL, fltLvlIdxL] = f_nearestLevel(1)
+[fltLvlPxS, fltLvlDistS, fltLvlQualS, fltLvlIdxS] = f_nearestLevel(-1)
+fltAtLvlL = f_atMeaningful(1)
+fltAtLvlS = f_atMeaningful(-1)
+
+// THE DUPLICATE KEY, and the contract SECTION 14 must honour.
+// The key is the level's BIRTH BAR - a stable identity that survives a merge,
+// a re-price or a prune - and never the level's float price.
+//
+//   CONTRACT FOR SECTION 14: on the bar it emits a signal for `dir`, it writes
+//       array.set(dupLvl, f_slot(dir), f_lvlKey(dir))
+//       array.set(dupBar, f_slot(dir), bar_index)
+//   and writes NOTHING on a rejected signal - a signal that was gated must not
+//   poison the level for the good signal that follows it twenty minutes later.
+//
+// na key (no eligible level) -> the duplicate gate fails OPEN, which is correct:
+// with no level there is no identity to have already traded, and the NO
+// LIQUIDITY gate upstream has already rejected that case anyway.
+f_lvlKey(int dir) =>
+    int idx = dir > 0 ? fltLvlIdxL : fltLvlIdxS
+    float k = na
+    if not na(idx) and idx >= 0 and idx < array.size(levels)
+        LiquidityLevel lv = array.get(levels, idx)
+        k := float(lv.createdBar)
+    k
+
+// ============================== 13.10 THE GATE ==============================
+// Direction-free blockers are computed above at global scope; only the
+// direction-dependent ones live here, and every one of them is a single
+// expression parameterised by dir rather than a mirrored copy.
+//
+// The thirteen filters of the brief map onto the chain as:
+//   1 volume -> LOW VOLUME (rvol + participation regime, one reason code)
+//   2 volatility spike -> HIGH VOLATILITY / SPIKE
+//   3 dead tape -> DEAD TAPE (LOW ATR)
+//   4 chop -> CHOPPY MARKET            5 RR -> POOR RR / STOP TOO WIDE (plan)
+//   6 mid-range -> MIDDLE OF RANGE     7 extension -> EXTENDED MOVE
+//   8 duplicate -> DUPLICATE SIGNAL    9 zone -> ZONE INVALIDATED
+//  10 session -> OUTSIDE SESSION + SESSION EDGE TRIM
+//  11 cooldown -> COOLDOWN / LOSS COOLDOWN / LOSS STREAK HALT
+//  12 HTF bias -> HTF BIAS OPPOSED    13 VWAP -> TOO FAR FROM VWAP
+// plus WARMING UP, DIRECTIONAL CONFLICT (SECTION 12) and LOW CONFIDENCE.
+//
+// The chain-completeness reasons (NO SWEEP ... NO RETEST) are NOT emitted here:
+// SECTION 14 owns the setup state and prepends them. This function answers only
+// "is the environment fit to trade this direction right now".
+f_gate(int dir, float score, RiskPlan pl) =>
+    int slot = f_slot(dir)
+
+    // --- location --------------------------------------------------------
+    float den     = math.max(aRef, tick)
+    float extLeg  = (dir > 0 ? close - fltLegLow : fltLegHigh - close) / den
+    float extOpen = na(sessOpenPx) ? 0.0 : dir * (close - sessOpenPx) / den
+    bool  blkExt  = extLeg > i_maxLegAtr or
+                     (i_useSessOpenExt and extOpen > i_maxSessOpenAtr)
+
+    // Signed VWAP extension in the trade's own direction; 0.0 when no VWAP, so
+    // the ceiling fails OPEN rather than blocking a whole volumeless feed.
+    bool blkVwapFar = (dir > 0 ? vwapExtAtr : -vwapExtAtr) > i_vwapMaxAtr
+
+    bool atLvl  = dir > 0 ? fltAtLvlL : fltAtLvlS
+    // SECTION 4 names noMansLand as THE no-liquidity condition ("no side has a
+    // level worth reacting to") and it belongs on THIS branch, not folded into
+    // MIDDLE OF RANGE. `na(nearest eligible level)` on its own can only be true
+    // when the level map holds nothing at all for this side, which after warmup
+    // never happens - PDL, PWL, the session low and every confirmed swing low
+    // are all support-side levels - so NO LIQUIDITY would be a reason code that
+    // can never be emitted. Both branches block either way; this decides only
+    // which cause the panel narrates and which bucket SECTION 15 counts.
+    // noMansLand implies `not atLvl` on both sides, so the split is exact.
+    bool noLvl  = noMansLand or na(dir > 0 ? fltLvlPxL : fltLvlPxS)
+    bool blkMid = midRange and not atLvl
+    bool blkZone = not (dir > 0 ? zoneAliveL : zoneAliveS)
+    bool blkHtf  = not f_htfAllow(dir)
+
+    // SECTION 12's anti-mediocrity floor is part of the CONFIDENCE verdict, not
+    // a cause of its own. Without it on the chain, a setup that fails i_coreMin
+    // is refused by SECTION 14 (`entryRawL and coreOkL and gateL == ok`) while
+    // this function still returns OK: the panel prints "all gates pass" on a bar
+    // that cannot fire, and SECTION 15 - which bumps the histogram only when the
+    // gate is NOT ok - never records the rejection at all.
+    bool coreOk = dir > 0 ? coreOkL : coreOkS
+
+    // --- the plan: consumed, never rebuilt -------------------------------
+    // Field access on an na object is a runtime error, so this is an `if`
+    // block and not a ternary (a ternary evaluates both arms).
+    bool planBad = true
+    NoTradeReason planWhy = NoTradeReason.poorRr
+    if not na(pl)
+        planBad := not pl.ok
+        if not pl.ok and pl.why != NoTradeReason.ok
+            planWhy := pl.why
+
+    // --- cooldown / dedupe, ALL per direction ----------------------------
+    int lsb  = array.get(lastSigBar,  slot)
+    int llb  = array.get(lastLossBar, slot)
+    int strk = array.get(lossStreak,  slot)
+    // ta.barssince() returns na before its condition has ever been true and
+    // that na is not usable as a length, so the age is always bar_index minus
+    // an explicit remembered bar, with a sentinel for "never happened".
+    int sinceSig  = na(lsb) ? 999999 : bar_index - lsb
+    int sinceLoss = na(llb) ? 999999 : bar_index - llb
+
+    bool blkCool     = i_cooldownBars     > 0 and sinceSig  < i_cooldownBars
+    bool blkLossCool = i_lossCooldownBars > 0 and sinceLoss < i_lossCooldownBars
+    // The halt expires by arithmetic - streak * cooldown bars after the last
+    // loss - so nothing has to reach into SECTION 15's counters to clear it.
+    bool blkStreak = i_maxLossStreak > 0 and strk >= i_maxLossStreak and
+                     sinceLoss < i_lossCooldownBars * i_maxLossStreak
+
+    float key    = f_lvlKey(dir)
+    float memKey = array.get(dupLvl, slot)
+    int   memBar = array.get(dupBar, slot)
+    bool  blkDup = i_dupBars > 0 and not na(key) and not na(memKey) and
+                   not na(memBar) and key == memKey and
+                   (bar_index - memBar) <= i_dupBars
+
+    // --- first match wins, most upstream cause first ----------------------
+    // TWO ordering choices worth stating, because they decide what the panel
+    // NAMES rather than what it decides (every gate must pass either way):
+    //  * The plan sits ABOVE the behavioural gates. Transaction cost is the
+    //    constraint that actually binds on low-timeframe gold; buried under the
+    //    cooldowns it would report COOLDOWN while the real reason a setup is
+    //    untradeable is that it can never pay for its own spread.
+    //  * The score is LAST, because it is an aggregate that is only meaningful
+    //    once the setup is otherwise valid - and LOW CONFIDENCE is the least
+    //    actionable thing this panel can say.
+    NoTradeReason r = NoTradeReason.ok
+    if not warmupOk
+        r := NoTradeReason.warmup
+    else if not sessSel
+        r := NoTradeReason.outsideSess
+    else if not edgeOk
+        r := NoTradeReason.sessEdge
+    else if blkNews
+        r := NoTradeReason.newsSpike
+    else if blkDeadTape
+        r := NoTradeReason.lowAtr
+    else if blkChop
+        r := NoTradeReason.choppy
+    else if blkLowVol
+        r := NoTradeReason.lowVolume
+    else if blkHtf
+        r := NoTradeReason.htfBlock
+    else if conflictNow
+        r := NoTradeReason.conflict
+    else if blkZone
+        r := NoTradeReason.zoneDead
+    else if noLvl
+        r := NoTradeReason.noLiquidity
+    else if blkMid
+        r := NoTradeReason.midRange
+    else if blkExt
+        r := NoTradeReason.extended
+    else if blkVwapFar
+        r := NoTradeReason.vwapFar
+    else if planBad
+        r := planWhy
+    else if blkStreak
+        r := NoTradeReason.lossStreak
+    else if blkLossCool
+        r := NoTradeReason.lossCooldown
+    else if blkCool
+        r := NoTradeReason.cooldown
+    else if blkDup
+        r := NoTradeReason.duplicate
+    else if na(score) or score < i_minScore or not coreOk
+        r := NoTradeReason.lowScore
+    r
+
+// Evaluated every bar for both directions, so the panel can narrate a rejection
+// without a signal having to exist. SECTION 14 calls f_gate once more with the
+// frozen plan on the bar it arms a setup; each written call site keeps its own
+// independent local scope, which is what makes that safe.
+gateL = f_gate(1,  scoreL, scPlanL)
+gateS = f_gate(-1, scoreS, scPlanS)
+// ========================= END SECTION 13 ===================================

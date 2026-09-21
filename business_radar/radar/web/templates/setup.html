@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}First run - business_radar{% endblock %}
+{% block content %}
+<div class="auth">
+  <div class="panel stack">
+    <h1>First run</h1>
+    <p class="small">The database has one owner row and no usable password: it exists so that
+      approvals and audit entries have somebody to point at, not so that anybody can sign in.
+      This turns it into an account.</p>
+    {% if error %}<div class="flash bad" role="alert">{{ error }}</div>{% endif %}
+    <form method="post" class="stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div class="field">
+        <label for="display_name">Your name</label>
+        <input id="display_name" name="display_name" type="text" value="Sagar" required>
+        <p class="help">This name is written into every approval record.</p>
+      </div>
+      <div class="field">
+        <label for="email">Email you will sign in with</label>
+        <input id="email" name="email" type="email" autocomplete="username" required autofocus>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password"
+               autocomplete="new-password" minlength="8" required>
+        <p class="help">At least 8 characters. Hashed with scrypt; the value is never stored.</p>
+      </div>
+      <div class="field">
+        <label for="confirm">Password again</label>
+        <input id="confirm" name="confirm" type="password" autocomplete="new-password" required>
+      </div>
+      <button class="btn primary" type="submit">Create the account</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

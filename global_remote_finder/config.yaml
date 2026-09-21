@@ -1,0 +1,67 @@
+# Global Remote Job Finder - Configuration
+#
+# Combines Naukri (India only) with global remote boards. All results kept,
+# no caps.
+
+# Search keywords - used for Naukri (India) and global board searches
+keywords:
+  - SDET
+  - QA Automation
+  - Automation Test Lead
+  - Python Automation Testing
+  - Playwright Automation
+  - Software Development Engineer in Test
+  - Test Automation
+  - Quality Engineer
+
+# --- Naukri settings (India only) ---
+naukri:
+  enabled: true
+  location: null                    # null = all of India
+  posted_days: 1                    # 1 = last 24 hours
+  pages_per_keyword: 2              # depth (unlimited results, more pages = more)
+  remote_location_markers:
+    - "remote"
+    - "work from home"
+    - "wfh"
+    - "anywhere in india"
+
+# --- Global boards (all remote, no login needed) ---
+# Each board has a distance limit in km (RemoteOK/Remote.co often list
+# "US-only" or "EU-only" roles). We keep them all but tag them.
+global:
+  enabled: true
+  posted_days: 30                   # global boards don't always show exact dates
+  max_pages_per_board: 2            # how deep to paginate each global board
+
+  # RemoteOK - remote developer/QA jobs, global
+  remoteok: true
+
+  # We Work Remotely - fully remote jobs, global
+  weworkremotely: true
+
+  # Remotive - curated remote jobs, reliable public API
+  remotive: true
+
+# Questions to ask each board (keyword subset - boards have distinct vocab)
+# A blank list means "use all keywords"
+board_keywords:
+  remoteok: ["qa", "test", "automation", "sdet", "quality"]
+  weworkremotely: ["qa", "test", "automation", "software"]
+  remotive: ["qa", "test", "automation", "software"]
+
+# Exclude these title keywords (case-insensitive)
+exclude_titles:
+  - intern
+  - fresher
+  - trainee
+  - entry level
+  - hardware
+  - sales
+  - marketing
+
+# Exclude these companies
+exclude_companies: []
+
+# Experience years tag (your profile)
+experience_years: 6

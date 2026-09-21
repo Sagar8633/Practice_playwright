@@ -1,0 +1,57 @@
+//@version=6
+// SRK Pullback v2 — selective trend-continuation, fixed TP / wider SL
+//  Trade ONLY when: EMAs stacked (trend) AND ADX>thr (strong), then price
+//  pulls back to the green EMA and CLOSES back through it in trend direction.
+//  Exit: fixed ATR target or ATR stop. Built for 15m / 1H, high win rate.
+strategy("SRK Pullback v2", overlay=true,
+     initial_capital=100000,
+     default_qty_type=strategy.percent_of_equity, default_qty_value=10,
+     commission_type=strategy.commission.percent, commission_value=0.03,
+     pyramiding=0, calc_on_every_tick=false)
+
+fastLen = input.int(5,  "Red EMA",   group="EMAs")
+midLen  = input.int(10, "Green EMA", group="EMAs")
+slowLen = input.int(20, "Blue EMA",  group="EMAs")
+adxLen  = input.int(14,  "ADX length",    group="Filter")
+adxThr  = input.float(25,"ADX threshold", group="Filter")
+atrLen  = input.int(14,  "ATR length", group="Risk")
+slAtr   = input.float(1.5,"Stop  = ATR x", group="Risk")
+tpAtr   = input.float(1.0,"Target= ATR x", group="Risk")
+
+emaR = ta.ema(close, fastLen)
+emaG = ta.ema(close, midLen)
+emaB = ta.ema(close, slowLen)
+plot(emaR, "R", color.red)
+plot(emaG, "G", color.green)
+plot(emaB, "B", color.blue)
+
+[dp, dm, adx] = ta.dmi(adxLen, adxLen)
+atr = ta.atr(atrLen)
+
+upTrend   = emaR > emaG and emaG > emaB and adx > adxThr
+downTrend = emaB > emaG and emaG > emaR and adx > adxThr
+
+longSig  = upTrend   and ta.crossover(close, emaG)
+shortSig = downTrend and ta.crossunder(close, emaG)
+
+var float sl = na
+var float tp = na
+
+if longSig and strategy.position_size == 0
+    sl := close - slAtr * atr
+    tp := close + tpAtr * atr
+    strategy.entry("L", strategy.long)
+
+if shortSig and strategy.position_size == 0
+    sl := close + slAtr * atr
+    tp := close - tpAtr * atr
+    strategy.entry("S", strategy.short)
+
+if strategy.position_size > 0
+    strategy.exit("L-x", from_entry="L", stop=sl, limit=tp)
+if strategy.position_size < 0
+    strategy.exit("S-x", from_entry="S", stop=sl, limit=tp)
+
+plotshape(longSig  and strategy.position_size==0, "L", shape.triangleup,   location.belowbar, color.new(color.green,0), size=size.small)
+plotshape(shortSig and strategy.position_size==0, "S", shape.triangledown, location.abovebar, color.new(color.red,0),   size=size.small)
+bgcolor(upTrend ? color.new(color.green,94) : downTrend ? color.new(color.red,94) : na)

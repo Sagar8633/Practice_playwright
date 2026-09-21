@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Remote Jobs - 2026-09-01</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f3f2ef;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: #0a66c2;
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            font-size: 28px;
+            font-weight: 600;
+        }
+        header p {
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0a66c2;
+            margin-top: 5px;
+        }
+        .filters {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .filters label {
+            font-weight: 500;
+            color: #555;
+        }
+        .filters input, .filters select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .filters input {
+            width: 250px;
+        }
+        table {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        thead {
+            background: #0a66c2;
+            color: white;
+        }
+        th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .job-title {
+            color: #0a66c2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .job-title:hover {
+            text-decoration: underline;
+        }
+        .company-name {
+            font-weight: 500;
+        }
+        .careers-link {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            text-decoration: none;
+            margin-top: 2px;
+        }
+        .careers-link:hover {
+            color: #0a66c2;
+        }
+        .badges {
+            margin-top: 4px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-right: 4px;
+        }
+        .badge-easy {
+            background: #d4edda;
+            color: #155724;
+        }
+        .badge-promoted {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .badge-remote {
+            background: #cce5ff;
+            color: #004085;
+        }
+        .apply-btn {
+            display: inline-block;
+            padding: 6px 16px;
+            background: #0a66c2;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 13px;
+        }
+        .apply-btn:hover {
+            background: #004182;
+        }
+        .companies-list {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        .companies-list h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 10px;
+        }
+        .company-chip {
+            padding: 8px 12px;
+            background: #f3f2ef;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .company-chip a {
+            color: #0a66c2;
+            text-decoration: none;
+        }
+        .company-chip a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 13px;
+        }
+        #searchInput:focus {
+            outline: 2px solid #0a66c2;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>LinkedIn Remote Jobs</h1>
+            <p>Generated on 2026-09-01 12:33:35 | 27 jobs found</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Total Jobs</h3>
+                <div class="value">27</div>
+            </div>
+            <div class="stat-card">
+                <h3>Remote</h3>
+                <div class="value">27</div>
+            </div>
+            <div class="stat-card">
+                <h3>Easy Apply</h3>
+                <div class="value">15</div>
+            </div>
+            <div class="stat-card">
+                <h3>Companies</h3>
+                <div class="value">26</div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <label for="searchInput">Filter:</label>
+            <input type="text" id="searchInput" placeholder="Search by title, company, location...">
+        </div>
+
+        <table id="jobsTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Company</th>
+                    <th>Location</th>
+                    <th>Salary</th>
+                    <th>Insight</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td>1</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4461530925/" target="_blank" class="job-title">Quality Assurance Engineer (Remote)</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Quik Hire Staffing</span>
+                <a href="https://www.google.com/search?q=Quik+Hire+Staffing+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Indonesia (Remote)</td>
+            <td></td>
+            <td>1 school alum works here 1 North Maharashtra University school alum works here</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4461530925/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4461504013/" target="_blank" class="job-title">Playwright Automation Tester</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">General Dynamics Information Technology</span>
+                <a href="https://www.google.com/search?q=General+Dynamics+Information+Technology+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Washington, DC (Remote)</td>
+            <td></td>
+            <td>2 school alumni work here 2 North Maharashtra University school alumni work here</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4461504013/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4461200902/" target="_blank" class="job-title">QA Automation + Manual Engineer- Canada</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">RELQ TECHNOLOGIES</span>
+                <a href="https://www.google.com/search?q=RELQ+TECHNOLOGIES+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Canada (Remote)</td>
+            <td></td>
+            <td></td>
+            <td><a href="https://www.linkedin.com/jobs/view/4461200902/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4460846957/" target="_blank" class="job-title">Quality Assurance Engineer (Remote)</a>
+                <div class="badges"><span class="badge badge-promoted">Promoted</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Quik Hire Staffing</span>
+                <a href="https://www.google.com/search?q=Quik+Hire+Staffing+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>India (Remote)</td>
+            <td>$25/hr - $60/hr</td>
+            <td>1 school alum works here 1 North Maharashtra University school alum works here</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4460846957/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4459841986/" target="_blank" class="job-title">Playwright Automation Tester (remote)</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Aubay Portugal</span>
+                <a href="https://www.google.com/search?q=Aubay+Portugal+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Portugal (Remote)</td>
+            <td></td>
+            <td>Company review time is typically 1 week</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4459841986/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4459761830/" target="_blank" class="job-title">Associate Quality Engineer</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Jobgether</span>
+                <a href="https://www.google.com/search?q=Jobgether+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Canada (Remote)</td>
+            <td></td>
+            <td></td>
+            <td><a href="https://www.linkedin.com/jobs/view/4459761830/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4459499860/" target="_blank" class="job-title">Software Engineer in Test - Lead</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-promoted">Promoted</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Codem Inc.</span>
+                <a href="https://www.google.com/search?q=Codem+Inc.+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>India (Remote)</td>
+            <td></td>
+            <td>Actively reviewing applicants</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4459499860/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4458929632/" target="_blank" class="job-title">100% Remote QA Position</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-promoted">Promoted</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">TeamsWork.In</span>
+                <a href="https://www.google.com/search?q=TeamsWork.In+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>India (Remote)</td>
+            <td></td>
+            <td>Company review time is typically 1 week</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4458929632/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4458403152/" target="_blank" class="job-title">Software Quality Assurance Tester</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">redPanda Development Services</span>
+                <a href="https://www.google.com/search?q=redPanda+Development+Services+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>South Africa (Remote)</td>
+            <td></td>
+            <td></td>
+            <td><a href="https://www.linkedin.com/jobs/view/4458403152/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4457976388/" target="_blank" class="job-title">Playwright Automation Architect / Technical Lead</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">QualityAI</span>
+                <a href="https://www.google.com/search?q=QualityAI+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>United States (Remote)</td>
+            <td>$150K/yr - $160K/yr</td>
+            <td>1 connection works here</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4457976388/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4457740485/" target="_blank" class="job-title">Software Quality Assurance Engineer (Teradyne, India)</a>
+                <div class="badges"><span class="badge badge-promoted">Promoted</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Teradyne</span>
+                <a href="https://www.google.com/search?q=Teradyne+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>India (Remote)</td>
+            <td></td>
+            <td></td>
+            <td><a href="https://www.linkedin.com/jobs/view/4457740485/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4457498646/" target="_blank" class="job-title">QA Automation Engineer</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">UniSysTech Consulting</span>
+                <a href="https://www.google.com/search?q=UniSysTech+Consulting+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Poland (Remote)</td>
+            <td></td>
+            <td>Actively reviewing applicants</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4457498646/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4457450035/" target="_blank" class="job-title">Playwright Automation Engineer</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Mitra AI</span>
+                <a href="https://www.google.com/search?q=Mitra+AI+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>India (Remote)</td>
+            <td></td>
+            <td>Actively reviewing applicants</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4457450035/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>14</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4456336440/" target="_blank" class="job-title">Sr. Quality Engineer (Remote)</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Inspira Financial</span>
+                <a href="https://www.google.com/search?q=Inspira+Financial+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Oak Brook, IL (Remote)</td>
+            <td></td>
+            <td></td>
+            <td><a href="https://www.linkedin.com/jobs/view/4456336440/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>15</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4455268686/" target="_blank" class="job-title">Lead Engineer, Testing</a>
+                <div class="badges"><span class="badge badge-promoted">Promoted</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Majesco</span>
+                <a href="https://www.google.com/search?q=Majesco+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>India (Remote)</td>
+            <td></td>
+            <td>7 school alumni work here 7 North Maharashtra University school alumni work here</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4455268686/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>16</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4454651359/" target="_blank" class="job-title">Senior QA Engineer - Remote</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-promoted">Promoted</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Kake</span>
+                <a href="https://www.google.com/search?q=Kake+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Hyderabad, Telangana, India (Remote)</td>
+            <td></td>
+            <td>Company review time is typically 1 week</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4454651359/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>17</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4454636672/" target="_blank" class="job-title">Software Engineer in Test</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Dotmatics</span>
+                <a href="https://www.google.com/search?q=Dotmatics+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>United Kingdom (Remote)</td>
+            <td></td>
+            <td></td>
+            <td><a href="https://www.linkedin.com/jobs/view/4454636672/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>18</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4452200983/" target="_blank" class="job-title">Lead Quality Assurance Tester</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-promoted">Promoted</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">ansrsource</span>
+                <a href="https://www.google.com/search?q=ansrsource+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>India (Remote)</td>
+            <td></td>
+            <td>Actively reviewing applicants</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4452200983/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>19</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4450768487/" target="_blank" class="job-title">Quality Assurance Engineer</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-promoted">Promoted</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">GoQuant</span>
+                <a href="https://www.google.com/search?q=GoQuant+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>India (Remote)</td>
+            <td></td>
+            <td>Actively reviewing applicants</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4450768487/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>20</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4450753644/" target="_blank" class="job-title">Quality Engineer</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">ChaTeck,Inc</span>
+                <a href="https://www.google.com/search?q=ChaTeck%2CInc+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>United States (Remote)</td>
+            <td></td>
+            <td></td>
+            <td><a href="https://www.linkedin.com/jobs/view/4450753644/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>21</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4449823194/" target="_blank" class="job-title">Quality Engineer</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Litehouse</span>
+                <a href="https://www.google.com/search?q=Litehouse+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>United States (Remote)</td>
+            <td></td>
+            <td></td>
+            <td><a href="https://www.linkedin.com/jobs/view/4449823194/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>22</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4449467285/" target="_blank" class="job-title">Senior Quality Engineer (AI)</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Nexaminds</span>
+                <a href="https://www.google.com/search?q=Nexaminds+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Canada (Remote)</td>
+            <td></td>
+            <td></td>
+            <td><a href="https://www.linkedin.com/jobs/view/4449467285/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>23</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4448758087/" target="_blank" class="job-title">Quality Engineer - Remote</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Premise Health</span>
+                <a href="https://www.google.com/search?q=Premise+Health+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Brentwood, TN (Remote)</td>
+            <td></td>
+            <td></td>
+            <td><a href="https://www.linkedin.com/jobs/view/4448758087/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>24</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4446219145/" target="_blank" class="job-title">Quality Assurance Engineer</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-promoted">Promoted</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Blossom Social</span>
+                <a href="https://www.google.com/search?q=Blossom+Social+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>India (Remote)</td>
+            <td></td>
+            <td>Actively reviewing applicants</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4446219145/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>25</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4445185204/" target="_blank" class="job-title">Quality Engineer</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Infios</span>
+                <a href="https://www.google.com/search?q=Infios+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Mexico (Remote)</td>
+            <td></td>
+            <td></td>
+            <td><a href="https://www.linkedin.com/jobs/view/4445185204/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>26</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4444324848/" target="_blank" class="job-title">QA Automation Engineer | $80/hr Remote</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Crossing Hurdles</span>
+                <a href="https://www.google.com/search?q=Crossing+Hurdles+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Canada (Remote)</td>
+            <td>$30/hr - $80/hr</td>
+            <td>Actively reviewing applicants</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4444324848/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>27</td>
+            <td>
+                <a href="https://www.linkedin.com/jobs/view/4439485186/" target="_blank" class="job-title">Associate Software Quality Assurance Engineer</a>
+                <div class="badges"><span class="badge badge-easy">Easy Apply</span> <span class="badge badge-promoted">Promoted</span> <span class="badge badge-remote">Remote</span></div>
+            </td>
+            <td>
+                <span class="company-name">Glidewell Dental</span>
+                <a href="https://www.google.com/search?q=Glidewell+Dental+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>India (Remote)</td>
+            <td></td>
+            <td>Actively reviewing applicants</td>
+            <td><a href="https://www.linkedin.com/jobs/view/4439485186/" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+            </tbody>
+        </table>
+
+        <div class="companies-list">
+            <h2>Companies Hiring (26)</h2>
+            <div class="companies-grid">
+                <div class="company-chip"><a href="https://www.google.com/search?q=Aubay+Portugal+careers+jobs+apply" target="_blank">Aubay Portugal</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Blossom+Social+careers+jobs+apply" target="_blank">Blossom Social</a></div><div class="company-chip"><a href="https://www.google.com/search?q=ChaTeck%2CInc+careers+jobs+apply" target="_blank">ChaTeck,Inc</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Codem+Inc.+careers+jobs+apply" target="_blank">Codem Inc.</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Crossing+Hurdles+careers+jobs+apply" target="_blank">Crossing Hurdles</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Dotmatics+careers+jobs+apply" target="_blank">Dotmatics</a></div><div class="company-chip"><a href="https://www.google.com/search?q=General+Dynamics+Information+Technology+careers+jobs+apply" target="_blank">General Dynamics Information Technology</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Glidewell+Dental+careers+jobs+apply" target="_blank">Glidewell Dental</a></div><div class="company-chip"><a href="https://www.google.com/search?q=GoQuant+careers+jobs+apply" target="_blank">GoQuant</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Infios+careers+jobs+apply" target="_blank">Infios</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Inspira+Financial+careers+jobs+apply" target="_blank">Inspira Financial</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Jobgether+careers+jobs+apply" target="_blank">Jobgether</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Kake+careers+jobs+apply" target="_blank">Kake</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Litehouse+careers+jobs+apply" target="_blank">Litehouse</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Majesco+careers+jobs+apply" target="_blank">Majesco</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Mitra+AI+careers+jobs+apply" target="_blank">Mitra AI</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Nexaminds+careers+jobs+apply" target="_blank">Nexaminds</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Premise+Health+careers+jobs+apply" target="_blank">Premise Health</a></div><div class="company-chip"><a href="https://www.google.com/search?q=QualityAI+careers+jobs+apply" target="_blank">QualityAI</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Quik+Hire+Staffing+careers+jobs+apply" target="_blank">Quik Hire Staffing</a></div><div class="company-chip"><a href="https://www.google.com/search?q=RELQ+TECHNOLOGIES+careers+jobs+apply" target="_blank">RELQ TECHNOLOGIES</a></div><div class="company-chip"><a href="https://www.google.com/search?q=TeamsWork.In+careers+jobs+apply" target="_blank">TeamsWork.In</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Teradyne+careers+jobs+apply" target="_blank">Teradyne</a></div><div class="company-chip"><a href="https://www.google.com/search?q=UniSysTech+Consulting+careers+jobs+apply" target="_blank">UniSysTech Consulting</a></div><div class="company-chip"><a href="https://www.google.com/search?q=ansrsource+careers+jobs+apply" target="_blank">ansrsource</a></div><div class="company-chip"><a href="https://www.google.com/search?q=redPanda+Development+Services+careers+jobs+apply" target="_blank">redPanda Development Services</a></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>LinkedIn Remote Job Finder | Data sourced from LinkedIn public job listings</p>
+        <p>Click "Careers →" to find each company's official job page</p>
+    </footer>
+
+    <script>
+        // Live filter
+        const searchInput = document.getElementById('searchInput');
+        const table = document.getElementById('jobsTable');
+        const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+        searchInput.addEventListener('input', function() {
+            const filter = this.value.toLowerCase();
+            for (let i = 0; i < rows.length; i++) {
+                const text = rows[i].textContent.toLowerCase();
+                rows[i].style.display = text.includes(filter) ? '' : 'none';
+            }
+        });
+    </script>
+</body>
+</html>

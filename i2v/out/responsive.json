@@ -1,0 +1,338 @@
+[
+  {
+    "device": "iPhone-15-Pro",
+    "orient": "portrait",
+    "page": "Home",
+    "vp": {
+      "width": 393,
+      "height": 659
+    },
+    "scrollW": 393,
+    "innerW": 393,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "iPhone-15-Pro",
+    "orient": "portrait",
+    "page": "Products",
+    "vp": {
+      "width": 393,
+      "height": 659
+    },
+    "scrollW": 393,
+    "innerW": 393,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "iPhone-15-Pro",
+    "orient": "portrait",
+    "page": "Contact",
+    "vp": {
+      "width": 393,
+      "height": 659
+    },
+    "scrollW": 393,
+    "innerW": 393,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "iPhone-15-Pro",
+    "orient": "landscape",
+    "page": "Home",
+    "vp": {
+      "width": 659,
+      "height": 393
+    },
+    "scrollW": 659,
+    "innerW": 659,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "iPhone-15-Pro",
+    "orient": "landscape",
+    "page": "Products",
+    "vp": {
+      "width": 659,
+      "height": 393
+    },
+    "scrollW": 659,
+    "innerW": 659,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "iPhone-15-Pro",
+    "orient": "landscape",
+    "page": "Contact",
+    "vp": {
+      "width": 659,
+      "height": 393
+    },
+    "scrollW": 659,
+    "innerW": 659,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "Pixel-7",
+    "orient": "portrait",
+    "page": "Home",
+    "vp": {
+      "width": 412,
+      "height": 839
+    },
+    "scrollW": 412,
+    "innerW": 412,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "Pixel-7",
+    "orient": "portrait",
+    "page": "Products",
+    "vp": {
+      "width": 412,
+      "height": 839
+    },
+    "scrollW": 412,
+    "innerW": 412,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "Pixel-7",
+    "orient": "portrait",
+    "page": "Contact",
+    "vp": {
+      "width": 412,
+      "height": 839
+    },
+    "scrollW": 412,
+    "innerW": 412,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "Pixel-7",
+    "orient": "landscape",
+    "page": "Home",
+    "vp": {
+      "width": 839,
+      "height": 412
+    },
+    "scrollW": 839,
+    "innerW": 839,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "Pixel-7",
+    "orient": "landscape",
+    "page": "Products",
+    "vp": {
+      "width": 839,
+      "height": 412
+    },
+    "scrollW": 839,
+    "innerW": 839,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "Pixel-7",
+    "orient": "landscape",
+    "page": "Contact",
+    "vp": {
+      "width": 839,
+      "height": 412
+    },
+    "scrollW": 839,
+    "innerW": 839,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "iPad-Pro-11",
+    "orient": "portrait",
+    "page": "Home",
+    "vp": {
+      "width": 834,
+      "height": 1194
+    },
+    "scrollW": 834,
+    "innerW": 834,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "iPad-Pro-11",
+    "orient": "portrait",
+    "page": "Products",
+    "vp": {
+      "width": 834,
+      "height": 1194
+    },
+    "scrollW": 834,
+    "innerW": 834,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "iPad-Pro-11",
+    "orient": "portrait",
+    "page": "Contact",
+    "vp": {
+      "width": 834,
+      "height": 1194
+    },
+    "scrollW": 834,
+    "innerW": 834,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "iPad-Pro-11",
+    "orient": "landscape",
+    "page": "Home",
+    "vp": {
+      "width": 1194,
+      "height": 834
+    },
+    "scrollW": 1194,
+    "innerW": 1194,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "iPad-Pro-11",
+    "orient": "landscape",
+    "page": "Products",
+    "vp": {
+      "width": 1194,
+      "height": 834
+    },
+    "scrollW": 1194,
+    "innerW": 1194,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "iPad-Pro-11",
+    "orient": "landscape",
+    "page": "Contact",
+    "vp": {
+      "width": 1194,
+      "height": 834
+    },
+    "scrollW": 1194,
+    "innerW": 1194,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "Galaxy-Tab",
+    "orient": "portrait",
+    "page": "Home",
+    "vp": {
+      "width": 712,
+      "height": 1138
+    },
+    "scrollW": 712,
+    "innerW": 712,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "Galaxy-Tab",
+    "orient": "portrait",
+    "page": "Products",
+    "vp": {
+      "width": 712,
+      "height": 1138
+    },
+    "scrollW": 712,
+    "innerW": 712,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "Galaxy-Tab",
+    "orient": "portrait",
+    "page": "Contact",
+    "vp": {
+      "width": 712,
+      "height": 1138
+    },
+    "scrollW": 712,
+    "innerW": 712,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "Galaxy-Tab",
+    "orient": "landscape",
+    "page": "Home",
+    "vp": {
+      "width": 1138,
+      "height": 712
+    },
+    "scrollW": 1138,
+    "innerW": 1138,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "Galaxy-Tab",
+    "orient": "landscape",
+    "page": "Products",
+    "vp": {
+      "width": 1138,
+      "height": 712
+    },
+    "scrollW": 1138,
+    "innerW": 1138,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  },
+  {
+    "device": "Galaxy-Tab",
+    "orient": "landscape",
+    "page": "Contact",
+    "vp": {
+      "width": 1138,
+      "height": 712
+    },
+    "scrollW": 1138,
+    "innerW": 1138,
+    "horizontalScroll": false,
+    "hamburgerFound": false,
+    "bodyFont": 16
+  }
+]

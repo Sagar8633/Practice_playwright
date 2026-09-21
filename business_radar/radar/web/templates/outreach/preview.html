@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% from "_macros.html" import status_badge, score_badge, confidence_badge, gate_list,
+                              source_link, history_table %}
+{% block title %}Preview {{ draft.business_name }} - business_radar{% endblock %}
+{% block content %}
+
+<div class="panel">
+  <div class="spread">
+    <div>
+      <p class="small"><a href="{{ url_for('outreach') }}">Outreach</a></p>
+      <div class="row">
+        <h1>{{ draft.business_name }}</h1>
+        {{ status_badge(draft.message_status) }}
+      </div>
+      <p class="mono">{{ draft.id }} &middot; {{ draft.message_id }}</p>
+    </div>
+    <a class="btn" href="{{ url_for('business', business_id=draft.business_id) }}">
+      Business page</a>
+  </div>
+</div>
+
+<div class="cols">
+  {# 1, 2, 3 #}
+  <section class="stack">
+    <div class="panel">
+      <header><span class="panel-title">1 &middot; Business</span></header>
+      <div class="row">
+        {{ score_badge(draft.opportunity_score, draft.opportunity_band) }}
+        {{ status_badge(draft.business_status) }}
+      </div>
+      <p class="small" style="margin-top:var(--s-2)">{{ draft.city }} &middot;
+        {{ draft.industry|pretty }} / {{ draft.category|pretty }} &middot; {{ draft.size_band }}</p>
+    </div>
+
+    <div class="panel">
+      <header><span class="panel-title">2 &middot; Channel</span></header>
+      <p>{{ draft.channel }}{% if draft.channel == 'EMAIL' %} via Gmail SMTP{% endif %}</p>
+      <p class="small">Transmitted by this machine, on your approval. There is no email service
+        provider in this stack: the message leaves this laptop over SMTP with an App Password,
+        so "sent" means "handed to Gmail from here".</p>
+      {% set cs = channel_status.get(draft.channel) %}
+      {% if cs and not cs.configured %}
+        <p class="reason" style="color:var(--warn-fg)">{{ cs.sentence() }}</p>
+      {% endif %}
+    </div>
+
+    <div class="panel">
+      <header><span class="panel-title">3 &middot; Contact</span></header>
+      {% if draft.contact_display %}
+        <p><strong>{{ draft.contact_display }}</strong></p>
+        <div class="finding-meta">
+          <span class="badge mute">{{ draft.contact_kind }}</span>
+          {% if draft.is_role_address %}<span class="badge mute">role address</span>{% endif %}
+          {% if draft.human_verified %}<span class="badge ok">human-confirmed</span>{% endif %}
+        </div>
+        <p class="small">confirmed by {{ draft.contact_verified_by_name or '—' }}
+          {{ draft.human_verified_at|day }} &middot; captured
+          {{ draft.contact_captured_at|day }}
+          {% if draft.contact_source_url %}
+            from {{ source_link(draft.contact_source_url, 'source') }}{% endif %}</p>
+      {% else %}
+        <p class="empty">No contact bound to this draft.</p>
+      {% endif %}
+    </div>
+
+    <div class="panel">
+      <header><span class="panel-title">5 &middot; Opportunity</span></header>
+      {% if draft.opportunity_score is not none %}
+        <div class="row">
+          {{ score_badge(draft.opportunity_score, draft.opportunity_band) }}
+          {{ confidence_badge(draft.opportunity_confidence, draft.confidence_pct) }}
+          <span>{{ draft.potential_solution }}</span>
+        </div>
+        <p class="small" style="margin-top:var(--s-2)">{{ draft.expected_benefit }}</p>
+        {% if modules %}
+          <p class="small">Modules:
+            {{ modules|map(attribute='module')|map('pretty')|join(', ') }}</p>
+        {% endif %}
+      {% else %}
+        <p class="empty">Not scored.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  {# 4 #}
+  <section class="panel">
+    <header>
+      <span class="panel-title">4 &middot; Research basis</span>
+      <span class="small">what may be said, hedged, or never mentioned</span>
+    </header>
+
+    <h3 style="color:var(--ok-fg);font-size:var(--t-xs);letter-spacing:.05em">OBSERVED &mdash; may be stated</h3>
+    {% if findings['OBSERVED'] %}
+      <ul style="margin:0 0 var(--s-3);padding-left:var(--s-4)">
+        {% for f in findings['OBSERVED'] %}
+          <li>{{ f.statement }}
+            <span class="finding-meta">{{ confidence_badge(f.confidence, f.confidence_pct) }}
+              {% for s in f.sources %}{{ source_link(s.url, s.name) }}{% endfor %}
+              <span class="mono">{{ f.id }}</span></span></li>
+        {% endfor %}
+      </ul>
+    {% else %}<p class="empty">Nothing observed. Nothing may be claimed.</p>{% endif %}
+
+    <h3 style="color:var(--info-fg);font-size:var(--t-xs);letter-spacing:.05em">INFERRED &mdash; must be hedged</h3>
+    {% if findings['INFERRED'] %}
+      <ul style="margin:0 0 var(--s-3);padding-left:var(--s-4)">
+        {% for f in findings['INFERRED'] %}
+          <li>{{ f.statement }}
+            <span class="finding-meta">{{ confidence_badge(f.confidence, f.confidence_pct) }}
+              <span class="mono">{{ f.id }}</span></span></li>
+        {% endfor %}
+      </ul>
+    {% else %}<p class="empty">Nothing inferred.</p>{% endif %}
+
+    <h3 style="color:var(--muted-fg);font-size:var(--t-xs);letter-spacing:.05em">UNKNOWN &mdash; never mentioned</h3>
+    {% if findings['UNKNOWN'] %}
+      <ul style="margin:0;padding-left:var(--s-4)">
+        {% for f in findings['UNKNOWN'] %}
+          <li>{{ f.label }} <span class="small">{{ f.unknown_reason|pretty }}</span></li>
+        {% endfor %}
+      </ul>
+    {% else %}<p class="empty">Nothing was left unverified.</p>{% endif %}
+  </section>
+</div>
+
+{# 6 #}
+<div class="panel">
+  <header>
+    <span class="panel-title">6 &middot; Generated message</span>
+    <span class="small">{{ draft.model_id }} / {{ draft.prompt_version }}
+      {% if draft.edit_count %}&middot; edited {{ draft.edit_count }}x{% endif %}</span>
+  </header>
+
+  {% if draft.message_status in ('DRAFT','PENDING_APPROVAL','POLICY_BLOCKED') %}
+    <form method="post" action="{{ url_for('preview_edit', draft_id=draft.id) }}" class="stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      {% if draft.channel == 'EMAIL' %}
+        <div class="field">
+          <label for="subject">Subject</label>
+          <input id="subject" name="subject" type="text" value="{{ draft.subject or '' }}">
+        </div>
+      {% endif %}
+      <div class="field">
+        <label for="body">Body</label>
+        <textarea id="body" name="body" rows="18">{{ draft.final_body }}</textarea>
+      </div>
+      <button class="btn" type="submit">Save and re-run the claim check</button>
+      <p class="reason">An edit goes back through the policy engine. There is no way to edit
+        past a block, because the check runs on what you typed, not on what was generated.</p>
+    </form>
+  {% else %}
+    {% if draft.subject %}<p><strong>Subject:</strong> {{ draft.subject }}</p>{% endif %}
+    <div class="bodybox">{{ draft.final_body }}</div>
+    <p class="reason">This message has already been approved, so the text is read-only.</p>
+  {% endif %}
+</div>
+
+<div class="cols">
+  {# 7, 8 #}
+  <section class="panel">
+    <header><span class="panel-title">7 &middot; AI confidence</span></header>
+    <div class="row">{{ confidence_badge(draft.ai_confidence, draft.ai_confidence_pct) }}</div>
+    <p class="small" style="margin-top:var(--s-2)">
+      {{ draft.model_id }} / {{ draft.prompt_version }} &middot;
+      {{ draft.input_tokens|dash }} in, {{ draft.output_tokens|dash }} out tokens</p>
+    <p class="small">Facts used: {{ (draft.facts_used or '[]') }}</p>
+    <p class="small">Inferences used: {{ (draft.inferences_used or '[]') }}</p>
+  </section>
+
+  <section class="panel">
+    <header>
+      <span class="panel-title">8 &middot; Policy check</span>
+      <span class="badge {{ {'PASS':'ok','WARN':'warn','BLOCK':'bad'}.get(draft.policy_result,'mute') }}">
+        {{ draft.policy_result or 'NOT RUN' }}</span>
+    </header>
+
+    <h3 style="font-size:var(--t-xs);letter-spacing:.05em;color:var(--text-2)">CLAIM CHECK</h3>
+    <p class="small">{{ claim_detail.get('rules_passed', 0) }} passed,
+      {{ claim_detail.get('violations', [])|length }} fired</p>
+    {% if claim_detail.get('violations') %}
+      <ul class="gates">
+        {% for v in claim_detail['violations'] %}
+          <li>
+            <span class="verdict {{ 'bad' if v.severity == 'BLOCK' else 'warn' }}">{{ v.severity }}</span>
+            <span class="letter">{{ v.rule }}</span>
+            <span>{{ v.explain }}
+              {% if v.sentence %}<br><em class="small">&ldquo;{{ v.sentence }}&rdquo;</em>{% endif %}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="small">Every rule passed. Every claim in this message traces to a stored
+        finding.</p>
+    {% endif %}
+
+    <h3 style="font-size:var(--t-xs);letter-spacing:.05em;color:var(--text-2);
+               margin-top:var(--s-4)">ELIGIBILITY CHECK</h3>
+    {{ gate_list(eligibility.gates) }}
+    <p class="small">Evaluated in this request at {{ eligibility.checked_at }}, not read from
+      a cache. Every gate is listed, including the ones that passed: a panel showing only
+      failures cannot be told apart from a panel that failed to run.</p>
+  </section>
+</div>
+
+{# 9 #}
+<div class="panel">
+  <header><span class="panel-title">9 &middot; Contact history</span></header>
+  {{ history_table(history) }}
+</div>
+
+{# The confirm control. It opens the dialog; it does not transmit. #}
+<div class="panel">
+  <div class="spread">
+    <div>
+      {% if blockers %}
+        <button class="btn" type="button" disabled aria-describedby="confirm-reason">
+          Confirm &amp; send&hellip;</button>
+        <p class="reason" id="confirm-reason">{{ blockers[0].sentence }}</p>
+      {% else %}
+        <button class="btn primary" type="button" id="open-confirm">
+          Confirm &amp; send&hellip;</button>
+        <p class="reason">This opens a dialog. Nothing is transmitted until you read the seven
+          items in it and type the word.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% if not blockers %}
+  {% include "outreach/confirm_dialog.html" %}
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if not blockers %}
+<script>
+(function () {
+  var opener = document.getElementById("open-confirm");
+  var dlg = document.getElementById("confirm-dialog");
+  var field = document.getElementById("confirm-word");
+  var button = document.getElementById("confirm-send");
+  var reason = document.getElementById("confirm-word-reason");
+  if (!opener || !dlg) { return; }
+
+  opener.addEventListener("click", function () {
+    if (typeof dlg.showModal === "function") { dlg.showModal(); } else { dlg.setAttribute("open", ""); }
+    if (field) { field.value = ""; field.focus(); }
+    sync();
+  });
+  dlg.addEventListener("close", function () { opener.focus(); });
+
+  function sync() {
+    if (!field || !button) { return; }
+    var ok = field.value === "SEND";
+    button.disabled = !ok;
+    if (reason) {
+      reason.textContent = ok ? "" : "Type SEND above to enable this.";
+    }
+  }
+  if (field) { field.addEventListener("input", sync); }
+  sync();
+})();
+</script>
+{% endif %}
+{% endblock %}

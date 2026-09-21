@@ -1,0 +1,1111 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - 'button "Logged in as patilkareena208 Active layout: Unnamed" [ref=e7]'
+    - toolbar [ref=e11]:
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]:
+            - button "D" [ref=e1367]
+            - button "Switch data type" [ref=e20]
+          - button "Compare symbols" [ref=e24]
+        - generic [ref=e32]:
+          - radiogroup [ref=e33]:
+            - radio "5 minutes" [ref=e34]:
+              - generic [ref=e35]: 5m
+            - radio "15 minutes" [checked] [ref=e37]:
+              - generic [ref=e38]: 15m
+            - radio "45 minutes" [ref=e40]:
+              - generic [ref=e41]: 45m
+          - button "Chart interval" [ref=e43]
+        - button "Candles" [ref=e53]
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - button "Indicators, metrics, and strategies" [ref=e65]:
+              - generic [ref=e70]: Indicators
+            - button "Favorite indicators" [ref=e71]
+          - button "Indicator templates" [ref=e78]
+        - generic [ref=e85]:
+          - button "Create alert" [ref=e86]:
+            - generic [ref=e91]: Alert
+          - button "Bar replay" [ref=e92]:
+            - generic [ref=e96]: Replay
+        - generic [ref=e100]:
+          - button "Undo change symbol" [ref=e1368]
+          - button [disabled] [ref=e105]
+        - generic [ref=e110]:
+          - button "Layout setup" [ref=e111]
+          - generic [ref=e114]:
+            - button "All changes saved" [disabled] [ref=e1857]:
+              - generic [ref=e117]:
+                - generic [ref=e118]: Unnamed
+                - generic: Save
+            - button "Manage layouts" [ref=e120]
+        - generic [ref=e128]:
+          - button "Quick search" [ref=e129]
+          - button "Settings" [ref=e134]
+          - button "Fullscreen mode" [ref=e140]
+          - button "Take a snapshot" [ref=e144]
+      - button "Trade" [ref=e153]
+      - button "Share your idea with the trade community" [ref=e161]:
+        - generic [ref=e162]: Publish
+    - toolbar [ref=e165]:
+      - generic [ref=e169]:
+        - generic [ref=e170]:
+          - generic [ref=e173]:
+            - button "Cross" [ref=e175]
+            - button "Cursors" [pressed] [ref=e181]
+          - generic [ref=e187]:
+            - button "Trendline" [ref=e189]
+            - button "Trend tools" [ref=e195]
+          - generic [ref=e201]:
+            - button "Fib retracement" [ref=e203]
+            - button "Gann and Fibonacci tools" [ref=e212]
+          - generic [ref=e218]:
+            - button "XABCD pattern" [ref=e220]
+            - button "Patterns" [ref=e226]
+          - generic [ref=e232]:
+            - button "Long position" [ref=e234]
+            - button "Forecasting and measurement tools" [ref=e238]
+          - generic [ref=e244]:
+            - button "Brush" [ref=e246]
+            - button "Geometric shapes" [ref=e252]
+          - generic [ref=e258]:
+            - button "Text" [ref=e260]
+            - button "Annotation tools" [ref=e264]
+          - generic [ref=e269]:
+            - button "Icon" [ref=e271]
+            - button "Icons" [ref=e275]
+        - generic [ref=e279]:
+          - button "Measure" [ref=e280]
+          - button "Zoom in" [ref=e284]
+        - generic [ref=e291]:
+          - generic [ref=e294]:
+            - button "Magnet mode snaps drawings placed near price bars to the closest OHLC value" [ref=e296]
+            - button "Magnets" [ref=e302]
+          - button "Keep drawing" [ref=e306]
+          - button "Lock all drawings" [ref=e310]
+          - generic [ref=e315]:
+            - button "Hide all drawings" [ref=e317]
+            - button "Hide options" [ref=e321]
+        - generic [ref=e327]:
+          - button "Remove objects" [ref=e329]
+          - button "Remove options" [ref=e333]
+    - generic [ref=e339]:
+      - 'region "Chart #1" [ref=e342]':
+        - generic [ref=e344]:
+          - generic [ref=e346]:
+            - generic:
+              - generic:
+                - toolbar:
+                  - generic:
+                    - generic [ref=e347]:
+                      - generic "Change symbol" [ref=e1369]:
+                        - generic [ref=e349]: D
+                        - button "Change symbol" [ref=e1371]: Dominion Energy, Inc.
+                      - generic "Change interval" [ref=e1372]:
+                        - text: ·
+                        - button "Change interval" [ref=e1373]: "15"
+                      - generic [ref=e1374]:
+                        - text: ·
+                        - generic [ref=e1375]: NYSE
+                    - generic:
+                      - generic:
+                        - button "Flag symbol"
+                        - button "More"
+                    - button "Market closed · One update every 5 seconds · NYSE by Cboe One" [ref=e1377]
+                  - generic [ref=e364]:
+                    - generic [ref=e365]:
+                      - generic [ref=e366]: O
+                      - generic [ref=e367]: "70.12"
+                    - generic [ref=e368]:
+                      - generic [ref=e369]: H
+                      - generic [ref=e370]: "70.26"
+                    - generic [ref=e371]:
+                      - generic [ref=e372]: L
+                      - generic [ref=e373]: "70.06"
+                    - generic [ref=e374]:
+                      - generic [ref=e375]: C
+                      - generic [ref=e376]: "70.08"
+                    - generic [ref=e377]: −0.04 (−0.06%)
+                - generic [ref=e381]:
+                  - generic [ref=e383]:
+                    - generic: "70.08"
+                    - generic: Sell
+                  - generic "Spread" [ref=e385]: "0.00"
+                  - generic [ref=e387]:
+                    - generic: "70.08"
+                    - generic: Buy
+              - generic:
+                - button "Hide indicator legend" [ref=e388]
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e1094]:
+                        - generic [ref=e1095]: SimpleSMA18 Strategy (MQL5 port)
+                        - generic [ref=e1097]:
+                          - generic "Fast MA Period" [ref=e1098]: "18"
+                          - generic "Trend MA Period" [ref=e1100]: "200"
+                          - generic "Volume MA Period" [ref=e1102]: "20"
+                          - generic "Swing Strength" [ref=e1104]: "2"
+                          - generic "Entry Buffer (ticks)" [ref=e1106]: "10"
+                          - generic "Break-Even Trigger (ticks)" [ref=e1108]: "500"
+                          - generic "Break-Even Offset (ticks)" [ref=e1110]: "10"
+                          - generic "Protection Mode" [ref=e1112]: Swing
+                          - generic "Protection Start (ticks, 0=immediate)" [ref=e1114]: "500"
+                          - generic "Swing Buffer (ticks)" [ref=e1116]: "50"
+                          - generic "Chandelier Lookback" [ref=e1118]: "22"
+                          - generic "ATR Period" [ref=e1120]: "22"
+                          - generic "ATR Multiplier" [ref=e1122]: "3"
+                          - generic "Trailing Start (ticks)" [ref=e1124]: "800"
+                          - generic "Trailing Distance (ticks)" [ref=e1126]: "500"
+                      - generic:
+                        - generic:
+                          - button "Hide"
+                          - button "Settings"
+                          - generic "Source code"
+                          - button "Remove"
+                          - button "More"
+                      - button "Active strategy" [ref=e1311]
+                    - generic [ref=e1137]:
+                      - generic "MA 18" [ref=e1139]: "69.99"
+                      - generic "MA 200" [ref=e1141]: "69.36"
+            - generic "Chart for BATS:D, 15 minutes" [ref=e1384]
+          - generic [ref=e430]: USD
+      - toolbar [ref=e448]:
+        - generic [ref=e450]:
+          - generic [ref=e451]:
+            - button "1 day in 1 minute intervals" [ref=e452]:
+              - generic [ref=e453]: 1D
+            - button "5 days in 5 minutes intervals" [ref=e454]:
+              - generic [ref=e455]: 5D
+            - button "1 month in 30 minutes intervals" [ref=e456]:
+              - generic [ref=e457]: 1M
+            - button "3 months in 1 hour intervals" [ref=e458]:
+              - generic [ref=e459]: 3M
+            - button "6 months in 2 hours intervals" [ref=e460]:
+              - generic [ref=e461]: 6M
+            - button "Year to day in 1 day intervals" [ref=e462]:
+              - generic [ref=e463]: YTD
+            - button "1 year in 1 day intervals" [ref=e464]:
+              - generic [ref=e465]: 1Y
+            - button "5 years in 1 week intervals" [ref=e466]:
+              - generic [ref=e467]: 5Y
+            - button "All data in 1 month intervals" [ref=e468]:
+              - generic [ref=e469]: All
+          - button "Go to" [ref=e471]
+        - generic [ref=e475]:
+          - button "Timezone" [ref=e478]:
+            - generic [ref=e479]: 16:20:36 UTC+5:30
+          - button "Regular" [ref=e482]: RTH
+          - button "Adjust data for dividends" [ref=e486]:
+            - generic [ref=e487]: ADJ
+    - generic [ref=e489]:
+      - toolbar [ref=e494]:
+        - button "Watchlist, details, and news" [ref=e495]
+        - button "Alerts" [ref=e500]
+        - button "Object tree and data window" [ref=e505]
+        - button "Chats" [ref=e509]
+        - button "Screeners" [ref=e514]
+        - button "Pine" [ref=e520]
+        - button "Calendars" [ref=e525]
+        - button "Community" [ref=e529]
+        - button "Notifications" [ref=e536]
+        - button "Products" [ref=e540]
+        - button "Help Center" [ref=e545]
+      - generic [ref=e549]: "[] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] –"
+    - generic [ref=e1142]:
+      - toolbar [ref=e1144]:
+        - generic [ref=e1147]:
+          - button "Close strategy report" [ref=e1148]:
+            - generic [ref=e1156]: SimpleSMA18 Strategy (MQL5 port)
+          - button "Open context menu" [ref=e1158]
+        - generic [ref=e1163]:
+          - button "Collapse panel" [ref=e1164]
+          - button "Maximize panel" [ref=e1168]
+      - generic [ref=e1179]:
+        - generic [ref=e1181]:
+          - tablist [ref=e1183]:
+            - tab [selected] [ref=e1184]:
+              - generic "Metrics" [ref=e1185]
+            - tab [ref=e1189]:
+              - generic "Trades" [ref=e1190]
+          - button "Oct 1, 2025 — Jul 11, 2026" [ref=e1385]
+          - button "10 K USD" [ref=e1386]
+          - button "Default detalization" [ref=e1226]
+          - button "Script execution 1" [ref=e1241]:
+            - generic [ref=e1245]:
+              - generic [ref=e1249]: Script execution
+              - generic [ref=e1250]: "1"
+        - generic [ref=e1388]:
+          - paragraph [ref=e1389]: Key stats
+          - generic [ref=e1390]:
+            - generic [ref=e1392]:
+              - generic [ref=e1394]:
+                - generic [ref=e1395]: Total PnL
+                - generic [ref=e1397]:
+                  - generic [ref=e1398]: −230.38
+                  - generic [ref=e1399]: USD
+                  - generic [ref=e1400]: −2.30%
+              - generic [ref=e1401]:
+                - generic [ref=e1402]: Max drawdown
+                - generic [ref=e1404]:
+                  - generic [ref=e1405]: "238.06"
+                  - generic [ref=e1406]: USD
+                  - generic [ref=e1407]: 2.38%
+              - generic [ref=e1408]:
+                - generic [ref=e1409]: Profitable trades
+                - generic [ref=e1411]:
+                  - generic [ref=e1412]: 33.62%
+                  - generic [ref=e1413]: 39/116
+              - generic [ref=e1414]:
+                - generic [ref=e1415]: Profit factor
+                - generic [ref=e1417]: "0.495"
+            - generic [ref=e1420]:
+              - generic [ref=e1421]:
+                - generic [ref=e1422]:
+                  - generic [ref=e1423]: Performance
+                  - link "Show description" [ref=e1424] [cursor=pointer]:
+                    - /url: /support/solutions/43000681735
+                - generic [ref=e1425]:
+                  - button "Scale" [ref=e1426]
+                  - button "Take a snapshot" [ref=e1432]
+                  - button "Expand chart" [ref=e1437]
+              - generic [ref=e1443]:
+                - generic:
+                  - generic:
+                    - generic: Cumulative PnL
+                    - generic [ref=e1448]:
+                      - generic [ref=e1449]: Buy and hold
+                      - button "Show" [ref=e1450]
+                    - generic: Trades excursions
+                    - generic: Run-ups and drawdowns
+                    - button "Hide metrics legend" [ref=e1463]
+                - table [ref=e1468]:
+                  - row [ref=e1469]:
+                    - cell
+                    - cell [ref=e1470]
+                    - cell [ref=e1474]
+                  - row [ref=e1478]:
+                    - cell
+                    - cell [ref=e1479]
+                    - cell [ref=e1483]
+          - generic [ref=e1486]:
+            - generic [ref=e1487]:
+              - paragraph [ref=e1488]: Return details
+              - tablist [ref=e1490]:
+                - tab "Overview" [selected] [ref=e1491]
+                - tab "Returns" [ref=e1493]
+                - tab "Benchmarking" [ref=e1495]
+                - tab "Risk-adjusted performance" [ref=e1497]
+                - button:
+                  - generic: More
+              - generic [ref=e1501]:
+                - generic [ref=e1503]:
+                  - generic [ref=e1504]: Open PnL
+                  - generic [ref=e1506]:
+                    - generic [ref=e1507]: "+0.91"
+                    - generic [ref=e1508]: USD
+                    - generic [ref=e1509]: +0.01%
+                - generic [ref=e1510]:
+                  - generic [ref=e1511]: Expected payoff
+                  - generic [ref=e1513]:
+                    - generic [ref=e1514]: −1.99
+                    - generic [ref=e1515]: USD
+                - generic [ref=e1516]:
+                  - generic [ref=e1517]: Strategy outperformance
+                  - generic [ref=e1519]:
+                    - generic [ref=e1520]: −1,622.87
+                    - generic [ref=e1521]: USD
+                    - generic [ref=e1522]: −16.23%
+                - generic [ref=e1523]:
+                  - generic [ref=e1524]: Sharpe ratio
+                  - generic [ref=e1526]: −1.377
+              - generic [ref=e1530]:
+                - generic [ref=e1531]:
+                  - generic [ref=e1532]: Profit structure
+                  - generic [ref=e1533]:
+                    - generic [ref=e1551]:
+                      - generic [ref=e1552]: ‪−240.00‬
+                      - generic [ref=e1553]: ‪−120.00‬
+                      - generic [ref=e1554]: ‪0.00‬
+                      - generic [ref=e1555]: ‪120.00‬
+                      - generic [ref=e1556]: ‪240.00‬
+                    - generic [ref=e1557]:
+                      - generic [ref=e1558]: Total profit
+                      - generic [ref=e1561]: Open PnL
+                      - generic [ref=e1564]: Total loss
+                      - generic [ref=e1567]: Commission
+                      - generic [ref=e1570]: Total PnL
+                - generic [ref=e1573]:
+                  - generic [ref=e1574]: Benchmarking
+                  - generic [ref=e1576]:
+                    - table [ref=e1579]:
+                      - row [ref=e1580]:
+                        - cell
+                        - cell [ref=e1581]
+                        - cell [ref=e1585]
+                    - generic [ref=e1589]:
+                      - generic [ref=e1590]: Buy and hold PnL
+                      - generic [ref=e1593]: Strategy PnL
+            - generic [ref=e1596]:
+              - paragraph [ref=e1597]: Trades analysis
+              - tablist [ref=e1599]:
+                - tab "Overview" [selected] [ref=e1600]
+                - tab "Trades analysis details" [ref=e1602]
+                - button:
+                  - generic: More
+              - generic [ref=e1606]:
+                - generic [ref=e1608]:
+                  - generic [ref=e1609]: Average PnL
+                  - generic [ref=e1611]:
+                    - generic [ref=e1612]: −1.99
+                    - generic [ref=e1613]: USD
+                    - generic [ref=e1614]: −0.21%
+                - generic [ref=e1615]:
+                  - generic [ref=e1616]: Average bars in trades
+                  - generic [ref=e1618]: "14"
+                - generic [ref=e1620]:
+                  - generic [ref=e1621]: Largest profit
+                  - button "Upgrade to get full access to Strategy report data" [ref=e1623]
+                - generic [ref=e1627]:
+                  - generic [ref=e1628]: Largest loss
+                  - button "Upgrade to get full access to Strategy report data" [ref=e1630]
+              - generic [ref=e1636]:
+                - generic [ref=e1637]:
+                  - generic [ref=e1638]: Returns distribution
+                  - generic [ref=e1640]:
+                    - table [ref=e1643]:
+                      - row [ref=e1644]:
+                        - cell
+                        - cell [ref=e1645]
+                        - cell [ref=e1649]
+                      - row [ref=e1653]:
+                        - cell
+                        - cell [ref=e1654]
+                        - cell [ref=e1658]
+                    - generic [ref=e1661]:
+                      - generic [ref=e1662]:
+                        - generic [ref=e1663]: Losers
+                        - generic [ref=e1666]: Winners
+                      - generic [ref=e1669]:
+                        - generic [ref=e1670]:
+                          - generic [ref=e1673]: Average loss
+                          - generic [ref=e1674]: −0.50%
+                        - generic [ref=e1675]:
+                          - generic [ref=e1678]: Average profit
+                          - generic [ref=e1679]: 0.56%
+                - generic [ref=e1680]:
+                  - generic [ref=e1681]: Trades distribution
+                  - generic [ref=e1683]:
+                    - generic [ref=e1688]:
+                      - generic [ref=e1689]: "116"
+                      - generic [ref=e1690]: Total trades
+                    - generic [ref=e1696]:
+                      - generic [ref=e1697]:
+                        - generic [ref=e1699]: Winners
+                        - generic [ref=e1700]:
+                          - generic [ref=e1701]: 39 trades
+                          - generic [ref=e1702]: 33.62%
+                      - generic [ref=e1703]:
+                        - generic [ref=e1705]: Losers
+                        - generic [ref=e1706]:
+                          - generic [ref=e1707]: 77 trades
+                          - generic [ref=e1708]: 66.38%
+                      - generic [ref=e1709]:
+                        - generic [ref=e1711]: Breakevens
+                        - generic [ref=e1712]:
+                          - generic [ref=e1713]: 0 trades
+                          - generic [ref=e1714]: 0.00%
+            - generic [ref=e1715]:
+              - paragraph [ref=e1716]: Equity run-ups and drawdowns
+              - tablist [ref=e1718]:
+                - tab "Overview" [selected] [ref=e1719]
+                - tab "Run-ups" [ref=e1721]
+                - tab "Drawdowns" [ref=e1723]
+                - button:
+                  - generic: More
+              - generic [ref=e1727]:
+                - generic [ref=e1729]:
+                  - generic [ref=e1730]: Average run-up duration
+                  - generic [ref=e1732]: 2 days
+                - generic [ref=e1734]:
+                  - generic [ref=e1735]: Average drawdown duration
+                  - generic [ref=e1737]: 263 days
+                - generic [ref=e1739]:
+                  - generic [ref=e1740]: Max drawdown as % of initial capital
+                  - button "Upgrade to get full access to Strategy report data" [ref=e1742]
+                - generic [ref=e1746]:
+                  - generic [ref=e1747]: Return of max drawdown
+                  - button "Upgrade to get full access to Strategy report data" [ref=e1749]
+              - generic [ref=e1755]:
+                - generic [ref=e1756]:
+                  - generic [ref=e1757]: Alternating growth and decline
+                  - generic [ref=e1759]:
+                    - generic [ref=e1760]: Not enough data to show
+                    - table [ref=e1766]:
+                      - row [ref=e1767]:
+                        - cell
+                        - cell [ref=e1768]
+                        - cell [ref=e1772]
+                - generic [ref=e1776]:
+                  - generic [ref=e1777]: Comparison of growth and decline periods
+                  - generic [ref=e1779]:
+                    - generic [ref=e1780]: Not enough data to show
+                    - generic [ref=e1783]:
+                      - generic [ref=e1784]: Run-up
+                      - generic [ref=e1785]:
+                        - generic [ref=e1786]:
+                          - generic [ref=e1787]: Maximum
+                          - generic [ref=e1789]: 0.03%
+                        - generic [ref=e1790]:
+                          - generic [ref=e1791]: Average
+                          - generic [ref=e1793]: 0.03%
+                    - generic [ref=e1794]:
+                      - generic [ref=e1795]: Drawdown
+                      - generic [ref=e1796]:
+                        - generic [ref=e1797]:
+                          - generic [ref=e1798]: Maximum
+                          - generic [ref=e1800]: 2.35%
+                        - generic [ref=e1801]:
+                          - generic [ref=e1802]: Average
+                          - generic [ref=e1804]: 2.35%
+                        - generic [ref=e1805]:
+                          - generic [ref=e1806]: Current
+                          - generic [ref=e1808]: 2.35%
+            - generic [ref=e1809]:
+              - paragraph [ref=e1810]: Capital efficiency
+              - tablist [ref=e1812]:
+                - tab "Overview" [selected] [ref=e1813]
+                - tab "Capital usage" [ref=e1815]
+                - tab "Margin usage" [ref=e1817]
+                - button:
+                  - generic: More
+              - generic [ref=e1821]:
+                - generic [ref=e1823]:
+                  - generic [ref=e1824]: CAGR
+                  - generic [ref=e1826]: −2.98%
+                - generic [ref=e1828]:
+                  - generic [ref=e1829]: Account size required
+                  - generic [ref=e1831]:
+                    - generic [ref=e1832]: "238.06"
+                    - generic [ref=e1833]: USD
+                - generic [ref=e1834]:
+                  - generic [ref=e1835]: Return on initial capital
+                  - generic [ref=e1837]: −2.31%
+                - generic [ref=e1839]:
+                  - generic [ref=e1840]: Margin calls
+                  - button "Upgrade to get full access to Strategy report data" [ref=e1842]
+              - generic [ref=e1848]:
+                - generic [ref=e1849]: Margin usage
+                - generic [ref=e1851]: Not enough data to show
+    - generic "Trading panel"
+  - generic: Symbol search
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+    - dialog "Symbol search" [ref=e1860]:
+      - generic [ref=e1861]:
+        - generic [ref=e1862]: Symbol search
+        - button "Close menu" [ref=e1864]
+      - generic [ref=e1871]:
+        - searchbox "Symbol, ISIN, or CUSIP" [active] [ref=e1875]: XAUUSD
+        - generic [ref=e1876]:
+          - button "Clear" [ref=e1877]
+          - separator [ref=e1881]
+          - button "Show spread operators" [ref=e1882]
+      - tablist [ref=e1888]:
+        - tab "All" [selected] [ref=e1889]
+        - tab "Stocks" [ref=e1891]
+        - tab "Funds" [ref=e1893]
+        - tab "Futures" [ref=e1895]
+        - tab "Forex" [ref=e1897]
+        - tab "Crypto" [ref=e1899]
+        - tab "Indices" [ref=e1901]
+        - tab "Bonds" [ref=e1903]
+        - tab "Economy" [ref=e1905]
+        - tab "Options" [ref=e1907]
+        - button:
+          - generic: More
+      - generic [ref=e1912]:
+        - generic [ref=e3489]:
+          - generic [ref=e3490]:
+            - generic [ref=e3491]: X
+            - emphasis [ref=e3502]: XAUUSD
+          - emphasis [ref=e3505]: Gold
+          - generic [ref=e3507]:
+            - generic [ref=e3508]: commodity cfd
+            - generic "OANDA" [ref=e3510]
+        - generic [ref=e3515]:
+          - generic [ref=e3516]:
+            - generic [ref=e3517]: G
+            - emphasis [ref=e3528]: GOLD
+          - generic [ref=e3530]:
+            - emphasis [ref=e3531]: GOLD
+            - text: (US$/OZ)
+          - generic [ref=e3533]:
+            - generic [ref=e3534]: commodity cfd
+            - generic [ref=e3535]: TVC
+        - generic [ref=e3541]:
+          - generic [ref=e3542]:
+            - generic [ref=e3543]: X
+            - emphasis [ref=e3554]: XAUUSD
+          - generic [ref=e3556]:
+            - emphasis [ref=e3557]: Gold
+            - text: / U.S. Dollar
+          - generic [ref=e3559]:
+            - generic [ref=e3560]: commodity cfd
+            - generic "FOREX.com" [ref=e3562]: FOREXCOM
+        - generic [ref=e3567]:
+          - generic [ref=e3568]:
+            - generic [ref=e3569]: X
+            - emphasis [ref=e3580]: XAUUSD
+          - generic [ref=e3582]:
+            - text: XAU/USD Spot -
+            - emphasis [ref=e3583]: Gold
+          - generic [ref=e3585]:
+            - generic [ref=e3586]: commodity cfd
+            - generic "FXCM" [ref=e3588]
+        - generic [ref=e3593]:
+          - generic [ref=e3594]:
+            - generic [ref=e3595]: X
+            - emphasis [ref=e3606]: XAUUSD
+          - generic [ref=e3608]:
+            - emphasis [ref=e3609]: Gold
+            - text: vs US Dollar
+          - generic [ref=e3611]:
+            - generic [ref=e3612]: commodity cfd
+            - generic "Pepperstone" [ref=e3614]
+        - generic [ref=e3619]:
+          - generic [ref=e3620]:
+            - generic [ref=e3621]: X
+            - emphasis [ref=e3632]: XAUUSD
+          - emphasis [ref=e3635]: Gold
+          - generic [ref=e3637]:
+            - generic [ref=e3638]: commodity cfd
+            - generic "Capital.com" [ref=e3640]
+        - generic [ref=e3645]:
+          - generic [ref=e3646]:
+            - generic [ref=e3647]: X
+            - emphasis [ref=e3658]: XAUUSD
+          - generic [ref=e3660]:
+            - emphasis [ref=e3661]: Gold
+            - text: US Dollar
+          - generic [ref=e3663]:
+            - generic [ref=e3664]: commodity cfd
+            - generic "Vantage" [ref=e3666]
+        - generic [ref=e3671]:
+          - generic [ref=e3672]:
+            - generic [ref=e3673]: X
+            - emphasis [ref=e3684]: XAUUSD
+          - generic [ref=e3686]:
+            - emphasis [ref=e3687]: Gold
+            - text: vs US Dollar
+          - generic [ref=e3689]:
+            - generic [ref=e3690]: commodity cfd
+            - generic "IC Markets" [ref=e3692]
+        - generic [ref=e3697]:
+          - generic [ref=e3698]:
+            - generic [ref=e3699]: X
+            - emphasis [ref=e3710]: XAUUSD
+          - generic [ref=e3712]:
+            - emphasis [ref=e3713]: GOLD
+            - text: / US DOLLAR
+          - generic [ref=e3715]:
+            - generic [ref=e3716]: commodity crypto oracle
+            - generic "Pyth" [ref=e3718]
+        - generic [ref=e3723]:
+          - generic [ref=e3724]:
+            - generic [ref=e3725]: X
+            - emphasis [ref=e3736]: XAUUSD
+          - generic [ref=e3738]:
+            - emphasis [ref=e3739]: Gold
+            - text: /US Dollar
+          - generic [ref=e3741]:
+            - generic [ref=e3742]: commodity cfd
+            - generic "Saxo" [ref=e3744]
+        - generic [ref=e3749]:
+          - generic [ref=e3750]:
+            - generic [ref=e3751]: X
+            - emphasis [ref=e3762]: XAUUSD
+          - generic [ref=e3764]:
+            - emphasis [ref=e3765]: Gold
+            - text: / US Dollar
+          - generic [ref=e3767]:
+            - generic [ref=e3768]: commodity cfd
+            - generic "Eightcap" [ref=e3770]
+        - generic [ref=e3775]:
+          - generic [ref=e3776]:
+            - generic [ref=e3777]: G
+            - emphasis [ref=e3787]: GOLD
+          - generic [ref=e3789]:
+            - emphasis [ref=e3790]: Gold
+            - text: Futures
+          - generic [ref=e3791]:
+            - generic [ref=e3792]:
+              - generic [ref=e3793]: futures
+              - generic "MCX — Multi Commodity Exchange" [ref=e3795]: MCX
+            - button "Expand" [ref=e3801]
+        - generic [ref=e3805]:
+          - generic [ref=e3806]:
+            - generic [ref=e3807]: X
+            - emphasis [ref=e3818]: XAUUSD
+          - generic [ref=e3820]:
+            - emphasis [ref=e3821]: GOLD
+            - text: / U.S. DOLLAR
+          - generic [ref=e3823]:
+            - generic [ref=e3824]: commodity cfd
+            - generic "ICE Data Services" [ref=e3826]: ICE
+        - generic [ref=e3831]:
+          - generic [ref=e3832]:
+            - generic [ref=e3833]: X
+            - emphasis [ref=e3844]: XAUUSD
+          - generic [ref=e3846]:
+            - emphasis [ref=e3847]: Gold
+            - text: vs US-Dollar
+          - generic [ref=e3849]:
+            - generic [ref=e3850]: commodity cfd
+            - generic "BlackBull Markets" [ref=e3852]
+        - generic [ref=e3857]:
+          - generic [ref=e3858]:
+            - generic [ref=e3859]: X
+            - emphasis [ref=e3870]: XAUUSD
+          - generic [ref=e3872]:
+            - emphasis [ref=e3873]: Gold
+            - text: vs US Dollar
+          - generic [ref=e3875]:
+            - generic [ref=e3876]: commodity cfd
+            - generic "Fusion Markets" [ref=e3878]
+        - generic [ref=e3883]:
+          - generic [ref=e3884]:
+            - generic [ref=e3885]: X
+            - emphasis [ref=e3896]: XAUUSD
+          - generic [ref=e3897]: XAU/USD
+          - generic [ref=e3900]:
+            - generic [ref=e3901]: commodity cfd
+            - generic "City Index" [ref=e3903]: CITYINDEX
+        - generic [ref=e3908]:
+          - generic [ref=e3909]:
+            - generic [ref=e3910]: X
+            - emphasis [ref=e3921]: XAUUSD
+          - generic [ref=e3923]:
+            - emphasis [ref=e3924]: Gold
+            - text: vs US Dollar
+          - generic [ref=e3926]:
+            - generic [ref=e3927]: commodity cfd
+            - generic "FP Markets" [ref=e3929]
+        - generic [ref=e3934]:
+          - generic [ref=e3935]:
+            - generic [ref=e3936]: X
+            - emphasis [ref=e3947]: XAUUSD
+          - generic [ref=e3949]:
+            - emphasis [ref=e3950]: Gold
+            - text: spot in USD
+          - generic [ref=e3952]:
+            - generic [ref=e3953]: commodity cfd
+            - generic "ThinkMarkets" [ref=e3955]
+        - generic [ref=e3960]:
+          - generic [ref=e3961]:
+            - generic [ref=e3962]: G
+            - emphasis [ref=e3973]: GOLD
+          - generic [ref=e3975]:
+            - emphasis [ref=e3976]: Gold
+            - text: "- Cash"
+          - generic [ref=e3978]:
+            - generic [ref=e3979]: commodity cfd
+            - generic "CMC Markets" [ref=e3981]
+        - generic [ref=e3986]:
+          - generic [ref=e3987]:
+            - generic [ref=e3988]: X
+            - emphasis [ref=e3999]: XAUUSD
+          - generic [ref=e4001]:
+            - emphasis [ref=e4002]: Gold
+            - text: Ounce vs US Dollar
+          - generic [ref=e4004]:
+            - generic [ref=e4005]: commodity cfd
+            - generic "FxPro" [ref=e4007]
+        - generic [ref=e4012]:
+          - generic [ref=e4013]:
+            - generic [ref=e4014]: G
+            - emphasis [ref=e4025]: GOLD
+          - generic [ref=e4027]:
+            - emphasis [ref=e4028]: Gold
+            - text: (per 0.1) CFD
+          - generic [ref=e4030]:
+            - generic [ref=e4031]: commodity cfd
+            - generic "FOREX.com" [ref=e4033]: FOREXCOM
+        - generic [ref=e4038]:
+          - generic [ref=e4039]:
+            - generic [ref=e4040]: X
+            - emphasis [ref=e4051]: XAUUSD
+          - generic [ref=e4053]:
+            - emphasis [ref=e4054]: Gold
+            - text: vs US-Dollar
+          - generic [ref=e4056]:
+            - generic [ref=e4057]: commodity cfd
+            - generic "GBE brokers" [ref=e4059]
+        - generic [ref=e4064]:
+          - generic [ref=e4065]:
+            - generic [ref=e4066]: X
+            - emphasis [ref=e4077]: XAUUSD
+          - generic [ref=e4079]:
+            - emphasis [ref=e4080]: Gold
+            - text: vs US Dollar
+          - generic [ref=e4082]:
+            - generic [ref=e4083]: commodity cfd
+            - generic "Tickmill" [ref=e4085]
+        - generic [ref=e4090]:
+          - generic [ref=e4091]:
+            - generic [ref=e4092]: C
+            - emphasis [ref=e4102]: GOLD
+          - emphasis [ref=e4105]: Gold
+          - generic [ref=e4106]:
+            - generic [ref=e4107]:
+              - generic [ref=e4108]: futures
+              - generic [ref=e4109]: CMC Markets
+            - button "Expand" [ref=e4116]
+        - generic [ref=e4120]:
+          - generic [ref=e4121]:
+            - generic [ref=e4122]: G
+            - emphasis [ref=e4133]: GOLD
+          - generic [ref=e4135]:
+            - emphasis [ref=e4136]: Gold
+            - text: (XAU)
+          - generic [ref=e4138]:
+            - generic [ref=e4139]: commodity cfd
+            - generic "Velocity Trade" [ref=e4141]
+        - generic [ref=e4146]:
+          - generic [ref=e4147]:
+            - generic [ref=e4148]: X
+            - emphasis [ref=e4159]: XAUUSD
+          - generic [ref=e4161]:
+            - emphasis [ref=e4162]: Gold
+            - text: vs US Dollar
+          - generic [ref=e4164]:
+            - generic [ref=e4165]: commodity cfd
+            - generic "Deriv" [ref=e4167]
+        - generic [ref=e4172]:
+          - generic [ref=e4173]:
+            - generic [ref=e4174]: X
+            - emphasis [ref=e4184]: XAUUSD
+          - generic [ref=e4186]:
+            - emphasis [ref=e4187]: Gold
+            - text: USD per ounce Futures
+          - generic [ref=e4188]:
+            - generic [ref=e4189]:
+              - generic [ref=e4190]: futures
+              - generic "BIST — Borsa Istanbul" [ref=e4192]: BIST
+            - button "Expand" [ref=e4198]
+        - generic [ref=e4202]:
+          - generic [ref=e4203]:
+            - generic [ref=e4204]: X
+            - emphasis [ref=e4215]: XAUUSD
+          - generic [ref=e4217]:
+            - emphasis [ref=e4218]: Gold
+            - text: vs US Dollar
+          - generic [ref=e4220]:
+            - generic [ref=e4221]: commodity cfd
+            - generic "CFI" [ref=e4223]
+        - generic [ref=e4228]:
+          - generic [ref=e4229]:
+            - generic [ref=e4230]: X
+            - emphasis [ref=e4241]: XAUUSD
+          - generic [ref=e4243]:
+            - emphasis [ref=e4244]: Gold
+            - text: vs US Dollar
+          - generic [ref=e4246]:
+            - generic [ref=e4247]: commodity cfd
+            - generic "Blueberry" [ref=e4249]
+        - generic [ref=e4254]:
+          - generic [ref=e4255]:
+            - generic [ref=e4256]: X
+            - emphasis [ref=e4267]: XAUUSD
+          - emphasis [ref=e4270]: GOLD
+          - generic [ref=e4272]:
+            - generic [ref=e4273]: commodity cfd
+            - generic "easyMarkets" [ref=e4275]
+        - generic [ref=e4280]:
+          - generic [ref=e4281]:
+            - generic [ref=e4282]: G
+            - emphasis [ref=e4293]: GOLD
+          - generic [ref=e4295]:
+            - emphasis [ref=e4296]: Gold
+            - text: Mining Inc.
+          - generic [ref=e4297]:
+            - generic [ref=e4298]:
+              - generic [ref=e4299]: stock
+              - generic "TSX — Toronto Stock Exchange" [ref=e4301]: TSX
+            - generic [ref=e4302]: "+11"
+            - button "Expand" [ref=e4316]
+        - generic [ref=e4320]:
+          - generic [ref=e4321]:
+            - generic [ref=e4322]: X
+            - emphasis [ref=e4333]: XAUUSD
+          - generic [ref=e4335]:
+            - text: Spot
+            - emphasis [ref=e4336]: Gold
+          - generic [ref=e4338]:
+            - generic [ref=e4339]: commodity cfd
+            - generic "Trade Nation" [ref=e4341]
+        - generic [ref=e4346]:
+          - generic [ref=e4347]:
+            - generic [ref=e4348]: G
+            - emphasis [ref=e4359]: GOLD
+          - generic [ref=e4361]:
+            - emphasis [ref=e4362]: Gold
+            - text: Bond Group Ltd.
+          - generic [ref=e4364]:
+            - generic [ref=e4365]: stock
+            - generic [ref=e4366]:
+              - img "Primary exchange" [ref=e4367]
+              - generic "TASE — Tel Aviv Stock Exchange" [ref=e4370]: TASE
+        - generic [ref=e4375]:
+          - generic [ref=e4376]:
+            - generic [ref=e4377]: G
+            - emphasis [ref=e4388]: GOLD
+          - generic [ref=e4390]:
+            - text: EUWAX
+            - emphasis [ref=e4391]: Gold
+          - generic [ref=e4392]:
+            - generic [ref=e4393]:
+              - generic [ref=e4394]: fund etf
+              - generic "SWB — Stuttgart Stock Exchange" [ref=e4396]: SWB
+            - generic [ref=e4397]: "+1"
+            - button "Expand" [ref=e4411]
+        - generic [ref=e4415]:
+          - generic [ref=e4416]:
+            - generic [ref=e4417]: X
+            - emphasis [ref=e4428]: XAUUSD
+          - generic [ref=e4430]:
+            - emphasis [ref=e4431]: GOLD
+            - text: VS US DOLLAR
+          - generic [ref=e4433]:
+            - generic [ref=e4434]: commodity cfd
+            - generic "Errante" [ref=e4436]
+        - generic [ref=e4441]:
+          - generic [ref=e4442]:
+            - generic [ref=e4443]: X
+            - emphasis [ref=e4454]: XAUUSD
+          - generic [ref=e4456]:
+            - emphasis [ref=e4457]: Gold
+            - text: vs US Dollar
+          - generic [ref=e4459]:
+            - generic [ref=e4460]: commodity cfd
+            - generic "GO Markets" [ref=e4462]
+        - generic [ref=e4467]:
+          - generic [ref=e4468]:
+            - generic [ref=e4469]: G
+            - emphasis [ref=e4480]: GOLD
+          - generic [ref=e4482]:
+            - emphasis [ref=e4483]: Gold
+            - text: (per 0.1) CFD
+          - generic [ref=e4485]:
+            - generic [ref=e4486]: commodity cfd
+            - generic "WH SelfInvest" [ref=e4488]: WHSELFINVEST
+        - generic [ref=e4493]:
+          - generic [ref=e4494]:
+            - generic [ref=e4495]: G
+            - emphasis [ref=e4506]: GOLD
+          - generic [ref=e4508]:
+            - text: Global X Physical
+            - emphasis [ref=e4509]: Gold
+            - text: Structured
+          - generic [ref=e4510]:
+            - generic [ref=e4511]:
+              - generic [ref=e4512]: fund etf
+              - generic "ASX — Australian Securities Exchange" [ref=e4514]: ASX
+            - button "Expand" [ref=e4528]
+        - generic [ref=e4532]:
+          - generic [ref=e4533]:
+            - generic [ref=e4534]: G
+            - emphasis [ref=e4545]: GOLD
+          - generic [ref=e4546]: Gold.com, Inc.
+          - generic [ref=e4548]:
+            - generic [ref=e4549]:
+              - generic [ref=e4550]: stock
+              - generic "NYSE — New York Stock Exchange" [ref=e4552]: NYSE
+            - generic [ref=e4553]: "+5"
+            - button "Expand" [ref=e4567]
+        - generic [ref=e4571]:
+          - generic [ref=e4572]:
+            - generic [ref=e4573]: X
+            - emphasis [ref=e4584]: XAUUSD
+          - generic [ref=e4586]:
+            - emphasis [ref=e4587]: GOLD
+            - text: / U.S. DOLLAR
+          - generic [ref=e4589]:
+            - generic [ref=e4590]: commodity cfd
+            - generic "Phillip Nova" [ref=e4592]
+        - generic [ref=e4597]:
+          - generic [ref=e4598]:
+            - generic [ref=e4599]: X
+            - emphasis [ref=e4610]: XAUUSD
+          - generic [ref=e4612]:
+            - emphasis [ref=e4613]: Gold
+            - text: vs US Dollar
+          - generic [ref=e4615]:
+            - generic [ref=e4616]: commodity cfd
+            - generic "Opofinance" [ref=e4618]
+        - generic [ref=e4623]:
+          - generic [ref=e4624]:
+            - generic [ref=e4625]: G
+            - emphasis [ref=e4636]: GOLD
+          - generic [ref=e4638]:
+            - text: Invesco Physical
+            - emphasis [ref=e4639]: Gold
+            - text: II ETC Exchange Traded Product 2026-open end on
+            - emphasis [ref=e4640]: Gold
+            - text: 1 Oz
+          - generic [ref=e4642]:
+            - generic [ref=e4643]: structured
+            - generic "LSE — London Stock Exchange (UK Companies)" [ref=e4645]: LSE
+        - generic [ref=e4650]:
+          - generic [ref=e4651]:
+            - generic [ref=e4652]: X
+            - emphasis [ref=e4663]: XAUUSD
+          - generic [ref=e4665]:
+            - emphasis [ref=e4666]: GOLD
+            - text: VS US DOLLAR
+          - generic [ref=e4668]:
+            - generic [ref=e4669]: commodity cfd
+            - generic "EsaFX" [ref=e4671]
+        - generic [ref=e4676]:
+          - generic [ref=e4677]:
+            - generic [ref=e4678]: G
+            - emphasis [ref=e4689]: GOLD
+          - emphasis [ref=e4692]: GOLD
+          - generic [ref=e4694]:
+            - generic [ref=e4695]: index
+            - generic "NCDEX — National Commodity & Derivatives Exchange" [ref=e4697]: NCDEX
+        - generic [ref=e4702]:
+          - generic [ref=e4703]:
+            - generic [ref=e4704]: G
+            - emphasis [ref=e4715]: GOLD
+          - generic [ref=e4717]:
+            - emphasis [ref=e4718]: GOLD
+            - text: ETF
+            - emphasis [ref=e4719]: Gold
+            - text: Fund
+          - generic [ref=e4721]:
+            - generic [ref=e4722]: fund etf
+            - generic "RUS" [ref=e4724]
+        - generic [ref=e4729]:
+          - generic [ref=e4730]:
+            - generic [ref=e4731]: X
+            - emphasis [ref=e4742]: XAUUSD
+          - generic [ref=e4744]:
+            - emphasis [ref=e4745]: Gold
+            - text: vs US Dollar
+          - generic [ref=e4747]:
+            - generic [ref=e4748]: commodity cfd
+            - generic "Skilling" [ref=e4750]
+        - generic [ref=e4755]:
+          - generic [ref=e4756]:
+            - generic [ref=e4757]: G
+            - emphasis [ref=e4768]: GOLD
+          - generic [ref=e4769]: PT Visi Telekomunikasi Infrastruktur Tbk
+          - generic [ref=e4772]:
+            - generic [ref=e4773]: stock
+            - generic [ref=e4774]:
+              - img "Primary exchange" [ref=e4775]
+              - generic "IDX — Indonesia Stock Exchange" [ref=e4778]: IDX
+        - generic [ref=e4783]:
+          - generic [ref=e4784]:
+            - generic [ref=e4785]: X
+            - emphasis [ref=e4796]: XAUUSD
+          - generic [ref=e4798]:
+            - emphasis [ref=e4799]: Gold
+            - text: vs US Dollar
+          - generic [ref=e4801]:
+            - generic [ref=e4802]: commodity cfd
+            - generic "Swissquote" [ref=e4804]: SWISSQUOTE
+        - generic [ref=e4809]:
+          - generic [ref=e4810]:
+            - generic [ref=e4811]: X
+            - emphasis [ref=e4822]: XAUUSD
+          - generic [ref=e4824]:
+            - emphasis [ref=e4825]: Gold
+            - text: vs US Dollar
+          - generic [ref=e4827]:
+            - generic [ref=e4828]: commodity cfd
+            - generic "Purple Trading" [ref=e4830]
+        - generic [ref=e4835]:
+          - generic [ref=e4836]:
+            - generic [ref=e4837]: X
+            - emphasis [ref=e4848]: XAUUSD
+          - generic [ref=e4850]:
+            - emphasis [ref=e4851]: Gold
+            - text: vs US Dollar
+          - generic [ref=e4853]:
+            - generic [ref=e4854]: commodity cfd
+            - generic "CXM" [ref=e4856]
+        - progressbar [ref=e4862]
+      - generic [ref=e3488]: Search using ISIN and CUSIP codes
+  - generic [ref=e723]:
+    - alert
+    - alert

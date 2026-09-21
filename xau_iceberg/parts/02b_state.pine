@@ -1,0 +1,103 @@
+// ============================================================================
+//  SECTION 2B : SHARED MUTABLE STATE
+//  Pine demands declaration before use, but two pairs of sections read each
+//  other: SECTION 13 (Filters) gates on the loss streak that SECTION 15
+//  (Failure Analysis) writes, and SECTION 16 (Presentation) draws the ids that
+//  SECTION 6 and SECTION 14 mint. Rather than forward-declare inside a module -
+//  which is how the same counter ends up existing twice under two names - every
+//  cross-section variable is declared exactly once, here.
+//
+//  READ/WRITE OWNERSHIP IS FIXED:
+//    lastSigBar*/lastLossBar*/lossStreak*  written by S15, read by S13
+//    dupLvl*/dupBar*                       written by S14, read by S13
+//    zoneSeq / setupSeq                    written by S6 / S14
+//  Within a bar S13 runs BEFORE S15, so S13 necessarily reads the values as of
+//  the previous bar. That is deterministic and it is the intended behaviour: a
+//  loss booked on this bar must not retro-gate a signal already evaluated on it.
+// ============================================================================
+
+// --- per-direction signal / loss memory (index 0 = LONG, 1 = SHORT) ---------
+// Per-direction on purpose. A global cooldown lets a stopped-out long suppress
+// shorts for the next 100 minutes, which deletes the failed-absorption reversal -
+// the single highest-value setup this model has.
+var array<int> lastSigBar  = array.new<int>(2, na)
+var array<int> lastLossBar = array.new<int>(2, na)
+var array<int> lossStreak  = array.new<int>(2, 0)
+
+// --- per-direction duplicate memory: identity of the level last traded -------
+var array<float> dupLvl = array.new<float>(2, na)
+var array<int>   dupBar = array.new<int>(2, na)
+
+// dir (+1/-1) -> array slot (0/1). The ONLY place this mapping is written.
+f_slot(int dir) => dir > 0 ? 0 : 1
+
+// --- monotonic ids ----------------------------------------------------------
+var int zoneSeq  = 0
+var int setupSeq = 0
+
+// --- signal plumbing filled by S14 and consumed by S16/S17/S18 -------------
+var RiskPlan sigPlanL = na
+var RiskPlan sigPlanS = na
+var float    sigScoreL = na
+var float    sigScoreS = na
+
+// --- WALK-FORWARD WINDOW ---------------------------------------------------
+// These live here, not in SECTION 18, for one reason: SECTION 16 draws the
+// status panel and SECTION 18 runs AFTER it. With the window declared downstream
+// the panel could report a clean SECTION 13 verdict on a bar whose signal the
+// window had silently suppressed - the user reads OK and sees no marker. The
+// computation depends only on `time` and its own inputs, so it is free to sit
+// this early; SECTION 18 keeps the telemetry that genuinely needs longSignal.
+GEXEC = "18 - Execution & Walk-Forward"
+
+// --- WHY AN IN-SCRIPT WINDOW AT ALL --------------------------------------
+// The Strategy Tester's date-range control is part of DEEP BACKTESTING, which
+// is a PAID TradingView feature. This account does not have it, so the tester's
+// own window is unavailable and a walk-forward fold cannot be expressed there.
+// The fold is therefore expressed IN THE SCRIPT, exactly as the user's existing
+// srk_sma18_v11_*.pine files already do, and it gates ORDER PLACEMENT only -
+// every indicator, array and counter keeps warming up on the bars before the
+// window, so fold 2 never starts from a cold ATR.
+i_useFixedWin  = input.bool(false, "Use fixed date window", group = GEXEC,
+     tooltip = "ON = reproducible walk-forward folds with hard UTC dates. This is " +
+               "the CORRECT way to run a fold, but it only works if the chart has " +
+               "actually loaded bars that far back - see the rolling window below. " +
+               "OFF = rolling lookback only.",
+     display = display.none)
+i_winFrom      = input.time(timestamp("2025-01-01T00:00:00+0000"), "  Window FROM (UTC)",
+     group = GEXEC,
+     tooltip = "Inclusive start of the fold. Ignored unless the box above is " +
+               "ticked. Set EARLIER than the chart holds and the fold silently " +
+               "starts at the first loaded bar instead - compare the bars-in-" +
+               "window count in the panel against the total to see whether that " +
+               "happened.",
+     display = display.none)
+i_winTo        = input.time(timestamp("2027-01-01T00:00:00+0000"), "  Window TO (UTC)",
+     group = GEXEC,
+     tooltip = "Inclusive end of the fold. Set it in the FUTURE to run an " +
+               "open-ended fold; set it to the start of the next fold to keep " +
+               "in-sample and out-of-sample strictly disjoint, which is the whole " +
+               "point of the exercise. THE DEFAULT IS DELIBERATELY IN THE FUTURE: " +
+               "a TO date in the past makes the window EMPTY on every intraday " +
+               "chart this account can load (a free plan holds ~3.6 days at 1M, " +
+               "~17 at 5M, ~52 at 15M), so ticking the box above would silently " +
+               "suppress every signal. Move it back only to close a fold.",
+     display = display.none)
+i_lookbackDays = input.int(0, "Rolling window (days back, 0 = all data)", minval = 0,
+     maxval = 3650, group = GEXEC,
+     tooltip = "THE ACCOUNT-SPECIFIC FALLBACK. 0 = trade every loaded bar. Any " +
+               "other value trades only the last N days. At the extremes: a value " +
+               "LARGER than the chart actually holds is a silent no-op (a free " +
+               "plan loads ~5000 bars = ~3.6 days at 1M, ~17 days at 5M, ~52 days " +
+               "at 15M), and 1-2 days at 15M leaves too few trades to mean " +
+               "anything. NOTE this window SLIDES: it is measured from `timenow`, " +
+               "so the same fold re-run tomorrow is NOT the same fold. Use the " +
+               "fixed dates above whenever you need reproducibility.",
+     display = display.none)
+
+// Both arms must hold. The rolling arm is written exactly as the user's existing
+// v11 files write it, so the two systems agree on what "in window" means.
+inWindow = (not i_useFixedWin or (time >= i_winFrom and time <= i_winTo)) and
+           (i_lookbackDays == 0 or time >= timenow - i_lookbackDays * 86400000)
+
+// ========================= END SECTION 2B ===================================

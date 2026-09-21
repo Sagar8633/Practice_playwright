@@ -1,0 +1,766 @@
+{
+  "pageMap": {
+    "Home": 140,
+    "Why-i2V (About)": 77,
+    "Products": 94,
+    "Industries (Solutions)": 94,
+    "Contact-Us": 77,
+    "Product-VMS": 83,
+    "Careers": 87,
+    "Blogs-News": 93,
+    "Resources": 87,
+    "Our-Partners": 83
+  },
+  "total": 107,
+  "checked": [
+    {
+      "link": "https://www.i2vsys.com/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/why-choose-i2v/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/video-management-software/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/ai-powered-video-analytics/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/integrated-command-and-control-center/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/central-monitoring-system/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/automatic-number-plate-recognition/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/intelligent-traffic-management-system/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/face-recognition-software/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries-we-serve/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/our-partners/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/career/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom-blog/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resource-center/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/contact-us/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://in.linkedin.com/company/i2v-systems",
+      "status": 200,
+      "err": null,
+      "internal": false,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.youtube.com/@i2vsystems120",
+      "status": 200,
+      "err": null,
+      "internal": false,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/?s=ppe",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/?s=hanwah",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/?s=vms",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/?s=brghntk",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/?s=Ravindra%20babu",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/integrated-command-and-control-center",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/ai-powered-video-analytics",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/video-management-software",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/video-management-software/?",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/ai-powered-video-analytics/?",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/integrated-command-and-control-center/?",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/central-monitoring-system",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/central-monitoring-system/?",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/intelligent-traffic-management-system/?",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/automatic-number-plate-recognition",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/automatic-number-plate-recognition/?",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/face-recognition-software",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/face-recognition-software/?",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/oil-and-gas",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/law-enforcement",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/energy/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/retail",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/smart-cities",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/education",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/transportation",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://youtu.be/XHOmBV4js_E?list=TLGGBFs0rFXZylcyNTExMjAyNQ",
+      "status": 200,
+      "err": null,
+      "internal": false,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/our-partners",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/partners/technology-partners/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom/securing-critical-infrastructure-in-2026-from-oil-gas-to-smart-cities/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom/passenger-safety-in-a-changing-world-the-role-of-intelligent-surveillance-in-aviation-and-transportation/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom/modern-border-security-in-a-changing-world-the-role-of-intelligent-surveillance/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/oil-and-gas/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/industrial/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/transportation/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/smart-cities/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/airport/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/law-enforcement/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/retail/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/railway-metro/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/education/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/healthcare/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/hospitality/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries/financial-institutions/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/html-sitemap/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/terms-of-use/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/privacy-policy/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/terms-of-use",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/contact-us",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/why-choose-i2v/terms-of-use",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/terms-of-use",
+      "status": 404,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/wp-content/uploads/2025/12/Container-1-2.webp",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/industries-we-serve/terms-of-use",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/contact-us/mandeep.panwar@i2vsys.com",
+      "status": 404,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/contact-us/terms-of-use",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.youtube.com/embed/XHOmBV4js_E?feature=oembed&autoplay=1&mute=1&controls=1&loop=1",
+      "status": 200,
+      "err": null,
+      "internal": false,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/products/video-management-software/terms-of-use",
+      "status": 404,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/wp-content/uploads/2025/12/image-3-1.webp",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/careers/software-engineer-in-ml/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/careers/computer-vision-engineer/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/careers/project-engineer/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/career/terms-of-use",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom-blog/?tab=news",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom/i2vs-innovation-takes-center-stage/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom/advancing-airport-security-innovation-at-inter-passenger-terminal-show-2025/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom/accelerating-digital-transformation-at-dtc-bhubaneswar-2025/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom-blog/?tab=stories",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom/i2v-command-and-control-psim-along-with-vms-successfully-installed-in-saharanpur-smart-city/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom/i2v-crowd-management-vms-successfully-installed-in-haridwar-for-mahakumbh-festival/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom/chennai-smart-city-deployment-scaling-surveillance-across-thousands-of-cameras/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom/i2v-itms-vms-successfully-installed-in-himachal-pradesh-mandi/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom-blog/?tab=blogs",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/newsroom-blog/terms-of-use",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resources/i2v-vms-pre-installer-1/",
+      "status": 404,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resources/i2v-vms-for-nvr-datasheet-rolling-datasheet/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resources/i2v-mic-datasheet-rolling-datasheet/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resources/i2v-mnvr-datasheet/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resources/traffic-brochure/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resources/smart-city-brochure/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resources/retail-brochure/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resources/industry-brochure/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resources/complete-product-brochure/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resources/airport-brochure/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resources/i2v-anpr-datasheet/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resources/i2v-vms-datasheet/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resources/i2v-va-datashet/",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/resource-center/terms-of-use",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://leafletjs.com/",
+      "status": 200,
+      "err": null,
+      "internal": false,
+      "method": "HEAD"
+    },
+    {
+      "link": "https://www.i2vsys.com/our-partners/terms-of-use",
+      "status": 200,
+      "err": null,
+      "internal": true,
+      "method": "HEAD"
+    }
+  ]
+}

@@ -1,0 +1,335 @@
+<style>
+  :root{
+    --bg:#f6f7f9; --panel:#ffffff; --panel2:#eef1f5; --ink:#0e1620; --muted:#5a6675;
+    --line:#e2e6ec; --accent:#0c8ea3;
+    --good:#0f9d58; --good-bg:#0f9d5814; --edge:#3aa6b9; --edge-bg:#3aa6b914;
+    --warn:#b3730a; --warn-bg:#b3730a14; --bad:#cf3540; --bad-bg:#cf354014; --nd:#9aa3b0; --nd-bg:#9aa3b012;
+    --mono:ui-monospace,"SF Mono","Cascadia Code","Roboto Mono",Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#090d14; --panel:#111826; --panel2:#0d1420; --ink:#e7eef7; --muted:#8a97a9; --line:#1e2736;
+      --accent:#39c0d6; --good:#2fbf6e; --good-bg:#2fbf6e18; --edge:#4fc6d8; --edge-bg:#4fc6d818;
+      --warn:#dca23a; --warn-bg:#dca23a18; --bad:#f0575d; --bad-bg:#f0575d18; --nd:#5c6675; --nd-bg:#5c667514; }
+  }
+  :root[data-theme="light"]{ --bg:#f6f7f9; --panel:#fff; --panel2:#eef1f5; --ink:#0e1620; --muted:#5a6675; --line:#e2e6ec; --accent:#0c8ea3; --good:#0f9d58; --good-bg:#0f9d5814; --edge:#3aa6b9; --edge-bg:#3aa6b914; --warn:#b3730a; --warn-bg:#b3730a14; --bad:#cf3540; --bad-bg:#cf354014; --nd:#9aa3b0; --nd-bg:#9aa3b012; }
+  :root[data-theme="dark"]{ --bg:#090d14; --panel:#111826; --panel2:#0d1420; --ink:#e7eef7; --muted:#8a97a9; --line:#1e2736; --accent:#39c0d6; --good:#2fbf6e; --good-bg:#2fbf6e18; --edge:#4fc6d8; --edge-bg:#4fc6d818; --warn:#dca23a; --warn-bg:#dca23a18; --bad:#f0575d; --bad-bg:#f0575d18; --nd:#5c6675; --nd-bg:#5c667514; }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px;margin:0 auto;padding:40px 22px 72px;}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums;}
+
+  /* header */
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:0 0 10px;}
+  h1{font-size:clamp(28px,4.4vw,42px);line-height:1.08;margin:0 0 12px;letter-spacing:-.02em;text-wrap:balance;font-weight:700;}
+  h1 .thin{color:var(--muted);font-weight:400;}
+  .lede{font-size:16px;color:var(--muted);max-width:64ch;margin:0 0 22px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:34px;}
+  .chip{font-family:var(--mono);font-size:12px;padding:5px 10px;border:1px solid var(--line);border-radius:6px;
+    background:var(--panel);color:var(--muted);}
+  .chip b{color:var(--ink);font-weight:600;}
+
+  /* verdict banner */
+  .verdict{border:1px solid var(--line);border-left:4px solid var(--warn);background:var(--panel);border-radius:12px;
+    padding:20px 22px;margin-bottom:32px;}
+  .verdict .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--warn);margin:0 0 8px;}
+  .verdict p{margin:0;font-size:17px;line-height:1.5;}
+  .verdict strong{color:var(--ink);}
+
+  /* stat tiles */
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:40px;}
+  @media(max-width:720px){.tiles{grid-template-columns:repeat(2,1fr)}}
+  .tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 15px;}
+  .tile .lab{font-size:12px;color:var(--muted);margin:0 0 8px;}
+  .tile .val{font-family:var(--mono);font-size:26px;font-weight:600;letter-spacing:-.01em;line-height:1;}
+  .tile .sub{font-size:12px;color:var(--muted);margin-top:7px;}
+  .tile .val.good{color:var(--good)} .tile .val.bad{color:var(--bad)} .tile .val.warn{color:var(--warn)}
+
+  section{margin-bottom:44px;}
+  h2{font-size:13px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+    margin:0 0 4px;font-weight:600;}
+  .h2sub{font-size:14px;color:var(--muted);margin:0 0 18px;}
+
+  /* matrix / tables */
+  .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel);}
+  table{border-collapse:collapse;width:100%;font-size:14px;}
+  th,td{padding:11px 13px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;}
+  thead th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+    font-weight:600;background:var(--panel2);position:sticky;top:0;}
+  tbody tr:last-child td{border-bottom:none;}
+  td.inst,th.inst{text-align:left;font-weight:600;}
+  td.inst small{display:block;font-weight:400;color:var(--muted);font-size:11px;font-family:var(--mono);}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums;}
+
+  /* heat cell */
+  .cell{display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+  .cell .win{font-family:var(--mono);font-size:15px;font-weight:600;}
+  .cell .pf{font-family:var(--mono);font-size:11px;padding:1px 6px;border-radius:5px;}
+  .heat-good{background:var(--good-bg)} .heat-good .win{color:var(--good)} .heat-good .pf{background:var(--good);color:#fff}
+  .heat-edge{background:var(--edge-bg)} .heat-edge .win{color:var(--edge)} .heat-edge .pf{background:var(--edge);color:#fff}
+  .heat-warn{background:var(--warn-bg)} .heat-warn .win{color:var(--warn)} .heat-warn .pf{background:var(--warn);color:#fff}
+  .heat-bad{background:var(--bad-bg)} .heat-bad .win{color:var(--bad)} .heat-bad .pf{background:var(--bad);color:#fff}
+  .heat-nd{background:var(--nd-bg);color:var(--nd)} .heat-nd .win{color:var(--nd);font-weight:400;font-size:12px;}
+
+  .legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:14px;font-size:12px;color:var(--muted);}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .dot{width:11px;height:11px;border-radius:3px;display:inline-block;}
+  .d-good{background:var(--good)} .d-edge{background:var(--edge)} .d-warn{background:var(--warn)} .d-bad{background:var(--bad)} .d-nd{background:var(--nd)}
+
+  /* verdict pill in detail tables */
+  .pill{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600;}
+  .p-good{background:var(--good-bg);color:var(--good)} .p-edge{background:var(--edge-bg);color:var(--edge)}
+  .p-warn{background:var(--warn-bg);color:var(--warn)} .p-bad{background:var(--bad-bg);color:var(--bad)} .p-nd{background:var(--nd-bg);color:var(--nd)}
+
+  .win-good{color:var(--good)} .win-bad{color:var(--bad)}
+
+  /* findings list */
+  .find{display:grid;gap:12px;}
+  .find .row{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);
+    border-radius:10px;padding:14px 16px;}
+  .find .ic{font-family:var(--mono);font-size:12px;font-weight:700;padding:3px 9px;border-radius:6px;flex:none;margin-top:1px;}
+  .find .row p{margin:0;font-size:14.5px;}
+  .find .row p b{color:var(--ink);}
+  .ic-good{background:var(--good-bg);color:var(--good)} .ic-bad{background:var(--bad-bg);color:var(--bad)}
+  .ic-warn{background:var(--warn-bg);color:var(--warn)} .ic-key{background:var(--accent);color:#fff;}
+
+  .note{font-size:13px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:13px 15px;}
+  .note b{color:var(--ink);}
+  ul.caveats{list-style:none;padding:0;margin:0;display:grid;gap:10px;}
+  ul.caveats li{padding-left:22px;position:relative;font-size:14px;color:var(--muted);}
+  ul.caveats li::before{content:"▹";position:absolute;left:0;color:var(--accent);}
+  ul.caveats li b{color:var(--ink);}
+
+  .foot{border-top:1px solid var(--line);margin-top:8px;padding-top:20px;font-size:12.5px;color:var(--muted);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--mono);}
+  a{color:var(--accent);}
+</style>
+
+<div class="wrap">
+
+  <p class="eyebrow">Strategy Backtest · Report</p>
+  <h1>trade_with_kareena <span class="thin">— performance across 7 markets &amp; 5 timeframes</span></h1>
+  <p class="lede">A real Strategy Tester backtest of the setup: <b>Smart&nbsp;Trail flip = entry, stop at the nearest pivot support/resistance, fixed 1:2 target.</b> One position at a time, commission and slippage included. Every number below is measured from TradingView's own data — nothing is estimated.</p>
+
+  <div class="chips">
+    <span class="chip">Entry <b>Smart Trail flip</b></span>
+    <span class="chip">Target <b>1 : 2 R:R</b></span>
+    <span class="chip">Stop <b>Pivot S/R</b></span>
+    <span class="chip">Costs <b>0.02% + 2 tick slip</b></span>
+    <span class="chip">Capital <b>$10,000 · 10%/trade</b></span>
+    <span class="chip">Break-even win rate <b>33.3%</b></span>
+  </div>
+
+  <div class="verdict">
+    <p class="k">The honest headline</p>
+    <p>Across every market and timeframe, the average win rate is <strong>~32.7%</strong> — essentially sitting <strong>on</strong> the 33.3% break-even line for a 1:2 target. In plain terms: <strong>as-is, this system has no reliable edge.</strong> Only <strong>7 of 27</strong> tested combinations were net-profitable, and they cluster in one place — <strong>Gold &amp; GBP/EUR on higher timeframes.</strong> Fast intraday (5m/15m) is the worst.</p>
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><p class="lab">Avg win rate (27 tests)</p><div class="val warn">32.7%</div><p class="sub">break-even is 33.3%</p></div>
+    <div class="tile"><p class="lab">Net-profitable tests</p><div class="val bad">7 / 27</div><p class="sub">≈ 26% · rest lose after costs</p></div>
+    <div class="tile"><p class="lab">Best result</p><div class="val good">PF 1.33</div><p class="sub">XAUUSD · 1&nbsp;Day</p></div>
+    <div class="tile"><p class="lab">Worst result</p><div class="val bad">PF 0.32</div><p class="sub">BTCUSD · 1&nbsp;Day · −66% DD</p></div>
+  </div>
+
+  <!-- HEATMAP MATRIX -->
+  <section>
+    <h2>Win-rate &amp; Profit-Factor matrix</h2>
+    <p class="h2sub">Each cell: <b>win %</b> (large) and <b>profit factor</b> (chip). Colour = profitability verdict from the profit factor. PF&nbsp;&gt;&nbsp;1 makes money, PF&nbsp;&lt;&nbsp;1 loses it after costs.</p>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th class="inst">Instrument</th>
+            <th>5&nbsp;min</th><th>15&nbsp;min</th><th>1&nbsp;hour</th><th>4&nbsp;hour</th><th>1&nbsp;day</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="inst">BTCUSD <small>crypto</small></td>
+            <td class="heat-warn"><div class="cell"><span class="win">36.8%</span><span class="pf">0.93</span></div></td>
+            <td class="heat-warn"><div class="cell"><span class="win">35.0%</span><span class="pf">0.99</span></div></td>
+            <td class="heat-bad"><div class="cell"><span class="win">33.5%</span><span class="pf">0.89</span></div></td>
+            <td class="heat-warn"><div class="cell"><span class="win">35.1%</span><span class="pf">0.92</span></div></td>
+            <td class="heat-bad"><div class="cell"><span class="win">26.8%</span><span class="pf">0.32</span></div></td>
+          </tr>
+          <tr>
+            <td class="inst">XAUUSD <small>gold</small></td>
+            <td class="heat-warn"><div class="cell"><span class="win">32.4%</span><span class="pf">0.97</span></div></td>
+            <td class="heat-good"><div class="cell"><span class="win">35.6%</span><span class="pf">1.17</span></div></td>
+            <td class="heat-warn"><div class="cell"><span class="win">35.0%</span><span class="pf">0.93</span></div></td>
+            <td class="heat-edge"><div class="cell"><span class="win">32.4%</span><span class="pf">1.01</span></div></td>
+            <td class="heat-good"><div class="cell"><span class="win">33.7%</span><span class="pf">1.33</span></div></td>
+          </tr>
+          <tr>
+            <td class="inst">EURUSD <small>forex</small></td>
+            <td class="heat-bad"><div class="cell"><span class="win">32.5%</span><span class="pf">0.64</span></div></td>
+            <td class="heat-bad"><div class="cell"><span class="win">32.0%</span><span class="pf">0.53</span></div></td>
+            <td class="heat-bad"><div class="cell"><span class="win">29.9%</span><span class="pf">0.70</span></div></td>
+            <td class="heat-edge"><div class="cell"><span class="win">35.2%</span><span class="pf">1.01</span></div></td>
+            <td class="heat-good"><div class="cell"><span class="win">34.6%</span><span class="pf">1.25</span></div></td>
+          </tr>
+          <tr>
+            <td class="inst">GBPUSD <small>forex</small></td>
+            <td class="heat-bad"><div class="cell"><span class="win">26.1%</span><span class="pf">0.53</span></div></td>
+            <td class="heat-bad"><div class="cell"><span class="win">23.1%</span><span class="pf">0.36</span></div></td>
+            <td class="heat-edge"><div class="cell"><span class="win">39.7%</span><span class="pf">1.00</span></div></td>
+            <td class="heat-good"><div class="cell"><span class="win">35.7%</span><span class="pf">1.12</span></div></td>
+            <td class="heat-good"><div class="cell"><span class="win">39.4%</span><span class="pf">1.07</span></div></td>
+          </tr>
+          <tr>
+            <td class="inst">USDJPY <small>forex</small></td>
+            <td class="heat-bad"><div class="cell"><span class="win">36.0%</span><span class="pf">0.45</span></div></td>
+            <td class="heat-bad"><div class="cell"><span class="win">33.3%</span><span class="pf">0.66</span></div></td>
+            <td class="heat-bad"><div class="cell"><span class="win">28.9%</span><span class="pf">0.52</span></div></td>
+            <td class="heat-bad"><div class="cell"><span class="win">33.1%</span><span class="pf">0.87</span></div></td>
+            <td class="heat-bad"><div class="cell"><span class="win">33.3%</span><span class="pf">0.88</span></div></td>
+          </tr>
+          <tr>
+            <td class="inst">US30 <small>Dow · via DJI</small></td>
+            <td class="heat-nd"><div class="cell"><span class="win">n/a</span></div></td>
+            <td class="heat-nd"><div class="cell"><span class="win">n/a</span></div></td>
+            <td class="heat-nd"><div class="cell"><span class="win">n/a</span></div></td>
+            <td class="heat-nd"><div class="cell"><span class="win">n/a</span></div></td>
+            <td class="heat-bad"><div class="cell"><span class="win">30.0%</span><span class="pf">0.72</span></div></td>
+          </tr>
+          <tr>
+            <td class="inst">USTEC <small>Nasdaq 100</small></td>
+            <td class="heat-nd"><div class="cell"><span class="win">n/a</span></div></td>
+            <td class="heat-nd"><div class="cell"><span class="win">n/a</span></div></td>
+            <td class="heat-nd"><div class="cell"><span class="win">n/a</span></div></td>
+            <td class="heat-nd"><div class="cell"><span class="win">n/a</span></div></td>
+            <td class="heat-bad"><div class="cell"><span class="win">22.0%</span><span class="pf">0.57</span></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="legend">
+      <span><i class="dot d-good"></i> Profitable · PF ≥ 1.05</span>
+      <span><i class="dot d-edge"></i> Slight edge · PF 1.00–1.05</span>
+      <span><i class="dot d-warn"></i> Break-even · PF 0.90–1.00</span>
+      <span><i class="dot d-bad"></i> Losing · PF &lt; 0.90</span>
+      <span><i class="dot d-nd"></i> No data (free-plan / feed limit)</span>
+    </div>
+    <p class="note" style="margin-top:16px;"><b>Test windows differ by timeframe</b> (the free plan gives a fixed number of bars, so higher TF = more calendar time): 5m ≈ 3–4 weeks · 15m ≈ 2–3 months · 1h ≈ 18 months · 4h ≈ 2.5–3.5 years · 1D = full history (up to 2002–2026 for FX, 2011–2026 for BTC). A true 1-year <i>intraday</i> test and the 10-minute interval both require a paid TradingView plan.</p>
+  </section>
+
+  <!-- DETAIL TABLES -->
+  <section>
+    <h2>Full detail — by timeframe</h2>
+    <p class="h2sub">Win %, profit factor, max drawdown and trade count for every tested combination.</p>
+
+    <div class="scroll" style="margin-bottom:16px;">
+      <table>
+        <thead><tr><th class="inst">5-Minute &nbsp;·&nbsp; ~3–4 weeks</th><th>Win %</th><th>Profit factor</th><th>Max DD</th><th>Trades</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td class="inst">BTCUSD</td><td class="num">36.8%</td><td class="num">0.93</td><td class="num">1.6%</td><td class="num">133</td><td><span class="pill p-warn">break-even</span></td></tr>
+          <tr><td class="inst">XAUUSD</td><td class="num">32.4%</td><td class="num">0.97</td><td class="num">0.5%</td><td class="num">105</td><td><span class="pill p-warn">break-even</span></td></tr>
+          <tr><td class="inst">EURUSD</td><td class="num">32.5%</td><td class="num">0.64</td><td class="num">0.3%</td><td class="num">80</td><td><span class="pill p-bad">losing</span></td></tr>
+          <tr><td class="inst">GBPUSD</td><td class="num">26.1%</td><td class="num">0.53</td><td class="num">0.2%</td><td class="num">23</td><td><span class="pill p-bad">losing</span></td></tr>
+          <tr><td class="inst">USDJPY</td><td class="num">36.0%</td><td class="num">0.45</td><td class="num">—</td><td class="num">75</td><td><span class="pill p-bad">losing</span></td></tr>
+          <tr><td class="inst">US30 · USTEC</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td><span class="pill p-nd">no data</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scroll" style="margin-bottom:16px;">
+      <table>
+        <thead><tr><th class="inst">15-Minute &nbsp;·&nbsp; ~2–3 months</th><th>Win %</th><th>Profit factor</th><th>Max DD</th><th>Trades</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td class="inst">BTCUSD</td><td class="num">35.0%</td><td class="num">0.99</td><td class="num">1.6%</td><td class="num">137</td><td><span class="pill p-warn">break-even</span></td></tr>
+          <tr><td class="inst">XAUUSD</td><td class="num win-good">35.6%</td><td class="num win-good">1.17</td><td class="num">0.8%</td><td class="num">73</td><td><span class="pill p-good">profitable</span></td></tr>
+          <tr><td class="inst">EURUSD</td><td class="num">32.0%</td><td class="num">0.53</td><td class="num">0.8%</td><td class="num">125</td><td><span class="pill p-bad">losing</span></td></tr>
+          <tr><td class="inst">GBPUSD</td><td class="num">23.1%</td><td class="num">0.36</td><td class="num">0.9%</td><td class="num">78</td><td><span class="pill p-bad">losing</span></td></tr>
+          <tr><td class="inst">USDJPY</td><td class="num">33.3%</td><td class="num">0.66</td><td class="num">—</td><td class="num">102</td><td><span class="pill p-bad">losing</span></td></tr>
+          <tr><td class="inst">US30 · USTEC</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td><span class="pill p-nd">no data</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scroll" style="margin-bottom:16px;">
+      <table>
+        <thead><tr><th class="inst">1-Hour &nbsp;·&nbsp; ~18 months</th><th>Win %</th><th>Profit factor</th><th>Max DD</th><th>Trades</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td class="inst">BTCUSD</td><td class="num">33.5%</td><td class="num">0.89</td><td class="num">4.8%</td><td class="num">170</td><td><span class="pill p-bad">losing</span></td></tr>
+          <tr><td class="inst">XAUUSD</td><td class="num">35.0%</td><td class="num">0.93</td><td class="num">2.5%</td><td class="num">—</td><td><span class="pill p-warn">break-even</span></td></tr>
+          <tr><td class="inst">EURUSD</td><td class="num">29.9%</td><td class="num">0.70</td><td class="num">1.7%</td><td class="num">—</td><td><span class="pill p-bad">losing</span></td></tr>
+          <tr><td class="inst">GBPUSD</td><td class="num">39.7%</td><td class="num">1.00</td><td class="num">0.9%</td><td class="num">—</td><td><span class="pill p-edge">break-even+</span></td></tr>
+          <tr><td class="inst">USDJPY</td><td class="num">28.9%</td><td class="num">0.52</td><td class="num">—</td><td class="num">—</td><td><span class="pill p-bad">losing</span></td></tr>
+          <tr><td class="inst">US30 · USTEC</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td><span class="pill p-nd">no intraday data</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scroll" style="margin-bottom:16px;">
+      <table>
+        <thead><tr><th class="inst">4-Hour &nbsp;·&nbsp; ~2.5–3.5 years</th><th>Win %</th><th>Profit factor</th><th>Max DD</th><th>Trades</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td class="inst">BTCUSD</td><td class="num">35.1%</td><td class="num">0.92</td><td class="num">6.4%</td><td class="num">111</td><td><span class="pill p-warn">break-even</span></td></tr>
+          <tr><td class="inst">XAUUSD</td><td class="num win-good">32.4%</td><td class="num win-good">1.01</td><td class="num">2.5%</td><td class="num">71</td><td><span class="pill p-edge">slight edge</span></td></tr>
+          <tr><td class="inst">EURUSD</td><td class="num win-good">35.2%</td><td class="num win-good">1.01</td><td class="num">1.2%</td><td class="num">105</td><td><span class="pill p-edge">slight edge</span></td></tr>
+          <tr><td class="inst">GBPUSD</td><td class="num win-good">35.7%</td><td class="num win-good">1.12</td><td class="num">0.9%</td><td class="num">112</td><td><span class="pill p-good">profitable</span></td></tr>
+          <tr><td class="inst">USDJPY</td><td class="num">33.1%</td><td class="num">0.87</td><td class="num">—</td><td class="num">118</td><td><span class="pill p-bad">losing</span></td></tr>
+          <tr><td class="inst">US30 · USTEC</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td><span class="pill p-nd">no intraday data</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scroll">
+      <table>
+        <thead><tr><th class="inst">1-Day &nbsp;·&nbsp; full history</th><th>Win %</th><th>Profit factor</th><th>Max DD</th><th>Trades</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td class="inst">BTCUSD <small>2011–2026</small></td><td class="num">26.8%</td><td class="num">0.32</td><td class="num win-bad">66.4%</td><td class="num">71</td><td><span class="pill p-bad">heavy loss</span></td></tr>
+          <tr><td class="inst">XAUUSD</td><td class="num win-good">33.7%</td><td class="num win-good">1.33</td><td class="num">9.2%</td><td class="num">255</td><td><span class="pill p-good">profitable</span></td></tr>
+          <tr><td class="inst">EURUSD <small>2002–2026</small></td><td class="num win-good">34.6%</td><td class="num win-good">1.25</td><td class="num">3.7%</td><td class="num">110</td><td><span class="pill p-good">profitable</span></td></tr>
+          <tr><td class="inst">GBPUSD <small>2002–2026</small></td><td class="num win-good">39.4%</td><td class="num win-good">1.07</td><td class="num">4.7%</td><td class="num">66</td><td><span class="pill p-good">profitable</span></td></tr>
+          <tr><td class="inst">USDJPY <small>2002–2026</small></td><td class="num">33.3%</td><td class="num">0.88</td><td class="num">—</td><td class="num">111</td><td><span class="pill p-bad">losing</span></td></tr>
+          <tr><td class="inst">US30 <small>via DJI</small></td><td class="num">30.0%</td><td class="num">0.72</td><td class="num">29.8%</td><td class="num">373</td><td><span class="pill p-bad">losing</span></td></tr>
+          <tr><td class="inst">USTEC <small>2012–2026</small></td><td class="num">22.0%</td><td class="num">0.57</td><td class="num">5.8%</td><td class="num">50</td><td><span class="pill p-bad">losing</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- FINDINGS -->
+  <section>
+    <h2>What the data says</h2>
+    <p class="h2sub">&nbsp;</p>
+    <div class="find">
+      <div class="row"><span class="ic ic-key">01</span><p><b>No edge as-is.</b> The average win rate (~32.7%) lands right on the 1:2 break-even (33.3%). A mechanical trail-flip with a fixed far target is, by nature, a coin-flip once you pay for it.</p></div>
+      <div class="row"><span class="ic ic-warn">02</span><p><b>Higher timeframe = better; faster = worse.</b> 5m &amp; 15m are almost all red. The few winners live on <b>4h and 1D</b>. Fast intraday amplifies the whipsaws the strategy is prone to, and costs eat a larger slice of each small move.</p></div>
+      <div class="row"><span class="ic ic-good">03</span><p><b>The only real pocket: Gold &amp; GBP/EUR on higher TFs.</b> XAUUSD (PF 1.17–1.33), GBPUSD (1.07–1.12) and EURUSD (1.25 daily) are the consistently non-losing cells. If anything here is worth developing, it's this.</p></div>
+      <div class="row"><span class="ic ic-bad">04</span><p><b>Crypto is the worst — especially BTC daily</b> (PF 0.32, −66% drawdown). A two-sided trail strategy gets run over by Bitcoin's long-term uptrend; the shorts bleed for years.</p></div>
+    </div>
+  </section>
+
+  <!-- CAVEATS -->
+  <section>
+    <h2>Read before trading a rupee on this</h2>
+    <p class="h2sub">&nbsp;</p>
+    <ul class="caveats">
+      <li><b>Backtest ≠ future.</b> These show how the rule <i>would have</i> done on past data. They do not predict future returns.</li>
+      <li><b>Real costs are usually worse.</b> Modelled at 0.02% + 2 ticks; live broker <b>spreads on gold, indices and crypto CFDs are wider</b>, which pushes thin edges toward zero.</li>
+      <li><b>Small samples.</b> Several intraday tests have 23–137 trades over weeks — indicative, not conclusive.</li>
+      <li><b>Windows aren't uniform.</b> Daily results span up to 24 years; intraday spans weeks. Compare within a timeframe, not across.</li>
+      <li><b>This tests the trail-flip logic</b>, not candlestick patterns — and the simplified R-Factor (no OI/sector) used for the strategy engine.</li>
+    </ul>
+  </section>
+
+  <!-- NEXT -->
+  <section>
+    <h2>The one experiment worth running next</h2>
+    <p class="h2sub">&nbsp;</p>
+    <div class="note" style="font-size:14.5px;line-height:1.55;">
+      The data points to a single fix: <b>cut the counter-trend whipsaw trades.</b> Turn on <b>“Require R-Factor confirmation”</b> (only long when R-Factor&nbsp;&gt;&nbsp;0, short when&nbsp;&lt;&nbsp;0), or add a <b>200-EMA trend filter</b> (longs only above it). This usually lifts the win rate a few points and — critically — fixes the BTC-daily disaster by killing the doomed counter-trend shorts. Re-running the whole matrix with that filter on is the highest-value next test.
+    </div>
+  </section>
+
+  <div class="foot">
+    <span>trade_with_kareena · TradingView Strategy Tester</span>
+    <span>Educational only · not financial advice · trade at your own risk</span>
+  </div>
+
+</div>

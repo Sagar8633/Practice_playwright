@@ -1,0 +1,448 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - 'button "Logged in as patilkareena208 Active layout: Unnamed" [ref=e7]'
+    - toolbar [ref=e11]:
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]:
+            - button "HAL" [ref=e18]
+            - button "Switch data type" [ref=e20]
+          - button "Compare symbols" [ref=e24]
+        - generic [ref=e32]:
+          - radiogroup [ref=e33]:
+            - radio "5 minutes" [ref=e34]:
+              - generic [ref=e35]: 5m
+            - radio "15 minutes" [checked] [ref=e37]:
+              - generic [ref=e38]: 15m
+            - radio "45 minutes" [ref=e40]:
+              - generic [ref=e41]: 45m
+          - button "Chart interval" [ref=e43]
+        - button "Candles" [ref=e53]
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - button "Indicators, metrics, and strategies" [ref=e65]:
+              - generic [ref=e70]: Indicators
+            - button "Favorite indicators" [ref=e71]
+          - button "Indicator templates" [ref=e78]
+        - generic [ref=e85]:
+          - button "Create alert" [ref=e86]:
+            - generic [ref=e91]: Alert
+          - button "Bar replay" [ref=e92]:
+            - generic [ref=e96]: Replay
+        - generic [ref=e100]:
+          - button "Undo change resolution" [ref=e1288]
+          - button [disabled] [ref=e105]
+        - generic [ref=e110]:
+          - button "Layout setup" [ref=e111]
+          - generic [ref=e114]:
+            - button "Save all charts for all symbols and intervals on your layout" [ref=e585]:
+              - generic [ref=e117]:
+                - generic [ref=e118]: Unnamed
+                - generic [ref=e586]: Save
+            - button "Manage layouts" [ref=e120]
+        - generic [ref=e128]:
+          - button "Quick search" [ref=e129]
+          - button "Settings" [ref=e134]
+          - button "Fullscreen mode" [ref=e140]
+          - button "Take a snapshot" [ref=e144]
+      - button "Trade" [ref=e153]
+      - button "Share your idea with the trade community" [ref=e161]:
+        - generic [ref=e162]: Publish
+    - toolbar [ref=e165]:
+      - generic [ref=e169]:
+        - generic [ref=e170]:
+          - generic [ref=e173]:
+            - button "Cross" [ref=e175]
+            - button "Cursors" [pressed] [ref=e181]
+          - generic [ref=e187]:
+            - button "Trendline" [ref=e189]
+            - button "Trend tools" [ref=e195]
+          - generic [ref=e201]:
+            - button "Fib retracement" [ref=e203]
+            - button "Gann and Fibonacci tools" [ref=e212]
+          - generic [ref=e218]:
+            - button "XABCD pattern" [ref=e220]
+            - button "Patterns" [ref=e226]
+          - generic [ref=e232]:
+            - button "Long position" [ref=e234]
+            - button "Forecasting and measurement tools" [ref=e238]
+          - generic [ref=e244]:
+            - button "Brush" [ref=e246]
+            - button "Geometric shapes" [ref=e252]
+          - generic [ref=e258]:
+            - button "Text" [ref=e260]
+            - button "Annotation tools" [ref=e264]
+          - generic [ref=e269]:
+            - button "Icon" [ref=e271]
+            - button "Icons" [ref=e275]
+        - generic [ref=e279]:
+          - button "Measure" [ref=e280]
+          - button "Zoom in" [ref=e284]
+        - generic [ref=e291]:
+          - generic [ref=e294]:
+            - button "Magnet mode snaps drawings placed near price bars to the closest OHLC value" [ref=e296]
+            - button "Magnets" [ref=e302]
+          - button "Keep drawing" [ref=e306]
+          - button "Lock all drawings" [ref=e310]
+          - generic [ref=e315]:
+            - button "Hide all drawings" [ref=e317]
+            - button "Hide options" [ref=e321]
+        - generic [ref=e327]:
+          - button "Remove objects" [ref=e329]
+          - button "Remove options" [ref=e333]
+    - generic [ref=e339]:
+      - 'region "Chart #1" [ref=e342]':
+        - generic [ref=e344]:
+          - generic [ref=e346]:
+            - generic:
+              - generic:
+                - toolbar:
+                  - generic:
+                    - generic [ref=e347]:
+                      - generic "Change symbol" [ref=e1289]:
+                        - generic [ref=e349]: H
+                        - button "Change symbol" [ref=e1290]: Hindustan Aeronautics Limited
+                      - generic "Change interval" [ref=e1291]:
+                        - text: ·
+                        - button "Change interval" [ref=e1292]: "15"
+                      - generic [ref=e1293]:
+                        - text: ·
+                        - generic [ref=e1294]: NSE
+                    - generic:
+                      - generic:
+                        - button "Flag symbol"
+                        - button "More"
+                    - button "Market closed" [ref=e359]
+                  - generic [ref=e364]:
+                    - generic [ref=e365]:
+                      - generic [ref=e366]: O
+                      - generic [ref=e367]: 4,501.90
+                    - generic [ref=e368]:
+                      - generic [ref=e369]: H
+                      - generic [ref=e370]: 4,513.00
+                    - generic [ref=e371]:
+                      - generic [ref=e372]: L
+                      - generic [ref=e373]: 4,499.80
+                    - generic [ref=e374]:
+                      - generic [ref=e375]: C
+                      - generic [ref=e376]: 4,512.90
+                    - generic [ref=e377]: +11.20 (+0.25%)
+                - generic [ref=e381]:
+                  - generic [ref=e383]:
+                    - generic: 4,506.80
+                    - generic: Sell
+                  - generic "Spread" [ref=e385]: "0.00"
+                  - generic [ref=e387]:
+                    - generic: 4,506.80
+                    - generic: Buy
+              - generic:
+                - button "Hide indicator legend" [ref=e388]
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e1094]:
+                        - generic [ref=e1095]: SimpleSMA18 Strategy (MQL5 port)
+                        - generic [ref=e1097]:
+                          - generic "Fast MA Period" [ref=e1098]: "18"
+                          - generic "Trend MA Period" [ref=e1100]: "200"
+                          - generic "Volume MA Period" [ref=e1102]: "20"
+                          - generic "Swing Strength" [ref=e1104]: "2"
+                          - generic "Entry Buffer (ticks)" [ref=e1106]: "10"
+                          - generic "Break-Even Trigger (ticks)" [ref=e1108]: "500"
+                          - generic "Break-Even Offset (ticks)" [ref=e1110]: "10"
+                          - generic "Protection Mode" [ref=e1112]: Swing
+                          - generic "Protection Start (ticks, 0=immediate)" [ref=e1114]: "500"
+                          - generic "Swing Buffer (ticks)" [ref=e1116]: "50"
+                          - generic "Chandelier Lookback" [ref=e1118]: "22"
+                          - generic "ATR Period" [ref=e1120]: "22"
+                          - generic "ATR Multiplier" [ref=e1122]: "3"
+                          - generic "Trailing Start (ticks)" [ref=e1124]: "800"
+                          - generic "Trailing Distance (ticks)" [ref=e1126]: "500"
+                      - generic:
+                        - generic:
+                          - button "Hide"
+                          - button "Settings"
+                          - generic "Source code"
+                          - button "Remove"
+                          - button "More"
+                      - button [ref=e1295]
+                    - generic [ref=e1137]:
+                      - generic "MA 18" [ref=e1139]: 4,508.37
+                      - generic "MA 200" [ref=e1141]: 4,431.05
+            - generic "Chart for NSE:HAL, 15 minutes" [ref=e1296]
+          - generic [ref=e430]: INR
+      - toolbar [ref=e448]:
+        - generic [ref=e450]:
+          - generic [ref=e451]:
+            - button "1 day in 1 minute intervals" [ref=e452]:
+              - generic [ref=e453]: 1D
+            - button "5 days in 5 minutes intervals" [ref=e454]:
+              - generic [ref=e455]: 5D
+            - button "1 month in 30 minutes intervals" [ref=e456]:
+              - generic [ref=e457]: 1M
+            - button "3 months in 1 hour intervals" [ref=e458]:
+              - generic [ref=e459]: 3M
+            - button "6 months in 2 hours intervals" [ref=e460]:
+              - generic [ref=e461]: 6M
+            - button "Year to day in 1 day intervals" [ref=e462]:
+              - generic [ref=e463]: YTD
+            - button "1 year in 1 day intervals" [ref=e464]:
+              - generic [ref=e465]: 1Y
+            - button "5 years in 1 week intervals" [ref=e466]:
+              - generic [ref=e467]: 5Y
+            - button "All data in 1 month intervals" [ref=e468]:
+              - generic [ref=e469]: All
+          - button "Go to" [ref=e471]
+        - generic [ref=e475]:
+          - button "Timezone" [ref=e478]:
+            - generic [ref=e479]: 16:15:56 UTC+5:30
+          - button "Regular" [ref=e482]: RTH
+          - button "Adjust data for dividends" [ref=e486]:
+            - generic [ref=e487]: ADJ
+    - generic [ref=e489]:
+      - toolbar [ref=e494]:
+        - button "Watchlist, details, and news" [ref=e495]
+        - button "Alerts" [ref=e500]
+        - button "Object tree and data window" [ref=e505]
+        - button "Chats" [ref=e509]
+        - button "Screeners" [ref=e514]
+        - button "Pine" [ref=e520]
+        - button "Calendars" [ref=e525]
+        - button "Community" [ref=e529]
+        - button "Notifications" [ref=e536]
+        - button "Products" [ref=e540]
+        - button "Help Center" [ref=e545]
+      - generic [ref=e549]: "[] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] –"
+    - generic [ref=e1142]:
+      - toolbar [ref=e1144]:
+        - generic [ref=e1147]:
+          - button "Close strategy report" [ref=e1148]:
+            - generic [ref=e1156]: SimpleSMA18 Strategy (MQL5 port)
+          - button "Open context menu" [ref=e1158]
+        - generic [ref=e1163]:
+          - button "Collapse panel" [ref=e1164]
+          - button "Maximize panel" [ref=e1168]
+      - generic [ref=e1179]:
+        - generic [ref=e1181]:
+          - tablist [ref=e1183]:
+            - tab [selected] [ref=e1184]:
+              - generic "Metrics" [ref=e1185]
+            - tab [ref=e1189]:
+              - generic "Trades" [ref=e1190]
+          - button "Sep 1, 2025 — Jul 10, 2026" [ref=e1297]
+          - button "10 K INR" [ref=e1211]
+          - button "Default detalization" [ref=e1226]
+          - button "Script execution 1" [ref=e1241]:
+            - generic [ref=e1245]:
+              - generic [ref=e1249]: Script execution
+              - generic [ref=e1250]: "1"
+        - generic [ref=e1256]:
+          - strong [ref=e1257]: This report requires trade data
+          - generic [ref=e1258]: The strategy report appears after the script makes even one trade. Ensure that the selected symbol and time interval are compatible with the strategy.
+    - generic "Trading panel"
+  - generic: 15 minutes
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+    - generic [ref=e592]:
+      - generic [ref=e593]:
+        - generic [ref=e594]: Pine Editor
+        - generic [ref=e596]:
+          - button "Move overlay to split-view" [ref=e597]
+          - button "Close" [ref=e602]
+      - generic [ref=e613]:
+        - generic [ref=e615]:
+          - generic [ref=e616]:
+            - button [ref=e617]:
+              - heading "Untitled script" [level=2] [ref=e621]
+            - button "Update on chart" [disabled] [ref=e1259]
+            - button "Save" [ref=e632]
+          - generic [ref=e639]:
+            - button "Publish script" [ref=e640]
+            - button "More" [ref=e648]
+        - code [ref=e656]:
+          - generic [ref=e657]:
+            - generic [ref=e659]:
+              - generic [ref=e787]: "74"
+              - generic [ref=e789]: "75"
+              - generic [ref=e791]: "76"
+              - generic [ref=e1046]:
+                - generic [ref=e1047] [cursor=pointer]: 
+                - generic [ref=e1048]: "77"
+              - generic [ref=e795]: "78"
+              - generic [ref=e797]: "79"
+              - generic [ref=e799]: "80"
+              - generic [ref=e1049]:
+                - generic [ref=e1050] [cursor=pointer]: 
+                - generic [ref=e1051]: "81"
+              - generic [ref=e803]: "82"
+              - generic [ref=e805]: "83"
+              - generic [ref=e1052]:
+                - generic [ref=e1053] [cursor=pointer]: 
+                - generic [ref=e1054]: "84"
+              - generic [ref=e809]: "85"
+              - generic [ref=e811]: "86"
+              - generic [ref=e1055]:
+                - generic [ref=e1056] [cursor=pointer]: 
+                - generic [ref=e1057]: "87"
+              - generic [ref=e815]: "88"
+              - generic [ref=e817]: "89"
+              - generic [ref=e1058]:
+                - generic [ref=e1059] [cursor=pointer]: 
+                - generic [ref=e1060]: "90"
+              - generic [ref=e821]: "91"
+              - generic [ref=e823]: "92"
+              - generic [ref=e1061]:
+                - generic [ref=e1062] [cursor=pointer]: 
+                - generic [ref=e1063]: "93"
+              - generic [ref=e827]: "94"
+              - generic [ref=e1064]:
+                - generic [ref=e1065] [cursor=pointer]: 
+                - generic [ref=e1066]: "95"
+              - generic [ref=e831]: "96"
+              - generic [ref=e833]: "97"
+              - generic [ref=e835]: "98"
+              - generic [ref=e1067]:
+                - generic [ref=e1068] [cursor=pointer]: 
+                - generic [ref=e1069]: "99"
+              - generic [ref=e839]: "100"
+              - generic [ref=e841]: "101"
+              - generic [ref=e1070]:
+                - generic [ref=e1071] [cursor=pointer]: 
+                - generic [ref=e1072]: "102"
+              - generic [ref=e845]: "103"
+              - generic [ref=e847]: "104"
+              - generic [ref=e1073]:
+                - generic [ref=e1074] [cursor=pointer]: 
+                - generic [ref=e1075]: "105"
+              - generic [ref=e851]: "106"
+              - generic [ref=e853]: "107"
+              - generic [ref=e1076]:
+                - generic [ref=e1077] [cursor=pointer]: 
+                - generic [ref=e1078]: "108"
+              - generic [ref=e857]: "109"
+              - generic [ref=e859]: "110"
+              - generic [ref=e1079]:
+                - generic [ref=e1080] [cursor=pointer]: 
+                - generic [ref=e1081]: "111"
+              - generic [ref=e863]: "112"
+              - generic [ref=e1082]:
+                - generic [ref=e1083] [cursor=pointer]: 
+                - generic [ref=e1084]: "113"
+              - generic [ref=e867]: "114"
+            - generic [ref=e684]:
+              - generic [ref=e965]: var float stopLvl = na
+              - generic [ref=e968]: if strategy.position_size > 0
+              - generic [ref=e970]: ep = strategy.position_avg_price
+              - generic [ref=e972]: "stopLvl := na(stopLvl) ? lastSwingLow : stopLvl"
+              - generic [ref=e974]: profitPts = (close - ep) / pt
+              - generic [ref=e976]: if enableBE and profitPts >= beTrigger
+              - generic [ref=e978]: stopLvl := math.max(nz(stopLvl, ep + beOffset * pt), ep + beOffset * pt)
+              - generic [ref=e980]: active = protStart == 0 or profitPts >= protStart
+              - generic [ref=e982]: if active and protMode == "Swing" and not na(lastSwingLow)
+              - generic [ref=e984]: ns = lastSwingLow - swingBuf * pt
+              - generic [ref=e986]: stopLvl := math.max(nz(stopLvl, ns), ns)
+              - generic [ref=e988]: if active and protMode == "Chandelier"
+              - generic [ref=e990]: ns = ta.highest(high, chLookback) - atrV * atrMult
+              - generic [ref=e992]: stopLvl := math.max(nz(stopLvl, ns), ns)
+              - generic [ref=e994]: if active and protMode == "Trailing" and profitPts >= trailStart
+              - generic [ref=e996]: ns = close - trailDist * pt
+              - generic [ref=e998]: stopLvl := math.max(nz(stopLvl, ns), ns)
+              - generic [ref=e1000]: if not na(stopLvl)
+              - generic [ref=e1002]: strategy.exit("Long-Prot", "Long", stop = stopLvl)
+              - generic [ref=e1004]: else if strategy.position_size < 0
+              - generic [ref=e1006]: ep = strategy.position_avg_price
+              - generic [ref=e1008]: "stopLvl := na(stopLvl) ? lastSwingHigh : stopLvl"
+              - generic [ref=e1010]: profitPts = (ep - close) / pt
+              - generic [ref=e1012]: if enableBE and profitPts >= beTrigger
+              - generic [ref=e1014]: stopLvl := math.min(nz(stopLvl, ep - beOffset * pt), ep - beOffset * pt)
+              - generic [ref=e1016]: active = protStart == 0 or profitPts >= protStart
+              - generic [ref=e1018]: if active and protMode == "Swing" and not na(lastSwingHigh)
+              - generic [ref=e1020]: ns = lastSwingHigh + swingBuf * pt
+              - generic [ref=e1022]: stopLvl := math.min(nz(stopLvl, ns), ns)
+              - generic [ref=e1024]: if active and protMode == "Chandelier"
+              - generic [ref=e1026]: ns = ta.lowest(low, chLookback) + atrV * atrMult
+              - generic [ref=e1028]: stopLvl := math.min(nz(stopLvl, ns), ns)
+              - generic [ref=e1030]: if active and protMode == "Trailing" and profitPts >= trailStart
+              - generic [ref=e1032]: ns = close + trailDist * pt
+              - generic [ref=e1034]: stopLvl := math.min(nz(stopLvl, ns), ns)
+              - generic [ref=e1036]: if not na(stopLvl)
+              - generic [ref=e1038]: strategy.exit("Short-Prot", "Short", stop = stopLvl)
+              - generic [ref=e1040]: else
+              - generic [ref=e1042]: stopLvl := na
+            - textbox "Editor content;Press Alt+F1 for Accessibility Options." [ref=e702]: if not na(stopLvl) strategy.exit("Short-Prot", "Short", stop = stopLvl) else stopLvl := na
+        - generic [ref=e709]:
+          - button [ref=e712]
+          - generic [ref=e720]:
+            - button "Line 114, Col 18" [ref=e1044]
+            - link "Pine Script® v5" [ref=e1045]:
+              - /url: https://www.tradingview.com/pine-script-reference/v5
+  - generic [ref=e723]:
+    - alert
+    - alert

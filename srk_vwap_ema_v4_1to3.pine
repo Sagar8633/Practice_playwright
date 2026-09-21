@@ -1,0 +1,53 @@
+//@version=6
+// SRK VWAP+EMA Regime v4 — same entry signal as v3, but FIXED 1:3 exit.
+//  Entry signal (unchanged from v3, the green/red triangles):
+//    long  = close>200EMA & correct side of session VWAP & bar dips to/below the
+//            50-EMA (low<=ema50) but CLOSES back above it as a bullish candle.
+//    short = mirror.
+//  Exit (NEW):
+//    SL = below the signal candle's low (long) / above its high (short).
+//    TP = 3 x risk  (1:3 risk-reward), fixed. No EMA trailing.
+strategy("SRK VWAP+EMA v4 1:3", overlay=true, initial_capital=100000,
+     default_qty_type=strategy.percent_of_equity, default_qty_value=10,
+     commission_type=strategy.commission.percent, commission_value=0.03,
+     pyramiding=0, calc_on_every_tick=false)
+
+emaPullLen = input.int(50,  "Pullback EMA", group="EMAs")
+emaRegLen  = input.int(200, "Regime EMA",   group="EMAs")
+useVwap    = input.bool(true,"Require correct side of session VWAP", group="Filter")
+rr         = input.float(3.0,"Reward:Risk (target = x * risk)", group="Exit")
+
+ema50  = ta.ema(close, emaPullLen)
+ema200 = ta.ema(close, emaRegLen)
+vwap   = ta.vwap(hlc3)
+
+plot(ema50,  "EMA50",  color=color.orange, linewidth=2)
+plot(ema200, "EMA200", color=color.blue,   linewidth=2)
+plot(vwap,   "VWAP",   color=color.purple)
+
+longRegime  = close > ema200 and (not useVwap or close > vwap)
+shortRegime = close < ema200 and (not useVwap or close < vwap)
+
+longRej  = longRegime  and low  <= ema50 and close > ema50 and close > open
+shortRej = shortRegime and high >= ema50 and close < ema50 and close < open
+
+var float slP = na
+var float tpP = na
+
+if longRej and strategy.position_size == 0
+    slP := low
+    tpP := close + rr * (close - low)
+    strategy.entry("L", strategy.long)
+if shortRej and strategy.position_size == 0
+    slP := high
+    tpP := close - rr * (high - close)
+    strategy.entry("S", strategy.short)
+
+if strategy.position_size > 0
+    strategy.exit("L-x", from_entry="L", stop=slP, limit=tpP)
+if strategy.position_size < 0
+    strategy.exit("S-x", from_entry="S", stop=slP, limit=tpP)
+
+plotshape(longRej  and strategy.position_size==0, "L", shape.triangleup,   location.belowbar, color.new(color.green,0), size=size.small)
+plotshape(shortRej and strategy.position_size==0, "S", shape.triangledown, location.abovebar, color.new(color.red,0),   size=size.small)
+bgcolor(longRegime ? color.new(color.green,95) : shortRegime ? color.new(color.red,95) : na)

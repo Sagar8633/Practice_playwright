@@ -1,0 +1,534 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - 'button "Logged in as patilkareena208 Active layout: Unnamed" [ref=e7]'
+    - toolbar [ref=e11]:
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]:
+            - button "KOTAKBANK" [ref=e18]
+            - button "Switch data type" [ref=e20]
+          - button "Compare symbols" [ref=e24]
+        - generic [ref=e32]:
+          - radiogroup [ref=e33]:
+            - radio "5 minutes" [checked] [ref=e34]:
+              - generic [ref=e35]: 5m
+            - radio "15 minutes" [ref=e37]:
+              - generic [ref=e38]: 15m
+            - radio "45 minutes" [ref=e40]:
+              - generic [ref=e41]: 45m
+          - button "Chart interval" [ref=e43]
+        - button "Candles" [ref=e53]
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - button "Indicators, metrics, and strategies" [ref=e65]:
+              - generic [ref=e70]: Indicators
+            - button "Favorite indicators" [ref=e71]
+          - button "Indicator templates" [ref=e78]
+        - generic [ref=e85]:
+          - button "Create alert" [ref=e86]:
+            - generic [ref=e91]: Alert
+          - button "Bar replay" [ref=e92]:
+            - generic [ref=e96]: Replay
+        - generic [ref=e100]:
+          - button [disabled] [ref=e101]
+          - button [disabled] [ref=e105]
+        - generic [ref=e110]:
+          - button "Layout setup" [ref=e111]
+          - generic [ref=e113]:
+            - button "All changes saved" [disabled] [ref=e114]:
+              - generic [ref=e116]:
+                - generic [ref=e117]: Unnamed
+                - generic: Save
+            - button "Manage layouts" [ref=e119]
+        - generic [ref=e127]:
+          - button "Quick search" [ref=e128]
+          - button "Settings" [ref=e133]
+          - button "Fullscreen mode" [ref=e139]
+          - button "Take a snapshot" [ref=e143]
+      - button "Trade" [ref=e152]
+      - button "Share your idea with the trade community" [ref=e160]:
+        - generic [ref=e161]: Publish
+    - toolbar [ref=e164]:
+      - generic [ref=e168]:
+        - generic [ref=e169]:
+          - generic [ref=e172]:
+            - button "Cross" [ref=e174]
+            - button "Cursors" [pressed] [ref=e180]
+          - generic [ref=e186]:
+            - button "Trendline" [ref=e188]
+            - button "Trend tools" [ref=e194]
+          - generic [ref=e200]:
+            - button "Fib retracement" [ref=e202]
+            - button "Gann and Fibonacci tools" [ref=e211]
+          - generic [ref=e217]:
+            - button "XABCD pattern" [ref=e219]
+            - button "Patterns" [ref=e225]
+          - generic [ref=e231]:
+            - button "Long position" [ref=e233]
+            - button "Forecasting and measurement tools" [ref=e237]
+          - generic [ref=e243]:
+            - button "Brush" [ref=e245]
+            - button "Geometric shapes" [ref=e251]
+          - generic [ref=e257]:
+            - button "Text" [ref=e259]
+            - button "Annotation tools" [ref=e263]
+          - generic [ref=e268]:
+            - button "Icon" [ref=e270]
+            - button "Icons" [ref=e274]
+        - generic [ref=e278]:
+          - button "Measure" [ref=e279]
+          - button "Zoom in" [ref=e283]
+        - generic [ref=e290]:
+          - generic [ref=e293]:
+            - button "Magnet mode snaps drawings placed near price bars to the closest OHLC value" [ref=e295]
+            - button "Magnets" [ref=e301]
+          - button "Keep drawing" [ref=e305]
+          - generic [ref=e310]:
+            - button "Lock drawings and indicators" [ref=e312]
+            - button "Lock options" [ref=e316]
+          - generic [ref=e321]:
+            - button "Hide all drawings" [ref=e323]
+            - button "Hide options" [ref=e327]
+        - generic [ref=e333]:
+          - button "Remove objects" [ref=e335]
+          - button "Remove options" [ref=e339]
+    - generic [ref=e345]:
+      - 'region "Chart #1" [ref=e348]':
+        - generic [ref=e349]:
+          - generic [ref=e350]:
+            - generic [ref=e352]:
+              - generic:
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e353]:
+                        - generic "Change symbol" [ref=e354]:
+                          - generic [ref=e355]: K
+                          - button "Change symbol" [ref=e359]: Kotak Mahindra Bank Limited
+                        - generic "Change interval" [ref=e360]:
+                          - text: ·
+                          - button "Change interval" [ref=e361]: "5"
+                        - generic "NSE — National Stock Exchange of India" [ref=e362]:
+                          - text: ·
+                          - generic [ref=e363]: NSE
+                      - generic:
+                        - generic:
+                          - button "Flag symbol"
+                          - button "More"
+                      - button "Market open" [ref=e365]
+                    - generic [ref=e370]:
+                      - generic [ref=e371]:
+                        - generic [ref=e372]: O
+                        - generic [ref=e373]: "425.05"
+                      - generic [ref=e374]:
+                        - generic [ref=e375]: H
+                        - generic [ref=e376]: "425.15"
+                      - generic [ref=e377]:
+                        - generic [ref=e378]: L
+                        - generic [ref=e379]: "425.00"
+                      - generic [ref=e380]:
+                        - generic [ref=e381]: C
+                        - generic [ref=e382]: "425.00"
+                      - generic [ref=e383]: −0.05 (−0.01%)
+                  - generic [ref=e387]:
+                    - generic [ref=e389]:
+                      - generic: "425.00"
+                      - generic: Sell
+                    - generic "Spread" [ref=e391]: "0.05"
+                    - generic [ref=e393]:
+                      - generic: "425.05"
+                      - generic: Buy
+                - generic:
+                  - button "Hide indicators legend" [ref=e394]
+                  - generic:
+                    - toolbar:
+                      - generic:
+                        - generic [ref=e398]:
+                          - generic [ref=e399]: SimpleSMA18 Strategy (MQL5 port)
+                          - generic [ref=e401]:
+                            - generic "Fast MA Period" [ref=e402]: "18"
+                            - generic "Trend MA Period" [ref=e404]: "200"
+                            - generic "Volume MA Period" [ref=e406]: "20"
+                            - generic "Swing Strength" [ref=e408]: "2"
+                            - generic "Entry Buffer (ticks)" [ref=e410]: "20"
+                            - generic "Break-Even Trigger (ticks)" [ref=e412]: 10,000
+                            - generic "Break-Even Offset (ticks)" [ref=e414]: 5,000
+                            - generic "Protection Mode" [ref=e416]: None
+                            - generic "Protection Start Mode" [ref=e418]: After Points
+                            - generic "Protection Start Points (ticks)" [ref=e420]: 2,000
+                            - generic "Swing Buffer (ticks)" [ref=e422]: "200"
+                            - generic "Chandelier Lookback" [ref=e424]: "22"
+                            - generic "ATR Period" [ref=e426]: "22"
+                            - generic "ATR Multiplier" [ref=e428]: "3"
+                            - generic [ref=e706]: 1,000
+                            - generic "Trailing Distance (ticks)" [ref=e432]: "500"
+                            - generic "Trailing Step (ticks)" [ref=e434]: "200"
+                            - generic "Partial Close Trigger (ticks)" [ref=e436]: 6,000
+                            - generic "Partial Close Percent" [ref=e438]: "50"
+                            - generic "MT5 Point Size (0 = auto mintick)" [ref=e440]: "0"
+                            - 'generic "Reward : Risk" [ref=e442]': "2"
+                        - generic:
+                          - generic:
+                            - button "Show" [ref=e444]
+                            - button "Settings"
+                            - generic "Source code"
+                            - button "Remove"
+                            - button "More"
+                    - toolbar:
+                      - generic:
+                        - generic [ref=e451]: SRK Trading Swing Indicator
+                        - generic:
+                          - generic:
+                            - button "Show" [ref=e454]
+                            - button "Settings"
+                            - button "Remove"
+                            - button "More"
+                    - toolbar:
+                      - generic:
+                        - generic [ref=e461]:
+                          - generic "trade_with_kareena Tracker" [ref=e462]: TWK Tracker
+                          - generic [ref=e464]:
+                            - generic "Table position" [ref=e465]: top_right
+                            - generic "Volume MA Length (bars)" [ref=e467]: "20"
+                            - generic "Row color opacity" [ref=e469]: "15"
+                            - generic "Table font size" [ref=e471]: small
+                            - generic "R-Factor lookback" [ref=e473]: "14"
+                            - generic "Benchmark for Sector Strength" [ref=e475]: NIFTY
+                            - generic "Multiplier" [ref=e477]: "1.5"
+                            - generic "ATR length" [ref=e479]: "10"
+                            - generic "Volume average length" [ref=e481]: "20"
+                            - generic "Volume threshold (x avg)" [ref=e483]: "1.8"
+                            - generic "Pivot strength (bars each side)" [ref=e485]: "5"
+                            - 'generic "Reward : Risk" [ref=e487]': "2"
+                            - generic "Projection width (bars)" [ref=e489]: "24"
+                        - generic:
+                          - generic:
+                            - button "Hide"
+                            - button "Settings"
+                            - generic "Source code"
+                            - button "Remove"
+                            - button "More"
+                      - generic [ref=e708]:
+                        - generic "Smart Trail" [ref=e710]: "424.72"
+                        - generic "Pivot High Dot" [ref=e712]: "0.00"
+                        - generic "Pivot Low Dot" [ref=e714]: "0.00"
+              - generic "Chart for NSE:KOTAKBANK, 5 minutes" [ref=e492]
+            - generic [aria-hidden] [ref=e494]:
+              - generic: INR
+          - generic [ref=e506]:
+            - generic:
+              - generic:
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e507]:
+                        - generic "Relative Strength Index" [ref=e508]: RSI
+                        - generic [ref=e510]:
+                          - generic "RSI Length" [ref=e511]: "14"
+                          - generic "Source" [ref=e513]: close
+                      - generic:
+                        - generic:
+                          - button "Hide"
+                          - button "Settings"
+                          - generic "Source code"
+                          - button "Remove"
+                          - button "More"
+                    - generic [ref=e516]:
+                      - generic "RSI" [ref=e518]: "53.49"
+                      - generic "RSI-based MA" [ref=e520]: "58.95"
+      - toolbar [ref=e536]:
+        - generic [ref=e538]:
+          - generic [ref=e539]:
+            - button "1 day in 1 minute intervals" [ref=e540]:
+              - generic [ref=e541]: 1D
+            - button "5 days in 5 minutes intervals" [ref=e542]:
+              - generic [ref=e543]: 5D
+            - button "1 month in 30 minutes intervals" [ref=e544]:
+              - generic [ref=e545]: 1M
+            - button "3 months in 1 hour intervals" [ref=e546]:
+              - generic [ref=e547]: 3M
+            - button "6 months in 2 hours intervals" [ref=e548]:
+              - generic [ref=e549]: 6M
+            - button "Year to day in 1 day intervals" [ref=e550]:
+              - generic [ref=e551]: YTD
+            - button "1 year in 1 day intervals" [ref=e552]:
+              - generic [ref=e553]: 1Y
+            - button "5 years in 1 week intervals" [ref=e554]:
+              - generic [ref=e555]: 5Y
+            - button "All data in 1 month intervals" [ref=e556]:
+              - generic [ref=e557]: All
+          - button "Go to" [ref=e559]
+        - generic [ref=e563]:
+          - button "Timezone" [ref=e566]:
+            - generic [ref=e567]: 12:46:39 UTC+5:30
+          - button "Regular" [ref=e571]: RTH
+          - button "Adjust data for dividends" [ref=e575]:
+            - generic [ref=e576]: ADJ
+    - generic [ref=e578]:
+      - toolbar [ref=e583]:
+        - button "Watchlist, details, and news" [ref=e584]
+        - button "Alerts" [pressed] [ref=e589]
+        - button "Object tree and data window" [ref=e594]
+        - button "Chats" [ref=e598]
+        - button "Screeners" [ref=e603]
+        - button "Pine" [ref=e609]
+        - button "Calendars" [ref=e614]
+        - button "Community" [ref=e618]
+        - button "Notifications" [ref=e625]
+        - button "Products" [ref=e629]
+        - button "Help Center" [ref=e634]
+      - generic [ref=e639]:
+        - generic [ref=e641]:
+          - tablist [ref=e645]:
+            - tab "Alerts" [selected] [ref=e646]
+            - tab "Log" [ref=e649]
+          - generic "Alerts" [ref=e653]:
+            - generic [ref=e656]:
+              - button "Create Alert" [ref=e659]
+              - generic [ref=e663]:
+                - button "Search" [ref=e664]
+                - button "Sorted by date created (newest first)" [ref=e668]
+                - button "Options" [ref=e672]
+            - generic [ref=e679]:
+              - generic [ref=e680]:
+                - generic: GMRAIRPORT Crossing Down 87.00
+                - generic [ref=e683]:
+                  - generic [ref=e684]: GMRAIRPORT•
+                  - generic [ref=e685]: Stopped — Expired
+              - generic [ref=e686]:
+                - generic: BTCUSD Crossing Down 73,700
+                - generic [ref=e688]:
+                  - generic [ref=e689]: BTCUSD•
+                  - generic [ref=e690]: Stopped — Expired
+              - generic [ref=e691]:
+                - generic: BTCUSD Crossing 71,800
+                - generic [ref=e693]:
+                  - generic [ref=e694]: BTCUSD•
+                  - generic [ref=e695]: Stopped — Triggered •
+                  - generic [ref=e696]: Mon 13 Apr '26 20:04:49
+        - text: "[] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] –"
+      - generic "Hide Tab" [ref=e699]
+    - generic "Trading panel"
+  - generic: SRK SMA18 Bot v11 (MT5 port)
+  - generic:
+    - generic [ref=e970]:
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - log [ref=e972]:
+        - list [ref=e973]:
+          - listitem:
+            - generic [ref=e976]:
+              - button "Close ad" [ref=e978]
+              - iframe [ref=e986]:
+                - generic [ref=f6e3]:
+                  - link [ref=f6e5] [cursor=pointer]:
+                    - /url: https://adclick.g.doubleclick.net/pcs/click?xai=AKAOjsssPx7AQXm9gHxDyJMDG-n3OuAAP3Ry-T98cLcSQiHmy9Adoxl1QDJfovNd3-9z9a4uwkVFN0T8yePArZlW6yRymvlSq4WItMxNuDzgrMBfaEZNjDz3ix4q5FswtfjCexHcjJbsGqRkgjJEOwst-nq4a7WA3jQAQXe8s5rmsyhAJzXVlFxHT7-BpDPWf-BRMJWcl3wjT9vii-5xbTZj8CDp_vUVM4mO8rfore_Vk2eniq8YEcxW40gzAyx3XbVbzDQ3Blrv5avq0lr-KPHYqbiu8YbRX9ZxjE5BM7uATz3VQpmb6u6C4AwLyPFEQEwXD1YZQvdrU1WlHUtxOKmCm4FhqmhyCi9_1mgqmdr8HaJfpZWi-_yO-zD2bgk-OjC9HkUDNJ2pE1iuEdaix6yEbUDDk4Wts0qs3dWJJZE3By1FE961BOfazUEYeA&sai=AMfl-YRw-HnQRXDaKDcjXTDBG4xiuxPFHvRIdcHAu2Ls5nKviZLG4_hfKgII9LeUkvcm8WYWCAlHUh0m-IKs7WKW-e-cFpB2R3Ruwqq5DGD5ocHfH2Vx_crHhFB54fTQ8OtELuqh8AsFfGm7brIFgcJmyriRnguXmsmyW7hEEzXrLhEbRCbBoU7IUTMvFdPTACgGoQwzuLknLidbprfjdYmV7d5SByah6dAKXfc1z2aq7I8m6o4sDJMh40k-VmWC7Tn8o6NWBgOLhV7ZvnYQ0dJM1_mhDcmhw4OS8FBygZkUls6TPBf0-_xx3FawOJ9EDi1lcjAoiymkqrdpythQdCOqv0hyudJti1vcZx_1KAJRmktzWw6NXeUyEvI&sig=Cg0ArKJSzN9MbjGbmLaOEAE&fbs_aeid=%5Bgw_fbsaeid%5D&urlfix=1&adurl=https://deltaexchange.onelink.me/DIpL%3Faf_web_dp%3Dhttps%253A%252F%252Fwww.delta.exchange%252F%253Fcode%253Dgcin%2526utm_campaign%253DTV2025%2526utm_medium%253Dbanner%2526utm_source%253DTV2025%26af_xp%3Dcustom%26pid%3DTradingview%26c%3Dgoldsilver%26af_click_lookback%3D23h
+                  - link "Trade Gold & Silver at 0.01% Fee" [ref=f6e8] [cursor=pointer]:
+                    - /url: https://adclick.g.doubleclick.net/pcs/click?xai=AKAOjsssPx7AQXm9gHxDyJMDG-n3OuAAP3Ry-T98cLcSQiHmy9Adoxl1QDJfovNd3-9z9a4uwkVFN0T8yePArZlW6yRymvlSq4WItMxNuDzgrMBfaEZNjDz3ix4q5FswtfjCexHcjJbsGqRkgjJEOwst-nq4a7WA3jQAQXe8s5rmsyhAJzXVlFxHT7-BpDPWf-BRMJWcl3wjT9vii-5xbTZj8CDp_vUVM4mO8rfore_Vk2eniq8YEcxW40gzAyx3XbVbzDQ3Blrv5avq0lr-KPHYqbiu8YbRX9ZxjE5BM7uATz3VQpmb6u6C4AwLyPFEQEwXD1YZQvdrU1WlHUtxOKmCm4FhqmhyCi9_1mgqmdr8HaJfpZWi-_yO-zD2bgk-OjC9HkUDNJ2pE1iuEdaix6yEbUDDk4Wts0qs3dWJJZE3By1FE961BOfazUEYeA&sai=AMfl-YRw-HnQRXDaKDcjXTDBG4xiuxPFHvRIdcHAu2Ls5nKviZLG4_hfKgII9LeUkvcm8WYWCAlHUh0m-IKs7WKW-e-cFpB2R3Ruwqq5DGD5ocHfH2Vx_crHhFB54fTQ8OtELuqh8AsFfGm7brIFgcJmyriRnguXmsmyW7hEEzXrLhEbRCbBoU7IUTMvFdPTACgGoQwzuLknLidbprfjdYmV7d5SByah6dAKXfc1z2aq7I8m6o4sDJMh40k-VmWC7Tn8o6NWBgOLhV7ZvnYQ0dJM1_mhDcmhw4OS8FBygZkUls6TPBf0-_xx3FawOJ9EDi1lcjAoiymkqrdpythQdCOqv0hyudJti1vcZx_1KAJRmktzWw6NXeUyEvI&sig=Cg0ArKJSzN9MbjGbmLaOEAE&fbs_aeid=%5Bgw_fbsaeid%5D&urlfix=1&adurl=https://deltaexchange.onelink.me/DIpL%3Faf_web_dp%3Dhttps%253A%252F%252Fwww.delta.exchange%252F%253Fcode%253Dgcin%2526utm_campaign%253DTV2025%2526utm_medium%253Dbanner%2526utm_source%253DTV2025%26af_xp%3Dcustom%26pid%3DTradingview%26c%3Dgoldsilver%26af_click_lookback%3D23h
+                  - link "Trade Gold and Silver Token Futures with low trading fees. Capture commodity market opportunities." [ref=f6e10] [cursor=pointer]:
+                    - /url: https://adclick.g.doubleclick.net/pcs/click?xai=AKAOjsssPx7AQXm9gHxDyJMDG-n3OuAAP3Ry-T98cLcSQiHmy9Adoxl1QDJfovNd3-9z9a4uwkVFN0T8yePArZlW6yRymvlSq4WItMxNuDzgrMBfaEZNjDz3ix4q5FswtfjCexHcjJbsGqRkgjJEOwst-nq4a7WA3jQAQXe8s5rmsyhAJzXVlFxHT7-BpDPWf-BRMJWcl3wjT9vii-5xbTZj8CDp_vUVM4mO8rfore_Vk2eniq8YEcxW40gzAyx3XbVbzDQ3Blrv5avq0lr-KPHYqbiu8YbRX9ZxjE5BM7uATz3VQpmb6u6C4AwLyPFEQEwXD1YZQvdrU1WlHUtxOKmCm4FhqmhyCi9_1mgqmdr8HaJfpZWi-_yO-zD2bgk-OjC9HkUDNJ2pE1iuEdaix6yEbUDDk4Wts0qs3dWJJZE3By1FE961BOfazUEYeA&sai=AMfl-YRw-HnQRXDaKDcjXTDBG4xiuxPFHvRIdcHAu2Ls5nKviZLG4_hfKgII9LeUkvcm8WYWCAlHUh0m-IKs7WKW-e-cFpB2R3Ruwqq5DGD5ocHfH2Vx_crHhFB54fTQ8OtELuqh8AsFfGm7brIFgcJmyriRnguXmsmyW7hEEzXrLhEbRCbBoU7IUTMvFdPTACgGoQwzuLknLidbprfjdYmV7d5SByah6dAKXfc1z2aq7I8m6o4sDJMh40k-VmWC7Tn8o6NWBgOLhV7ZvnYQ0dJM1_mhDcmhw4OS8FBygZkUls6TPBf0-_xx3FawOJ9EDi1lcjAoiymkqrdpythQdCOqv0hyudJti1vcZx_1KAJRmktzWw6NXeUyEvI&sig=Cg0ArKJSzN9MbjGbmLaOEAE&fbs_aeid=%5Bgw_fbsaeid%5D&urlfix=1&adurl=https://deltaexchange.onelink.me/DIpL%3Faf_web_dp%3Dhttps%253A%252F%252Fwww.delta.exchange%252F%253Fcode%253Dgcin%2526utm_campaign%253DTV2025%2526utm_medium%253Dbanner%2526utm_source%253DTV2025%26af_xp%3Dcustom%26pid%3DTradingview%26c%3Dgoldsilver%26af_click_lookback%3D23h
+                  - generic [ref=f6e11]: Ad
+                  - link "Download App" [ref=f6e13] [cursor=pointer]:
+                    - /url: https://adclick.g.doubleclick.net/pcs/click?xai=AKAOjsssPx7AQXm9gHxDyJMDG-n3OuAAP3Ry-T98cLcSQiHmy9Adoxl1QDJfovNd3-9z9a4uwkVFN0T8yePArZlW6yRymvlSq4WItMxNuDzgrMBfaEZNjDz3ix4q5FswtfjCexHcjJbsGqRkgjJEOwst-nq4a7WA3jQAQXe8s5rmsyhAJzXVlFxHT7-BpDPWf-BRMJWcl3wjT9vii-5xbTZj8CDp_vUVM4mO8rfore_Vk2eniq8YEcxW40gzAyx3XbVbzDQ3Blrv5avq0lr-KPHYqbiu8YbRX9ZxjE5BM7uATz3VQpmb6u6C4AwLyPFEQEwXD1YZQvdrU1WlHUtxOKmCm4FhqmhyCi9_1mgqmdr8HaJfpZWi-_yO-zD2bgk-OjC9HkUDNJ2pE1iuEdaix6yEbUDDk4Wts0qs3dWJJZE3By1FE961BOfazUEYeA&sai=AMfl-YRw-HnQRXDaKDcjXTDBG4xiuxPFHvRIdcHAu2Ls5nKviZLG4_hfKgII9LeUkvcm8WYWCAlHUh0m-IKs7WKW-e-cFpB2R3Ruwqq5DGD5ocHfH2Vx_crHhFB54fTQ8OtELuqh8AsFfGm7brIFgcJmyriRnguXmsmyW7hEEzXrLhEbRCbBoU7IUTMvFdPTACgGoQwzuLknLidbprfjdYmV7d5SByah6dAKXfc1z2aq7I8m6o4sDJMh40k-VmWC7Tn8o6NWBgOLhV7ZvnYQ0dJM1_mhDcmhw4OS8FBygZkUls6TPBf0-_xx3FawOJ9EDi1lcjAoiymkqrdpythQdCOqv0hyudJti1vcZx_1KAJRmktzWw6NXeUyEvI&sig=Cg0ArKJSzN9MbjGbmLaOEAE&fbs_aeid=%5Bgw_fbsaeid%5D&urlfix=1&adurl=https://deltaexchange.onelink.me/DIpL%3Faf_web_dp%3Dhttps%253A%252F%252Fwww.delta.exchange%252F%253Fcode%253Dgcin%2526utm_campaign%253DTV2025%2526utm_medium%253Dbanner%2526utm_source%253DTV2025%26af_xp%3Dcustom%26pid%3DTradingview%26c%3Dgoldsilver%26af_click_lookback%3D23h
+                  - link "Crypto products and NFTs are unregulated and can be highly risky. There may be no regulatory recourse for any loss from such transactions." [ref=f6e15] [cursor=pointer]:
+                    - /url: https://adclick.g.doubleclick.net/pcs/click?xai=AKAOjsssPx7AQXm9gHxDyJMDG-n3OuAAP3Ry-T98cLcSQiHmy9Adoxl1QDJfovNd3-9z9a4uwkVFN0T8yePArZlW6yRymvlSq4WItMxNuDzgrMBfaEZNjDz3ix4q5FswtfjCexHcjJbsGqRkgjJEOwst-nq4a7WA3jQAQXe8s5rmsyhAJzXVlFxHT7-BpDPWf-BRMJWcl3wjT9vii-5xbTZj8CDp_vUVM4mO8rfore_Vk2eniq8YEcxW40gzAyx3XbVbzDQ3Blrv5avq0lr-KPHYqbiu8YbRX9ZxjE5BM7uATz3VQpmb6u6C4AwLyPFEQEwXD1YZQvdrU1WlHUtxOKmCm4FhqmhyCi9_1mgqmdr8HaJfpZWi-_yO-zD2bgk-OjC9HkUDNJ2pE1iuEdaix6yEbUDDk4Wts0qs3dWJJZE3By1FE961BOfazUEYeA&sai=AMfl-YRw-HnQRXDaKDcjXTDBG4xiuxPFHvRIdcHAu2Ls5nKviZLG4_hfKgII9LeUkvcm8WYWCAlHUh0m-IKs7WKW-e-cFpB2R3Ruwqq5DGD5ocHfH2Vx_crHhFB54fTQ8OtELuqh8AsFfGm7brIFgcJmyriRnguXmsmyW7hEEzXrLhEbRCbBoU7IUTMvFdPTACgGoQwzuLknLidbprfjdYmV7d5SByah6dAKXfc1z2aq7I8m6o4sDJMh40k-VmWC7Tn8o6NWBgOLhV7ZvnYQ0dJM1_mhDcmhw4OS8FBygZkUls6TPBf0-_xx3FawOJ9EDi1lcjAoiymkqrdpythQdCOqv0hyudJti1vcZx_1KAJRmktzWw6NXeUyEvI&sig=Cg0ArKJSzN9MbjGbmLaOEAE&fbs_aeid=%5Bgw_fbsaeid%5D&urlfix=1&adurl=https://deltaexchange.onelink.me/DIpL%3Faf_web_dp%3Dhttps%253A%252F%252Fwww.delta.exchange%252F%253Fcode%253Dgcin%2526utm_campaign%253DTV2025%2526utm_medium%253Dbanner%2526utm_source%253DTV2025%26af_xp%3Dcustom%26pid%3DTradingview%26c%3Dgoldsilver%26af_click_lookback%3D23h
+      - generic:
+        - log:
+          - list
+    - generic [ref=e720]:
+      - generic [ref=e721]:
+        - generic [ref=e722]:
+          - button "Move overlay to split-view" [ref=e723]
+          - generic [ref=e728]: Pine Editor
+        - generic [ref=e729]:
+          - button "Collapse panel" [ref=e730]
+          - button "Close" [ref=e735]
+      - generic [ref=e746]:
+        - generic [ref=e748]:
+          - generic [ref=e749]:
+            - button [ref=e1277]:
+              - heading "Untitled script" [level=2] [ref=e1278]
+            - button "Add to chart" [ref=e758]
+            - button [disabled] [ref=e1344]
+          - generic [ref=e765]:
+            - button "Publish script" [ref=e766]
+            - button [ref=e987]
+        - code [ref=e1290]:
+          - generic [ref=e1291]:
+            - generic [aria-hidden] [ref=e1293]:
+              - generic [ref=e1349]: "220"
+              - generic [ref=e1351]:
+                - generic [ref=e1352] [cursor=pointer]: 
+                - generic [ref=e1353]: "221"
+              - generic [ref=e1354]: "222"
+              - generic [ref=e1356]: "223"
+              - generic [ref=e1358]: "224"
+              - generic [ref=e1360]: "225"
+              - generic [ref=e1362]: "226"
+              - generic [ref=e1364]: "227"
+              - generic [ref=e1366]: "228"
+              - generic [ref=e1368]: "229"
+              - generic [ref=e1370]: "230"
+              - generic [ref=e1372]:
+                - generic [ref=e1373] [cursor=pointer]: 
+                - generic [ref=e1374]: "231"
+              - generic [ref=e1375]: "232"
+              - generic [ref=e1377]: "233"
+              - generic [ref=e1379]: "234"
+              - generic [ref=e1381]: "235"
+              - generic [ref=e1383]: "236"
+              - generic [ref=e1385]: "237"
+              - generic [ref=e1387]: "238"
+              - generic [ref=e1389]: "239"
+              - generic [ref=e1391]: "240"
+              - generic [ref=e1393]: "241"
+              - generic [ref=e1395]: "242"
+              - generic [ref=e1397]: "243"
+              - generic [ref=e1399]: "244"
+              - generic [ref=e1401]: "245"
+              - generic [ref=e1403]: "246"
+              - generic [ref=e1405]: "247"
+              - generic [ref=e1407]: "248"
+              - generic [ref=e1409]: "249"
+            - generic [aria-hidden] [ref=e1318]:
+              - generic [ref=e1480]: st = array.get(states, i)
+              - generic [ref=e1482]: if not (onlyHits and sg == 0)
+              - generic [ref=e1484]: fired = sg != 0
+              - generic [ref=e1487]:
+                - text: bg = sg == 1 ?
+                - generic [ref=e1488] [cursor=pointer]
+                - text: "color.new(color.green, 0) : sg == -1 ?"
+                - generic [ref=e1489] [cursor=pointer]
+                - text: "color.new(color.red, 0) : st == 1 ?"
+                - generic [ref=e1490] [cursor=pointer]
+                - text: "color.new(color.green, 80) : st == -1 ?"
+                - generic [ref=e1491] [cursor=pointer]
+                - text: "color.new(color.red, 80) :"
+                - generic [ref=e1492] [cursor=pointer]
+                - text: color.new(color.gray, 85)
+              - generic [ref=e1494]:
+                - text: txt = fired ?
+                - generic [ref=e1495] [cursor=pointer]
+                - text: "color.white :"
+                - generic [ref=e1496] [cursor=pointer]
+                - text: color.gray
+              - generic [ref=e1497]: "table.cell(panel, 0, row, fired ? \"*\" : \"\", text_color = txt, bgcolor = bg, text_size = size.tiny)"
+              - generic [ref=e1499]: table.cell(panel, 1, row, array.get(names, i), text_color = txt, bgcolor = bg, text_size = size.tiny)
+              - generic [ref=e1501]: "table.cell(panel, 2, row, st == 1 ? \"UP\" : st == -1 ? \"DOWN\" : \"-\", text_color = txt, bgcolor = bg, text_size = size.tiny)"
+              - generic [ref=e1503]: table.cell(panel, 3, row, str.tostring(array.get(prices, i), "#.##"), text_color = txt, bgcolor = bg, text_size = size.tiny)
+              - generic [ref=e1505]: table.cell(panel, 4, row, str.tostring(array.get(adxs, i), "#.0"), text_color = txt, bgcolor = bg, text_size = size.tiny)
+              - generic [ref=e1507]: row += 1
+              - generic [ref=e1509]: if row > 40
+              - generic [ref=e1511]: break
+              - generic [ref=e1514]: // ---------------------------- This chart's own symbol -----------------------
+              - generic [ref=e1516]: // Same rule drawn on whatever symbol the chart is showing, so the triangles and
+              - generic [ref=e1518]: // the EMA ribbon match what the scanner is alerting on.
+              - generic [ref=e1520]: emaR = ta.ema(close, fastLen)
+              - generic [ref=e1522]: emaG = ta.ema(close, midLen)
+              - generic [ref=e1524]: emaB = ta.ema(close, slowLen)
+              - generic [ref=e1527]:
+                - text: "plot(markChart ? emaR : na, \"Red EMA\", color ="
+                - generic [ref=e1528] [cursor=pointer]
+                - text: color.red, linewidth = 2)
+              - generic [ref=e1530]:
+                - text: "plot(markChart ? emaG : na, \"Green EMA\", color ="
+                - generic [ref=e1531] [cursor=pointer]
+                - text: color.green, linewidth = 2)
+              - generic [ref=e1533]:
+                - text: "plot(markChart ? emaB : na, \"Blue EMA\", color ="
+                - generic [ref=e1534] [cursor=pointer]
+                - text: color.blue, linewidth = 2)
+              - generic [ref=e1536]: "[cSig, cState, _cPx, _cAdx, _cSl] = srk()"
+              - generic [ref=e1539]:
+                - text: plotshape(markChart and cSig == 1, "Bullish", shape.triangleup, location.belowbar,
+                - generic [ref=e1540] [cursor=pointer]
+                - text: color.new(color.green, 0), size = size.small, text = "Bullish", textcolor =
+                - generic [ref=e1541] [cursor=pointer]
+                - text: color.blue)
+              - generic [ref=e1543]:
+                - text: plotshape(markChart and cSig == -1, "Bearish", shape.triangledown, location.abovebar,
+                - generic [ref=e1544] [cursor=pointer]
+                - text: color.new(color.red, 0), size = size.small, text = "Bearish", textcolor =
+                - generic [ref=e1545] [cursor=pointer]
+                - text: color.blue)
+              - generic [ref=e1547]:
+                - text: bgcolor(markChart ? (cState == 1 ?
+                - generic [ref=e1548] [cursor=pointer]
+                - text: "color.new(color.green, 92) : cState == -1 ?"
+                - generic [ref=e1549] [cursor=pointer]
+                - text: "color.new(color.red, 92) : na) : na)"
+            - textbox "Editor content;Press Alt+F1 for Accessibility Options." [active] [ref=e1337]: ", cState, _cPx, _cAdx, _cSl] = srk() plotshape(markChart and cSig == 1, \"Bullish\", shape.triangleup, location.belowbar, color.new(color.green, 0), size = size.small, text = \"Bullish\", textcolor = color.blue) plotshape(markChart and cSig == -1, \"Bearish\", shape.triangledown, location.abovebar, color.new(color.red, 0), size = size.small, text = \"Bearish\", textcolor = color.blue) bgcolor(markChart ? (cState == 1 ? color.new(color.green, 92) : cState == -1 ? color.new(color.red, 92) : na) : na)"
+        - generic [ref=e955]:
+          - button [ref=e958]
+          - generic [ref=e966]:
+            - button "Line 249, Col 1" [ref=e1553]
+            - link "Pine Script® v6" [ref=e968]:
+              - /url: https://in.tradingview.com/pine-script-reference/v6
+    - generic [ref=e1555]:
+      - generic [ref=e1556]:
+        - generic [ref=e1557]: Save script
+        - generic [ref=e1558]:
+          - generic [ref=e1559]: New script name
+          - textbox [ref=e1563]: SRK Swing Scanner B1 (15m)
+        - generic [ref=e1564]:
+          - button "Save" [ref=e1565]
+          - button "Cancel" [ref=e1567]
+      - button "close" [ref=e1569]
+  - generic [ref=e1098]:
+    - alert
+    - alert

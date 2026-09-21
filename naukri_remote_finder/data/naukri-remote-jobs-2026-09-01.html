@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naukri Remote Jobs - 2026-09-01</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f7f6f3;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container { max-width: 1500px; margin: 0 auto; padding: 20px; }
+        header {
+            background: #4a7fd4;
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        header h1 { font-size: 28px; font-weight: 600; }
+        header p { opacity: 0.9; margin-top: 5px; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #4a7fd4;
+            margin-top: 5px;
+        }
+        .filters {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .filters label { font-weight: 500; color: #555; }
+        .filters input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 280px;
+        }
+        .filters input:focus { outline: 2px solid #4a7fd4; }
+        table {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        thead { background: #4a7fd4; color: white; }
+        th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            vertical-align: top;
+        }
+        tr:hover { background: #f8f9fa; }
+        tr:last-child td { border-bottom: none; }
+        .job-title { color: #4a7fd4; text-decoration: none; font-weight: 500; }
+        .job-title:hover { text-decoration: underline; }
+        .company-name { font-weight: 500; }
+        .careers-link {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            text-decoration: none;
+            margin-top: 2px;
+        }
+        .careers-link:hover { color: #4a7fd4; }
+        .badges { margin-top: 4px; }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-right: 4px;
+        }
+        .badge-remote { background: #cce5ff; color: #004085; }
+        .badge-easy { background: #d4edda; color: #155724; }
+        .badge-company { background: #fff3cd; color: #856404; }
+        .badge-question { background: #f8d7da; color: #721c24; }
+        .apply-btn {
+            display: inline-block;
+            padding: 6px 16px;
+            background: #4a7fd4;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        .apply-btn:hover { background: #3868b8; }
+        .companies-list {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        .companies-list h2 { font-size: 18px; margin-bottom: 15px; color: #333; }
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 10px;
+        }
+        .company-chip {
+            padding: 8px 12px;
+            background: #f7f6f3;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .company-chip a { color: #4a7fd4; text-decoration: none; }
+        .company-chip a:hover { text-decoration: underline; }
+        footer { text-align: center; padding: 30px; color: #666; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Naukri Remote Jobs</h1>
+            <p>Generated on 2026-09-01 12:57:48 | 21 remote jobs | Posted in last 24h | Across India</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Total Remote Jobs</h3>
+                <div class="value">21</div>
+            </div>
+            <div class="stat-card">
+                <h3>1-Click Apply</h3>
+                <div class="value">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>With Questionnaire</h3>
+                <div class="value">8</div>
+            </div>
+            <div class="stat-card">
+                <h3>Companies</h3>
+                <div class="value">20</div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <label for="searchInput">Filter:</label>
+            <input type="text" id="searchInput" placeholder="Search by title, company, skill, location...">
+        </div>
+
+        <table id="jobsTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Company</th>
+                    <th>Location</th>
+                    <th>Exp</th>
+                    <th>Salary</th>
+                    <th>Skills</th>
+                    <th>Posted</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td>1</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-sr-manual-qa-engineer-ai-llm-api-testing-ciklum-remote-6-to-11-years-310826500088" target="_blank" class="job-title">Sr Manual QA Engineer (AI / LLM &amp; API Testing)</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-company">Company Apply</span> <span class="badge badge-easy">1-Click Apply</span></div>
+            </td>
+            <td>
+                <span class="company-name">Ciklum</span>
+                <a href="https://www.google.com/search?q=Ciklum+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>6-11 Yrs</td>
+            <td>Not disclosed</td>
+            <td>ci/cd pipelines, contract testing, pytest, mental health, medical insurance, ai, business analyst, llm</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-sr-manual-qa-engineer-ai-llm-api-testing-ciklum-remote-6-to-11-years-310826500088" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-senior-devops-engineer-exl-gurugram-6-to-10-years-010926015722" target="_blank" class="job-title">Senior Devops Engineer</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-question">Questionnaire</span></div>
+            </td>
+            <td>
+                <span class="company-name">EXL</span>
+                <a href="https://www.google.com/search?q=EXL+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>6-10 Yrs</td>
+            <td>Not disclosed</td>
+            <td>AWS DevOps, Terraform, AWS Glue, DevOps Tools, Ci/Cd, CI CD Pipeline, Continuous Delivery, Continuous Integration</td>
+            <td>Just Now</td>
+            <td><a href="https://www.naukri.com/job-listings-senior-devops-engineer-exl-gurugram-6-to-10-years-010926015722" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-sr-databricks-platform-engineer-sparix-global-private-limited-remote-6-to-11-years-310826500127" target="_blank" class="job-title">Sr Databricks Platform Engineer</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-company">Company Apply</span> <span class="badge badge-easy">1-Click Apply</span></div>
+            </td>
+            <td>
+                <span class="company-name">Sparix Global</span>
+                <a href="https://www.google.com/search?q=Sparix+Global+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>6-11 Yrs</td>
+            <td>Not disclosed</td>
+            <td>github, lakehouse, unity catalog, enterprise applications, access management, databricks, workflows, platform engineering</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-sr-databricks-platform-engineer-sparix-global-private-limited-remote-6-to-11-years-310826500127" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-devops-consultant-sparix-global-private-limited-remote-5-to-8-years-310826500146" target="_blank" class="job-title">Devops Consultant</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-company">Company Apply</span> <span class="badge badge-easy">1-Click Apply</span></div>
+            </td>
+            <td>
+                <span class="company-name">Sparix Global</span>
+                <a href="https://www.google.com/search?q=Sparix+Global+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>5-8 Yrs</td>
+            <td>Not disclosed</td>
+            <td>artifactory, cloud networking, container, ci/cd pipelines, azure key vault, cloud migration, amazon web services, azure devops</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-devops-consultant-sparix-global-private-limited-remote-5-to-8-years-310826500146" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-pncpl-software-engineer-deltek-bengaluru-6-to-11-years-310826026960" target="_blank" class="job-title">Pncpl Software Engineer</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-question">Questionnaire</span></div>
+            </td>
+            <td>
+                <span class="company-name">Deltek</span>
+                <a href="https://www.google.com/search?q=Deltek+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>6-11 Yrs</td>
+            <td>Not disclosed</td>
+            <td>Java, Microservices, Backend Development, Docker, generative ai, Spring Boot, Python, Kubernetes</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-pncpl-software-engineer-deltek-bengaluru-6-to-11-years-310826026960" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-delinea-engineer-keydata-associates-inc-remote-5-to-10-years-310826500118" target="_blank" class="job-title">Delinea Engineer</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-company">Company Apply</span> <span class="badge badge-easy">1-Click Apply</span></div>
+            </td>
+            <td>
+                <span class="company-name">Keydata Associates</span>
+                <a href="https://www.google.com/search?q=Keydata+Associates+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>5-10 Yrs</td>
+            <td>Not disclosed</td>
+            <td>ci/cd pipelines, cyberark, administration, delinea, access management, cybersecurity, cloud, azure ad</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-delinea-engineer-keydata-associates-inc-remote-5-to-10-years-310826500118" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-python-ai-developer-email-integration-part-time-freelance-remote-java-r-d-bhopal-6-to-10-years-310826025539" target="_blank" class="job-title">Python AI Developer-Email Integration - Part Time/Freelance (Remote)</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-question">Questionnaire</span></div>
+            </td>
+            <td>
+                <span class="company-name">Java R&amp;D</span>
+                <a href="https://www.google.com/search?q=Java+R%26D+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>6-10 Yrs</td>
+            <td>Not disclosed</td>
+            <td>Integration, API, Python, SMTP, OAuth 2.0, SSO, Part time, Part</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-python-ai-developer-email-integration-part-time-freelance-remote-java-r-d-bhopal-6-to-10-years-310826025539" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-aws-backend-engineer-vistateq-virtuosity-india-3-to-8-years-310826015969" target="_blank" class="job-title">AWS Backend Engineer</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-question">Questionnaire</span></div>
+            </td>
+            <td>
+                <span class="company-name">Vistateq Virtuosity</span>
+                <a href="https://www.google.com/search?q=Vistateq+Virtuosity+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>3-8 Yrs</td>
+            <td>Not disclosed</td>
+            <td>TypeScript, AWS Bedrock, AI, AWS, Python, node, Data Engineering, Power BI</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-aws-backend-engineer-vistateq-virtuosity-india-3-to-8-years-310826015969" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-master-data-management-mdm-analyst-remote-6-pm-to-3am-ist-enternet-business-systems-hyderabad-4-to-9-years-310826026731" target="_blank" class="job-title">Master Data Management (MDM) Analyst -  Remote (6 PM To 3AM IST)</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-question">Questionnaire</span></div>
+            </td>
+            <td>
+                <span class="company-name">Enternet Business Systems</span>
+                <a href="https://www.google.com/search?q=Enternet+Business+Systems+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>4-9 Yrs</td>
+            <td>Not disclosed</td>
+            <td>Pim, MDM, ERP, Master Data Management, SQL, Master data, Data management, Data analysis</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-master-data-management-mdm-analyst-remote-6-pm-to-3am-ist-enternet-business-systems-hyderabad-4-to-9-years-310826026731" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-senior-backend-developer-python-aws-snowflake-guidepoint-pune-6-to-10-years-310826019477" target="_blank" class="job-title">Senior Backend Developer - Python, AWS, Snowflake</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-question">Questionnaire</span></div>
+            </td>
+            <td>
+                <span class="company-name">Guidepoint</span>
+                <a href="https://www.google.com/search?q=Guidepoint+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>6-10 Yrs</td>
+            <td>Not disclosed</td>
+            <td>Application Development, Snowflake, AWS, Python, SQL, Backend, Senior, Application</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-senior-backend-developer-python-aws-snowflake-guidepoint-pune-6-to-10-years-310826019477" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-software-tester-workiy-inc-remote-2-to-7-years-310826500075" target="_blank" class="job-title">SOFTWARE TESTER</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-company">Company Apply</span> <span class="badge badge-easy">1-Click Apply</span></div>
+            </td>
+            <td>
+                <span class="company-name">Workiy Technologies</span>
+                <a href="https://www.google.com/search?q=Workiy+Technologies+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>2-7 Yrs</td>
+            <td>Not disclosed</td>
+            <td>software testing, regression testing, jmeter, browserstack, digital solutions, qa, rest assured, quality engineering</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-software-tester-workiy-inc-remote-2-to-7-years-310826500075" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-sr-backend-engineer-core-apis-sre-focus-fingerprintjs-remote-5-to-10-years-310826500232" target="_blank" class="job-title">Sr Backend Engineer, Core APIs (SRE Focus)</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-company">Company Apply</span> <span class="badge badge-easy">1-Click Apply</span></div>
+            </td>
+            <td>
+                <span class="company-name">Fingerprintjs</span>
+                <a href="https://www.google.com/search?q=Fingerprintjs+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>5-10 Yrs</td>
+            <td>Not disclosed</td>
+            <td>api development, ci/cd pipelines, data analytics, craft, databricks, aws cloudformation, backend development, analytics</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-sr-backend-engineer-core-apis-sre-focus-fingerprintjs-remote-5-to-10-years-310826500232" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-quality-assurance-tester-qa-tester-manual-qa-tester-mewhiz-services-remote-4-to-7-years-310826014334" target="_blank" class="job-title">Quality Assurance Tester, QA Tester, Manual QA Tester,</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-question">Questionnaire</span></div>
+            </td>
+            <td>
+                <span class="company-name">Mewhiz Services</span>
+                <a href="https://www.google.com/search?q=Mewhiz+Services+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>4-7 Yrs</td>
+            <td>4-9 Lacs PA</td>
+            <td>QA Testing, Regression Testing, Web Technologies, Test Planning, Database Testing, UAT, Manual Testing, JIRA</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-quality-assurance-tester-qa-tester-manual-qa-tester-mewhiz-services-remote-4-to-7-years-310826014334" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>14</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-sr-netsuite-administrator-digicert-remote-3-to-8-years-310826500162" target="_blank" class="job-title">Sr. NetSuite Administrator</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-company">Company Apply</span> <span class="badge badge-easy">1-Click Apply</span></div>
+            </td>
+            <td>
+                <span class="company-name">Digicert</span>
+                <a href="https://www.google.com/search?q=Digicert+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>3-8 Yrs</td>
+            <td>Not disclosed</td>
+            <td>administration, exception handling, financial systems, ai, dns, accounting, cadence, change management</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-sr-netsuite-administrator-digicert-remote-3-to-8-years-310826500162" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>15</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-sr-seo-specialis-igaming-boosta-remote-4-to-7-years-310826500141" target="_blank" class="job-title">Sr SEO Specialis (iGaming)</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-company">Company Apply</span> <span class="badge badge-easy">1-Click Apply</span></div>
+            </td>
+            <td>
+                <span class="company-name">Boosta</span>
+                <a href="https://www.google.com/search?q=Boosta+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>4-7 Yrs</td>
+            <td>Not disclosed</td>
+            <td>competitor analysis, mental health, medical insurance, analytics tools, competitive intelligence, budgeting, analytics, ahrefs</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-sr-seo-specialis-igaming-boosta-remote-4-to-7-years-310826500141" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>16</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-sr-people-operations-specialist-highlevel-remote-5-to-10-years-310826500192" target="_blank" class="job-title">Sr. People Operations Specialist</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-company">Company Apply</span> <span class="badge badge-easy">1-Click Apply</span></div>
+            </td>
+            <td>
+                <span class="company-name">Highlevel Llc</span>
+                <a href="https://www.google.com/search?q=Highlevel+Llc+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>5-10 Yrs</td>
+            <td>Not disclosed</td>
+            <td>business requirements, administration, compliance reporting, ai, artificial intelligence, collaboration tools, benefits administration, automation</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-sr-people-operations-specialist-highlevel-remote-5-to-10-years-310826500192" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>17</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-r-business-analyst-product-commercialization-lead-cert-id-india-private-limited-remote-3-to-8-years-310826500246" target="_blank" class="job-title">R - Business Analyst &amp; Product Commercialization Lead</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-company">Company Apply</span> <span class="badge badge-easy">1-Click Apply</span></div>
+            </td>
+            <td>
+                <span class="company-name">Foodchain Id</span>
+                <a href="https://www.google.com/search?q=Foodchain+Id+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>3-8 Yrs</td>
+            <td>Not disclosed</td>
+            <td>delivery coordination, editor, authoring, confluence, ai, business analysis, business analyst, azure devops</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-r-business-analyst-product-commercialization-lead-cert-id-india-private-limited-remote-3-to-8-years-310826500246" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>18</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-staff-product-designer-moniepoint-remote-3-to-8-years-310826500124" target="_blank" class="job-title">Staff Product Designer</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-company">Company Apply</span> <span class="badge badge-easy">1-Click Apply</span></div>
+            </td>
+            <td>
+                <span class="company-name">Moniepoint</span>
+                <a href="https://www.google.com/search?q=Moniepoint+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>3-8 Yrs</td>
+            <td>Not disclosed</td>
+            <td>financial concepts, business management, craft, after effects, articulate, analytics tools, case studies, banking</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-staff-product-designer-moniepoint-remote-3-to-8-years-310826500124" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>19</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-customer-solutions-manager-ziff-davis-remote-5-to-10-years-310826500233" target="_blank" class="job-title">Customer Solutions Manager</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-company">Company Apply</span> <span class="badge badge-easy">1-Click Apply</span></div>
+            </td>
+            <td>
+                <span class="company-name">Ziff Davis</span>
+                <a href="https://www.google.com/search?q=Ziff+Davis+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>5-10 Yrs</td>
+            <td>Not disclosed</td>
+            <td>project management, python, data analytics, customer success, ai, international business, networking, machine learning</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-customer-solutions-manager-ziff-davis-remote-5-to-10-years-310826500233" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>20</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-sr-ai-engineer-kayzen-remote-4-to-8-years-310826500155" target="_blank" class="job-title">Sr AI Engineer</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-company">Company Apply</span> <span class="badge badge-easy">1-Click Apply</span></div>
+            </td>
+            <td>
+                <span class="company-name">Kayzen</span>
+                <a href="https://www.google.com/search?q=Kayzen+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>4-8 Yrs</td>
+            <td>Not disclosed</td>
+            <td>embeddings, algorithms, frontend development, bidding, data pipelines, ai solutions, ai, advertising</td>
+            <td>1 Day Ago</td>
+            <td><a href="https://www.naukri.com/job-listings-sr-ai-engineer-kayzen-remote-4-to-8-years-310826500155" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+        <tr>
+            <td>21</td>
+            <td>
+                <a href="https://www.naukri.com/job-listings-data-engineer-shell-infotech-bengaluru-5-to-8-years-010926010887" target="_blank" class="job-title">Data Engineer</a>
+                <div class="badges"><span class="badge badge-remote">Remote</span> <span class="badge badge-question">Questionnaire</span></div>
+            </td>
+            <td>
+                <span class="company-name">Shell Infotech</span>
+                <a href="https://www.google.com/search?q=Shell+Infotech+careers+jobs+apply" target="_blank" class="careers-link">Careers →</a>
+            </td>
+            <td>Remote</td>
+            <td>5-8 Yrs</td>
+            <td>Not disclosed</td>
+            <td>Data Engineering, GCP, Ci/Cd, Spark, Python, Airflow, NoSQL, Shell Scripting</td>
+            <td>Just Now</td>
+            <td><a href="https://www.naukri.com/job-listings-data-engineer-shell-infotech-bengaluru-5-to-8-years-010926010887" target="_blank" class="apply-btn">Apply →</a></td>
+        </tr>
+            </tbody>
+        </table>
+
+        <div class="companies-list">
+            <h2>Companies Hiring Remotely (20)</h2>
+            <div class="companies-grid">
+                <div class="company-chip"><a href="https://www.google.com/search?q=Boosta+careers+jobs+apply" target="_blank">Boosta</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Ciklum+careers+jobs+apply" target="_blank">Ciklum</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Deltek+careers+jobs+apply" target="_blank">Deltek</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Digicert+careers+jobs+apply" target="_blank">Digicert</a></div><div class="company-chip"><a href="https://www.google.com/search?q=EXL+careers+jobs+apply" target="_blank">EXL</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Enternet+Business+Systems+careers+jobs+apply" target="_blank">Enternet Business Systems</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Fingerprintjs+careers+jobs+apply" target="_blank">Fingerprintjs</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Foodchain+Id+careers+jobs+apply" target="_blank">Foodchain Id</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Guidepoint+careers+jobs+apply" target="_blank">Guidepoint</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Highlevel+Llc+careers+jobs+apply" target="_blank">Highlevel Llc</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Java+R%26D+careers+jobs+apply" target="_blank">Java R&amp;D</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Kayzen+careers+jobs+apply" target="_blank">Kayzen</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Keydata+Associates+careers+jobs+apply" target="_blank">Keydata Associates</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Mewhiz+Services+careers+jobs+apply" target="_blank">Mewhiz Services</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Moniepoint+careers+jobs+apply" target="_blank">Moniepoint</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Shell+Infotech+careers+jobs+apply" target="_blank">Shell Infotech</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Sparix+Global+careers+jobs+apply" target="_blank">Sparix Global</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Vistateq+Virtuosity+careers+jobs+apply" target="_blank">Vistateq Virtuosity</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Workiy+Technologies+careers+jobs+apply" target="_blank">Workiy Technologies</a></div><div class="company-chip"><a href="https://www.google.com/search?q=Ziff+Davis+careers+jobs+apply" target="_blank">Ziff Davis</a></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Naukri Remote Job Finder | Remote-only, posted in last 24h, across India</p>
+        <p>Click "Careers →" to find each company's official job page</p>
+    </footer>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const table = document.getElementById('jobsTable');
+        const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        searchInput.addEventListener('input', function() {
+            const filter = this.value.toLowerCase();
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].style.display = rows[i].textContent.toLowerCase().includes(filter) ? '' : 'none';
+            }
+        });
+    </script>
+</body>
+</html>

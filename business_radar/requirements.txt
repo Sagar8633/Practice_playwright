@@ -1,0 +1,28 @@
+# business_radar runtime dependencies.
+#
+# Everything here is free at the tier this project runs on. There is deliberately no
+# `anthropic`, no `boto3`, no `openai`, no paid data-vendor SDK: _CONTEXT.md section 2 puts the
+# whole build on the Gemini free tier and OpenStreetMap, and a stray provider SDK in this file is
+# how a "free" tool quietly acquires a bill.
+
+# --- LLM -----------------------------------------------------------------
+# Google AI Studio / Gemini free tier. Import is `from google import genai`.
+google-genai>=1.0.0
+
+# --- HTTP ----------------------------------------------------------------
+# Overpass, Nominatim, and business websites. No scraping framework; requests plus a real
+# User-Agent and a rate bucket is the whole discovery client.
+requests>=2.31.0
+
+# --- config --------------------------------------------------------------
+PyYAML>=6.0.1
+
+# --- web -----------------------------------------------------------------
+# Flask for the app, waitress to serve it (never the dev server), Jinja2 for both the live pages
+# and the self-contained exported report.
+Flask>=3.0.0
+waitress>=3.0.0
+Jinja2>=3.1.3
+
+# --- tests ---------------------------------------------------------------
+pytest>=8.0.0

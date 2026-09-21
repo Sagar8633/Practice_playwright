@@ -1,0 +1,190 @@
+# business_radar - non-secret configuration.
+#
+# Copy to config.yaml and edit. Secrets never live here: they live in config/.env, which is
+# gitignored. If you find an API key or an app password in this file, something has gone wrong.
+#
+# Every value below is read by radar/config.py into the Config dataclass. Keys that are absent
+# fall back to the DEFAULTS in that module, so a short config.yaml is a valid config.yaml.
+
+# ---------------------------------------------------------------------------
+# Cities
+# ---------------------------------------------------------------------------
+# `slug` is the identity used in every join; `name` is the display form; `nominatim_query` is the
+# exact string sent to Nominatim to resolve the municipal boundary. Nominatim is asked once per
+# city in the lifetime of the project (1 request/second, hard policy limit) and the resolved
+# osm_relation_id is pasted back in below so later runs make zero geocoding requests.
+cities:
+  - slug: dhule
+    name: Dhule
+    state_region: Maharashtra
+    nominatim_query: "Dhule, Maharashtra, India"
+    osm_relation_id: null      # paste the relation id after the first resolve
+  - slug: shirpur
+    name: Shirpur
+    state_region: Maharashtra
+    nominatim_query: "Shirpur, Dhule, Maharashtra, India"
+    osm_relation_id: null
+  - slug: nashik
+    name: Nashik
+    state_region: Maharashtra
+    nominatim_query: "Nashik, Maharashtra, India"
+    osm_relation_id: null
+  - slug: jalgaon
+    name: Jalgaon
+    state_region: Maharashtra
+    nominatim_query: "Jalgaon, Maharashtra, India"
+    osm_relation_id: null
+
+# ---------------------------------------------------------------------------
+# What to look for
+# ---------------------------------------------------------------------------
+# Values must come from the canonical vocabularies in _CONTEXT.md section 6, which are also the
+# CHECK constraints on businesses.industry and businesses.category. An empty list means "all".
+industries:
+  - HEALTHCARE
+  - EDUCATION
+  - AUTOMOBILE
+  - MANUFACTURING
+  - RETAIL
+  - HOSPITALITY
+  - DISTRIBUTION
+
+categories:
+  - HOSPITAL
+  - DIAGNOSTIC_CENTER
+  - SCHOOL
+  - COLLEGE
+  - MANUFACTURER
+  - DISTRIBUTOR
+  - VEHICLE_DEALER
+  - GARAGE
+  - HOTEL
+  - RESTAURANT
+  - RETAIL_STORE
+
+# ---------------------------------------------------------------------------
+# Research
+# ---------------------------------------------------------------------------
+research:
+  depth: STANDARD              # STANDARD | DEEP
+  min_opportunity_score: 0     # 0 keeps every researched business in the report. See below.
+  max_businesses_per_campaign: 200
+  max_sources_per_business: 8
+  page_fetch_timeout_seconds: 20
+  max_page_bytes: 2000000
+  snapshot_dir: data/capture   # raw fetched pages, so a finding stays checkable
+  # min_opportunity_score defaults to 0 on purpose. A campaign that silently drops everything
+  # under 70 because nobody typed a number is a campaign whose report is missing rows for a
+  # reason nobody remembers. Set it per campaign when you mean it.
+
+# ---------------------------------------------------------------------------
+# Discovery - OpenStreetMap only. No Google Places, no paid vendor.
+# ---------------------------------------------------------------------------
+discovery:
+  # One identifiable User-Agent used for every outbound request in the system. A default Python
+  # user agent is a Nominatim policy violation and gets the IP blocked. Put a real contact
+  # address in it before running anything.
+  user_agent: "business-radar/1.0 (+https://example.github.io/business-radar; contact: you@example.com)"
+
+  overpass:
+    endpoints:
+      - "https://overpass-api.de/api/interpreter"
+      - "https://overpass.kumi.systems/api/interpreter"
+    max_concurrent: 1          # the instance offers two slots; take one, leave one
+    min_interval_seconds: 6
+    timeout_seconds: 180
+    element_cap: 2000
+    cache_days: 30
+
+  nominatim:
+    endpoint: "https://nominatim.openstreetmap.org/search"
+    min_interval_seconds: 1    # absolute policy limit, not a suggestion
+    timeout_seconds: 30
+
+  website:
+    min_interval_seconds: 2    # per host, when fetching a business's own site
+    respect_robots: true
+
+# ---------------------------------------------------------------------------
+# LLM - Google Gemini free tier
+# ---------------------------------------------------------------------------
+# The key itself is GEMINI_API_KEY in config/.env. The model id and prompt version are pinned
+# into every row that stores model output, so an audit can reproduce why a message came out the
+# way it did.
+llm:
+  model: gemini-2.5-flash
+  research_prompt_version: research-v1
+  message_prompt_version: msg-email-v1
+  classify_prompt_version: classify-v1
+  temperature: 0.2
+  max_output_tokens: 4096
+  timeout_seconds: 120
+  # Free tier is a quota ceiling, not a bill. Hitting it pauses the campaign until tomorrow.
+  daily_request_cap: 180
+  requests_per_minute: 8
+
+# ---------------------------------------------------------------------------
+# Email
+# ---------------------------------------------------------------------------
+# The address and app password are in config/.env. If they are absent the email channel is
+# simply unconfigured, which is a supported state: everything up to APPROVED still works and
+# nothing can be sent.
+email:
+  from_name: "Sagar"
+  reply_to: null               # defaults to the sending address
+  smtp_host: smtp.gmail.com
+  smtp_port: 587               # STARTTLS. Use 465 for SMTP_SSL.
+  smtp_use_ssl: false
+  imap_host: imap.gmail.com
+  imap_port: 993
+  imap_folder: INBOX
+  poll_interval_minutes: 20
+  # Unsubscribe is mailto: only. There is no public hostname on this deploy, so RFC 8058
+  # one-click unsubscribe cannot be offered and RFC 2369 mailto: is what remains. It must work.
+  unsubscribe_subject: "unsubscribe"
+  identity_page_url: "https://example.github.io/business-radar"
+
+  # Sending pace. These protect one free Gmail account, which is the only asset the outreach
+  # side of this system can damage.
+  daily_send_cap: 25
+  send_min_gap_seconds: 45
+  # Day 1 of sending onwards. The account starts small and grows; the last value is the ceiling.
+  ramp_schedule: [5, 5, 10, 10, 15, 15, 20, 20, 25]
+  bounce_rate_max_pct: 5.0
+  complaint_rate_max_pct: 0.1
+  bounce_rate_min_sample: 20
+
+# ---------------------------------------------------------------------------
+# Contact policy - the defaults seeded into the GLOBAL contact_policy row
+# ---------------------------------------------------------------------------
+# The database row is authoritative once it exists; these are what a fresh database is seeded
+# with and what /settings shows as the baseline.
+contact_policy:
+  automation_mode: HUMAN_APPROVAL   # the only supported value in v1, enforced by a DB trigger
+  min_days_between_outreach: 21
+  max_attempts: 3
+  max_followups: 2
+  stop_after_rejection: true
+  stop_after_opt_out: true
+  recent_campaign_days: 90
+  same_domain_days: 30
+  same_domain_max: 1
+  verification_valid_days: 30
+  approval_ttl_minutes: 60
+
+# ---------------------------------------------------------------------------
+# Web app
+# ---------------------------------------------------------------------------
+web:
+  host: 127.0.0.1              # loopback only. There is no public hostname and no exposed port.
+  port: 8770
+  threads: 4
+
+# ---------------------------------------------------------------------------
+# Logging
+# ---------------------------------------------------------------------------
+logging:
+  level: INFO                  # DEBUG | INFO | WARNING | ERROR
+  file: logs/radar.log
+  max_bytes: 5000000
+  backup_count: 5

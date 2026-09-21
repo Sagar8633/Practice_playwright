@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>{% block title %}business_radar{% endblock %}</title>
+<script>
+/* Theme before first paint, so a dark-theme reader gets no white flash. The read is wrapped
+   because a private window makes localStorage throw, and Auto is a fine default. */
+try {
+  var t = localStorage.getItem("radar:theme");
+  if (t === "light" || t === "dark") { document.documentElement.dataset.theme = t; }
+} catch (e) { /* blocked storage: Auto */ }
+</script>
+<link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+
+{% if me %}
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="{{ url_for('index') }}">business_radar</a>
+    <nav class="nav" aria-label="Main">
+      <a href="{{ url_for('index') }}"
+         {% if request.path == '/' or request.path.startswith('/campaigns') %}aria-current="page"{% endif %}>Campaigns</a>
+      <a href="{{ url_for('outreach') }}"
+         {% if request.path.startswith('/outreach') %}aria-current="page"{% endif %}>Outreach
+        {% if nav_counts.tray %}<span class="count num">{{ nav_counts.tray }}</span>{% endif %}</a>
+      <a href="{{ url_for('handoffs') }}"
+         {% if request.path.startswith('/handoffs') %}aria-current="page"{% endif %}>Handoffs
+        {% if nav_counts.handoffs %}<span class="count num">{{ nav_counts.handoffs }}</span>{% endif %}</a>
+      <a href="{{ url_for('settings_channels') }}"
+         {% if request.path.startswith('/settings') %}aria-current="page"{% endif %}>Settings</a>
+    </nav>
+    <div class="right">
+      {% set email = channel_status.get('EMAIL') %}
+      {% if email and not email.configured %}
+        <span class="badge info" title="{{ email.sentence() }}">EMAIL NOT CONFIGURED</span>
+      {% endif %}
+      <span class="small">{{ me.display_name }}</span>
+      <button type="button" class="btn quiet" id="theme-toggle"
+              aria-label="Switch between the light and dark theme">Theme</button>
+      <form method="post" action="{{ url_for('logout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button class="btn quiet" type="submit">Sign out</button>
+      </form>
+    </div>
+  </div>
+</header>
+{% endif %}
+
+<main>
+  <div class="wrap">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, text in messages %}
+        <div class="flash {{ category }}" role="status">{{ text }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+</main>
+
+<script>
+/* The only script on the page. Everything else is a form post, because a state change that
+   depends on JavaScript is a state change that silently does not happen. */
+(function () {
+  var btn = document.getElementById("theme-toggle");
+  if (!btn) { return; }
+  btn.addEventListener("click", function () {
+    var root = document.documentElement;
+    var now = root.dataset.theme === "dark" ? "light" : "dark";
+    root.dataset.theme = now;
+    try { localStorage.setItem("radar:theme", now); } catch (e) { /* nothing to do */ }
+  });
+})();
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

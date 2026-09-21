@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% from "_macros.html" import status_badge, score_badge, gate_list %}
+{% block title %}Outreach - business_radar{% endblock %}
+{% block content %}
+
+<div class="spread" style="margin-bottom:var(--s-4)">
+  <div>
+    <h1>Outreach</h1>
+    <p class="small">{{ tray|length }} selected &middot; {{ sent_today }} of
+      {{ policy.daily_send_cap }} sent today. Nothing on this screen transmits anything.</p>
+  </div>
+  {% set email = channel_status.get('EMAIL') %}
+  {% if email and not email.configured %}
+    <div class="flash info" style="margin:0;max-width:46ch">
+      {{ email.sentence() }} Drafting, policy checks, previews and approvals all still work;
+      an approved message is written to data/outbox/ and is not sent.
+    </div>
+  {% endif %}
+</div>
+
+<div class="cols">
+  <section class="stack">
+    <div class="panel">
+      <header>
+        <span class="panel-title">Selection tray</span>
+        {% if tray %}
+          <form method="post" action="{{ url_for('outreach_prepare') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button class="btn primary" type="submit">Prepare outreach for all</button>
+          </form>
+        {% endif %}
+      </header>
+
+      {% if grouped %}
+        {% for city, rows in grouped.items() %}
+          <h3 style="margin-top:var(--s-4)">{{ city }} ({{ rows|length }})</h3>
+          {% for row in rows %}
+            {% set check = checks.get(row.id) %}
+            <div class="card {% if row.state == 'BLOCKED' or (check and check.blocked) %}urgent{% else %}normal{% endif %}"
+                 style="margin-top:var(--s-2)">
+              <div class="spread">
+                <div>
+                  <div class="row">
+                    <strong><a href="{{ url_for('business', business_id=row.business_id) }}">{{ row.name }}</a></strong>
+                    {{ score_badge(row.opportunity_score, row.opportunity_band) }}
+                    {{ status_badge(row.state) }}
+                  </div>
+                  <p class="small">{{ row.category|pretty }} &middot; {{ row.size_band }}
+                    &middot; channel {{ row.intent_channel or 'EMAIL' }}
+                    {% if row.potential_solution %}&middot; {{ row.potential_solution }}{% endif %}</p>
+                  {% if check and check.blocked %}
+                    <p class="reason" style="color:var(--bad-fg)">{{ check.first_block_sentence }}</p>
+                  {% endif %}
+                </div>
+                <div class="row">
+                  {% if row.draft_id %}
+                    <a class="btn primary" href="{{ url_for('preview', draft_id=row.draft_id) }}">
+                      Open preview</a>
+                  {% endif %}
+                  <form method="post"
+                        action="{{ url_for('outreach_remove', selection_id=row.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button class="btn" type="submit"
+                            {% if row.state == 'DISPATCHED' %}disabled
+                            aria-describedby="rm-{{ row.id }}"{% endif %}>Remove</button>
+                    {% if row.state == 'DISPATCHED' %}
+                      <p class="reason" id="rm-{{ row.id }}">A message has already gone out
+                        for this selection.</p>
+                    {% endif %}
+                  </form>
+                </div>
+              </div>
+              {% if check %}
+                <details style="margin-top:var(--s-2)">
+                  <summary class="small">Eligibility, evaluated just now</summary>
+                  {{ gate_list(check.gates) }}
+                </details>
+              {% endif %}
+            </div>
+          {% endfor %}
+        {% endfor %}
+      {% else %}
+        <p class="empty">Nothing selected. Pick from the contact-ready list beside this.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="panel" style="align-self:start">
+    <header>
+      <span class="panel-title">Contact-ready</span>
+      <span class="small">{{ available|length }} verified, with a confirmed contact</span>
+    </header>
+    {% if available %}
+      <div class="tablewrap">
+        <table class="btable">
+          <thead><tr><th scope="col">Business</th><th scope="col">City</th>
+            <th scope="col" class="num">Score</th><th scope="col"></th></tr></thead>
+          <tbody>
+            {% for b in available %}
+              <tr>
+                <th scope="row" data-label="Business">
+                  <a href="{{ url_for('business', business_id=b.id) }}">{{ b.name }}</a></th>
+                <td data-label="City">{{ b.city }}</td>
+                <td data-label="Score" class="num">{{ score_badge(b.opportunity_score, b.opportunity_band) }}</td>
+                <td data-label="">
+                  <form method="post" action="{{ url_for('outreach_select') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <input type="hidden" name="business_id" value="{{ b.id }}">
+                    <button class="btn" type="submit">Select</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="empty">Nothing is contact-ready. A business gets here by passing the nine
+        checks and having one human-confirmed contact.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,241 @@
+// ============================================================================
+//  SECTION 1 : TYPES + ENUMS  (one place, because Pine requires declaration
+//  before use and several of these cross-reference each other)
+//
+//  ONE vocabulary for "why not". Three overlapping taxonomies were merged here:
+//  the pre-signal GATE causes (owned by SECTION 13 - Filters, first-match-wins
+//  in the fixed priority order below) and the post-arm DEATH causes (owned by
+//  SECTION 15 - Failure Analysis). The no-trade panel, the failure histogram,
+//  the state machine and the alert payload all speak THIS enum and no other.
+// ============================================================================
+
+enum NoTradeReason
+    ok            = "OK"
+    // ---- GATE causes: evaluated most-upstream-first, first match wins -------
+    warmup        = "WARMING UP"
+    outsideSess   = "OUTSIDE SESSION"
+    sessEdge      = "SESSION EDGE TRIM"
+    lowAtr        = "DEAD TAPE (LOW ATR)"
+    newsSpike     = "HIGH VOLATILITY / SPIKE"
+    choppy        = "CHOPPY MARKET"
+    lowVolume     = "LOW VOLUME"
+    noLiquidity   = "NO LIQUIDITY"
+    midRange      = "MIDDLE OF RANGE"
+    extended      = "EXTENDED MOVE"
+    vwapFar       = "TOO FAR FROM VWAP"
+    noSweep       = "NO SWEEP"
+    noAbsorption  = "NO ABSORPTION"
+    zoneDead      = "ZONE INVALIDATED"
+    noRejection   = "NO REJECTION"
+    noDisplace    = "NO DISPLACEMENT"
+    noBos         = "NO BOS"
+    noRetest      = "NO RETEST"
+    lowScore      = "LOW CONFIDENCE"
+    poorRr        = "POOR RR"
+    wideStop      = "STOP TOO WIDE"
+    conflict      = "DIRECTIONAL CONFLICT"
+    htfBlock      = "HTF BIAS OPPOSED"
+    cooldown      = "COOLDOWN"
+    lossCooldown  = "LOSS COOLDOWN"
+    lossStreak    = "LOSS STREAK HALT"
+    duplicate     = "DUPLICATE SIGNAL"
+    maxSetups     = "SETUP SLOTS FULL"
+    tradeOpen     = "TRADE ALREADY OPEN"
+    outOfWindow   = "OUTSIDE BACKTEST WINDOW"
+    // ---- DEATH causes: why an armed setup died before or after entry -------
+    dTimeout      = "EXPIRED (TIMEOUT)"
+    dZoneBroken   = "ZONE BROKEN"
+    dFalseSweep   = "FALSE SWEEP"
+    dDispFail     = "DISPLACEMENT FAILED"
+    dBosFail      = "BOS FAILED (FAKEOUT)"
+    dRetestFail   = "RETEST FAILED"
+    dEvicted      = "EVICTED (SLOT REUSED)"
+    dConflict     = "KILLED BY CONFLICT"
+    dSessionEnd   = "SESSION CLOSED"
+    dStopped      = "STOPPED OUT"
+    dTarget       = "TARGET REACHED"
+    dTimeStop     = "TIME STOP"
+
+// Setup lifecycle. RANK IS STRICTLY INCREASING and `dead` is ABSORBING - that
+// pair of invariants is the whole non-repainting argument for the state machine.
+// Confirmation mode adds exactly one legal edge: bos -> armed (skipping retest).
+enum SetupState
+    idle      = "IDLE"
+    absorbing = "ABSORBING"
+    rejected  = "REJECTED"
+    displaced = "DISPLACED"
+    bos       = "BOS"
+    retest    = "AWAITING RETEST"
+    armed     = "ARMED"
+    active    = "ACTIVE"
+    dead      = "DEAD"
+
+enum ZoneState
+    zPending = "PENDING"
+    zLive    = "LIVE"
+    zBroken  = "BROKEN"
+    zExpired = "EXPIRED"
+
+enum LevelKind
+    pdh      = "PDH"
+    pdl      = "PDL"
+    pwh      = "PWH"
+    pwl      = "PWL"
+    psh      = "PSH"
+    psl      = "PSL"
+    csh      = "CSH"
+    csl      = "CSL"
+    swingHi  = "SWING H"
+    swingLo  = "SWING L"
+    eqh      = "EQH"
+    eql      = "EQL"
+    poc      = "POC"
+    dayOpenK = "D-OPEN"
+
+// ---------------------------------------------------------------- TYPES
+// `side` polarity is the ONE place in this file that is not dir-polarity:
+//   side = +1  the level was born from a HIGH  -> it is RESISTANCE
+//   side = -1  the level was born from a LOW   -> it is SUPPORT
+// A LONG (dir = +1) therefore needs a SUPPORT level, i.e. `lvl.side == -dir`.
+type LiquidityLevel
+    float     price       = na
+    LevelKind kind        = LevelKind.swingLo
+    int       side        = 0
+    int       createdBar  = 0
+    int       touches     = 0
+    int       lastTouch   = 0
+    float     strength    = 0.0     // 0..1
+    bool      active      = true
+    bool      swept       = false
+
+type Swing
+    float price  = na
+    int   bar    = 0
+    int   dir    = 0        // +1 = swing HIGH, -1 = swing LOW
+    bool  broken = false
+
+type SweepCand
+    int   dir       = 0     // +1 = SELL-side liquidity swept (bullish candidate)
+    float lvlPrice  = na    // SNAPSHOT at candidate open - a later merge must not move it
+    float extreme   = na
+    int   openBar   = 0
+    int   lvlIdx    = -1
+    float maxPen    = 0.0
+    float quality   = 0.0   // 0..1
+    bool  resolved  = false
+
+type IcebergZone
+    int       id        = 0
+    int       dir       = 0
+    float     top       = na
+    float     bottom    = na
+    int       bornBar   = 0
+    int       bornTime  = 0
+    float     atrRef    = na    // FROZEN at creation - the break buffer never re-scales
+    float     strength  = 0.0   // 0..1
+    int       tests     = 0
+    int       lastTest  = 0
+    float     invalid   = na
+    ZoneState state     = ZoneState.zPending
+    float     swpExt    = na
+    int       breakRun  = 0
+    box       bx        = na
+    label     lb        = na
+
+type DispLeg
+    int   dir      = 0
+    float originLo = na
+    float originHi = na
+    float extreme  = na
+    float fvgLo    = na
+    float fvgHi    = na
+    bool  hasFvg   = false
+    float strength = 0.0
+    int   bar      = 0
+
+type RiskPlan
+    int           dir   = 0
+    float         entry = na
+    float         stop  = na
+    float         tp1   = na
+    float         tp2   = na
+    float         tp3   = na
+    float         risk  = na    // NET risk per oz, cost included
+    float         rr1   = na
+    float         rr2   = na
+    float         rr3   = na
+    float         qRr   = 0.0   // 0..1, feeds the score modifier
+    bool          ok    = false
+    NoTradeReason why   = NoTradeReason.ok
+
+type Setup
+    int           id       = 0
+    int           dir      = 0
+    SetupState    st       = SetupState.idle
+    int           bornBar  = 0
+    int           stBar    = 0
+    int           zoneId   = 0
+    float         zoneTop  = na
+    float         zoneBot  = na
+    float         swpExt   = na
+    float         bosLvl   = na
+    float         dispOrg  = na
+    float         dispFar  = na
+    float         retestLv = na
+    float         score    = na
+    RiskPlan      plan     = na
+    NoTradeReason death    = NoTradeReason.ok
+    // evidence snapshot, frozen at the signal bar, for the panel and the alert
+    float         qLevel   = 0.0
+    float         qSweep   = 0.0
+    float         qRvol    = 0.0
+    float         qAbsorb  = 0.0
+    float         qReject  = 0.0
+    float         qDisp    = 0.0
+    float         qBos     = 0.0
+    float         qRetest  = 0.0
+    // drawing handles - every one of these is explicitly deleted on death
+    box           bx       = na
+    label         lb       = na
+    line          lnE      = na
+    line          lnS      = na
+    line          ln1      = na
+    line          ln2      = na
+    line          ln3      = na
+
+// The ONE virtual trade tracker. Multi-slot on purpose: a single slot silently
+// discards every trade that outlives the cooldown, which biases the loss streak
+// towards fast-resolving trades only.
+type VTrade
+    int           dir     = 0
+    int           openBar = 0
+    float         entry   = na
+    float         stop    = na
+    float         be      = na
+    float         tp1     = na
+    float         tp2     = na
+    float         tp3     = na
+    float         risk    = na
+    bool          tp1Hit  = false
+    bool          tp2Hit  = false
+    bool          isOpen  = true
+    float         mfe     = 0.0
+    float         mae     = 0.0
+    float         rMult   = na
+    int           closeBar = 0
+    NoTradeReason outcome = NoTradeReason.ok
+
+type DirStats
+    int   armed   = 0
+    int   signals = 0
+    int   tp1     = 0
+    int   tp2     = 0
+    int   tp3     = 0
+    int   sl      = 0
+    int   be      = 0
+    int   wins    = 0
+    int   losses  = 0
+    float sumR    = 0.0
+    float grossW  = 0.0
+    float grossL  = 0.0
+// ========================= END SECTION 1 ====================================

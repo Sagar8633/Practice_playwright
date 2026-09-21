@@ -1,0 +1,202 @@
+[
+{
+  "id": "L4-Q01", "level": 4, "difficulty": "medium",
+  "title": "Use the configured confidence threshold",
+  "scenario": "The recognition cut-off is not hard-coded — it lives in SystemConfig under the key 'RecognitionConfidence'. Your test must read it rather than assume 0.5.",
+  "task": "Count Face_Recognition events whose confidence is below the configured threshold. Return one column named below_threshold.",
+  "tables": ["Events", "SystemConfig"],
+  "skills": ["scalar subquery", "jsonb", "casting"],
+  "expected": "A single number — the events failing the configured bar.",
+  "checkColumnNames": true,
+  "hints": [
+    "A subquery that returns exactly one row and one column can be used anywhere a value is allowed.",
+    "Fetch the threshold with SELECT \"Value\" FROM \"SystemConfig\" WHERE \"Key\" = 'RecognitionConfidence'.",
+    "That value is text, so cast it to numeric before comparing.",
+    "Compare the event's extracted confidence against that scalar subquery inside the WHERE clause."
+  ],
+  "solution": "SELECT count(*) AS below_threshold\nFROM \"Events\"\nWHERE \"EventName\" = 'Face_Recognition'\n  AND (\"_EventProperties\" ->> 'confidence')::numeric\n      < (SELECT \"Value\"::numeric\n           FROM \"SystemConfig\"\n          WHERE \"Key\" = 'RecognitionConfidence');",
+  "explanation": {
+    "breakdown": "The scalar subquery is evaluated once and its single value substituted into the comparison.",
+    "why": "Reading the threshold from configuration means the test stays correct when someone tunes the value. A hard-coded 0.5 would quietly start testing the wrong thing.",
+    "commonMistake": "Forgetting the ::numeric cast on the config value. Comparing numeric to text raises an error; worse, comparing text to text would compare '0.45' and '0.5' lexicographically, where '0.45' < '0.5' happens to be right but '0.9' < '0.5' would be wrong.",
+    "performance": "A scalar subquery with no correlation runs once, not per row.",
+    "qaRelevance": "Tests that duplicate configuration values drift from the system they test. Always read the setting from where the application reads it."
+  }
+},
+{
+  "id": "L4-Q02", "level": 4, "difficulty": "medium",
+  "title": "Cameras that produced events yesterday",
+  "scenario": "You want the list of cameras that were definitely alive yesterday, as a starting point for a morning health check.",
+  "task": "Return the Name of every camera for which at least one event exists with a Time falling on yesterday's date. Sort by Name.",
+  "tables": ["VideoSources", "Events"],
+  "skills": ["EXISTS", "correlated subquery", "epoch conversion"],
+  "expected": "Most cameras, but not the silent one.",
+  "orderMatters": true,
+  "hints": [
+    "EXISTS tests whether a subquery returns any row at all; it does not care what the row contains.",
+    "The subquery must be correlated — it refers to the outer camera's Id.",
+    "Convert Time to a date with to_timestamp(\"Time\"/1000)::date and compare against CURRENT_DATE - 1.",
+    "WHERE EXISTS (SELECT 1 FROM \"Events\" e WHERE e.\"VideoSourceId\" = v.\"Id\" AND to_timestamp(e.\"Time\"/1000)::date = CURRENT_DATE - 1)."
+  ],
+  "solution": "SELECT v.\"Name\"\nFROM \"VideoSources\" v\nWHERE EXISTS (\n  SELECT 1\n  FROM \"Events\" e\n  WHERE e.\"VideoSourceId\" = v.\"Id\"\n    AND to_timestamp(e.\"Time\" / 1000)::date = CURRENT_DATE - 1\n)\nORDER BY v.\"Name\";",
+  "explanation": {
+    "breakdown": "EXISTS runs the inner query per outer row and stops at the first match. SELECT 1 is conventional — the value is never used.",
+    "why": "EXISTS never duplicates the outer row, unlike a join, so it is the right tool when you only need to test presence.",
+    "commonMistake": "Using a join and then needing DISTINCT to undo the fan-out. EXISTS avoids the problem rather than repairing it.",
+    "alternative": "A join with DISTINCT, or an IN subquery. EXISTS is usually clearest and handles NULLs safely.",
+    "performance": "Semi-join: the engine stops at the first matching event per camera.",
+    "qaRelevance": "'Did this device report at all in the window' is the fundamental liveness question for any monitored fleet."
+  }
+},
+{
+  "id": "L4-Q03", "level": 4, "difficulty": "hard",
+  "title": "Why NOT IN betrays you",
+  "scenario": "A colleague wrote an orphan-detection query with NOT IN and it returns nothing, so they concluded the data is clean. You know it is not.",
+  "task": "Return three counts on one row: orphans found using NOT EXISTS as via_not_exists, orphans found using NOT IN as via_not_in, and the number of events whose VideoSourceId is NULL as null_camera_events.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["NOT EXISTS", "NOT IN", "NULL semantics", "scalar subquery"],
+  "expected": "via_not_exists is 220, via_not_in is 0, and null_camera_events is 70. The NOT IN result is wrong.",
+  "checkColumnNames": true,
+  "hints": [
+    "Three scalar subqueries, one per column.",
+    "The NOT EXISTS version must exclude events with a NULL camera, or it counts them as orphans too.",
+    "The NOT IN version compares e.\"VideoSourceId\" against the full list of camera Ids — write it exactly as a colleague naively would, without filtering NULLs from the inner list.",
+    "The inner list is SELECT \"Id\" FROM \"VideoSources\" — but think about what happens if any value being compared is NULL."
+  ],
+  "solution": "SELECT\n  (SELECT count(*) FROM \"Events\" e\n    WHERE e.\"VideoSourceId\" IS NOT NULL\n      AND NOT EXISTS (SELECT 1 FROM \"VideoSources\" v\n                       WHERE v.\"Id\" = e.\"VideoSourceId\"))        AS via_not_exists,\n  (SELECT count(*) FROM \"Events\" e\n    WHERE e.\"VideoSourceId\" NOT IN (SELECT \"Id\" FROM \"VideoSources\")) AS via_not_in,\n  (SELECT count(*) FROM \"Events\" e\n    WHERE e.\"VideoSourceId\" IS NULL)                             AS null_camera_events;",
+  "explanation": {
+    "breakdown": "NOT IN is rewritten by SQL as a chain of <> comparisons joined by AND. If the left-hand value is NULL, every comparison yields UNKNOWN, the whole expression is UNKNOWN, and the row is not returned.",
+    "why": "Here the left side is nullable: 70 events have a NULL VideoSourceId. Those rows evaluate to UNKNOWN and vanish. The orphans themselves are also lost because NOT IN returns no rows once UNKNOWN enters the picture for them — the result is a silent, total false negative.",
+    "commonMistake": "Concluding from an empty NOT IN result that the data is clean. It is the most dangerous NULL trap in SQL precisely because it fails silently and looks like good news.",
+    "alternative": "NOT EXISTS is NULL-safe and should be the default. If you must use NOT IN, guard both sides: NOT IN (SELECT \"Id\" FROM \"VideoSources\" WHERE \"Id\" IS NOT NULL) and ensure the outer column is non-null.",
+    "performance": "PostgreSQL can plan NOT EXISTS as an efficient anti-join; NOT IN with a nullable column often forces a much worse plan.",
+    "qaRelevance": "This single behaviour has hidden more data-integrity bugs than any other. If a data-quality query returns zero rows, prove the zero is real before you trust it."
+  }
+},
+{
+  "id": "L4-Q04", "level": 4, "difficulty": "medium",
+  "title": "Cameras busier than the fleet average",
+  "scenario": "You want the cameras carrying an above-average share of traffic, as candidates for rebalancing.",
+  "task": "Return camera Name as camera and event count as n for cameras whose event count exceeds the average event count per camera. Sort by n descending then camera.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["CTE", "aggregate of aggregate", "scalar subquery"],
+  "expected": "Roughly the top half of the fleet by volume.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "You need two levels of aggregation: a count per camera, then an average of those counts.",
+    "SQL cannot nest aggregates directly — avg(count(*)) is not allowed in one step.",
+    "Compute the per-camera counts in a CTE, then query that CTE twice: once for the rows, once for the average.",
+    "WITH per_cam AS (SELECT ... count(*) AS n ... GROUP BY ...) SELECT * FROM per_cam WHERE n > (SELECT avg(n) FROM per_cam)."
+  ],
+  "solution": "WITH per_cam AS (\n  SELECT v.\"Name\" AS camera, count(*) AS n\n  FROM \"Events\" e\n  JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\n  GROUP BY v.\"Name\"\n)\nSELECT camera, n\nFROM per_cam\nWHERE n > (SELECT avg(n) FROM per_cam)\nORDER BY n DESC, camera;",
+  "explanation": {
+    "breakdown": "The CTE names an intermediate result so it can be referenced more than once. The scalar subquery then aggregates over that intermediate result.",
+    "why": "Aggregating an aggregate requires two passes. A CTE is the readable way to express that; a derived table in the FROM clause does the same thing.",
+    "commonMistake": "Writing HAVING count(*) > avg(count(*)), which SQL rejects — you cannot nest aggregate functions.",
+    "alternative": "A window function computes it in one pass: SELECT ... FROM (SELECT camera, n, avg(n) OVER () AS fleet_avg FROM per_cam) t WHERE n > fleet_avg.",
+    "performance": "PostgreSQL may evaluate the CTE twice. For heavy CTEs, MATERIALIZED forces a single evaluation.",
+    "qaRelevance": "Comparing each device to the fleet norm is the basis of outlier detection, and outliers are where defects hide."
+  }
+},
+{
+  "id": "L4-Q05", "level": 4, "difficulty": "hard",
+  "title": "Cameras with a config but no stream URL for the stream they use",
+  "scenario": "A camera declares which stream it uses via UseStreamType, and the URLs live in VideoSourceStreamMappings. If the declared type has no row, the camera has nowhere to connect.",
+  "task": "Return the Name as camera and UseStreamType as declared_stream for every camera that has no stream mapping row matching its declared stream type. Sort by camera.",
+  "tables": ["VideoSources", "VideoSourceStreamMappings"],
+  "skills": ["NOT EXISTS", "correlated subquery", "multi-column matching"],
+  "expected": "Five cameras, including FACE-Server-Room-32 which declares stream type 2.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "The correlation is on two columns at once, not one.",
+    "A mapping matches only if it belongs to the same camera AND has the same StreamType.",
+    "NOT EXISTS with both conditions inside the subquery.",
+    "WHERE NOT EXISTS (SELECT 1 FROM \"VideoSourceStreamMappings\" s WHERE s.\"VideoSourceId\" = v.\"Id\" AND s.\"StreamType\" = v.\"UseStreamType\")."
+  ],
+  "solution": "SELECT v.\"Name\"          AS camera,\n       v.\"UseStreamType\" AS declared_stream\nFROM \"VideoSources\" v\nWHERE NOT EXISTS (\n  SELECT 1\n  FROM \"VideoSourceStreamMappings\" s\n  WHERE s.\"VideoSourceId\" = v.\"Id\"\n    AND s.\"StreamType\"    = v.\"UseStreamType\"\n)\nORDER BY camera;",
+  "explanation": {
+    "breakdown": "Both correlation conditions live inside the subquery. Together they define what 'a matching mapping' means.",
+    "why": "Splitting the conditions — one inside, one outside — changes the meaning entirely. Moving the StreamType test to the outer WHERE would filter cameras rather than mappings.",
+    "commonMistake": "Checking only that the camera has some stream mapping. Most of these cameras do have a mapping — just not for the type they are configured to use.",
+    "alternative": "A LEFT JOIN on both columns with an IS NULL test gives the same answer.",
+    "qaRelevance": "This is a genuine misconfiguration that stops a camera connecting, and no single-table check can find it: it exists only in the relationship between two tables."
+  }
+},
+{
+  "id": "L4-Q06", "level": 4, "difficulty": "hard",
+  "title": "Fleet health summary with multiple CTEs",
+  "scenario": "You want a one-row summary for the morning stand-up covering several independent integrity checks.",
+  "task": "Return a single row with four columns: total_cameras, cameras_with_events, orphan_events, and null_camera_events.",
+  "tables": ["VideoSources", "Events"],
+  "skills": ["multiple CTEs", "cross join", "COUNT DISTINCT"],
+  "expected": "One row of headline integrity numbers.",
+  "checkColumnNames": true,
+  "hints": [
+    "Each number is an independent aggregate, so each can be its own CTE.",
+    "Multiple CTEs are separated by commas after a single WITH.",
+    "Each CTE returns exactly one row, so they can be combined with CROSS JOIN.",
+    "WITH a AS (...), b AS (...), c AS (...) SELECT a.x, b.y, c.z FROM a, b, c;"
+  ],
+  "solution": "WITH cams AS (\n  SELECT count(*) AS total_cameras FROM \"VideoSources\"\n),\nactive AS (\n  SELECT count(DISTINCT e.\"VideoSourceId\") AS cameras_with_events\n  FROM \"Events\" e\n  JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\n),\norphans AS (\n  SELECT count(*) AS orphan_events\n  FROM \"Events\" e\n  WHERE e.\"VideoSourceId\" IS NOT NULL\n    AND NOT EXISTS (SELECT 1 FROM \"VideoSources\" v WHERE v.\"Id\" = e.\"VideoSourceId\")\n),\nnulls AS (\n  SELECT count(*) AS null_camera_events\n  FROM \"Events\" WHERE \"VideoSourceId\" IS NULL\n)\nSELECT cams.total_cameras,\n       active.cameras_with_events,\n       orphans.orphan_events,\n       nulls.null_camera_events\nFROM cams, active, orphans, nulls;",
+  "explanation": {
+    "breakdown": "Four independent single-row CTEs, combined by a cross join. Because each side has exactly one row, the cross join produces exactly one row.",
+    "why": "CTEs name each step, so the query reads as a list of checks rather than a wall of nested subqueries.",
+    "commonMistake": "Cross-joining CTEs that return more than one row, which multiplies the output. This pattern is only safe when every CTE is guaranteed to be a single row.",
+    "alternative": "Four scalar subqueries in the select list is equivalent and slightly shorter; the CTE form scales better as checks accumulate.",
+    "performance": "Each CTE is evaluated once. The cross join of single rows is free.",
+    "qaRelevance": "This is the shape of a nightly data-quality dashboard: one row, one column per invariant, trivially assertable in an automated test."
+  }
+},
+{
+  "id": "L4-Q07", "level": 4, "difficulty": "hard",
+  "title": "Users whose two role records disagree",
+  "scenario": "A user's role is stored both on AspNetUsers.RoleId and in the AspNetUserRoles junction table. Authorization depends on which one the code reads.",
+  "task": "Return UserName as username, the role name from the column as column_role, and the role name from the junction as junction_role, for every user where the two disagree — including users with no junction row at all. Sort by username.",
+  "tables": ["AspNetUsers", "AspNetRoles", "AspNetUserRoles"],
+  "skills": ["LEFT JOIN", "IS DISTINCT FROM", "NULL-safe comparison"],
+  "expected": "Two users: k.mehta (Viewer vs Operator) and n.gupta (Viewer vs no row at all).",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Join users to roles twice: once through the RoleId column, once through the junction table.",
+    "The junction side must be a LEFT JOIN so users with no junction row are not dropped.",
+    "Comparing with <> loses rows where one side is NULL, because NULL <> 'Viewer' is UNKNOWN, not true.",
+    "IS DISTINCT FROM is the NULL-safe inequality: NULL IS DISTINCT FROM 'Viewer' is true."
+  ],
+  "solution": "SELECT u.\"UserName\" AS username,\n       rc.\"Name\"    AS column_role,\n       rj.\"Name\"    AS junction_role\nFROM \"AspNetUsers\" u\nJOIN \"AspNetRoles\" rc ON rc.\"Id\" = u.\"RoleId\"\nLEFT JOIN \"AspNetUserRoles\" ur ON ur.\"UserId\" = u.\"Id\"\nLEFT JOIN \"AspNetRoles\"     rj ON rj.\"Id\" = ur.\"RoleId\"\nWHERE rj.\"Name\" IS DISTINCT FROM rc.\"Name\"\nORDER BY username;",
+  "explanation": {
+    "breakdown": "Two joins to the same role table under different aliases give both versions of the role side by side. IS DISTINCT FROM compares them treating NULL as a comparable value.",
+    "why": "Plain <> would silently drop n.gupta, whose junction role is NULL — precisely the user with the worse problem, since they have no junction row at all.",
+    "commonMistake": "Using <> and reporting only one discrepancy. The NULL case is both invisible and more severe.",
+    "alternative": "COALESCE both sides to a sentinel string before comparing, though IS DISTINCT FROM states the intent directly.",
+    "qaRelevance": "Two sources of truth for an authorization decision is a security finding, not just a data-quality one. Which record wins determines what the user can actually do."
+  }
+},
+{
+  "id": "L4-Q08", "level": 4, "difficulty": "hard",
+  "title": "Each camera's share of its manager's traffic",
+  "scenario": "You want to see whether any single camera dominates its site's event volume, which usually indicates a misconfigured rule.",
+  "task": "For manager 'AM-Central', return camera Name as camera, its event count as n, and its percentage of that manager's total, rounded to 1 decimal, as pct. Sort by pct descending then camera.",
+  "tables": ["Events", "VideoSources", "AnalyticManagers"],
+  "skills": ["CTE", "scalar subquery", "arithmetic", "ROUND"],
+  "expected": "The central-site cameras with percentages summing to about 100.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Build the per-camera counts for that manager in a CTE first.",
+    "The denominator is the sum of all counts in that CTE, which is a scalar subquery over it.",
+    "Integer division truncates to zero — multiply by 100.0 or cast to numeric to force decimal maths.",
+    "round(100.0 * n / (SELECT sum(n) FROM cte), 1)."
+  ],
+  "solution": "WITH per_cam AS (\n  SELECT v.\"Name\" AS camera, count(*) AS n\n  FROM \"Events\" e\n  JOIN \"VideoSources\"     v ON v.\"Id\" = e.\"VideoSourceId\"\n  JOIN \"AnalyticManagers\" m ON m.\"Id\" = v.\"AnalyticManagerId\"\n  WHERE m.\"Name\" = 'AM-Central'\n  GROUP BY v.\"Name\"\n)\nSELECT camera,\n       n,\n       round(100.0 * n / (SELECT sum(n) FROM per_cam), 1) AS pct\nFROM per_cam\nORDER BY pct DESC, camera;",
+  "explanation": {
+    "breakdown": "The CTE produces per-camera counts; the scalar subquery sums them for the denominator; 100.0 forces numeric division.",
+    "why": "In PostgreSQL, integer / integer is integer division. 5/100 is 0, not 0.05. Writing 100.0 rather than 100 changes the whole expression to numeric.",
+    "commonMistake": "Writing 100 * n / total with all integers. Every percentage below 1 collapses to 0 and the result looks empty rather than wrong.",
+    "alternative": "A window function avoids the second pass entirely: 100.0 * n / sum(n) OVER ().",
+    "qaRelevance": "Share-of-traffic is how you spot a camera whose rules are firing far too often — the ratio is stable even as absolute volumes change."
+  }
+}
+]

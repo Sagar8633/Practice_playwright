@@ -1,0 +1,52 @@
+# LinkedIn Remote Job Finder - Search Configuration
+#
+# Customize your job search below. All fields are optional.
+
+# Search keywords - each one triggers a separate LinkedIn search
+keywords:
+  - SDET
+  - QA Automation Engineer
+  - Automation Test Lead
+  - Python Automation Testing
+  - Playwright Automation
+  - Software Development Engineer in Test
+  - Test Automation
+  - Quality Engineer
+
+# Location filter (null = worldwide/remote)
+# LinkedIn uses its own f_WT=2 remote filter, so location is secondary
+location: null
+
+# Only show jobs posted in the last N days (null = no filter)
+posted_days: 30
+
+# How many pages to scrape per keyword (25 results per page)
+pages_per_keyword: 2
+
+# Maximum total jobs in the report
+max_results: 100
+
+# Exclude these title keywords (case-insensitive substring match)
+exclude_titles:
+  - intern
+  - fresher
+  - trainee
+  - junior
+  - entry level
+  - hardware
+  - sales
+  - marketing
+
+# Exclude these companies (case-insensitive substring match)
+exclude_companies: []
+
+# Preferred locations (shown first in results)
+preferred_locations:
+  - Remote
+  - Worldwide
+  - Pune
+  - Bangalore
+  - Bengaluru
+  - Mumbai
+  - Gurgaon
+  - Gurugram

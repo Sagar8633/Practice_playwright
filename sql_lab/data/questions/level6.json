@@ -1,0 +1,226 @@
+[
+{
+  "id": "L6-Q01", "level": 6, "difficulty": "medium",
+  "title": "Events in the last 24 hours",
+  "scenario": "The overnight shift wants to know how much traffic came in since this time yesterday.",
+  "task": "Return a single count named recent_events for events whose Time falls within the last 24 hours.",
+  "tables": ["Events"],
+  "skills": ["epoch conversion", "date filtering", "INTERVAL"],
+  "expected": "A single number.",
+  "checkColumnNames": true,
+  "hints": [
+    "Time is epoch milliseconds, so you must either convert the column or convert your boundary.",
+    "Converting the boundary is far better: it keeps the column bare so the index can be used.",
+    "The boundary in milliseconds is extract(epoch from now() - interval '24 hours') * 1000.",
+    "WHERE \"Time\" >= extract(epoch FROM now() - interval '24 hours') * 1000."
+  ],
+  "solution": "SELECT count(*) AS recent_events\nFROM \"Events\"\nWHERE \"Time\" >= extract(epoch FROM now() - interval '24 hours') * 1000;",
+  "explanation": {
+    "breakdown": "The comparison boundary is computed once as a millisecond epoch, then compared directly against the raw column.",
+    "why": "Wrapping the column in to_timestamp() would work but makes the expression non-sargable — the index on Time becomes unusable and every row must be converted.",
+    "commonMistake": "Forgetting the * 1000 and comparing milliseconds against seconds. The boundary lands in 1970, every row qualifies, and the count silently equals the whole table.",
+    "performance": "Keep the indexed column bare on one side of the comparison. This is the single most valuable performance habit for time-series filtering.",
+    "qaRelevance": "Rolling-window counts are the foundation of every monitoring alert. Getting the unit conversion right once and reusing it prevents a whole family of bugs."
+  }
+},
+{
+  "id": "L6-Q02", "level": 6, "difficulty": "medium",
+  "title": "Daily event volume",
+  "scenario": "You want the daily trend line for the last week to see whether volume is stable.",
+  "task": "Return the event date as day and the count as n for the last 7 days, sorted by day.",
+  "tables": ["Events"],
+  "skills": ["date_trunc", "GROUP BY", "epoch conversion"],
+  "expected": "Seven or eight rows showing daily totals.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Grouping by day means collapsing each timestamp to midnight of its day.",
+    "date_trunc('day', ts) does exactly that.",
+    "Convert first: to_timestamp(\"Time\"/1000), then truncate.",
+    "Filter with a millisecond boundary in WHERE, and GROUP BY the truncated date."
+  ],
+  "solution": "SELECT date_trunc('day', to_timestamp(\"Time\" / 1000))::date AS day,\n       count(*)                                            AS n\nFROM \"Events\"\nWHERE \"Time\" >= extract(epoch FROM now() - interval '7 days') * 1000\nGROUP BY 1\nORDER BY day;",
+  "explanation": {
+    "breakdown": "date_trunc rounds a timestamp down to the requested precision. Casting to ::date drops the time part entirely, which makes the output cleaner.",
+    "why": "The WHERE clause still filters on the raw bigint so the index remains usable; only the surviving rows are converted for grouping.",
+    "commonMistake": "Filtering on the converted expression as well, which discards the index and scans everything.",
+    "alternative": "date_trunc('week', ...) or ('month', ...) for coarser trends — same shape, different argument.",
+    "qaRelevance": "A daily series is the first thing to look at when someone reports 'events dropped'. It immediately tells you whether the change is gradual or a cliff."
+  }
+},
+{
+  "id": "L6-Q03", "level": 6, "difficulty": "medium",
+  "title": "Yesterday versus the day before",
+  "scenario": "Operations reports fewer events yesterday. Before investigating cameras, confirm the overall change.",
+  "task": "Return one row with day_before and yesterday as counts, and the difference (yesterday minus day_before) as delta.",
+  "tables": ["Events"],
+  "skills": ["conditional aggregation", "FILTER", "date boundaries"],
+  "expected": "Two totals and a negative delta.",
+  "checkColumnNames": true,
+  "hints": [
+    "Both numbers come from the same table over two adjacent date ranges — one pass with two filtered aggregates.",
+    "The date of an event is to_timestamp(\"Time\"/1000)::date.",
+    "Yesterday is CURRENT_DATE - 1; the day before is CURRENT_DATE - 2.",
+    "count(*) FILTER (WHERE ... = CURRENT_DATE - 2) and the same for - 1, then subtract."
+  ],
+  "solution": "SELECT\n  count(*) FILTER (WHERE to_timestamp(\"Time\"/1000)::date = CURRENT_DATE - 2) AS day_before,\n  count(*) FILTER (WHERE to_timestamp(\"Time\"/1000)::date = CURRENT_DATE - 1) AS yesterday,\n  count(*) FILTER (WHERE to_timestamp(\"Time\"/1000)::date = CURRENT_DATE - 1)\n  - count(*) FILTER (WHERE to_timestamp(\"Time\"/1000)::date = CURRENT_DATE - 2) AS delta\nFROM \"Events\"\nWHERE \"Time\" >= extract(epoch FROM CURRENT_DATE - 2) * 1000\n  AND \"Time\" <  extract(epoch FROM CURRENT_DATE)     * 1000;",
+  "explanation": {
+    "breakdown": "The outer WHERE narrows to the two days of interest so the scan stays small; the FILTER clauses then split those rows into the two buckets.",
+    "why": "Note the half-open range: >= start AND < end. Using <= CURRENT_DATE would include today's partial data and make the comparison misleading.",
+    "commonMistake": "Comparing a full day against a partial day. It is the most common reason a 'drop' turns out to be an artefact of when the query ran.",
+    "alternative": "A grouped query with LAG() computes day-over-day deltas for every day at once — see Level 7.",
+    "qaRelevance": "Always confirm the aggregate change is real before drilling into individual devices. Half of reported 'drops' are boundary errors in the report itself."
+  }
+},
+{
+  "id": "L6-Q04", "level": 6, "difficulty": "hard",
+  "title": "Which camera dropped the most yesterday",
+  "scenario": "Total volume is down. Now find which camera is responsible.",
+  "task": "For each camera return Name as camera, its day-before count as day_before, its yesterday count as yesterday, and the difference as delta. Show only cameras where delta is negative. Sort by delta ascending then camera.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["conditional aggregation", "JOIN", "HAVING", "date boundaries"],
+  "expected": "The cameras that fell, worst first. ANPR-Gate-01 leads by a wide margin.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Same two-bucket idea as before, but grouped per camera.",
+    "Join to VideoSources so the output names the camera.",
+    "The negative-delta test involves aggregates, so it belongs in HAVING.",
+    "HAVING count(*) FILTER (yesterday) - count(*) FILTER (day_before) < 0."
+  ],
+  "solution": "SELECT v.\"Name\" AS camera,\n       count(*) FILTER (WHERE to_timestamp(e.\"Time\"/1000)::date = CURRENT_DATE - 2) AS day_before,\n       count(*) FILTER (WHERE to_timestamp(e.\"Time\"/1000)::date = CURRENT_DATE - 1) AS yesterday,\n       count(*) FILTER (WHERE to_timestamp(e.\"Time\"/1000)::date = CURRENT_DATE - 1)\n       - count(*) FILTER (WHERE to_timestamp(e.\"Time\"/1000)::date = CURRENT_DATE - 2) AS delta\nFROM \"Events\" e\nJOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nWHERE e.\"Time\" >= extract(epoch FROM CURRENT_DATE - 2) * 1000\n  AND e.\"Time\" <  extract(epoch FROM CURRENT_DATE)     * 1000\nGROUP BY v.\"Name\"\nHAVING count(*) FILTER (WHERE to_timestamp(e.\"Time\"/1000)::date = CURRENT_DATE - 1)\n     - count(*) FILTER (WHERE to_timestamp(e.\"Time\"/1000)::date = CURRENT_DATE - 2) < 0\nORDER BY delta ASC, camera;",
+  "explanation": {
+    "breakdown": "Per-camera two-bucket comparison. HAVING repeats the expression because an output alias is not visible to HAVING.",
+    "why": "A camera that produced nothing on both days never appears — it forms no group. A camera that died before the window is invisible to this query entirely, which is why the silent-camera check is separate.",
+    "commonMistake": "Assuming the biggest absolute drop is the biggest problem. A camera falling from 40 to 6 matters far more proportionally than one falling from 900 to 880.",
+    "alternative": "Compute the percentage change as well, to rank by proportion rather than absolute volume.",
+    "qaRelevance": "This is step two of the standard drop investigation: confirm the total, then attribute it to devices."
+  }
+},
+{
+  "id": "L6-Q05", "level": 6, "difficulty": "hard",
+  "title": "Find the hours with no events at all",
+  "scenario": "A gap in the data is invisible in a GROUP BY, because a missing hour simply produces no row. You need to see the holes.",
+  "task": "For camera 'PERIM-North-07' over the last 5 days, return every hour as hour_slot and the event count as n, including hours with zero events. Sort by hour_slot.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["generate_series", "LEFT JOIN", "date_trunc", "COALESCE"],
+  "expected": "120 hourly rows, nearly all with n = 0 because this camera stopped reporting.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "A GROUP BY can only produce rows for data that exists. To show absent hours you must generate them.",
+    "generate_series(start, stop, interval '1 hour') produces a row per hour.",
+    "LEFT JOIN the generated series to the aggregated events, so hours with no match survive.",
+    "Wrap the count in COALESCE(..., 0), or count a column from the right-hand side so unmatched hours count zero."
+  ],
+  "solution": "WITH slots AS (\n  SELECT generate_series(\n           date_trunc('hour', now()) - interval '5 days',\n           date_trunc('hour', now()),\n           interval '1 hour') AS hour_slot\n),\nhits AS (\n  SELECT date_trunc('hour', to_timestamp(e.\"Time\"/1000)) AS hour_slot,\n         count(*) AS n\n  FROM \"Events\" e\n  JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\n  WHERE v.\"Name\" = 'PERIM-North-07'\n    AND e.\"Time\" >= extract(epoch FROM now() - interval '5 days') * 1000\n  GROUP BY 1\n)\nSELECT s.hour_slot,\n       COALESCE(h.n, 0) AS n\nFROM slots s\nLEFT JOIN hits h ON h.hour_slot = s.hour_slot\nORDER BY s.hour_slot;",
+  "explanation": {
+    "breakdown": "generate_series manufactures the complete set of hour slots. The real data is aggregated separately, then LEFT JOINed onto that skeleton so every slot appears.",
+    "why": "Absence of data produces absence of rows. Any monitoring query built purely on GROUP BY is blind to outages by construction.",
+    "commonMistake": "Reporting 'no anomalies' because the grouped result looked continuous. It looked continuous because the gaps were not rows.",
+    "alternative": "In Level 7, LAG() over the actual events finds unusually large gaps without generating a full calendar — cheaper for sparse checks.",
+    "performance": "generate_series is cheap; the cost is the aggregation. Bound the range tightly.",
+    "qaRelevance": "This is the query that proves a camera went dark and, crucially, exactly when. That timestamp is what you correlate against deployment and network logs."
+  }
+},
+{
+  "id": "L6-Q06", "level": 6, "difficulty": "medium",
+  "title": "The most recent event overall",
+  "scenario": "You want a quick liveness check: when did the system last record anything?",
+  "task": "Return the latest event time as a timestamp named last_event_at, and how many whole minutes ago that was as minutes_ago.",
+  "tables": ["Events"],
+  "skills": ["MAX", "to_timestamp", "date arithmetic"],
+  "expected": "One row. Note that future-dated events make this later than now.",
+  "checkColumnNames": true,
+  "hints": [
+    "max(\"Time\") gives the largest epoch value; convert it for display.",
+    "to_timestamp(max(\"Time\")/1000) turns it into a timestamp.",
+    "Subtracting that from now() gives an interval.",
+    "extract(epoch from interval)/60 converts an interval to minutes."
+  ],
+  "solution": "SELECT to_timestamp(max(\"Time\") / 1000)                                    AS last_event_at,\n       floor(extract(epoch FROM now() - to_timestamp(max(\"Time\")/1000)) / 60)::int AS minutes_ago\nFROM \"Events\";",
+  "explanation": {
+    "breakdown": "max() finds the extreme value; the conversion and arithmetic are applied to that single result.",
+    "why": "The answer is negative, because this dataset contains future-dated events. A liveness check that trusts max() would report the system as healthy even if it had stopped hours ago.",
+    "commonMistake": "Using max(\"Time\") as a liveness signal without excluding future timestamps. A single bad clock makes the check permanently green.",
+    "alternative": "max(\"Time\") FILTER (WHERE \"Time\" <= extract(epoch from now())*1000) ignores impossible values.",
+    "qaRelevance": "Monitoring built on max(timestamp) fails silently when one device has a wrong clock. Always bound the maximum at the present moment."
+  }
+},
+{
+  "id": "L6-Q07", "level": 6, "difficulty": "hard",
+  "title": "Events straddling the reporting boundary",
+  "scenario": "Yesterday's report and today's dashboard disagree. One possibility: events that happened yesterday but arrived today, counted differently depending on which timestamp the report uses.",
+  "task": "Count events where Time falls on yesterday but ReceivedTime falls on today or later. Return one column named late_arrivals.",
+  "tables": ["Events"],
+  "skills": ["date boundaries", "two timestamp columns", "epoch conversion"],
+  "expected": "The events whose occurrence day and arrival day differ across the midnight boundary.",
+  "checkColumnNames": true,
+  "hints": [
+    "Two independent date conditions, one on each timestamp column.",
+    "Convert each with to_timestamp(col/1000)::date.",
+    "Time must equal CURRENT_DATE - 1; ReceivedTime must be CURRENT_DATE or later.",
+    "Both conditions in the same WHERE, joined with AND."
+  ],
+  "solution": "SELECT count(*) AS late_arrivals\nFROM \"Events\"\nWHERE to_timestamp(\"Time\"/1000)::date         = CURRENT_DATE - 1\n  AND to_timestamp(\"ReceivedTime\"/1000)::date >= CURRENT_DATE;",
+  "explanation": {
+    "breakdown": "The two columns are filtered independently, isolating rows where the event day and the arrival day disagree.",
+    "why": "A report grouped by Time and a dashboard grouped by ReceivedTime will disagree by exactly this set of rows. Neither is wrong — they answer different questions.",
+    "commonMistake": "Assuming the two timestamps are interchangeable. Choosing between 'when it happened' and 'when we learned about it' is a product decision that must be stated in the report.",
+    "alternative": "Comparing date_trunc('day', ...) of both columns finds all mismatches, not only forward ones — including the clock-skewed camera whose events arrive before they happen.",
+    "qaRelevance": "This is the root cause behind a large share of 'the numbers do not match' tickets. Establishing which timestamp each report uses usually resolves the argument in minutes."
+  }
+},
+{
+  "id": "L6-Q08", "level": 6, "difficulty": "hard",
+  "title": "Weekly volume per event type",
+  "scenario": "Product wants a weekly trend by analytic type to see which features are growing.",
+  "task": "Return the week start as week, the EventName as event_name, and the count as n, for the four highest-volume event names only. Sort by week then event_name.",
+  "tables": ["Events"],
+  "skills": ["date_trunc week", "GROUP BY", "subquery in WHERE", "IN"],
+  "expected": "A grid of weeks by event type.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Truncate to week with date_trunc('week', ...), which returns the Monday of that week.",
+    "You need to restrict to the top four event names, which is itself an aggregate question.",
+    "Use a subquery in WHERE: \"EventName\" IN (SELECT ... GROUP BY ... ORDER BY count(*) DESC LIMIT 4).",
+    "Group the outer query by both week and event name."
+  ],
+  "solution": "SELECT date_trunc('week', to_timestamp(\"Time\"/1000))::date AS week,\n       \"EventName\"                                        AS event_name,\n       count(*)                                           AS n\nFROM \"Events\"\nWHERE \"EventName\" IN (\n  SELECT \"EventName\" FROM \"Events\"\n  GROUP BY \"EventName\"\n  ORDER BY count(*) DESC\n  LIMIT 4\n)\nGROUP BY 1, 2\nORDER BY week, event_name;",
+  "explanation": {
+    "breakdown": "The IN subquery is evaluated once to produce the four names; the outer query then groups the filtered rows by week and name.",
+    "why": "date_trunc('week', ...) anchors weeks on Monday in PostgreSQL. If your business week starts on Sunday you must offset, and getting this wrong shifts every number by a day.",
+    "commonMistake": "Assuming weeks start on Sunday, or comparing week numbers across systems that use different conventions.",
+    "alternative": "A window function ranking event names by volume avoids the second scan of Events.",
+    "performance": "The subquery scans the whole table once. On a large table, restrict its time range too.",
+    "qaRelevance": "Weekly aggregation smooths daily noise and makes genuine trend breaks visible — the right granularity for release-over-release comparison."
+  }
+},
+{
+  "id": "L6-Q09", "level": 6, "difficulty": "hard",
+  "title": "Last seen, per camera",
+  "scenario": "You want a fleet liveness table: when did each camera last report, and is that acceptable?",
+  "task": "For every camera return Name as camera, the last event timestamp as last_seen, hours since then as hours_since, and a status of 'SILENT' when more than 48 hours or never, else 'ALIVE'. Include cameras with no events. Sort by camera.",
+  "tables": ["VideoSources", "Events"],
+  "skills": ["LEFT JOIN", "MAX", "CASE", "NULL handling", "date arithmetic"],
+  "expected": "All 42 cameras, with the silent one and the two never-reporting ones flagged.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Start from VideoSources and LEFT JOIN Events so cameras with none survive.",
+    "max(e.\"Time\") over the group is NULL for a camera with no events.",
+    "Converting NULL yields NULL, so the CASE must test for NULL explicitly before comparing hours.",
+    "Group by the camera name, and remember aggregates ignore NULLs."
+  ],
+  "solution": "SELECT v.\"Name\" AS camera,\n       to_timestamp(max(e.\"Time\") / 1000) AS last_seen,\n       floor(extract(epoch FROM now() - to_timestamp(max(e.\"Time\")/1000)) / 3600)::int AS hours_since,\n       CASE\n         WHEN max(e.\"Time\") IS NULL THEN 'SILENT'\n         WHEN now() - to_timestamp(max(e.\"Time\")/1000) > interval '48 hours' THEN 'SILENT'\n         ELSE 'ALIVE'\n       END AS status\nFROM \"VideoSources\" v\nLEFT JOIN \"Events\" e ON e.\"VideoSourceId\" = v.\"Id\"\nGROUP BY v.\"Name\"\nORDER BY camera;",
+  "explanation": {
+    "breakdown": "LEFT JOIN keeps every camera; max() over an empty set returns NULL rather than erroring; the CASE handles that NULL first.",
+    "why": "Two different situations produce a SILENT verdict — a camera that stopped and a camera that never started. Both need attention, and the NULL branch is what makes the second one visible.",
+    "commonMistake": "Using an inner join, which drops exactly the cameras you most need to see.",
+    "alternative": "A correlated scalar subquery per camera reads more clearly to some, at similar cost here.",
+    "performance": "One aggregate over the whole Events table. A production version should restrict to a recent window.",
+    "qaRelevance": "This is the single most useful operational query in the whole course: one row per device, one column that says whether to worry."
+  }
+}
+]

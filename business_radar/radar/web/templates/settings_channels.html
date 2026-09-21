@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Channels - business_radar{% endblock %}
+{% block content %}
+
+<div class="spread" style="margin-bottom:var(--s-4)">
+  <div>
+    <h1>Channels</h1>
+    <p class="small">What each channel can do right now, and what is missing if it cannot.
+      Nothing on this page turns a channel on: going live means touching four different kinds
+      of thing in four different places, and a button here would collapse three of them into
+      one click.</p>
+  </div>
+</div>
+
+{% set email = statuses['EMAIL'] %}
+<div class="panel">
+  <header>
+    <span class="panel-title">Email</span>
+    <span class="badge {{ 'ok' if email.configured else 'info' }}">
+      {{ email.mode|replace('_',' ') }}</span>
+  </header>
+
+  {% if not email.configured %}
+    <p>{{ email.sentence() }}</p>
+    <h3 style="font-size:var(--t-xs);letter-spacing:.05em;color:var(--text-2);
+               margin-top:var(--s-3)">STILL NEEDED</h3>
+    <ul style="margin:0 0 var(--s-3);padding-left:var(--s-4)">
+      {% for item in email.missing %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+  {% else %}
+    <dl class="facts">
+      <dt>Gmail account</dt><dd>{{ config.email.address }}</dd>
+      <dt>App Password</dt><dd>set &mdash; the value is never displayed, here or anywhere</dd>
+      <dt>Unsubscribe</dt><dd>{{ config.email.unsubscribe_mailto }}</dd>
+      <dt>Today</dt><dd class="num">{{ sent_today }} of {{ policy.daily_send_cap }} sent</dd>
+    </dl>
+  {% endif %}
+
+  <h3 style="font-size:var(--t-xs);letter-spacing:.05em;color:var(--text-2);
+             margin-top:var(--s-4)">THE FOUR LOCKS</h3>
+  <ul class="locks">
+    {% for label, is_open, detail in email.locks %}
+      <li>
+        <span class="lock-state {{ 'open' if is_open else 'shut' }}">
+          {{ 'OPEN' if is_open else 'SHUT' }}</span>
+        <span>{{ label }} <span class="small">&mdash; {{ detail }}</span></span>
+      </li>
+    {% endfor %}
+  </ul>
+  <p class="reason">Locks 1 and 2 live in config.yaml and contact_policy; lock 3 is set by the
+    launcher that starts the service; lock 4 is config/.env. Nothing here can change any of
+    them, deliberately.</p>
+
+  <p class="small" style="margin-top:var(--s-3)">{{ email.note }}</p>
+
+  {% if not email.configured %}
+    <p class="small">What works right now: research, reports, verification, selection,
+      drafting, policy checks, previews and approvals. An approved message is written to
+      data/outbox/ and is <strong>not</strong> sent.</p>
+  {% endif %}
+</div>
+
+{% for key in ['WHATSAPP','PHONE','MANUAL'] %}
+  {% set s = statuses[key] %}
+  <div class="panel">
+    <header>
+      <span class="panel-title">{{ key|lower|capitalize }}</span>
+      <span class="badge {{ 'ok' if s.configured and s.switch_on else 'mute' }}">
+        {{ s.mode|replace('_',' ') }}</span>
+    </header>
+    <p>{{ s.note }}</p>
+    {% if not s.switch_on %}
+      <p class="reason">{{ s.sentence() }}</p>
+    {% endif %}
+  </div>
+{% endfor %}
+
+<div class="panel">
+  <header><span class="panel-title">Contact policy</span></header>
+  <dl class="facts">
+    <dt>Automation mode</dt><dd>{{ policy.automation_mode }} &mdash; the only mode this build
+      can honour, because it is the only one with an implemented approval source</dd>
+    <dt>Minimum days between outreach</dt><dd class="num">{{ policy.min_days_between_outreach }}</dd>
+    <dt>Maximum attempts</dt><dd class="num">{{ policy.max_attempts }}</dd>
+    <dt>Maximum follow-ups</dt><dd class="num">{{ policy.max_followups }}</dd>
+    <dt>Verification valid for</dt><dd class="num">{{ policy.verification_valid_days }} days</dd>
+    <dt>Daily send cap</dt><dd class="num">{{ policy.daily_send_cap }}</dd>
+    <dt>Minimum gap between sends</dt><dd class="num">{{ policy.send_min_gap_seconds }}s</dd>
+  </dl>
+  <p class="reason">Free Gmail allows 500 recipients a day. The working limit here is 15-25 and
+    it is set by policy, not by Google: one recipient per message, a per-business body,
+    per-message human approval, a working unsubscribe. Raising it past 25 changes what this is.</p>
+</div>
+{% endblock %}

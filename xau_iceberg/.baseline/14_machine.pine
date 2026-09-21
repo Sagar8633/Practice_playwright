@@ -1,0 +1,711 @@
+// ============================================================================
+//  SECTION 14 : SETUP STATE MACHINE  --  THE SPINE
+//
+//  Every detector above this line answers ONE question about the current bar.
+//  This section is the only thing in the file that remembers a TRADE IDEA
+//  across bars: it births a Setup when SECTION 5 reports a sweep, walks it
+//  forward through the SetupState ladder as each later detector confirms, and
+//  emits exactly one signal per direction per bar when the chain completes.
+//
+//  THE TWO INVARIANTS THAT MAKE THIS NON-REPAINTING
+//    (1) RANK STRICTLY INCREASES. f_smEnter() refuses any transition whose
+//        target rank is not strictly greater than the current rank. There is
+//        no backward edge and no self-edge, so a state, once stamped with its
+//        stBar, can never be revisited, re-stamped or downgraded. A label
+//        anchored to a historical transition cannot move because the
+//        transition itself cannot be un-made.
+//    (2) `dead` IS ABSORBING. f_smStep() only looks at ranks 0..6 (idle..armed)
+//        and `dead` is rank 8, so nothing can leave it.
+//
+//  The ARCHITECT RELAXED the draft's stricter "advancement is always rank+1"
+//  rule to plain "rank strictly increases", for one concrete reason: SECTION 10
+//  offers a Confirmation entry mode that has no retest leg, and under rank+1
+//  the bos -> armed edge it needs was ILLEGAL. Mode 1 was unreachable code.
+//  Strict monotonicity preserves the whole non-repaint argument and legalises
+//  exactly the skips the entry modes require. Both legal skip edges are
+//  bos -> armed and bos -> retest -> armed, and which one fires is decided by
+//  SECTION 10's trigger, not by a mode string duplicated here.
+//
+//  THE ARMED STATE HAS A REAL ONE-BAR DEADLINE. In the draft the step window
+//  stopped at `retest`, so `armed` was never evaluated and its documented
+//  timeout was dead code: a setup that armed but was not the one promoted sat
+//  in `armed` forever, was never invalidated, never timed out, never evicted
+//  (the eviction filter protects everything above rank 0) and was still counted
+//  as live - so the direction ran out of slots and silently went dark for the
+//  rest of the chart. Here `armed` is inside the step window, the deadline is
+//  enforced, and step 14b additionally reaps every armed setup that was not
+//  promoted on the bar it armed. No setup can survive its own arming bar
+//  unpromoted.
+//
+//  ONE ARRAY, NOT TWO. The per-direction cap is the invariant that matters and
+//  it is enforced on a dir-filtered LIVE count; a second array would only give
+//  SECTION 16 two things to draw and two places to get the index wrong.
+//
+//  TWO-PHASE DEATH, WITH NO EXCEPTIONS. kill() marks dead, stamps the reason
+//  and stamps stBar - it never frees a handle. The NEXT bar's step 1 calls
+//  .wipe() and removes the element. Eviction goes through the SAME path (the
+//  draft freed and removed an evicted victim inline, which is a second death
+//  path and the one place a handle can be freed twice or a death can vanish
+//  before SECTION 15 sees it). Therefore: exactly one call site for .wipe(),
+//  exactly one code path, every death visible to SECTION 15 on its death bar.
+//
+//  WHAT THIS SECTION DOES NOT DO, on purpose:
+//    * NO detection. It never asks whether a sweep happened; it reads sweepSigL.
+//    * NO risk maths. f_riskPlan() belongs to SECTION 11 and is called here
+//      EXACTLY ONCE per setup, on the bar it arms, with entryPx = close.
+//    * NO gating. gateL / gateS are SECTION 13's first-match-wins verdict and
+//      this section treats them as the single authority.
+//    * NO zone lifecycle. SECTION 6 owns array<IcebergZone>; a Setup carries
+//      the zone ID as identity plus a frozen snapshot of the bounds so its
+//      drawing and its stop cannot move after the fact.
+// ============================================================================
+
+// ---------------------------------------------------------------- S14 GROUPS
+G14L = "14 - Setup Lifecycle"
+G14T = "14 - Setup Lifecycle Timeouts"
+
+// ---------------------------------------------------------------- S14 INPUTS
+i_maxSetupsPerDir = input.int(2, "Max live setups per direction", minval = 1,
+     maxval = 4, group = G14L,
+     tooltip = "Hard cap on concurrent UNFINISHED setups per direction. At 1 " +
+               "the engine commits to the first candidate and ignores a better " +
+               "one that forms behind it; at 4 four half-formed candidates " +
+               "compete for the same confirmations and the chart fills with " +
+               "boxes that never arm. Open trades do NOT consume a slot.",
+     display = display.none)
+
+i_maxHopsPerBar = input.int(2, "Max state hops per bar", minval = 1, maxval = 3,
+     group = G14L,
+     tooltip = "How many forward states one setup may advance inside a single " +
+               "confirmed bar. 1 is strictest - one state per candle - and " +
+               "will miss the single decisive candle that IS both the sweep " +
+               "and the absorption, which is how a real gold trap prints. At 3 " +
+               "a very clean candle can carry a setup from birth to armed in " +
+               "one bar; nothing repaints, but the six confirmations are then " +
+               "six facts about one candle rather than six about six.",
+     display = display.none)
+
+i_conflictMode = input.string("Best score wins", "Long vs short on one bar",
+     options = ["Best score wins", "Kill both"], group = G14L,
+     tooltip = "What to do when a long and a short arm on the SAME bar. An " +
+               "EXACT score tie always resolves to NO TRADE under either " +
+               "setting: equal scores mean the model has no opinion. 'Allow " +
+               "both' is deliberately not offered - a TradingView strategy " +
+               "holds one net position, so the second entry would reverse the " +
+               "first rather than hedge it, and the indicator would then " +
+               "disagree with its own strategy twin.",
+     display = display.none)
+
+i_killOnSessionEnd = input.bool(true, "Kill everything at the day rollover",
+     group = G14L,
+     tooltip = "Gold's structure does not survive the settlement gap and the " +
+               "thin rollover hour. ON discards every unfinished setup AND " +
+               "flattens every open idea at the new trading day (the day " +
+               "boundary is the one set by the timezone input in SECTION 0). " +
+               "OFF carries swept levels and absorption zones across the gap, " +
+               "which is how a setup ends up anchored to a price that no " +
+               "longer exists.",
+     display = display.none)
+
+i_barsToAbsorb = input.int(4, "TRAP: bars from sweep to rejection", minval = 1,
+     maxval = 50, group = G14T,
+     tooltip = "Deadline on the `idle` and `absorbing` states. If absorption " +
+               "has not shown itself this fast, nothing was being absorbed - " +
+               "the sweep was just a move. Too low and every setup dies in the " +
+               "trap phase; too high and the engine holds stale ideas through " +
+               "a trend leg that already invalidated them.",
+     display = display.none)
+
+i_barsToBreak = input.int(8, "BREAK: bars from rejection to BOS", minval = 1,
+     maxval = 100, group = G14T,
+     tooltip = "Deadline on `rejected` and `displaced`. Real absorption is " +
+               "followed by displacement quickly; a slow grind away from the " +
+               "zone is drift, not a reversal, and this is what expires it.",
+     display = display.none)
+
+i_barsToRetest = input.int(15, "ENTRY: bars from BOS to armed", minval = 1,
+     maxval = 200, group = G14T,
+     tooltip = "Deadline on `bos` and `retest` - the most generous window, " +
+               "because the pullback is the part that legitimately takes time. " +
+               "Set it very high and the engine will chase a displacement that " +
+               "has already decayed; set it very low and only V-shaped " +
+               "retests ever arm.",
+     display = display.none)
+
+i_barsInTrade = input.int(60, "TRADE: max bars in trade (time stop)", minval = 5,
+     maxval = 500, group = G14T,
+     tooltip = "THE time stop, and the only one in the file - SECTION 15's " +
+               "virtual ledger reads this same input so the setup and its " +
+               "trade record can never expire on different bars. An idea that " +
+               "has neither reached target nor been stopped in this many bars " +
+               "has lost its edge and is booked flat at the close.",
+     display = display.none)
+
+i_invalidAtrMult = input.float(0.35, "Hard-invalidation buffer (x ATR)",
+     minval = 0.0, maxval = 2.0, step = 0.05, group = G14L,
+     tooltip = "Passed to f_tol(), so the buffer is this many ATR but never " +
+               "thinner than one spread. A CLOSE this far the wrong side of " +
+               "the sweep extreme, the zone or the displacement origin kills " +
+               "the setup. At 0 the buffer collapses to one spread and normal " +
+               "quote breathing will kill valid setups; above ~1.0 nothing is " +
+               "ever invalidated and every setup dies of timeout instead, " +
+               "which throws away the most informative failure signal there is.",
+     display = display.none)
+
+// ----------------------------------------------------------------------------
+//  14.1  THE INTRABAR PATH POLICY - declared here, obeyed everywhere
+//
+//  Bar-resolution data genuinely cannot tell whether the stop or the target was
+//  touched first inside a bar that contains both. This file ALWAYS assumes the
+//  STOP FILLED FIRST. That is deliberately pessimistic, it can only make the
+//  reported result worse than reality, and it is what keeps this ledger honest
+//  next to TradingView's broker emulator, which guesses the path from the bar's
+//  open and will therefore look better than this on exactly the bars that
+//  matter most. SECTION 15 reuses these two primitives rather than restating
+//  the rule, so there is one definition of "touched" in the file.
+// ----------------------------------------------------------------------------
+f_pathStop(int dir, float px) => na(px) ? false : dir > 0 ? low  <= px : high >= px
+f_pathTgt (int dir, float px) => na(px) ? false : dir > 0 ? high >= px : low  <= px
+
+// ----------------------------------------------------------------------------
+//  14.2  RANK AND DEADLINE
+//  f_smRankOf() is the SAME ladder as Setup.rank() in SECTION 2, taking a bare
+//  SetupState instead of a Setup, because f_smEnter() has to rank a state it
+//  has not committed yet. If one is ever edited the other must follow.
+//  Deadlines are PER STATE, measured from stBar. The frozen Setup type carries
+//  stBar and no phaseBar, so a per-PHASE clock is not expressible; per state is
+//  marginally more generous (a rejected -> displaced hop restarts the BREAK
+//  clock) and is stated here rather than quietly assumed.
+// ----------------------------------------------------------------------------
+f_smRankOf(SetupState st) =>
+    switch st
+        SetupState.idle      => 0
+        SetupState.absorbing => 1
+        SetupState.rejected  => 2
+        SetupState.displaced => 3
+        SetupState.bos       => 4
+        SetupState.retest    => 5
+        SetupState.armed     => 6
+        SetupState.active    => 7
+        => 8
+
+f_smDeadline(SetupState st) =>
+    switch st
+        SetupState.idle      => i_barsToAbsorb
+        SetupState.absorbing => i_barsToAbsorb
+        SetupState.rejected  => i_barsToBreak
+        SetupState.displaced => i_barsToBreak
+        SetupState.bos       => i_barsToRetest
+        SetupState.retest    => i_barsToRetest
+        SetupState.armed     => 1
+        SetupState.active    => i_barsInTrade
+        => 1000000
+
+// ----------------------------------------------------------------------------
+//  14.3  THE COLLECTION + THE ARM TRIGGERS
+// ----------------------------------------------------------------------------
+var array<Setup> setups = array.new<Setup>()
+
+// Hoisted to global scope and evaluated on EVERY bar, unconditionally, so that
+// nothing inside the state machine's lazily-evaluated conditions can skip them.
+// gateL / gateS are SECTION 13's first-match-wins verdict and carry the score
+// test, the R:R test, the cooldowns and the duplicate test, so they are the one
+// authority here; coreOk is SECTION 12's "the evidence chain actually closed"
+// flag and is required as well, because a contender that cannot show core
+// evidence must not be allowed to arm and then veto its mirror.
+s14ArmL = entryRawL and coreOkL and gateL == NoTradeReason.ok
+s14ArmS = entryRawS and coreOkS and gateS == NoTradeReason.ok
+
+// ----------------------------------------------------------------------------
+//  14.4  LIFECYCLE PRIMITIVES
+//  kill() NEVER frees a drawing. There is exactly one .wipe() call site in this
+//  file and it is in the garbage collector at step 1.
+// ----------------------------------------------------------------------------
+f_smKill(Setup s, NoTradeReason why) =>
+    s.st    := SetupState.dead
+    s.stBar := bar_index
+    s.death := why
+    true
+
+f_smEnter(Setup s, SetupState nxt) =>
+    // INVARIANT (1), enforced in code rather than asserted in prose.
+    bool ok = f_smRankOf(nxt) > s.rank()
+    if ok
+        s.st    := nxt
+        s.stBar := bar_index
+    ok
+
+f_smLive(int dir) =>
+    // An ACTIVE setup is a position, not a candidate, so it does not consume a
+    // candidate slot. Counting it would let one open trade block every new
+    // birth in its direction for i_barsInTrade bars - which on 15M is the best
+    // part of a session - for no reason connected to the quality of the idea.
+    int c = 0
+    int n = setups.size()
+    if n > 0
+        for i = 0 to n - 1
+            Setup s = setups.get(i)
+            int r = s.rank()
+            if s.dir == dir and r <= 6
+                c += 1
+    c
+
+f_smHasActive(int dir) =>
+    bool found = false
+    int n = setups.size()
+    if n > 0
+        for i = 0 to n - 1
+            Setup s = setups.get(i)
+            if s.dir == dir and s.st == SetupState.active
+                found := true
+    found
+
+// Weakest EVICTABLE peer: rank 0 (`idle`) only, oldest first. THE eviction
+// policy in one line - a newborn may only ever displace another newborn.
+// Anything that has reached `absorbing` has shown evidence and is protected.
+f_smWeakestIdx(int dir) =>
+    int wIdx = -1
+    int wBar = 2147483647
+    int n    = setups.size()
+    if n > 0
+        for i = 0 to n - 1
+            Setup s = setups.get(i)
+            if s.dir == dir and s.st == SetupState.idle and s.bornBar < wBar
+                wIdx := i
+                wBar := s.bornBar
+    wIdx
+
+f_smMakeRoom(int dir) =>
+    bool ok = f_smLive(dir) < i_maxSetupsPerDir
+    if not ok
+        int wi = f_smWeakestIdx(dir)
+        if wi >= 0
+            f_smKill(setups.get(wi), NoTradeReason.dEvicted)
+            ok := true
+    ok
+
+// ----------------------------------------------------------------------------
+//  14.5  HARD INVALIDATION - returns the reason that ACTUALLY fired
+//  Returning a NoTradeReason rather than a bool is what lets SECTION 15's
+//  histogram say WHICH thesis broke instead of which stage it broke in. All
+//  three tests use CLOSE, never a wick: a wick through the level is the trap
+//  this system trades, so killing on it would delete the setup at the exact
+//  moment it becomes valid. Every test is a true mirror - the only difference
+//  between long and short is the sign of dir.
+// ----------------------------------------------------------------------------
+f_smInvalid(Setup s) =>
+    bool  up  = s.dir > 0
+    float buf = f_tol(i_invalidAtrMult)
+    int   r   = s.rank()
+    NoTradeReason why = NoTradeReason.ok
+
+    // (1) The sweep was genuine continuation, not a trap: there was nothing
+    //     resting there to absorb.
+    if not na(s.swpExt)
+        bool gone = up ? close < s.swpExt - buf : close > s.swpExt + buf
+        if gone
+            why := NoTradeReason.dFalseSweep
+
+    // (2) Price closed back through the absorption zone. Only meaningful once
+    //     the rejection has printed - before that the zone is still forming.
+    if why == NoTradeReason.ok and r >= 2 and not na(s.zoneTop) and not na(s.zoneBot)
+        bool lost = up ? close < s.zoneBot - buf : close > s.zoneTop + buf
+        if lost
+            why := NoTradeReason.dZoneBroken
+
+    // (3) SECTION 6 itself declared the zone dead. Only applied when the zone
+    //     the setup was born on is still the CURRENT one for its side - a
+    //     superseded zone is not an invalidated one.
+    if why == NoTradeReason.ok and r >= 2 and s.zoneId != 0
+        int  zid   = up ? zoneIdL    : zoneIdS
+        bool alive = up ? zoneAliveL : zoneAliveS
+        if s.zoneId == zid and not alive
+            why := NoTradeReason.dZoneBroken
+
+    // (4) The displacement leg has been fully retraced after the break, so the
+    //     break was a fake. dispOrg is the leg's near edge (SECTION 8's
+    //     canonical scalar), which is why this is a real test and not a
+    //     restatement of (2).
+    if why == NoTradeReason.ok and r >= 4 and not na(s.dispOrg)
+        bool faded = up ? close < s.dispOrg - buf : close > s.dispOrg + buf
+        if faded
+            why := NoTradeReason.dBosFail
+    why
+
+// ----------------------------------------------------------------------------
+//  14.6  GEOMETRY FREEZE
+//  Returns NoTradeReason.ok to accept the transition, or the reason to kill on.
+//  Everything a Setup will ever be drawn or traded from is copied into the
+//  object HERE, at the instant the detector that owns it says so, and is never
+//  recomputed. That is the whole of the "historical labels do not move" claim.
+// ----------------------------------------------------------------------------
+f_smCapture(Setup s, SetupState nxt) =>
+    bool up = s.dir > 0
+    NoTradeReason why = NoTradeReason.ok
+    switch nxt
+        SetupState.absorbing =>
+            s.qAbsorb := up ? qAbsorbL : qAbsorbS
+            s.qRvol   := up ? qRvolL   : qRvolS
+            s.zoneId  := up ? zoneIdL  : zoneIdS
+            s.zoneTop := up ? zoneTopL : zoneTopS
+            s.zoneBot := up ? zoneBotL : zoneBotS
+            // Never freeze an na or inverted zone: it would produce a stop on
+            // the wrong side of entry and a plausible-looking plan with
+            // nonsensical geometry that only ever exits on the time stop.
+            bool bad = na(s.zoneTop) or na(s.zoneBot) or s.zoneTop <= s.zoneBot
+            if bad
+                why := NoTradeReason.zoneDead
+            why
+        SetupState.rejected =>
+            s.qReject := up ? qRejectL : qRejectS
+            why
+        SetupState.displaced =>
+            s.qDisp   := up ? qDispL   : qDispS
+            s.dispOrg := up ? dispOrgL : dispOrgS
+            s.dispFar := up ? dispFarL : dispFarS
+            if na(s.dispOrg)
+                why := NoTradeReason.noDisplace
+            why
+        SetupState.bos =>
+            s.qBos    := up ? qBosL      : qBosS
+            s.bosLvl  := up ? bosLvlL    : bosLvlS
+            s.retestLv := up ? retestLvlL : retestLvlS
+            // No "is the level already broken" re-test here: SECTION 9 owns
+            // break detection and bosSigL is by construction the bar the close
+            // took the level out. Re-deriving it here is how displaced -> bos
+            // turns into a rubber stamp that counts the displacement leg as
+            // its own confirmation.
+            if na(s.bosLvl)
+                why := NoTradeReason.noBos
+            why
+        SetupState.armed =>
+            s.score   := up ? scoreL   : scoreS
+            s.qRetest := up ? qRetestL : qRetestS
+            // ---------------------------------------------------------------
+            // THE ONE AND ONLY f_riskPlan() CALL FOR THIS SETUP.
+            // entryPx is the CLOSE of this confirmed bar - the bar SECTION 10
+            // emitted the trigger on - not a price frozen at the BOS up to
+            // i_barsToRetest bars ago. The plan is then frozen into the object
+            // and every later read (stop, targets, R:R, the alert payload, the
+            // strategy's order) is that same plan. SECTION 12 called
+            // f_riskPlan() earlier on this same bar with entryPx = close for a
+            // provisional qRr, so the two agree by construction.
+            // ---------------------------------------------------------------
+            float swpLo = up ? s.swpExt : na
+            float swpHi = up ? na       : s.swpExt
+            RiskPlan pl = f_riskPlan(s.dir, close, s.zoneBot, s.zoneTop,
+                 swpLo, swpHi, lastSwLo, lastSwHi,
+                 up ? invAnchorL : invAnchorS)
+            s.plan := pl
+            if na(pl)
+                why := NoTradeReason.poorRr
+            else if not pl.ok
+                why := pl.why == NoTradeReason.ok ? NoTradeReason.poorRr : pl.why
+            why
+        => why
+
+// ----------------------------------------------------------------------------
+//  14.7  THE TRANSITION SWITCH
+//  Pure: no side effects, no ta.* calls. Every detector was precomputed at
+//  global scope above, so v6's lazy and/or cannot skip one and desynchronise
+//  its own history. Two edges leave `bos` - straight to `armed` when SECTION 10
+//  triggers (Confirmation mode, and also a Retest-mode trigger that lands on
+//  the touch bar itself) and to `retest` when price merely reaches the frozen
+//  retest level. Both increase rank, so both are legal.
+// ----------------------------------------------------------------------------
+f_smRetestTouch(Setup s) =>
+    // f_tol(0.05) and not an input: this edge is DESCRIPTIVE - what arms a
+    // setup is SECTION 10's trigger, never this touch - so a second tolerance
+    // knob here would only be a way to disagree with SECTION 10.
+    float t = f_tol(0.05)
+    na(s.retestLv) ? false :
+         s.dir > 0 ? low <= s.retestLv + t : high >= s.retestLv - t
+
+f_smNext(Setup s) =>
+    bool up  = s.dir > 0
+    bool arm = up ? s14ArmL : s14ArmS
+    // Hoisted out of the switch arm: a multi-line ternary inside a switch arm is
+    // legal but unreadable, and f_smRetestTouch() is pure so evaluating it for
+    // every state costs nothing and cannot desynchronise anything.
+    SetupState fromBos = arm ? SetupState.armed : f_smRetestTouch(s) ? SetupState.retest : s.st
+    switch s.st
+        SetupState.idle      => (up ? absSigL  : absSigS)  ? SetupState.absorbing : s.st
+        SetupState.absorbing => (up ? rejSigL  : rejSigS)  ? SetupState.rejected  : s.st
+        SetupState.rejected  => (up ? dispSigL : dispSigS) ? SetupState.displaced : s.st
+        SetupState.displaced => (up ? bosSigL  : bosSigS)  ? SetupState.bos       : s.st
+        SetupState.bos       => fromBos
+        SetupState.retest    => arm ? SetupState.armed : s.st
+        => s.st
+
+// One transition attempt. PRIORITY IS LOAD-BEARING: invalidation outranks
+// timeout outranks advancement, so a setup that is both stale and broken always
+// records the more informative reason.
+f_smStep(Setup s) =>
+    bool moved = false
+    int  r     = s.rank()
+    if r <= 6
+        NoTradeReason inv = f_smInvalid(s)
+        if inv != NoTradeReason.ok
+            f_smKill(s, inv)
+            moved := true
+        else if bar_index - s.stBar >= f_smDeadline(s.st)
+            f_smKill(s, NoTradeReason.dTimeout)
+            moved := true
+        else
+            SetupState nxt = f_smNext(s)
+            if nxt != s.st
+                NoTradeReason why = f_smCapture(s, nxt)
+                if why == NoTradeReason.ok
+                    f_smEnter(s, nxt)
+                else
+                    f_smKill(s, why)
+                moved := true
+    moved
+
+f_smAdvance(Setup s) =>
+    int  hops = 0
+    bool go   = true
+    while go and hops < i_maxHopsPerBar
+        go := f_smStep(s)
+        hops += 1
+    hops
+
+// ----------------------------------------------------------------------------
+//  14.8  COLLECTION PASSES
+//  Every loop freezes its bound in a local first. v6 re-evaluates a for header's
+//  `to` expression on every iteration, so `for i = 0 to setups.size() - 1` while
+//  pushing or removing inside the body silently changes the iteration count.
+//  The GC iterates DOWNWARD so a removal never disturbs an index still to be
+//  visited, guarded by `if n > 0` because `for i = -1 to 0` on an empty array
+//  counts UP and then indexes -1, which v6 reads as "last element".
+// ----------------------------------------------------------------------------
+f_smGc() =>
+    int n = setups.size()
+    if n > 0
+        for i = n - 1 to 0
+            Setup s = setups.get(i)
+            // stBar < bar_index: a setup killed on THIS bar stays one more bar
+            // so SECTION 15 can record its death and SECTION 16 can grey it out.
+            if s.st == SetupState.dead and s.stBar < bar_index
+                s.wipe()
+                setups.remove(i)
+    setups.size()
+
+f_smFlush(NoTradeReason why) =>
+    int n = setups.size()
+    if n > 0
+        for i = 0 to n - 1
+            Setup s = setups.get(i)
+            if s.st != SetupState.dead
+                f_smKill(s, why)
+    true
+
+f_smPass() =>
+    int n = setups.size()          // frozen: nothing is added or removed in here
+    if n > 0
+        for i = 0 to n - 1
+            f_smAdvance(setups.get(i))
+    n
+
+// Best armed setup in a direction, by the score FROZEN on this setup at its own
+// arm capture. Ties on score break on the older setup, which is deterministic
+// and independent of array order.
+f_smBestArmed(int dir) =>
+    int   idx  = -1
+    float best = -1.0
+    int   bBar = 2147483647
+    int   n    = setups.size()
+    if n > 0
+        for i = 0 to n - 1
+            Setup s = setups.get(i)
+            if s.dir == dir and s.st == SetupState.armed
+                float sc = nz(s.score, -1.0)
+                if sc > best or (sc == best and s.bornBar < bBar)
+                    best := sc
+                    bBar := s.bornBar
+                    idx  := i
+    idx
+
+// No setup may survive the bar it armed on. The one promoted at step 14 is
+// already `active` by the time this runs, so this cannot touch it - which is
+// why the reaper needs no "keep this index" argument and cannot get it wrong.
+f_smReapArmed(int dir, NoTradeReason why) =>
+    int n = setups.size()
+    if n > 0
+        for i = 0 to n - 1
+            Setup s = setups.get(i)
+            if s.dir == dir and s.st == SetupState.armed
+                f_smKill(s, why)
+    true
+
+// ----------------------------------------------------------------------------
+//  14.9  EXPORTED SIGNAL SURFACE
+//  Recomputed from false / -1 every bar. sigIdxL/S index into `setups` and are
+//  valid only on the bar the signal fires; the GC shifts indices on the next
+//  bar, which is why nothing may cache them.
+// ----------------------------------------------------------------------------
+longSignal  = false
+shortSignal = false
+sigIdxL     = -1
+sigIdxS     = -1
+
+// ============================================================================
+//  THE CANONICAL PER-BAR ORDER. This ordering IS the non-repainting argument,
+//  so it is written out as a list rather than left to be inferred from the
+//  file's line order.
+//
+//   1. GARBAGE COLLECT   free the handles of everything that died on a PREVIOUS
+//                        bar and remove it. The only .wipe() call site.
+//   1b SESSION FLUSH     day rollover kills every non-dead setup.
+//   2. LEVELS            SECTION 4  - liquidity map, VWAP, day/week extremes
+//   3. PRESSURE          SECTION 0  - rvol, delta proxy, buy/sell pressure
+//   4. SWEEP             SECTION 5  - sweepSigL/S, extremes, quality
+//   5. ABSORPTION        SECTION 6  - zones, absSigL/S
+//   6. REJECTION         SECTION 7  - rejSigL/S
+//   7. DISPLACEMENT      SECTION 8  - dispSigL/S, origin, FVG
+//   8. STRUCTURE / BOS   SECTIONS 3 + 9 - swings, bosSigL/S, CHoCH
+//   9. RETEST            SECTION 10 - entryRawL/S, retest level, inv anchor
+//  10. RISK + FILTERS    SECTIONS 11 + 13 - f_riskPlan(), gateL/S
+//  11. SCORING           SECTION 12 - scoreL/S, coreOkL/S, conflictNow
+//       Steps 2-11 are PURE MEASUREMENT. None of them reads setup state, and
+//       every ta.* call in the file lives in them, unconditionally, at global
+//       scope. That is what makes step 12 free to be as branchy as it likes.
+//  12. STATE MACHINE     12a births, then 12b advance. The ONLY writer of
+//                        setup state in the entire file.
+//  13. CONFLICT          best armed long vs best armed short. LOSERS DIE HERE,
+//                        strictly before anything is emitted.
+//  14. SIGNAL            promote the survivors to `active` and publish.
+//  14b REAP              every armed setup not promoted this bar dies now.
+//  15. MANAGEMENT        stop / target / time stop on `active` setups, never on
+//                        the bar that set them active.
+//  16. DRAW              SECTION 16, display only, outside this gate, and it
+//                        never creates, advances, kills or frees anything.
+// ============================================================================
+if confirmed and warmupOk
+    // ---- 1. GARBAGE COLLECT -------------------------------------------------
+    f_smGc()
+
+    // ---- 1b. SESSION FLUSH --------------------------------------------------
+    if i_killOnSessionEnd and newDay
+        f_smFlush(NoTradeReason.dSessionEnd)
+
+    // ---- 12a. BIRTHS --------------------------------------------------------
+    // setupSeq is incremented HERE and not inside a helper: a Pine function may
+    // not reassign a global, and a one-element array counter would be a second
+    // id source to get out of step with SECTION 2B's.
+    if sweepSigL
+        if f_smMakeRoom(1)
+            setupSeq := setupSeq + 1
+            setups.push(Setup.new(id = setupSeq, dir = 1, st = SetupState.idle,
+                 bornBar = bar_index, stBar = bar_index,
+                 swpExt = sweepExtL, qSweep = qSweepL, qLevel = qLevelL))
+    if sweepSigS
+        if f_smMakeRoom(-1)
+            setupSeq := setupSeq + 1
+            setups.push(Setup.new(id = setupSeq, dir = -1, st = SetupState.idle,
+                 bornBar = bar_index, stBar = bar_index,
+                 swpExt = sweepExtS, qSweep = qSweepS, qLevel = qLevelS))
+
+    // ---- 12b. ADVANCE -------------------------------------------------------
+    f_smPass()
+
+    // ---- 13. CONFLICT -------------------------------------------------------
+    int iL = f_smBestArmed(1)
+    int iS = f_smBestArmed(-1)
+    if iL >= 0 and iS >= 0
+        Setup sl = setups.get(iL)
+        Setup ss = setups.get(iS)
+        float cL = nz(sl.score, -1.0)
+        float cS = nz(ss.score, -1.0)
+        // An exact tie means the model has no opinion. NO TRADE, under EVERY
+        // policy - the draft buried this inside one branch, so the promise the
+        // tooltip makes was false for the other.
+        bool tie = cL == cS
+        if tie or i_conflictMode == "Kill both"
+            f_smKill(sl, NoTradeReason.dConflict)
+            f_smKill(ss, NoTradeReason.dConflict)
+            iL := -1
+            iS := -1
+        else if cL > cS
+            f_smKill(ss, NoTradeReason.dConflict)
+            iS := -1
+        else
+            f_smKill(sl, NoTradeReason.dConflict)
+            iL := -1
+
+    // ---- 14. SIGNAL ---------------------------------------------------------
+    // One position per direction. A second entry while one is still open is
+    // refused here rather than left to SECTION 13, which cannot see this array.
+    if iL >= 0
+        if f_smHasActive(1)
+            f_smKill(setups.get(iL), NoTradeReason.tradeOpen)
+        else
+            Setup s = setups.get(iL)
+            f_smEnter(s, SetupState.active)
+            longSignal := true
+            sigIdxL    := iL
+            sigPlanL   := s.plan
+            sigScoreL  := s.score
+            // Duplicate memory for SECTION 13, keyed on the frozen sweep
+            // extreme - the identity of the liquidity event this trade is
+            // built on, which is what "the same setup twice" actually means.
+            array.set(dupLvl, f_slot(1), s.swpExt)
+            array.set(dupBar, f_slot(1), bar_index)
+    if iS >= 0
+        if f_smHasActive(-1)
+            f_smKill(setups.get(iS), NoTradeReason.tradeOpen)
+        else
+            Setup s2 = setups.get(iS)
+            f_smEnter(s2, SetupState.active)
+            shortSignal := true
+            sigIdxS     := iS
+            sigPlanS    := s2.plan
+            sigScoreS   := s2.score
+            array.set(dupLvl, f_slot(-1), s2.swpExt)
+            array.set(dupBar, f_slot(-1), bar_index)
+
+    // ---- 14b. REAP ----------------------------------------------------------
+    // Anything still `armed` lost to a same-direction peer. dEvicted, not
+    // dConflict: the cross-direction losers already died at step 13 and the two
+    // causes must stay distinguishable in SECTION 15's histogram.
+    f_smReapArmed(1,  NoTradeReason.dEvicted)
+    f_smReapArmed(-1, NoTradeReason.dEvicted)
+
+    // ---- 15. MANAGEMENT -----------------------------------------------------
+    // `bar_index > s.stBar` is not a nicety. stBar is stamped when the setup
+    // went active, i.e. at THIS bar's close, and the strategy twin fills at the
+    // NEXT bar's open. Managing the signal bar's own range would book a stop or
+    // a target from price action that happened BEFORE the signal existed, and
+    // the indicator's ledger and the strategy's blotter would then disagree by
+    // construction on exactly the impulse candles that matter.
+    //
+    // WHAT THIS IS AND IS NOT: an `active` Setup is a SLOT and a drawing, not a
+    // position. It is released on the ORIGINAL stop, on TP3, or on the time
+    // stop. The POSITION - partials, the break-even move after TP1, the
+    // R-multiple - is SECTION 15's VTrade and that is the authoritative book.
+    // With break-even enabled the VTrade can therefore close a few bars before
+    // its Setup does. That costs nothing: an active Setup does not consume a
+    // candidate slot (see f_smLive), so a lingering one cannot starve the
+    // engine, and the two are never summed.
+    int nMan = setups.size()
+    if nMan > 0
+        for i = 0 to nMan - 1
+            Setup s3 = setups.get(i)
+            if s3.st == SetupState.active and bar_index > s3.stBar and not na(s3.plan)
+                bool sHit = f_pathStop(s3.dir, s3.plan.stop)
+                bool tHit = f_pathTgt(s3.dir, s3.plan.tp3)
+                if sHit                       // path policy: the stop wins ties
+                    f_smKill(s3, NoTradeReason.dStopped)
+                else if tHit
+                    f_smKill(s3, NoTradeReason.dTarget)
+                else if bar_index - s3.stBar >= i_barsInTrade
+                    f_smKill(s3, NoTradeReason.dTimeStop)
+
+// MEMORY BOUND, since this array is the only unbounded-looking thing here.
+// Within one bar: live <= 2 * i_maxSetupsPerDir (the dir-filtered cap), plus at
+// most that many again killed on this bar and awaiting the next GC, plus two
+// births. Every dead element is removed at the next bar's step 1, so
+// setups.size() <= 4 * i_maxSetupsPerDir + 2 at every point in every bar, i.e.
+// 10 at the default. Against a 500/500/500 drawing budget and 1 box + 1 label +
+// 5 lines per setup that is a 7x margin on the tightest of the three.
+// ========================= END SECTION 14 ===================================

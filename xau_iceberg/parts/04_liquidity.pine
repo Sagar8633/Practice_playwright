@@ -1,0 +1,803 @@
+// ============================================================================
+//  SECTION 4 : LIQUIDITY MAP
+//
+//  THE one array<LiquidityLevel> in the file. Every other module reads this
+//  registry; nobody else builds one. What lives here:
+//    * PDH/PDL/PWH/PWL from the CALENDAR day/week (newDay/newWeek, SECTION 0) -
+//      never from the feed's own daily bar, which on a gold CFD rolls at
+//      17:00/18:00 NY and is 8-9 hours stale by the time London trades,
+//    * one previous-session high/low slot PER SESSION (Asia, London, NY have
+//      INDEPENDENT lifecycles - a shared slot deletes the Asia high at the
+//      London close, i.e. exactly before the session that most often sweeps it),
+//    * the current session high/low, and the calendar day open,
+//    * confirmed swings from SECTION 3, clustered into EQH/EQL,
+//    * ONE manual session-anchored VWAP with sigma bands.
+//
+//  THREE RULES THIS SECTION EXISTS TO ENFORCE
+//  1. MERGING A CLUSTER ALWAYS TAKES THE EXTREME, NEVER THE MEAN. Averaging two
+//     equal highs moves the level DOWN into the range - i.e. it moves a stop
+//     inside the liquidity that stop is supposed to sit beyond. The extreme is
+//     where the resting orders are.
+//  2. A POLARITY FLIP MUST NOT DISQUALIFY A SWEPT LEVEL. A close through PDL is
+//     the sweep this whole system trades. Flipping PDL to "resistance" on that
+//     close would make it ineligible for the long the sweep just created, which
+//     deletes the strongest evidence in the registry at the exact bar it
+//     matters. The break is therefore slow (1.2 ATR AND two confirmed closes)
+//     and a swept level keeps a grace window on the REVERSAL side.
+//  3. ta.vwap() IS BANNED FROM THIS FILE. It raises a RUNTIME ERROR on feeds
+//     that report no volume, and several XAUUSD feeds report none - that kills
+//     the whole script, not just the VWAP. The manual accumulator below
+//     degrades to a TWAP instead.
+//
+//  DELIBERATELY NOT HERE:
+//    * NO volume-profile POC. A 48-bin histogram over 1.5x yesterday's range
+//      quantises to ~0.94 USD per bin - coarser than the entire proximity
+//      window it would be measured against (0.35-0.75 USD) - so "price is at
+//      the POC" would be decided by where the bin grid happened to fall. The
+//      LevelKind.poc member stays in SECTION 1 for a future profile that earns
+//      its resolution; nothing in this build mints one.
+//    * NO VWAP LEVEL in the registry. VWAP is a moving value, the registry is
+//      a map of frozen prices; vwapS / vwapSd are published as values instead.
+//    * NO session strings. SECTION 0 owns session membership in each session's
+//      own IANA zone; this module consumes inAsia / inLondon / inNy.
+// ============================================================================
+
+// ---------------------------------------------------------------- S4 GROUPS
+G4P = "4 - Liquidity: Periods"
+G4C = "4 - Liquidity: Swings & Clusters"
+G4V = "4 - Liquidity: VWAP"
+G4Q = "4 - Liquidity: Proximity & Range"
+
+// ---------------------------------------------------------------- S4 INPUTS
+// One enable/disable per LEVEL KIND, so a user who does not believe in one of
+// them can remove it from the map without touching anything else. NOTE: the
+// toggles govern REGISTRATION ONLY. pdh/pdl are still computed when the daily
+// toggle is off, because the mid-range reference reads them and that veto must
+// not silently switch itself off.
+i_useDaily   = input.bool(true,  "Previous day high / low", group = G4P,
+     tooltip = "PDH/PDL of the previous CALENDAR day in the trading-day timezone. " +
+               "The highest-quality intraday reference on gold. Off removes them " +
+               "from the level map but they are still used as the mid-range " +
+               "reference, which is a range measurement, not a level.",
+     display = display.none)
+i_useWeekly  = input.bool(false, "Previous week high / low", group = G4P,
+     tooltip = "PWH/PWL. Scored highest of all kinds when touched, but on 1M-15M " +
+               "gold price reaches them a few times a month. Off by default so " +
+               "they do not occupy registry slots they rarely earn.",
+     display = display.none)
+i_useSessions= input.bool(true,  "Previous session high / low (per session)",
+     group = G4P,
+     tooltip = "Registers each session's high and low when THAT session closes. " +
+               "Asia, London and NY get independent slots: the Asia high must " +
+               "survive the London close, because the NY session is where it is " +
+               "most often swept.",
+     display = display.none)
+i_useCurSess = input.bool(true,  "Current session high / low", group = G4P,
+     tooltip = "The live session extreme, as a level. It uses the PREVIOUS bar's " +
+               "session extreme and only activates once price has left it (below), " +
+               "because a high printed by the current bar has no resting orders at " +
+               "it - counting it would make 'at a meaningful level' true by " +
+               "construction on every new session extreme.",
+     display = display.none)
+i_csLeaveAtr = input.float(1.20, "Current-session level: leave distance (x ATR)",
+     minval = 0.2, maxval = 5.0, step = 0.05, group = G4P,
+     tooltip = "Price must travel this far from the session extreme before that " +
+               "extreme counts as a level price can RETURN to. At 0.2 the level is " +
+               "live almost immediately and reads as a tautology; above ~2.5 it " +
+               "almost never activates intraday.",
+     display = display.none)
+i_useDayOpen = input.bool(true,  "Day open", group = G4P,
+     tooltip = "The open of the current calendar day, as a NEUTRAL level (it acts " +
+               "as support and resistance depending on which side price approaches " +
+               "from). Weakest of the registered kinds - it needs confluence to " +
+               "clear the quality gate on its own.",
+     display = display.none)
+
+i_useSwings  = input.bool(true,  "Confirmed swing highs / lows", group = G4C,
+     tooltip = "Pivots from SECTION 3, registered at bar_index - pivot RIGHT legs. " +
+               "A lone untested swing scores ~0.30 and cannot clear the quality " +
+               "gate by itself - it has to be touched again, or be confluent with " +
+               "something bigger. That is intended: one pivot is a price, not a pool.",
+     display = display.none)
+i_useEq      = input.bool(true,  "Cluster into equal highs / lows", group = G4C,
+     tooltip = "Swings landing within the tight band of an existing cluster are " +
+               "merged instead of added, and the cluster is promoted to EQH/EQL. " +
+               "Off keeps every pivot as its own separate swing level and disables " +
+               "the promotion entirely (not just the label).",
+     display = display.none)
+i_eqTolATR   = input.float(0.15, "Equal-high / low band (x ATR)", minval = 0.02,
+     maxval = 1.0, step = 0.01, group = G4C,
+     tooltip = "Half-width of the 'same price' band, floored at one spread. The " +
+               "pool band is twice this. It is also the de-duplication band for " +
+               "confluence. Too tight (0.02) and genuine equal highs never cluster; " +
+               "too wide (0.5+) and a whole trend leg becomes one level.",
+     display = display.none)
+i_eqMinTouches = input.int(2, "Swings required to call it equal highs / lows",
+     minval = 2, maxval = 6, group = G4C,
+     tooltip = "How many confirmed swings must sit inside the tight band before the " +
+               "cluster is promoted from a plain swing to EQH/EQL. 2 is the classic " +
+               "definition. Raising it makes EQH rare and the map mostly swings.",
+     display = display.none)
+i_eqMinDip   = input.float(1.00, "Minimum pullback between touches (x ATR)",
+     minval = 0.0, maxval = 5.0, step = 0.05, group = G4C,
+     tooltip = "Two highs only count as TWO touches if price actually pulled away " +
+               "between them. Without it a flat plateau registers as an equal-high " +
+               "pool with double the touch credit. At 0 the gate falls back to the " +
+               "spread floor, so nearly every plateau counts twice; above ~2 ATR " +
+               "almost nothing on 1M gold earns a second touch. Note the pivot " +
+               "still becomes a level either way - what the gate withholds is the " +
+               "TOUCH, not the price.",
+     display = display.none)
+i_eqMaxGap   = input.int(240, "Maximum bars between clustered touches", minval = 20,
+     maxval = 2000, group = G4C,
+     tooltip = "Equal highs are a micro-structure idea: adjacent swings deliberately " +
+               "left level. Two highs days apart that happen to land within " +
+               "tolerance are a coincidence, not an EQH - with ~80 swings spread " +
+               "over a ~100 USD envelope, chance alone produces a dozen of them per " +
+               "week. This is the recency bound that rejects them.",
+     display = display.none)
+
+i_proxAtr    = input.float(0.45, "Level proximity tolerance (x ATR)", minval = 0.05,
+     maxval = 2.0, step = 0.05, group = G4Q,
+     tooltip = "How close price must come for a level to count, floored at one " +
+               "spread by f_tol(). It is also the confluence radius - ONE tolerance " +
+               "for 'near', so the two can never disagree in the dead-volatility " +
+               "regime the floor exists for.",
+     display = display.none)
+i_minLevelQual = input.float(0.40, "Minimum level quality (0..1)", minval = 0.0,
+     maxval = 1.0, step = 0.05, group = G4Q,
+     tooltip = "Quality is kind x touch count, decayed by age. Concrete values at " +
+               "zero touches: prev-week 0.55, prev-day 0.50, prev-session 0.41, " +
+               "current-session 0.33, bare swing 0.30, day open 0.28; a twice-" +
+               "touched equal-high cluster reaches 0.81. At the default 0.40 the " +
+               "period levels stand alone and a lone swing needs a second touch or " +
+               "confluence. This is a LEVEL-QUALITY weight, not a probability.",
+     display = display.none)
+i_conflBonus = input.float(0.15, "Confluence bonus (x the second level's quality)",
+     minval = 0.0, maxval = 0.5, step = 0.05, group = G4Q,
+     tooltip = "Credit for a SECOND, distinct level inside the same proximity " +
+               "window, scaled by how good that second level is. Distinct means " +
+               "further than the equal-high band from the first, so one price event " +
+               "recorded under two kinds cannot pay twice. At 0 confluence is off.",
+     display = display.none)
+i_tightFrac  = input.float(0.45, "Precise-touch fraction of tolerance", minval = 0.1,
+     maxval = 1.0, step = 0.05, group = G4Q,
+     tooltip = "Inside the mid-range veto, only a touch this precise still counts " +
+               "as being AT a level. At 1.0 the veto stops applying to proximity at " +
+               "all; at 0.1 nothing survives it.",
+     display = display.none)
+i_midBand    = input.float(0.15, "Mid-range band (+/- around 0.50)", minval = 0.0,
+     maxval = 0.45, step = 0.01, group = G4Q,
+     tooltip = "Price is 'in the middle' when its position in the PREVIOUS day's " +
+               "range is within this of 0.50. Inside the band liquidity credit is " +
+               "cut and a touch must be precise. 0 disables the mid-range veto.",
+     display = display.none)
+i_minDayRangeAtr = input.float(8.0, "Minimum reference range for the veto (x ATR)",
+     minval = 1.0, maxval = 40.0, step = 0.5, group = G4Q,
+     tooltip = "When yesterday's range is narrower than this there is no meaningful " +
+               "'middle' - the whole day is one balance area - so the mid-range veto " +
+               "switches off rather than vetoing the entire chart.",
+     display = display.none)
+i_midPenalty = input.float(0.45, "Mid-range liquidity credit multiplier", minval = 0.0,
+     maxval = 1.0, step = 0.05, group = G4Q,
+     tooltip = "What the level sub-score is multiplied by when price is mid-range. " +
+               "At 1.0 being mid-range costs nothing; at 0 it zeroes the level " +
+               "evidence outright.",
+     display = display.none)
+
+i_maxLevels  = input.int(40, "Maximum levels kept", minval = 10, maxval = 200,
+     group = G4Q,
+     tooltip = "Hard cap on the registry. Over the cap, the lowest-quality " +
+               "UNPROTECTED level is evicted, at most 4 per bar. The period kinds " +
+               "are never evicted, so the true upper bound is this + 13 + 4.",
+     display = display.none)
+i_maxLevelAge = input.int(1500, "Forget a level after (bars since last touch)",
+     minval = 100, maxval = 10000, group = G4Q,
+     tooltip = "Age is measured from the LAST touch, not from creation, so a pool " +
+               "price keeps returning to stays young. Keyed on creation instead, a " +
+               "five-touch pool would be deleted for being old on the bar after its " +
+               "fifth touch, which is the opposite of the intent.",
+     display = display.none)
+i_decayBars  = input.int(900, "Quality decay constant (bars)", minval = 50,
+     maxval = 10000, group = G4Q,
+     tooltip = "Untouched levels fade as exp(-age / this), floored below. At 900 " +
+               "the floor binds at ~825 bars; past that a stale level holds its " +
+               "floor quality until the age prune removes it. Protected period " +
+               "kinds do not decay at all - yesterday's high does not get weaker " +
+               "because the session is long.",
+     display = display.none)
+i_decayFloor = input.float(0.40, "Quality decay floor", minval = 0.1, maxval = 1.0,
+     step = 0.05, group = G4Q,
+     tooltip = "The most an old level can be discounted. At 1.0 age costs nothing.",
+     display = display.none)
+i_lvlBreakAtr = input.float(1.20, "Decisive break distance (x ATR)", minval = 0.2,
+     maxval = 5.0, step = 0.05, group = G4Q,
+     tooltip = "How far beyond a level price must CLOSE, on two consecutive " +
+               "confirmed bars, before the level flips polarity. Deliberately far: " +
+               "at 0.40 ATR on 1M gold this is 0.14 USD, below the spread, so every " +
+               "level near price would ping-pong its polarity on noise and 'which " +
+               "direction may use this level' becomes a coin flip.",
+     display = display.none)
+i_sweepGrace = input.int(12, "Swept level stays usable for (bars)", minval = 0,
+     maxval = 200, group = G4Q,
+     tooltip = "After a decisive break, the level remains eligible for the REVERSAL " +
+               "direction for this many bars, and keeps full quality. This is the " +
+               "sweep-and-reverse setup: the level was taken out, and that is the " +
+               "reason to trade back through it. At 0 a broken level is unusable by " +
+               "the very setup its break creates.",
+     display = display.none)
+i_flipPenalty = input.float(0.60, "Quality kept after a break", minval = 0.1,
+     maxval = 1.0, step = 0.05, group = G4Q,
+     tooltip = "Once the grace window above has expired, a level price closed " +
+               "decisively through is worth this fraction of its unbroken quality. " +
+               "Applied once, not compounded, so chop cannot drive a level to zero.",
+     display = display.none)
+
+// -------------------------------------------------------------- S4 HELPERS
+// ONE registry. Declared before the helpers that push into it.
+var array<LiquidityLevel> levels = array.new<LiquidityLevel>()
+
+// Managed slots: exactly one live level per period kind, held by REFERENCE
+// rather than found by scanning for its kind. A reference survives the array
+// index shifts that pruning causes; an index does not, and in v6 a stale index
+// of -1 is a legal read of the LAST element rather than a loud error.
+int S4_PDH = 0
+int S4_PDL = 1
+int S4_PWH = 2
+int S4_PWL = 3
+int S4_PAH = 4      // previous ASIA   high / low
+int S4_PAL = 5
+int S4_PLH = 6      // previous LONDON high / low
+int S4_PLL = 7
+int S4_PNH = 8      // previous NY     high / low
+int S4_PNL = 9
+int S4_CSH = 10     // current session high / low
+int S4_CSL = 11
+int S4_DOP = 12     // day open
+var array<LiquidityLevel> s4Slot = array.new<LiquidityLevel>(13)
+
+// Period accumulators, one slot per period. Index 0 day, 1 week, 2 Asia,
+// 3 London, 4 NY. Arrays rather than 20 scalars because scalars cannot be
+// written from inside a helper and the alternative is five copy-pasted blocks.
+int S4_DAY = 0
+int S4_WK  = 1
+int S4_ASI = 2
+int S4_LON = 3
+int S4_NYS = 4
+var array<float> s4PHi  = array.new<float>(5, na)   // running, current period
+var array<float> s4PLo  = array.new<float>(5, na)
+var array<float> s4PrvH = array.new<float>(5, na)   // previous COMPLETED period
+var array<float> s4PrvL = array.new<float>(5, na)
+var array<bool>  s4Full = array.new<bool>(5, false) // current period seen from bar 1
+var array<bool>  s4PrvF = array.new<bool>(5, false) // previous period was complete
+
+// Tolerances. Every one goes through f_tol(), so every one is floored at a
+// spread and NOTHING here is denominated in ticks: mintick is 0.01 on most
+// XAUUSD feeds and 0.001 on others, and a tick-denominated floor silently
+// mis-scales by 10x between them.
+s4EqTol   = f_tol(i_eqTolATR)
+// TWICE THE FLOORED BAND, not the floor of twice the band. f_tol() clamps at one
+// spread (0.25 USD), and on 1M gold 0.15 x aRef is ~0.05 - so BOTH f_tol(0.15)
+// and f_tol(0.30) return the floor and the tight/wide pair collapses to one
+// number. That kills the asymmetric ratchet bound below AND makes the demotion
+// branch (bestD > s4EqTol) unreachable, because every merge already passed
+// d <= lim == s4EqTol. Deriving it from s4EqTol keeps the documented 2:1 ratio
+// at every timeframe, floor or no floor.
+s4PoolTol = 2.0 * s4EqTol
+s4ProxTol = f_tol(i_proxAtr)
+s4BrkTol  = f_tol(i_lvlBreakAtr)
+
+// Protected kinds are never pruned, never decayed and never evicted. They are
+// exactly the kinds a managed slot points at, which is what keeps every slot
+// reference pointing at a level that is still IN the array.
+f_s4Prot(LevelKind k) =>
+    k == LevelKind.pdh or k == LevelKind.pdl or k == LevelKind.pwh
+         or k == LevelKind.pwl or k == LevelKind.psh or k == LevelKind.psl
+         or k == LevelKind.csh or k == LevelKind.csl or k == LevelKind.dayOpenK
+
+// Live quality: kind x touches (SECTION 2 owns that rubric), aged, and
+// discounted once the break grace has expired. Age runs from the LAST touch.
+f_s4Score(LiquidityLevel L) =>
+    // Explicit float throughout: in v6 int/int is a FRACTION, but math.max over
+    // two ints is an int, and mixing the two inside math.exp is how a decay
+    // silently becomes a step function.
+    float age = math.max(float(bar_index - math.max(L.lastTouch, L.createdBar)), 0.0)
+    float dec = f_s4Prot(L.kind) ? 1.0 :
+         math.max(math.exp(-age / float(i_decayBars)), i_decayFloor)
+    // The break discount waits for the grace window. Applying it AT the break
+    // would strip the swept level of its quality on the exact bar the sweep
+    // makes it most relevant - the same bug as flipping it out of eligibility.
+    float pen = L.swept and (bar_index - L.lastTouch) > i_sweepGrace ? i_flipPenalty : 1.0
+    f_clamp01(L.quality() * dec * pen)
+
+// Eligibility. A SUPERSET of SECTION 2's strict isFor(): it additionally admits
+// NEUTRAL levels (the day open acts both ways) and a swept level inside its
+// grace window (rule 2 at the top of this section).
+f_s4Elig(LiquidityLevel L, int dir) =>
+    bool normal = L.side == 0 or L.side == -dir
+    bool grace  = L.swept and L.side == dir and (bar_index - L.lastTouch) <= i_sweepGrace
+    L.active and not na(L.price) and (normal or grace)
+
+// The ONE insertion point. touches starts at 0 - "touched once since birth" is
+// one merge - which is what calibrates SECTION 2's quality() rubric: a fresh
+// previous-day extreme scores 0.50 and a bare swing 0.30.
+f_s4Add(float px, LevelKind k, int sd) =>
+    LiquidityLevel L = LiquidityLevel.new(price = px, kind = k, side = sd,
+         createdBar = bar_index, touches = 0, lastTouch = bar_index,
+         strength = 0.0, active = true, swept = false)
+    L.strength := f_s4Score(L)
+    array.push(levels, L)
+    L
+
+// Period roll: the OUTGOING level is demoted to a plain swing, not deleted.
+// Yesterday's high is still a price the market remembers; it just stops being
+// THE previous-day high, and it re-enters the ordinary swing lifecycle where it
+// can be merged into, aged and eventually pruned. Its side is already correct
+// (+1 was born from a high), so the demotion cannot manufacture a neutral level.
+f_s4Roll(int slot, float px, LevelKind k, int sd, bool on) =>
+    LiquidityLevel old = array.get(s4Slot, slot)
+    if not na(old)
+        old.kind     := sd > 0 ? LevelKind.swingHi : LevelKind.swingLo
+        old.strength := f_s4Score(old)
+    array.set(s4Slot, slot, na)
+    if on and not na(px)
+        array.set(s4Slot, slot, f_s4Add(px, k, sd))
+
+// Tracked slot: ONE object whose price is re-pointed in place. Used for the
+// live session extreme and the day open, which would otherwise push a new
+// level on every bar / every day and flood the registry with stale neutrals.
+f_s4Track(int slot, float px, LevelKind k, int sd, bool on) =>
+    LiquidityLevel L = array.get(s4Slot, slot)
+    bool live = on and not na(px)
+    if na(L)
+        if live
+            array.set(s4Slot, slot, f_s4Add(px, k, sd))
+    else
+        L.price  := px
+        L.active := live
+    // The trailing expression is load-bearing. Without it the if/else IS the
+    // return value, and its two branches disagree: the first ends in a void
+    // array.set() while the second ends in an assignment, which Pine types as
+    // series bool. "Return type of one of the if or switch blocks is not
+    // compatible" is exactly that mismatch.
+    live
+
+// Cluster merge. Returns true when the pivot was absorbed by an existing
+// cluster, false when it needs a level of its own.
+//
+// THE BAND IS ASYMMETRIC, and that is what bounds the ratchet. Because the
+// cluster price is always the EXTREME (rule 1), a merge that EXTENDS the
+// extreme moves the level; N successive higher highs each inside the wide band
+// would walk a "level" up an entire trend leg while every single step looked
+// like a legal merge. So extension is allowed only inside the TIGHT band while
+// retraction gets the wide one: total drift is bounded by touches x eqTol.
+f_s4Merge(float px, int sd, int atBar, bool fresh) =>
+    int   hit   = -1
+    float bestD = 1.0e20
+    int   n     = array.size(levels)
+    // Clustering OFF means clustering off, not "cluster silently and skip the
+    // label": without this guard two pivots landing on the same mintick-rounded
+    // gold price still merge on exact equality, and 4000.00 twice is common.
+    if n > 0 and i_useEq
+        for i = 0 to n - 1
+            LiquidityLevel L = array.get(levels, i)
+            bool ck = L.kind == LevelKind.swingHi or L.kind == LevelKind.swingLo or
+                      L.kind == LevelKind.eqh     or L.kind == LevelKind.eql
+            if L.active and ck and L.side == sd and not na(L.price)
+                bool  ext = sd > 0 ? px > L.price : px < L.price
+                float lim = ext ? s4EqTol : s4PoolTol
+                float d   = math.abs(px - L.price)
+                int   gap = atBar - L.lastTouch
+                // NEAREST cluster, not the first one found: binding to an older,
+                // farther cluster while a closer one exists is how hot clusters
+                // end up carrying stale timestamps.
+                if d <= lim and gap <= i_eqMaxGap and d < bestD
+                    bestD := d
+                    hit   := i
+    bool merged = hit >= 0
+    if merged
+        LiquidityLevel L = array.get(levels, hit)
+        L.price     := sd > 0 ? math.max(L.price, px) : math.min(L.price, px)
+        L.lastTouch := atBar
+        if fresh
+            // A touch is only a touch if price genuinely left and came back.
+            L.touches := L.touches + 1
+        // Promotion is by the tightness of THIS merge: touches + 1 is the number
+        // of swings in the cluster, since creation contributes one at touches = 0.
+        // A merge WIDER than the tight band demotes the cluster back to a plain
+        // swing - the stored price is the envelope's extreme, so a wide merge is
+        // evidence the cluster is a sloped shelf, not a pair of equal highs.
+        if bestD <= s4EqTol and L.touches + 1 >= i_eqMinTouches
+            L.kind := sd > 0 ? LevelKind.eqh : LevelKind.eql
+        else if bestD > s4EqTol
+            L.kind := sd > 0 ? LevelKind.swingHi : LevelKind.swingLo
+        L.strength := f_s4Score(L)
+    merged
+
+// ----------------------------------------------------------------------------
+//  4.1  PERIOD EXTREMES
+//  Rolled on the CALENDAR boundaries SECTION 0 publishes. `full` marks a period
+//  observed from its own first bar: the partially loaded period at the left edge
+//  of history is tracked but never PUBLISHED, so a fresh chart load and a
+//  scrolled-back one agree about what PDH is.
+// ----------------------------------------------------------------------------
+// Pivot-aligned running extremes for the dip gate. The pivot under test sits at
+// bar_index - i_pivotRight, so the accumulator must be fed that bar's data. Fed
+// with the LIVE bar instead, it swallows the i_pivotRight bars AFTER the pivot -
+// and any post-pivot impulse then launders a flat plateau into "a real dip".
+s4LoPiv = low[i_pivotRight]
+s4HiPiv = high[i_pivotRight]
+s4PivBar = bar_index - i_pivotRight
+
+var float s4RunLo  = na
+var float s4RunHi  = na
+var float dayOpen  = na
+var float s4CsHiP  = na     // PRIOR-bar running high of the active session
+var float s4CsLoP  = na
+var bool  s4LeftHi = false  // price has travelled away from that extreme
+var bool  s4LeftLo = false
+
+// Session edges. SECTION 0 owns membership; these are just its transitions.
+s4AsiNew = inAsia   and not inAsia[1]
+s4LonNew = inLondon and not inLondon[1]
+s4NyNew  = inNy     and not inNy[1]
+s4AsiEnd = not inAsia   and inAsia[1]
+s4LonEnd = not inLondon and inLondon[1]
+s4NyEnd  = not inNy     and inNy[1]
+// Most specific session wins the "current" label during the London/NY overlap.
+s4CurSl  = inNy ? S4_NYS : inLondon ? S4_LON : inAsia ? S4_ASI : -1
+
+if confirmed and warmupOk
+    // --- (a) close the period that just ended, then open the new one --------
+    if newDay
+        array.set(s4PrvH, S4_DAY, array.get(s4PHi,  S4_DAY))
+        array.set(s4PrvL, S4_DAY, array.get(s4PLo,  S4_DAY))
+        array.set(s4PrvF, S4_DAY, array.get(s4Full, S4_DAY))
+        array.set(s4PHi,  S4_DAY, na)
+        array.set(s4PLo,  S4_DAY, na)
+        array.set(s4Full, S4_DAY, true)
+        dayOpen := open
+    if newWeek
+        array.set(s4PrvH, S4_WK, array.get(s4PHi,  S4_WK))
+        array.set(s4PrvL, S4_WK, array.get(s4PLo,  S4_WK))
+        array.set(s4PrvF, S4_WK, array.get(s4Full, S4_WK))
+        array.set(s4PHi,  S4_WK, na)
+        array.set(s4PLo,  S4_WK, na)
+        array.set(s4Full, S4_WK, true)
+    // Each session opens and closes on its OWN `if`, never a ternary chain: two
+    // sessions can end on the same bar and a chain silently discards one of them.
+    if s4AsiNew
+        array.set(s4PHi,  S4_ASI, na)
+        array.set(s4PLo,  S4_ASI, na)
+        array.set(s4Full, S4_ASI, true)
+    if s4LonNew
+        array.set(s4PHi,  S4_LON, na)
+        array.set(s4PLo,  S4_LON, na)
+        array.set(s4Full, S4_LON, true)
+    if s4NyNew
+        array.set(s4PHi,  S4_NYS, na)
+        array.set(s4PLo,  S4_NYS, na)
+        array.set(s4Full, S4_NYS, true)
+    if s4AsiEnd
+        array.set(s4PrvH, S4_ASI, array.get(s4PHi,  S4_ASI))
+        array.set(s4PrvL, S4_ASI, array.get(s4PLo,  S4_ASI))
+        array.set(s4PrvF, S4_ASI, array.get(s4Full, S4_ASI))
+    if s4LonEnd
+        array.set(s4PrvH, S4_LON, array.get(s4PHi,  S4_LON))
+        array.set(s4PrvL, S4_LON, array.get(s4PLo,  S4_LON))
+        array.set(s4PrvF, S4_LON, array.get(s4Full, S4_LON))
+    if s4NyEnd
+        array.set(s4PrvH, S4_NYS, array.get(s4PHi,  S4_NYS))
+        array.set(s4PrvL, S4_NYS, array.get(s4PLo,  S4_NYS))
+        array.set(s4PrvF, S4_NYS, array.get(s4Full, S4_NYS))
+
+    // --- (b) fold this bar in. Day and week run 24h; sessions only when open.
+    for s = 0 to 4
+        bool act = (s == S4_DAY or s == S4_WK) ? true :
+                   s == S4_ASI ? inAsia : s == S4_LON ? inLondon : inNy
+        if act
+            float h = array.get(s4PHi, s)
+            float l = array.get(s4PLo, s)
+            array.set(s4PHi, s, na(h) ? high : math.max(h, high))
+            array.set(s4PLo, s, na(l) ? low  : math.min(l, low))
+
+// Published values. A period that was not observed from its first bar publishes
+// na rather than a partial extreme.
+pdh = array.get(s4PrvF, S4_DAY) ? array.get(s4PrvH, S4_DAY) : na
+pdl = array.get(s4PrvF, S4_DAY) ? array.get(s4PrvL, S4_DAY) : na
+pwh = array.get(s4PrvF, S4_WK)  ? array.get(s4PrvH, S4_WK)  : na
+pwl = array.get(s4PrvF, S4_WK)  ? array.get(s4PrvL, S4_WK)  : na
+// Running extremes, as of the last CONFIRMED bar - the forming bar is excluded
+// on purpose, so nothing downstream can read a high that is still moving.
+dayHi = array.get(s4PHi, S4_DAY)
+dayLo = array.get(s4PLo, S4_DAY)
+csHi  = s4CurSl < 0 ? na : array.get(s4PHi, s4CurSl)
+csLo  = s4CurSl < 0 ? na : array.get(s4PLo, s4CurSl)
+
+// ----------------------------------------------------------------------------
+//  4.2  SESSION-ANCHORED VWAP  (manual - ta.vwap() is banned from this file)
+//  Anchored to the shared newDay, which is also the CVD epoch boundary, so the
+//  two series are always talking about the same session.
+//  Sums are accumulated around an ANCHOR PRICE rather than around zero: gold
+//  trades near 4000, so p^2 is ~1.6e7 and E[p^2] - E[p]^2 is a difference of two
+//  huge nearly-equal numbers. Centring on the day's first price makes the
+//  variance a sum of small numbers and the sigma bands trustworthy.
+// ----------------------------------------------------------------------------
+var float s4Anchor = na
+var float s4SdV    = 0.0   // sum d*v
+var float s4SV     = 0.0   // sum v
+var float s4Sd2V   = 0.0   // sum d^2*v
+var float s4SdT    = 0.0   // sum d           (TWAP fallback)
+var float s4Sd2T   = 0.0   // sum d^2
+var float s4NT     = 0.0   // bar count
+
+if confirmed and warmupOk
+    if newDay or na(s4Anchor)
+        s4Anchor := hlc3
+        s4SdV    := 0.0
+        s4SV     := 0.0
+        s4Sd2V   := 0.0
+        s4SdT    := 0.0
+        s4Sd2T   := 0.0
+        s4NT     := 0.0
+    float d = hlc3 - s4Anchor
+    s4SdV  := s4SdV  + d * vol
+    s4SV   := s4SV   + vol
+    s4Sd2V := s4Sd2V + d * d * vol
+    s4SdT  := s4SdT  + d
+    s4Sd2T := s4Sd2T + d * d
+    s4NT   := s4NT   + 1.0
+
+// TWAP fallback, not na: several XAUUSD feeds report zero volume, and a na VWAP
+// would make every downstream `close - vwapS` test na - which on a FLOOR gate
+// reads as "always blocked", a silent total shutdown that looks like a quiet day.
+s4VwUseV = s4SV > 0.0
+s4VwMean = s4VwUseV ? s4SdV / s4SV : (s4NT > 0.0 ? s4SdT / s4NT : 0.0)
+vwapS    = na(s4Anchor) ? hlc3 : s4Anchor + s4VwMean
+s4VwVar  = s4VwUseV ? s4Sd2V / s4SV  - s4VwMean * s4VwMean :
+           s4NT > 0.0 ? s4Sd2T / s4NT - s4VwMean * s4VwMean : 0.0
+vwapSd   = math.sqrt(math.max(s4VwVar, 0.0))
+
+// ----------------------------------------------------------------------------
+//  4.3  REGISTRY MAINTENANCE  (every mutation is inside `confirmed and warmupOk`)
+// ----------------------------------------------------------------------------
+if confirmed and warmupOk
+    // --- (a) period levels. Roll AFTER 4.1 published, so the price pushed here
+    //         is the completed period's, never a developing one.
+    if newDay
+        f_s4Roll(S4_PDH, pdh, LevelKind.pdh,  1, i_useDaily)
+        f_s4Roll(S4_PDL, pdl, LevelKind.pdl, -1, i_useDaily)
+    if newWeek
+        f_s4Roll(S4_PWH, pwh, LevelKind.pwh,  1, i_useWeekly)
+        f_s4Roll(S4_PWL, pwl, LevelKind.pwl, -1, i_useWeekly)
+    if s4AsiEnd
+        f_s4Roll(S4_PAH, array.get(s4PrvF, S4_ASI) ? array.get(s4PrvH, S4_ASI) : na,
+             LevelKind.psh,  1, i_useSessions)
+        f_s4Roll(S4_PAL, array.get(s4PrvF, S4_ASI) ? array.get(s4PrvL, S4_ASI) : na,
+             LevelKind.psl, -1, i_useSessions)
+    if s4LonEnd
+        f_s4Roll(S4_PLH, array.get(s4PrvF, S4_LON) ? array.get(s4PrvH, S4_LON) : na,
+             LevelKind.psh,  1, i_useSessions)
+        f_s4Roll(S4_PLL, array.get(s4PrvF, S4_LON) ? array.get(s4PrvL, S4_LON) : na,
+             LevelKind.psl, -1, i_useSessions)
+    if s4NyEnd
+        f_s4Roll(S4_PNH, array.get(s4PrvF, S4_NYS) ? array.get(s4PrvH, S4_NYS) : na,
+             LevelKind.psh,  1, i_useSessions)
+        f_s4Roll(S4_PNL, array.get(s4PrvF, S4_NYS) ? array.get(s4PrvL, S4_NYS) : na,
+             LevelKind.psl, -1, i_useSessions)
+
+    // --- (b) the live session extreme, as a level price can RETURN to.
+    //     It uses the PRIOR bar's session high and only once price has left it.
+    //     The running high already contains THIS bar's high, so probing it with
+    //     this bar's high gives distance zero on every new session extreme -
+    //     "at a meaningful level" would then be true by construction, which is
+    //     the reaction certifying the cause it is supposed to predict.
+    //     On a session EDGE the carried extreme still belongs to the session that
+    //     just ended, so the leave test is skipped rather than run against a stale
+    //     price - else the first London bar could activate a level at the Asia high
+    //     and call it the current session's.
+    if s4AsiNew or s4LonNew or s4NyNew or s4AsiEnd or s4LonEnd or s4NyEnd
+        s4LeftHi := false
+        s4LeftLo := false
+    else
+        if not na(s4CsHiP) and s4CsHiP - low > f_tol(i_csLeaveAtr)
+            s4LeftHi := true
+        if not na(s4CsLoP) and high - s4CsLoP > f_tol(i_csLeaveAtr)
+            s4LeftLo := true
+        // A NEW session extreme retires the latch. Without this the latch outlives
+        // the price it described: once price has left the session high ONCE, it
+        // stays true for the rest of the session while s4CsHiP keeps re-pointing
+        // at each later high - so the csh level sits live at ~zero distance on
+        // every new session extreme, which is the reaction certifying the cause,
+        // exactly what the leave test above exists to prevent. csHi/csLo already
+        // include this bar (4.1 folded it in); s4CsHiP is still the prior bar's.
+        if not na(csHi) and not na(s4CsHiP) and csHi > s4CsHiP
+            s4LeftHi := false
+        if not na(csLo) and not na(s4CsLoP) and csLo < s4CsLoP
+            s4LeftLo := false
+    f_s4Track(S4_CSH, s4CsHiP, LevelKind.csh,  1, i_useCurSess and s4LeftHi)
+    f_s4Track(S4_CSL, s4CsLoP, LevelKind.csl, -1, i_useCurSess and s4LeftLo)
+    f_s4Track(S4_DOP, dayOpen, LevelKind.dayOpenK, 0, i_useDayOpen)
+
+    // --- (c) swings from SECTION 3, clustered.
+    //     The dip accumulators are fed the PIVOT-ALIGNED bar so their timeline
+    //     matches the pivot's, then reset on registration.
+    s4RunLo := na(s4RunLo) ? s4LoPiv : math.min(s4RunLo, s4LoPiv)
+    s4RunHi := na(s4RunHi) ? s4HiPiv : math.max(s4RunHi, s4HiPiv)
+    if i_useSwings and not na(pvtHi)
+        float dip   = na(s4RunLo) ? 1.0e20 : pvtHi - s4RunLo
+        bool  fresh = dip >= f_tol(i_eqMinDip)
+        if not f_s4Merge(pvtHi, 1, s4PivBar, fresh)
+            f_s4Add(pvtHi, LevelKind.swingHi, 1)
+        s4RunLo := na
+    if i_useSwings and not na(pvtLo)
+        float dip   = na(s4RunHi) ? 1.0e20 : s4RunHi - pvtLo
+        bool  fresh = dip >= f_tol(i_eqMinDip)
+        if not f_s4Merge(pvtLo, -1, s4PivBar, fresh)
+            f_s4Add(pvtLo, LevelKind.swingLo, -1)
+        s4RunHi := na
+
+    // --- (d) breaks, rescore and prune, in ONE downward pass so that removing
+    //     an element cannot skip the next one. The break test is TWO consecutive
+    //     confirmed closes beyond the buffer, written as close and close[1]
+    //     rather than a per-level counter because LiquidityLevel has no counter
+    //     field and a series offset needs none.
+    int n4 = array.size(levels)
+    if n4 > 0
+        float pruneRef = (na(pdh) or na(pdl) or pdh <= pdl) ? aRef * 25.0 : pdh - pdl
+        float pruneDst = math.max(f_tol(18.0), 1.5 * pruneRef)
+        for i = n4 - 1 to 0
+            LiquidityLevel L = array.get(levels, i)
+            // The live session extremes are EXCLUDED from the break test: their
+            // own price moves with the session, so "price closed through it"
+            // establishes nothing durable about where orders rest - it would just
+            // flip the polarity of a level that is about to move anyway.
+            bool trk = L.kind == LevelKind.csh or L.kind == LevelKind.csl
+            if not na(L.price)
+                bool upBrk = close > L.price + s4BrkTol and close[1] > L.price + s4BrkTol
+                bool dnBrk = close < L.price - s4BrkTol and close[1] < L.price - s4BrkTol
+                if not trk and ((L.side > 0 and upBrk) or (L.side < 0 and dnBrk))
+                    // The level is not deleted, it INVERTS: broken resistance is
+                    // support. `swept` timestamps the event through lastTouch, which
+                    // is what the grace window and the discount both read.
+                    L.side      := -L.side
+                    L.swept     := true
+                    L.lastTouch := bar_index
+                L.strength := f_s4Score(L)
+            // Age runs from the last touch. Keyed on creation, a five-touch pool
+            // would be deleted for being old one bar after its fifth touch.
+            bool old  = bar_index - math.max(L.lastTouch, L.createdBar) > i_maxLevelAge
+            // Distance is measured against the DAY'S range, not the bar ATR: "will
+            // price ever come back here" is a question about the day, and an
+            // ATR-scaled answer is 7x tighter on 1M than on 15M for no reason.
+            bool far  = L.touches < 1 and (bar_index - L.createdBar) > 200
+                 and not na(L.price) and math.abs(close - L.price) > pruneDst
+            if (old or far) and not f_s4Prot(L.kind)
+                array.remove(levels, i)
+
+    // --- (e) hard cap. At most 4 evictions per bar, lowest quality first, and
+    //     never a protected kind - which is also what keeps every managed-slot
+    //     reference pointing at a level that is still in the array.
+    for e = 0 to 3
+        if array.size(levels) > i_maxLevels
+            int   worst = -1
+            float wq    = 1.0e20
+            for i = 0 to array.size(levels) - 1
+                LiquidityLevel L = array.get(levels, i)
+                if not f_s4Prot(L.kind) and L.strength < wq
+                    wq    := L.strength
+                    worst := i
+            if worst >= 0
+                array.remove(levels, worst)
+
+    // --- (f) carry the session extreme forward for the NEXT bar's level price.
+    s4CsHiP := s4CurSl < 0 ? na : array.get(s4PHi, s4CurSl)
+    s4CsLoP := s4CurSl < 0 ? na : array.get(s4PLo, s4CurSl)
+
+// ----------------------------------------------------------------------------
+//  4.4  THE QUERY
+//  f_nearestLevel(dir) -> [price, dist, qual, idx]
+//    price : the nearest ELIGIBLE level, or na when the map has nothing for dir
+//    dist  : USD per ounce, NOT ATR multiples and NOT ticks. Compare it against
+//            f_tol(x) like every other distance in this file.
+//    qual  : 0..1, that level's live quality plus the confluence bonus
+//    idx   : its index in `levels`, valid ONLY on the bar it was returned -
+//            pruning shifts indices, and in v6 a stale -1 reads the LAST element
+//            instead of throwing. Snapshot the PRICE if you need to remember it.
+//  A long probes `low` as well as `close`: the sweep wick is the interaction
+//  with the level, and a bar that wicked through and closed back inside has
+//  touched it even though its close did not.
+//
+//  "NEAREST" IS RANKED BY proximity x quality, NOT by distance alone. Distance
+//  alone lets a bare swing 0.05 USD away hide the previous-day high 0.20 USD
+//  away - both inside tolerance, and the one that matters is the one price is
+//  reacting to. Ties, and the case where EVERYTHING is outside tolerance (every
+//  product is then 0), fall back to the genuinely nearest, so `dist` still means
+//  what it says and `near` is still correctly false.
+// ----------------------------------------------------------------------------
+f_nearestLevel(int dir) =>
+    float probe = dir > 0 ? low : high
+    float bPx   = na
+    float bD    = na
+    float bQ    = 0.0
+    float bS    = -1.0
+    int   bI    = -1
+    int   n     = array.size(levels)
+    if n > 0
+        for i = 0 to n - 1
+            LiquidityLevel L = array.get(levels, i)
+            if f_s4Elig(L, dir)
+                float d  = math.min(math.abs(probe - L.price), math.abs(close - L.price))
+                float sc = f_clamp01(1.0 - d / s4ProxTol) * L.strength
+                if sc > bS or (sc == bS and (na(bD) or d < bD))
+                    bD  := d
+                    bS  := sc
+                    bPx := L.price
+                    bQ  := L.strength
+                    bI  := i
+    // Confluence, de-duplicated: credit for ONE genuinely distinct second level
+    // in the same window, scaled by its own quality. Counting array ENTRIES
+    // instead would pay three times for one price - the day high, the session
+    // high and the swing high are routinely the same high wearing three labels.
+    float b2Q = 0.0
+    if not na(bPx) and n > 0 and i_conflBonus > 0.0
+        for i = 0 to n - 1
+            LiquidityLevel L = array.get(levels, i)
+            if f_s4Elig(L, dir)
+                float d = math.min(math.abs(probe - L.price), math.abs(close - L.price))
+                if d <= s4ProxTol and math.abs(L.price - bPx) > s4EqTol and L.strength > b2Q
+                    b2Q := L.strength
+    [bPx, bD, f_clamp01(bQ + i_conflBonus * b2Q), bI]
+
+// ----------------------------------------------------------------------------
+//  4.5  MID-RANGE / NO-MAN'S-LAND
+//  The reference is ALWAYS the previous COMPLETED day. A developing window would
+//  switch the veto off during the quietest hours (a 3-hour Asia range is never
+//  "wide") and on during the first hour, which is the exact inverse of the
+//  intent - and on 1M it would flicker bar to bar.
+// ----------------------------------------------------------------------------
+s4RefRng  = (na(pdh) or na(pdl)) ? na : pdh - pdl
+// The only two raw ATR multiples in this section are here and in the prune
+// fallback, and deliberately so: they size a DAY'S RANGE, they do not ask "is
+// this close enough to be the same price". Flooring an 8-ATR range at one spread
+// through f_tol() would be meaningless - f_tol is for tolerances, not magnitudes.
+rangeWide = not na(s4RefRng) and s4RefRng > i_minDayRangeAtr * aRef
+// NOT clamped: above 1 means price is beyond yesterday's high, below 0 beyond
+// its low, and squashing that to the boundary would hide exactly the extension
+// the rest of the file wants to know about.
+rangePos  = rangeWide ? (close - pdl) / s4RefRng : na
+midRange  = rangeWide and math.abs(rangePos - 0.5) < i_midBand
+
+// ----------------------------------------------------------------------------
+//  4.6  PUBLISHED EVIDENCE
+//  Evaluated ONCE per direction per bar. Long and short are the same expression
+//  with dir flipped - there is no second code path to keep in sync.
+// ----------------------------------------------------------------------------
+[s4PxL, s4DistL, s4QualL, s4IdxL] = f_nearestLevel(1)
+[s4PxS, s4DistS, s4QualS, s4IdxS] = f_nearestLevel(-1)
+
+// "No eligible level" is a fact, not missing data, so it scores 0.0 rather than
+// na: na here would poison the whole setup score instead of costing it a row.
+f_s4Grade(float d, float q) =>
+    na(d) ? 0.0 : f_clamp01((1.0 - f_ramp(d, 0.0, s4ProxTol)) * q *
+         (midRange ? i_midPenalty : 1.0))
+
+qLevelL = f_s4Grade(s4DistL, s4QualL)
+qLevelS = f_s4Grade(s4DistS, s4QualS)
+
+// near AND strong AND (not mid-range OR a genuinely precise touch). The tight
+// override is what keeps a clean tag of a major level tradeable in the middle of
+// the day's range - only VAGUE mid-range proximity is vetoed.
+s4NearL  = not na(s4DistL) and s4DistL <= s4ProxTol
+s4NearS  = not na(s4DistS) and s4DistS <= s4ProxTol
+s4TightL = not na(s4DistL) and s4DistL <= i_tightFrac * s4ProxTol
+s4TightS = not na(s4DistS) and s4DistS <= i_tightFrac * s4ProxTol
+s4MeanL  = s4NearL and s4QualL >= i_minLevelQual and (not midRange or s4TightL)
+s4MeanS  = s4NearS and s4QualS >= i_minLevelQual and (not midRange or s4TightS)
+
+f_atMeaningful(int dir) => dir > 0 ? s4MeanL : s4MeanS
+
+// Price is nowhere in particular: no side has a level worth reacting to. This is
+// the NO LIQUIDITY gate SECTION 13 reads, and it is deliberately direction-free.
+noMansLand = not s4MeanL and not s4MeanS
+// ========================= END SECTION 4 ====================================

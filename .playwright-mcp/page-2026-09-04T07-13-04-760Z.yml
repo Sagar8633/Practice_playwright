@@ -1,0 +1,221 @@
+- generic [ref=e2]:
+  - heading "SRK Swing Scanner → TradingView" [level=1] [ref=e3]
+  - paragraph [ref=e4]: 212 F&O symbols across 6 scripts · 15-minute timeframe · one alert per script
+  - generic [ref=e5]:
+    - strong [ref=e6]: "Your budget: 5 alerts (free plan)."
+    - text: Deploy
+    - strong [ref=e7]: b1–b5
+    - text: below, in that order. The list is sorted by traded value, so b1 carries the 40 busiest F&O stocks and each later batch matters less. b1–b5 covers
+    - strong [ref=e8]: 200 of 212 names
+    - text: ; only b6 (the 12 thinnest, plus the four indices Yahoo reports no volume for) is left out.
+  - heading "1 · Copy each script" [level=2] [ref=e9]
+  - table [ref=e10]:
+    - rowgroup [ref=e11]:
+      - row [ref=e12]:
+        - columnheader "#" [ref=e13]
+        - columnheader "Script" [ref=e14]
+        - columnheader "Symbols" [ref=e15]
+        - columnheader "Turnover rank" [ref=e16]
+        - columnheader [ref=e17]
+        - columnheader [ref=e18]
+    - rowgroup [ref=e19]:
+      - row [ref=e20]:
+        - cell "1" [ref=e21]
+        - cell "B1 HDFCBANK, ETERNAL, BSE, RELIANCE, ICICIBANK, BHARTIARTL, LAURUSLABS, ADANIENSOL, INFY …" [ref=e22]:
+          - text: B1
+          - generic [ref=e23]: HDFCBANK, ETERNAL, BSE, RELIANCE, ICICIBANK, BHARTIARTL, LAURUSLABS, ADANIENSOL, INFY …
+        - cell "40" [ref=e24]
+        - cell "#1–#999" [ref=e25]
+        - cell [ref=e26]:
+          - button "Copy" [ref=e27] [cursor=pointer]
+        - cell [ref=e28]:
+          - button "View" [ref=e29] [cursor=pointer]
+      - row [ref=e30]:
+        - cell "2" [ref=e31]
+        - cell "B2 EICHERMOT, LICI, VBL, HEROMOTOCO, INDIGO, TECHM, BAJAJ_AUTO, MUTHOOTFIN, SUNPHARMA …" [ref=e32]:
+          - text: B2
+          - generic [ref=e33]: EICHERMOT, LICI, VBL, HEROMOTOCO, INDIGO, TECHM, BAJAJ_AUTO, MUTHOOTFIN, SUNPHARMA …
+        - cell "40" [ref=e34]
+        - cell "#41–#999" [ref=e35]
+        - cell [ref=e36]:
+          - button "Copy" [ref=e37] [cursor=pointer]
+        - cell [ref=e38]:
+          - button "View" [ref=e39] [cursor=pointer]
+      - row [ref=e40]:
+        - cell "3" [ref=e41]
+        - cell "B3 POLICYBZR, KEI, CGPOWER, ICICIGI, DMART, BANKBARODA, BHARATFORG, NAM_INDIA, MANAPPURAM …" [ref=e42]:
+          - text: B3
+          - generic [ref=e43]: POLICYBZR, KEI, CGPOWER, ICICIGI, DMART, BANKBARODA, BHARATFORG, NAM_INDIA, MANAPPURAM …
+        - cell "40" [ref=e44]
+        - cell "#81–#999" [ref=e45]
+        - cell [ref=e46]:
+          - button "Copy" [ref=e47] [cursor=pointer]
+        - cell [ref=e48]:
+          - button "View" [ref=e49] [cursor=pointer]
+      - row [ref=e50]:
+        - cell "4" [ref=e51]
+        - cell "B4 CANBK, ASIANPAINT, NYKAA, GMRAIRPORT, SBILIFE, AUROPHARMA, NMDC, RBLBANK, PNB …" [ref=e52]:
+          - text: B4
+          - generic [ref=e53]: CANBK, ASIANPAINT, NYKAA, GMRAIRPORT, SBILIFE, AUROPHARMA, NMDC, RBLBANK, PNB …
+        - cell "40" [ref=e54]
+        - cell "#121–#160" [ref=e55]
+        - cell [ref=e56]:
+          - button "Copy" [ref=e57] [cursor=pointer]
+        - cell [ref=e58]:
+          - button "View" [ref=e59] [cursor=pointer]
+      - row [ref=e60]:
+        - cell "5" [ref=e61]
+        - cell "B5 CIPLA, BANDHANBNK, VOLTAS, JINDALSTEL, KPITTECH, FORTIS, IOC, OIL, HAVELLS …" [ref=e62]:
+          - text: B5
+          - generic [ref=e63]: CIPLA, BANDHANBNK, VOLTAS, JINDALSTEL, KPITTECH, FORTIS, IOC, OIL, HAVELLS …
+        - cell "40" [ref=e64]
+        - cell "#161–#200" [ref=e65]
+        - cell [ref=e66]:
+          - button "Copy" [ref=e67] [cursor=pointer]
+        - cell [ref=e68]:
+          - button "View" [ref=e69] [cursor=pointer]
+      - row [ref=e70]:
+        - cell "6" [ref=e71]
+        - cell "B6 — skipped at 5 alerts IREDA, PETRONET, TIINDIA, BLUESTARCO, PIIND, NBCC, GODFRYPHLP, IEX, NIFTY …" [ref=e72]:
+          - text: B6 — skipped at 5 alerts
+          - generic [ref=e73]: IREDA, PETRONET, TIINDIA, BLUESTARCO, PIIND, NBCC, GODFRYPHLP, IEX, NIFTY …
+        - cell "12" [ref=e74]
+        - cell "#201–#999" [ref=e75]
+        - cell [ref=e76]:
+          - button "Copy" [ref=e77] [cursor=pointer]
+        - cell [ref=e78]:
+          - button "View" [ref=e79] [cursor=pointer]
+  - heading "2 · Paste into the Pine Editor" [level=2] [ref=e80]
+  - list [ref=e81]:
+    - listitem [ref=e82]:
+      - text: On TradingView, open
+      - strong [ref=e83]: Pine Editor
+      - text: (bottom panel).
+    - listitem [ref=e84]:
+      - strong [ref=e85]: Open → New indicator
+      - text: .
+    - listitem [ref=e86]: Click inside the editor, Ctrl+A, then Ctrl+V. Paste — never type. Monaco's auto-indent silently corrupts hand-typed Pine.
+    - listitem [ref=e87]:
+      - strong [ref=e88]: Save
+      - text: (Ctrl+S), keep the script's own name, then
+      - strong [ref=e89]: Add to chart
+      - text: .
+    - listitem [ref=e90]:
+      - text: Set the chart to the
+      - strong [ref=e91]: 15m
+      - text: timeframe.
+  - heading "3 · Create the alert" [level=2] [ref=e92]
+  - list [ref=e93]:
+    - listitem [ref=e94]: Press Alt+A.
+    - listitem [ref=e95]:
+      - strong [ref=e96]: Condition
+      - text: → the scanner script's name.
+    - listitem [ref=e97]:
+      - text: The dropdown just below it →
+      - strong [ref=e98]: Any alert() function call
+      - text: . This is the setting that makes one alert cover all 40 symbols — get it wrong and you get nothing.
+    - listitem [ref=e99]:
+      - strong [ref=e100]: Notifications
+      - text: tab → tick
+      - strong [ref=e101]: Notify on app
+      - text: (this is the phone push), plus
+      - strong [ref=e102]: Show popup
+      - text: and
+      - strong [ref=e103]: Play sound
+      - text: .
+    - listitem [ref=e104]: Leave the message box alone. The script writes it.
+    - listitem [ref=e105]:
+      - strong [ref=e106]: Expiration
+      - text: → as far out as the plan allows, then
+      - strong [ref=e107]: Create
+      - text: .
+  - generic [ref=e108]:
+    - strong [ref=e109]: Only 2 indicators fit on a chart at once (free plan).
+    - text: "That is fine: an alert keeps running after you remove the indicator. So — add b1, create its alert,"
+    - emphasis [ref=e110]: remove b1 from the chart
+    - text: ", add b2, and so on. Check the Alerts panel afterwards; all five should read as active."
+  - generic [ref=e111]:
+    - strong [ref=e112]: These alerts never fire on history.
+    - text: TradingView ignores
+    - code [ref=e113]: alert()
+    - text: on historical bars, and the script also gates on
+    - code [ref=e114]: barstate.isconfirmed
+    - text: with
+    - code [ref=e115]: alert.freq_once_per_bar_close
+    - text: . Nothing triggers until a real 15m candle closes while the alert is live.
+  - heading "4 · Prove the phone push works" [level=2] [ref=e116]
+  - list [ref=e117]:
+    - listitem [ref=e118]: Install the TradingView app and sign in as the same account.
+    - listitem [ref=e119]:
+      - text: Open b1's settings on the chart and set
+      - strong [ref=e120]: ADX threshold
+      - text: to
+      - code [ref=e121]: "0"
+      - text: ", then edit its alert so it uses that setting."
+    - listitem [ref=e122]: Wait for the next 15m close — with the threshold at 0 something fires almost immediately. Confirm the phone buzzes.
+    - listitem [ref=e123]:
+      - text: Put the threshold back to
+      - code [ref=e124]: "20"
+      - text: .
+  - heading "Progress" [level=2] [ref=e125]
+  - generic [ref=e126]:
+    - generic [ref=e127]:
+      - checkbox "b1 — pasted and saved" [ref=e128]
+      - generic [ref=e129]: b1 — pasted and saved
+    - generic [ref=e130]:
+      - checkbox "b1 — alert created with Any alert() function call" [ref=e131]
+      - generic [ref=e132]: b1 — alert created with Any alert() function call
+    - generic [ref=e133]:
+      - checkbox "b1 — Notify on app ticked" [ref=e134]
+      - generic [ref=e135]: b1 — Notify on app ticked
+    - generic [ref=e136]:
+      - checkbox "b1 — removed from chart" [ref=e137]
+      - generic [ref=e138]: b1 — removed from chart
+    - generic [ref=e139]:
+      - checkbox "b2 — pasted and saved" [ref=e140]
+      - generic [ref=e141]: b2 — pasted and saved
+    - generic [ref=e142]:
+      - checkbox "b2 — alert created with Any alert() function call" [ref=e143]
+      - generic [ref=e144]: b2 — alert created with Any alert() function call
+    - generic [ref=e145]:
+      - checkbox "b2 — Notify on app ticked" [ref=e146]
+      - generic [ref=e147]: b2 — Notify on app ticked
+    - generic [ref=e148]:
+      - checkbox "b2 — removed from chart" [ref=e149]
+      - generic [ref=e150]: b2 — removed from chart
+    - generic [ref=e151]:
+      - checkbox "b3 — pasted and saved" [ref=e152]
+      - generic [ref=e153]: b3 — pasted and saved
+    - generic [ref=e154]:
+      - checkbox "b3 — alert created with Any alert() function call" [ref=e155]
+      - generic [ref=e156]: b3 — alert created with Any alert() function call
+    - generic [ref=e157]:
+      - checkbox "b3 — Notify on app ticked" [ref=e158]
+      - generic [ref=e159]: b3 — Notify on app ticked
+    - generic [ref=e160]:
+      - checkbox "b3 — removed from chart" [ref=e161]
+      - generic [ref=e162]: b3 — removed from chart
+    - generic [ref=e163]:
+      - checkbox "b4 — pasted and saved" [ref=e164]
+      - generic [ref=e165]: b4 — pasted and saved
+    - generic [ref=e166]:
+      - checkbox "b4 — alert created with Any alert() function call" [ref=e167]
+      - generic [ref=e168]: b4 — alert created with Any alert() function call
+    - generic [ref=e169]:
+      - checkbox "b4 — Notify on app ticked" [ref=e170]
+      - generic [ref=e171]: b4 — Notify on app ticked
+    - generic [ref=e172]:
+      - checkbox "b4 — removed from chart" [ref=e173]
+      - generic [ref=e174]: b4 — removed from chart
+    - generic [ref=e175]:
+      - checkbox "b5 — pasted and saved" [ref=e176]
+      - generic [ref=e177]: b5 — pasted and saved
+    - generic [ref=e178]:
+      - checkbox "b5 — alert created with Any alert() function call" [ref=e179]
+      - generic [ref=e180]: b5 — alert created with Any alert() function call
+    - generic [ref=e181]:
+      - checkbox "b5 — Notify on app ticked" [ref=e182]
+      - generic [ref=e183]: b5 — Notify on app ticked
+    - generic [ref=e184]:
+      - checkbox "b5 — removed from chart" [ref=e185]
+      - generic [ref=e186]: b5 — removed from chart

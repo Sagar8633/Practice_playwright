@@ -1,0 +1,1598 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e8]:
+        - list [ref=e10]:
+          - listitem [ref=e11]:
+            - link "twitter" [ref=e12] [cursor=pointer]:
+              - /url: https://twitter.com/corymitc
+              - generic [ref=e13]: 
+          - listitem [ref=e14]:
+            - link "facebook" [ref=e15] [cursor=pointer]:
+              - /url: https://www.facebook.com/tradethatswing
+              - generic [ref=e16]: 
+          - listitem [ref=e17]:
+            - link "instagram" [ref=e18] [cursor=pointer]:
+              - /url: https://www.instagram.com/corymitc/
+              - generic [ref=e19]: 
+          - listitem [ref=e20]:
+            - link "youtube" [ref=e21] [cursor=pointer]:
+              - /url: https://www.youtube.com/c/CoryMitchellTrading
+              - generic [ref=e22]: 
+        - link "Cart" [ref=e24] [cursor=pointer]:
+          - /url: https://tradethatswing.com/cart/
+          - generic [ref=e25]: 
+          - generic [ref=e28]: $0.00
+          - generic [ref=e29]: 
+      - banner [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - link "Trade That Swing" [ref=e35] [cursor=pointer]:
+              - /url: https://tradethatswing.com/
+              - img "Trade That Swing" [ref=e36]
+            - paragraph [ref=e38]:
+              - text: Stock and forex trading education and analysis.
+              - text: No BS swing trading, day trading, and investing strategies.
+          - navigation [ref=e40]:
+            - generic [ref=e41]:
+              - list [ref=e42]:
+                - listitem [ref=e43]:
+                  - link "Trading Courses " [ref=e44] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/trading-courses-shop/
+                    - text: Trading Courses
+                    - generic: 
+                - listitem [ref=e45]:
+                  - link "Stocks " [ref=e46] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/category/stocks/
+                    - text: Stocks
+                    - generic: 
+                - listitem [ref=e47]:
+                  - link "ETFs " [ref=e48] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/category/etfs/
+                    - text: ETFs
+                    - generic: 
+                - listitem [ref=e49]:
+                  - link "Forex " [ref=e50] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/category/forex/
+                    - text: Forex
+                    - generic: 
+                - listitem [ref=e51]:
+                  - link "Investing " [ref=e52] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/category/stocks/investing/
+                    - text: Investing
+                    - generic: 
+                - listitem [ref=e53]:
+                  - link "Trade Improvement " [ref=e54] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/category/trading-improvement/
+                    - text: Trade Improvement
+                    - generic: 
+                - listitem [ref=e55]:
+                  - link "Trader Coaching" [ref=e56] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/trader-coaching-with-cory-mitchell-cmt/
+                - listitem [ref=e57]:
+                  - link "About Us " [ref=e58] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/about-us/
+                    - text: About Us
+                    - generic: 
+                - listitem [ref=e59]:
+                  - link "Member Area" [ref=e60] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/my-account/
+                - listitem [ref=e61]:
+                  - link "Cart" [ref=e62] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/cart/
+                    - generic: 
+                    - generic [ref=e63]: "0"
+              - text: 
+    - heading "Opening Range Breakout Strategy up 400% This Year (Strict Rules, Fully Automatable)" [level=1] [ref=e68]
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - article [ref=e74]:
+          - generic [ref=e75]:
+            - heading "Opening Range Breakout Strategy up 400% This Year (Strict Rules, Fully Automatable)" [level=1] [ref=e76]
+            - generic [ref=e77]:
+              - time [ref=e79]: March 5, 2026
+              - generic [ref=e80]:
+                - text: Posted by
+                - link "Cory Mitchell, CMT" [ref=e84] [cursor=pointer]:
+                  - /url: https://tradethatswing.com/author/corymitc/
+              - link "Trading/Charting Software" [ref=e86] [cursor=pointer]:
+                - /url: https://tradethatswing.com/category/trading-charting-software/
+              - link "52 Comments" [ref=e88] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comments
+          - generic [ref=e89]:
+            - paragraph [ref=e90]:
+              - text: Recently, I sat down for a discussion with Andre, the CEO of
+              - link "Edgeful" [ref=e91] [cursor=pointer]:
+                - /url: https://edgeful.com/?via=TTS
+              - text: . Our discussion covered mistakes aspiring traders often make, as well as tips on improving performance.
+              - text: Finally, we discussed some specific strategies, mainly the Opening Range Breakout Strategy. The strategy is up 170% or 250% over the last year, based on going long and short, or only long. That’s making one trade a day…and it can be fully automated.
+            - paragraph [ref=e92]: Edgeful has created Algos that you can load and backtest in TradingView (plots all trade levels for you), or connect to your broker to have trades placed automatically.
+            - iframe [ref=e94]:
+              - generic [active] [ref=f1e1]:
+                - generic "YouTube Video Player" [ref=f1e3]
+                - generic [ref=f1e5]:
+                  - generic:
+                    - generic:
+                      - button "Play video" [ref=f1e10] [cursor=pointer]:
+                        - generic [ref=f1e13]:
+                          - img
+                      - button "Hide player controls" [ref=f1e14] [cursor=pointer]
+                      - generic [ref=f1e16]:
+                        - generic [ref=f1e21]:
+                          - generic [ref=f1e22]:
+                            - link "Discussing High Probability Day Trading Patterns and a 1-Trade-Per-Day Strategy Up 250% This Year" [ref=f1e23] [cursor=pointer]:
+                              - /url: https://www.youtube.com/watch?v=9rGKaIDz-bQ
+                            - link "Cory Mitchell Trading" [ref=f1e24] [cursor=pointer]:
+                              - /url: /channel/UCLZKGgOYin_SEZrB8NkgTUg
+                              - generic [ref=f1e25]: Cory Mitchell Trading
+                          - generic [ref=f1e26]:
+                            - button "thumbnail-image" [ref=f1e27] [cursor=pointer]:
+                              - img "thumbnail-image" [ref=f1e28]
+                            - generic [ref=f1e30]:
+                              - generic: Cory Mitchell Trading
+                              - generic: 5.29K subscribers
+                        - generic [ref=f1e31]:
+                          - button "Share" [ref=f1e34] [cursor=pointer]:
+                            - generic [ref=f1e38]:
+                              - img
+                          - link "Watch on YouTube" [ref=f1e45] [cursor=pointer]:
+                            - /url: https://www.youtube.com/watch?v=9rGKaIDz-bQ
+                            - generic [ref=f1e48]:
+                              - text: Watch on
+                              - img [ref=f1e50]:
+                                - generic [ref=f1e52]:
+                                  - img
+            - paragraph [ref=e95]:
+              - text: Edgeful is a research platform that shows the statistics on a wide range of patterns and circumstances, such as how often gaps fill, how often the market finishes higher or lower based on the opening hour (or other amount of time), how often a stock/future/currency pair reaches its average daily range, and much more.
+              - text: Run statistical studies on a wide range of stocks, ETFs, futures contracts, and currency pairs.
+            - paragraph [ref=e96]: But let’s get back to the interesting part. A simple strategy that produced well into triple-digit gains over the last year, making only one trade a day.
+            - heading "The Strategy Results" [level=2] [ref=e97]
+            - paragraph [ref=e98]:
+              - emphasis [ref=e99]:
+                - strong [ref=e100]: This article was originally written on October 6, 2025. I have kept the original article and criteria intact, which were relevant when the article was written. At the bottom, I have provided updates on how the strategy criteria change over time based on the information and moves the market is giving us.
+            - paragraph [ref=e101]:
+              - text: I actually noticed a few things on the call, and found that the default settings, which produced the above results, weren’t capitalizing on the really big movement days. A small adjustment for that, and the profit jumped to 433% over the last year. That’s a $43,310 profit on a $10,000 futures account trading 1 contract of the Nasdaq E-mini (NQ). For a smaller account, consider trading MNQ (Nasdaq E-micro).
+              - text: That’s a fantastic return for making one trade a day. It does not account for commissions or slippage. Because it is only one trade a day, commissions didn’t adjust the overall profit by much.
+              - emphasis [ref=e102]: As you know, historical results are not always indicative of future performance.
+            - figure [ref=e103]:
+              - link "ORB strategy back test, longs only for NQ futures" [ref=e104] [cursor=pointer]:
+                - /url: https://tradethatswing.com/wp-content/uploads/2025/10/nq-overview.jpg
+                - img "ORB strategy back test, longs only for NQ futures" [ref=e105]
+            - paragraph [ref=e106]: In my own backtest, which differs slightly from the one run during the video, the strategy produced 114 trades. 74.56% were profitable. Profit factor was 2.512. The max drawdown was $2,725, or about 12% of the account balance at the time. If that drawdown occurred when trading commenced, that would be a 27.25% drawdown on a $10,000 account.
+            - paragraph [ref=e107]: Because of the high win rate, consecutive losses are fairly rare. There were 3 separate instances of two losses in a row over the 114 trades. No instances of three losses in a row, although it could certainly happen.
+            - figure [ref=e108]:
+              - link "ORB backtest statistics for NQ futures" [ref=e109] [cursor=pointer]:
+                - /url: https://tradethatswing.com/wp-content/uploads/2025/10/nq-trades.jpg
+                - img "ORB backtest statistics for NQ futures" [ref=e110]
+            - paragraph [ref=e111]:
+              - text: This is for a $10,000 account, and trading 1 futures contract through the entire year. Positions were NOT scaled up as the account grew.
+              - emphasis [ref=e112]: The loss per trade was capped at $1000
+              - text: . That is 10% of the starting account balance, but that risk would drop as the account grows.
+            - paragraph [ref=e113]: That’s more risk than I usually take on per trade, but because of the high win rate, the account was never really in danger (if the largest loss occurred near the beginning, it would have been down 27.25%). The equity curve near the top shows how the strategy tends to bounce back quite quickly…or at least it did over the last year.
+            - paragraph [ref=e114]:
+              - text: To risk less, keep the same parameters with a $20,000 account. The dollar profit remains the same at $43,000, risk is halved (5% per trade at the beginning, but drops as the account gets bigger), and percentage profit is also halved to 216%. Or use a $30,000 account to further reduce percentage risk and percentage returns.
+              - text: "[I actually have a"
+              - link "position sizing method based on maximum acceptable drawdown" [ref=e115] [cursor=pointer]:
+                - /url: https://tradethatswing.com/three-effective-forex-position-sizing-methods/
+              - text: . It doesn’t consider individual trade risk. This position sizing method may risk 3% to 5% or more of the account routinely, because even in the event of many losses in a row, the drawdown would be within my acceptable level. Only recommended for very well-tested strategies.]
+              - text: Futures contracts are inherently leveraged. So returns would be dramatically less trading an ETF, even a leveraged ETF like TQQQ (26.7% over the last year). And it is advisable to run stats on every instrument, even if they seem related, because results will be quite different if trading ES futures, for example. Different volatility levels and tendencies would mean different parameters used for the trade.
+            - heading "The ORB Strategy" [level=2] [ref=e116]
+            - paragraph [ref=e117]: The ORB Strategy buys or sells when the price has a 5-minute candle close (changing this will dramatically change results) outside the high or low of the first 15 minutes. 1 trade a day, if it triggers. Technically, the stop loss is the other side of the opening range, and the target is 50% of the opening range.
+            - paragraph [ref=e118]: It seems like that is a negative reward:risk! Risk the whole opening range to only make half the opening range???
+            - paragraph [ref=e119]: Sort of. Remember, risk is capped at $1000, which is 50 points on an NQ contract. If the opening range is bigger than that, then risk is still capped at 50 points. So in actual practice, the average winning trade is about $846, and the average losing trade is $987, which is closer to 1:1 than it first appears. The high win rate makes it profitable. And palatable for many traders since there are relatively few extended drawdowns.
+            - paragraph [ref=e120]: Here are screenshots of the last couple of trades the strategy took. The first was a winner, hitting the target, while the next was a loser, hitting the stop loss.
+            - figure [ref=e121]:
+              - link "ORB strategy trades examples on NQ futures" [ref=e122] [cursor=pointer]:
+                - /url: https://tradethatswing.com/wp-content/uploads/2025/10/nq-algos.png
+                - img "ORB strategy trades examples on NQ futures" [ref=e123]
+            - paragraph [ref=e124]: The conditions were long only and 1 trade per day. So, if ORB is broken to the downside first, all trades for the day are ignored, even if the price breaks ORB to the upside later in the day. You can see a couple of examples of this on the chart, where there are no trades after an ORB break lower.
+            - heading "The Conditions/Settings for This Test" [level=2] [ref=e125]
+            - paragraph [ref=e126]: In the video, we tested out scenarios for taking both long and shorts, just longs, and capping opening ranges at 0.5% (if the opening range is bigger than that, there is no trade).
+            - paragraph [ref=e127]:
+              - text: In my own test, which produced higher returns of 433% over the last year, I expanded the opening range limit to 0.8%. This had a dramatic effect. It increased the number of trades and profit considerably, essentially taking advantage of higher movement days.
+              - text: It was long only because most of the year has been moving higher.
+              - text: When I ran the test from May 1 to October 3 (uptrend period), the profit was actually higher (450%) than for the entire last year (433%), highlighting that it seems to pay to play in alignment with the major trend, and ignore trades in the opposite direction. This is only tested on uptrends and optimal performance came from only taking longs. Don’t assume the same results from downtrends, as downtrends act differently. I need to do more research on settings for downtrends. At a glance, the results were not very good from just flipping the criteria to only take shorts in a downtrend.
+            - paragraph [ref=e128]:
+              - text: How can you determine the major trend? Watch the
+              - link "Weekly Market Outlook" [ref=e129] [cursor=pointer]:
+                - /url: https://tradethatswing.com/swing-trading-stock-market-outlook-for-this-week/
+              - text: or track the
+              - link "market health indicators" [ref=e130] [cursor=pointer]:
+                - /url: https://tradethatswing.com/when-to-buy-stocks-after-a-stock-market-correction/
+              - text: yourself.
+            - paragraph [ref=e131]: Here are the settings for the test. Each day of the week (all customizable) are the same as the one shown.
+            - figure [ref=e133]:
+              - link "opening range strategy algo settings for NQ as of Oct 6 2025" [ref=e134] [cursor=pointer]:
+                - /url: https://tradethatswing.com/wp-content/uploads/2025/10/algo-settings1.jpg
+                - img "opening range strategy algo settings for NQ as of Oct 6 2025" [ref=e135]
+            - paragraph [ref=e136]: "And the next page of settings in the algo:"
+            - figure [ref=e138]:
+              - img "algo settings for NQ opening range strategy as of oct 6 2025" [ref=e139]
+            - paragraph [ref=e140]:
+              - text: Every instrument is different and has its own personality. Context is also important, as discussed. An overall uptrending period seems to do better with ORB longs only, for NQ. Certain days of the week also perform better than others. You can run the stats and exclude certain days if they tend to perform poorly. All these settings can be tested in
+              - link "Edgeful" [ref=e141] [cursor=pointer]:
+                - /url: https://edgeful.com/?via=TTS
+              - text: ", and customized in the"
+              - link "Edgeful Algos" [ref=e142] [cursor=pointer]:
+                - /url: https://www.edgeful.com/features/algos?via=TTS
+              - text: .
+              - text: Or, just trade the ORB strategy on your own. You can track how it performs by day of week, opening range size, which target gets hits the most…
+              - strong [ref=e143]: as this will change over time.
+              - text: Edgeful provides the data.
+              - strong [ref=e144]: This means the settings will change over time. These settings may no longer work at some point. It is the trader’s job to monitor what is working recently and update the strategy inputs accordingly.
+            - paragraph [ref=e145]:
+              - text: You may also be interested in the
+              - link "Gold Initial Balance Breakout Day Trading Strategy" [ref=e146] [cursor=pointer]:
+                - /url: https://tradethatswing.com/one-trade-a-day-gold-strategy-411-in-last-year-fully-automatable/
+              - text: (fully automated as well).
+            - heading "March 5, 2026 Update" [level=2] [ref=e147]
+            - paragraph [ref=e148]: The basic strategy stays the same over time, but there may be times it is not worth deploying, or when the criteria need to be updated. We can see this by monitoring results and reviewing the price action.
+            - paragraph [ref=e149]:
+              - text: This is done every week or two so that as conditions change, they are adapted to. This was discussed in the video above.
+              - text: "Here are some recent observations:"
+            - list [ref=e150]:
+              - listitem [ref=e151]: Shorts haven’t helped. Sticking with long only.
+              - listitem [ref=e152]: Thursdays have not worked great for longs. Avoid till they improve.
+              - listitem [ref=e153]: Ideally, a bigger max loss is used. This allows the price to chop around (which it has) while still eventually hitting the target. This requires a larger account, though. The increased win rate more than offsets the smaller R:R.
+            - paragraph [ref=e154]: The following stats are for a $2000 maximum loss per trade, with a $30,000 account, over the last 3 months. Position size is one contract.
+            - figure [ref=e155]:
+              - link "ORB stats for NQ, 3 month period." [ref=e156] [cursor=pointer]:
+                - /url: https://tradethatswing.com/wp-content/uploads/2025/10/orb-stats-3-months-march-2026.jpg
+                - img "ORB stats for NQ, 3 month period." [ref=e157]
+            - figure [ref=e158]:
+              - link [ref=e159] [cursor=pointer]:
+                - /url: https://tradethatswing.com/wp-content/uploads/2025/10/march-5-2026-orb-stats.jpg
+            - paragraph [ref=e160]: Keeping risk capped at $1000 still performed well, but only captured about half the profit of expanding the risk level.
+            - paragraph [ref=e161]: "Other options to consider:"
+            - list [ref=e162]:
+              - listitem [ref=e163]: A “move to breakeven” criteria
+              - listitem [ref=e164]: Multiple targets
+            - paragraph [ref=e165]: If employing a strategy, don’t just trust that what worked in the distant past will work going forward. Stay on top of what is working and what isn’t, adjust accordingly.
+            - paragraph [ref=e166]:
+              - text: Algos for trading and backtesting available from
+              - link "Edgeful" [ref=e167] [cursor=pointer]:
+                - /url: https://www.edgeful.com/features/algos?via=TTS
+              - text: .
+            - paragraph [ref=e168]:
+              - text: Cory Mitchell, CMT
+              - emphasis [ref=e169]: "Disclaimer: Nothing in this article is personal investment advice, or advice to buy or sell anything. Trading is risky and can result in substantial losses, even more than deposited if using leverage."
+              - emphasis [ref=e170]: This article includes affiliate links. If you purchase something from a linked website, TradeThatSwing may be compensated.
+            - paragraph [ref=e171]: Past performance is not always indicative of future results.
+            - generic [ref=e173]:
+              - link "Facebook" [ref=e174] [cursor=pointer]:
+                - /url: /#facebook
+                - generic:
+                  - img
+                - generic [ref=e175]: Facebook
+              - link "Twitter" [ref=e176] [cursor=pointer]:
+                - /url: /#twitter
+                - generic:
+                  - img
+                - generic [ref=e177]: Twitter
+              - link "Email" [ref=e178] [cursor=pointer]:
+                - /url: /#email
+                - generic:
+                  - img
+                - generic [ref=e179]: Email
+              - link "Pinterest" [ref=e180] [cursor=pointer]:
+                - /url: /#pinterest
+                - generic:
+                  - img
+                - generic [ref=e181]: Pinterest
+              - link "Reddit" [ref=e182] [cursor=pointer]:
+                - /url: /#reddit
+                - generic:
+                  - img
+                - generic [ref=e183]: Reddit
+              - link "LinkedIn" [ref=e184] [cursor=pointer]:
+                - /url: /#linkedin
+                - generic:
+                  - img
+                - generic [ref=e185]: LinkedIn
+              - link "WhatsApp" [ref=e186] [cursor=pointer]:
+                - /url: /#whatsapp
+                - generic:
+                  - img
+                - generic [ref=e187]: WhatsApp
+              - link "Messenger" [ref=e188] [cursor=pointer]:
+                - /url: /#facebook_messenger
+                - generic:
+                  - img
+                - generic [ref=e189]: Messenger
+              - link "Threads" [ref=e190] [cursor=pointer]:
+                - /url: /#threads
+                - generic:
+                  - img
+                - generic [ref=e191]: Threads
+          - generic [ref=e192]:
+            - link "52 Comments" [ref=e193] [cursor=pointer]:
+              - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comments
+            - generic "Like this post. Opening Range Breakout Strategy up 400% This Year (Strict Rules, Fully Automatable)" [ref=e194] [cursor=pointer]:
+              - generic [ref=e195]: 
+              - text: "43"
+        - generic [ref=e199]:
+          - heading "About Cory Mitchell, CMT" [level=3] [ref=e200]
+          - generic [ref=e201]:
+            - paragraph [ref=e202]: Cory is a professional trader since 2005. In between trading stocks and forex he consults for a number of prominent financial websites and enjoys an active lifestyle. He runs TradeThatSwing and coaches individual clients.
+            - list [ref=e203]:
+              - listitem [ref=e204]:
+                - link " " [ref=e205] [cursor=pointer]:
+                  - /url: https://www.facebook.com/groups/SwingTrading123/
+                  - generic [ref=e206]: 
+                  - generic [ref=e207]: 
+              - listitem [ref=e208]:
+                - link " " [ref=e209] [cursor=pointer]:
+                  - /url: https://twitter.com/corymitc
+                  - generic [ref=e210]: 
+                  - generic [ref=e211]: 
+              - listitem [ref=e212]:
+                - link " " [ref=e213] [cursor=pointer]:
+                  - /url: https://www.youtube.com/channel/UCLZKGgOYin_SEZrB8NkgTUg
+                  - generic [ref=e214]: 
+                  - generic [ref=e215]: 
+        - generic [ref=e217]:
+          - heading "52 Comments" [level=4] [ref=e218]
+          - heading "Leave your reply." [level=5] [ref=e219] [cursor=pointer]
+        - list [ref=e220]:
+          - listitem [ref=e221]:
+            - generic [ref=e222]:
+              - generic [ref=e223]:
+                - generic [ref=e225]: Pedro
+                - generic [ref=e226]:
+                  - text: ·
+                  - link "Reply to Pedro" [ref=e227] [cursor=pointer]:
+                    - /url: "#comment-58865"
+                    - text: Reply
+                - img [ref=e229] [cursor=pointer]
+                - generic [ref=e231]:
+                  - generic [ref=e232]:
+                    - strong [ref=e233]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e235]: Anti-Spam by CleanTalk
+              - link "June 4, 2026 at 7:26 AM" [ref=e237] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-58865
+                - time [ref=e238]: June 4, 2026 at 7:26 AM
+              - paragraph [ref=e240]: "ey! thanks for your time and content shared! ask: d’you try to add volume confirmation for breaking? market behaviour isnt the best for ORB lately, im using 5 to 10 mediaVol to confirm the break. (trying my best english, im from argentina) Gracias! saludos"
+            - list [ref=e241]:
+              - listitem [ref=e242]:
+                - generic [ref=e243]:
+                  - generic [ref=e244]:
+                    - generic [ref=e246]: Cory Mitchell, CMT
+                    - generic [ref=e247]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e248] [cursor=pointer]:
+                        - /url: "#comment-58887"
+                        - text: Reply
+                    - generic [ref=e249]: Author
+                    - img [ref=e251] [cursor=pointer]
+                    - generic [ref=e253]:
+                      - generic [ref=e254]:
+                        - strong [ref=e255]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e257]: Anti-Spam by CleanTalk
+                  - link "June 7, 2026 at 4:11 PM" [ref=e259] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-58887
+                    - time [ref=e260]: June 7, 2026 at 4:11 PM
+                  - paragraph [ref=e262]: Volume confirmation wasn’t included. But you could use it if it helps.
+          - listitem [ref=e263]:
+            - generic [ref=e264]:
+              - generic [ref=e265]:
+                - generic [ref=e267]: Adam
+                - generic [ref=e268]:
+                  - text: ·
+                  - link "Reply to Adam" [ref=e269] [cursor=pointer]:
+                    - /url: "#comment-58811"
+                    - text: Reply
+              - link "May 29, 2026 at 8:28 AM" [ref=e271] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-58811
+                - time [ref=e272]: May 29, 2026 at 8:28 AM
+              - generic [ref=e273]:
+                - paragraph [ref=e274]: Hi there
+                - paragraph [ref=e275]: It seems since around the start of may this strategy has become very choppy
+                - paragraph [ref=e276]: I stay on baseline 50% orb TP and 100% orb SL and have been losing money
+                - paragraph [ref=e277]: Is there market conditions I should be aware about and could I expect to see this strategy start performing again
+            - list [ref=e278]:
+              - listitem [ref=e279]:
+                - generic [ref=e280]:
+                  - generic [ref=e281]:
+                    - generic [ref=e283]: Cory Mitchell, CMT
+                    - generic [ref=e284]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e285] [cursor=pointer]:
+                        - /url: "#comment-58816"
+                        - text: Reply
+                    - generic [ref=e286]: Author
+                    - img [ref=e288] [cursor=pointer]
+                    - generic [ref=e290]:
+                      - generic [ref=e291]:
+                        - strong [ref=e292]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e294]: Anti-Spam by CleanTalk
+                  - link "May 29, 2026 at 3:41 PM" [ref=e296] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-58816
+                    - time [ref=e297]: May 29, 2026 at 3:41 PM
+                  - paragraph [ref=e299]: As mentioned throughout the article, really important to stay on top of the data reports to see what is working and what isn’t. Go through the Edgeful reports at least once or twice every couple weeks to see what is working longer-term and shorter-term and how the reports/stats are changing. This can be used to adjust the inputs/settings for the strategy. Basically gotta stay on top of it, as the settings that take advantage of current conditions may change over time. If the reports show little edge, stay out. It is not set-and-forget.
+          - listitem [ref=e300]:
+            - generic [ref=e301]:
+              - generic [ref=e302]:
+                - generic [ref=e304]: Izzal
+                - generic [ref=e305]:
+                  - text: ·
+                  - link "Reply to Izzal" [ref=e306] [cursor=pointer]:
+                    - /url: "#comment-58789"
+                    - text: Reply
+                - img [ref=e308] [cursor=pointer]
+                - generic [ref=e310]:
+                  - generic [ref=e311]:
+                    - strong [ref=e312]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e314]: Anti-Spam by CleanTalk
+              - link "May 25, 2026 at 11:30 PM" [ref=e316] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-58789
+                - time [ref=e317]: May 25, 2026 at 11:30 PM
+              - generic [ref=e318]:
+                - paragraph [ref=e319]: Thank you for this article. I am an ORB trader as well, and always look for new knowledge and learn from others how they incorporate their ORB strategy. From your article, I see that your algo only take long position. Since taking longs only decreases the number of trades, as well as the algo is designed as negative R:R, it is obvious that the win rate looks superior. But, like everyone would say, if it works, why not? With such high WR and PF, I am sure Tradingview calculated the Sortino ratio to some crazy value. Curious what is the Sharpe ratio though.
+                - paragraph [ref=e320]: If you have the oppurtunity to test with your strategy, try adding a +DI / -DI filter, that defines the direction of the market. If the difference return to a positive value, it is uptrending, negative value means down trending. And the larger the value difference means the trend is steeper. This may give you the oppurtunity for the algo to trade both directions.
+          - listitem [ref=e321]:
+            - generic [ref=e322]:
+              - generic [ref=e323]:
+                - generic [ref=e325]: Spencer
+                - generic [ref=e326]:
+                  - text: ·
+                  - link "Reply to Spencer" [ref=e327] [cursor=pointer]:
+                    - /url: "#comment-58128"
+                    - text: Reply
+                - img [ref=e329] [cursor=pointer]
+                - generic [ref=e331]:
+                  - generic [ref=e332]:
+                    - strong [ref=e333]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e335]: Anti-Spam by CleanTalk
+              - link "March 24, 2026 at 10:44 AM" [ref=e337] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-58128
+                - time [ref=e338]: March 24, 2026 at 10:44 AM
+              - generic [ref=e339]:
+                - paragraph [ref=e340]: Hi there,
+                - paragraph [ref=e341]: Thank you for doing this, I always like seeing how others are executing the ORB strategy.
+                - paragraph [ref=e342]: One thing I was curious about, what led you to use the 15-minute opening range instead of something shorter like a 5-minute range? Was that based on backtesting results, or more from experience with reducing false breakouts?
+                - paragraph [ref=e343]: I’ve been testing a 5-minute ORB myself and noticed it captures more momentum but also more noise, so I’d be interested to hear what you found when comparing the two.
+            - list [ref=e344]:
+              - listitem [ref=e345]:
+                - generic [ref=e346]:
+                  - generic [ref=e347]:
+                    - generic [ref=e349]: Cory Mitchell, CMT
+                    - generic [ref=e350]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e351] [cursor=pointer]:
+                        - /url: "#comment-58131"
+                        - text: Reply
+                    - generic [ref=e352]: Author
+                    - img [ref=e354] [cursor=pointer]
+                    - generic [ref=e356]:
+                      - generic [ref=e357]:
+                        - strong [ref=e358]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e360]: Anti-Spam by CleanTalk
+                  - link "March 24, 2026 at 3:49 PM" [ref=e362] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-58131
+                    - time [ref=e363]: March 24, 2026 at 3:49 PM
+                  - paragraph [ref=e365]:
+                    - text: Longer time frame, less noise. The 5 minute can work well at times, but also get really chopped at other times.
+                    - text: Also, every asset tends to act a bit different. So 5 may be fine on one, but 15 or 30 may better on other.
+                    - text: But yes, 5 can be ok too (likely with different parameters).
+          - listitem [ref=e366]:
+            - generic [ref=e367]:
+              - generic [ref=e368]:
+                - generic [ref=e370]: Ellis
+                - generic [ref=e371]:
+                  - text: ·
+                  - link "Reply to Ellis" [ref=e372] [cursor=pointer]:
+                    - /url: "#comment-57826"
+                    - text: Reply
+                - img [ref=e374] [cursor=pointer]
+                - generic [ref=e376]:
+                  - generic [ref=e377]:
+                    - strong [ref=e378]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e380]: Anti-Spam by CleanTalk
+              - link "March 23, 2026 at 11:01 AM" [ref=e382] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-57826
+                - time [ref=e383]: March 23, 2026 at 11:01 AM
+              - paragraph [ref=e385]: Since 6th March, this strategy seems to not be working at all and is now losing me a lot of money, all backtests before have been steady incline but sine march has started a sharp decline, is there any reason for this and if so what is the reason
+            - list [ref=e386]:
+              - listitem [ref=e387]:
+                - generic [ref=e388]:
+                  - generic [ref=e389]:
+                    - generic [ref=e391]: Cory Mitchell, CMT
+                    - generic [ref=e392]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e393] [cursor=pointer]:
+                        - /url: "#comment-58096"
+                        - text: Reply
+                    - generic [ref=e394]: Author
+                    - img [ref=e396] [cursor=pointer]
+                    - generic [ref=e398]:
+                      - generic [ref=e399]:
+                        - strong [ref=e400]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e402]: Anti-Spam by CleanTalk
+                  - link "March 24, 2026 at 8:01 AM" [ref=e404] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-58096
+                    - time [ref=e405]: March 24, 2026 at 8:01 AM
+                  - generic [ref=e406]:
+                    - paragraph [ref=e407]:
+                      - text: Conditions change. March has been sharply downtrending mostly. Prior to this we had uptrends and choppy sideways action. The markets made a major shift into poor health in early March.
+                      - text: Monitor to see what is working and adjust settings accordingly (it is not set and forget, as mentioned many times in the article).
+                    - paragraph [ref=e408]: "From the article:"
+                    - paragraph [ref=e409]: “Don’t assume the same results from downtrends, as downtrends act differently. I need to do more research on settings for downtrends. At a glance, the results were not very good from just flipping the criteria to only take shorts in a downtrend.”
+                    - paragraph [ref=e410]: Haven’t found any criteria that work consistently across downtrends, yet.
+          - listitem [ref=e411]:
+            - generic [ref=e412]:
+              - generic [ref=e413]:
+                - generic [ref=e415]: basel
+                - generic [ref=e416]:
+                  - text: ·
+                  - link "Reply to basel" [ref=e417] [cursor=pointer]:
+                    - /url: "#comment-57139"
+                    - text: Reply
+                - img [ref=e419] [cursor=pointer]
+                - generic [ref=e421]:
+                  - generic [ref=e422]:
+                    - strong [ref=e423]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e425]: Anti-Spam by CleanTalk
+              - link "March 4, 2026 at 3:16 PM" [ref=e427] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-57139
+                - time [ref=e428]: March 4, 2026 at 3:16 PM
+              - paragraph [ref=e430]: SL is 50 points and TP is 50 points ? or SL is at the low of the range and TP is where?
+            - list [ref=e431]:
+              - listitem [ref=e432]:
+                - generic [ref=e433]:
+                  - generic [ref=e434]:
+                    - generic [ref=e436]: Cory Mitchell, CMT
+                    - generic [ref=e437]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e438] [cursor=pointer]:
+                        - /url: "#comment-57205"
+                        - text: Reply
+                    - generic [ref=e439]: Author
+                    - img [ref=e441] [cursor=pointer]
+                    - generic [ref=e443]:
+                      - generic [ref=e444]:
+                        - strong [ref=e445]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e447]: Anti-Spam by CleanTalk
+                  - link "March 5, 2026 at 7:50 AM" [ref=e449] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-57205
+                    - time [ref=e450]: March 5, 2026 at 7:50 AM
+                  - generic [ref=e451]:
+                    - paragraph [ref=e452]: "From the article: The ORB Strategy buys or sells when the price has a 5-minute candle close (changing this will dramatically change results) outside the high or low of the first 15 minutes. 1 trade a day, if it triggers. Technically, the stop loss is the other side of the opening range, and the target is 50% of the opening range [whatever that is. So it will vary each day based on the size of the opening range]."
+                    - paragraph [ref=e453]: It seems like that is a negative reward:risk! Risk the whole opening range to only make half the opening range???
+                    - paragraph [ref=e454]: Sort of. Remember, risk is capped at $1000, which is 50 points on an NQ contract. If the opening range is bigger than that, then risk is still capped at 50 points.
+                    - paragraph [ref=e455]: THAT WAS AT THE TIME OF THE ARTICLE PUBLICATION. Conditions are different now than the lookback period at the time of publication. So while the basic strategy stays the same over time, the levels for profits and losses and opening range thresholds will change over time.
+          - listitem [ref=e456]:
+            - generic [ref=e457]:
+              - generic [ref=e458]:
+                - generic [ref=e460]: basel
+                - generic [ref=e461]:
+                  - text: ·
+                  - link "Reply to basel" [ref=e462] [cursor=pointer]:
+                    - /url: "#comment-56939"
+                    - text: Reply
+                - img [ref=e464] [cursor=pointer]
+                - generic [ref=e466]:
+                  - generic [ref=e467]:
+                    - strong [ref=e468]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e470]: Anti-Spam by CleanTalk
+              - link "February 23, 2026 at 7:54 PM" [ref=e472] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56939
+                - time [ref=e473]: February 23, 2026 at 7:54 PM
+              - paragraph [ref=e475]: "hey thanks for the information , great results. i have recently started the ORB strategy ,on MNQ, i have noticed that it is working. my question : for this specific results you got, do you mark the high and low of the 5 minutes ? or 15 ?"
+            - list [ref=e476]:
+              - listitem [ref=e477]:
+                - generic [ref=e478]:
+                  - generic [ref=e479]:
+                    - generic [ref=e481]: Cory Mitchell, CMT
+                    - generic [ref=e482]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e483] [cursor=pointer]:
+                        - /url: "#comment-56940"
+                        - text: Reply
+                    - generic [ref=e484]: Author
+                    - img [ref=e486] [cursor=pointer]
+                    - generic [ref=e488]:
+                      - generic [ref=e489]:
+                        - strong [ref=e490]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e492]: Anti-Spam by CleanTalk
+                  - link "February 23, 2026 at 8:23 PM" [ref=e494] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56940
+                    - time [ref=e495]: February 23, 2026 at 8:23 PM
+                  - generic [ref=e496]:
+                    - paragraph [ref=e497]: ORB Strategy buys or sells when the price has a 5-minute candle close outside the high or low of the first 15 minutes.
+                    - paragraph [ref=e498]: So 5-min chart, with high and low of first 15 mins marked. Then waiting for a 5 min close outside that.
+              - listitem [ref=e499]:
+                - generic [ref=e500]:
+                  - generic [ref=e501]:
+                    - generic [ref=e503]: Cory Mitchell, CMT
+                    - generic [ref=e504]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e505] [cursor=pointer]:
+                        - /url: "#comment-56944"
+                        - text: Reply
+                    - generic [ref=e506]: Author
+                    - img [ref=e508] [cursor=pointer]
+                    - generic [ref=e510]:
+                      - generic [ref=e511]:
+                        - strong [ref=e512]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e514]: Anti-Spam by CleanTalk
+                  - link "February 24, 2026 at 8:48 AM" [ref=e516] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56944
+                    - time [ref=e517]: February 24, 2026 at 8:48 AM
+                  - generic [ref=e518]:
+                    - paragraph [ref=e519]: A reminder to update the criteria based on what data/price action shows over the last month to few months.
+                    - paragraph [ref=e520]: The criteria in the article are not forever. As discussed in the video, the idea is to update the criteria based on how the market is acting.
+                    - paragraph [ref=e521]: Just a reminder to everyone that as conditions change (and current conditions differ from the backtest period), update the criteria (min/max range, targets, long/short, weekdays, etc.) accordingly.
+          - listitem [ref=e522]:
+            - generic [ref=e523]:
+              - generic [ref=e524]:
+                - generic [ref=e526]: Jason
+                - generic [ref=e527]:
+                  - text: ·
+                  - link "Reply to Jason" [ref=e528] [cursor=pointer]:
+                    - /url: "#comment-56740"
+                    - text: Reply
+                - img [ref=e530] [cursor=pointer]
+                - generic [ref=e532]:
+                  - generic [ref=e533]:
+                    - strong [ref=e534]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e536]: Anti-Spam by CleanTalk
+              - link "February 8, 2026 at 7:13 AM" [ref=e538] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56740
+                - time [ref=e539]: February 8, 2026 at 7:13 AM
+              - paragraph [ref=e541]: When you say you’re capping your OR at .5% or .8%, can you explain what that means? Is that based off ATR? I’ve also back tested your strategy and the only negative I’ve found is when there is major 10am news, there are more losers than winners. But those are easily avoided, this shows even more promise. I’d like a little more explanation on the .5 or .8% though. Thanks for all the hard work on this!
+            - list [ref=e542]:
+              - listitem [ref=e543]:
+                - generic [ref=e544]:
+                  - generic [ref=e545]:
+                    - generic [ref=e547]: Cory Mitchell, CMT
+                    - generic [ref=e548]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e549] [cursor=pointer]:
+                        - /url: "#comment-56741"
+                        - text: Reply
+                    - generic [ref=e550]: Author
+                    - img [ref=e552] [cursor=pointer]
+                    - generic [ref=e554]:
+                      - generic [ref=e555]:
+                        - strong [ref=e556]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e558]: Anti-Spam by CleanTalk
+                  - link "February 8, 2026 at 8:50 AM" [ref=e560] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56741
+                    - time [ref=e561]: February 8, 2026 at 8:50 AM
+                  - generic [ref=e562]:
+                    - paragraph [ref=e563]: That is the size of the opening range. So if the size of the opening range is larger than 0.8%, no trade is taken that day.
+                    - paragraph [ref=e564]: "So in simple numbers: if the low of the range is 100, the high of the range can’t be higher than 100.80."
+                    - paragraph [ref=e565]: Or you could use a measurement or ruler tool. If measuring the opening range produces a bigger number than 0.8%, avoid. This cap will change over time as volatility changes.
+                    - paragraph [ref=e566]: This is to prevent too much movement from having already occurred. If the opening range is huge, then much of the movement has already occurred…or at least the profitability of the strategy drops.
+                - list [ref=e567]:
+                  - listitem [ref=e568]:
+                    - generic [ref=e569]:
+                      - generic [ref=e570]:
+                        - generic [ref=e572]: Jason
+                        - generic [ref=e573]:
+                          - text: ·
+                          - link "Reply to Jason" [ref=e574] [cursor=pointer]:
+                            - /url: "#comment-56746"
+                            - text: Reply
+                        - img [ref=e576] [cursor=pointer]
+                        - generic [ref=e578]:
+                          - generic [ref=e579]:
+                            - strong [ref=e580]: The Real Person Badge!
+                            - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                          - generic [ref=e582]: Anti-Spam by CleanTalk
+                      - link "February 9, 2026 at 6:09 AM" [ref=e584] [cursor=pointer]:
+                        - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56746
+                        - time [ref=e585]: February 9, 2026 at 6:09 AM
+                      - generic [ref=e586]:
+                        - paragraph [ref=e587]: Thanks for the quick response!
+                        - paragraph [ref=e588]: Is this the daily 14 ATR or is it the 15m ATR 14 period?
+                    - list [ref=e589]:
+                      - listitem [ref=e590]:
+                        - generic [ref=e591]:
+                          - generic [ref=e592]:
+                            - generic [ref=e594]: Jason
+                            - generic [ref=e595]:
+                              - text: ·
+                              - link "Reply to Jason" [ref=e596] [cursor=pointer]:
+                                - /url: "#comment-56747"
+                                - text: Reply
+                            - img [ref=e598] [cursor=pointer]
+                            - generic [ref=e600]:
+                              - generic [ref=e601]:
+                                - strong [ref=e602]: The Real Person Badge!
+                                - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                              - generic [ref=e604]: Anti-Spam by CleanTalk
+                          - link "February 9, 2026 at 6:22 AM" [ref=e606] [cursor=pointer]:
+                            - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56747
+                            - time [ref=e607]: February 9, 2026 at 6:22 AM
+                          - paragraph [ref=e609]: Disregard…. I see what you mean now. I used the TOS trendline drawing to see the percentage you’re talking about. Thank you!
+          - listitem [ref=e610]:
+            - generic [ref=e611]:
+              - generic [ref=e612]:
+                - generic [ref=e614]: Vana posa
+                - generic [ref=e615]:
+                  - text: ·
+                  - link "Reply to Vana posa" [ref=e616] [cursor=pointer]:
+                    - /url: "#comment-56220"
+                    - text: Reply
+                - img [ref=e618] [cursor=pointer]
+                - generic [ref=e620]:
+                  - generic [ref=e621]:
+                    - strong [ref=e622]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e624]: Anti-Spam by CleanTalk
+              - link "January 13, 2026 at 12:00 PM" [ref=e626] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56220
+                - time [ref=e627]: January 13, 2026 at 12:00 PM
+              - paragraph [ref=e629]:
+                - text: Thanks for the post, really appreciate it.
+                - text: Have you backtested this strategy in years like from 2020 to 2024 or further ? if yes what were the results like. (Like mar ratio or profit factor )
+                - text: Thanks again
+            - list [ref=e630]:
+              - listitem [ref=e631]:
+                - generic [ref=e632]:
+                  - generic [ref=e633]:
+                    - generic [ref=e635]: Cory Mitchell, CMT
+                    - generic [ref=e636]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e637] [cursor=pointer]:
+                        - /url: "#comment-56223"
+                        - text: Reply
+                    - generic [ref=e638]: Author
+                    - img [ref=e640] [cursor=pointer]
+                    - generic [ref=e642]:
+                      - generic [ref=e643]:
+                        - strong [ref=e644]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e646]: Anti-Spam by CleanTalk
+                  - link "January 13, 2026 at 4:18 PM" [ref=e648] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56223
+                    - time [ref=e649]: January 13, 2026 at 4:18 PM
+                  - generic [ref=e650]:
+                    - paragraph [ref=e651]:
+                      - text: Yes, but settings change based on market conditions.
+                      - text: As discussed in the video, he talked about running stats on recent price action and updating the settings accordingly. So these exact settings may not work at various times, but other settings would, because the stats show which settings to use at that time.
+                      - text: So if you are asking if THESE settings work every year, probably not. But edgeful allows us to run stats in real time to see what is working right now (at any given time) to put the odds in our favor.
+                      - text: It should NOT be construed as a set and forget strategy forever. It needs updating based on what is working, and the stats show us what is working. If the stats aren’t strong, then we stop using it.
+                    - paragraph [ref=e652]: These setting were working on those market conditions. Every couple weeks ideally they should be tweaked based to reflect change ORB ranges are working best, what targets, etc. If tweaks aren’t needed, it is traded as is until something needs to change.
+                    - paragraph [ref=e653]: So the answer is, it works, but the algo/strategy settings will likely be different.
+                - list [ref=e654]:
+                  - listitem [ref=e655]:
+                    - generic [ref=e656]:
+                      - generic [ref=e657]:
+                        - generic [ref=e659]: Vana posa
+                        - generic [ref=e660]:
+                          - text: ·
+                          - link "Reply to Vana posa" [ref=e661] [cursor=pointer]:
+                            - /url: "#comment-56226"
+                            - text: Reply
+                        - img [ref=e663] [cursor=pointer]
+                        - generic [ref=e665]:
+                          - generic [ref=e666]:
+                            - strong [ref=e667]: The Real Person Badge!
+                            - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                          - generic [ref=e669]: Anti-Spam by CleanTalk
+                      - link "January 13, 2026 at 10:05 PM" [ref=e671] [cursor=pointer]:
+                        - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56226
+                        - time [ref=e672]: January 13, 2026 at 10:05 PM
+                      - paragraph [ref=e674]:
+                        - text: Thanks for the reply, I was looking for a strategy that performs same as or somewhat better than Nasdaq 100 during bull market but has much lower drawdowns during bear markets.
+                        - text: I saw that the strategy did exactly that during mid Feb to mid April in a bear market. It did not make money but it also did not have a severe drawdown but worked really well in the subsequent bull market.
+                        - text: So I just wanted to ask during previous bull markets and bear markets did it perform similarly (like low drawdowns during bear market and has matched the performance of nasdaq 100 during bull markets trading only from the long side and risking no more than 1% per trade as we already know the max risk per trade)
+                        - text: Again thanks for the reply really appreciate it
+                    - list [ref=e675]:
+                      - listitem [ref=e676]:
+                        - generic [ref=e677]:
+                          - generic [ref=e678]:
+                            - generic [ref=e680]: Cory Mitchell, CMT
+                            - generic [ref=e681]:
+                              - text: ·
+                              - link "Reply to Cory Mitchell, CMT" [ref=e682] [cursor=pointer]:
+                                - /url: "#comment-56238"
+                                - text: Reply
+                            - generic [ref=e683]: Author
+                            - img [ref=e685] [cursor=pointer]
+                            - generic [ref=e687]:
+                              - generic [ref=e688]:
+                                - strong [ref=e689]: The Real Person Badge!
+                                - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                              - generic [ref=e691]: Anti-Spam by CleanTalk
+                          - link "January 14, 2026 at 9:08 AM" [ref=e693] [cursor=pointer]:
+                            - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56238
+                            - time [ref=e694]: January 14, 2026 at 9:08 AM
+                          - generic [ref=e695]:
+                            - paragraph [ref=e696]: I haven’t tested them all. If the strategy is being updated based on stats with high probabilities in real-time, then it should work. We can run the stats before trading commences.
+                            - paragraph [ref=e697]: BUT….Several comments back, I responded to someone saying that I haven’t found it good during some bear markets. Until I find settings that work well in a bear market (and once we are in one, I can see how the market is moving to determine that) I don’t recommend it.
+                            - paragraph [ref=e698]: As stated, this test reflects the conditions during the test; no other conditions. Even since I published this article, NQ has been flat. That is different conditions.
+                        - list [ref=e699]:
+                          - listitem [ref=e700]:
+                            - generic [ref=e701]:
+                              - generic [ref=e702]:
+                                - generic [ref=e704]: Vana posa
+                                - img [ref=e706] [cursor=pointer]
+                                - generic [ref=e708]:
+                                  - generic [ref=e709]:
+                                    - strong [ref=e710]: The Real Person Badge!
+                                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                                  - generic [ref=e712]: Anti-Spam by CleanTalk
+                              - link "January 14, 2026 at 10:31 AM" [ref=e714] [cursor=pointer]:
+                                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56241
+                                - time [ref=e715]: January 14, 2026 at 10:31 AM
+                              - paragraph [ref=e717]: Thanks again for the reply, really appreciate it
+          - listitem [ref=e718]:
+            - generic [ref=e719]:
+              - generic [ref=e720]:
+                - generic [ref=e722]: Nicola Aruta
+                - generic [ref=e723]:
+                  - text: ·
+                  - link "Reply to Nicola Aruta" [ref=e724] [cursor=pointer]:
+                    - /url: "#comment-56219"
+                    - text: Reply
+              - link "January 13, 2026 at 11:42 AM" [ref=e726] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56219
+                - time [ref=e727]: January 13, 2026 at 11:42 AM
+              - paragraph [ref=e729]:
+                - text: Sorry for all the quesions but i’m trying to figure out this strategy from months.
+                - text: The setup you tested is, entry at the closure, fix stop loss 1000$ (1 contract is 50 points), take profit 50% of the ORB, range limit 0.8% for al the weekdays.
+                - text: If the price breaks first below only with the wick the bullish setup is valid, and you take only longs on this strategy!
+                - text: Am i right with everything?
+            - list [ref=e730]:
+              - listitem [ref=e731]:
+                - generic [ref=e732]:
+                  - generic [ref=e733]:
+                    - generic [ref=e735]: Cory Mitchell, CMT
+                    - generic [ref=e736]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e737] [cursor=pointer]:
+                        - /url: "#comment-56224"
+                        - text: Reply
+                    - generic [ref=e738]: Author
+                    - img [ref=e740] [cursor=pointer]
+                    - generic [ref=e742]:
+                      - generic [ref=e743]:
+                        - strong [ref=e744]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e746]: Anti-Spam by CleanTalk
+                  - link "January 13, 2026 at 4:27 PM" [ref=e748] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56224
+                    - time [ref=e749]: January 13, 2026 at 4:27 PM
+                  - generic [ref=e750]:
+                    - paragraph [ref=e751]: That looks right.
+                    - paragraph [ref=e752]: "Now, the question is: are you running the test on time period tested? Or a different period? Run it on the time period I tested to see if you have the correct inputs."
+                    - paragraph [ref=e753]:
+                      - text: BUT…and you will probably hate this, but it was discussed in the video….These setting were working on those market conditions. Every couple weeks ideally they should be tweaked based to reflect which ORB ranges are working best, what targets, days of the week, long/short/both etc. If tweaks aren’t needed, it is traded as is until something needs to change. So these exact settings may not work at various times, but other settings would, because the stats show which settings to use at that time.
+                      - text: Edgeful allows us to run stats in real time to see what is working right now/recently (at any given time) to put the odds in our favor.
+                      - text: It should NOT be construed as a set and forget strategy forever. It needs updating based on what is working, and the stats show us what is working. If the stats aren’t strong, then we stop using it.
+          - listitem [ref=e754]:
+            - generic [ref=e755]:
+              - generic [ref=e756]:
+                - generic [ref=e758]: Nicola
+                - generic [ref=e759]:
+                  - text: ·
+                  - link "Reply to Nicola" [ref=e760] [cursor=pointer]:
+                    - /url: "#comment-56172"
+                    - text: Reply
+                - img [ref=e762] [cursor=pointer]
+                - generic [ref=e764]:
+                  - generic [ref=e765]:
+                    - strong [ref=e766]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e768]: Anti-Spam by CleanTalk
+              - link "January 10, 2026 at 9:14 AM" [ref=e770] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56172
+                - time [ref=e771]: January 10, 2026 at 9:14 AM
+              - paragraph [ref=e773]:
+                - text: I tested this strategy on the NQ but the results aren’t good why?!!
+                - text: I entered only long after the 5 m close to the upside with a fix stop loss of 50 pnts and a targhet about 50% of the ORB, if the price has break the low before closing the high i don’t enter and my range limit is about 0.50%.
+                - text: The results are pretty ugly!
+            - list [ref=e774]:
+              - listitem [ref=e775]:
+                - generic [ref=e776]:
+                  - generic [ref=e777]:
+                    - generic [ref=e779]: Cory Mitchell, CMT
+                    - generic [ref=e780]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e781] [cursor=pointer]:
+                        - /url: "#comment-56195"
+                        - text: Reply
+                    - generic [ref=e782]: Author
+                    - img [ref=e784] [cursor=pointer]
+                    - generic [ref=e786]:
+                      - generic [ref=e787]:
+                        - strong [ref=e788]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e790]: Anti-Spam by CleanTalk
+                  - link "January 11, 2026 at 4:27 PM" [ref=e792] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56195
+                    - time [ref=e793]: January 11, 2026 at 4:27 PM
+                  - generic [ref=e794]:
+                    - paragraph [ref=e795]: Some of your settings are different. The SL is not fixed. It is a max of 50 points, but if the range is smaller, the SL is smaller (won’t occur too often).
+                    - paragraph [ref=e796]:
+                      - text: Your range limit is different than the range limit I tested for. One the page under settings (screenshot) it shows 0.8% max to capture bigger movement days.
+                      - text: You’d have to make sure all the settings shown/discussed are accounted for. If not, results will differ. This test was long only.
+          - listitem [ref=e797]:
+            - generic [ref=e798]:
+              - generic [ref=e799]:
+                - generic [ref=e801]: Nicola
+                - generic [ref=e802]:
+                  - text: ·
+                  - link "Reply to Nicola" [ref=e803] [cursor=pointer]:
+                    - /url: "#comment-56101"
+                    - text: Reply
+                - img [ref=e805] [cursor=pointer]
+                - generic [ref=e807]:
+                  - generic [ref=e808]:
+                    - strong [ref=e809]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e811]: Anti-Spam by CleanTalk
+              - link "January 6, 2026 at 11:59 AM" [ref=e813] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56101
+                - time [ref=e814]: January 6, 2026 at 11:59 AM
+              - paragraph [ref=e816]: LO STOP LOSS DOVE VA MESSO?
+            - list [ref=e817]:
+              - listitem [ref=e818]:
+                - generic [ref=e819]:
+                  - generic [ref=e820]:
+                    - generic [ref=e822]: Cory Mitchell, CMT
+                    - generic [ref=e823]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e824] [cursor=pointer]:
+                        - /url: "#comment-56107"
+                        - text: Reply
+                    - generic [ref=e825]: Author
+                    - img [ref=e827] [cursor=pointer]
+                    - generic [ref=e829]:
+                      - generic [ref=e830]:
+                        - strong [ref=e831]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e833]: Anti-Spam by CleanTalk
+                  - link "January 7, 2026 at 7:12 AM" [ref=e835] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56107
+                    - time [ref=e836]: January 7, 2026 at 7:12 AM
+                  - generic [ref=e837]:
+                    - paragraph [ref=e838]: "From the article: “Technically, the stop loss is the other side of the opening range, and the target is 50% of the opening range."
+                    - paragraph [ref=e839]: It seems like that is a negative reward:risk! Risk the whole opening range to only make half the opening range???
+                    - paragraph [ref=e840]: Sort of. Remember, risk is capped at $1000 [or whatever you set your max risk at], which is 50 points on an NQ contract. If the opening range is bigger than that, then risk is still capped at 50 points.”
+          - listitem [ref=e841]:
+            - generic [ref=e842]:
+              - generic [ref=e843]:
+                - generic [ref=e845]: megan
+                - generic [ref=e846]:
+                  - text: ·
+                  - link "Reply to megan" [ref=e847] [cursor=pointer]:
+                    - /url: "#comment-56070"
+                    - text: Reply
+                - img [ref=e849] [cursor=pointer]
+                - generic [ref=e851]:
+                  - generic [ref=e852]:
+                    - strong [ref=e853]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e855]: Anti-Spam by CleanTalk
+              - link "January 5, 2026 at 9:53 AM" [ref=e857] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56070
+                - time [ref=e858]: January 5, 2026 at 9:53 AM
+              - paragraph [ref=e860]: I’m curious what the results would be in other markets such as ES or Gold or Crude. Have you tested any other markets?
+            - list [ref=e861]:
+              - listitem [ref=e862]:
+                - generic [ref=e863]:
+                  - generic [ref=e864]:
+                    - generic [ref=e866]: Cory Mitchell, CMT
+                    - generic [ref=e867]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e868] [cursor=pointer]:
+                        - /url: "#comment-56091"
+                        - text: Reply
+                    - generic [ref=e869]: Author
+                    - img [ref=e871] [cursor=pointer]
+                    - generic [ref=e873]:
+                      - generic [ref=e874]:
+                        - strong [ref=e875]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e877]: Anti-Spam by CleanTalk
+                  - link "January 5, 2026 at 8:21 PM" [ref=e879] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56091
+                    - time [ref=e880]: January 5, 2026 at 8:21 PM
+                  - paragraph [ref=e882]: Not yet. I will do that this week.
+                - list [ref=e883]:
+                  - listitem [ref=e884]:
+                    - generic [ref=e885]:
+                      - generic [ref=e886]:
+                        - generic [ref=e888]: megan
+                        - generic [ref=e889]:
+                          - text: ·
+                          - link "Reply to megan" [ref=e890] [cursor=pointer]:
+                            - /url: "#comment-56286"
+                            - text: Reply
+                        - img [ref=e892] [cursor=pointer]
+                        - generic [ref=e894]:
+                          - generic [ref=e895]:
+                            - strong [ref=e896]: The Real Person Badge!
+                            - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                          - generic [ref=e898]: Anti-Spam by CleanTalk
+                      - link "January 17, 2026 at 10:35 AM" [ref=e900] [cursor=pointer]:
+                        - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56286
+                        - time [ref=e901]: January 17, 2026 at 10:35 AM
+                      - paragraph [ref=e903]: Curious if there were any promising markets/insights you wouldn’t mind sharing… seems like ES should work with this as well.
+                    - list [ref=e904]:
+                      - listitem [ref=e905]:
+                        - generic [ref=e906]:
+                          - generic [ref=e907]:
+                            - generic [ref=e909]: Cory Mitchell, CMT
+                            - generic [ref=e910]:
+                              - text: ·
+                              - link "Reply to Cory Mitchell, CMT" [ref=e911] [cursor=pointer]:
+                                - /url: "#comment-56287"
+                                - text: Reply
+                            - generic [ref=e912]: Author
+                            - img [ref=e914] [cursor=pointer]
+                            - generic [ref=e916]:
+                              - generic [ref=e917]:
+                                - strong [ref=e918]: The Real Person Badge!
+                                - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                              - generic [ref=e920]: Anti-Spam by CleanTalk
+                          - link "January 17, 2026 at 11:13 AM" [ref=e922] [cursor=pointer]:
+                            - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56287
+                            - time [ref=e923]: January 17, 2026 at 11:13 AM
+                          - paragraph [ref=e925]: The settings will be different for each market, since they have different volatilities.
+                  - listitem [ref=e926]:
+                    - generic [ref=e927]:
+                      - generic [ref=e928]:
+                        - generic [ref=e930]: Dee
+                        - generic [ref=e931]:
+                          - text: ·
+                          - link "Reply to Dee" [ref=e932] [cursor=pointer]:
+                            - /url: "#comment-56917"
+                            - text: Reply
+                        - img [ref=e934] [cursor=pointer]
+                        - generic [ref=e936]:
+                          - generic [ref=e937]:
+                            - strong [ref=e938]: The Real Person Badge!
+                            - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                          - generic [ref=e940]: Anti-Spam by CleanTalk
+                      - link "February 21, 2026 at 3:11 PM" [ref=e942] [cursor=pointer]:
+                        - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56917
+                        - time [ref=e943]: February 21, 2026 at 3:11 PM
+                      - paragraph [ref=e945]: Hi, did you get round to testing this in Gold, ES, Crude ? Any results to report ? Thank you.
+                    - list [ref=e946]:
+                      - listitem [ref=e947]:
+                        - generic [ref=e948]:
+                          - generic [ref=e949]:
+                            - generic [ref=e951]: Cory Mitchell, CMT
+                            - generic [ref=e952]:
+                              - text: ·
+                              - link "Reply to Cory Mitchell, CMT" [ref=e953] [cursor=pointer]:
+                                - /url: "#comment-56918"
+                                - text: Reply
+                            - generic [ref=e954]: Author
+                            - img [ref=e956] [cursor=pointer]
+                            - generic [ref=e958]:
+                              - generic [ref=e959]:
+                                - strong [ref=e960]: The Real Person Badge!
+                                - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                              - generic [ref=e962]: Anti-Spam by CleanTalk
+                          - link "February 21, 2026 at 8:01 PM" [ref=e964] [cursor=pointer]:
+                            - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-56918
+                            - time [ref=e965]: February 21, 2026 at 8:01 PM
+                          - paragraph [ref=e967]:
+                            - text: "This one:"
+                            - link "https://tradethatswing.com/one-trade-a-day-gold-strategy-411-in-last-year-fully-automatable/" [ref=e968] [cursor=pointer]:
+                              - /url: https://tradethatswing.com/one-trade-a-day-gold-strategy-411-in-last-year-fully-automatable/
+                            - text: Nothing else yet.
+          - listitem [ref=e969]:
+            - generic [ref=e970]:
+              - generic [ref=e971]:
+                - generic [ref=e973]: megan
+                - generic [ref=e974]:
+                  - text: ·
+                  - link "Reply to megan" [ref=e975] [cursor=pointer]:
+                    - /url: "#comment-55902"
+                    - text: Reply
+                - img [ref=e977] [cursor=pointer]
+                - generic [ref=e979]:
+                  - generic [ref=e980]:
+                    - strong [ref=e981]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e983]: Anti-Spam by CleanTalk
+              - link "December 23, 2025 at 7:37 PM" [ref=e985] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-55902
+                - time [ref=e986]: December 23, 2025 at 7:37 PM
+              - paragraph [ref=e988]: thanks for sharing! question about the target… say the ORB range is 100, and so .5 of that is 50. say OR high is 23,000 would the target be 23,500 or would it be added to whatever your 5M entry price is?
+            - list [ref=e989]:
+              - listitem [ref=e990]:
+                - generic [ref=e991]:
+                  - generic [ref=e992]:
+                    - generic [ref=e994]: Cory Mitchell, CMT
+                    - generic [ref=e995]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e996] [cursor=pointer]:
+                        - /url: "#comment-55911"
+                        - text: Reply
+                    - generic [ref=e997]: Author
+                    - img [ref=e999] [cursor=pointer]
+                    - generic [ref=e1001]:
+                      - generic [ref=e1002]:
+                        - strong [ref=e1003]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e1005]: Anti-Spam by CleanTalk
+                  - link "December 24, 2025 at 2:01 PM" [ref=e1007] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-55911
+                    - time [ref=e1008]: December 24, 2025 at 2:01 PM
+                  - generic [ref=e1009]:
+                    - paragraph [ref=e1010]: If OR is 100 points… Then if the target is 50% of that, it would be 50, and SL would be 100 points if SL is 100%.
+                    - paragraph [ref=e1011]: This is calculated from the first 5 minute close outside the OR.
+                    - paragraph [ref=e1012]: The stop loss is overruled by the maximum loss rule though.
+                    - paragraph [ref=e1013]: Nasdaq futures are $20 per point. So say for example we choose a max loss of $1000 per trade. Then the SL will go at 50 points from the actual entry (because 50 x $20 = $1000) even if the theoretical SL should be more than that…say if the OR was 120 points (then SL would be 60 points…but would be overruled by the 50 point max SL to keep risk to $1000 or less).
+                    - paragraph [ref=e1014]: Hopefully that makes sense?
+                    - paragraph [ref=e1015]: Happy holidays!
+                - list [ref=e1016]:
+                  - listitem [ref=e1017]:
+                    - generic [ref=e1018]:
+                      - generic [ref=e1019]:
+                        - generic [ref=e1021]: megan
+                        - generic [ref=e1022]:
+                          - text: ·
+                          - link "Reply to megan" [ref=e1023] [cursor=pointer]:
+                            - /url: "#comment-55987"
+                            - text: Reply
+                        - img [ref=e1025] [cursor=pointer]
+                        - generic [ref=e1027]:
+                          - generic [ref=e1028]:
+                            - strong [ref=e1029]: The Real Person Badge!
+                            - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                          - generic [ref=e1031]: Anti-Spam by CleanTalk
+                      - link "December 29, 2025 at 7:15 AM" [ref=e1033] [cursor=pointer]:
+                        - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-55987
+                        - time [ref=e1034]: December 29, 2025 at 7:15 AM
+                      - paragraph [ref=e1036]: That makes sense, thanks!
+          - listitem [ref=e1037]:
+            - generic [ref=e1038]:
+              - generic [ref=e1039]:
+                - generic [ref=e1041]: Matt
+                - generic [ref=e1042]:
+                  - text: ·
+                  - link "Reply to Matt" [ref=e1043] [cursor=pointer]:
+                    - /url: "#comment-55812"
+                    - text: Reply
+                - img [ref=e1045] [cursor=pointer]
+                - generic [ref=e1047]:
+                  - generic [ref=e1048]:
+                    - strong [ref=e1049]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e1051]: Anti-Spam by CleanTalk
+              - link "December 17, 2025 at 4:03 PM" [ref=e1053] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-55812
+                - time [ref=e1054]: December 17, 2025 at 4:03 PM
+              - generic [ref=e1055]:
+                - paragraph [ref=e1056]: Hello, thanks for sharing this content.
+                - paragraph [ref=e1057]: "I’d like to ask: is the backtest result coming from the Edgeful algo itself? Or you coded your own version of it?"
+                - paragraph [ref=e1058]: I’m interested in knowing if it’s possible to actually tweak their indicator (Algo) or if it comes as is without any further possibility to change it.
+                - paragraph [ref=e1059]: Thanks in advance
+            - list [ref=e1060]:
+              - listitem [ref=e1061]:
+                - generic [ref=e1062]:
+                  - generic [ref=e1063]:
+                    - generic [ref=e1065]: Cory Mitchell, CMT
+                    - generic [ref=e1066]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e1067] [cursor=pointer]:
+                        - /url: "#comment-55831"
+                        - text: Reply
+                    - generic [ref=e1068]: Author
+                    - img [ref=e1070] [cursor=pointer]
+                    - generic [ref=e1072]:
+                      - generic [ref=e1073]:
+                        - strong [ref=e1074]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e1076]: Anti-Spam by CleanTalk
+                  - link "December 18, 2025 at 7:26 AM" [ref=e1078] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-55831
+                    - time [ref=e1079]: December 18, 2025 at 7:26 AM
+                  - generic [ref=e1080]:
+                    - paragraph [ref=e1081]: Changing theirs’s. It gives settings to change.
+                    - paragraph [ref=e1082]: They also produced a new one which can have multiple profit targets and another where the stop loss can be moved to breakeven.
+                    - paragraph [ref=e1083]: But yes they are customizable. The two images at the very bottom of the article show most of the options/setting available to tweak.
+          - listitem [ref=e1084]:
+            - generic [ref=e1085]:
+              - generic [ref=e1086]:
+                - generic [ref=e1088]: Eric
+                - generic [ref=e1089]:
+                  - text: ·
+                  - link "Reply to Eric" [ref=e1090] [cursor=pointer]:
+                    - /url: "#comment-55598"
+                    - text: Reply
+                - img [ref=e1092] [cursor=pointer]
+                - generic [ref=e1094]:
+                  - generic [ref=e1095]:
+                    - strong [ref=e1096]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e1098]: Anti-Spam by CleanTalk
+              - link "December 8, 2025 at 11:25 AM" [ref=e1100] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-55598
+                - time [ref=e1101]: December 8, 2025 at 11:25 AM
+              - paragraph [ref=e1103]: How would you set up a take profit or stop loss?
+            - list [ref=e1104]:
+              - listitem [ref=e1105]:
+                - generic [ref=e1106]:
+                  - generic [ref=e1107]:
+                    - generic [ref=e1109]: Cory Mitchell, CMT
+                    - generic [ref=e1110]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e1111] [cursor=pointer]:
+                        - /url: "#comment-55603"
+                        - text: Reply
+                    - generic [ref=e1112]: Author
+                    - img [ref=e1114] [cursor=pointer]
+                    - generic [ref=e1116]:
+                      - generic [ref=e1117]:
+                        - strong [ref=e1118]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e1120]: Anti-Spam by CleanTalk
+                  - link "December 8, 2025 at 4:05 PM" [ref=e1122] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-55603
+                    - time [ref=e1123]: December 8, 2025 at 4:05 PM
+                  - generic [ref=e1124]:
+                    - paragraph [ref=e1125]:
+                      - text: The algos can do it for you, if using them. This will require connecting the account to TradingView. Edgeful has documentation on this.
+                      - link "https://www.edgeful.com/algos-automation/get-started?via=TTS" [ref=e1126] [cursor=pointer]:
+                        - /url: https://www.edgeful.com/algos-automation/get-started?via=TTS
+                      - text: (if you subscribed and logged in this link will take you to the algo tutorials. If not logged in, then it will take you to the generic algo sales page to sign up).
+                    - paragraph [ref=e1127]: If doing it manually, then a bracket order, set at the levels determined by the algo or manually calculated based on the strategy.
+                    - paragraph [ref=e1128]: Does that answer your question?
+          - listitem [ref=e1129]:
+            - generic [ref=e1130]:
+              - generic [ref=e1131]:
+                - link "bitm" [ref=e1134] [cursor=pointer]:
+                  - /url: https://bitm.pl
+                - generic [ref=e1135]:
+                  - text: ·
+                  - link "Reply to bitm" [ref=e1136] [cursor=pointer]:
+                    - /url: "#comment-54670"
+                    - text: Reply
+                - img [ref=e1138] [cursor=pointer]
+                - generic [ref=e1140]:
+                  - generic [ref=e1141]:
+                    - strong [ref=e1142]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e1144]: Anti-Spam by CleanTalk
+              - link "November 4, 2025 at 3:11 AM" [ref=e1146] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-54670
+                - time [ref=e1147]: November 4, 2025 at 3:11 AM
+              - paragraph [ref=e1149]: "Solid ORB write-up. The mechanics matter: exact opening window, treatment of gaps, stop logic, and realistic slippage. A quick strat by volatility regime and a basic news filter would show whether performance is outlier-driven or durable. Good to see risk and position sizing front and center — that’s where most “400%” claims quietly fall apart."
+          - listitem [ref=e1150]:
+            - generic [ref=e1151]:
+              - generic [ref=e1152]:
+                - generic [ref=e1154]: Juggie
+                - generic [ref=e1155]:
+                  - text: ·
+                  - link "Reply to Juggie" [ref=e1156] [cursor=pointer]:
+                    - /url: "#comment-54566"
+                    - text: Reply
+                - img [ref=e1158] [cursor=pointer]
+                - generic [ref=e1160]:
+                  - generic [ref=e1161]:
+                    - strong [ref=e1162]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e1164]: Anti-Spam by CleanTalk
+              - link "October 30, 2025 at 4:01 AM" [ref=e1166] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-54566
+                - time [ref=e1167]: October 30, 2025 at 4:01 AM
+              - paragraph [ref=e1169]: You said if price breaks the range low first, its a no-trade day. This “break”, does it mean when a 5 min candle closes below or just when price goes below the range no matter a close or not?
+            - list [ref=e1170]:
+              - listitem [ref=e1171]:
+                - generic [ref=e1172]:
+                  - generic [ref=e1173]:
+                    - generic [ref=e1175]: Cory Mitchell, CMT
+                    - generic [ref=e1176]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e1177] [cursor=pointer]:
+                        - /url: "#comment-54569"
+                        - text: Reply
+                    - generic [ref=e1178]: Author
+                    - img [ref=e1180] [cursor=pointer]
+                    - generic [ref=e1182]:
+                      - generic [ref=e1183]:
+                        - strong [ref=e1184]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e1186]: Anti-Spam by CleanTalk
+                  - link "October 30, 2025 at 7:06 AM" [ref=e1188] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-54569
+                    - time [ref=e1189]: October 30, 2025 at 7:06 AM
+                  - generic [ref=e1190]:
+                    - paragraph [ref=e1191]: A close. So a 5-minute close below (if going long only) is a a no -trade day. A wick is ok. The strategy is essentially taking the first 5-minute close outside the opening range, whether we opted to skip it or not.
+                    - paragraph [ref=e1192]: As conditions change, long only probably won’t be the best approach. Recently was a predominantly uptrending period. If the indices enter a downtrend, that would be a different market environment. Maybe this weekend when I have some time I will run numbers on downtrends and see if it favors shorts or a mix of longs and shorts.
+                    - paragraph [ref=e1193]: Just pointing that out, because this article was about optimizing for an overall uptrend. If a downtrend occurs, we would want to align our parameters for taking advantage of that.
+                - list [ref=e1194]:
+                  - listitem [ref=e1195]:
+                    - generic [ref=e1196]:
+                      - generic [ref=e1197]:
+                        - generic [ref=e1199]: Juggie
+                        - generic [ref=e1200]:
+                          - text: ·
+                          - link "Reply to Juggie" [ref=e1201] [cursor=pointer]:
+                            - /url: "#comment-54590"
+                            - text: Reply
+                        - img [ref=e1203] [cursor=pointer]
+                        - generic [ref=e1205]:
+                          - generic [ref=e1206]:
+                            - strong [ref=e1207]: The Real Person Badge!
+                            - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                          - generic [ref=e1209]: Anti-Spam by CleanTalk
+                      - link "October 31, 2025 at 3:02 AM" [ref=e1211] [cursor=pointer]:
+                        - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-54590
+                        - time [ref=e1212]: October 31, 2025 at 3:02 AM
+                      - paragraph [ref=e1214]: Ok. Thank you very much for your response. I will like to see the short trend numbers also. Thanks.
+                    - list [ref=e1215]:
+                      - listitem [ref=e1216]:
+                        - generic [ref=e1217]:
+                          - generic [ref=e1218]:
+                            - generic [ref=e1220]: Cory Mitchell, CMT
+                            - generic [ref=e1221]:
+                              - text: ·
+                              - link "Reply to Cory Mitchell, CMT" [ref=e1222] [cursor=pointer]:
+                                - /url: "#comment-54626"
+                                - text: Reply
+                            - generic [ref=e1223]: Author
+                            - img [ref=e1225] [cursor=pointer]
+                            - generic [ref=e1227]:
+                              - generic [ref=e1228]:
+                                - strong [ref=e1229]: The Real Person Badge!
+                                - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                              - generic [ref=e1231]: Anti-Spam by CleanTalk
+                          - link "November 1, 2025 at 8:43 AM" [ref=e1233] [cursor=pointer]:
+                            - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-54626
+                            - time [ref=e1234]: November 1, 2025 at 8:43 AM
+                          - generic [ref=e1235]:
+                            - paragraph [ref=e1236]: I went through a number of downtrend periods, using my market health indicators which I update each week to determine the downtrend periods.
+                            - paragraph [ref=e1237]: While some periods did ok, most did not. Therefore, I wouldn’t trade the strategy in a downtrend. There may be some specific parameters that work, or certain days, but similar parameters to this article don’t really work in downtrends (just taking short signals instead of longs). A combination of long and short trades didn’t work either.
+                            - paragraph [ref=e1238]: My guess is because of the increased volatility during downtrends. Daily ranges tend to be bigger and more whipsaw-y. Where as uptrends tend to be calm.
+                            - paragraph [ref=e1239]: There is always a way to make an idea profitable, but the strategy as outlined in this article is for up trending conditions. It would likely need a full revamp or quite different parameters for downtrends.
+                        - list [ref=e1240]:
+                          - listitem [ref=e1241]:
+                            - generic [ref=e1242]:
+                              - generic [ref=e1243]:
+                                - generic [ref=e1245]: Juggie
+                                - img [ref=e1247] [cursor=pointer]
+                                - generic [ref=e1249]:
+                                  - generic [ref=e1250]:
+                                    - strong [ref=e1251]: The Real Person Badge!
+                                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                                  - generic [ref=e1253]: Anti-Spam by CleanTalk
+                              - link "November 3, 2025 at 10:43 AM" [ref=e1255] [cursor=pointer]:
+                                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-54658
+                                - time [ref=e1256]: November 3, 2025 at 10:43 AM
+                              - paragraph [ref=e1258]:
+                                - text: Thank you for taking your time to look at it.
+                                - text: Maybe Longs can work even in down trends? Thats is, we only take longs no matter the trend?
+                          - listitem [ref=e1259]:
+                            - generic [ref=e1260]:
+                              - generic [ref=e1261]:
+                                - generic [ref=e1263]: Cory Mitchell, CMT
+                                - generic [ref=e1264]: Author
+                                - img [ref=e1266] [cursor=pointer]
+                                - generic [ref=e1268]:
+                                  - generic [ref=e1269]:
+                                    - strong [ref=e1270]: The Real Person Badge!
+                                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                                  - generic [ref=e1272]: Anti-Spam by CleanTalk
+                              - link "November 3, 2025 at 12:35 PM" [ref=e1274] [cursor=pointer]:
+                                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-54661
+                                - time [ref=e1275]: November 3, 2025 at 12:35 PM
+                              - generic [ref=e1276]:
+                                - paragraph [ref=e1277]: No. That has not worked either. Would have wiped out the account very quickly in some downtrending periods.
+                                - paragraph [ref=e1278]: The shorts perform ok in some downtrending periods, but not others. So need to do more research on this.
+                                - paragraph [ref=e1279]: For now, the strategy is long only during uptrends (or less optimally, longs and short during uptrends).
+          - listitem [ref=e1280]:
+            - generic [ref=e1281]:
+              - generic [ref=e1282]:
+                - generic [ref=e1284]: Victor
+                - generic [ref=e1285]:
+                  - text: ·
+                  - link "Reply to Victor" [ref=e1286] [cursor=pointer]:
+                    - /url: "#comment-54261"
+                    - text: Reply
+                - img [ref=e1288] [cursor=pointer]
+                - generic [ref=e1290]:
+                  - generic [ref=e1291]:
+                    - strong [ref=e1292]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e1294]: Anti-Spam by CleanTalk
+              - link "October 13, 2025 at 12:15 PM" [ref=e1296] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-54261
+                - time [ref=e1297]: October 13, 2025 at 12:15 PM
+              - generic [ref=e1298]:
+                - paragraph [ref=e1299]: Hey Cory
+                - paragraph [ref=e1300]:
+                  - text: Interesting conversation and something to look futher into. Your content is always great!
+                  - text: Thank you,
+                  - text: Victor
+          - listitem [ref=e1301]:
+            - generic [ref=e1302]:
+              - generic [ref=e1303]:
+                - generic [ref=e1305]: Roman
+                - generic [ref=e1306]:
+                  - text: ·
+                  - link "Reply to Roman" [ref=e1307] [cursor=pointer]:
+                    - /url: "#comment-54232"
+                    - text: Reply
+                - img [ref=e1309] [cursor=pointer]
+                - generic [ref=e1311]:
+                  - generic [ref=e1312]:
+                    - strong [ref=e1313]: The Real Person Badge!
+                    - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                  - generic [ref=e1315]: Anti-Spam by CleanTalk
+              - link "October 11, 2025 at 4:55 PM" [ref=e1317] [cursor=pointer]:
+                - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-54232
+                - time [ref=e1318]: October 11, 2025 at 4:55 PM
+              - generic [ref=e1319]:
+                - paragraph [ref=e1320]: Hi,
+                - paragraph [ref=e1321]: interesting. Btw, the link to the position sizing method is broken.
+                - paragraph [ref=e1322]: best regards
+                - paragraph [ref=e1323]: Roman
+            - list [ref=e1324]:
+              - listitem [ref=e1325]:
+                - generic [ref=e1326]:
+                  - generic [ref=e1327]:
+                    - generic [ref=e1329]: Cory Mitchell, CMT
+                    - generic [ref=e1330]:
+                      - text: ·
+                      - link "Reply to Cory Mitchell, CMT" [ref=e1331] [cursor=pointer]:
+                        - /url: "#comment-54241"
+                        - text: Reply
+                    - generic [ref=e1332]: Author
+                    - img [ref=e1334] [cursor=pointer]
+                    - generic [ref=e1336]:
+                      - generic [ref=e1337]:
+                        - strong [ref=e1338]: The Real Person Badge!
+                        - text: Verified as a real person and not a bot. The comment was approved without pre-moderation.
+                      - generic [ref=e1340]: Anti-Spam by CleanTalk
+                  - link "October 12, 2025 at 4:20 PM" [ref=e1342] [cursor=pointer]:
+                    - /url: https://tradethatswing.com/opening-range-breakout-strategy-up-400-this-year/#comment-54241
+                    - time [ref=e1343]: October 12, 2025 at 4:20 PM
+                  - paragraph [ref=e1345]: Thanks. Fixed.
+        - generic [ref=e1346]:
+          - heading "Leave a Reply" [level=3] [ref=e1347]
+          - heading "Leave a well-reasoned comment or question." [level=5] [ref=e1348]
+          - generic [ref=e1349]:
+            - paragraph [ref=e1350]:
+              - textbox "Your name *" [ref=e1351]
+            - paragraph [ref=e1352]:
+              - textbox "Your email address *" [ref=e1353]
+            - paragraph [ref=e1354]:
+              - textbox "Your website URL" [ref=e1355]
+            - paragraph [ref=e1356]:
+              - textbox [ref=e1357]
+            - paragraph [ref=e1358]:
+              - checkbox "Save my name, email, and website in this browser for the next time I comment." [ref=e1359]
+              - generic [ref=e1360]: Save my name, email, and website in this browser for the next time I comment.
+            - paragraph [ref=e1361]:
+              - button "Submit Comment" [ref=e1362] [cursor=pointer]
+      - generic [ref=e1363]:
+        - paragraph [ref=e1366]:
+          - link "Sign Up" [ref=e1367] [cursor=pointer]:
+            - /url: https://tradethatswing.com/weekly-trading-newsletter/
+            - strong [ref=e1368]: Sign Up
+          - text: for My Free Weekly Trading Tips Newsletter
+        - generic [ref=e1369]:
+          - heading "Search the Site" [level=4] [ref=e1370]
+          - search [ref=e1371]:
+            - textbox "Enter keywords" [ref=e1372]
+            - button [ref=e1373] [cursor=pointer]: 
+        - generic [ref=e1374]:
+          - heading "Trading Courses" [level=4] [ref=e1375]
+          - generic [ref=e1376]:
+            - figure [ref=e1378]:
+              - link [ref=e1379] [cursor=pointer]:
+                - /url: https://tradethatswing.com/product/the-trading-fix-book-tactics-for-overcoming-all-the-common-trading-problems/
+                - img [ref=e1380]
+            - figure [ref=e1382]:
+              - link [ref=e1383] [cursor=pointer]:
+                - /url: https://tradethatswing.com/product/the-complete-method-stock-swing-trading-course/
+                - img [ref=e1384]
+            - figure [ref=e1385]:
+              - link [ref=e1386] [cursor=pointer]:
+                - /url: https://tradethatswing.com/product/price-action-stock-day-trading-course/
+            - figure [ref=e1388]:
+              - link [ref=e1389] [cursor=pointer]:
+                - /url: https://tradethatswing.com/product/the-eurusd-day-trading-course/
+                - img [ref=e1390]
+            - figure [ref=e1391]:
+              - link [ref=e1392] [cursor=pointer]:
+                - /url: https://tradethatswing.com/product/forex-swing-trading-course/
+            - figure [ref=e1394]:
+              - link [ref=e1395] [cursor=pointer]:
+                - /url: https://tradethatswing.com/product/forex-trading-introduction-course-with-cory-mitchell-cmt/
+                - img [ref=e1396]
+            - figure [ref=e1398]:
+              - link [ref=e1399] [cursor=pointer]:
+                - /url: https://tradethatswing.com/product/passive-stock-investing-using-etfs-ebook/
+                - img [ref=e1400]
+    - generic [ref=e1402] [cursor=pointer]: 
+    - paragraph [ref=e1406]:
+      - text: © 2026 · TradeThatSwing. This site may profit from affiliate marketing and advertising. Powered by
+      - link "KZS" [ref=e1407] [cursor=pointer]:
+        - /url: https://kzs.ca/
+    - navigation:
+      - link " Prev" [ref=e1408] [cursor=pointer]:
+        - /url: https://tradethatswing.com/how-beliefs-shape-our-trading-are-your-beliefs-helping-or-hurting-you/
+        - generic [ref=e1409]: 
+        - generic [ref=e1410]: Prev
+      - link " Next" [ref=e1411] [cursor=pointer]:
+        - /url: https://tradethatswing.com/how-to-commit-to-a-trading-decision-to-avoid-overthinking-analysis-paralysis-or-conflicting-obtrusive-thoughts/
+        - generic [ref=e1412]: 
+        - generic [ref=e1413]: Next
+  - generic [ref=e1414]:
+    - link "Facebook" [ref=e1415] [cursor=pointer]:
+      - /url: /#facebook
+      - generic:
+        - img
+      - generic [ref=e1416]: Facebook
+    - link "Twitter" [ref=e1417] [cursor=pointer]:
+      - /url: /#twitter
+      - generic:
+        - img
+      - generic [ref=e1418]: Twitter
+    - link "Email" [ref=e1419] [cursor=pointer]:
+      - /url: /#email
+      - generic:
+        - img
+      - generic [ref=e1420]: Email
+    - link "Pinterest" [ref=e1421] [cursor=pointer]:
+      - /url: /#pinterest
+      - generic:
+        - img
+      - generic [ref=e1422]: Pinterest
+    - link "Reddit" [ref=e1423] [cursor=pointer]:
+      - /url: /#reddit
+      - generic:
+        - img
+      - generic [ref=e1424]: Reddit
+    - link "LinkedIn" [ref=e1425] [cursor=pointer]:
+      - /url: /#linkedin
+      - generic:
+        - img
+      - generic [ref=e1426]: LinkedIn
+    - link "WhatsApp" [ref=e1427] [cursor=pointer]:
+      - /url: /#whatsapp
+      - generic:
+        - img
+      - generic [ref=e1428]: WhatsApp
+    - link "Messenger" [ref=e1429] [cursor=pointer]:
+      - /url: /#facebook_messenger
+      - generic:
+        - img
+      - generic [ref=e1430]: Messenger
+    - link "Threads" [ref=e1431] [cursor=pointer]:
+      - /url: /#threads
+      - generic:
+        - img
+      - generic [ref=e1432]: Threads
+  - generic [ref=e1434]:
+    - text: This website uses cookies to improve your experience. We'll assume you're ok with this, but you can opt-out if you wish.
+    - button "Cookie settings" [ref=e1435] [cursor=pointer]
+    - button "ACCEPT" [ref=e1436] [cursor=pointer]
+  - text: Show more Enabled
+  - generic [ref=e1438]:
+    - paragraph [ref=e1440]:
+      - text: Need help with your trading?
+      - link "Trader Coaching" [ref=e1441] [cursor=pointer]:
+        - /url: https://tradethatswing.com/trader-coaching-with-cory-mitchell-cmt/
+      - text: is Available
+    - link "Get Help" [ref=e1443] [cursor=pointer]:
+      - /url: https://tradethatswing.com/trader-coaching-with-cory-mitchell-cmt/
+      - generic [ref=e1444]: Get Help
+    - generic [ref=e1445] [cursor=pointer]: X

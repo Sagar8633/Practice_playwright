@@ -1,0 +1,934 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e6]:
+      - 'button "Logged in as patilkareena208 Active layout: Unnamed" [ref=e7]'
+      - generic [ref=e8]: "11"
+    - toolbar [ref=e12]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - button "TATACONSUM" [ref=e19]:
+              - generic [ref=e20]: TATACONSUM
+            - button "Switch data type" [ref=e21]:
+              - img [ref=e22]:
+                - img [ref=e23]
+          - button "Compare symbols" [ref=e25]:
+            - img [ref=e26]:
+              - img [ref=e27]
+        - generic [ref=e33]:
+          - radiogroup [ref=e34]:
+            - radio "5 minutes" [checked] [ref=e35]:
+              - generic [ref=e37]: 5m
+            - radio "15 minutes" [ref=e38]:
+              - generic [ref=e40]: 15m
+            - radio "45 minutes" [ref=e41]:
+              - generic [ref=e43]: 45m
+          - button "Chart interval" [ref=e44]:
+            - img [ref=e47]:
+              - img [ref=e48]
+        - button "Candles" [ref=e54]:
+          - img [ref=e56]:
+            - img [ref=e57]
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - button "Indicators, metrics, and strategies" [ref=e66]:
+              - img [ref=e67]:
+                - img [ref=e68]
+              - generic [ref=e71]: Indicators
+            - button "Favorite indicators" [ref=e72]:
+              - img [ref=e75]:
+                - img [ref=e76]
+          - button "Indicator templates" [ref=e79]:
+            - img [ref=e81]:
+              - img [ref=e82]
+        - generic [ref=e86]:
+          - button "Create alert" [ref=e87]:
+            - img [ref=e88]:
+              - img [ref=e89]
+            - generic [ref=e92]: Alert
+          - button "Bar replay" [ref=e93]:
+            - img [ref=e94]:
+              - img [ref=e95]
+            - generic [ref=e97]: Replay
+        - generic [ref=e101]:
+          - button "Undo" [ref=e3266]:
+            - img [ref=e103]:
+              - img [ref=e104]
+          - button [disabled] [ref=e106]:
+            - img [ref=e107]:
+              - img [ref=e108]
+        - generic [ref=e111]:
+          - button "Layout setup" [ref=e112]:
+            - img [ref=e113]:
+              - img
+          - generic [ref=e115]:
+            - button "Save all charts for all symbols and intervals on your layout" [ref=e3267]:
+              - generic [ref=e118]:
+                - generic [ref=e119]: Unnamed
+                - generic [ref=e3268]: Save
+            - button "Manage layouts" [ref=e121]:
+              - img [ref=e124]:
+                - img [ref=e125]
+        - generic [ref=e129]:
+          - button "Quick search" [ref=e130]:
+            - img [ref=e131]:
+              - img [ref=e132]
+          - button "Settings" [ref=e135]:
+            - img [ref=e136]:
+              - img [ref=e137]
+          - button "Fullscreen mode" [ref=e141]:
+            - img [ref=e142]:
+              - img [ref=e143]
+          - button "Take a snapshot" [ref=e145]:
+            - img [ref=e147]:
+              - img [ref=e148]
+      - button "Trade" [ref=e154]:
+        - generic [ref=e160]: Trade
+      - button "Share your idea with the trade community" [ref=e162]:
+        - generic [ref=e164]: Publish
+    - toolbar [ref=e166]:
+      - generic [ref=e170]:
+        - generic [ref=e171]:
+          - generic [ref=e174]:
+            - button "Cross" [ref=e176]:
+              - img [ref=e177]:
+                - img [ref=e178]
+            - button "Cursors" [pressed] [ref=e182]:
+              - img [ref=e183]:
+                - img [ref=e184]
+          - generic [ref=e188]:
+            - button "Trendline" [ref=e190]:
+              - img [ref=e191]:
+                - img [ref=e192]
+            - button "Trend tools" [ref=e196]:
+              - img [ref=e197]:
+                - img [ref=e198]
+          - generic [ref=e202]:
+            - button "Fib retracement" [ref=e204]:
+              - img [ref=e205]:
+                - img [ref=e206]
+            - button "Gann and Fibonacci tools" [ref=e213]:
+              - img [ref=e214]:
+                - img [ref=e215]
+          - generic [ref=e219]:
+            - button "XABCD pattern" [ref=e221]:
+              - img [ref=e222]:
+                - img [ref=e223]
+            - button "Patterns" [ref=e227]:
+              - img [ref=e228]:
+                - img [ref=e229]
+          - generic [ref=e233]:
+            - button "Long position" [ref=e235]:
+              - img [ref=e236]:
+                - img [ref=e237]
+            - button "Forecasting and measurement tools" [ref=e239]:
+              - img [ref=e240]:
+                - img [ref=e241]
+          - generic [ref=e245]:
+            - button "Brush" [ref=e247]:
+              - img [ref=e248]:
+                - img [ref=e249]
+            - button "Geometric shapes" [ref=e253]:
+              - img [ref=e254]:
+                - img [ref=e255]
+          - generic [ref=e259]:
+            - button "Text" [ref=e261]:
+              - img [ref=e262]:
+                - img [ref=e263]
+            - button "Annotation tools" [ref=e265]:
+              - img [ref=e266]:
+                - img [ref=e267]
+          - generic [ref=e270]:
+            - button "Icon" [ref=e272]:
+              - img [ref=e273]:
+                - img [ref=e274]
+            - button "Icons" [ref=e276]:
+              - img [ref=e277]:
+                - img [ref=e278]
+        - generic [ref=e280]:
+          - button "Measure" [ref=e281]:
+            - img [ref=e282]:
+              - img [ref=e283]
+          - button "Zoom in" [ref=e285]:
+            - img [ref=e286]:
+              - img [ref=e287]
+        - generic [ref=e292]:
+          - generic [ref=e295]:
+            - button "Magnet mode snaps drawings placed near price bars to the closest OHLC value" [ref=e297]:
+              - img [ref=e298]:
+                - img [ref=e299]
+            - button "Magnets" [ref=e303]:
+              - img [ref=e304]:
+                - img [ref=e305]
+          - button "Keep drawing" [ref=e307]:
+            - img [ref=e308]:
+              - img [ref=e309]
+          - button "Lock all drawings" [ref=e311]:
+            - img [ref=e312]:
+              - img [ref=e313]
+          - generic [ref=e316]:
+            - button "Hide all drawings" [ref=e318]:
+              - img [ref=e319]:
+                - img [ref=e320]
+            - button "Hide options" [ref=e322]:
+              - img [ref=e323]:
+                - img [ref=e324]
+        - generic [ref=e328]:
+          - button "Remove objects" [ref=e330]:
+            - img [ref=e331]:
+              - img [ref=e332]
+          - button "Remove options" [ref=e334]:
+            - img [ref=e335]:
+              - img [ref=e336]
+    - generic [ref=e340]:
+      - 'region "Chart #1" [ref=e343]':
+        - generic [ref=e344]:
+          - generic [ref=e345]:
+            - generic [ref=e347]:
+              - generic:
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e348]:
+                        - generic "Change symbol" [ref=e1154]:
+                          - generic [ref=e350]:
+                            - img [ref=e352]
+                            - generic [ref=e353]: T
+                          - button "Change symbol" [ref=e1155]: Tata Consumer Products Limited
+                        - generic "Change interval" [ref=e1156]:
+                          - text: ·
+                          - button "Change interval" [ref=e1157]: "5"
+                        - generic [ref=e1158]:
+                          - text: ·
+                          - generic [ref=e1159]: NSE
+                      - generic:
+                        - generic:
+                          - button "Flag symbol":
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - img
+                          - button "More":
+                            - generic:
+                              - img
+                      - button "Market closed" [ref=e360]:
+                        - img [ref=e361]:
+                          - img [ref=e362]
+                    - generic [ref=e365]:
+                      - generic [ref=e366]:
+                        - generic [ref=e367]: O
+                        - generic [ref=e368]: 1,094.40
+                      - generic [ref=e369]:
+                        - generic [ref=e370]: H
+                        - generic [ref=e371]: 1,094.40
+                      - generic [ref=e372]:
+                        - generic [ref=e373]: L
+                        - generic [ref=e374]: 1,093.00
+                      - generic [ref=e375]:
+                        - generic [ref=e376]: C
+                        - generic [ref=e377]: 1,094.20
+                      - generic [ref=e379]: −0.20 (−0.02%)
+                  - generic [ref=e382]:
+                    - generic [ref=e384]:
+                      - generic: 1,131.30
+                      - generic: Sell
+                    - generic "Spread" [ref=e386]: "0.00"
+                    - generic [ref=e388]:
+                      - generic: 1,131.30
+                      - generic: Buy
+              - generic "Chart for NSE:TATACONSUM, 5 minutes" [ref=e390]
+            - generic [ref=e395]:
+              - generic [ref=e396]: INR
+              - img [ref=e398]
+          - generic [ref=e404]:
+            - generic:
+              - generic:
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e405]:
+                        - generic [ref=e407]: trade_with_kareena
+                        - generic [ref=e408]:
+                          - generic "Table position" [ref=e409]:
+                            - generic [ref=e410]: top_right
+                          - generic "Flow smoothing length" [ref=e411]:
+                            - generic [ref=e412]: "20"
+                          - generic "Flow visual scale" [ref=e413]:
+                            - generic [ref=e414]: "1"
+                      - generic:
+                        - generic:
+                          - button "Hide":
+                            - generic:
+                              - img
+                          - button "Settings":
+                            - generic:
+                              - img
+                          - generic "Source code":
+                            - generic:
+                              - img
+                          - button "Remove":
+                            - generic:
+                              - img
+                          - button "More":
+                            - generic:
+                              - img
+                    - generic [ref=e416]:
+                      - generic "Momentum Flow Hist" [ref=e418]: −0.07
+                      - generic [ref=e3269]: −0.07
+                      - generic "Flow Up" [ref=e422]: "0.00"
+                      - generic "Flow Down" [ref=e424]: "0.00"
+            - generic [ref=e3271]:
+              - img [ref=e3274]
+              - img [ref=e3278]
+              - img [ref=e3282]
+              - img [ref=e3287]
+      - toolbar [ref=e445]:
+        - generic [ref=e447]:
+          - generic [ref=e448]:
+            - button "1 day in 1 minute intervals" [ref=e449]:
+              - generic [ref=e450]: 1D
+            - button "5 days in 5 minutes intervals" [ref=e451]:
+              - generic [ref=e452]: 5D
+            - button "1 month in 30 minutes intervals" [ref=e453]:
+              - generic [ref=e454]: 1M
+            - button "3 months in 1 hour intervals" [ref=e455]:
+              - generic [ref=e456]: 3M
+            - button "6 months in 2 hours intervals" [ref=e457]:
+              - generic [ref=e458]: 6M
+            - button "Year to day in 1 day intervals" [ref=e459]:
+              - generic [ref=e460]: YTD
+            - button "1 year in 1 day intervals" [ref=e461]:
+              - generic [ref=e462]: 1Y
+            - button "5 years in 1 week intervals" [ref=e463]:
+              - generic [ref=e464]: 5Y
+            - button "All data in 1 month intervals" [ref=e465]:
+              - generic [ref=e466]: All
+          - button "Go to" [ref=e468]:
+            - img [ref=e469]:
+              - img [ref=e470]
+        - generic [ref=e472]:
+          - button "Timezone" [ref=e475]:
+            - generic [ref=e476]: 15:45:10 UTC+5:30
+          - button "Regular" [ref=e479]: RTH
+          - button "Adjust data for dividends" [ref=e483]:
+            - generic [ref=e484]: ADJ
+    - generic [ref=e486]:
+      - toolbar [ref=e491]:
+        - button "Watchlist, details, and news" [ref=e492]:
+          - img [ref=e493]:
+            - img [ref=e494]
+        - button "Alerts" [ref=e497]:
+          - img [ref=e498]:
+            - img [ref=e499]
+        - button "Object tree and data window" [ref=e502]:
+          - img [ref=e503]:
+            - img [ref=e504]
+        - button "Chats" [ref=e506]:
+          - img [ref=e507]:
+            - img [ref=e508]
+        - button "Screeners" [ref=e511]:
+          - img [ref=e512]:
+            - img [ref=e513]
+        - button "Pine" [ref=e517]:
+          - img [ref=e518]:
+            - img [ref=e519]
+        - button "Calendars" [ref=e522]:
+          - img [ref=e523]:
+            - img [ref=e524]
+        - button "Community" [ref=e526]:
+          - img [ref=e527]:
+            - img [ref=e528]
+        - button "Notifications" [ref=e533]:
+          - img [ref=e534]:
+            - img [ref=e535]
+        - button "Products" [ref=e537]:
+          - img [ref=e538]:
+            - img [ref=e539]
+        - button "Help Center" [ref=e542]:
+          - img [ref=e543]:
+            - img [ref=e544]
+      - generic [ref=e546]: "[] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] –"
+    - generic "Trading panel"
+  - generic:
+    - generic:
+      - generic:
+        - generic: Momentum Flow Line
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+    - generic [ref=e555]:
+      - generic [ref=e556]:
+        - generic [ref=e558]: Pine Editor
+        - generic [ref=e559]:
+          - button "Move overlay to split-view" [ref=e560]:
+            - img [ref=e562]:
+              - img [ref=e563]
+          - button "Close" [ref=e565]:
+            - img [ref=e567]:
+              - img [ref=e568]
+      - generic [ref=e576]:
+        - generic [ref=e578]:
+          - generic [ref=e579]:
+            - button "trade_with_kareena Tracker" [ref=e3258]:
+              - img [ref=e581]:
+                - img [ref=e582]
+              - heading "trade_with_kareena Tracker" [level=2] [ref=e3259]
+              - img [ref=e585]:
+                - img [ref=e586]
+            - button "Add to chart" [ref=e1218]:
+              - img [ref=e1220]:
+                - img [ref=e1221]
+              - generic [ref=e1224]: Add to chart
+            - button "Saved" [disabled] [ref=e3260]:
+              - img [ref=e3262]:
+                - img [ref=e3263]
+              - generic [ref=e1231]: Saved
+          - generic [ref=e593]:
+            - button "Publish script" [ref=e594]:
+              - img [ref=e596]:
+                - img [ref=e597]
+              - generic [ref=e600]: Publish script
+            - button "More" [ref=e602]:
+              - img [ref=e604]:
+                - img [ref=e605]
+        - code [ref=e1232]:
+          - generic [ref=e1233]:
+            - generic [ref=e1235]:
+              - generic [ref=e1287]: "10"
+              - generic [ref=e1289]: "11"
+              - generic [ref=e1291]: "12"
+              - generic [ref=e1293]: "13"
+              - generic [ref=e1295]: "14"
+              - generic [ref=e1297]: "15"
+              - generic [ref=e1299]: "16"
+              - generic [ref=e1301]: "17"
+              - generic [ref=e1303]: "18"
+              - generic [ref=e1305]: "19"
+              - generic [ref=e1307]: "20"
+              - generic [ref=e1309]: "21"
+              - generic [ref=e1311]: "22"
+              - generic [ref=e1313]: "23"
+              - generic [ref=e1315]: "24"
+              - generic [ref=e1317]: "25"
+              - generic [ref=e1319]: "26"
+              - generic [ref=e1321]: "27"
+              - generic [ref=e1322]:
+                - generic [ref=e1323] [cursor=pointer]: 
+                - generic [ref=e1324]: "28"
+              - generic [ref=e1326]: "29"
+              - generic [ref=e1328]: "30"
+              - generic [ref=e1330]: "31"
+              - generic [ref=e1331]:
+                - generic [ref=e1332] [cursor=pointer]: 
+                - generic [ref=e1333]: "32"
+              - generic [ref=e1335]: "33"
+              - generic [ref=e1337]: "34"
+              - generic [ref=e1339]: "35"
+              - generic [ref=e1340]:
+                - generic [ref=e1341] [cursor=pointer]: 
+                - generic [ref=e1342]: "36"
+              - generic [ref=e1344]: "37"
+              - generic [ref=e1346]: "38"
+              - generic [ref=e1348]: "39"
+              - generic [ref=e1350]: "40"
+              - generic [ref=e1352]: "41"
+              - generic [ref=e1354]: "42"
+              - generic [ref=e1356]: "43"
+              - generic [ref=e1358]: "44"
+              - generic [ref=e1360]: "45"
+              - generic [ref=e1362]: "46"
+              - generic [ref=e1364]: "47"
+              - generic [ref=e1366]: "48"
+              - generic [ref=e1368]: "49"
+              - generic [ref=e1370]: "50"
+              - generic [ref=e1372]: "51"
+              - generic [ref=e1374]: "52"
+              - generic [ref=e1376]: "53"
+              - generic [ref=e1378]: "54"
+              - generic [ref=e1379]:
+                - generic [ref=e1380] [cursor=pointer]: 
+                - generic [ref=e1381]: "55"
+              - generic [ref=e1383]: "56"
+              - generic [ref=e1385]: "57"
+              - generic [ref=e1387]: "58"
+              - generic [ref=e1389]: "59"
+              - generic [ref=e1391]: "60"
+              - generic [ref=e1393]: "61"
+              - generic [ref=e1395]: "62"
+              - generic [ref=e1396]:
+                - generic [ref=e1397] [cursor=pointer]: 
+                - generic [ref=e1398]: "63"
+              - generic [ref=e1400]: "64"
+              - generic [ref=e1402]: "65"
+              - generic [ref=e1404]: "66"
+              - generic [ref=e1406]: "67"
+              - generic [ref=e1408]: "68"
+              - generic [ref=e1410]: "69"
+              - generic [ref=e1412]: "70"
+              - generic [ref=e1413]:
+                - generic [ref=e1414] [cursor=pointer]: 
+                - generic [ref=e1415]: "71"
+              - generic [ref=e1416]:
+                - generic [ref=e1417] [cursor=pointer]: 
+                - generic [ref=e1418]: "72"
+              - generic [ref=e1420]: "73"
+              - generic [ref=e1422]: "74"
+              - generic [ref=e1424]: "75"
+              - generic [ref=e1426]: "76"
+              - generic [ref=e1428]: "77"
+              - generic [ref=e1430]: "78"
+              - generic [ref=e1432]: "79"
+              - generic [ref=e1434]: "80"
+              - generic [ref=e1436]: "81"
+              - generic [ref=e1438]: "82"
+              - generic [ref=e1440]: "83"
+              - generic [ref=e1442]: "84"
+              - generic [ref=e1444]: "85"
+              - generic [ref=e1446]: "86"
+              - generic [ref=e1448]: "87"
+              - generic [ref=e1450]: "88"
+              - generic [ref=e1452]: "89"
+              - generic [ref=e1454]: "90"
+              - generic [ref=e1456]: "91"
+              - generic [ref=e1458]: "92"
+              - generic [ref=e1460]: "93"
+              - generic [ref=e1462]: "94"
+              - generic [ref=e1464]: "95"
+              - generic [ref=e1466]: "96"
+              - generic [ref=e1468]: "97"
+              - generic [ref=e1470]: "98"
+              - generic [ref=e1472]: "99"
+              - generic [ref=e1474]: "100"
+              - generic [ref=e1476]: "101"
+              - generic [ref=e1477]:
+                - generic [ref=e1478] [cursor=pointer]: 
+                - generic [ref=e1479]: "102"
+              - generic [ref=e1480]:
+                - generic [ref=e1481] [cursor=pointer]: 
+                - generic [ref=e1482]: "103"
+              - generic [ref=e1484]: "104"
+              - generic [ref=e1486]: "105"
+              - generic [ref=e1488]: "106"
+              - generic [ref=e1490]: "107"
+              - generic [ref=e1492]: "108"
+              - generic [ref=e1494]: "109"
+              - generic [ref=e1496]: "110"
+              - generic [ref=e1498]: "111"
+              - generic [ref=e1500]: "112"
+              - generic [ref=e1502]: "113"
+              - generic [ref=e1504]: "114"
+              - generic [ref=e1506]: "115"
+              - generic [ref=e1508]: "116"
+              - generic [ref=e1510]: "117"
+              - generic [ref=e1512]: "118"
+              - generic [ref=e1515]: "119"
+            - generic [ref=e1251]:
+              - img [ref=e1522]
+              - img [ref=e1530]
+              - img [ref=e1538]
+              - img [ref=e1550]
+              - img [ref=e1564]
+              - img [ref=e1580]
+              - img [ref=e1587]
+              - img [ref=e1599]
+              - img [ref=e1614]
+              - img [ref=e1627]
+              - img [ref=e1662]
+              - img [ref=e1669]
+              - img [ref=e1680]
+              - img [ref=e1694]
+              - img [ref=e1709]
+              - img [ref=e1714]
+              - img [ref=e1729]
+              - img [ref=e1749]
+              - img [ref=e1754]
+              - img [ref=e1769]
+              - img [ref=e1789]
+              - img [ref=e1794]
+              - img [ref=e1809]
+              - img [ref=e1825]
+              - img [ref=e1849]
+              - img [ref=e1866]
+              - img [ref=e1883]
+              - img [ref=e1903]
+              - img [ref=e1919]
+              - img [ref=e1929]
+              - img [ref=e1941]
+              - img [ref=e1951]
+              - img [ref=e1958]
+              - img [ref=e1967]
+              - img [ref=e1974]
+              - img [ref=e1980]
+              - img [ref=e1994]
+              - img [ref=e2003]
+              - img [ref=e2010]
+              - img [ref=e2020]
+              - img [ref=e2051]
+              - img [ref=e2072]
+              - img [ref=e2089]
+              - img [ref=e2106]
+              - img [ref=e2126]
+              - img [ref=e2136]
+              - img [ref=e2160]
+              - img [ref=e2182]
+              - img [ref=e2203]
+              - img [ref=e2234]
+              - img [ref=e2244]
+              - img [ref=e2253]
+              - img [ref=e2260]
+              - img [ref=e2272]
+              - img [ref=e2289]
+              - img [ref=e2307]
+              - img [ref=e2323]
+              - img [ref=e2338]
+              - img [ref=e2359]
+              - img [ref=e2373]
+              - img [ref=e2389]
+              - img [ref=e2403]
+              - img [ref=e2414]
+              - img [ref=e2427]
+              - img [ref=e2439]
+              - img [ref=e2451]
+              - img [ref=e2469]
+              - img [ref=e2482]
+              - img [ref=e2498]
+              - img [ref=e2511]
+              - img [ref=e2524]
+              - img [ref=e2541]
+              - img [ref=e2568]
+              - img [ref=e2584]
+              - img [ref=e2602]
+              - img [ref=e2620]
+              - img [ref=e2635]
+              - img [ref=e2656]
+              - img [ref=e2693]
+              - img [ref=e2702]
+              - img [ref=e2709]
+              - img [ref=e2721]
+              - img [ref=e2740]
+              - img [ref=e2761]
+              - img [ref=e2772]
+              - img [ref=e2787]
+              - img [ref=e2802]
+              - img [ref=e2824]
+              - img [ref=e2839]
+              - img [ref=e2853]
+              - img [ref=e2865]
+              - img [ref=e2879]
+              - img [ref=e2895]
+              - img [ref=e2909]
+              - img [ref=e2922]
+              - img [ref=e2948]
+              - generic [ref=e1260]:
+                - generic [ref=e2972]: // ---------------- Inputs ----------------
+                - generic [ref=e2974]: grpT = "Momentum Table"
+                - generic [ref=e2976]: showTbl = input.bool(true, "Show MTF momentum table", group=grpT)
+                - generic [ref=e2978]: tblPos = input.string("top_right", "Table position", options=["top_right","top_left","bottom_right","bottom_left","middle_right"], group=grpT)
+                - generic [ref=e2980]: useVolStr = input.bool(true, "Weight by volume strength", group=grpT)
+                - generic [ref=e2983]: grpR = "R-Factor"
+                - generic [ref=e2985]: showR = input.bool(true, "Show R-Factor panel", group=grpR)
+                - generic [ref=e2987]: rPos = input.string("top_left", "R-Factor position", options=["top_left","top_right","bottom_left","bottom_right","middle_left"], group=grpR)
+                - generic [ref=e2989]: rLen = input.int(14, "R-Factor lookback", minval=2, group=grpR)
+                - generic [ref=e2991]: benchSym = input.symbol("NSE:NIFTY", "Benchmark for Sector Strength", group=grpR, tooltip="Index/sector to measure relative strength against. For crypto try CRYPTOCAP:TOTAL or BINANCE:BTCUSDT. Invalid symbols are ignored (score = 0).")
+                - generic [ref=e2994]: grpC = "Colors"
+                - generic [ref=e2996]:
+                  - text: colBuy = input.color(
+                  - text: color.new(#26a69a, 0), "Buy / Positive", group=grpC)
+                - generic [ref=e2999]:
+                  - text: colSell = input.color(
+                  - text: color.new(#ef5350, 0), "Sell / Negative", group=grpC)
+                - generic [ref=e3003]: // ---------------- Buy/Sell volume split (close position in bar range) --------
+                - generic [ref=e3005]: buyingVolume() =>
+                - generic [ref=e3007]: rng = math.max(high - low, syminfo.mintick)
+                - generic [ref=e3009]: volume * ((close - low) / rng)
+                - generic [ref=e3012]: sellingVolume() =>
+                - generic [ref=e3014]: rng = math.max(high - low, syminfo.mintick)
+                - generic [ref=e3016]: volume * ((high - close) / rng)
+                - generic [ref=e3019]: f_tf(tf) =>
+                - generic [ref=e3021]: bv = request.security(syminfo.tickerid, tf, buyingVolume(), barmerge.gaps_off, barmerge.lookahead_off)
+                - generic [ref=e3023]: sv = request.security(syminfo.tickerid, tf, sellingVolume(), barmerge.gaps_off, barmerge.lookahead_off)
+                - generic [ref=e3025]: v = request.security(syminfo.tickerid, tf, volume, barmerge.gaps_off, barmerge.lookahead_off)
+                - generic [ref=e3027]: va = request.security(syminfo.tickerid, tf, ta.sma(volume, 20), barmerge.gaps_off, barmerge.lookahead_off)
+                - generic [ref=e3029]: base = (bv - sv) / math.max(bv + sv, 1)
+                - generic [ref=e3031]: "strength = useVolStr ? math.max(v / math.max(va, 1), 0.0) : 1.0"
+                - generic [ref=e3033]: "[bv, sv, base * strength]"
+                - generic [ref=e3036]: "[bv1, sv1, sc1] = f_tf(\"1\")"
+                - generic [ref=e3038]: "[bv3, sv3, sc3] = f_tf(\"3\")"
+                - generic [ref=e3040]: "[bv5, sv5, sc5] = f_tf(\"5\")"
+                - generic [ref=e3042]: "[bv15, sv15, sc15] = f_tf(\"15\")"
+                - generic [ref=e3044]: "[bv30, sv30, sc30] = f_tf(\"30\")"
+                - generic [ref=e3046]: "[bv60, sv60, sc60] = f_tf(\"60\")"
+                - generic [ref=e3048]: "[bv240,sv240,sc240]= f_tf(\"240\")"
+                - generic [ref=e3050]: "[bvD, svD, scD] = f_tf(\"1D\")"
+                - generic [ref=e3053]: // ---------------- helpers (global) ----------------
+                - generic [ref=e3055]: f_fmt(x) =>
+                - generic [ref=e3057]: a = math.abs(x)
+                - generic [ref=e3059]: "a >= 1e9 ? str.tostring(x/1e9, \"#.##\")+\"B\" : a >= 1e6 ? str.tostring(x/1e6, \"#.##\")+\"M\" : a >= 1e3 ? str.tostring(x/1e3, \"#.##\")+\"K\" : str.tostring(x, \"#.##\")"
+                - generic [ref=e3061]: "f_resTxt(s) => s > 0 ? \"Positive (BUY)\" : s < 0 ? \"Negative (SELL)\" : \"Neutral\""
+                - generic [ref=e3063]:
+                  - text: "f_resCol(s) => s > 0 ? colBuy : s < 0 ? colSell :"
+                  - text: color.gray
+                - generic [ref=e3066]: "f_pos(p) => p==\"top_left\"?position.top_left : p==\"top_right\"?position.top_right : p==\"bottom_left\"?position.bottom_left : p==\"bottom_right\"?position.bottom_right : p==\"middle_left\"?position.middle_left : position.middle_right"
+                - generic [ref=e3068]: "f_sc(v) => (v >= 0 ? \"+\" : \"\") + str.tostring(v, \"#0.0\")"
+                - generic [ref=e3071]: f_row(tbl, row, label, bv, sv, sc) =>
+                - generic [ref=e3073]:
+                  - text: table.cell(tbl, 0, row, label, text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.gray,70), text_size=size.small)
+                - generic [ref=e3077]:
+                  - text: table.cell(tbl, 1, row, f_fmt(bv), text_color=colBuy, bgcolor=
+                  - text: color.new(color.black,60), text_size=size.small)
+                - generic [ref=e3080]:
+                  - text: table.cell(tbl, 2, row, f_fmt(sv), text_color=colSell, bgcolor=
+                  - text: color.new(color.black,60), text_size=size.small)
+                - generic [ref=e3083]:
+                  - text: table.cell(tbl, 3, row, f_resTxt(sc), text_color=
+                  - text: color.white, bgcolor=f_resCol(sc), text_size=size.small)
+                - generic [ref=e3087]: // ---------------- MTF momentum table ----------------
+                - generic [ref=e3089]: var table mt = na
+                - generic [ref=e3091]: if showTbl
+                - generic [ref=e3093]: if na(mt)
+                - generic [ref=e3095]: mt := table.new(f_pos(tblPos), 4, 9, border_width=1)
+                - generic [ref=e3097]:
+                  - text: table.cell(mt, 0,0,"Periods", text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.blue,30), text_size=size.small)
+                - generic [ref=e3101]:
+                  - text: table.cell(mt, 1,0,"Buying Vol", text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.blue,30), text_size=size.small)
+                - generic [ref=e3105]:
+                  - text: table.cell(mt, 2,0,"Selling Vol", text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.blue,30), text_size=size.small)
+                - generic [ref=e3109]:
+                  - text: table.cell(mt, 3,0,"Result", text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.blue,30), text_size=size.small)
+                - generic [ref=e3113]: f_row(mt,1,"1m", bv1, sv1, sc1)
+                - generic [ref=e3115]: f_row(mt,2,"3m", bv3, sv3, sc3)
+                - generic [ref=e3117]: f_row(mt,3,"5m", bv5, sv5, sc5)
+                - generic [ref=e3119]: f_row(mt,4,"15m", bv15, sv15, sc15)
+                - generic [ref=e3121]: f_row(mt,5,"30m", bv30, sv30, sc30)
+                - generic [ref=e3123]: f_row(mt,6,"1h", bv60, sv60, sc60)
+                - generic [ref=e3125]: f_row(mt,7,"4h", bv240,sv240,sc240)
+                - generic [ref=e3127]: f_row(mt,8,"1D", bvD, svD, scD)
+                - generic [ref=e3130]: // ---------------- R-FACTOR composite (each component ~ -20..+20) -------------
+                - generic [ref=e3132]: priceMom = (ta.rsi(close, rLen) - 50) / 50 * 20
+                - generic [ref=e3134]: volRatio = volume / math.max(ta.sma(volume, rLen), 1)
+                - generic [ref=e3136]: volScore = math.max(math.min(volRatio - 1, 1), -1) * 20
+                - generic [ref=e3138]: bench = request.security(benchSym, timeframe.period, close, barmerge.gaps_off, barmerge.lookahead_off, ignore_invalid_symbol=true)
+                - generic [ref=e3140]: "rs = na(bench) or na(bench[rLen]) ? na : (close / close[rLen]) / (bench / bench[rLen])"
+                - generic [ref=e3142]: "sectorScore= na(rs) ? 0.0 : math.max(math.min((rs - 1) * 50, 1), -1) * 20"
+                - generic [ref=e3144]: oiScore = math.max(math.min(ta.roc(ta.sma(volume, rLen), rLen) / 100, 1), -1) * 20
+                - generic [ref=e3146]: smartScore = (ta.mfi(hlc3, rLen) - 50) / 50 * 20
+                - generic [ref=e3149]: rFactor = priceMom + volScore + sectorScore + oiScore + smartScore
+                - generic [ref=e3151]:
+                  - text: "rCol = rFactor > 33 ? colBuy : rFactor < -33 ? colSell :"
+                  - text: color.new(color.orange, 0)
+                - generic [ref=e3154]: "rBias = rFactor > 33 ? \"STRONG BUY\" : rFactor > 0 ? \"BUY\" : rFactor < -33 ? \"STRONG SELL\" : rFactor < 0 ? \"SELL\" : \"NEUTRAL\""
+                - generic [ref=e3157]: var table rt = na
+                - generic [ref=e3159]: if showR
+                - generic [ref=e3161]: if na(rt)
+                - generic [ref=e3163]: rt := table.new(f_pos(rPos), 2, 7, border_width=1)
+                - generic [ref=e3165]:
+                  - text: table.cell(rt,0,0,"R-FACTOR", text_color=
+                  - text: color.white, bgcolor=rCol, text_size=size.normal)
+                - generic [ref=e3168]:
+                  - text: table.cell(rt,1,0,str.tostring(rFactor,"#0.0"), text_color=
+                  - text: color.white, bgcolor=rCol, text_size=size.normal)
+                - generic [ref=e3171]:
+                  - text: table.cell(rt,0,1,"Price Momentum", text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.gray,70), text_size=size.small)
+                - generic [ref=e3175]:
+                  - text: table.cell(rt,1,1,f_sc(priceMom), text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.black,60), text_size=size.small)
+                - generic [ref=e3179]:
+                  - text: table.cell(rt,0,2,"Volume", text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.gray,70), text_size=size.small)
+                - generic [ref=e3183]:
+                  - text: table.cell(rt,1,2,f_sc(volScore), text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.black,60), text_size=size.small)
+                - generic [ref=e3187]:
+                  - text: table.cell(rt,0,3,"Sector Strength", text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.gray,70), text_size=size.small)
+                - generic [ref=e3191]:
+                  - text: table.cell(rt,1,3,f_sc(sectorScore), text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.black,60), text_size=size.small)
+                - generic [ref=e3195]:
+                  - text: table.cell(rt,0,4,"OI / Derivatives", text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.gray,70), text_size=size.small)
+                - generic [ref=e3199]:
+                  - text: table.cell(rt,1,4,f_sc(oiScore), text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.black,60), text_size=size.small)
+                - generic [ref=e3203]:
+                  - text: table.cell(rt,0,5,"Smart Money Flow", text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.gray,70), text_size=size.small)
+                - generic [ref=e3207]:
+                  - text: table.cell(rt,1,5,f_sc(smartScore), text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.black,60), text_size=size.small)
+                - generic [ref=e3211]:
+                  - text: table.cell(rt,0,6,"Bias", text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.gray,70), text_size=size.small)
+                - generic [ref=e3215]:
+                  - text: table.cell(rt,1,6,rBias, text_color=
+                  - text: color.white, bgcolor=rCol, text_size=size.small)
+            - textbox "Editor content;Press Alt+F1 for Accessibility Options." [ref=e1279]: "//@version=6 // ============================================================================= // trade_with_kareena — TRACKER (overlay on price chart) // • Multi-timeframe Buying/Selling volume table (BUY / SELL per TF) // • R-Factor composite strength panel: // R = Price Momentum + Volume + Sector Strength + OI/Derivatives + Smart Money Flow // Pair this with the \"trade_with_kareena Flow\" indicator (separate bottom pane). // ========================================================…k,60), text_size=size.small) table.cell(rt,0,5,\"Smart Money Flow\", text_color=color.white, bgcolor=color.new(color.gray,70), text_size=size.small) table.cell(rt,1,5,f_sc(smartScore), text_color=color.white, bgcolor=color.new(color.black,60), text_size=size.small) table.cell(rt,0,6,\"Bias\", text_color=color.white, bgcolor=color.new(color.gray,70), text_size=size.small) table.cell(rt,1,6,rBias, text_color=color.white, bgcolor=rCol, text_size=size.small)"
+        - generic [ref=e630]:
+          - button [ref=e633]:
+            - img [ref=e634]:
+              - img [ref=e635]
+          - generic [ref=e641]:
+            - button "1 ∙ Today, 15:40" [ref=e3265]
+            - button "Line 119, Col 1" [ref=e3219]
+            - link "Pine Script® v6" [ref=e1031]:
+              - /url: https://in.tradingview.com/pine-script-reference/v6
+    - table [ref=e3293]:
+      - rowgroup [ref=e3294]:
+        - row "Symbol title" [ref=e3295]:
+          - cell [ref=e3296]:
+            - img [ref=e3298]
+          - cell "Symbol title" [ref=e3300]:
+            - generic [ref=e3302]: Symbol title
+        - row:
+          - cell
+        - row "Chart values" [ref=e3303]:
+          - cell [ref=e3304]:
+            - img [ref=e3306]
+          - cell "Chart values" [ref=e3308]:
+            - generic [ref=e3310]: Chart values
+        - row:
+          - cell
+        - row "Bar change values" [ref=e3311]:
+          - cell [ref=e3312]:
+            - img [ref=e3314]
+          - cell "Bar change values" [ref=e3316]:
+            - generic [ref=e3318]: Bar change values
+        - row:
+          - cell
+        - row "Volume" [ref=e3319]:
+          - cell [ref=e3320]
+          - cell "Volume" [ref=e3321]:
+            - generic [ref=e3323]: Volume
+        - row:
+          - cell
+        - row "Last day change values" [ref=e3324]:
+          - cell [ref=e3325]
+          - cell "Last day change values" [ref=e3326]:
+            - generic [ref=e3328]: Last day change values
+        - row:
+          - cell
+        - row [ref=e3329]:
+          - cell [ref=e3330]
+          - cell [ref=e3332]
+        - row "Indicator titles" [ref=e3334]:
+          - cell [ref=e3335]:
+            - img [ref=e3337]
+          - cell "Indicator titles" [ref=e3339]:
+            - generic [ref=e3341]: Indicator titles
+        - row:
+          - cell
+        - row "Indicator inputs" [ref=e3342]:
+          - cell [ref=e3343]:
+            - img [ref=e3345]
+          - cell "Indicator inputs" [ref=e3347]:
+            - generic [ref=e3349]: Indicator inputs
+        - row:
+          - cell
+        - row "Indicator values" [ref=e3350]:
+          - cell [ref=e3351]:
+            - img [ref=e3353]
+          - cell "Indicator values" [ref=e3355]:
+            - generic [ref=e3357]: Indicator values
+        - row:
+          - cell
+        - row [ref=e3358]:
+          - cell [ref=e3359]
+          - cell [ref=e3361]
+        - row "Settings…" [ref=e3363]:
+          - cell [ref=e3364]:
+            - img [ref=e3366]
+          - cell "Settings…" [ref=e3369]:
+            - generic [ref=e3371]: Settings…
+        - row:
+          - cell
+  - generic [ref=e644]:
+    - alert
+    - alert

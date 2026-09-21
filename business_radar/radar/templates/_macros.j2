@@ -1,0 +1,190 @@
+{#
+  Shared rendering fragments for the campaign report.
+
+  Two rules govern everything in this file.
+
+  1. Nothing here emits a <form>, an input with a name, a method attribute, or any control that
+     could submit. Every state-changing affordance is an ordinary <a href> to a GET route on the
+     live app, produced by act_link() below. There is no POST macro in this template tree, which
+     is the first of the four places 03-html-report.md section 3.1.2 enforces the export's
+     "carries no capability" property.
+  2. Every number goes through the |dash filter. A zero and an em dash mean different things and
+     this file never lets them collapse into each other.
+#}
+
+{# ---------------------------------------------------------------- badges #}
+{% macro badge(tone, label, title=None) -%}
+<span class="badge {{ tone }}"{% if title %} title="{{ title }}"{% endif %}>{{ label }}</span>
+{%- endmacro %}
+
+{% macro score_badge(score) -%}
+{% if score is none %}
+{{ na("Not scored yet") }}
+{%- else %}
+{% set band = score_band(score) %}
+<span class="badge score {{ score_class(score) }}" title="{{ band }}{% if band == 'HIGH' %}: 80-100{% elif band == 'MEDIUM' %}: 60-79{% else %}: below 60{% endif %}">{{ score }}</span>
+{%- endif %}
+{%- endmacro %}
+
+{% macro conf_badge(confidence, pct=None) -%}
+{% if not confidence %}
+{{ na("No research run for this business") }}
+{%- else %}
+<span class="badge {{ confidence_class(confidence) }}"{% if pct is not none %} title="confidence {{ pct }}%"{% endif %}>{{ confidence }}</span>
+{%- endif %}
+{%- endmacro %}
+
+{% macro na(why) -%}
+<span class="na" title="{{ why }}" aria-label="no data">&mdash;</span>
+{%- endmacro %}
+
+{# ------------------------------------------------------------------ links #}
+{% macro ext(url, title=None) -%}
+{% set href = url|safe_url %}
+{% if href %}
+<a class="ext" href="{{ href }}" target="_blank" rel="noopener noreferrer nofollow" title="{{ title or href }}">&#8599;</a>
+{%- endif %}
+{%- endmacro %}
+
+{#
+  The only way this template tree renders a state-changing control.
+
+  It emits <a> and nothing else. When no app base URL was baked in at export time it emits a
+  disabled span instead, because a report mailed to somebody else must not carry links that
+  silently resolve to *their* machine. There is deliberately no fallback to localhost.
+#}
+{% macro act_link(app_base, path, label, title=None) -%}
+{% if app_base %}
+<a class="act" href="{{ app_base }}{{ path }}" data-deep="1"{% if title %} title="{{ title }}"{% endif %}>{{ label }}</a>
+{%- else %}
+<span class="act" aria-disabled="true" title="No live app URL was recorded when this file was exported.">{{ label }}</span>
+{%- endif %}
+{%- endmacro %}
+
+{# --------------------------------------------------------------- KPI card #}
+{% macro kpi(label, value, sub=None, denom=None, tone="neutral", primary=false,
+             filter_key=None, filter_val=None, why="No data") -%}
+<button type="button" class="kpi tone-{{ tone }}{{ ' is-primary' if primary else '' }}"
+        {% if filter_key %}data-kpi-filter="{{ filter_key }}" data-kpi-value="{{ filter_val }}"{% endif %}>
+  <span class="kpi-label">{{ label }}</span>
+  <span class="kpi-value num"{% if denom %} title="{{ denom }}"{% endif %}>{{ value|dash(why=why) }}</span>
+  {% if sub %}<span class="kpi-sub">{{ sub }}</span>{% endif %}
+</button>
+{%- endmacro %}
+
+{# ------------------------------------------------------- contact channels #}
+{#
+  What channels exist, never a contact value. Contact values live behind a session in the live
+  app and are not in this file at all.
+#}
+{% macro contact_cell(row) -%}
+{% set attr = row.contact_attr %}
+{% if attr == "NONE" %}
+{{ na("No contact recorded") }}
+{%- elif attr == "UNVERIFIED" %}
+<span class="chip unk" title="{{ row.n_contacts_any }} contact(s) found but not yet confirmed">?</span>
+{%- else %}
+{% for kind in attr.split(" ") %}
+<span class="chip" title="{{ CONTACT_CHIP[kind][1] }}">{{ CONTACT_CHIP[kind][0] }}</span>
+{%- endfor %}
+{%- endif %}
+{%- endmacro %}
+
+{# ------------------------------------------------- findings, section 12 #}
+{#
+  Three labelled fieldsets, always, in this order, even when one is empty. Dropping an empty
+  section would let a business with zero UNKNOWN findings look identical to one where the
+  research pipeline never populated the kind at all.
+#}
+{% macro findings_block(kind, legend, empty_text, items) -%}
+<fieldset class="findings kind-{{ kind }}">
+  <legend>{{ legend }}</legend>
+  {% if items %}
+  <ul>
+    {% for f in items %}
+    <li id="f-{{ f.finding_id[-10:] }}">
+      <span class="stmt">
+        {% if kind == "INFERRED" %}<span class="pfx">Inferred:</span> {% endif %}{{ f.statement }}
+        {# An UNKNOWN finding has nothing to cite by definition; the badge is only news
+           for a kind that was supposed to carry a source. #}
+        {% if not f.has_source and kind != "UNKNOWN" %}<span class="nosrc" title="No source is recorded for this finding, so no message may cite it.">NO SOURCE</span>{% endif %}
+      </span>
+      {% if kind == "UNKNOWN" %}
+      <span class="conf">{{ na(f.unknown_reason|default("Could not be verified", true)|replace("_", " ")|lower) }}</span>
+      {% else %}
+      <span class="conf">{{ conf_badge(f.confidence, f.confidence_pct) }}</span>
+      <span class="refs">
+        {% for s in f.sources %}<a href="#src-{{ s.source_id[-10:] }}" title="{{ s.name }}">[{{ s.number }}]</a>{% endfor %}
+      </span>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="empty">{{ empty_text }}</p>
+  {% endif %}
+</fieldset>
+{%- endmacro %}
+
+{# ---------------------------------------------------- sources, section 14 #}
+{% macro source_list(refs) -%}
+{% if refs %}
+<ol class="sources">
+  {% for s in refs %}
+  <li id="src-{{ s.source_id[-10:] }}">
+    <div class="srcline">
+      <span class="srcnum">[{{ s.number }}]</span>
+      {% if s.url %}
+      <a href="{{ s.url }}" target="_blank" rel="noopener noreferrer nofollow">{{ s.name }}</a>
+      {% else %}
+      <span title="URL withheld: not an absolute http(s) URL">{{ s.name }}</span>
+      {% endif %}
+      <span class="stype">{{ s.source_type }}</span>
+      <span class="when" title="{{ s.checked_at or '' }}">checked {{ s.checked_at|fmt_date }}</span>
+    </div>
+    {% if s.excerpt %}
+    <blockquote class="excerpt">{{ s.excerpt[:300] }}{% if s.excerpt|length > 300 %}&hellip;{% endif %}</blockquote>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ol>
+{% else %}
+<p class="absent">No source was recorded for this business. Nothing here may be cited in a message.</p>
+{% endif %}
+{%- endmacro %}
+
+{# ---------------------------------------------- the send-readiness chip #}
+{#
+  Section 40 lists SEND among the row actions. This report renders no SEND control, in either
+  mode: it renders a read-only chip naming the outstanding precondition, and links at most to
+  the outreach workspace where the CONFIRM & SEND button lives behind an approval record.
+  A research report is a document. Documents do not send email.
+#}
+{% macro ready_chip(row, app_base) -%}
+{% set gate = row.blocking_gate %}
+{% if row.is_suppressed %}
+  {% set tone, label, path = "bad", "DO NOT CONTACT", "/business/" ~ row.business_id ~ "#suppression" %}
+{% elif not row.research_complete %}
+  {% set tone, label, path = "mute", "Not researched", none %}
+{% elif gate == "D_VERIFICATION_REVOKED" %}
+  {% set tone, label, path = "mute", "Out of scope", "/business/" ~ row.business_id %}
+{% elif gate == "D_NOT_VERIFIED" %}
+  {% set tone, label, path = "warn", "Needs verification", "/verify/" ~ row.business_id %}
+{% elif gate == "E_CONTACT_MISSING" %}
+  {% set tone, label, path = "warn", "No contact", "/business/" ~ row.business_id ~ "#contacts" %}
+{% elif gate == "D_HUMAN_OWNED" %}
+  {% set tone, label, path = "ok", "With you - live lead", "/handoffs" %}
+{% elif row.last_message_status == "POLICY_BLOCKED" %}
+  {% set tone, label, path = "bad", "Policy blocked", ("/outreach/" ~ row.draft_id) if row.draft_id else none %}
+{% elif row.n_sent > 0 %}
+  {% set tone, label, path = "info", "Follow-up available", "/outreach?business=" ~ row.business_id %}
+{% else %}
+  {% set tone, label, path = "info", "Ready to prepare", "/outreach?business=" ~ row.business_id %}
+{% endif %}
+{% set title = BLOCK_REASON.get(gate, label) if gate else label %}
+{% if path and app_base %}
+<a class="ready {{ tone }}" href="{{ app_base }}{{ path }}" data-deep="1" title="{{ title }}">{{ label }}</a>
+{%- else %}
+<span class="ready {{ tone }}" title="{{ title }}">{{ label }}</span>
+{%- endif %}
+{%- endmacro %}

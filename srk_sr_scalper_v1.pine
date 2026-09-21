@@ -1,0 +1,479 @@
+//@version=6
+// =============================================================================
+//  SUPPORT RESISTANCE SCALP - 15m structure levels for 1m execution (+ max pain)
+//
+//  HOW IT IS MEANT TO BE USED
+//    Put the chart on 1m. Leave "Structure timeframe" at 15. Every level you
+//    see is derived from CONFIRMED 15m swing pivots - you execute on the 1m
+//    but you are trading 15m structure.
+//
+//  WHAT IT DRAWS
+//    1. 15m swing pivots merged into zones. Pivots that land near each other
+//       collapse into a single level carrying a touch count, so a shelf that
+//       has been respected 5 times draws heavier than one tested once.
+//       Levels flip role on a decisive close through them (resistance becomes
+//       support and back), which is most of the edge in index scalping.
+//    2. The session skeleton: previous-day H/L/C, today's open, classic floor
+//       pivots (PP/R1-R3/S1-S3), and the opening-range high/low.
+//    3. Optional option levels: max pain, CE walls (resistance), PE walls
+//       (support), the OI-weighted level, and a strike grid.
+//
+//  NON-REPAINTING, BY CONSTRUCTION
+//    With "Strict confirmation" on (the default), HTF pivots are read with the
+//    [1] + lookahead_on pairing. That is the ONLY pairing that returns the same
+//    last-closed 15m bar on historical and on realtime bars; [1] + lookahead_off
+//    silently disagrees between the two and rebuilds the level store differently
+//    after a chart reload. A level therefore appears up to one 15m bar after its
+//    pivot confirms - and once drawn its price NEVER moves, because a pivot that
+//    merges into an existing level bumps its touch count without being averaged
+//    into its price.
+//    Turn strict confirmation off to see levels one 15m bar sooner, and accept
+//    that the newest level can shift until that bar closes.
+//    Previous-day values use the same [1] + lookahead_on pairing.
+//
+//  MAX PAIN - READ THIS BEFORE YOU LOOK FOR A BUG
+//    Pine has no HTTP access. NO Pine script can fetch an option chain, from
+//    NSE or anywhere else. Max pain and OI walls MUST be computed outside and
+//    typed in below. Your own option_chain_reader already computes them with
+//    the standard algorithm (oc/engine/bias.py :: compute_max_pain):
+//
+//        cd option_chain_reader
+//        python main.py --pine-only NIFTY
+//
+//    then copy Max Pain / OI Avg / S1-S3 / R1-R3 out of
+//    generated/oi_levels_nifty.pine into group "7 - Option levels" here.
+//    Those numbers move a handful of times a session, so refreshing them once
+//    or twice a day is genuinely enough.
+//
+//    Max pain only exists for instruments with listed options (NIFTY,
+//    BANKNIFTY, F&O stocks). Leave group 7 switched off for XAUUSD, spot FX
+//    or crypto - there is no such thing as max pain there.
+// =============================================================================
+
+indicator("Support resistance scalp", "S/R Scalp", overlay = true,
+     max_lines_count = 500, max_labels_count = 500, max_boxes_count = 500)
+
+// ================================= INPUTS ====================================
+var string G1 = "1 - Structure (higher timeframe)"
+htfTF      = input.timeframe("15", "Structure timeframe", group = G1,
+     tooltip = "Levels come from swing pivots on THIS timeframe. Leave at 15 and run the chart at 1m.")
+pivLeft    = input.int(3, "Pivot left bars",  minval = 1, maxval = 20, group = G1)
+pivRight   = input.int(3, "Pivot right bars", minval = 1, maxval = 20, group = G1,
+     tooltip = "A swing needs this many HTF bars to its right before it counts. Higher = fewer, stronger, later.")
+strictConf = input.bool(true, "Strict confirmation (use last CLOSED HTF bar)", group = G1,
+     tooltip = "ON = cannot repaint. OFF = levels appear up to one HTF bar sooner, but the newest can shift until that bar closes.")
+maxLevels  = input.int(8, "Max levels to keep", minval = 2, maxval = 30, group = G1)
+maxDistPc  = input.float(2.0, "Drop levels further than (% of price)", minval = 0.1, step = 0.1, group = G1,
+     tooltip = "For 1m scalping a level 3% away is noise. Anything beyond this is discarded.")
+
+var string G2 = "2 - Zones & strength"
+zoneMult   = input.float(0.15, "Zone half-width (x HTF ATR)", minval = 0.0, step = 0.05, group = G2,
+     tooltip = "0 = hairline levels. 0.15 of a 15m ATR is a realistic scalping zone.")
+mergeMult  = input.float(0.35, "Merge levels closer than (x HTF ATR)", minval = 0.05, step = 0.05, group = G2)
+brkMult    = input.float(0.25, "Break buffer (x HTF ATR)", minval = 0.0, step = 0.05, group = G2,
+     tooltip = "A close beyond a level by this much flips its role.")
+minTouch   = input.int(1, "Only draw levels with at least N touches", minval = 1, maxval = 10, group = G2)
+showTouch  = input.bool(true, "Show touch count on labels", group = G2)
+
+var string G3 = "3 - Session levels"
+showPrevDay = input.bool(true,  "Previous day High / Low / Close", group = G3)
+showDayOpen = input.bool(true,  "Session open", group = G3)
+showPivots  = input.bool(false, "Classic floor pivots (PP, R1-R3, S1-S3)", group = G3)
+pivotDepth  = input.int(1, "Floor pivot depth (1-3)", minval = 1, maxval = 3, group = G3)
+
+var string G4 = "4 - Opening range"
+showOR     = input.bool(true, "Show opening range high / low", group = G4)
+orMinutes  = input.int(15, "Opening range length (minutes)", minval = 1, maxval = 120, group = G4,
+     tooltip = "15 = the first 15m candle of the session. For NSE that is 09:15-09:30.")
+
+var string G5 = "5 - Style"
+extendR    = input.bool(true, "Extend levels to the right", group = G5)
+lvlBackBar = input.int(120, "Draw levels back this many bars", minval = 10, maxval = 1000, group = G5)
+resCol     = input.color(#ef5350, "Resistance", inline = "c1", group = G5)
+supCol     = input.color(#26a69a, "Support",    inline = "c1", group = G5)
+sessCol    = input.color(#787b86, "Session",    inline = "c2", group = G5)
+orCol      = input.color(#ab47bc, "Open range", inline = "c2", group = G5)
+zoneAlpha  = input.int(88, "Zone fill transparency", minval = 50, maxval = 100, group = G5)
+
+var string G6 = "6 - Panel & alerts"
+showPanel  = input.bool(true, "Show level panel", group = G6)
+panelPos   = input.string("Top Right", "Panel position",
+     options = ["Top Right", "Top Left", "Bottom Right", "Bottom Left"], group = G6)
+markTouch  = input.bool(true, "Mark 1m rejections at a level", group = G6)
+alertOn    = input.bool(true, "Enable alert() calls", group = G6,
+     tooltip = "NOTE: a TradingView Basic plan allows ZERO indicator alerts, so these cannot be turned into a live alert on that plan. They cost nothing to leave on.")
+
+var string G7 = "7 - Option levels (paste from option_chain_reader)"
+showOpt    = input.bool(false, "Enable option levels", group = G7,
+     tooltip = "Only meaningful for NIFTY / BANKNIFTY / F&O stocks. Pine cannot fetch these - paste them in.")
+maxPainIn  = input.float(0.0, "Max pain",          minval = 0, group = G7)
+oiAvgIn    = input.float(0.0, "OI-weighted level", minval = 0, group = G7)
+ceW1       = input.float(0.0, "CE wall (resistance) 1", minval = 0, inline = "ce1", group = G7)
+ceW2       = input.float(0.0, "2",                      minval = 0, inline = "ce1", group = G7)
+ceW3       = input.float(0.0, "3",                      minval = 0, inline = "ce1", group = G7)
+peW1       = input.float(0.0, "PE wall (support) 1",    minval = 0, inline = "pe1", group = G7)
+peW2       = input.float(0.0, "2",                      minval = 0, inline = "pe1", group = G7)
+peW3       = input.float(0.0, "3",                      minval = 0, inline = "pe1", group = G7)
+snapSpot   = input.float(0.0, "Spot when snapshot was taken", minval = 0, group = G7,
+     tooltip = "Used only for the staleness warning. Copy GEN_SPOT from the generated file.")
+snapTime   = input.string("", "Snapshot time (free text)", group = G7)
+driftWarn  = input.float(1.0, "Warn when price drifts (%) from snapshot spot", minval = 0.1, step = 0.1, group = G7)
+showGrid   = input.bool(false, "Draw strike grid", group = G7)
+gridStep   = input.float(50, "Strike step", minval = 0.01, group = G7)
+gridCount  = input.int(6, "Strikes each side", minval = 1, maxval = 20, group = G7)
+
+// ================================= TYPES =====================================
+// One merged S/R level. `touches` is what makes a level worth trading: it is
+// incremented only on a fresh ENTRY into the zone, never bar-by-bar while price
+// sits inside it, so a level cannot inflate its own score by loitering.
+type Lvl
+    float price
+    int   touches
+    int   bornBar
+    int   lastBar
+    bool  isRes
+    bool  inside
+    int   flips
+
+// ============================== HTF STRUCTURE ================================
+// Pivots + ATR + the HTF bar's open time, fetched in ONE security call.
+//
+// The [1] offset MUST be paired with lookahead_on. That combination is the only
+// one that returns the same "last fully closed HTF bar" on historical AND on
+// realtime bars. The tempting [1] + lookahead_off pairing is the classic MTF
+// mistake: off resolves to the last CLOSED HTF bar on history but to the
+// DEVELOPING one in realtime, so the two disagree by one HTF bar and the level
+// store rebuilds differently after a chart reload.
+f_struct() =>
+    ph  = ta.pivothigh(high, pivLeft, pivRight)
+    pl  = ta.pivotlow(low,  pivLeft, pivRight)
+    atr = ta.atr(14)
+    [strictConf ? ph[1] : ph, strictConf ? pl[1] : pl, strictConf ? atr[1] : atr, strictConf ? time[1] : time]
+
+[htfPH, htfPL, htfATR, htfTime] = request.security(syminfo.tickerid, htfTF, f_struct(),
+     lookahead = strictConf ? barmerge.lookahead_on : barmerge.lookahead_off)
+
+atrRaw = nz(htfATR, ta.atr(14) * 3)
+atrRef = atrRaw > 0 ? atrRaw : syminfo.mintick * 100
+
+mergeTol = mergeMult * atrRef
+zoneHalf = zoneMult  * atrRef
+brkBuf   = brkMult   * atrRef
+
+// A new HTF bar has published its values. Guards against re-adding the same
+// pivot on all 15 of the 1m bars that share one 15m bar.
+htfNew = not na(htfTime) and htfTime != nz(htfTime[1], -1)
+
+// =============================== LEVEL STORE =================================
+var array<Lvl> lvls = array.new<Lvl>()
+
+// Merge into an existing level when close enough, else create one. The merge is
+// touch-weighted: an established shelf barely moves when a new pivot joins it.
+f_add(array<Lvl> arr, float p, float tol) =>
+    if not na(p) and p > 0
+        merged = false
+        if array.size(arr) > 0
+            for i = 0 to array.size(arr) - 1
+                l = array.get(arr, i)
+                if math.abs(l.price - p) <= tol
+                    // The price stays ANCHORED to the founding pivot. Averaging the new
+                    // pivot in would move a level that is already drawn on the chart,
+                    // which breaks the guarantee in the header - and a level that drifts
+                    // under a resting order is worse than a level that is slightly off.
+                    // A merging pivot adds confirmation only; it gets no vote on price.
+                    l.touches := l.touches + 1
+                    l.lastBar := bar_index
+                    merged    := true
+                    break
+        if not merged
+            // Seed 'inside' from the CURRENT bar. Starting it at false would make the
+            // maintenance loop below count a phantom touch, and fire a false alert, for
+            // any level born while price is already sitting inside its zone.
+            bornInside = low <= p + zoneHalf and high >= p - zoneHalf
+            array.push(arr, Lvl.new(p, 1, bar_index, bar_index, p > close, bornInside, 0))
+
+if htfNew
+    f_add(lvls, htfPH, mergeTol)
+    f_add(lvls, htfPL, mergeTol)
+
+// ---- per-bar maintenance: touches, role flips, distance pruning -------------
+var float lastTouchPrice = na
+var float brokePrice     = na
+var bool  touchedNow     = false
+var bool  brokeNow       = false
+touchedNow := false
+brokeNow   := false
+
+// Iterated downwards so array.remove() cannot skip an element.
+if array.size(lvls) > 0
+    for i = array.size(lvls) - 1 to 0
+        l = array.get(lvls, i)
+
+        // Touch = a fresh entry into the zone after having been outside it.
+        nowIn = low <= l.price + zoneHalf and high >= l.price - zoneHalf
+        if nowIn and not l.inside
+            l.touches := l.touches + 1
+            l.lastBar := bar_index
+            // Several levels can be tagged on one bar. Keep the NEAREST, else the marker
+            // and the alert name whichever level happens to sit lowest in the array -
+            // insertion order, which means nothing after merge/prune/cap churn.
+            if not touchedNow or na(lastTouchPrice) or math.abs(l.price - close) < math.abs(lastTouchPrice - close)
+                lastTouchPrice := l.price
+            touchedNow := true
+        l.inside := nowIn
+
+        // A decisive close through a level flips its role. Polarity flips are
+        // most of what a 1m scalper is actually trading off 15m structure.
+        if barstate.isconfirmed
+            if l.isRes and close > l.price + brkBuf
+                l.isRes := false
+                l.flips := l.flips + 1
+                // Same nearest-wins rule as the touch above, for the same reason.
+                if not brokeNow or na(brokePrice) or math.abs(l.price - close) < math.abs(brokePrice - close)
+                    brokePrice := l.price
+                brokeNow := true
+            else if not l.isRes and close < l.price - brkBuf
+                l.isRes := true
+                l.flips := l.flips + 1
+                if not brokeNow or na(brokePrice) or math.abs(l.price - close) < math.abs(brokePrice - close)
+                    brokePrice := l.price
+                brokeNow := true
+
+        // Too far away to scalp against, or worn out by repeated breaks.
+        if math.abs(l.price - close) / close * 100.0 > maxDistPc or l.flips >= 4
+            array.remove(lvls, i)
+
+// ---- cap the store, dropping the weakest ------------------------------------
+// Score favours touches first and recency second, so an old level tested many
+// times outranks a fresh one tested once.
+while array.size(lvls) > maxLevels
+    worstIdx   = 0
+    worstScore = 1e20
+    for i = 0 to array.size(lvls) - 1
+        l  = array.get(lvls, i)
+        sc = l.touches * 1000.0 - (bar_index - l.lastBar)
+        if sc < worstScore
+            worstScore := sc
+            worstIdx   := i
+    array.remove(lvls, worstIdx)
+
+// ============================== SESSION LEVELS ===============================
+// [1] with lookahead_on reads only fully closed days - safe, not repainting.
+[pdH, pdL, pdC, tdO] = request.security(syminfo.tickerid, "D",
+     [high[1], low[1], close[1], open], lookahead = barmerge.lookahead_on)
+
+pp  = (pdH + pdL + pdC) / 3.0
+rng = pdH - pdL
+r1  = 2 * pp - pdL
+s1  = 2 * pp - pdH
+r2  = pp + rng
+s2  = pp - rng
+r3  = pdH + 2 * (pp - pdL)
+s3  = pdL - 2 * (pdH - pp)
+
+// ---- opening range ----------------------------------------------------------
+newDay = timeframe.change("D")
+var float orHi    = na
+var float orLo    = na
+var int   orStart = na
+var bool  orDone  = false
+if newDay
+    orHi    := high
+    orLo    := low
+    orStart := time
+    orDone  := false
+else if not na(orStart) and not orDone
+    // '<' not '<=': 'time' is the bar's OPEN time, so at exactly orStart + 15min we are
+    // looking at the 09:30 bar, which belongs to the SECOND 15m candle. '<=' would fold
+    // 16 one-minute bars into a 15-minute opening range.
+    if time < orStart + orMinutes * 60000
+        orHi := math.max(nz(orHi, high), high)
+        orLo := math.min(nz(orLo, low),  low)
+    else
+        orDone := true
+
+// ================================= DRAWING ===================================
+var array<line>  dLines  = array.new<line>()
+var array<label> dLabels = array.new<label>()
+var array<box>   dBoxes  = array.new<box>()
+
+f_line(float p, string txt, color col, string sty, int wid) =>
+    if not na(p) and p > 0
+        ln = line.new(bar_index - lvlBackBar, p, bar_index + (extendR ? 20 : 0), p,
+             xloc = xloc.bar_index, extend = extendR ? extend.right : extend.none,
+             color = col, width = wid, style = sty)
+        array.push(dLines, ln)
+        lb = label.new(bar_index + (extendR ? 22 : 0), p,
+             txt + "  " + str.tostring(p, format.mintick),
+             xloc = xloc.bar_index, yloc = yloc.price, style = label.style_label_left,
+             color = color.new(color.black, 100), textcolor = col, size = size.small)
+        array.push(dLabels, lb)
+
+// Everything is redrawn on the last bar only. Cheaper than tracking individual
+// drawing objects, and it cannot leak stale lines when levels get pruned.
+if barstate.islast
+    while array.size(dLines) > 0
+        line.delete(array.pop(dLines))
+    while array.size(dLabels) > 0
+        label.delete(array.pop(dLabels))
+    while array.size(dBoxes) > 0
+        box.delete(array.pop(dBoxes))
+
+    // --- structural levels ---
+    if array.size(lvls) > 0
+        for i = 0 to array.size(lvls) - 1
+            l = array.get(lvls, i)
+            if l.touches >= minTouch
+                col = l.isRes ? resCol : supCol
+                // Heavier line for a level that has held more often.
+                wid = math.min(1 + int(l.touches / 2), 4)
+                if zoneHalf > 0
+                    bx = box.new(bar_index - lvlBackBar, l.price + zoneHalf,
+                         bar_index + (extendR ? 20 : 0), l.price - zoneHalf,
+                         xloc = xloc.bar_index, extend = extendR ? extend.right : extend.none,
+                         border_color = color.new(col, 60), border_width = 1,
+                         bgcolor = color.new(col, zoneAlpha))
+                    array.push(dBoxes, bx)
+                tag = (l.isRes ? "R" : "S") + (showTouch ? " x" + str.tostring(l.touches) : "")
+                f_line(l.price, tag, col, line.style_solid, wid)
+
+    // --- session skeleton ---
+    if showPrevDay
+        f_line(pdH, "PDH", sessCol, line.style_dashed, 1)
+        f_line(pdL, "PDL", sessCol, line.style_dashed, 1)
+        f_line(pdC, "PDC", sessCol, line.style_dotted, 1)
+    if showDayOpen
+        f_line(tdO, "Open", sessCol, line.style_dotted, 1)
+    if showPivots
+        f_line(pp, "PP", color.new(color.yellow, 20), line.style_dashed, 1)
+        f_line(r1, "R1", color.new(resCol, 30), line.style_dotted, 1)
+        f_line(s1, "S1", color.new(supCol, 30), line.style_dotted, 1)
+        if pivotDepth >= 2
+            f_line(r2, "R2", color.new(resCol, 50), line.style_dotted, 1)
+            f_line(s2, "S2", color.new(supCol, 50), line.style_dotted, 1)
+        if pivotDepth >= 3
+            f_line(r3, "R3", color.new(resCol, 65), line.style_dotted, 1)
+            f_line(s3, "S3", color.new(supCol, 65), line.style_dotted, 1)
+    if showOR
+        f_line(orHi, "ORH", orCol, line.style_dashed, 1)
+        f_line(orLo, "ORL", orCol, line.style_dashed, 1)
+
+    // --- option levels (values pasted in from option_chain_reader) ---
+    if showOpt
+        f_line(maxPainIn, "MAX PAIN", color.new(color.orange, 0), line.style_solid, 2)
+        f_line(oiAvgIn,   "OI Avg",   color.new(color.blue, 20),  line.style_dotted, 1)
+        f_line(ceW1, "CE1", color.new(resCol, 15), line.style_dashed, 2)
+        f_line(ceW2, "CE2", color.new(resCol, 40), line.style_dashed, 1)
+        f_line(ceW3, "CE3", color.new(resCol, 60), line.style_dashed, 1)
+        f_line(peW1, "PE1", color.new(supCol, 15), line.style_dashed, 2)
+        f_line(peW2, "PE2", color.new(supCol, 40), line.style_dashed, 1)
+        f_line(peW3, "PE3", color.new(supCol, 60), line.style_dashed, 1)
+        if showGrid and gridStep > 0
+            baseK = math.round(close / gridStep) * gridStep
+            for k = -gridCount to gridCount
+                gp = baseK + k * gridStep
+                gl = line.new(bar_index - lvlBackBar, gp, bar_index + 20, gp,
+                     xloc = xloc.bar_index, extend = extend.none,
+                     color = color.new(color.gray, 80), width = 1, style = line.style_dotted)
+                array.push(dLines, gl)
+
+// ================================== PANEL ====================================
+// Nearest level either side, so the scalp decision is one glance: how far is
+// the next wall, and is max pain pulling with me or against me.
+f_nearest(array<Lvl> arr, bool above) =>
+    float best = na
+    if array.size(arr) > 0
+        for i = 0 to array.size(arr) - 1
+            l  = array.get(arr, i)
+            ok = above ? l.price > close : l.price < close
+            if ok and l.touches >= minTouch
+                if na(best) or math.abs(l.price - close) < math.abs(best - close)
+                    best := l.price
+    best
+
+f_row(table t, int r, string k, string v, color vc) =>
+    table.cell(t, 0, r, k, text_size = size.tiny, text_color = color.silver, text_halign = text.align_left)
+    table.cell(t, 1, r, v, text_size = size.tiny, text_color = vc, text_halign = text.align_right)
+
+nearRes = f_nearest(lvls, true)
+nearSup = f_nearest(lvls, false)
+
+var table pnl = na
+if showPanel and barstate.islast
+    pos = panelPos == "Top Right"    ? position.top_right :
+          panelPos == "Top Left"     ? position.top_left  :
+          panelPos == "Bottom Right" ? position.bottom_right : position.bottom_left
+    if not na(pnl)
+        table.delete(pnl)
+    pnl := table.new(pos, 2, 8, bgcolor = color.new(color.black, 25),
+           border_width = 1, border_color = color.new(color.gray, 70))
+
+    table.cell(pnl, 0, 0, "S/R Scalp  " + htfTF, text_size = size.small,
+         text_color = color.white, text_halign = text.align_left)
+    table.cell(pnl, 1, 0, str.tostring(array.size(lvls)) + " lvl", text_size = size.small,
+         text_color = color.white, text_halign = text.align_right)
+
+    f_row(pnl, 1, "Next resistance", na(nearRes) ? "-" :
+         str.tostring(nearRes, format.mintick) + "  (+" + str.tostring(nearRes - close, "#.##") + ")", resCol)
+    f_row(pnl, 2, "Next support", na(nearSup) ? "-" :
+         str.tostring(nearSup, format.mintick) + "  (-" + str.tostring(close - nearSup, "#.##") + ")", supCol)
+
+    float room = na(nearRes) or na(nearSup) ? na : nearRes - nearSup
+    f_row(pnl, 3, "Room between", na(room) ? "-" : str.tostring(room, "#.##"),
+         na(room) ? color.gray : room > atrRef ? color.lime : color.orange)
+    f_row(pnl, 4, "HTF ATR(14)", str.tostring(atrRef, "#.##"), color.white)
+
+    if showOpt and maxPainIn > 0
+        mpDist = maxPainIn - close
+        f_row(pnl, 5, "Max pain", str.tostring(maxPainIn, format.mintick), color.orange)
+        // Max pain is a pull INTO expiry, not an intraday signal. It is context
+        // for which side to lean on, never a trade trigger on its own.
+        f_row(pnl, 6, "MP pull", (mpDist > 0 ? "UP  +" : "DOWN  ") + str.tostring(mpDist, "#.##"),
+             mpDist > 0 ? color.lime : mpDist < 0 ? color.red : color.gray)
+        f_row(pnl, 7, "Snapshot", snapTime == "" ? "not set" : snapTime, color.gray)
+
+// Staleness guard, same idea as the generated oi_levels_*.pine file: baked OI
+// numbers age, and trading a stale wall is worse than trading no wall at all.
+if showOpt and snapSpot > 0 and barstate.islast
+    drift = math.abs(close - snapSpot) / snapSpot * 100.0
+    if drift > driftWarn
+        // Tracked in dLabels like every other drawing. Left untracked it would commit one
+        // label per closed bar and, over a session, evict the real level labels from the
+        // 500-label buffer. The drain loop runs earlier in this same islast pass, so this
+        // label is cleared on the next bar.
+        array.push(dLabels, label.new(bar_index, high,
+             "Option levels " + str.tostring(drift, "#.#") + "% from snapshot spot - regenerate",
+             style = label.style_label_down, color = color.new(color.orange, 20),
+             textcolor = color.white, size = size.small))
+
+// Warn if the chart timeframe is ABOVE the structure timeframe - the whole
+// design assumes you read structure higher than you execute.
+if barstate.islast and timeframe.in_seconds() > timeframe.in_seconds(htfTF)
+    // Tracked for the same reason as the staleness label: this condition is a persistent
+    // misconfiguration, so it fires on EVERY bar and would leak fastest of all.
+    array.push(dLabels, label.new(bar_index, low,
+         "Chart TF is higher than the structure TF (" + htfTF + ") - put the chart on 1m",
+         style = label.style_label_up, color = color.new(color.red, 20),
+         textcolor = color.white, size = size.small))
+
+// ============================= MARKERS & ALERTS ==============================
+// A rejection is a wick INTO the zone that closes back OUT of it. The naive test
+// (low < level for an up bar) is trivially true whenever the tagged level sits above
+// price, so it fired on continuation bars rallying into resistance - the opposite of
+// what the arrow claims. Both legs are now required: pierced the zone, closed clear of it.
+rejectUp = markTouch and touchedNow and close > open and
+     low <= nz(lastTouchPrice, low) + zoneHalf and close > nz(lastTouchPrice, low) + zoneHalf
+rejectDn = markTouch and touchedNow and close < open and
+     high >= nz(lastTouchPrice, high) - zoneHalf and close < nz(lastTouchPrice, high) - zoneHalf
+plotshape(rejectUp, "Rejection up",   shape.triangleup,   location.belowbar, supCol, size = size.tiny)
+plotshape(rejectDn, "Rejection down", shape.triangledown, location.abovebar, resCol, size = size.tiny)
+
+// NOTE: on a TradingView Basic plan these cannot be turned into live alerts -
+// that plan allows zero indicator-based alerts. They work from Essential up.
+if alertOn and barstate.isconfirmed
+    if touchedNow
+        alert(syminfo.ticker + " tagged a " + htfTF + " level at " +
+             str.tostring(nz(lastTouchPrice, close), format.mintick), alert.freq_once_per_bar_close)
+    if brokeNow
+        alert(syminfo.ticker + " broke the " + htfTF + " level at " +
+             str.tostring(nz(brokePrice, close), format.mintick), alert.freq_once_per_bar_close)

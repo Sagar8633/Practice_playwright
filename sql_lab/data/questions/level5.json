@@ -1,0 +1,205 @@
+[
+{
+  "id": "L5-Q01", "level": 5, "difficulty": "medium",
+  "title": "Classify recognition confidence",
+  "scenario": "The product team wants recognition results bucketed into High, Medium and Low confidence bands for a quality report.",
+  "task": "For Face_Recognition events, classify confidence as 'High' when >= 0.8, 'Medium' when >= 0.5, otherwise 'Low'. Return the band as confidence_band and the count as n, sorted by n descending then confidence_band.",
+  "tables": ["Events"],
+  "skills": ["CASE WHEN", "GROUP BY", "jsonb"],
+  "expected": "Three rows: High, Medium and Low, with Low being substantial.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "CASE WHEN condition THEN value ... ELSE value END produces a computed column.",
+    "The branches are evaluated top to bottom and the first true one wins, so order them from strictest to loosest.",
+    "Because the first branch already caught anything >= 0.8, the second only needs >= 0.5.",
+    "You can GROUP BY the same CASE expression, or more simply GROUP BY 1."
+  ],
+  "solution": "SELECT CASE\n         WHEN (\"_EventProperties\" ->> 'confidence')::numeric >= 0.8 THEN 'High'\n         WHEN (\"_EventProperties\" ->> 'confidence')::numeric >= 0.5 THEN 'Medium'\n         ELSE 'Low'\n       END        AS confidence_band,\n       count(*)   AS n\nFROM \"Events\"\nWHERE \"EventName\" = 'Face_Recognition'\nGROUP BY 1\nORDER BY n DESC, confidence_band;",
+  "explanation": {
+    "breakdown": "CASE returns the value of the first branch whose condition is true; ELSE catches everything else, including NULL.",
+    "why": "Because branches short-circuit in order, the second condition does not need an upper bound. Writing BETWEEN 0.5 AND 0.8 in the second branch would be redundant and easy to get wrong at the boundary.",
+    "commonMistake": "Ordering branches loosest-first. With >= 0.5 written first, nothing ever reaches the High branch and every high-confidence event is labelled Medium.",
+    "alternative": "width_bucket() bins numeric values into equal ranges when the bands are regular.",
+    "qaRelevance": "Bucketing turns a continuous metric into something you can assert on. 'Low must stay under 15% of the total' is a testable release gate."
+  }
+},
+{
+  "id": "L5-Q02", "level": 5, "difficulty": "medium",
+  "title": "Decode the server type enum",
+  "scenario": "AnalyticServers.Type is an untyped integer. Reports need human labels.",
+  "task": "Return the server Name as server and a decoded label as server_type: 0 is 'Standard', 1 is 'Failover', 2 is 'Edge', anything else 'Unknown'. Sort by server.",
+  "tables": ["AnalyticServers"],
+  "skills": ["CASE WHEN", "enum decoding"],
+  "expected": "Seven servers with readable type labels.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "A simple value-to-label mapping.",
+    "Since every branch tests the same column for equality, the simple CASE form works: CASE \"Type\" WHEN 0 THEN ... END.",
+    "Add an ELSE so unexpected values are visible rather than silently NULL.",
+    "CASE \"Type\" WHEN 0 THEN 'Standard' WHEN 1 THEN 'Failover' WHEN 2 THEN 'Edge' ELSE 'Unknown' END."
+  ],
+  "solution": "SELECT \"Name\" AS server,\n       CASE \"Type\"\n         WHEN 0 THEN 'Standard'\n         WHEN 1 THEN 'Failover'\n         WHEN 2 THEN 'Edge'\n         ELSE 'Unknown'\n       END AS server_type\nFROM \"AnalyticServers\"\nORDER BY server;",
+  "explanation": {
+    "breakdown": "The simple CASE form compares one expression against a series of values — shorter than repeating the column in every branch.",
+    "why": "The ELSE branch matters more than it looks. Without it, an unexpected enum value yields NULL, which reads as missing data rather than as the bug it is.",
+    "commonMistake": "Omitting ELSE. A new type value added by developers then appears as a blank cell that nobody investigates.",
+    "alternative": "A real lookup table joined in, which keeps the mapping in one place instead of copied into every query.",
+    "qaRelevance": "Labelling unknown values explicitly is how a report tells you the schema changed underneath it."
+  }
+},
+{
+  "id": "L5-Q03", "level": 5, "difficulty": "hard",
+  "title": "Recognition success rate per camera",
+  "scenario": "You need to compare face cameras against each other on the metric that matters: what fraction of their recognitions actually matched a person.",
+  "task": "For each camera with Face_Recognition events, return Name as camera, total events as total, matched events as matched, and the success rate as a percentage rounded to 1 decimal as success_pct. Sort by success_pct ascending then camera.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["conditional aggregation", "FILTER", "jsonb", "arithmetic"],
+  "expected": "Face cameras ranked worst-first. FACE-Lobby-18 is dramatically worse than the rest.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "You need two counts over the same group: all rows, and only the matched ones.",
+    "PostgreSQL supports an aggregate FILTER clause: count(*) FILTER (WHERE condition).",
+    "The matched flag is jsonb text, so cast it: (\"_EventProperties\" ->> 'matched')::boolean.",
+    "Divide with 100.0 to force numeric division, and round to 1 decimal."
+  ],
+  "solution": "SELECT v.\"Name\" AS camera,\n       count(*) AS total,\n       count(*) FILTER (WHERE (e.\"_EventProperties\" ->> 'matched')::boolean) AS matched,\n       round(100.0 * count(*) FILTER (WHERE (e.\"_EventProperties\" ->> 'matched')::boolean)\n             / count(*), 1) AS success_pct\nFROM \"Events\" e\nJOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nWHERE e.\"EventName\" = 'Face_Recognition'\nGROUP BY v.\"Name\"\nORDER BY success_pct ASC, camera;",
+  "explanation": {
+    "breakdown": "FILTER restricts which rows an individual aggregate sees, without affecting the others in the same select list. It is cleaner than the older sum(CASE WHEN ... THEN 1 ELSE 0 END) idiom.",
+    "why": "Both counts come from one pass over one group, so the ratio is guaranteed consistent. Computing them in separate queries risks comparing different row sets.",
+    "commonMistake": "count(CASE WHEN cond THEN 1 END) also works, but count(CASE WHEN cond THEN 1 ELSE 0 END) does not — count() counts non-NULL values, and 0 is not NULL, so it counts everything.",
+    "alternative": "avg(CASE WHEN cond THEN 1.0 ELSE 0 END) gives the rate directly as a fraction.",
+    "performance": "One scan, one grouping. Far better than issuing one query per camera.",
+    "qaRelevance": "This is the query that isolates a single failing camera from a fleet that looks fine in aggregate. The fleet average hides it; the per-camera breakdown makes it obvious."
+  }
+},
+{
+  "id": "L5-Q04", "level": 5, "difficulty": "hard",
+  "title": "Camera health scorecard",
+  "scenario": "You want a single status column per camera that folds several independent integrity checks into one verdict, for a release readiness review.",
+  "task": "For every camera return Name as camera and a status: 'NO_CONFIG' if it has no configuration rows, else 'DANGLING_ACTIVE_CONFIG' if its activeConfigId matches no configuration, else 'NO_STREAM_URL' if no stream mapping matches its UseStreamType, else 'OK'. Sort by status then camera.",
+  "tables": ["VideoSources", "VideoSourceConfigs", "VideoSourceStreamMappings"],
+  "skills": ["CASE WHEN", "EXISTS", "priority logic"],
+  "expected": "Most cameras OK, with a handful flagged by the three checks.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Each check is an EXISTS or NOT EXISTS subquery used as a boolean inside a CASE branch.",
+    "Branch order encodes severity — the first matching branch wins, so put the most serious condition first.",
+    "For the stream check, the subquery must match on both VideoSourceId and StreamType.",
+    "CASE WHEN NOT EXISTS (...) THEN 'NO_CONFIG' WHEN NOT EXISTS (...) THEN 'DANGLING_ACTIVE_CONFIG' WHEN NOT EXISTS (...) THEN 'NO_STREAM_URL' ELSE 'OK' END."
+  ],
+  "solution": "SELECT v.\"Name\" AS camera,\n       CASE\n         WHEN NOT EXISTS (SELECT 1 FROM \"VideoSourceConfigs\" c\n                           WHERE c.\"VideoSourceId\" = v.\"Id\")\n           THEN 'NO_CONFIG'\n         WHEN NOT EXISTS (SELECT 1 FROM \"VideoSourceConfigs\" c\n                           WHERE c.\"Id\" = v.\"activeConfigId\")\n           THEN 'DANGLING_ACTIVE_CONFIG'\n         WHEN NOT EXISTS (SELECT 1 FROM \"VideoSourceStreamMappings\" s\n                           WHERE s.\"VideoSourceId\" = v.\"Id\"\n                             AND s.\"StreamType\" = v.\"UseStreamType\")\n           THEN 'NO_STREAM_URL'\n         ELSE 'OK'\n       END AS status\nFROM \"VideoSources\" v\nORDER BY status, camera;",
+  "explanation": {
+    "breakdown": "Each CASE branch is an independent existence check. Because CASE stops at the first true branch, a camera reports only its most severe problem.",
+    "why": "Reporting one verdict per camera makes the output actionable. A camera with three problems still needs one owner and one fix, starting with the worst.",
+    "commonMistake": "Ordering branches by convenience rather than severity, so a camera with no configuration at all gets reported as merely missing a stream URL.",
+    "alternative": "Return three boolean columns instead of one status, if you want to see every problem a camera has at once.",
+    "performance": "Three correlated subqueries per camera, but only 42 cameras — trivial. Against a large fleet, LEFT JOINs computed once would scale better.",
+    "qaRelevance": "This is a release gate query. Run it before deployment; a non-empty non-OK set is a blocker."
+  }
+},
+{
+  "id": "L5-Q05", "level": 5, "difficulty": "medium",
+  "title": "Latency banding",
+  "scenario": "Ingestion latency should be under a second. You want the distribution across sensible bands, including the impossible ones.",
+  "task": "Band every event by (ReceivedTime - Time): 'NEGATIVE' when below 0, 'FAST' under 1000, 'NORMAL' under 5000, otherwise 'SLOW'. Return the band as latency_band and count as n, sorted by n descending then latency_band.",
+  "tables": ["Events"],
+  "skills": ["CASE WHEN", "GROUP BY", "arithmetic"],
+  "expected": "Four bands. NEGATIVE should not exist in a healthy system, but it does here.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "The banded expression is the difference between the two bigint columns.",
+    "Test for negative first — otherwise negative values fall into the FAST band, since anything below 0 is also below 1000.",
+    "Each subsequent branch only needs an upper bound.",
+    "GROUP BY 1 groups by the CASE expression."
+  ],
+  "solution": "SELECT CASE\n         WHEN \"ReceivedTime\" - \"Time\" < 0    THEN 'NEGATIVE'\n         WHEN \"ReceivedTime\" - \"Time\" < 1000 THEN 'FAST'\n         WHEN \"ReceivedTime\" - \"Time\" < 5000 THEN 'NORMAL'\n         ELSE 'SLOW'\n       END      AS latency_band,\n       count(*) AS n\nFROM \"Events\"\nGROUP BY 1\nORDER BY n DESC, latency_band;",
+  "explanation": {
+    "breakdown": "Ordering the branches from most negative upward means each branch only needs one bound.",
+    "why": "Negative latency means an event was recorded as received before it happened — physically impossible, so it is a clock problem, not a performance one.",
+    "commonMistake": "Omitting the negative branch. Those rows then count as the fastest events in the system and quietly improve your latency statistics.",
+    "alternative": "width_bucket() for regular bands; a histogram with generate_series for a full distribution.",
+    "qaRelevance": "Impossible values are the most valuable rows in any dataset. A band that should always be empty is the easiest possible assertion to write, and the most informative when it fires."
+  }
+},
+{
+  "id": "L5-Q06", "level": 5, "difficulty": "hard",
+  "title": "Pipeline utilisation classification",
+  "scenario": "Capacity review wants each pipeline labelled by how full it is relative to its declared limit.",
+  "task": "For every pipeline return Name as pipeline, MaxVideoSourceAllowed as capacity, assigned camera count as assigned, and a label as utilisation: 'OVER' if assigned exceeds capacity, 'FULL' if equal, 'EMPTY' if zero, otherwise 'OK'. Sort by pipeline.",
+  "tables": ["PipeLines", "PipeLineVideoSources"],
+  "skills": ["CASE WHEN", "LEFT JOIN", "GROUP BY", "aggregate in CASE"],
+  "expected": "Twelve pipelines, including one OVER and one EMPTY.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Count assignments per pipeline with a LEFT JOIN so empty pipelines still appear.",
+    "count(pv.\"Id\") yields 0 for a pipeline with no assignments; count(*) would wrongly yield 1.",
+    "A CASE expression can contain aggregates, as long as the whole thing sits in the select list of a grouped query.",
+    "Order the branches so OVER is tested before FULL, and handle the zero case explicitly."
+  ],
+  "solution": "SELECT p.\"Name\"                  AS pipeline,\n       p.\"MaxVideoSourceAllowed\" AS capacity,\n       count(pv.\"Id\")            AS assigned,\n       CASE\n         WHEN count(pv.\"Id\") > p.\"MaxVideoSourceAllowed\"  THEN 'OVER'\n         WHEN count(pv.\"Id\") = p.\"MaxVideoSourceAllowed\"  THEN 'FULL'\n         WHEN count(pv.\"Id\") = 0                          THEN 'EMPTY'\n         ELSE 'OK'\n       END                       AS utilisation\nFROM \"PipeLines\" p\nLEFT JOIN \"PipeLineVideoSources\" pv ON pv.\"PipeLineId\" = p.\"Id\"\nGROUP BY p.\"Name\", p.\"MaxVideoSourceAllowed\"\nORDER BY pipeline;",
+  "explanation": {
+    "breakdown": "The CASE sits in the select list of a grouped query, so it may reference both aggregates and grouped columns.",
+    "why": "count(pv.\"Id\") rather than count(*) is what makes EMPTY detectable. After a LEFT JOIN the unmatched row still exists, filled with NULLs, so count(*) sees one row.",
+    "commonMistake": "count(*) after a LEFT JOIN — the single most common LEFT JOIN bug, and it silently turns every empty group into a group of one.",
+    "alternative": "A scalar subquery per pipeline avoids the join and the counting subtlety entirely.",
+    "qaRelevance": "Both extremes matter: OVER risks dropped frames, EMPTY means paid-for capacity doing nothing. One query surfaces both."
+  }
+},
+{
+  "id": "L5-Q07", "level": 5, "difficulty": "hard",
+  "title": "Event quality flags per camera",
+  "scenario": "You want one row per camera summarising several data-quality problems at once, rather than running four separate queries.",
+  "task": "For each camera with events, return Name as camera, total events as total, events missing a snapshot as no_snapshot, events with negative latency as negative_latency, and events dated in the future as future_dated. Sort by camera.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["conditional aggregation", "FILTER", "multiple metrics"],
+  "expected": "One row per camera, with the problem columns mostly zero and a few standing out.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Four aggregates over the same group, three of them filtered.",
+    "count(*) FILTER (WHERE ...) applies a different condition to each aggregate.",
+    "A future-dated event has Time greater than the current epoch in milliseconds: extract(epoch from now()) * 1000.",
+    "Missing snapshot means SnapshotPath IS NULL."
+  ],
+  "solution": "SELECT v.\"Name\" AS camera,\n       count(*) AS total,\n       count(*) FILTER (WHERE e.\"SnapshotPath\" IS NULL)                          AS no_snapshot,\n       count(*) FILTER (WHERE e.\"ReceivedTime\" - e.\"Time\" < 0)                    AS negative_latency,\n       count(*) FILTER (WHERE e.\"Time\" > extract(epoch FROM now()) * 1000)        AS future_dated\nFROM \"Events\" e\nJOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nGROUP BY v.\"Name\"\nORDER BY camera;",
+  "explanation": {
+    "breakdown": "Every aggregate sees the same group but its own filtered subset, so all four numbers are computed in a single pass.",
+    "why": "One pass guarantees the numbers are mutually consistent and is far cheaper than four separate scans.",
+    "commonMistake": "Running four queries and joining the results. More code, slower, and open to skew if the data changes between runs.",
+    "alternative": "sum(CASE WHEN cond THEN 1 ELSE 0 END) is the portable equivalent for engines without FILTER.",
+    "performance": "One scan, one hash aggregate — the efficient shape for multi-metric reporting.",
+    "qaRelevance": "This is a per-device data-quality scorecard. Ship it as a nightly job and diff it between releases."
+  }
+},
+{
+  "id": "L5-Q08", "level": 5, "difficulty": "hard",
+  "title": "External source freshness",
+  "scenario": "Each external VMS records when it last synchronised. A stale sync means the camera list may be out of date.",
+  "task": "For each external source return Name as source, ServerState as state, whole days since LastSynced as days_stale, and a verdict: 'NEVER_SYNCED' if LastSynced is NULL, 'STALE' if more than 7 days, 'AGING' if more than 1 day, otherwise 'FRESH'. Sort by source.",
+  "tables": ["ExternalSources"],
+  "skills": ["CASE WHEN", "date arithmetic", "NULL handling", "EXTRACT"],
+  "expected": "Four sources; VMS-Genetec-North is STALE at roughly 45 days.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Subtracting a timestamp from now() yields an interval, not a number.",
+    "extract(day from now() - \"LastSynced\") pulls the whole-day component out of that interval.",
+    "Test the NULL case first — arithmetic on NULL yields NULL, which would fall through every numeric branch to ELSE.",
+    "CASE WHEN \"LastSynced\" IS NULL THEN 'NEVER_SYNCED' WHEN ... > 7 THEN 'STALE' ..."
+  ],
+  "solution": "SELECT \"Name\"        AS source,\n       \"ServerState\" AS state,\n       extract(day FROM now() - \"LastSynced\")::int AS days_stale,\n       CASE\n         WHEN \"LastSynced\" IS NULL                          THEN 'NEVER_SYNCED'\n         WHEN now() - \"LastSynced\" > interval '7 days'      THEN 'STALE'\n         WHEN now() - \"LastSynced\" > interval '1 day'       THEN 'AGING'\n         ELSE 'FRESH'\n       END AS verdict\nFROM \"ExternalSources\"\nORDER BY source;",
+  "explanation": {
+    "breakdown": "Timestamp minus timestamp gives an interval, which can be compared directly against an interval literal. No conversion to seconds is needed.",
+    "why": "Testing IS NULL first is essential. NULL > interval '7 days' is UNKNOWN, not true, so a never-synced source would silently be labelled FRESH.",
+    "commonMistake": "Putting the NULL check last or omitting it. The worst case then reports as the healthiest.",
+    "alternative": "age(\"LastSynced\") is a readable shorthand for now() - timestamp.",
+    "qaRelevance": "Silence is ambiguous: a source that never synced and a source that synced a second ago both have no recent errors. Only an explicit freshness check distinguishes them."
+  }
+}
+]

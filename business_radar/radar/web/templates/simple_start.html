@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}Find businesses{% endblock %}
+
+{% block content %}
+<style>
+  .sw { max-width: 560px; margin: 0 auto; }
+  .sw h1 { font-size: 1.9rem; margin: 0 0 .3rem; }
+  .sw .sub { color: var(--muted, #667); margin: 0 0 2rem; }
+
+  .row { display:flex; gap:.75rem; margin-bottom:1rem; }
+  .row > div { flex:1; }
+  .row > div.narrow { flex:0 0 200px; }
+
+  label.lbl { display:block; font-weight:600; margin-bottom:.4rem; font-size:.92rem; }
+  select, input.txt {
+    width:100%; padding:.8rem .9rem; font-size:1.05rem;
+    border:1px solid var(--rule, #ccc); border-radius:6px; background:var(--surface,#fff);
+    color:inherit;
+  }
+  #suggest { list-style:none; margin:.3rem 0 0; padding:0; }
+  #suggest li { padding:.55rem .8rem; cursor:pointer; border:1px solid var(--rule,#ddd);
+                border-top:none; background:var(--surface,#fff); font-size:.9rem; }
+  #suggest li:first-child { border-top:1px solid var(--rule,#ddd); }
+  #suggest li:hover { background:var(--accent-soft,#eef3f1); }
+
+  .go { width:100%; padding:1rem; font-size:1.1rem; font-weight:600; cursor:pointer;
+        border:none; border-radius:6px; background:var(--accent,#2f5d50); color:#fff;
+        margin-top:.6rem; }
+  .go:disabled { opacity:.55; cursor:not-allowed; }
+  .note { font-size:.86rem; color:var(--muted,#667); margin-top:1.1rem; text-align:center; }
+
+  .bar { height:10px; background:var(--rule,#e5e5e5); border-radius:5px; overflow:hidden; }
+  .bar > div { height:100%; background:var(--accent,#2f5d50); width:0; transition:width .5s; }
+  .runbox { border:1px solid var(--rule,#ddd); border-radius:8px; padding:1.4rem; }
+  .stats { display:flex; gap:2rem; margin-top:1.1rem; }
+  .stats b { display:block; font-size:1.6rem; line-height:1.2; }
+  .stats span { font-size:.85rem; color:var(--muted,#667); }
+</style>
+
+<div class="sw">
+
+{% if progress.running %}
+  <h1>Working</h1>
+  <p class="sub">{{ progress.place }}</p>
+  <div class="runbox">
+    <div class="bar"><div id="pbar" style="width: {{ progress.percent }}%"></div></div>
+    <p id="pmsg" style="margin:.9rem 0 0;">{{ progress.message }}</p>
+    <div class="stats">
+      <div><b id="pfound">{{ progress.found }}</b><span>found</span></div>
+      <div><b id="pdone">{{ progress.researched }}</b><span>researched</span></div>
+      <div><b id="pela">{{ progress.elapsed }}s</b><span>elapsed</span></div>
+    </div>
+  </div>
+  <p class="note">Leave this open. Nothing is sent to anyone — this only finds and researches.</p>
+
+{% elif progress.stage == 'done' %}
+  <h1>Done</h1>
+  <p class="sub">{{ progress.place }}</p>
+  <div class="runbox">
+    <div class="stats" style="margin:0 0 1.2rem;">
+      <div><b>{{ progress.found }}</b><span>found</span></div>
+      <div><b>{{ progress.researched }}</b><span>researched</span></div>
+      {% if progress.failed %}<div><b>{{ progress.failed }}</b><span>skipped</span></div>{% endif %}
+    </div>
+    <a class="go" style="display:block;text-align:center;text-decoration:none;"
+       href="{{ url_for('campaign', campaign_id=progress.campaign_id) }}">See what was found</a>
+  </div>
+  <p class="note">Businesses worth contacting are waiting for you to check them.
+    Nothing can be written or sent until you do.</p>
+  <p class="note"><a href="{{ url_for('simple.start') }}?again=1">Search somewhere else</a></p>
+
+{% else %}
+  <h1>Find businesses</h1>
+  <p class="sub">Pick a place. Everything after that happens on its own.</p>
+
+  {% if progress.error %}
+    <p class="flash bad" style="margin-bottom:1.2rem;">{{ progress.error }}</p>
+  {% endif %}
+
+  <form method="post" action="{{ url_for('simple.start_run') }}" autocomplete="off" id="f">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <div class="row">
+      <div class="narrow">
+        <label class="lbl" for="country">Country</label>
+        <select id="country" name="country">
+          {% for c in countries %}
+            <option value="{{ c }}" {% if c == 'India' %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label class="lbl" for="city">City or town</label>
+        <input class="txt" id="city" name="city" placeholder="Nashik" required autofocus>
+        <ul id="suggest"></ul>
+      </div>
+    </div>
+
+    <button class="go" type="submit">Find businesses</button>
+  </form>
+
+  <p class="note">Searches every kind of business, researches the most promising ones,
+    and builds your report. Takes a few minutes.</p>
+{% endif %}
+
+</div>
+
+<script>
+(function () {
+  var running = {{ 'true' if progress.running else 'false' }};
+  if (running) {
+    var poll = setInterval(function () {
+      fetch("{{ url_for('simple.progress') }}").then(function (r) { return r.json(); })
+        .then(function (p) {
+          var el;
+          if ((el = document.getElementById('pbar')))  el.style.width = p.percent + '%';
+          if ((el = document.getElementById('pmsg')))  el.textContent = p.message;
+          if ((el = document.getElementById('pfound')))el.textContent = p.found;
+          if ((el = document.getElementById('pdone'))) el.textContent = p.researched;
+          if ((el = document.getElementById('pela')))  el.textContent = p.elapsed + 's';
+          if (!p.running) { clearInterval(poll); location.reload(); }
+        }).catch(function () {});
+    }, 2000);
+    return;
+  }
+
+  var city = document.getElementById('city');
+  var country = document.getElementById('country');
+  var list = document.getElementById('suggest');
+  var timer = null;
+  if (!city) return;
+
+  city.addEventListener('input', function () {
+    clearTimeout(timer);
+    var q = city.value.trim();
+    if (q.length < 3) { list.innerHTML = ''; return; }
+    timer = setTimeout(function () {
+      fetch("{{ url_for('simple.places') }}?q=" +
+            encodeURIComponent(q + ', ' + country.value))
+        .then(function (r) { return r.json(); })
+        .then(function (rows) {
+          list.innerHTML = '';
+          if (!rows || rows.error || !rows.length) return;
+          rows.slice(0, 5).forEach(function (row) {
+            var li = document.createElement('li');
+            li.textContent = row.label;
+            li.addEventListener('click', function () {
+              city.value = row.query; list.innerHTML = '';
+            });
+            list.appendChild(li);
+          });
+        }).catch(function () {});
+    }, 400);
+  });
+
+  document.getElementById('f').addEventListener('submit', function (e) {
+    var b = e.target.querySelector('button');
+    b.disabled = true; b.textContent = 'Starting…';
+  });
+})();
+</script>
+{% endblock %}

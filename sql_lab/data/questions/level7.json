@@ -1,0 +1,234 @@
+[
+{
+  "id": "L7-Q01", "level": 7, "difficulty": "medium",
+  "title": "The latest event from every camera",
+  "scenario": "The operator wall board shows the most recent event per camera. You need the query behind it.",
+  "task": "Return camera Name as camera, EventName as event_name and the event timestamp as event_time, for the single most recent event of each camera. Sort by camera.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["ROW_NUMBER", "PARTITION BY", "CTE"],
+  "expected": "One row per camera that has events.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "You need one row per group, chosen by a ranking rather than aggregated.",
+    "ROW_NUMBER() OVER (PARTITION BY camera ORDER BY time DESC) numbers each camera's events, newest first.",
+    "A window function cannot be used in WHERE, so compute it in a CTE or subquery and filter outside.",
+    "WITH ranked AS (SELECT ..., ROW_NUMBER() OVER (...) AS rn FROM ...) SELECT ... WHERE rn = 1."
+  ],
+  "solution": "WITH ranked AS (\n  SELECT v.\"Name\"      AS camera,\n         e.\"EventName\" AS event_name,\n         to_timestamp(e.\"Time\"/1000) AS event_time,\n         ROW_NUMBER() OVER (PARTITION BY v.\"Name\" ORDER BY e.\"Time\" DESC) AS rn\n  FROM \"Events\" e\n  JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\n)\nSELECT camera, event_name, event_time\nFROM ranked\nWHERE rn = 1\nORDER BY camera;",
+  "explanation": {
+    "breakdown": "PARTITION BY restarts the numbering for each camera; ORDER BY inside OVER decides which row gets number 1. The outer query keeps only those.",
+    "why": "Window functions are evaluated after WHERE and GROUP BY, so they cannot be referenced in WHERE. Wrapping in a CTE is the standard workaround.",
+    "commonMistake": "Writing WHERE ROW_NUMBER() OVER (...) = 1, which PostgreSQL rejects outright.",
+    "alternative": "PostgreSQL's DISTINCT ON is more concise: SELECT DISTINCT ON (v.\"Name\") ... ORDER BY v.\"Name\", e.\"Time\" DESC. It is not portable but it is idiomatic and fast.",
+    "performance": "The window sort dominates. An index on (VideoSourceId, Time DESC) makes this dramatically cheaper.",
+    "qaRelevance": "'Latest record per group' is the most frequently needed pattern in operational reporting, and doing it with a correlated subquery per row is the most common performance mistake."
+  }
+},
+{
+  "id": "L7-Q02", "level": 7, "difficulty": "hard",
+  "title": "RANK, DENSE_RANK and ROW_NUMBER on a real tie",
+  "scenario": "Two cameras have produced exactly the same number of events. You need to understand how the three ranking functions treat that.",
+  "task": "Return camera Name as camera, event count as n, and the three rankings by descending count as rnk, dense_rnk and row_num. Limit to the top 6. Sort by n descending then camera.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["RANK", "DENSE_RANK", "ROW_NUMBER", "window over aggregate"],
+  "expected": "Six rows. Two cameras share n = 1456; RANK gives both 3, DENSE_RANK gives both 3, ROW_NUMBER gives 3 and 4.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "You can apply a window function on top of an aggregated result — compute the counts first.",
+    "Do the aggregation in a CTE, then rank its rows.",
+    "All three functions share the same OVER (ORDER BY n DESC) clause.",
+    "Apply LIMIT in the outer query after ranking."
+  ],
+  "solution": "WITH per_cam AS (\n  SELECT v.\"Name\" AS camera, count(*) AS n\n  FROM \"Events\" e\n  JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\n  GROUP BY v.\"Name\"\n)\nSELECT camera,\n       n,\n       RANK()       OVER (ORDER BY n DESC) AS rnk,\n       DENSE_RANK() OVER (ORDER BY n DESC) AS dense_rnk,\n       ROW_NUMBER() OVER (ORDER BY n DESC) AS row_num\nFROM per_cam\nORDER BY n DESC, camera\nLIMIT 6;",
+  "explanation": {
+    "breakdown": "RANK assigns the same rank to ties and then skips (3, 3, 5). DENSE_RANK ties without skipping (3, 3, 4). ROW_NUMBER never ties and assigns an arbitrary order among equals (3, 4).",
+    "why": "The difference only becomes visible when a tie actually exists — which is why this dataset was built with one.",
+    "commonMistake": "Using ROW_NUMBER for a 'top N' leaderboard. When two rows tie at the cut-off, one is silently dropped, and which one is non-deterministic between runs.",
+    "alternative": "For 'top N including ties', RANK() <= N is correct; ROW_NUMBER() <= N is not.",
+    "performance": "The three functions share one window definition, so PostgreSQL sorts once.",
+    "qaRelevance": "Non-deterministic ROW_NUMBER on ties is a classic flaky-test cause: the query passes locally and fails in CI because the tie broke the other way."
+  }
+},
+{
+  "id": "L7-Q03", "level": 7, "difficulty": "hard",
+  "title": "Time between consecutive events",
+  "scenario": "You want to see the gap between one event and the previous one for a single camera, as the basis for outage detection.",
+  "task": "For camera 'ANPR-Gate-02', return the event timestamp as event_time and the seconds since that camera's previous event as gap_seconds, for the 15 most recent events. Sort by event_time descending.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["LAG", "window ordering", "date arithmetic"],
+  "expected": "Fifteen rows; the oldest of them has a NULL gap.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "LAG(column) OVER (ORDER BY time) returns the value from the previous row.",
+    "Subtracting the previous Time from the current one gives a gap in milliseconds.",
+    "Divide by 1000 for seconds. The very first row has no predecessor, so LAG returns NULL.",
+    "Compute the window in a CTE, then order and limit in the outer query."
+  ],
+  "solution": "WITH ev AS (\n  SELECT e.\"Time\",\n         LAG(e.\"Time\") OVER (ORDER BY e.\"Time\") AS prev_time\n  FROM \"Events\" e\n  JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\n  WHERE v.\"Name\" = 'ANPR-Gate-02'\n)\nSELECT to_timestamp(\"Time\"/1000)          AS event_time,\n       (\"Time\" - prev_time) / 1000        AS gap_seconds\nFROM ev\nORDER BY event_time DESC\nLIMIT 15;",
+  "explanation": {
+    "breakdown": "LAG looks one row back in the window's ordering. With no PARTITION BY the whole filtered set is one window, which is correct here because it is already a single camera.",
+    "why": "The ORDER BY inside OVER defines what 'previous' means and is independent of the query's final ORDER BY. Getting these confused is the usual source of nonsense gaps.",
+    "commonMistake": "Ordering the window DESC and then reading the result as 'time since previous', when it is actually 'time until next'.",
+    "alternative": "LEAD() looks forward instead. LAG(x, 1, default) supplies a value instead of NULL for the first row.",
+    "performance": "One sort over the filtered rows.",
+    "qaRelevance": "Inter-event gaps are how you detect a camera that stalls intermittently — a fault that never shows up in daily totals."
+  }
+},
+{
+  "id": "L7-Q04", "level": 7, "difficulty": "hard",
+  "title": "Detect outage windows across the fleet",
+  "scenario": "You want every instance where a camera went quiet for more than two hours, across all cameras at once.",
+  "task": "Return camera Name as camera, the gap start as gap_start, the gap end as gap_end, and the gap length in minutes as gap_minutes, for gaps longer than 120 minutes. Sort by gap_minutes descending then camera, limit 20.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["LAG", "PARTITION BY", "CTE", "filtering window results"],
+  "expected": "The longest silences, dominated by the camera that stopped entirely.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Now the window must restart per camera, so PARTITION BY the camera.",
+    "LAG gives the previous event time within that camera's ordered sequence.",
+    "The gap in minutes is (current - previous) / 1000 / 60.",
+    "Filter on the computed gap in an outer query, since window results are not available in WHERE."
+  ],
+  "solution": "WITH gaps AS (\n  SELECT v.\"Name\" AS camera,\n         LAG(e.\"Time\") OVER (PARTITION BY v.\"Name\" ORDER BY e.\"Time\") AS prev_time,\n         e.\"Time\" AS curr_time\n  FROM \"Events\" e\n  JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\n)\nSELECT camera,\n       to_timestamp(prev_time/1000)          AS gap_start,\n       to_timestamp(curr_time/1000)          AS gap_end,\n       ((curr_time - prev_time) / 60000)::int AS gap_minutes\nFROM gaps\nWHERE prev_time IS NOT NULL\n  AND curr_time - prev_time > 120 * 60 * 1000\nORDER BY gap_minutes DESC, camera\nLIMIT 20;",
+  "explanation": {
+    "breakdown": "PARTITION BY camera makes LAG restart at each camera, so no gap is ever computed across two different devices. The outer query then filters on the computed difference.",
+    "why": "Omitting PARTITION BY would compare the last event of one camera with the first of the next, producing meaningless gaps that look like outages.",
+    "commonMistake": "Forgetting PARTITION BY. The query still runs and returns plausible-looking rows, which is what makes it dangerous.",
+    "alternative": "The generate_series approach in Level 6 finds gaps by their absence; this finds them by their edges. This version is far cheaper on sparse data.",
+    "performance": "One partitioned sort. An index on (VideoSourceId, Time) supports it well.",
+    "qaRelevance": "Gap detection gives you the exact start and end of an outage, which is what you correlate against deploy times and network events during a post-mortem."
+  }
+},
+{
+  "id": "L7-Q05", "level": 7, "difficulty": "hard",
+  "title": "Running total of daily events",
+  "scenario": "You want a cumulative view of event volume over the last two weeks for a capacity discussion.",
+  "task": "Return the day as day, that day's count as n, and the running cumulative total as running_total, for the last 14 days. Sort by day.",
+  "tables": ["Events"],
+  "skills": ["window frame", "SUM OVER", "date_trunc"],
+  "expected": "Fourteen or fifteen rows with a monotonically increasing running total.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Aggregate to a daily count first, in a CTE.",
+    "A running total is SUM(n) OVER (ORDER BY day).",
+    "With an ORDER BY and no explicit frame, the default frame is RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW, which is exactly a running total.",
+    "Select both the daily count and the windowed sum."
+  ],
+  "solution": "WITH daily AS (\n  SELECT date_trunc('day', to_timestamp(\"Time\"/1000))::date AS day,\n         count(*) AS n\n  FROM \"Events\"\n  WHERE \"Time\" >= extract(epoch FROM now() - interval '14 days') * 1000\n  GROUP BY 1\n)\nSELECT day,\n       n,\n       SUM(n) OVER (ORDER BY day) AS running_total\nFROM daily\nORDER BY day;",
+  "explanation": {
+    "breakdown": "SUM as a window function accumulates over the frame. The default frame with ORDER BY runs from the start of the partition to the current row.",
+    "why": "Without ORDER BY inside OVER, the frame is the entire partition and SUM returns the grand total on every row — a very different, and usually unintended, result.",
+    "commonMistake": "Omitting ORDER BY in OVER and getting the same total repeated on every row.",
+    "alternative": "ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW states the frame explicitly. It differs from the default RANGE when there are duplicate ORDER BY values — with RANGE, tied rows all get the same cumulative value.",
+    "performance": "One sort over a small daily aggregate.",
+    "qaRelevance": "Running totals expose slow drift that daily figures hide, and they are how you check a retention policy is actually keeping the table bounded."
+  }
+},
+{
+  "id": "L7-Q06", "level": 7, "difficulty": "hard",
+  "title": "Seven-day moving average",
+  "scenario": "Daily counts are noisy. A moving average makes the underlying trend visible.",
+  "task": "Return day, that day's count as n, and the 7-day moving average rounded to 1 decimal as moving_avg_7d, for the last 21 days. Sort by day.",
+  "tables": ["Events"],
+  "skills": ["window frame", "ROWS BETWEEN", "AVG OVER"],
+  "expected": "About 21 rows, with the moving average smoother than the raw counts.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Aggregate to daily counts in a CTE first.",
+    "A moving average needs an explicit frame, not the default.",
+    "ROWS BETWEEN 6 PRECEDING AND CURRENT ROW gives a seven-row window including the current day.",
+    "AVG(n) OVER (ORDER BY day ROWS BETWEEN 6 PRECEDING AND CURRENT ROW)."
+  ],
+  "solution": "WITH daily AS (\n  SELECT date_trunc('day', to_timestamp(\"Time\"/1000))::date AS day,\n         count(*) AS n\n  FROM \"Events\"\n  WHERE \"Time\" >= extract(epoch FROM now() - interval '21 days') * 1000\n  GROUP BY 1\n)\nSELECT day,\n       n,\n       round(AVG(n) OVER (ORDER BY day\n                          ROWS BETWEEN 6 PRECEDING AND CURRENT ROW), 1) AS moving_avg_7d\nFROM daily\nORDER BY day;",
+  "explanation": {
+    "breakdown": "ROWS BETWEEN 6 PRECEDING AND CURRENT ROW defines a sliding seven-row window. The first six rows average over fewer rows, since the frame is clipped at the start.",
+    "why": "ROWS counts physical rows; RANGE counts values. For a moving average over days, ROWS is what you want — but only if every day is present. A missing day silently shortens the real time span the average covers.",
+    "commonMistake": "Using RANGE BETWEEN 6 PRECEDING with a date column, which PostgreSQL interprets as an interval offset and may reject or behave unexpectedly.",
+    "alternative": "For gap-safe windows, join to a generated calendar first so every day exists as a row.",
+    "qaRelevance": "Moving averages are the basis of anomaly alerts: flag a day whose value deviates from its trailing average by more than a threshold, rather than alerting on every noisy spike."
+  }
+},
+{
+  "id": "L7-Q07", "level": 7, "difficulty": "hard",
+  "title": "Top three events per camera",
+  "scenario": "For a per-camera profile page you need each camera's three most frequent event types.",
+  "task": "Return camera Name as camera, EventName as event_name, count as n, and the within-camera rank as rnk, keeping only ranks 1 to 3. Sort by camera then rnk.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["ROW_NUMBER", "PARTITION BY", "top-N per group"],
+  "expected": "Up to three rows per camera.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Aggregate by camera and event name first to get the counts.",
+    "Then rank within each camera, partitioning by camera and ordering by count descending.",
+    "Filter to rnk <= 3 in an outer query.",
+    "Add a tie-breaker to the window ORDER BY so results are deterministic."
+  ],
+  "solution": "WITH counts AS (\n  SELECT v.\"Name\"      AS camera,\n         e.\"EventName\" AS event_name,\n         count(*)      AS n\n  FROM \"Events\" e\n  JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\n  GROUP BY v.\"Name\", e.\"EventName\"\n),\nranked AS (\n  SELECT camera, event_name, n,\n         ROW_NUMBER() OVER (PARTITION BY camera\n                            ORDER BY n DESC, event_name) AS rnk\n  FROM counts\n)\nSELECT camera, event_name, n, rnk\nFROM ranked\nWHERE rnk <= 3\nORDER BY camera, rnk;",
+  "explanation": {
+    "breakdown": "Two stacked CTEs: aggregate, then rank within partitions, then filter. This is the canonical top-N-per-group shape.",
+    "why": "The secondary sort key event_name makes the ranking deterministic. Without it, cameras with tied counts produce different output on different runs.",
+    "commonMistake": "Omitting the tie-breaker, then writing an automated test that asserts exact output. It will fail intermittently.",
+    "alternative": "RANK() instead of ROW_NUMBER() returns all tied rows at the cut-off, which may be more than three per camera — choose deliberately.",
+    "performance": "One aggregation and one partitioned sort, both over a small intermediate result.",
+    "qaRelevance": "Top-N per group appears in nearly every dashboard. Knowing that ROW_NUMBER truncates ties and RANK does not is what makes the output defensible."
+  }
+},
+{
+  "id": "L7-Q08", "level": 7, "difficulty": "hard",
+  "title": "First and last event per camera in one row",
+  "scenario": "You want each camera's active period at a glance: when it first reported and when it last did.",
+  "task": "Return camera Name as camera, first event timestamp as first_seen, last as last_seen, and the span in whole days as active_days. Sort by camera.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["MIN", "MAX", "date arithmetic", "GROUP BY"],
+  "expected": "One row per camera with events.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "This one is a plain aggregate — MIN and MAX per group — not a window function.",
+    "Convert both extremes with to_timestamp(x/1000).",
+    "The span in days is the difference of the two epochs divided by the milliseconds in a day.",
+    "86400000 milliseconds in a day."
+  ],
+  "solution": "SELECT v.\"Name\" AS camera,\n       to_timestamp(min(e.\"Time\")/1000) AS first_seen,\n       to_timestamp(max(e.\"Time\")/1000) AS last_seen,\n       ((max(e.\"Time\") - min(e.\"Time\")) / 86400000)::int AS active_days\nFROM \"Events\" e\nJOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nGROUP BY v.\"Name\"\nORDER BY camera;",
+  "explanation": {
+    "breakdown": "MIN and MAX over the group give the endpoints; their difference in milliseconds converts to days by integer division.",
+    "why": "This deliberately does not need a window function. FIRST_VALUE and LAST_VALUE would work but require careful frame handling — LAST_VALUE with the default frame returns the current row, not the last, which surprises almost everyone.",
+    "commonMistake": "Reaching for LAST_VALUE() OVER (ORDER BY ...) and getting the current row back, because the default frame ends at CURRENT ROW. It needs ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING.",
+    "alternative": "If you also needed a non-aggregated column from the first and last rows, then window functions become necessary.",
+    "qaRelevance": "A camera whose active span is much shorter than the retention window either arrived late or died early. Either way it needs explaining before you trust its statistics."
+  }
+},
+{
+  "id": "L7-Q09", "level": 7, "difficulty": "hard",
+  "title": "Day-over-day change per camera",
+  "scenario": "Rather than comparing two fixed days, you want every camera's daily series with the change from its own previous day.",
+  "task": "For the last 5 days, return camera Name as camera, day, that day's count as n, the previous day's count as prev_n, and the difference as delta. Sort by camera then day.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["LAG", "PARTITION BY", "date_trunc", "CTE"],
+  "expected": "A daily series per camera with per-camera deltas; the first day of each camera has a NULL prev_n.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Aggregate to (camera, day, count) in a CTE.",
+    "LAG over that, partitioned by camera and ordered by day, gives the previous day's count.",
+    "The delta is the current count minus the lagged one; it is NULL on each camera's first day.",
+    "PARTITION BY camera is essential, or the lag crosses camera boundaries."
+  ],
+  "solution": "WITH daily AS (\n  SELECT v.\"Name\" AS camera,\n         date_trunc('day', to_timestamp(e.\"Time\"/1000))::date AS day,\n         count(*) AS n\n  FROM \"Events\" e\n  JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\n  WHERE e.\"Time\" >= extract(epoch FROM CURRENT_DATE - 5) * 1000\n    AND e.\"Time\" <  extract(epoch FROM CURRENT_DATE)     * 1000\n  GROUP BY 1, 2\n)\nSELECT camera,\n       day,\n       n,\n       LAG(n) OVER (PARTITION BY camera ORDER BY day)     AS prev_n,\n       n - LAG(n) OVER (PARTITION BY camera ORDER BY day) AS delta\nFROM daily\nORDER BY camera, day;",
+  "explanation": {
+    "breakdown": "Aggregate first, then lag within each camera's ordered day series. The same window expression is written twice; PostgreSQL evaluates the shared window once.",
+    "why": "This scales to the whole fleet in one query, unlike the fixed two-day comparison in Level 6. It also automatically handles cameras with different histories.",
+    "commonMistake": "Forgetting PARTITION BY, so the first day of one camera is compared against the last day of the previous camera — producing large, entirely fictional deltas.",
+    "alternative": "A named WINDOW clause avoids repeating the definition: WINDOW w AS (PARTITION BY camera ORDER BY day), then LAG(n) OVER w.",
+    "performance": "One partitioned sort over a small aggregate.",
+    "qaRelevance": "This single query replaces the manual day-by-day comparison entirely, and it is the natural input to an automated 'alert when any camera drops more than X percent' rule."
+  }
+}
+]

@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% from "_macros.html" import status_badge, score_badge %}
+{% block title %}{{ campaign.name }} - business_radar{% endblock %}
+{% block content %}
+
+<div class="panel">
+  <div class="spread">
+    <div>
+      <div class="row">{{ status_badge(campaign.status, campaign.paused_reason or '') }}
+        <h1>{{ campaign.name }}</h1></div>
+      <p class="small" style="margin-top:var(--s-2)">
+        Created by {{ campaign.created_by_name or '—' }} on {{ campaign.created_at|stamp }}
+        &middot; min score {{ campaign.min_opportunity_score }}
+        &middot; depth {{ campaign.research_depth }}
+        {% if campaign.max_businesses %}&middot; cap {{ campaign.max_businesses }}{% endif %}
+      </p>
+      <p class="mono">{{ campaign.id }}
+        {% if campaign.research_model_id %}
+          &middot; {{ campaign.research_model_id }} / {{ campaign.research_prompt_version }}
+        {% endif %}</p>
+    </div>
+    <a class="btn" href="{{ url_for('index') }}">All campaigns</a>
+  </div>
+</div>
+
+{% if campaign.status == 'PAUSED' and campaign.paused_reason == 'RATE_LIMIT' %}
+<div class="flash warn" role="status">
+  Research is paused: today's Gemini request quota is used up. This resumes by itself after
+  the quota resets. An ETA that ignores the quota wall would be a lie, so there is none.
+</div>
+{% endif %}
+
+<div class="panel">
+  <header><span class="panel-title">Discovery</span></header>
+  {% if cities %}
+    <div class="tablewrap">
+      <table class="btable">
+        <thead><tr><th scope="col">City</th><th scope="col">Status</th>
+          <th scope="col" class="num">Discovered</th><th scope="col">Finished</th></tr></thead>
+        <tbody>
+          {% for c in cities %}
+            <tr>
+              <th scope="row" data-label="City">{{ c.city }}</th>
+              <td data-label="Status">{{ status_badge(c.status) }}</td>
+              <td data-label="Discovered" class="num">{{ c.n_discovered }}</td>
+              <td data-label="Finished">{{ c.finished_at|day }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="empty">No cities on this campaign.</p>
+  {% endif %}
+</div>
+
+<div class="panel">
+  <header>
+    <span class="panel-title">Statistics</span>
+    <span class="small">Every figure is an aggregate over real rows. A figure with nothing
+      behind it reads &mdash;, never 0.</span>
+  </header>
+  <div class="kpis">
+    {% set tiles = [
+      ('Found', funnel.found, 'info'),
+      ('Researched', funnel.researched, 'info'),
+      ('Qualified', funnel.qualified, 'info'),
+      ('Verified', funnel.verified, 'ok'),
+      ('Selected', funnel.selected, 'ok'),
+      ('Prepared', funnel.prepared, 'warn'),
+      ('Approved', funnel.approved, 'warn'),
+      ('Sent', funnel.sent, 'ok'),
+      ('Responses', funnel.responses, 'info'),
+      ('Interested', funnel.interested, 'ok'),
+      ('Demos', funnel.demos, 'ok'),
+      ('Proposals', funnel.proposals, 'ok'),
+      ('Won', funnel.won, 'ok')
+    ] %}
+    {% for label, value, tone in tiles %}
+      <div class="kpi tone-{{ tone }}">
+        <div class="kpi-label">{{ label }}</div>
+        <div class="kpi-value">{{ value|dash }}</div>
+      </div>
+    {% endfor %}
+  </div>
+  {% if funnel.found %}
+    <p class="small" style="margin-top:var(--s-3)">
+      Research progress {{ funnel.researched }} of {{ funnel.found }}.</p>
+    <div class="bar" aria-hidden="true">
+      <span style="width:{{ (100 * funnel.researched / funnel.found)|round(0,'floor') }}%"></span>
+    </div>
+  {% endif %}
+</div>
+
+<div class="panel">
+  <header>
+    <span class="panel-title">Businesses</span>
+    <span class="small">{{ businesses|length }} shown, highest opportunity first.
+      Unscored rows sink to the bottom.</span>
+  </header>
+  {% if businesses %}
+    <div class="tablewrap">
+      <table class="btable">
+        <thead><tr>
+          <th scope="col">Business</th><th scope="col">City</th><th scope="col">Category</th>
+          <th scope="col" class="num">Score</th><th scope="col">Status</th>
+          <th scope="col">Held back by</th><th scope="col">Contacts</th>
+        </tr></thead>
+        <tbody>
+          {% for b in businesses %}
+            <tr {% if b.is_suppressed %}class="suppressed"{% endif %}>
+              <th scope="row" data-label="Business">
+                <a href="{{ url_for('business', business_id=b.business_id) }}">{{ b.name }}</a>
+              </th>
+              <td data-label="City">{{ b.city }}</td>
+              <td data-label="Category">{{ b.category|pretty }}</td>
+              <td data-label="Score" class="num">{{ score_badge(b.opportunity_score, b.opportunity_band) }}</td>
+              <td data-label="Status">
+                {% if b.is_suppressed %}
+                  <span class="badge bad">DO NOT CONTACT</span>
+                {% else %}
+                  {{ status_badge(b.status, b.skip_reason or '') }}
+                {% endif %}
+              </td>
+              <td data-label="Held back by">{{ b.contact_ready_block_code|pretty or '—' }}</td>
+              <td data-label="Contacts" class="num">{{ b.n_contacts }}/{{ b.n_contacts_any }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="empty">Nothing discovered yet. Discovery and research run from the command
+      line; this page shows what they wrote.</p>
+  {% endif %}
+</div>
+{% endblock %}

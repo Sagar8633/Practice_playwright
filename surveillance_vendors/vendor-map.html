@@ -1,0 +1,611 @@
+<title>Video Surveillance Vendor Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#EAEEF1;
+  --surface:#FFFFFF;
+  --surface-2:#F4F7F8;
+  --ink:#0E161B;
+  --ink-2:#36444D;
+  --muted:#66757F;
+  --line:#D4DDE3;
+  --line-2:#BAC7CF;
+  --accent:#0B6E77;
+  --accent-ink:#07545C;
+  --accent-soft:#DCEEF0;
+  --warm:#A0491D;
+  --warm-soft:#F5E6DD;
+  --shadow:0 1px 2px rgba(14,22,27,.05),0 10px 28px -20px rgba(14,22,27,.4);
+  --fd:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --fb:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif;
+  --fm:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0B1115;
+    --surface:#131D23;
+    --surface-2:#18242B;
+    --ink:#E3EDF2;
+    --ink-2:#B2C2CB;
+    --muted:#80929D;
+    --line:#22303A;
+    --line-2:#33454F;
+    --accent:#3FC2CE;
+    --accent-ink:#84DFE7;
+    --accent-soft:#0D2C31;
+    --warm:#E08F63;
+    --warm-soft:#2E1D14;
+    --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 28px -20px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0B1115;
+  --surface:#131D23;
+  --surface-2:#18242B;
+  --ink:#E3EDF2;
+  --ink-2:#B2C2CB;
+  --muted:#80929D;
+  --line:#22303A;
+  --line-2:#33454F;
+  --accent:#3FC2CE;
+  --accent-ink:#84DFE7;
+  --accent-soft:#0D2C31;
+  --warm:#E08F63;
+  --warm-soft:#2E1D14;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 28px -20px rgba(0,0,0,.9);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:var(--fb);font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+/* ---------- masthead ---------- */
+.mast{padding:44px 0 28px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:var(--fm);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent-ink);margin:0 0 14px;
+}
+h1{
+  font-family:var(--fd);font-weight:700;font-size:clamp(30px,5vw,46px);
+  line-height:1.05;letter-spacing:-.02em;margin:0 0 14px;text-wrap:balance;
+}
+.lede{margin:0;max-width:64ch;color:var(--ink-2);font-size:16px}
+.lede b{font-weight:600;color:var(--ink)}
+
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.stat{
+  position:relative;background:var(--surface);border:1px solid var(--line);
+  padding:12px 18px;min-width:132px;
+}
+.stat::before,.stat::after{
+  content:"";position:absolute;width:9px;height:9px;border:2px solid var(--accent);
+}
+.stat::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.stat::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.stat .num{
+  font-family:var(--fd);font-weight:700;font-size:26px;line-height:1;
+  font-variant-numeric:tabular-nums;display:block;
+}
+.stat .lbl{
+  font-family:var(--fm);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-top:6px;display:block;
+}
+
+/* ---------- toolbar ---------- */
+.bar{
+  position:sticky;top:0;z-index:20;background:var(--ground);
+  border-bottom:1px solid var(--line);padding:14px 0 12px;
+}
+.bar-in{display:flex;flex-direction:column;gap:11px}
+.row1{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+#q{
+  flex:1 1 260px;min-width:0;font:inherit;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line-2);padding:9px 12px;
+}
+#q::placeholder{color:var(--muted)}
+#q:focus-visible,.chip:focus-visible,.seg-btn:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px;
+}
+.grouper{display:flex;border:1px solid var(--line-2);background:var(--surface)}
+.seg-btn{
+  font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  background:none;border:0;color:var(--muted);padding:9px 13px;cursor:pointer;
+}
+.seg-btn + .seg-btn{border-left:1px solid var(--line-2)}
+.seg-btn[aria-pressed="true"]{background:var(--accent);color:#fff}
+:root[data-theme="dark"] .seg-btn[aria-pressed="true"],
+.seg-btn[aria-pressed="true"]{color:var(--surface)}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chips-lbl{
+  font-family:var(--fm);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-right:4px;width:52px;flex:none;
+}
+.chip{
+  font:inherit;font-size:12.5px;background:var(--surface);color:var(--ink-2);
+  border:1px solid var(--line-2);padding:4px 10px;cursor:pointer;border-radius:999px;
+}
+.chip:hover{border-color:var(--accent);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink);font-weight:500}
+.chip.warm[aria-pressed="true"]{background:var(--warm-soft);border-color:var(--warm);color:var(--warm)}
+.chip .n{font-family:var(--fm);font-size:11px;opacity:.7;margin-left:5px}
+.reset{
+  font-family:var(--fm);font-size:11px;background:none;border:0;color:var(--muted);
+  cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:4px;
+}
+
+/* ---------- list ---------- */
+main{padding:8px 0 60px}
+.group{margin-top:34px}
+.group-head{
+  display:flex;align-items:baseline;gap:12px;
+  padding-bottom:9px;border-bottom:2px solid var(--ink);margin-bottom:2px;
+}
+.group-head h2{
+  font-family:var(--fd);font-weight:700;font-size:19px;letter-spacing:-.01em;margin:0;
+}
+.group-head .count{
+  font-family:var(--fm);font-size:11.5px;color:var(--muted);
+  font-variant-numeric:tabular-nums;margin-left:auto;
+}
+.group-head .note{font-size:12.5px;color:var(--muted)}
+
+.co{
+  display:grid;grid-template-columns:minmax(190px,1.1fr) minmax(0,2.1fr) minmax(190px,1fr);
+  gap:6px 20px;padding:13px 2px;border-bottom:1px solid var(--line);align-items:start;
+}
+.co:hover{background:var(--surface-2)}
+.co-id{display:flex;flex-direction:column;gap:3px}
+.co-name{font-family:var(--fd);font-weight:600;font-size:15.5px;margin:0;line-height:1.25}
+.co-hq{
+  font-family:var(--fm);font-size:11.5px;color:var(--muted);margin:0;
+}
+.co-desc{margin:0;font-size:14px;color:var(--ink-2)}
+.co-own{display:block;font-size:12.5px;color:var(--muted);margin-top:3px}
+.co-own b{font-weight:500;color:var(--ink-2)}
+.co-tags{list-style:none;display:flex;flex-wrap:wrap;gap:5px;margin:0;padding:0;justify-content:flex-end}
+.tag{
+  font-family:var(--fm);font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  border:1px solid var(--line-2);color:var(--muted);padding:2px 7px;white-space:nowrap;
+}
+.tag.on{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+.tag.ind{border-color:var(--warm);color:var(--warm);background:var(--warm-soft)}
+
+.empty{
+  text-align:center;padding:64px 20px;color:var(--muted);
+  border:1px dashed var(--line-2);margin-top:34px;
+}
+
+/* ---------- closing ---------- */
+.close{border-top:1px solid var(--line);margin-top:46px;padding:30px 0 70px}
+.close h2{font-family:var(--fd);font-size:16px;margin:0 0 14px;letter-spacing:-.01em}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px}
+.close p,.close li{font-size:13.5px;color:var(--ink-2);margin:0 0 8px}
+.close ul{margin:0;padding-left:17px}
+.close strong{font-weight:600;color:var(--ink)}
+.caveat{
+  border-left:3px solid var(--warm);padding:2px 0 2px 14px;color:var(--muted);font-size:13px;
+}
+
+@media (max-width:820px){
+  .co{grid-template-columns:1fr;gap:5px}
+  .co-tags{justify-content:flex-start;margin-top:4px}
+  .chips-lbl{width:auto}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <p class="eyebrow">VMS · ANPR · Face · Video analytics · CCTV</p>
+    <h1>Video Surveillance Vendor Map</h1>
+    <p class="lede">Companies building video management software, automatic number-plate recognition, face recognition, video analytics and surveillance hardware &mdash; worldwide, with <b>India covered in depth</b>. Filter by what they build or where they are.</p>
+    <div class="stats" id="stats"></div>
+  </header>
+</div>
+
+<div class="bar">
+  <div class="wrap bar-in">
+    <div class="row1">
+      <input id="q" type="search" placeholder="Search company, city or capability&hellip;" aria-label="Search companies">
+      <div class="grouper" role="group" aria-label="Group results by">
+        <button class="seg-btn" data-group="r" aria-pressed="true">By region</button>
+        <button class="seg-btn" data-group="s" aria-pressed="false">By segment</button>
+      </div>
+    </div>
+    <div class="chips" id="segChips"><span class="chips-lbl">Builds</span></div>
+    <div class="chips" id="regChips"><span class="chips-lbl">Region</span></div>
+  </div>
+</div>
+
+<div class="wrap"><main id="out"></main></div>
+
+<div class="wrap">
+  <section class="close">
+    <div class="cols">
+      <div>
+        <h2>How to read this</h2>
+        <p>Segment tags describe what a company <strong>actually ships</strong>, not what its marketing claims. Most serious players cover two or three &mdash; a camera maker with an analytics suite, or a VMS vendor with an ANPR module.</p>
+        <p>The <strong>India ops</strong> tag marks global companies with real engineering, manufacturing or delivery teams in India, not just a sales office.</p>
+      </div>
+      <div>
+        <h2>Where to track it</h2>
+        <ul>
+          <li><strong>IPVM</strong> &mdash; the industry's independent testing and news desk; the single best source on who is real.</li>
+          <li><strong>NIST FRVT / FATE</strong> &mdash; the neutral scoreboard for face-recognition accuracy claims.</li>
+          <li><strong>Trade shows</strong> &mdash; ISC West (US), IFSEC (UK), Secutech &amp; IFSEC India, Intersec Dubai, Security China.</li>
+          <li><strong>Tenders</strong> &mdash; Indian smart-city and safe-city ICCC bids on GeM and state portals reveal the real integrator landscape.</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Caveats</h2>
+        <p class="caveat">This sector consolidates constantly &mdash; Canon, Motorola Solutions, Hanwha and Axon have each absorbed several names below. Ownership and status reflect what was public as of early 2026; verify before you rely on any single entry.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const SEG = {
+  vms:   "VMS",
+  anpr:  "ANPR/LPR",
+  face:  "Face rec",
+  va:    "Video analytics",
+  cam:   "Cameras & NVR",
+  cloud: "Cloud video",
+  chip:  "Chips & edge",
+  si:    "Integrator"
+};
+const REG = {
+  india: ["India", "Product companies, OEMs, PSUs and integrators"],
+  na:    ["North America", "Largest concentration of VMS and cloud-video vendors"],
+  eu:    ["Europe", "Cameras, ANPR engines and traffic enforcement"],
+  il:    ["Israel", "Outsized share of the world's video-analytics R&D"],
+  cn:    ["Greater China", "Volume hardware plus the largest face-recognition firms"],
+  jpkr:  ["Japan &amp; Korea", "Imaging giants and the owners of much of the Western market"],
+  apac:  ["Asia-Pacific", "Taiwan hardware, Southeast Asian analytics startups"],
+  mea:   ["Middle East &amp; Africa", "National-scale safe-city programmes"],
+  latam: ["Latin America", "Regional VMS and camera manufacturing"]
+};
+
+const D = [
+/* ================= INDIA ================= */
+{n:"i2V Systems",hq:"Gurugram, India",r:"india",s:["va","anpr","vms"],d:"Video analytics, ANPR and video management for traffic, city and enterprise sites."},
+{n:"Videonetics",hq:"Kolkata, India",r:"india",s:["vms","va","anpr","face"],d:"Unified AI video platform; one of the most deployed VMS stacks in Indian smart-city and police projects."},
+{n:"Vehant Technologies",hq:"Noida, India",r:"india",s:["anpr","va"],d:"Traffic enforcement, ANPR and under-vehicle/baggage scanning; KritiKal spin-off."},
+{n:"KritiKal Solutions",hq:"Noida, India",r:"india",s:["va","anpr"],d:"Computer-vision engineering services and embedded vision products."},
+{n:"AllGoVision",hq:"Bengaluru, India",r:"india",s:["va","face"],d:"Analytics software that layers onto third-party VMS platforms rather than replacing them."},
+{n:"Staqu Technologies",hq:"Gurugram, India",r:"india",s:["va","face"],d:"JARVIS video analytics; face, crowd and behaviour analysis for police and industry."},
+{n:"Awiros",hq:"Noida, India",r:"india",s:["va"],d:"Video-AI operating system with an app store of interchangeable analytics models."},
+{n:"Uncanny Vision",hq:"Bengaluru, India",r:"india",s:["va","anpr"],d:"Edge video analytics and ANPR tuned to run on low-power camera silicon."},
+{n:"Intozi",hq:"Gurugram, India",r:"india",s:["va","anpr","face"],d:"Deep-learning video analytics, ANPR and face recognition."},
+{n:"Innefu Labs",hq:"New Delhi, India",r:"india",s:["face","va"],d:"Face recognition and link analysis built for law-enforcement investigation."},
+{n:"FaceTagr",hq:"Chennai, India",r:"india",s:["face"],d:"Face recognition for policing, missing-person search, attendance and access."},
+{n:"Wobot Intelligence",hq:"Bengaluru, India",r:"india",s:["va","cloud"],d:"Video intelligence for SOP and hygiene compliance in retail and food service."},
+{n:"Detect Technologies",hq:"Chennai, India",r:"india",s:["va"],d:"Industrial video analytics for plant safety, PPE and asset monitoring."},
+{n:"Netradyne",hq:"Bengaluru &amp; San Diego",r:"india",s:["va"],d:"Driver-facing AI dashcams and fleet video analytics; India-founded, dual HQ."},
+{n:"Skylark Labs",hq:"Mohali, India &amp; USA",r:"india",s:["va","face"],d:"Video AI for defence, border and public-safety surveillance."},
+{n:"CRON AI",hq:"Gurugram &amp; London",r:"india",s:["va"],d:"3D perception sensing for traffic, rail and infrastructure monitoring."},
+{n:"Matrix Comsec",hq:"Vadodara, India",r:"india",s:["cam","vms"],d:"SATATYA cameras, NVRs and VMS alongside access control and telecom."},
+{n:"CP PLUS (Aditya Infotech)",hq:"Noida, India",r:"india",s:["cam","vms"],d:"India's largest home-grown CCTV brand; cameras, recorders and AI camera lines."},
+{n:"Prama India",hq:"Mumbai &amp; Nashik",r:"india",s:["cam","vms"],d:"Cameras and recorders manufactured in India; Hikvision-linked lineage.",o:"Hikvision JV lineage"},
+{n:"Sparsh CCTV",hq:"Noida, India",r:"india",s:["cam"],d:"Made-in-India cameras and NVRs aimed at STQC/BIS-compliant government tenders."},
+{n:"Secureye",hq:"New Delhi, India",r:"india",s:["cam"],d:"CCTV, biometrics and access-control hardware for the Indian channel."},
+{n:"Hi Focus",hq:"Chennai, India",r:"india",s:["cam"],d:"CCTV camera and recorder brand serving the Indian distribution market."},
+{n:"Zicom",hq:"Mumbai, India",r:"india",s:["cam","si"],d:"Electronic security systems and managed remote-monitoring services."},
+{n:"Godrej Security Solutions",hq:"Mumbai, India",r:"india",s:["cam","si"],d:"Surveillance, safes and security systems across home and enterprise."},
+{n:"Dixon Technologies",hq:"Noida, India",r:"india",s:["cam"],d:"Contract manufacturer producing CCTV cameras and recorders for major brands."},
+{n:"e-con Systems",hq:"Chennai, India",r:"india",s:["cam","chip"],d:"Embedded camera modules and vision hardware for OEMs worldwide."},
+{n:"Ignitarium",hq:"Bengaluru &amp; Kochi",r:"india",s:["va","chip"],d:"Vision-AI product engineering; TYQ-i analytics building blocks."},
+{n:"PathPartner Technology",hq:"Bengaluru, India",r:"india",s:["chip","va"],d:"Embedded vision and multimedia engineering.",o:"KPIT"},
+{n:"Mistral Solutions",hq:"Bengaluru, India",r:"india",s:["chip","va"],d:"Embedded vision and defence electronics design services."},
+{n:"Softnautics",hq:"Ahmedabad, India",r:"india",s:["chip","va"],d:"Embedded machine-learning and vision engineering services.",o:"MosChip"},
+{n:"Bharat Electronics (BEL)",hq:"Bengaluru, India",r:"india",s:["si","cam"],d:"Defence PSU delivering city surveillance, ANPR and command-and-control centres."},
+{n:"Keltron",hq:"Thiruvananthapuram, India",r:"india",s:["si","anpr"],d:"Kerala state PSU behind the state's AI traffic-enforcement camera network."},
+{n:"ECIL",hq:"Hyderabad, India",r:"india",s:["si"],d:"Central PSU supplying surveillance and security electronics to government."},
+{n:"L&amp;T Smart World",hq:"Chennai, India",r:"india",s:["si"],d:"Safe-city and smart-city integrator behind many large Indian ICCC deployments."},
+{n:"Tata Elxsi",hq:"Bengaluru, India",r:"india",s:["va","si"],d:"Vision and AI engineering services; transport and smart-city systems design."},
+{n:"Tata Advanced Systems",hq:"Hyderabad, India",r:"india",s:["si"],d:"Defence and homeland-security systems including surveillance integration."},
+{n:"Allied Digital Services",hq:"Mumbai, India",r:"india",s:["si"],d:"Safe-city and city surveillance systems integration and managed services."},
+{n:"Honeywell Automation India",hq:"Pune, India",r:"india",s:["si","vms"],d:"Building security, MAXPRO VMS and command centres; large India engineering base."},
+{n:"NEC Corporation India",hq:"New Delhi, India",r:"india",s:["face","si"],d:"NeoFace face recognition and safe-city delivery for Indian cities and airports."},
+{n:"Bosch Engineering India",hq:"Bengaluru, India",r:"india",s:["va","cam"],d:"Major R&amp;D centre for Bosch video systems and on-camera analytics."},
+
+/* ================= NORTH AMERICA ================= */
+{n:"Motorola Solutions",hq:"Chicago, USA",r:"na",s:["vms","cam","va","anpr","cloud"],d:"The consolidator: video security is now one of its two core businesses.",o:"Owns Avigilon, Pelco, IndigoVision, Ava, Vigilant, Calipsa",io:1},
+{n:"Genetec",hq:"Montreal, Canada",r:"na",s:["vms","anpr","cloud"],d:"Security Center VMS plus AutoVu ANPR; the main Western alternative to Milestone.",io:1},
+{n:"Verkada",hq:"San Mateo, USA",r:"na",s:["cam","cloud","vms","va"],d:"Cloud-managed cameras with built-in VMS; sells hardware and software as one subscription."},
+{n:"Eagle Eye Networks",hq:"Austin, USA",r:"na",s:["cloud","vms","va"],d:"Cloud VMS that works with third-party cameras; heavy reseller channel."},
+{n:"Rhombus Systems",hq:"Sacramento, USA",r:"na",s:["cam","cloud","va"],d:"Cloud cameras and sensors for mid-market enterprise."},
+{n:"Flock Safety",hq:"Atlanta, USA",r:"na",s:["anpr","cam","cloud"],d:"Networked LPR cameras for neighbourhoods and police; the fastest-growing ANPR story in the US."},
+{n:"Axon",hq:"Scottsdale, USA",r:"na",s:["va","cloud","si"],d:"Body cameras and evidence cloud; Fusus brings real-time crime centres.",o:"Acquired Fusus, 2024"},
+{n:"Rekor Systems",hq:"Columbia, USA",r:"na",s:["anpr","va"],d:"Roadway intelligence and vehicle recognition built on the OpenALPR engine."},
+{n:"Johnson Controls",hq:"Cork &amp; Milwaukee",r:"na",s:["vms","cam","si"],d:"Tyco security portfolio: exacqVision VMS, American Dynamics and Illustra cameras.",io:1},
+{n:"Honeywell",hq:"Charlotte, USA",r:"na",s:["vms","cam","si"],d:"MAXPRO VMS, cameras and building-wide security integration.",io:1},
+{n:"Alarm.com",hq:"Tysons, USA",r:"na",s:["cloud","va","vms"],d:"Cloud video for residential and SMB; ObjectVideo Labs does the analytics research.",o:"Owns OpenEye, ObjectVideo Labs"},
+{n:"Teledyne FLIR",hq:"Wilsonville, USA",r:"na",s:["cam","va"],d:"Thermal and multispectral cameras for perimeter, traffic and critical infrastructure."},
+{n:"Network Optix",hq:"Walnut Creek, USA",r:"na",s:["vms"],d:"Nx Witness VMS platform, widely white-labelled by camera makers."},
+{n:"Digital Watchdog",hq:"Tampa, USA",r:"na",s:["cam","vms"],d:"Cameras, recorders and DW Spectrum VMS for the US channel."},
+{n:"Salient Systems",hq:"Austin, USA",r:"na",s:["vms"],d:"CompleteView VMS for enterprise and multi-site retail."},
+{n:"Vicon Industries",hq:"Hauppauge, USA",r:"na",s:["vms","cam"],d:"Valerus VMS and cameras for schools, transit and government."},
+{n:"March Networks",hq:"Ottawa, Canada",r:"na",s:["vms","va","cam"],d:"Video for banking and retail loss prevention.",o:"Infinova"},
+{n:"Senstar",hq:"Ottawa, Canada",r:"na",s:["va","vms","cam"],d:"Perimeter intrusion detection fused with video; formerly Magal and Aimetis."},
+{n:"Solink",hq:"Ottawa, Canada",r:"na",s:["cloud","va"],d:"Cloud video tied to POS and transaction data for retail and restaurants."},
+{n:"Spot AI",hq:"San Francisco, USA",r:"na",s:["cloud","va","vms"],d:"Video AI agents layered over existing cameras."},
+{n:"Coram AI",hq:"San Francisco, USA",r:"na",s:["cloud","va"],d:"Natural-language search across live and recorded camera feeds."},
+{n:"Turing AI",hq:"Santa Clara, USA",r:"na",s:["cloud","va","face"],d:"Cloud video intelligence with face and behaviour search."},
+{n:"Ambient.ai",hq:"Palo Alto, USA",r:"na",s:["va"],d:"Behaviour-based threat detection that replaces rule-based alerts."},
+{n:"ZeroEyes",hq:"Philadelphia, USA",r:"na",s:["va"],d:"Visual gun detection with a human-verified alert centre."},
+{n:"Actuate AI",hq:"New York, USA",r:"na",s:["va"],d:"Weapon and intrusion detection retrofitted onto existing cameras."},
+{n:"Omnilert",hq:"Leesburg, USA",r:"na",s:["va"],d:"Gun detection and emergency mass notification."},
+{n:"Athena Security",hq:"Austin, USA",r:"na",s:["va"],d:"Weapon detection and occupancy analytics."},
+{n:"Deep Sentinel",hq:"Pleasanton, USA",r:"na",s:["va","cloud"],d:"AI-triaged cameras with live remote guards for homes and small business."},
+{n:"Voxel",hq:"San Francisco, USA",r:"na",s:["va"],d:"Workplace safety and ergonomics analytics for warehouses and manufacturing."},
+{n:"Chooch",hq:"San Francisco, USA",r:"na",s:["va"],d:"Vision-AI platform deployed across security, safety and industrial use cases."},
+{n:"Clearview AI",hq:"New York, USA",r:"na",s:["face"],d:"Face search against scraped web imagery; sold mainly to law enforcement."},
+{n:"Paravision",hq:"San Francisco, USA",r:"na",s:["face"],d:"Face-recognition SDKs and liveness detection; a consistent NIST performer."},
+{n:"Rank One Computing",hq:"Denver, USA",r:"na",s:["face"],d:"Lightweight face and biometric matching SDKs for US agencies."},
+{n:"FaceFirst",hq:"Austin, USA",r:"na",s:["face"],d:"Face recognition for retail loss prevention and organised-crime deterrence."},
+{n:"SAFR",hq:"Seattle, USA",r:"na",s:["face","va"],d:"Face recognition and computer vision; RealNetworks lineage."},
+{n:"BigBear.ai (Pangiam)",hq:"Columbia, USA",r:"na",s:["face","va"],d:"Face and vehicle recognition for aviation and border security; absorbed Trueface."},
+{n:"Aware",hq:"Burlington, USA",r:"na",s:["face"],d:"Biometric matching software and identity workflows for government."},
+{n:"Sighthound",hq:"Winter Park, USA",r:"na",s:["va","anpr"],d:"Vehicle, plate and face analytics SDKs for developers."},
+{n:"PlateSmart Technologies",hq:"Tampa, USA",r:"na",s:["anpr"],d:"Camera-agnostic ANPR software for law enforcement and access control."},
+{n:"Verra Mobility",hq:"Mesa, USA",r:"na",s:["anpr"],d:"Photo enforcement and tolling programmes run as a managed service."},
+{n:"Iteris",hq:"Austin, USA",r:"na",s:["va","anpr"],d:"Traffic detection sensors and mobility data for road agencies."},
+{n:"SureView Systems",hq:"Tampa, USA",r:"na",s:["si","vms"],d:"Immix and Ops platforms for central monitoring stations and GSOCs."},
+{n:"Ambarella",hq:"Santa Clara, USA",r:"na",s:["chip"],d:"The dominant SoC in professional IP cameras; CVflow edge AI.",io:1},
+{n:"NVIDIA",hq:"Santa Clara, USA",r:"na",s:["chip","va"],d:"Jetson edge modules and the Metropolis vision stack most analytics vendors build on.",io:1},
+{n:"Qualcomm",hq:"San Diego, USA",r:"na",s:["chip"],d:"Vision-intelligence SoCs for cameras and edge boxes.",io:1},
+{n:"Texas Instruments",hq:"Dallas, USA",r:"na",s:["chip"],d:"Vision processors and radar for surveillance and traffic sensing.",io:1},
+{n:"Quantum",hq:"San Jose, USA",r:"na",s:["si"],d:"Surveillance-grade storage and hyperconverged recording infrastructure."},
+{n:"Wasabi Technologies",hq:"Boston, USA",r:"na",s:["cloud"],d:"Surveillance Cloud storage tier used behind many VMS deployments."},
+
+/* ================= EUROPE ================= */
+{n:"Milestone Systems",hq:"Br&oslash;ndby, Denmark",r:"eu",s:["vms","cloud"],d:"XProtect &mdash; the open VMS most third-party analytics integrate with first.",o:"Canon",io:1},
+{n:"Axis Communications",hq:"Lund, Sweden",r:"eu",s:["cam","vms","va"],d:"Invented the IP camera; still the reference for open, well-documented hardware.",o:"Canon",io:1},
+{n:"Bosch Building Technologies",hq:"Grasbrunn, Germany",r:"eu",s:["cam","va","vms"],d:"Cameras with mature on-board analytics; strong in critical infrastructure.",io:1},
+{n:"Dallmeier",hq:"Regensburg, Germany",r:"eu",s:["cam","vms","va"],d:"Panomera multifocal sensor cameras for stadiums, casinos and city squares."},
+{n:"MOBOTIX",hq:"Langmeil, Germany",r:"eu",s:["cam","va"],d:"Decentralised cameras that run analytics on-board.",o:"Konica Minolta"},
+{n:"Geutebr&uuml;ck",hq:"Windhagen, Germany",r:"eu",s:["vms","cam","va"],d:"VMS and cameras for industrial process and logistics documentation."},
+{n:"Qognify",hq:"Pearl River, USA &amp; Germany",r:"eu",s:["vms","va","si"],d:"Ocularis VMS and Situator PSIM for airports, transit and utilities.",o:"Hanwha Vision"},
+{n:"Irisity",hq:"Gothenburg, Sweden",r:"eu",s:["va"],d:"IRIS+ analytics for perimeter and public space.",o:"Acquired Agent Vi, 2022"},
+{n:"Ipsotek",hq:"London, UK",r:"eu",s:["va"],d:"Scenario-based video analytics for transport hubs and national programmes.",o:"Eviden (Atos)"},
+{n:"Digital Barriers",hq:"London, UK",r:"eu",s:["va","cam"],d:"Edge analytics and ultra-low-bandwidth live video for covert and mobile use."},
+{n:"Facewatch",hq:"London, UK",r:"eu",s:["face"],d:"Shared retail watchlists using face recognition; a live UK privacy test case."},
+{n:"Veesion",hq:"Paris, France",r:"eu",s:["va"],d:"Gesture-based shoplifting detection for retail chains."},
+{n:"Wintics",hq:"Paris, France",r:"eu",s:["va"],d:"Cityvision analytics for mobility, traffic and public-space management."},
+{n:"XXII",hq:"Paris, France",r:"eu",s:["va"],d:"Real-time video analytics for cities, transport and industrial safety."},
+{n:"Two-i",hq:"Metz, France",r:"eu",s:["va"],d:"Video analytics for retail, industry and public safety."},
+{n:"Foxstream",hq:"Lyon, France",r:"eu",s:["va"],d:"Perimeter intrusion analytics certified for high-security French sites."},
+{n:"Survision",hq:"Nantes, France",r:"eu",s:["anpr"],d:"All-in-one ANPR cameras for parking, tolling and access."},
+{n:"Tattile",hq:"Brescia, Italy",r:"eu",s:["anpr","cam"],d:"ANPR cameras and traffic enforcement systems.",o:"Sanmarco Informatica"},
+{n:"Adaptive Recognition",hq:"Budapest, Hungary",r:"eu",s:["anpr"],d:"Long-standing ANPR camera and engine maker, formerly ARH."},
+{n:"Vaxtor Technologies",hq:"Madrid, Spain",r:"eu",s:["anpr"],d:"OCR engines for plates, containers, wagons and dangerous-goods codes."},
+{n:"Herta Security",hq:"Barcelona, Spain",r:"eu",s:["face"],d:"Face recognition for crowded scenes; stadiums, casinos and airports."},
+{n:"Davantis",hq:"Barcelona, Spain",r:"eu",s:["va"],d:"Perimeter video analytics with very low false-alarm rates for CRA monitoring."},
+{n:"Visual Tools",hq:"Madrid, Spain",r:"eu",s:["cam","va","vms"],d:"Recorders and analytics for retail chains and banking."},
+{n:"Neurotechnology",hq:"Vilnius, Lithuania",r:"eu",s:["face","anpr"],d:"MegaMatcher biometric and plate-recognition SDKs licensed worldwide."},
+{n:"Innovatrics",hq:"Bratislava, Slovakia",r:"eu",s:["face"],d:"Face and fingerprint biometrics behind several national ID systems."},
+{n:"Cognitec Systems",hq:"Dresden, Germany",r:"eu",s:["face"],d:"FaceVACS &mdash; one of the oldest dedicated face-recognition vendors."},
+{n:"IDEMIA",hq:"Courbevoie, France",r:"eu",s:["face","si"],d:"Biometric identity at national scale; border, police and civil ID systems.",io:1},
+{n:"Thales",hq:"Paris, France",r:"eu",s:["face","si"],d:"Biometrics, border control and integrated security for critical sites.",io:1},
+{n:"Leonardo (ELSAG)",hq:"Rome, Italy",r:"eu",s:["anpr","si"],d:"ELSAG plate readers and national security systems integration."},
+{n:"Jenoptik",hq:"Jena, Germany",r:"eu",s:["anpr"],d:"TraffiStar speed and red-light enforcement with integrated plate reading."},
+{n:"Kapsch TrafficCom",hq:"Vienna, Austria",r:"eu",s:["anpr","si"],d:"Tolling and traffic management with vehicle identification at the core.",io:1},
+{n:"Q-Free",hq:"Trondheim, Norway",r:"eu",s:["anpr","va"],d:"Tolling, traffic sensing and roadside vehicle detection."},
+{n:"Nedap",hq:"Groenlo, Netherlands",r:"eu",s:["anpr"],d:"Vehicle identification and long-range access control."},
+{n:"TagMaster",hq:"Stockholm, Sweden",r:"eu",s:["anpr"],d:"Rail and road vehicle identification; owns CitySync ANPR."},
+{n:"Yunex Traffic",hq:"Munich, Germany",r:"eu",s:["anpr","si"],d:"Traffic management and enforcement; former Siemens Mobility unit.",io:1},
+{n:"Videotec",hq:"Vicenza, Italy",r:"eu",s:["cam"],d:"Ruggedised PTZ cameras and housings for extreme environments."},
+{n:"Mirasys",hq:"Espoo, Finland",r:"eu",s:["vms","va"],d:"Open VMS for city surveillance and large distributed sites."},
+{n:"Wavestore",hq:"London, UK",r:"eu",s:["vms"],d:"Linux-based VMS integrating video with access control and analytics."},
+{n:"Luxriot",hq:"Riga, Latvia",r:"eu",s:["vms"],d:"EVO VMS with a large installer following."},
+{n:"AxxonSoft",hq:"Belgrade, Serbia",r:"eu",s:["vms","va","anpr"],d:"Axxon One VMS with built-in analytics and plate recognition; Russian origins."},
+{n:"NtechLab",hq:"Moscow, Russia",r:"eu",s:["face","va"],d:"FindFace &mdash; city-scale face recognition, notably in Moscow."},
+{n:"VisionLabs",hq:"Moscow &amp; Amsterdam",r:"eu",s:["face"],d:"Face-recognition platform for banking, retail and city projects."},
+{n:"Macroscop",hq:"Perm, Russia",r:"eu",s:["vms","va"],d:"VMS with server-side analytics for distributed sites."},
+{n:"Prosegur",hq:"Madrid, Spain",r:"eu",s:["si","cloud"],d:"Guarding plus remote video monitoring at continental scale."},
+{n:"Securitas Technology",hq:"Uppsala, Sweden",r:"eu",s:["si"],d:"Electronic security integration; the former Stanley Security business.",io:1},
+{n:"Verisure",hq:"Versoix, Switzerland",r:"eu",s:["cloud","si"],d:"Monitored alarms with verified video for homes and small business."},
+{n:"Hailo",hq:"Tel Aviv, Israel",r:"eu",s:["chip"],d:"Edge AI accelerators widely designed into analytics cameras and NVRs."},
+
+/* ================= ISRAEL ================= */
+{n:"BriefCam",hq:"Modi'in, Israel",r:"il",s:["va","face"],d:"Video synopsis and forensic search; the standard investigation add-on for police.",o:"Canon"},
+{n:"Agent Vi",hq:"Rosh Ha'ayin, Israel",r:"il",s:["va"],d:"Distributed real-time analytics and cloud video AI.",o:"Irisity"},
+{n:"viisights",hq:"Tel Aviv, Israel",r:"il",s:["va"],d:"Behavioural recognition &mdash; reads actions and intent rather than objects alone."},
+{n:"Corsight AI",hq:"Tel Aviv, Israel",r:"il",s:["face"],d:"Face recognition engineered for poor angles, masks and low light."},
+{n:"Oosto",hq:"Tel Aviv, Israel",r:"il",s:["face","va"],d:"Watchlist face recognition for access and threat detection; ownership changed in 2024."},
+{n:"Cortica",hq:"Tel Aviv, Israel",r:"il",s:["va"],d:"Unsupervised vision AI applied to autonomous inspection and surveillance."},
+{n:"Percepto",hq:"Modi'in, Israel",r:"il",s:["va"],d:"Drone-in-a-box inspection and perimeter patrol for industrial sites."},
+{n:"Magos Systems",hq:"Petah Tikva, Israel",r:"il",s:["va"],d:"Radar sensors slaved to PTZ cameras for wide-area perimeter detection."},
+
+/* ================= GREATER CHINA ================= */
+{n:"Hikvision",hq:"Hangzhou, China",r:"cn",s:["cam","vms","va","anpr","face"],d:"The world's largest video surveillance manufacturer by revenue and volume.",io:1},
+{n:"Dahua Technology",hq:"Hangzhou, China",r:"cn",s:["cam","vms","va","anpr","face"],d:"Second-largest global manufacturer; full stack from sensors to platform.",io:1},
+{n:"Uniview (UNV)",hq:"Hangzhou, China",r:"cn",s:["cam","vms","va"],d:"Third of the Chinese big three; strong channel presence in India and EMEA.",io:1},
+{n:"Tiandy Technologies",hq:"Tianjin, China",r:"cn",s:["cam","va"],d:"Low-light and starlight cameras with on-board AI."},
+{n:"Infinova",hq:"Shenzhen, China",r:"cn",s:["cam","vms"],d:"Cameras and transmission; owns March Networks in North America."},
+{n:"Kedacom",hq:"Suzhou, China",r:"cn",s:["cam","vms","va"],d:"Video conferencing and public-security video networks."},
+{n:"Huawei",hq:"Shenzhen, China",r:"cn",s:["cam","va","si"],d:"HoloSens cameras and safe-city platforms sold as national infrastructure."},
+{n:"SenseTime",hq:"Shanghai &amp; Hong Kong",r:"cn",s:["face","va"],d:"One of China's largest computer-vision firms; SenseFoundry city platform."},
+{n:"Megvii (Face++)",hq:"Beijing, China",r:"cn",s:["face","va"],d:"Face recognition and vision platforms for city, retail and logistics."},
+{n:"YITU Technology",hq:"Shanghai, China",r:"cn",s:["face","va"],d:"Face recognition and healthcare AI; a repeat NIST FRVT top scorer."},
+{n:"CloudWalk",hq:"Guangzhou, China",r:"cn",s:["face"],d:"Face recognition for banking, transport and public security."},
+{n:"Intellifusion",hq:"Shenzhen, China",r:"cn",s:["face","va","chip"],d:"Vision AI with its own edge silicon for city deployments."},
+{n:"DeepGlint",hq:"Beijing, China",r:"cn",s:["face","va"],d:"3D vision and face recognition for security and retail."},
+{n:"Milesight",hq:"Xiamen, China",r:"cn",s:["cam","va"],d:"AI cameras and IoT sensors aimed at the European channel."},
+{n:"TVT Digital",hq:"Shenzhen, China",r:"cn",s:["cam","vms"],d:"OEM cameras and recorders behind many regional brands."},
+{n:"Sunell Technology",hq:"Shenzhen, China",r:"cn",s:["cam"],d:"Cameras including thermal and body-worn lines."},
+{n:"EZVIZ",hq:"Hangzhou, China",r:"cn",s:["cam","cloud"],d:"Consumer cloud cameras; Hikvision's retail brand.",io:1},
+{n:"Imou",hq:"Hangzhou, China",r:"cn",s:["cam","cloud"],d:"Consumer and SMB cloud cameras; Dahua's retail brand.",io:1},
+{n:"Reolink",hq:"Shenzhen, China",r:"cn",s:["cam","cloud"],d:"Direct-to-consumer cameras and NVR kits."},
+{n:"TP-Link (VIGI)",hq:"Shenzhen, China",r:"cn",s:["cam","vms"],d:"Networking vendor expanding into business surveillance.",io:1},
+{n:"Rockchip",hq:"Fuzhou, China",r:"cn",s:["chip"],d:"Vision SoCs used across mid-tier cameras and NVRs."},
+{n:"Horizon Robotics",hq:"Beijing, China",r:"cn",s:["chip"],d:"Edge AI processors for automotive and smart-city vision."},
+
+/* ================= JAPAN & KOREA ================= */
+{n:"NEC",hq:"Tokyo, Japan",r:"jpkr",s:["face","va","si"],d:"NeoFace has topped NIST face-recognition benchmarks repeatedly; airports and borders.",io:1},
+{n:"Canon",hq:"Tokyo, Japan",r:"jpkr",s:["cam","vms","va"],d:"Quietly the largest owner in the sector through Axis, Milestone and BriefCam.",io:1},
+{n:"i-PRO",hq:"Tokyo, Japan",r:"jpkr",s:["cam","va"],d:"Panasonic's former security business, now independent; cameras with edge AI.",io:1},
+{n:"Sony",hq:"Tokyo, Japan",r:"jpkr",s:["chip","cam"],d:"Supplies the image sensors in most of the industry; AITRIOS edge-AI platform.",io:1},
+{n:"Hitachi",hq:"Tokyo, Japan",r:"jpkr",s:["va","si"],d:"Public-safety video analytics and city systems integration.",io:1},
+{n:"Hanwha Vision",hq:"Seongnam, South Korea",r:"jpkr",s:["cam","vms","va"],d:"Wisenet cameras and, since acquiring Qognify, enterprise VMS and PSIM.",io:1},
+{n:"IDIS",hq:"Daejeon, South Korea",r:"jpkr",s:["cam","vms"],d:"End-to-end Korean-manufactured surveillance with its own VMS.",io:1},
+{n:"Suprema",hq:"Seongnam, South Korea",r:"jpkr",s:["face"],d:"Face and fingerprint access control; heavy presence in Indian enterprises.",io:1},
+{n:"Innodep",hq:"Seoul, South Korea",r:"jpkr",s:["vms","va"],d:"VMS for city control centres and public-safety networks."},
+{n:"Alchera",hq:"Seoul, South Korea",r:"jpkr",s:["face","va"],d:"Face recognition plus fire and anomaly detection from CCTV feeds."},
+{n:"Deeping Source",hq:"Seoul, South Korea",r:"jpkr",s:["va"],d:"Privacy-preserving video analytics that de-identifies before processing."},
+
+/* ================= ASIA-PACIFIC ================= */
+{n:"VIVOTEK",hq:"Taipei, Taiwan",r:"apac",s:["cam","va","vms"],d:"IP cameras with edge analytics.",o:"Delta Electronics",io:1},
+{n:"Gorilla Technology",hq:"Taipei &amp; London",r:"apac",s:["va","si","anpr"],d:"Video analytics and network intelligence for smart cities and telcos."},
+{n:"Vaidio",hq:"White Plains, USA &amp; Taiwan",r:"apac",s:["va","face","anpr"],d:"AI vision platform that layers 30+ analytics onto existing cameras; formerly IronYun."},
+{n:"Umbo CV",hq:"Taipei, Taiwan",r:"apac",s:["cam","cloud","va"],d:"Cloud cameras with autonomous monitoring for SMB."},
+{n:"Synology",hq:"Taipei, Taiwan",r:"apac",s:["vms"],d:"Surveillance Station VMS bundled with its NAS hardware.",io:1},
+{n:"QNAP",hq:"Taipei, Taiwan",r:"apac",s:["vms"],d:"QVR Pro recording software on NAS and edge appliances.",io:1},
+{n:"ADLINK Technology",hq:"Taipei, Taiwan",r:"apac",s:["chip"],d:"Edge AI computers used as analytics appliances."},
+{n:"Advantech",hq:"Taipei, Taiwan",r:"apac",s:["chip","si"],d:"Industrial edge servers and video analytics appliances.",io:1},
+{n:"SenSen.AI",hq:"Melbourne, Australia",r:"apac",s:["anpr","va"],d:"ANPR and video analytics for parking, casinos and city services; Chennai R&amp;D.",io:1},
+{n:"iOmniscient",hq:"Sydney, Australia",r:"apac",s:["va","face","anpr"],d:"Multi-sensor analytics including crowd, face and plate in dense scenes."},
+{n:"icetana",hq:"Perth, Australia",r:"apac",s:["va"],d:"Self-learning anomaly detection across large camera estates."},
+{n:"Graymatics",hq:"Singapore",r:"apac",s:["va"],d:"Cognitive video analytics for cities, retail and media."},
+{n:"Xjera Labs",hq:"Singapore",r:"apac",s:["va","face"],d:"Video analytics for crowd, traffic and facility management."},
+{n:"NCS Group",hq:"Singapore",r:"apac",s:["si"],d:"Safe-city and government surveillance systems integration.",io:1},
+{n:"Certis",hq:"Singapore",r:"apac",s:["si","va"],d:"Security operations blending guarding with video-based command centres."},
+{n:"Nodeflux",hq:"Jakarta, Indonesia",r:"apac",s:["va","face"],d:"Indonesia's leading vision-AI firm; national ID and city analytics."},
+{n:"VinAI",hq:"Hanoi, Vietnam",r:"apac",s:["face","va"],d:"Vision and face research applied to smart city and automotive."},
+
+/* ================= MIDDLE EAST & AFRICA ================= */
+{n:"Presight AI",hq:"Abu Dhabi, UAE",r:"mea",s:["va","si"],d:"Big-data and video analytics for policing and government; G42 group."},
+{n:"Space42 (Bayanat)",hq:"Abu Dhabi, UAE",r:"mea",s:["va","si"],d:"Geospatial and AI analytics including wide-area surveillance."},
+{n:"Elm",hq:"Riyadh, Saudi Arabia",r:"mea",s:["si","face"],d:"Digital security services and national surveillance programmes."},
+{n:"ASELSAN",hq:"Ankara, T&uuml;rkiye",r:"mea",s:["cam","va","si"],d:"Defence electronics; border surveillance and city security systems."},
+{n:"Vumacam",hq:"Johannesburg, South Africa",r:"mea",s:["cam","anpr","va"],d:"Privately built city-wide camera and ANPR network sold as a service."},
+{n:"Milestone MEA / regional integrators",hq:"Dubai, UAE",r:"mea",s:["si"],d:"The Gulf runs on integrators &mdash; most global VMS reaches projects through them."},
+
+/* ================= LATIN AMERICA ================= */
+{n:"Digifort",hq:"S&atilde;o Paulo, Brazil",r:"latam",s:["vms","va","anpr"],d:"Widely deployed VMS across Latin America with its own analytics modules."},
+{n:"Intelbras",hq:"S&atilde;o Jos&eacute;, Brazil",r:"latam",s:["cam","vms"],d:"Brazil's dominant security hardware brand; Dahua manufacturing ties."},
+{n:"Seguritech",hq:"Mexico City, Mexico",r:"latam",s:["si"],d:"Large-scale city surveillance and C4/C5 command centre projects."},
+{n:"Positivo Tecnologia",hq:"Curitiba, Brazil",r:"latam",s:["cam"],d:"Local manufacturing of security and computing hardware."}
+];
+
+/* ---------- state ---------- */
+const state = { q:"", segs:new Set(), regs:new Set(), group:"r" };
+const out = document.getElementById("out");
+
+/* ---------- chips ---------- */
+function buildChips(el, entries, set, warm){
+  entries.forEach(([k,label,count])=>{
+    const b=document.createElement("button");
+    b.className="chip"+(warm&&k==="india"?" warm":"");
+    b.type="button";
+    b.setAttribute("aria-pressed","false");
+    b.dataset.k=k;
+    b.innerHTML=label+'<span class="n">'+count+'</span>';
+    b.addEventListener("click",()=>{
+      if(set.has(k)){set.delete(k);b.setAttribute("aria-pressed","false");}
+      else{set.add(k);b.setAttribute("aria-pressed","true");}
+      render();
+    });
+    el.appendChild(b);
+  });
+  const r=document.createElement("button");
+  r.className="reset";r.type="button";r.textContent="clear";
+  r.addEventListener("click",()=>{
+    set.clear();
+    el.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+    render();
+  });
+  el.appendChild(r);
+}
+buildChips(
+  document.getElementById("segChips"),
+  Object.entries(SEG).map(([k,v])=>[k,v,D.filter(c=>c.s.includes(k)).length]),
+  state.segs,false
+);
+buildChips(
+  document.getElementById("regChips"),
+  Object.entries(REG).map(([k,v])=>[k,v[0],D.filter(c=>c.r===k).length]),
+  state.regs,true
+);
+
+/* ---------- stats ---------- */
+(function(){
+  const countries=new Set();
+  D.forEach(c=>{ c.hq.split("&amp;").forEach(p=>{
+    const bits=p.split(",");countries.add((bits[bits.length-1]||"").trim());
+  });});
+  const s=[
+    [D.length,"Companies"],
+    [D.filter(c=>c.r==="india").length,"India-based"],
+    [D.filter(c=>c.io).length,"With India ops"],
+    [Object.keys(SEG).length,"Segments"]
+  ];
+  document.getElementById("stats").innerHTML =
+    s.map(([n,l])=>'<div class="stat"><span class="num">'+n+'</span><span class="lbl">'+l+'</span></div>').join("");
+})();
+
+/* ---------- filter + render ---------- */
+function matches(c){
+  if(state.segs.size && !c.s.some(x=>state.segs.has(x))) return false;
+  if(state.regs.size && !state.regs.has(c.r)) return false;
+  if(state.q){
+    const hay=(c.n+" "+c.hq+" "+c.d+" "+(c.o||"")+" "+c.s.map(k=>SEG[k]).join(" ")).toLowerCase();
+    if(!state.q.split(/\s+/).every(t=>hay.includes(t))) return false;
+  }
+  return true;
+}
+function card(c){
+  const tags=c.s.map(k=>'<li class="tag'+(state.segs.has(k)?" on":"")+'">'+SEG[k]+'</li>').join("")
+    + (c.io?'<li class="tag ind">India ops</li>':'');
+  return '<article class="co">'
+    + '<div class="co-id"><h3 class="co-name">'+c.n+'</h3><p class="co-hq">'+c.hq+'</p></div>'
+    + '<div><p class="co-desc">'+c.d+(c.o?'<span class="co-own"><b>'+c.o+'</b></span>':'')+'</p></div>'
+    + '<ul class="co-tags">'+tags+'</ul>'
+    + '</article>';
+}
+function render(){
+  const hits=D.filter(matches);
+  if(!hits.length){
+    out.innerHTML='<p class="empty">No companies match that. Try clearing a filter or searching for a capability like &ldquo;ANPR&rdquo; or a city.</p>';
+    return;
+  }
+  let html="";
+  if(state.group==="r"){
+    Object.entries(REG).forEach(([k,[name,note]])=>{
+      const g=hits.filter(c=>c.r===k);
+      if(!g.length) return;
+      html+='<section class="group"><div class="group-head"><h2>'+name+'</h2>'
+          + '<span class="note">'+note+'</span><span class="count">'+g.length+'</span></div>'
+          + g.map(card).join("")+'</section>';
+    });
+  } else {
+    Object.entries(SEG).forEach(([k,name])=>{
+      const g=hits.filter(c=>c.s.includes(k));
+      if(!g.length) return;
+      html+='<section class="group"><div class="group-head"><h2>'+name+'</h2>'
+          + '<span class="note">companies shipping this</span><span class="count">'+g.length+'</span></div>'
+          + g.map(card).join("")+'</section>';
+    });
+  }
+  out.innerHTML=html;
+}
+document.getElementById("q").addEventListener("input",e=>{
+  state.q=e.target.value.trim().toLowerCase();render();
+});
+document.querySelectorAll(".seg-btn").forEach(b=>{
+  b.addEventListener("click",()=>{
+    state.group=b.dataset.group;
+    document.querySelectorAll(".seg-btn").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+    render();
+  });
+});
+render();
+</script>

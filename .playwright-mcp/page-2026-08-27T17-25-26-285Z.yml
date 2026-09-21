@@ -1,0 +1,669 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - generic [ref=e6]: AI BUSINESS OPPORTUNITY RESEARCH
+          - heading "Dhule-Shirpur - 26 Aug 2026" [level=1] [ref=e7]
+          - generic [ref=e8]:
+            - generic [ref=e9]: Search date 26 Aug 2026, 12:42 IST
+            - generic [ref=e10]: Cities Dhule, Shirpur
+            - generic [ref=e11]: Depth DEEP
+            - generic [ref=e12]: Min score 60
+            - generic [ref=e13]: Size filter all sizes
+            - generic [ref=e14]: Campaign cmp_01JSMOKE000000000000000001
+        - group "Theme" [ref=e15]:
+          - button "Auto" [ref=e16] [cursor=pointer]
+          - button "Light" [pressed] [ref=e17] [cursor=pointer]
+          - button "Dark" [ref=e18] [cursor=pointer]
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - term [ref=e21]: Businesses found
+          - definition [ref=e22]: "4"
+        - generic [ref=e23]:
+          - term [ref=e24]: Researched
+          - definition [ref=e25]: "3"
+        - generic [ref=e26]:
+          - term [ref=e27]: Qualified
+          - definition [ref=e28]: "3"
+        - generic [ref=e29]:
+          - term [ref=e30]: Skipped
+          - definition [ref=e31]: "0"
+        - generic [ref=e32]:
+          - term [ref=e33]: Requiring verification
+          - definition [ref=e34]: "2"
+        - generic [ref=e35]:
+          - term [ref=e36]: Ready for outreach
+          - definition [ref=e37]: "1"
+      - generic [ref=e38]:
+        - text: Read-only export. Generated 27 Aug 2026, 22:54 IST; the figures are the data as of that moment. VERIFY and PREPARE OUTREACH open the live app at
+        - code [ref=e39]: http://127.0.0.1:8770
+        - text: . Selection here is preview-only — nothing in this file writes to the database, and there is no send control in this document by design.
+  - main [ref=e40]:
+    - region [ref=e41]:
+      - generic [ref=e42]:
+        - heading "Campaign KPIs" [level=2] [ref=e43]
+        - generic [ref=e44]: Every card is a SQL aggregate over the 4 row(s) below. Click a card to filter the table.
+      - generic [ref=e45]:
+        - button "Total businesses 4" [ref=e46] [cursor=pointer]:
+          - generic [ref=e47]: Total businesses
+          - generic "discovered in this campaign" [ref=e48]: "4"
+        - button "Qualified 3 score >= 60" [ref=e49] [cursor=pointer]:
+          - generic [ref=e50]: Qualified
+          - generic "3 of 3 researched" [ref=e51]: "3"
+          - generic [ref=e52]: score >= 60
+        - button "High opportunity 1 score 80-100" [ref=e53] [cursor=pointer]:
+          - generic [ref=e54]: High opportunity
+          - generic "1 of 3 scored" [ref=e55]: "1"
+          - generic [ref=e56]: score 80-100
+        - button "Medium opportunity 2 score 60-79" [ref=e57] [cursor=pointer]:
+          - generic [ref=e58]: Medium opportunity
+          - generic "2 of 3 scored" [ref=e59]: "2"
+          - generic [ref=e60]: score 60-79
+        - button "Low opportunity 0 score below 60" [ref=e61] [cursor=pointer]:
+          - generic [ref=e62]: Low opportunity
+          - generic "0 of 3 scored" [ref=e63]: "0"
+          - generic [ref=e64]: score below 60
+        - button "Website available 2 1 not checked" [ref=e65] [cursor=pointer]:
+          - generic [ref=e66]: Website available
+          - generic [ref=e67]: "2"
+          - generic [ref=e68]: 1 not checked
+        - button "No website 1 a real finding, not a gap" [ref=e69] [cursor=pointer]:
+          - generic [ref=e70]: No website
+          - generic [ref=e71]: "1"
+          - generic [ref=e72]: a real finding, not a gap
+        - button "Potential software opportunity 3 has a named solution and modules" [ref=e73] [cursor=pointer]:
+          - generic [ref=e74]: Potential software opportunity
+          - generic [ref=e75]: "3"
+          - generic [ref=e76]: has a named solution and modules
+        - button "Need verification 2" [ref=e77] [cursor=pointer]:
+          - generic [ref=e78]: Need verification
+          - generic [ref=e79]: "2"
+        - button "Verified 2" [ref=e80] [cursor=pointer]:
+          - generic [ref=e81]: Verified
+          - generic [ref=e82]: "2"
+        - button "Already contacted 1" [ref=e83] [cursor=pointer]:
+          - generic [ref=e84]: Already contacted
+          - generic [ref=e85]: "1"
+        - button "Interested 1" [ref=e86] [cursor=pointer]:
+          - generic [ref=e87]: Interested
+          - generic [ref=e88]: "1"
+      - generic [ref=e89]: The three score bands exclude 1 business(es) that are not scored yet, so they do not sum to the total. Website presence was never checked for 1 business(es); they are in neither website card. An em dash means not measured. A zero means we looked and the answer was none.
+    - region [ref=e90]:
+      - generic [ref=e91]:
+        - heading "City summary" [level=2] [ref=e92]
+        - generic [ref=e93]: Five figures per city, in the order you typed the cities.
+      - generic "City summary" [ref=e94]:
+        - article [ref=e95]:
+          - heading "Dhule 4 found" [level=3] [ref=e96]:
+            - text: Dhule
+            - generic [ref=e97]: 4 found
+          - generic [ref=e98]:
+            - generic [ref=e99]:
+              - term [ref=e100]: Found
+              - definition [ref=e101]: "4"
+            - generic [ref=e102]:
+              - term [ref=e103]: Qualified
+              - definition [ref=e104]: "3"
+            - generic [ref=e105]:
+              - term [ref=e106]: High opportunity
+              - definition [ref=e107]: "1"
+            - generic [ref=e108]:
+              - term [ref=e109]: Verified
+              - definition [ref=e110]: "2"
+            - generic [ref=e111]:
+              - term [ref=e112]: Ready for outreach
+              - definition [ref=e113]: "1"
+          - button "Open Dhule" [ref=e114] [cursor=pointer]
+        - article [ref=e115]:
+          - heading "Shirpur 0 found" [level=3] [ref=e116]:
+            - text: Shirpur
+            - generic [ref=e117]: 0 found
+          - generic [ref=e118]:
+            - generic [ref=e119]:
+              - term [ref=e120]: Found
+              - definition [ref=e121]: "0"
+            - generic [ref=e122]:
+              - term [ref=e123]: Qualified
+              - definition [ref=e124]: —
+            - generic [ref=e125]:
+              - term [ref=e126]: High opportunity
+              - definition [ref=e127]: —
+            - generic [ref=e128]:
+              - term [ref=e129]: Verified
+              - definition [ref=e130]: "0"
+            - generic [ref=e131]:
+              - term [ref=e132]: Ready for outreach
+              - definition [ref=e133]: "0"
+          - paragraph [ref=e134]: Discovery returned no businesses for this city.
+    - region [ref=e135]:
+      - generic [ref=e136]:
+        - heading "Filters, search and sort" [level=2] [ref=e137]
+        - generic [ref=e138]: A tab is a view; a filter is a predicate. A row shows when it is in the active pane and passes every filter.
+      - generic [ref=e139]:
+        - generic [ref=e140]:
+          - generic [ref=e141]:
+            - generic [ref=e142]: ⚲
+            - generic [ref=e143]: Search businesses
+            - searchbox "Search businesses try city:nashik score:>80" [ref=e144]
+            - generic [ref=e145]:
+              - text: try
+              - code [ref=e146]: city:nashik score:>80
+          - button "Filters" [expanded] [ref=e147] [cursor=pointer]
+          - button "Clear all filters" [ref=e148] [cursor=pointer]
+          - button "Sort across all groups" [ref=e149] [cursor=pointer]
+        - generic [ref=e150]:
+          - generic [ref=e151]:
+            - generic [ref=e152]: 1 · City
+            - generic [ref=e153]:
+              - button "Dhule" [ref=e154] [cursor=pointer]
+              - button "Shirpur" [ref=e155] [cursor=pointer]
+          - generic [ref=e156]:
+            - generic [ref=e157]: 2 · Industry
+            - generic [ref=e158]:
+              - button "Healthcare" [ref=e159] [cursor=pointer]
+              - button "Education" [ref=e160] [cursor=pointer]
+              - button "Automobile" [ref=e161] [cursor=pointer]
+          - generic [ref=e162]:
+            - generic [ref=e163]: 3 · Business size
+            - generic [ref=e164]:
+              - button "MICRO" [ref=e165] [cursor=pointer]
+              - button "SMALL" [ref=e166] [cursor=pointer]
+              - button "MEDIUM" [ref=e167] [cursor=pointer]
+              - button "LARGE" [ref=e168] [cursor=pointer]
+              - button "UNKNOWN" [ref=e169] [cursor=pointer]
+          - generic [ref=e170]:
+            - generic [ref=e171]: 4 · Opportunity score
+            - generic [ref=e172]:
+              - button "80+" [ref=e173] [cursor=pointer]
+              - button "60-79" [ref=e174] [cursor=pointer]
+              - button "below 60" [ref=e175] [cursor=pointer]
+            - generic [ref=e176]:
+              - spinbutton "Minimum opportunity score" [ref=e177]
+              - generic [ref=e178]: –
+              - spinbutton "Maximum opportunity score" [ref=e179]
+            - generic [ref=e180]:
+              - checkbox "include unscored" [checked] [ref=e181]
+              - text: include unscored
+          - generic [ref=e182]:
+            - generic [ref=e183]: 5 · Website status
+            - generic [ref=e184]:
+              - button "Has website" [ref=e185] [cursor=pointer]
+              - button "No website" [ref=e186] [cursor=pointer]
+              - button "Not checked" [ref=e187] [cursor=pointer]
+          - generic [ref=e188]:
+            - generic [ref=e189]: 6 · Digital maturity
+            - generic [ref=e190]:
+              - spinbutton "Minimum digital maturity" [ref=e191]
+              - generic [ref=e192]: –
+              - spinbutton "Maximum digital maturity" [ref=e193]
+            - generic [ref=e194]:
+              - checkbox "include unassessed" [checked] [ref=e195]
+              - text: include unassessed
+          - generic [ref=e196]:
+            - generic [ref=e197]: 7 · Research confidence
+            - generic [ref=e198]:
+              - button "HIGH" [ref=e199] [cursor=pointer]
+              - button "MEDIUM" [ref=e200] [cursor=pointer]
+              - button "LOW" [ref=e201] [cursor=pointer]
+              - button "No research" [ref=e202] [cursor=pointer]
+          - generic [ref=e203]:
+            - generic [ref=e204]: 8 · Verification status
+            - generic [ref=e205]:
+              - button "AI researched" [ref=e206] [cursor=pointer]
+              - button "Needs verification" [ref=e207] [cursor=pointer]
+              - button "Verified" [ref=e208] [cursor=pointer]
+              - button "Contact ready" [ref=e209] [cursor=pointer]
+              - button "Rejected" [ref=e210] [cursor=pointer]
+              - button "Skipped" [ref=e211] [cursor=pointer]
+          - generic [ref=e212]:
+            - generic [ref=e213]:
+              - text: 9 · Contact status
+              - generic [ref=e214]: (any of)
+            - generic [ref=e215]:
+              - button "Email" [ref=e216] [cursor=pointer]
+              - button "Phone" [ref=e217] [cursor=pointer]
+              - button "WhatsApp" [ref=e218] [cursor=pointer]
+              - button "Unconfirmed" [ref=e219] [cursor=pointer]
+              - button "None" [ref=e220] [cursor=pointer]
+          - generic [ref=e221]:
+            - generic [ref=e222]: 10 · Outreach status
+            - generic [ref=e223]:
+              - button "Not contacted" [ref=e224] [cursor=pointer]
+              - button "Queued" [ref=e225] [cursor=pointer]
+              - button "Sent" [ref=e226] [cursor=pointer]
+              - button "Delivered" [ref=e227] [cursor=pointer]
+              - button "Bounced" [ref=e228] [cursor=pointer]
+              - button "Failed" [ref=e229] [cursor=pointer]
+              - button "Responded" [ref=e230] [cursor=pointer]
+              - button "Interested" [ref=e231] [cursor=pointer]
+              - button "Do not contact" [ref=e232] [cursor=pointer]
+          - generic [ref=e233]:
+            - generic [ref=e234]: 11 · Date discovered
+            - generic [ref=e235]:
+              - button "Today" [ref=e236] [cursor=pointer]
+              - button "Last 7 days" [ref=e237] [cursor=pointer]
+            - generic [ref=e238]:
+              - textbox "Discovered from" [ref=e239]
+              - generic [ref=e240]: –
+              - textbox "Discovered to" [ref=e241]
+        - generic [ref=e242]:
+          - status [ref=e243]: Showing 4 of 4 businesses
+          - generic [ref=e244]: Sorted by score desc
+    - region [ref=e245]:
+      - generic [ref=e246]:
+        - heading "Businesses" [level=2] [ref=e247]
+        - generic [ref=e248]: City tab, then industry tab; category groups inside the pane.
+      - tablist "City" [ref=e249]:
+        - tab "All 4" [selected] [ref=e250] [cursor=pointer]:
+          - text: All
+          - generic [ref=e251]: "4"
+        - tab "Dhule 4" [ref=e252] [cursor=pointer]:
+          - text: Dhule
+          - generic [ref=e253]: "4"
+        - tab "Shirpur 0" [ref=e254] [cursor=pointer]:
+          - text: Shirpur
+          - generic [ref=e255]: "0"
+      - tablist "Industry" [ref=e256]:
+        - tab "All 4" [selected] [ref=e257] [cursor=pointer]:
+          - text: All
+          - generic [ref=e258]: "4"
+        - tab "Healthcare 2" [ref=e259] [cursor=pointer]:
+          - text: Healthcare
+          - generic [ref=e260]: "2"
+        - tab "Education 1" [ref=e261] [cursor=pointer]:
+          - text: Education
+          - generic [ref=e262]: "1"
+        - tab "Automobile 1" [ref=e263] [cursor=pointer]:
+          - text: Automobile
+          - generic [ref=e264]: "1"
+      - tabpanel "Businesses" [ref=e265]:
+        - table [ref=e266]:
+          - caption [ref=e267]: All cities · all industries · 4 row(s)
+          - rowgroup [ref=e268]:
+            - row [ref=e269]:
+              - columnheader [ref=e270]:
+                - checkbox "Select all eligible visible rows" [ref=e271]
+              - columnheader "Business" [ref=e272] [cursor=pointer]
+              - columnheader "City" [ref=e273] [cursor=pointer]
+              - columnheader "Industry" [ref=e274] [cursor=pointer]
+              - columnheader "Size" [ref=e275] [cursor=pointer]
+              - columnheader "Website" [ref=e276] [cursor=pointer]
+              - columnheader "Digital maturity" [ref=e277] [cursor=pointer]
+              - columnheader "Opportunity score▼" [ref=e278] [cursor=pointer]
+              - columnheader "Potential solution" [ref=e279] [cursor=pointer]
+              - columnheader "Contact available" [ref=e280] [cursor=pointer]
+              - columnheader "Research confidence" [ref=e281] [cursor=pointer]
+              - columnheader "Verification status" [ref=e282] [cursor=pointer]
+              - columnheader "Outreach status" [ref=e283] [cursor=pointer]
+              - columnheader "Actions" [ref=e284]
+          - rowgroup [ref=e285]:
+            - row [ref=e286]:
+              - columnheader "Diagnostic centres(1)" [ref=e287]
+            - row [ref=e288]:
+              - cell "Select Shree Diagnostics This business has replied - read the response before contacting again." [ref=e289]:
+                - checkbox "Select Shree Diagnostics" [disabled] [ref=e290]
+                - note [ref=e291]: i
+                - generic [ref=e292]: This business has replied - read the response before contacting again.
+              - cell "Shree Diagnostics ↗ Diagnostic centre · Dhule" [ref=e293]:
+                - link "Shree Diagnostics" [ref=e294] [cursor=pointer]:
+                  - /url: "#biz-00000000D4"
+                - link "↗" [ref=e295] [cursor=pointer]:
+                  - /url: https://shree-diag.example
+                - generic "discovered 2026-08-26" [ref=e296]: Diagnostic centre · Dhule
+              - cell "Dhule" [ref=e297]
+              - cell "Healthcare" [ref=e298]
+              - cell "SMALL" [ref=e299]
+              - cell [ref=e301]:
+                - link "Yes" [ref=e302] [cursor=pointer]:
+                  - /url: https://shree-diag.example
+              - cell "55" [ref=e303]
+              - cell "72" [ref=e306]:
+                - 'generic "MEDIUM: 60-79" [ref=e307]': "72"
+              - cell "Hospital Operations Platform" [ref=e308]
+              - cell "E" [ref=e310]:
+                - generic "Business email available" [ref=e311]: E
+              - cell "HIGH" [ref=e312]:
+                - generic "confidence 81%" [ref=e313]: HIGH
+              - cell "VERIFIED" [ref=e314]
+              - cell "INTERESTED" [ref=e316]
+              - cell [ref=e318]:
+                - button "Research" [ref=e319] [cursor=pointer]
+                - link "View" [ref=e320] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8770/business/biz_01SMOKE0000000000000000D4
+                - link "Message" [ref=e321] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8770/outreach/out_01M1241STTX48178XQ6TCCHNNF
+                - button "History" [ref=e322] [cursor=pointer]
+                - link "Follow-up available" [ref=e323] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8770/outreach?business=biz_01SMOKE0000000000000000D4
+          - rowgroup [ref=e324]:
+            - row [ref=e325]:
+              - columnheader "Garages(1)" [ref=e326]
+            - row [ref=e327]:
+              - cell "Select Patil Auto Garage This business still needs your verification." [ref=e328]:
+                - checkbox "Select Patil Auto Garage" [disabled] [ref=e329]
+                - note [ref=e330]: i
+                - generic [ref=e331]: This business still needs your verification.
+              - cell "Patil Auto Garage Garage · Dhule" [ref=e332]:
+                - link "Patil Auto Garage" [ref=e333] [cursor=pointer]:
+                  - /url: "#biz-00000000C3"
+                - generic "discovered 2026-08-26" [ref=e334]: Garage · Dhule
+              - cell "Dhule" [ref=e335]
+              - cell "Automobile" [ref=e336]
+              - cell "UNKNOWN" [ref=e337]
+              - cell "no data" [ref=e339]: —
+              - cell "no data" [ref=e340]: —
+              - cell "no data" [ref=e341]: —
+              - cell "no data" [ref=e342]: —
+              - cell "no data" [ref=e343]: —
+              - cell "no data" [ref=e344]: —
+              - cell "AI RESEARCHED" [ref=e345]
+              - cell "NOT CONTACTED" [ref=e347]
+              - cell "Research View Verify Not researched" [ref=e349]:
+                - button "Research" [ref=e350] [cursor=pointer]
+                - link "View" [ref=e351] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8770/business/biz_01SMOKE0000000000000000C3
+                - link "Verify" [ref=e352] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8770/verify/biz_01SMOKE0000000000000000C3?from=export&campaign=cmp_01JSMOKE000000000000000001
+                - generic "This business still needs your verification." [ref=e353]: Not researched
+          - rowgroup [ref=e354]:
+            - row [ref=e355]:
+              - columnheader "Hospitals(1)" [ref=e356]
+            - row [ref=e357]:
+              - cell [ref=e358]:
+                - checkbox "Select ABC Hospital" [ref=e359]
+              - cell "ABC Hospital ↗ Hospital · Dhule" [ref=e360]:
+                - link "ABC Hospital" [ref=e361] [cursor=pointer]:
+                  - /url: "#biz-00000000A1"
+                - link "↗" [ref=e362] [cursor=pointer]:
+                  - /url: https://abc-hospital.example
+                - generic "discovered 2026-08-26" [ref=e363]: Hospital · Dhule
+              - cell "Dhule" [ref=e364]
+              - cell "Healthcare" [ref=e365]
+              - cell "MEDIUM" [ref=e366]
+              - cell [ref=e368]:
+                - link "Yes" [ref=e369] [cursor=pointer]:
+                  - /url: https://abc-hospital.example
+              - cell "62" [ref=e370]
+              - cell "86" [ref=e373]:
+                - 'generic "HIGH: 80-100" [ref=e374]': "86"
+              - cell "Hospital Operations Platform" [ref=e375]
+              - cell "E" [ref=e377]:
+                - generic "Business email available" [ref=e378]: E
+              - cell "MEDIUM" [ref=e379]:
+                - generic "confidence 64%" [ref=e380]: MEDIUM
+              - cell "READY" [ref=e381]
+              - cell "NOT CONTACTED" [ref=e383]
+              - cell [ref=e385]:
+                - button "Research" [ref=e386] [cursor=pointer]
+                - link "View" [ref=e387] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8770/business/biz_01SMOKE0000000000000000A1
+                - link "Prepare" [ref=e388] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8770/outreach?campaign=cmp_01JSMOKE000000000000000001&business=biz_01SMOKE0000000000000000A1
+                - link "Ready to prepare" [ref=e389] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8770/outreach?business=biz_01SMOKE0000000000000000A1
+          - rowgroup [ref=e390]:
+            - row [ref=e391]:
+              - columnheader "Schools(1)" [ref=e392]
+            - row [ref=e393]:
+              - 'cell "Select Sunrise English School Do not contact: an opt-out or suppression is recorded." [ref=e394]':
+                - checkbox "Select Sunrise English School" [disabled] [ref=e395]
+                - note [ref=e396]: i
+                - generic [ref=e397]: "Do not contact: an opt-out or suppression is recorded."
+              - cell "Sunrise English School School · Dhule" [ref=e398]:
+                - link "Sunrise English School" [ref=e399] [cursor=pointer]:
+                  - /url: "#biz-00000000B2"
+                - generic "discovered 2026-08-26" [ref=e400]: School · Dhule
+              - cell "Dhule" [ref=e401]
+              - cell "Education" [ref=e402]
+              - cell "SMALL" [ref=e403]
+              - cell "No" [ref=e405]
+              - cell "18" [ref=e406]
+              - cell "64" [ref=e409]:
+                - 'generic "MEDIUM: 60-79" [ref=e410]': "64"
+              - cell "Hospital Operations Platform" [ref=e411]
+              - cell "?" [ref=e413]:
+                - generic "1 contact(s) found but not yet confirmed" [ref=e414]: "?"
+              - cell "LOW" [ref=e415]:
+                - generic "confidence 41%" [ref=e416]: LOW
+              - cell "NOT VERIFIED" [ref=e417]
+              - cell "DO NOT CONTACT" [ref=e419]
+              - cell [ref=e421]:
+                - button "Research" [ref=e422] [cursor=pointer]
+                - link "View" [ref=e423] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8770/business/biz_01SMOKE0000000000000000B2
+                - link "Verify" [ref=e424] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8770/verify/biz_01SMOKE0000000000000000B2?from=export&campaign=cmp_01JSMOKE000000000000000001
+                - link "DO NOT CONTACT" [ref=e425] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8770/business/biz_01SMOKE0000000000000000B2#suppression
+    - region [ref=e426]:
+      - generic [ref=e427]:
+        - heading "Top opportunities" [level=2] [ref=e428]
+        - generic [ref=e429]: Top 3 of 3 researched businesses (3 scored). Unscored businesses never appear here.
+      - table [ref=e431]:
+        - rowgroup [ref=e432]:
+          - row [ref=e433]:
+            - columnheader "Rank" [ref=e434]
+            - columnheader "Business" [ref=e435]
+            - columnheader "City" [ref=e436]
+            - columnheader "Industry" [ref=e437]
+            - columnheader "Score" [ref=e438]
+            - columnheader "Potential system" [ref=e439]
+            - columnheader "Reason" [ref=e440]
+            - columnheader "Confidence" [ref=e441]
+            - columnheader "Verification" [ref=e442]
+        - rowgroup [ref=e443]:
+          - row [ref=e444]:
+            - cell "1" [ref=e445]
+            - cell [ref=e446]:
+              - link "ABC Hospital" [ref=e447] [cursor=pointer]:
+                - /url: "#biz-00000000A1"
+            - cell "Dhule" [ref=e448]
+            - cell "Healthcare" [ref=e449]
+            - cell "86" [ref=e450]:
+              - 'generic "HIGH: 80-100" [ref=e451]': "86"
+            - cell "Hospital Operations Platform" [ref=e452]
+            - cell "Operational complexity 22/25 - The public website lists four clinical departments and their timings." [ref=e453]
+            - cell "MEDIUM" [ref=e454]:
+              - generic "confidence 64%" [ref=e455]: MEDIUM
+            - cell "READY" [ref=e456]
+          - row [ref=e458]:
+            - cell "2" [ref=e459]
+            - cell [ref=e460]:
+              - link "Shree Diagnostics" [ref=e461] [cursor=pointer]:
+                - /url: "#biz-00000000D4"
+            - cell "Dhule" [ref=e462]
+            - cell "Healthcare" [ref=e463]
+            - cell "72" [ref=e464]:
+              - 'generic "MEDIUM: 60-79" [ref=e465]': "72"
+            - cell "Hospital Operations Platform" [ref=e466]
+            - cell "Operational complexity 22/25 - The public website lists four clinical departments and their timings." [ref=e467]
+            - cell "HIGH" [ref=e468]:
+              - generic "confidence 81%" [ref=e469]: HIGH
+            - cell "VERIFIED" [ref=e470]
+          - row [ref=e472]:
+            - cell "3" [ref=e473]
+            - cell [ref=e474]:
+              - link "Sunrise English School" [ref=e475] [cursor=pointer]:
+                - /url: "#biz-00000000B2"
+            - cell "Dhule" [ref=e476]
+            - cell "Education" [ref=e477]
+            - cell "64" [ref=e478]:
+              - 'generic "MEDIUM: 60-79" [ref=e479]': "64"
+            - cell "Hospital Operations Platform" [ref=e480]
+            - cell "Operational complexity 22/25 - The public website lists four clinical departments and their timings." [ref=e481]
+            - cell "LOW" [ref=e482]:
+              - generic "confidence 41%" [ref=e483]: LOW
+            - cell "NOT VERIFIED" [ref=e484]
+    - region [ref=e486]:
+      - generic [ref=e487]:
+        - heading "City comparison" [level=2] [ref=e488]
+        - generic [ref=e489]: Conversion is interested / contacted. Nothing contacted means no rate, not a rate of zero.
+      - table [ref=e491]:
+        - rowgroup [ref=e492]:
+          - row [ref=e493]:
+            - columnheader "City" [ref=e494]
+            - columnheader "Businesses" [ref=e495]
+            - columnheader "Qualified" [ref=e496]
+            - columnheader "High opportunity" [ref=e497]
+            - columnheader "Verified" [ref=e498]
+            - columnheader "Contacted" [ref=e499]
+            - columnheader "Responses" [ref=e500]
+            - columnheader "Interested" [ref=e501]
+            - columnheader "Conversion" [ref=e502]
+            - columnheader "Potential revenue" [ref=e503]
+        - rowgroup [ref=e504]:
+          - row [ref=e505]:
+            - cell "Dhule" [ref=e506]
+            - cell "4" [ref=e507]
+            - cell "3" [ref=e508]
+            - cell "1" [ref=e509]
+            - cell "2" [ref=e510]
+            - cell "1" [ref=e511]
+            - cell "1" [ref=e512]
+            - cell "1" [ref=e513]
+            - cell "100.0%" [ref=e514]
+            - cell "₹ 3,90,000 2 of 3 qualified priced" [ref=e515]:
+              - text: ₹ 3,90,000
+              - generic [ref=e516]: 2 of 3 qualified priced
+          - row [ref=e517]:
+            - cell "Shirpur" [ref=e518]
+            - cell "0" [ref=e519]
+            - cell "no data" [ref=e520]: —
+            - cell "no data" [ref=e521]: —
+            - cell "0" [ref=e522]
+            - cell "0" [ref=e523]
+            - cell "no data" [ref=e524]: —
+            - cell "no data" [ref=e525]: —
+            - cell "no data" [ref=e526]: —
+            - cell "no data" [ref=e527]: —
+          - row [ref=e528]:
+            - rowheader "TOTAL" [ref=e529]
+            - columnheader "4" [ref=e530]
+            - columnheader "3" [ref=e531]
+            - columnheader "1" [ref=e532]
+            - columnheader "2" [ref=e533]
+            - columnheader "1" [ref=e534]
+            - columnheader "1" [ref=e535]
+            - columnheader "1" [ref=e536]
+            - columnheader "100.0%" [ref=e537]
+            - columnheader "₹ 3,90,000 (2 priced)" [ref=e538]
+    - region [ref=e539]:
+      - generic [ref=e540]:
+        - heading "Industry comparison" [level=2] [ref=e541]
+        - generic [ref=e542]: Average opportunity is over scored rows only; the count underneath says how many those are.
+      - table [ref=e544]:
+        - rowgroup [ref=e545]:
+          - row [ref=e546]:
+            - columnheader "Industry" [ref=e547]
+            - columnheader "Businesses" [ref=e548]
+            - columnheader "Avg opportunity" [ref=e549]
+            - columnheader "Verified" [ref=e550]
+            - columnheader "Contacted" [ref=e551]
+            - columnheader "Responses" [ref=e552]
+            - columnheader "Interested" [ref=e553]
+            - columnheader "Demos" [ref=e554]
+            - columnheader "Won" [ref=e555]
+            - columnheader "Revenue" [ref=e556]
+        - rowgroup [ref=e557]:
+          - row [ref=e558]:
+            - cell "Healthcare SMALL SAMPLE" [ref=e559]:
+              - text: Healthcare
+              - 'generic "Fewer than ten contacted: a high conversion here is not a trend." [ref=e560]': SMALL SAMPLE
+            - cell "2" [ref=e561]
+            - cell "79.0 2 of 2 scored" [ref=e562]:
+              - text: "79.0"
+              - generic [ref=e563]: 2 of 2 scored
+            - cell "2" [ref=e564]
+            - cell "1" [ref=e565]
+            - cell "1" [ref=e566]
+            - cell "1" [ref=e567]
+            - cell "0" [ref=e568]
+            - cell "0" [ref=e569]
+            - cell "no data" [ref=e570]: —
+          - row [ref=e571]:
+            - cell "Education" [ref=e572]
+            - cell "1" [ref=e573]
+            - cell "64.0 1 of 1 scored" [ref=e574]:
+              - text: "64.0"
+              - generic [ref=e575]: 1 of 1 scored
+            - cell "0" [ref=e576]
+            - cell "0" [ref=e577]
+            - cell "no data" [ref=e578]: —
+            - cell "no data" [ref=e579]: —
+            - cell "no data" [ref=e580]: —
+            - cell "no data" [ref=e581]: —
+            - cell "no data" [ref=e582]: —
+          - row [ref=e583]:
+            - cell "Automobile" [ref=e584]
+            - cell "1" [ref=e585]
+            - cell "no data 0 of 1 scored" [ref=e586]:
+              - text: —
+              - generic [ref=e587]: 0 of 1 scored
+            - cell "0" [ref=e588]
+            - cell "0" [ref=e589]
+            - cell "no data" [ref=e590]: —
+            - cell "no data" [ref=e591]: —
+            - cell "no data" [ref=e592]: —
+            - cell "no data" [ref=e593]: —
+            - cell "no data" [ref=e594]: —
+  - contentinfo [ref=e595]:
+    - generic [ref=e596]:
+      - heading "What the numbers mean" [level=2] [ref=e597]
+      - generic [ref=e598]:
+        - generic [ref=e599]:
+          - term [ref=e600]: Businesses found
+          - definition [ref=e601]: every campaign_businesses row for this campaign, whatever the business's status and whatever the membership state
+        - generic [ref=e602]:
+          - term [ref=e603]: Researched
+          - definition [ref=e604]: at least one research_runs row with status = COMPLETE
+        - generic [ref=e605]:
+          - term [ref=e606]: Qualified
+          - definition [ref=e607]: research complete, a current opportunity score, score >= 60, status not SKIPPED or REJECTED
+        - generic [ref=e608]:
+          - term [ref=e609]: Skipped
+          - definition [ref=e610]: "status IN (SKIPPED, REJECTED): 0 skipped by the pipeline, 0 rejected by you"
+        - generic [ref=e611]:
+          - term [ref=e612]: Requiring verification
+          - definition [ref=e613]: status IN (AI_RESEARCHED, NEEDS_VERIFICATION)
+        - generic [ref=e614]:
+          - term [ref=e615]: Ready for outreach
+          - definition [ref=e616]: "status = CONTACT_READY: verified, and a human-confirmed contact exists"
+        - generic [ref=e617]:
+          - term [ref=e618]: Em dash
+          - definition [ref=e619]: not measured. A zero means we looked and the answer was none. They are never rendered the same way.
+      - generic [ref=e620]:
+        - text: Notes on this build
+        - list [ref=e621]:
+          - listitem [ref=e622]: campaigns.n_qualified says 2, live count is 3. The report shows 3.
+          - listitem [ref=e623]: campaigns.n_verified says 1, live count is 2. The report shows 2.
+          - listitem [ref=e624]: 1 business(es) carry no opportunity score. They are excluded from every score band and from the top-opportunities table.
+      - heading "Provenance" [level=2] [ref=e625]
+      - generic [ref=e626]:
+        - generic [ref=e627]:
+          - term [ref=e628]: Report generated
+          - definition [ref=e629]: 2026-08-27T17:24:59Z (27 Aug 2026, 22:54 IST) by radar/report.py report-1.0.0
+        - generic [ref=e630]:
+          - term [ref=e631]: Campaign
+          - definition [ref=e632]: cmp_01JSMOKE000000000000000001 · status COMPLETE · created by Owner
+        - generic [ref=e633]:
+          - term [ref=e634]: Research model
+          - definition [ref=e635]: gemini-2.5-flash, prompt research-v4
+        - generic [ref=e636]:
+          - term [ref=e637]: Scoring
+          - definition [ref=e638]: scores are read from opportunities.score and never recomputed at render time
+        - generic [ref=e639]:
+          - term [ref=e640]: Discovery sources
+          - definition [ref=e641]: OpenStreetMap Overpass and Nominatim, business websites, free public registries. No paid data vendor.
+        - generic [ref=e642]:
+          - term [ref=e643]: Rows rendered
+          - definition [ref=e644]: "4"
+        - generic [ref=e645]:
+          - term [ref=e646]: Contact data in this file
+          - definition [ref=e647]: none. Channel availability is shown; no address, number or named individual is written into this document.
+        - generic [ref=e648]:
+          - term [ref=e649]: Contact data sent to an LLM
+          - definition [ref=e650]: none, ever. business_contacts values are substituted locally after generation.
+        - generic [ref=e651]:
+          - term [ref=e652]: Send capability
+          - definition [ref=e653]: none. This document has no form, no token and no send control, in either rendering.

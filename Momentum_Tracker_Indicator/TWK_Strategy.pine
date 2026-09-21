@@ -1,0 +1,77 @@
+//@version=6
+// =============================================================================
+//  trade_with_kareena — STRATEGY (for TradingView Strategy Tester / backtesting)
+//  Rule tested: Smart Trail flip = entry, stop = nearest pivot S/R (or trail),
+//               target = fixed Reward:Risk (default 1:2). One position at a time.
+//  Costs included (commission + slippage) so results are closer to reality.
+//  NOTE: results depend on the history your TradingView plan provides — check
+//        the Strategy Tester's date range; free plans truncate intraday history.
+// =============================================================================
+strategy("trade_with_kareena Strategy", shorttitle="TWK Strat", overlay=true,
+     initial_capital=10000,
+     default_qty_type=strategy.percent_of_equity, default_qty_value=10,
+     commission_type=strategy.commission.percent, commission_value=0.02,
+     slippage=2, pyramiding=0,
+     max_labels_count=500, max_boxes_count=100, max_lines_count=100)
+
+// ---------------- Inputs ----------------
+grpS = "Signal"
+stMult = input.float(1.5, "Smart Trail Multiplier", minval=0.5, group=grpS)
+stATR  = input.int(10, "Smart Trail ATR length", minval=1, group=grpS)
+pivLen = input.int(5, "Pivot strength for stop (bars each side)", minval=1, group=grpS)
+rr     = input.float(2.0, "Reward : Risk (target)", minval=0.5, group=grpS)
+
+grpF = "Filter (optional)"
+useRF = input.bool(false, "Require R-Factor confirmation", group=grpF, tooltip="If on: only take LONG when R-Factor>0 and SHORT when R-Factor<0. Fewer, higher-quality trades.")
+rLen  = input.int(14, "R-Factor lookback", minval=2, group=grpF)
+
+grpT = "Time filter (optional)"
+useDate = input.bool(false, "Limit backtest date range", group=grpT)
+fromDate = input.time(timestamp("01 Jan 2025 00:00"), "From", group=grpT)
+toDate   = input.time(timestamp("01 Jan 2026 00:00"), "To",   group=grpT)
+inWin = not useDate or (time >= fromDate and time <= toDate)
+
+// ---------------- Smart Trail flip ----------------
+[stVal, stDir] = ta.supertrend(stMult, stATR)
+bullFlip = stDir < 0 and stDir[1] >= 0
+bearFlip = stDir > 0 and stDir[1] <= 0
+
+// ---------------- Pivot S/R for the stop ----------------
+ph = ta.pivothigh(high, pivLen, pivLen)
+pl = ta.pivotlow(low, pivLen, pivLen)
+var float lastPL = na
+var float lastPH = na
+if not na(pl)
+    lastPL := pl
+if not na(ph)
+    lastPH := ph
+
+// ---------------- R-Factor (simplified: no OI/sector, for backtest robustness) ----
+priceMom   = (ta.rsi(close, rLen) - 50) / 50 * 20
+volScore   = math.max(math.min(volume / math.max(ta.sma(volume, rLen), 1) - 1, 1), -1) * 20
+smartScore = (ta.mfi(hlc3, rLen) - 50) / 50 * 20
+rFactor    = priceMom + volScore + smartScore
+
+longCond  = bullFlip and inWin and (not useRF or rFactor > 0)
+shortCond = bearFlip and inWin and (not useRF or rFactor < 0)
+
+// ---------------- Entries: enter only when flat; exit at stop / 1:2 target ----------
+if longCond and strategy.position_size == 0
+    e = close
+    s = (not na(lastPL) and lastPL < e) ? lastPL : stVal
+    r = e - s
+    if r > 0
+        t = e + rr * r
+        strategy.entry("Long", strategy.long)
+        strategy.exit("L-exit", "Long", stop=s, limit=t)
+
+if shortCond and strategy.position_size == 0
+    e = close
+    s = (not na(lastPH) and lastPH > e) ? lastPH : stVal
+    r = s - e
+    if r > 0
+        t = e - rr * r
+        strategy.entry("Short", strategy.short)
+        strategy.exit("S-exit", "Short", stop=s, limit=t)
+
+plot(stVal, "Smart Trail", color=#7e57c2, style=plot.style_linebr)

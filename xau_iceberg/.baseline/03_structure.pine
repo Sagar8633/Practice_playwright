@@ -1,0 +1,293 @@
+// ============================================================================
+//  SECTION 3 : SWINGS, STRUCTURAL TREND, CHOP
+//
+//  This section owns the skeleton every other section hangs off:
+//    * confirmed pivots on the SHARED i_pivotLeft / i_pivotRight (SECTION 0),
+//    * one capped array<Swing> per side,
+//    * the most recent UNBROKEN swing per side (the reference level S9 breaks
+//      and S10/S11 anchor against),
+//    * structTrend  - the CHART-TF structural sequence, HH/HL vs LH/LL,
+//    * chopScore    - a 3-vote composite, and isChoppy = chopScore >= 2.
+//
+//  WHAT THIS SECTION DOES NOT DO, on purpose:
+//    * NO break detection. BOS/CHoCH is SECTION 9. This section never reads a
+//      break, never marks a Swing broken and never latches a direction from
+//      one. SECTION 9 mutates the `broken` flag on the objects stored here;
+//      because S9 runs BELOW this section, a flag set on bar b is first seen by
+//      the reference scan on bar b+1. That ordering is deterministic and it is
+//      what S9 wants: it must break the reference as it stood BEFORE its own
+//      marking pass.
+//    * NO absorption-zone lifecycle. The draft kept a private zoneLive/legLow
+//      copy here; the ONE array<IcebergZone> belongs to SECTION 6, so that
+//      state is deleted rather than duplicated under a second name.
+//    * NO HTF role. structTrend is chart-TF only. The HTF bias is htfBias /
+//      f_htfAllow() / f_htfScalar() in SECTION 0 and nothing here feeds it.
+//
+//  DELETED FROM THE DRAFT (review blocker, not an omission): the "chronological
+//  precedence" override that let the last BREAK outrank the swing sequence.
+//  It made the CHoCH test circular - a break was certified as a reversal by the
+//  previous break of the same oscillation, and since breaks in a range always
+//  alternate, every whipsaw certified. structTrend is now proved by the swing
+//  sequence ALONE, which is also what makes it computable here, above S9.
+// ============================================================================
+
+// ---------------------------------------------------------------- S3 GROUPS
+G3S = "3 - Structure & Swings"
+G3C = "3 - Chop & Range"
+
+// ---------------------------------------------------------------- S3 INPUTS
+// NOTE: i_pivotLeft, i_pivotRight and i_atrLen are NOT declared here. One pivot
+// pair for the whole file lives in SECTION 0 because i_pivotRight IS the
+// system's entire declared signal latency; a second pair would mean a second,
+// undocumented latency.
+i_maxSwings = input.int(12, "Swings kept per side", minval = 3, maxval = 50, group = G3S,
+     tooltip = "How many CONFIRMED swing highs and swing lows stay in memory. The " +
+               "oldest is discarded when the cap is hit. Too low (3-5) and the " +
+               "reference level a break needs can be evicted before price reaches " +
+               "it; too high (40+) costs loop time on every bar and keeps prices " +
+               "that stopped being structure hours ago. 12 covers intraday gold.",
+     display = display.none)
+
+i_erLen = input.int(20, "Efficiency Ratio length (bars)", minval = 2, maxval = 200,
+     group = G3C,
+     tooltip = "Kaufman Efficiency Ratio window: net move divided by path " +
+               "travelled. 1.0 is a perfectly straight move, 0.0 is pure noise " +
+               "that went nowhere. IMPORTANT: ER is NOT dimensionless across " +
+               "lengths - for a driftless random walk its expected value is about " +
+               "1/sqrt(length) (0.22 at 20, 0.27 at 14). If you change this, " +
+               "rescale the threshold below by sqrt(oldLen / newLen) or the vote " +
+               "silently gets looser or tighter.",
+     display = display.none)
+i_erChopThresh = input.float(0.28, "ER below this = one chop vote", minval = 0.0,
+     maxval = 1.0, step = 0.01, group = G3C,
+     tooltip = "At the default length of 20 the random-walk baseline is about " +
+               "0.22, so 0.28 votes chop on anything only mildly straighter than " +
+               "noise. Raise it and the ER vote is on almost always; drop it below " +
+               "0.22 and the vote effectively never fires.",
+     display = display.none)
+i_adxLen = input.int(14, "ADX length", minval = 2, maxval = 100, group = G3C,
+     tooltip = "Wilder DI / ADX smoothing, used for BOTH arguments of ta.dmi(). " +
+               "There is no ta.adx() in Pine v6 - ADX is the third element of the " +
+               "ta.dmi() tuple. Short lengths make the vote twitchy; long ones " +
+               "make it report the trend that is already over.",
+     display = display.none)
+i_adxChopThresh = input.float(18.0, "ADX below this = one chop vote", minval = 0.0,
+     maxval = 100.0, step = 0.5, group = G3C,
+     tooltip = "ADX is directionless, so this vote is exactly symmetrical between " +
+               "longs and shorts. Be aware ADX measures the trend being REVERSED: " +
+               "at a genuine exhaustion turn the prior trend's ADX is still high, " +
+               "so this vote says 'not choppy' right where the system wants to " +
+               "trade. That is why it is one vote of three and not a veto. Above " +
+               "about 25 it votes chop nearly always.",
+     display = display.none)
+i_overlapPct = input.float(0.60, "Swing-box overlap above this = one chop vote",
+     minval = 0.0, maxval = 1.0, step = 0.05, group = G3C,
+     tooltip = "Geometric overlap of the last two swing boxes, scored as the " +
+               "intersection divided by the TALLER of the two. 1.0 = consecutive " +
+               "legs occupy the same price band (a range); 0.0 = legs are cleanly " +
+               "stacked (a trend). Calibration, with r = the retracement fraction " +
+               "and e = how far the new leg extends past the old high, both in " +
+               "units of the old leg: overlap = r / max(1, r + e). A leg that " +
+               "stalls at the old high (e = 0) scores EXACTLY r, so 0.50 / 0.62 / " +
+               "0.79 for a 50 / 61.8 / 78.6% retrace. A measured-move extension " +
+               "(e = r) is pinned at 0.50 for ANY r >= 0.5, because the taller " +
+               "box grows with the retrace. Deep retracement ALONE therefore " +
+               "never trips this vote: 0.60 fires only on a deep retrace that " +
+               "also fails to extend, which is a range. At 1.0 it never fires.",
+     display = display.none)
+
+// ------------------------------------------------------------- S3 HELPERS
+// Every loop below is guarded by `if n > 0`. In Pine `for i = n - 1 to 0` with
+// n = 0 becomes `for i = -1 to 0`, which counts UP and executes i = -1 - and in
+// v6 a negative array index is LEGAL (it counts from the end), so the guard is
+// the difference between a clean skip and silently reading the newest element.
+f_swPush(array<Swing> arr, Swing s, int cap) =>
+    array.push(arr, s)
+    if array.size(arr) > cap
+        array.shift(arr)                  // oldest out, FIFO, bounded memory
+    array.size(arr)
+
+// Newest UNBROKEN swing, or na. Returns the OBJECT rather than an index: an
+// index sentinel of -1 is a valid negative index in v6, so a missed guard at a
+// future call site would silently return the newest swing instead of failing.
+f_swNewestUnbroken(array<Swing> arr) =>
+    Swing found = na
+    int n = array.size(arr)
+    if n > 0
+        for i = n - 1 to 0
+            Swing s = array.get(arr, i)
+            if not s.broken and not na(s.price)
+                found := s
+                break
+    found
+
+// Geometric overlap of two price boxes, 0..1. na in -> na out: an unknown box
+// pair must ABSTAIN from the chop vote, not assert 0.0 ("perfectly stacked =
+// trending"), which is a directional claim manufactured out of missing data.
+f_boxOverlap(float hi1, float lo1, float hi2, float lo2) =>
+    float den = math.max(hi1 - lo1, hi2 - lo2)
+    na(hi1) or na(lo1) or na(hi2) or na(lo2) or na(den) or den <= 0 ? na :
+         f_clamp01(math.max(0.0, math.min(hi1, hi2) - math.max(lo1, lo2)) / den)
+
+// ----------------------------------------------------------------------------
+//  3.1  PIVOT DETECTION - the one and only source of structural delay
+//  ta.pivothigh(high, L, R) returns non-na on the bar R bars AFTER the pivot
+//  bar, and the value it returns IS that pivot's price. Take it from the RETURN
+//  VALUE, never from high[R]: an indexed read is what forces the historical
+//  buffer wider than max_bars_back and throws at runtime.
+//  Both calls sit at global scope, unconditionally, on their own line - v6
+//  evaluates and/or lazily and a ta.* call inside a condition skips bars and
+//  corrupts its own history.
+// ----------------------------------------------------------------------------
+pvtHi = ta.pivothigh(high, i_pivotLeft, i_pivotRight)
+pvtLo = ta.pivotlow(low,  i_pivotLeft, i_pivotRight)
+
+// THE anchor. Every pivot-derived drawing and every stored swing bar uses this.
+s3PvtBar = bar_index - i_pivotRight
+
+// ----------------------------------------------------------------------------
+//  3.2  SWING MEMORY
+//  Registration is gated on `confirmed` for a concrete reason, not ceremony:
+//  on a FORMING bar the forming high is one of the pivot's right-hand legs, so
+//  pvtHi can read non-na early in the bar and na again once the bar extends past
+//  the pivot. Writing on the closing tick only is what makes the array identical
+//  on history and in realtime.
+//  No "already broken at registration" test exists because it would be dead
+//  code: no bar between the pivot and its confirmation exceeded the pivot's
+//  extreme, so no close could have either. A fresh swing is always unbroken.
+// ----------------------------------------------------------------------------
+var array<Swing> swHiArr = array.new<Swing>()
+var array<Swing> swLoArr = array.new<Swing>()
+
+// Last TWO swings per side, in REGISTRATION order (broken or not). These drive
+// the HH/HL sequence and the overlap box - both are statements about the shape
+// price actually traced, so a swing that was later broken still counts as
+// having existed. Tracked per side INDEPENDENTLY: two swing highs can confirm
+// with no swing low between them, and an alternation assumption would silently
+// drop one of them.
+var float s3RegHi        = na
+var float s3RegHiPrev    = na
+var int   s3RegHiBar     = na
+var int   s3RegHiPrevBar = na
+var float s3RegLo        = na
+var float s3RegLoPrev    = na
+var int   s3RegLoBar     = na
+var int   s3RegLoPrevBar = na
+
+if confirmed and warmupOk
+    if not na(pvtHi)
+        f_swPush(swHiArr, Swing.new(price = pvtHi, bar = s3PvtBar, dir = 1,
+             broken = false), i_maxSwings)
+        s3RegHiPrev    := s3RegHi
+        s3RegHiPrevBar := s3RegHiBar
+        s3RegHi        := pvtHi
+        s3RegHiBar     := s3PvtBar
+    if not na(pvtLo)
+        f_swPush(swLoArr, Swing.new(price = pvtLo, bar = s3PvtBar, dir = -1,
+             broken = false), i_maxSwings)
+        s3RegLoPrev    := s3RegLo
+        s3RegLoPrevBar := s3RegLoBar
+        s3RegLo        := pvtLo
+        s3RegLoBar     := s3PvtBar
+
+// ----------------------------------------------------------------------------
+//  3.3  REFERENCE LEVELS - newest UNBROKEN swing per side
+//  Recomputed every bar by scan rather than latched into a var, so the instant
+//  SECTION 9 flags a swing broken the reference moves on by itself. A latched
+//  copy is how a reference ends up pinned to a price that was taken out hours
+//  ago, which then freezes every break test that reads it.
+//  na PROPAGATES here (SECTION 0 policy): "no unbroken swing on this side" is
+//  reported as na, never substituted with high/low and never with the last
+//  known value. Consumers state their own na policy at the call site.
+// ----------------------------------------------------------------------------
+Swing s3RefHi = f_swNewestUnbroken(swHiArr)
+Swing s3RefLo = f_swNewestUnbroken(swLoArr)
+
+float lastSwHi    = na(s3RefHi) ? na : s3RefHi.price
+float lastSwLo    = na(s3RefLo) ? na : s3RefLo.price
+int   lastSwHiBar = na(s3RefHi) ? na : s3RefHi.bar
+int   lastSwLoBar = na(s3RefLo) ? na : s3RefLo.bar
+
+// ----------------------------------------------------------------------------
+//  3.4  STRUCTURAL TREND (chart timeframe, descriptive, NOT a trade gate)
+//  +1 = HH and HL, -1 = LH and LL, 0 = mixed / unknown / transitional.
+//  Comparisons against na are FALSE in v6, so a side that has not yet produced
+//  two swings can never manufacture a trend - it reaches 0 through the
+//  `otherwise` branch, which is exactly the "structure is not legible yet"
+//  answer, and it is the same 0 a genuinely mixed sequence produces.
+//
+//  READ THIS BEFORE CONSUMING structTrend: it lags by construction, but it is a
+//  THREE-state reading and the two transitions do NOT cost the same. After a
+//  genuine bullish turn it leaves -1 as soon as EITHER a higher high OR a higher
+//  low CONFIRMS - that first confirmation drops it to 0, not to +1 - and it only
+//  reaches +1 once BOTH have, i.e. at least i_pivotRight bars after the second of
+//  them prints. SECTION 9 reads structTrend == -1 as its bullish-CHoCH
+//  precondition, so that test is satisfied only while the break is still ahead of
+//  the first confirming pivot; a second break later in the same move typically
+//  reads 0 and is graded ambiguous rather than reversal. That is deliberate - the
+//  CHoCH claim is that sellers were demonstrably dominant BEFORE the break, and
+//  once a higher pivot has confirmed that is no longer demonstrable. It must NOT
+//  be used as an entry-direction veto: demanding structTrend agree with trade
+//  direction would veto precisely the reversal the break just licensed.
+// ----------------------------------------------------------------------------
+bool s3Hh = s3RegHi > s3RegHiPrev
+bool s3Hl = s3RegLo > s3RegLoPrev
+bool s3Lh = s3RegHi < s3RegHiPrev
+bool s3Ll = s3RegLo < s3RegLoPrev
+
+int structTrend = s3Hh and s3Hl ?  1 :
+                  s3Lh and s3Ll ? -1 : 0
+
+// ----------------------------------------------------------------------------
+//  3.5  CHOP / RANGE - three independent votes, none of which has a veto
+//  Three measures that fail in DIFFERENT ways were chosen on purpose: ER is
+//  blind to volatility, ADX is blind to the turn it is standing on, and the
+//  overlap ratio is blind to time. Requiring two of three is what stops any one
+//  blind spot from deciding on its own.
+// ----------------------------------------------------------------------------
+
+// (a) Kaufman Efficiency Ratio. The path step uses nz(close[1], close) so bar 0
+//     contributes 0 instead of poisoning the whole rolling sum with na.
+s3ErStep = math.abs(close - nz(close[1], close))
+s3ErPath = math.sum(s3ErStep, i_erLen)
+s3ErNet  = math.abs(close - close[i_erLen])
+// na, NEVER 0, when the path is unavailable or flat: 0 reads as "maximum chop"
+// and would flag every warmup bar and every frozen feed as a range.
+erVal = na(s3ErPath) or s3ErPath <= 0 ? na : f_clamp01(s3ErNet / s3ErPath)
+
+// (b) Wilder ADX. ta.dmi is the ONLY route to ADX in v6 and both of its
+//     arguments must be simple int - which is why i_adxLen comes from input.int
+//     and is never reassigned. The DI legs are destructured but deliberately
+//     unused: ADX is directionless, and reading DI+ against DI- here would
+//     smuggle a directional bias into a measure that must stay symmetrical.
+[s3DiPlus, s3DiMinus, adxVal] = ta.dmi(i_adxLen, i_adxLen)
+
+// (c) Swing-box overlap - TEMPORALLY GUARDED.
+//     The naive version feeds (lastHi, lastLo) and (prevHi, prevLo) straight in,
+//     but those are the last two pivots PER SIDE. When two highs confirm with no
+//     low between them the two "boxes" interleave in time and the ratio
+//     describes a shape that never existed on the chart. The guard demands that
+//     BOTH swings of the newer box are strictly newer than BOTH swings of the
+//     older box; when alternation is broken the vote ABSTAINS (na) rather than
+//     inventing a number.
+bool s3BoxOk = not na(s3RegHiBar) and not na(s3RegLoBar) and
+               not na(s3RegHiPrevBar) and not na(s3RegLoPrevBar) and
+               math.min(s3RegHiBar, s3RegLoBar) > math.max(s3RegHiPrevBar, s3RegLoPrevBar)
+s3Overlap = s3BoxOk ? f_boxOverlap(s3RegHi, s3RegLo, s3RegHiPrev, s3RegLoPrev) : na
+
+// Composite. A measure with no value casts NO vote - `na < x` and `na > x` are
+// both false in v6 - so warmup abstains rather than certifying chop. The votes
+// are named rather than inlined so the sum needs no wrapped line and so Debug
+// mode can report WHICH measure objected. Each is an int ternary and the total
+// is a plain int sum in {0,1,2,3}: no division anywhere, so the v6 int/int
+// fraction trap cannot reach the chop score.
+int s3VoteEr  = erVal     < i_erChopThresh  ? 1 : 0
+int s3VoteAdx = adxVal    < i_adxChopThresh ? 1 : 0
+int s3VoteOvl = s3Overlap > i_overlapPct    ? 1 : 0
+int chopScore = s3VoteEr + s3VoteAdx + s3VoteOvl
+
+// Two of three. SECTION 13 gates on this flag and SECTION 12 grades on the raw
+// chopScore, so the same evidence is read once as a gate and once as a
+// gradient - never twice as a penalty.
+bool isChoppy = chopScore >= 2
+// ========================= END SECTION 3 ====================================

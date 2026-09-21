@@ -1,0 +1,770 @@
+
+// ============================================================================
+//  SECTION 16 : PRESENTATION  --  THE ONE AND ONLY DRAWING OWNER
+//
+//  Conflict [30] handed this section ALL drawing, for one reason: a drawing
+//  budget that is split across seven modules is a budget nobody can sum. Every
+//  label, line, box, table and plot slot in this file is created here, counted
+//  here, and released here.
+//
+//  ANCHORING RULE (one rule, applied without exception):
+//    PIVOT-derived art   -> bar_index - i_pivotRight
+//        swing marks, liquidity-level birth, EQ clusters. The pivot BAR is
+//        i_pivotRight bars back; drawing it at bar_index would claim the event
+//        happened later than it did, which is the visual form of repainting.
+//    SIGNAL-derived art  -> bar_index
+//        entry/SL/TP lines, zone boxes, LONG/SHORT block labels. The signal bar
+//        IS the confirmed bar being processed - there is nothing to rewind.
+//
+//  WHAT EACH MODE SHOWS (i_mode lives in SECTION 0, so both builds agree):
+//    CLEAN (default)
+//      * LONG / SHORT block label carrying blockText() at the signal bar
+//      * the iceberg zone box, one per LIVE IcebergZone in SECTION 6's array
+//      * Entry / SL / TP1 / TP2 / TP3 lines with their right-edge price tags
+//      * the main status / no-trade panel (one table)
+//      * dead zones are DELETED
+//    DEBUG (everything above, plus)
+//      * the per-condition checklist table: Liquidity, Sweep, Buy/Sell Pressure,
+//        Absorption, Rejection, Displacement, BOS, Retest, RR, HTF Bias - with
+//        f_mark() glyphs for BOTH sides, both scores, and the verdict line
+//      * liquidity level lines from SECTION 4, near price, with kind + price
+//      * swing-high / swing-low marks, anchored at bar_index - i_pivotRight
+//      * per-bar diagnostics: bars tinted by the Delta Proxy, a background tint
+//        on directional conflict, data-window series, chop / session glyphs
+//      * dead zones are GREYED and frozen instead of deleted, so the post-mortem
+//        is still on the chart
+//    i_showStats (SECTION 0) independently toggles the SECTION 15 stats panel.
+//
+//  BUDGET ARITHMETIC (caps: 500 labels / 500 lines / 500 boxes / 64 plots)
+//    LABELS  = 6 * i_maxTradeVisuals      + i_maxLevelLines
+//              (1 block + 5 price tags)     (Debug level map, full redraw)
+//            = 6*5 + 12 = 42          worst case 6*20 + 40 = 160   <= 500  OK
+//    LINES   = 5 * i_maxTradeVisuals      + i_maxLevelLines
+//            = 5*5 + 12 = 37          worst case 5*20 + 40 = 140   <= 500  OK
+//    BOXES   = i_maxZoneBoxes = 8     worst case 40                <= 500  OK
+//            (the "BUY ABSORPTION nn/100" caption is box.text - zero objects)
+//    PLOTS   = 2 signal shapes + 2 swing shapes + 1 barcolor + 1 bgcolor
+//            + 6 named plots for SECTION 17's alertcondition placeholders
+//            + 2 data-window diagnostics + 2 diagnostic glyphs
+//            = 16, plus SECTION 17's 4 alertcondition() calls = 20 of 64.
+//            44 slots are left for SECTION 18's execution build.
+//    Swing marks are plotshape() with offset, NOT labels: they cost 0 of the 500
+//    drawing objects and 1 of the 64 plot slots each, and they carry the pivot
+//    offset structurally so they can never drift off the pivot bar.
+//
+//  Every pool below is a RING BUFFER with an explicit .delete() on eviction.
+//  TradingView silently hiding the oldest instance is NOT a budget policy: the
+//  object still exists, still counts, and still cannot be recoloured.
+// ============================================================================
+
+// ---------------------------------------------------------------- V1 GROUPS
+G16  = "16 - Presentation"
+G16C = "16 - Colours"
+
+// ------------------------------------------------------------ V2 INPUTS
+i_maxTradeVisuals = input.int(5, "Keep last N setups drawn", minval = 1, maxval = 20,
+     group = G16,
+     tooltip = "Each drawn setup costs 6 labels and 5 lines. At 1 the chart shows only " +
+               "the current setup; at 20 it holds 120 labels and 100 lines - still far " +
+               "inside the 500 cap, but a 1M gold chart becomes unreadable long before " +
+               "the cap binds. The ring buffer DELETES evicted drawings, it does not " +
+               "merely let TradingView hide them.",
+     display = display.none)
+i_lineExtend      = input.int(30, "Entry / SL / TP line length (bars)", minval = 1,
+     maxval = 200, group = G16,
+     tooltip = "Bars the level lines run to the RIGHT of the signal bar. Capped at 200 " +
+               "in ONE place (this maxval) because xloc.bar_index drawings may not sit " +
+               "more than 500 bars beyond the last bar, and the price tag is placed at " +
+               "the far end. At 1 the lines are stubs; at 200 they run most of a screen.",
+     display = display.none)
+i_showZoneBox     = input.bool(true, "Draw iceberg zone boxes", group = G16,
+     tooltip = "One box per LIVE zone in SECTION 6's array. Off removes every box and " +
+               "its caption; the zones still exist and still drive the signal.",
+     display = display.none)
+i_maxZoneBoxes    = input.int(8, "Max zone boxes on chart", minval = 1, maxval = 40,
+     group = G16,
+     tooltip = "DRAWING budget only - this is deliberately NOT i_absMaxZones, which caps " +
+               "how many zone OBJECTS SECTION 6 tracks. Set this below that cap and the " +
+               "oldest box is deleted while its zone keeps trading; set it above and " +
+               "nothing is ever evicted early.",
+     display = display.none)
+i_showLevelLines  = input.bool(true, "Debug: draw liquidity level lines", group = G16,
+     tooltip = "Debug mode only. Redrawn in full on the last bar, so the count can never " +
+               "creep - it is exactly the cap below, or fewer.",
+     display = display.none)
+i_maxLevelLines   = input.int(12, "Debug: max level lines", minval = 0, maxval = 40,
+     group = G16,
+     tooltip = "Only ACTIVE levels within 10 ATR of price are candidates. At 0 the level " +
+               "map is off even in Debug; at 40 a ranging gold session draws a ladder " +
+               "dense enough to hide the candles.",
+     display = display.none)
+i_showSwingMarks  = input.bool(true, "Debug: mark confirmed swings", group = G16,
+     tooltip = "Drawn with plotshape(offset = -i_pivotRight), so the glyph sits on the " +
+               "PIVOT bar, not on the bar that confirmed it. Costs zero drawing objects.",
+     display = display.none)
+i_zoneTransp      = input.int(85, "Zone fill transparency at strength 50", minval = 45,
+     maxval = 95, group = G16C,
+     tooltip = "The CENTRE of the mapping, not a ceiling. A zone of absorption strength 50 " +
+               "renders at exactly this value; stronger zones get more solid and weaker " +
+               "ones fainter, clamped to 45..95. At 45 every zone is heavy; at 95 only " +
+               "the strongest are visible at all. (A one-sided math.min() cap here would " +
+               "be inert above strength 20 and INVERTED below it.)",
+     display = display.none)
+i_bullCol         = input.color(#26A69A, "Bullish / LONG", group = G16C, display = display.none)
+i_bearCol         = input.color(#EF5350, "Bearish / SHORT", group = G16C, display = display.none)
+i_slCol           = input.color(#FFA726, "Stop-loss line", group = G16C,
+     tooltip = "A dedicated hue on purpose. If the stop borrowed the direction colour, a " +
+               "SHORT setup would draw a red SL one pixel from three red TP lines and the " +
+               "short side would get a materially worse read of stop-vs-target than the " +
+               "long side. The stop is the same colour on both sides - that IS the symmetry.",
+     display = display.none)
+i_entryCol        = input.color(#90A4AE, "Entry line", group = G16C, display = display.none)
+i_panelPos        = input.string("Top Right", "Main panel anchor",
+     options = ["Top Left", "Top Center", "Top Right", "Middle Left", "Middle Right"],
+     group = G16,
+     tooltip = "Bottom-right and bottom-left are deliberately NOT offered: the Debug " +
+               "checklist owns bottom-right and the stats panel owns bottom-left. " +
+               "TradingView renders one table per anchor, so two tables sharing an anchor " +
+               "overlap unreadably. This script uses 3 of the 9 anchors and can never collide.",
+     display = display.none)
+
+// -------------------------------------------------------- V3 HOUSE PALETTE
+vxHdrBg  = #263238        // header rows
+vxLblBg  = #37474F        // label / key column
+vxValBg  = #455A64        // value column
+vxTxt    = #ECEFF1        // primary text
+vxTxt2   = #B0BEC5        // secondary / disclaimer text
+vxOkCol  = #66BB6A
+vxNoCol  = #EF5350
+vxWarnCol= #FFA726
+
+vxDbg = i_mode == "Debug"
+
+// --------------------------------------------------- V4 RING-BUFFER POOLS
+// Budgets are computed ONCE, from the inputs, and the pools are trimmed against
+// them on every push. A pool that is sized in objects rather than in setups
+// silently changes meaning when a display toggle moves, so both budgets below
+// are stated as (objects per setup) * (setups kept).
+vxLblBudget = 6 * i_maxTradeVisuals      // 1 block label + 5 price tags
+vxLnBudget  = 5 * i_maxTradeVisuals      // entry + stop + 3 targets
+
+var array<label> vxLbls   = array.new<label>()
+var array<line>  vxLns    = array.new<line>()
+var array<line>  vxLvlLn  = array.new<line>()      // Debug level map, full redraw
+var array<label> vxLvlLb  = array.new<label>()
+
+// Zone boxes are keyed by the zone ID SECTION 6 mints, in three parallel arrays.
+// vxZoneMaxId is what stops an evicted box being re-born next bar and churning
+// forever: an id is drawn at most once, ever.
+var array<int>   vxZoneId = array.new<int>()
+var array<box>   vxZoneBx = array.new<box>()
+var array<bool>  vxZoneOn = array.new<bool>()
+var int          vxZoneMaxId = 0
+
+// Which side signalled most recently, for the panel's SIGNAL row.
+var int vxLastDir = 0
+var int vxLastBar = na
+
+f_vxPushLbl(label l) =>
+    array.push(vxLbls, l)
+    while array.size(vxLbls) > vxLblBudget
+        label.delete(array.shift(vxLbls))
+
+f_vxPushLn(line l) =>
+    array.push(vxLns, l)
+    while array.size(vxLns) > vxLnBudget
+        line.delete(array.shift(vxLns))
+
+// ------------------------------------------------------- V5 SMALL HELPERS
+f_vxPos(string s) =>
+    switch s
+        "Top Left"     => position.top_left
+        "Top Center"   => position.top_center
+        "Top Right"    => position.top_right
+        "Middle Left"  => position.middle_left
+        "Middle Right" => position.middle_right
+        => position.top_right
+
+f_vxCell(table t, int c, int r, string txt, color bg, color fg, string ha) =>
+    table.cell(t, c, r, txt, text_color = fg, bgcolor = bg, text_size = size.small,
+         text_halign = ha, text_valign = text.align_top)
+
+f_vxNum(float x, string fmt) => na(x) ? "n/a" : str.tostring(x, fmt)
+f_vxInt(int x) => na(x) ? "n/a" : str.tostring(x)
+
+// Zone opacity from the zone's OWN absorption strength (0..1), never from the
+// composite setup score. A zone is born at the absorption step, before rejection,
+// displacement, BOS and retest can possibly be true, so the composite score at
+// zone birth is structurally capped around a third of its range - painting with
+// it would make every zone uniformly faint and carry no information at all.
+f_vxZoneAlpha(float strength01) =>
+    float s = f_clamp01(nz(strength01, 0.5)) * 100.0
+    int(math.round(f_clamp(i_zoneTransp - 0.5 * (s - 50.0), 45.0, 95.0)))
+
+// Is the zone carrying this id still live in SECTION 6's array?
+// Returns false both when the zone died and when SECTION 6 evicted it, which is
+// exactly the condition under which its box must stop growing.
+f_vxZoneLive(int id) =>
+    bool found = false
+    int  n     = array.size(zones)
+    if n > 0
+        for i = 0 to n - 1
+            IcebergZone z = array.get(zones, i)
+            if z.id == id and z.isLive()
+                found := true
+                break
+    found
+
+// How far the best still-breathing setup on this side got through the chain.
+// SetupState rank is strictly increasing (SECTION 2), so the max rank IS the
+// furthest progress, and `dead` is excluded rather than ranked highest.
+f_vxBestRank(int dir) =>
+    int best = 0
+    int n    = array.size(setups)
+    if n > 0
+        for i = 0 to n - 1
+            Setup s = array.get(setups, i)
+            if s.dir == dir and s.st != SetupState.dead
+                int rk = s.rank()
+                best := rk > best ? rk : best
+    best
+
+// ------------------------------------------------- V6 GLOBAL-SCOPE READS
+// These are hoisted to global scope and evaluated on EVERY bar, unconditionally.
+// Two reasons, both hard: a helper owned by another section may carry internal
+// state, and a conditional call would then skip bars; and f_riskPlan() must see
+// the same inputs on the panel bar that SECTION 12 saw when it scored, or the
+// panel and the score disagree about the same setup.
+vxLiqL = f_atMeaningful(1)
+vxLiqS = f_atMeaningful(-1)
+vxHtfL = f_htfAllow(1)
+vxHtfS = f_htfAllow(-1)
+vxRankL  = f_vxBestRank(1)
+vxRankS  = f_vxBestRank(-1)
+
+// PROVISIONAL risk plans for the panel's RR row, at entryPx = close - the same
+// call SECTION 12 makes for qRr. On a signal bar SECTION 14 freezes the real
+// plan with entryPx = close as well, so these agree by construction and the
+// panel can never show an RR the signal did not have.
+vxPlanL = f_riskPlan(1,  close, zoneBotL, zoneTopL, sweepExtL, sweepExtS,
+     lastSwLo, lastSwHi, invAnchorL)
+vxPlanS = f_riskPlan(-1, close, zoneBotS, zoneTopS, sweepExtL, sweepExtS,
+     lastSwLo, lastSwHi, invAnchorS)
+
+// -------------------------------------------- V7 SIGNAL DRAWING (bar_index)
+// ONE path, parameterised by dir. f_dirCol() is the only branch; the geometry
+// is a mirror of itself, so a long and a short setup drawn from mirrored bars
+// produce mirrored art without a second code path to keep in sync.
+f_vxLevelLine(int x0, int x1, float px, string tag, color c, string sty) =>
+    if not na(px)
+        f_vxPushLn(line.new(x1 = x0, y1 = px, x2 = x1, y2 = px, xloc = xloc.bar_index,
+             extend = extend.none, color = c, style = sty, width = 1))
+        f_vxPushLbl(label.new(x = x1, y = px, text = tag + " " + f_px(px),
+             xloc = xloc.bar_index, yloc = yloc.price,
+             color = color.new(color.black, 100), style = label.style_label_left,
+             textcolor = c, size = size.tiny, textalign = text.align_left))
+
+f_vxDrawSignal(int dir, RiskPlan pl, float sc) =>
+    if not na(pl)
+        color c  = f_dirCol(dir, i_bullCol, i_bearCol)
+        int   x0 = bar_index
+        int   x1 = bar_index + i_lineExtend
+        // The block label renders the EXACT user format through the frozen
+        // RiskPlan.blockText() method, so the chart and the SECTION 17 payload
+        // read the same numbers out of the same object.
+        f_vxPushLbl(label.new(x = x0, y = dir > 0 ? low - 0.6 * aRef : high + 0.6 * aRef,
+             text = pl.blockText(sc), xloc = xloc.bar_index, yloc = yloc.price,
+             color = color.new(c, 8),
+             style = dir > 0 ? label.style_label_up : label.style_label_down,
+             textcolor = vxTxt, size = size.small, textalign = text.align_left))
+        f_vxLevelLine(x0, x1, pl.entry, "E",   i_entryCol,      line.style_solid)
+        f_vxLevelLine(x0, x1, pl.stop,  "SL",  i_slCol,         line.style_dashed)
+        f_vxLevelLine(x0, x1, pl.tp1,   "TP1", color.new(c, 0),  line.style_dotted)
+        f_vxLevelLine(x0, x1, pl.tp2,   "TP2", color.new(c, 25), line.style_dotted)
+        f_vxLevelLine(x0, x1, pl.tp3,   "TP3", color.new(c, 45), line.style_dotted)
+
+// ---------------------------------------------------- V8 ZONE BOX LIFECYCLE
+f_vxNewZoneBox(IcebergZone z) =>
+    color c = f_dirCol(z.dir, i_bullCol, i_bearCol)
+    // Clamp the left edge: a zone born beyond the drawing window cannot be
+    // anchored at its birth bar, and clamping is cheaper than losing the box.
+    int born = nz(z.bornBar, bar_index)
+    int lft  = born > bar_index - 500 ? born : bar_index - 500
+    box.new(left = lft, top = z.top, right = bar_index + 1, bottom = z.bottom,
+         xloc = xloc.bar_index, border_color = color.new(c, 30), border_width = 1,
+         border_style = line.style_solid,
+         bgcolor = color.new(c, f_vxZoneAlpha(z.strength)),
+         text = (z.dir > 0 ? "BUY ABSORPTION  " : "SELL ABSORPTION  ") +
+                 str.tostring(math.round(f_clamp01(z.strength) * 100.0), "#") + "/100",
+         text_color = color.new(c, 0), text_size = size.tiny,
+         text_halign = text.align_left,
+         text_valign = z.dir > 0 ? text.align_bottom : text.align_top)
+
+// ============================================================================
+//  V9 : ALL STATE-CHANGING DRAWING. Confirmed bars only, without exception.
+// ============================================================================
+if confirmed and warmupOk
+
+    // --- zone births -------------------------------------------------------
+    // Both sides are handled by the SAME loop over the array, so a bar that
+    // gives birth to a bull zone AND a bear zone draws both. A single "newest
+    // zone" slot would silently drop one of them.
+    if i_showZoneBox
+        int nZ = array.size(zones)
+        if nZ > 0
+            for i = 0 to nZ - 1
+                IcebergZone z = array.get(zones, i)
+                if z.isLive() and z.id > vxZoneMaxId
+                    array.push(vxZoneId, z.id)
+                    array.push(vxZoneBx, f_vxNewZoneBox(z))
+                    array.push(vxZoneOn, true)
+                    vxZoneMaxId := z.id > vxZoneMaxId ? z.id : vxZoneMaxId
+                    while array.size(vxZoneId) > i_maxZoneBoxes
+                        array.shift(vxZoneId)
+                        box.delete(array.shift(vxZoneBx))
+                        array.shift(vxZoneOn)
+
+    // --- grow every live box, retire the dead ones -------------------------
+    // DOWNWARD loop: the Clean branch removes the entry it is standing on, and
+    // walking down means a removal cannot disturb an index still to be visited.
+    int nP = array.size(vxZoneId)
+    if nP > 0
+        for i = nP - 1 to 0
+            if array.get(vxZoneOn, i)
+                box b = array.get(vxZoneBx, i)
+                if f_vxZoneLive(array.get(vxZoneId, i))
+                    box.set_right(b, bar_index + 1)
+                else if vxDbg
+                    // Debug keeps the corpse: a zone that died is the most
+                    // informative object on the chart for the next ten bars.
+                    array.set(vxZoneOn, i, false)
+                    box.set_bgcolor(b, color.new(color.gray, 92))
+                    box.set_border_color(b, color.new(color.gray, 40))
+                    box.set_border_style(b, line.style_dashed)
+                    box.set_text_color(b, color.new(color.gray, 20))
+                    box.set_text(b, "ZONE INVALIDATED")
+                else
+                    box.delete(b)
+                    array.remove(vxZoneId, i)
+                    array.remove(vxZoneBx, i)
+                    array.remove(vxZoneOn, i)
+
+    // --- official signals (mirror blocks, line for line) -------------------
+    if longSignal
+        f_vxDrawSignal(1, sigPlanL, sigScoreL)
+        vxLastDir := 1
+        vxLastBar := bar_index
+    if shortSignal
+        f_vxDrawSignal(-1, sigPlanS, sigScoreS)
+        vxLastDir := -1
+        vxLastBar := bar_index
+
+// ============================================================================
+//  V10 : TABLES. Three tables, three distinct anchors, DISPLAY ONLY.
+//  barstate.islast reads state that is already committed; it writes none.
+// ============================================================================
+var table vxMain = table.new(position.top_right, 2, 9, border_width = 1,
+     frame_color = color.new(vxHdrBg, 20), frame_width = 1,
+     border_color = color.new(#000000, 70))
+var table vxChk  = table.new(position.bottom_right, 3, 14, border_width = 1,
+     frame_color = color.new(vxHdrBg, 20), frame_width = 1,
+     border_color = color.new(#000000, 70))
+var table vxStat = table.new(position.bottom_left, 3, 13, border_width = 1,
+     frame_color = color.new(vxHdrBg, 20), frame_width = 1,
+     border_color = color.new(#000000, 70))
+
+// The ten checklist rows, in chain order. Column 1 is LONG, column 2 is SHORT,
+// so "Buy / Sell Pressure" reads left-to-right in the same order as the columns:
+// a LONG wants BUY pressure, its mirror wants SELL pressure.
+var array<string> vxChkName = array.new<string>()
+if barstate.isfirst
+    array.push(vxChkName, "Liquidity")
+    array.push(vxChkName, "Sweep")
+    array.push(vxChkName, "Buy / Sell Pressure")
+    array.push(vxChkName, "Absorption")
+    array.push(vxChkName, "Rejection")
+    array.push(vxChkName, "Displacement")
+    array.push(vxChkName, "BOS")
+    array.push(vxChkName, "Retest")
+    array.push(vxChkName, "RR")
+    array.push(vxChkName, "HTF Bias")
+
+// The DEATH half of NoTradeReason, in declaration order, so SECTION 15's
+// histogram indices can be rendered as words instead of as integers. The titles
+// are pulled THROUGH f_reason() rather than retyped, so if a member's title ever
+// changes in SECTION 1 this panel follows it instead of quietly lying.
+var array<string> vxDeathName = array.new<string>()
+if barstate.isfirst
+    array.push(vxDeathName, f_reason(NoTradeReason.dTimeout))
+    array.push(vxDeathName, f_reason(NoTradeReason.dZoneBroken))
+    array.push(vxDeathName, f_reason(NoTradeReason.dFalseSweep))
+    array.push(vxDeathName, f_reason(NoTradeReason.dDispFail))
+    array.push(vxDeathName, f_reason(NoTradeReason.dBosFail))
+    array.push(vxDeathName, f_reason(NoTradeReason.dRetestFail))
+    array.push(vxDeathName, f_reason(NoTradeReason.dEvicted))
+    array.push(vxDeathName, f_reason(NoTradeReason.dConflict))
+    array.push(vxDeathName, f_reason(NoTradeReason.dSessionEnd))
+    array.push(vxDeathName, f_reason(NoTradeReason.dStopped))
+    array.push(vxDeathName, f_reason(NoTradeReason.dTarget))
+    array.push(vxDeathName, f_reason(NoTradeReason.dTimeStop))
+
+// A per-condition snapshot for ONE side. The raw condition is OR-ed with the
+// chain rank because a sweep or a BOS is a one-bar event: without the rank the
+// checklist would read all-crosses on 99% of bars and tell the user nothing
+// about the setup that is actually half-built in front of them.
+f_vxChecks(int dir, int rk) =>
+    RiskPlan pl   = dir > 0 ? vxPlanL : vxPlanS
+    // Field access sits inside an `if`, never in the false branch of a ternary:
+    // reading a field off an na object is a RUNTIME ERROR that blanks the whole
+    // chart, and `?:` is not guaranteed to leave the untaken branch unevaluated.
+    bool     rrOk = false
+    if not na(pl)
+        rrOk := pl.ok
+    array.from(
+         dir > 0 ? vxLiqL : vxLiqS,
+         (dir > 0 ? sweepSigL : sweepSigS) or rk >= 1,
+         (dir > 0 ? buyPressure : sellPressure) > 0.5,
+         (dir > 0 ? zoneAliveL : zoneAliveS) or (dir > 0 ? absSigL : absSigS),
+         (dir > 0 ? rejSigL  : rejSigS)  or rk >= 2,
+         (dir > 0 ? dispSigL : dispSigS) or rk >= 3,
+         (dir > 0 ? bosSigL  : bosSigS)  or rk >= 4,
+         (dir > 0 ? entryRawL : entryRawS) or rk >= 6,
+         rrOk,
+         dir > 0 ? vxHtfL : vxHtfS)
+
+f_vxExpectancy(DirStats d) =>
+    float out = na
+    if not na(d)
+        float n = d.wins + d.losses
+        if n > 0
+            out := d.sumR / n
+    out
+
+f_vxWinRate(DirStats d) =>
+    float out = na
+    if not na(d)
+        float n = d.wins + d.losses
+        if n > 0
+            out := 100.0 * d.wins / n
+    out
+
+f_vxPf(DirStats d) =>
+    float out = na
+    if not na(d)
+        if d.grossL > 0
+            out := d.grossW / d.grossL
+    out
+
+// SECTION 15 indexes failHist by position in the WHOLE NoTradeReason enum - 43
+// rows, gate causes AND death causes - while vxDeathName holds only the 12 death
+// titles. `n == array.size(vxDeathName)` was therefore 43 == 12: a gate that can
+// never be true, so this cell could only ever print the "unmapped" fallback.
+// Each death title is now looked up BY NAME in SECTION 15's own parallel array,
+// which is exactly how SECTION 15 bumps the histogram, so the two cannot drift.
+f_vxTopFail() =>
+    string out = "n/a"
+    int    n   = array.size(failHist)
+    int    nd  = array.size(vxDeathName)
+    if n > 0 and nd > 0 and n == array.size(s15FailName)
+        int bi = -1
+        int bv = 0
+        for i = 0 to nd - 1
+            int ix = array.indexof(s15FailName, array.get(vxDeathName, i))
+            int v  = ix >= 0 ? array.get(failHist, ix) : 0
+            if v > bv
+                bv := v
+                bi := i
+        out := bi < 0 ? "none yet" :
+             array.get(vxDeathName, bi) + " x" + str.tostring(bv)
+    else if n > 0
+        // Honest failure rather than a confident wrong word: if SECTION 15 ever
+        // re-buckets its histogram, say so instead of mislabelling the cause.
+        out := "histogram size " + str.tostring(n) + " - unmapped"
+    out
+
+if barstate.islast
+    table.set_position(vxMain, f_vxPos(i_panelPos))
+
+    // ---------------------------------------------------- MAIN STATUS PANEL
+    string hdr = "ICEburg  -  iceberg / absorption (proxy)"
+    string sub = syminfo.ticker + "  " + timeframe.period +
+         (barstate.isrealtime and not barstate.isconfirmed ? "  (bar forming)" : "")
+    f_vxCell(vxMain, 0, 0, hdr, vxHdrBg, vxTxt,  text.align_left)
+    f_vxCell(vxMain, 1, 0, sub, vxHdrBg, vxTxt2, text.align_right)
+
+    // ------------------------------------------------- PLAIN-ENGLISH STATUS
+    // The one row that answers "what is this doing, and what do I change?".
+    // Everything else on this panel is supporting detail. Written without
+    // jargon on purpose: the rest of the panel is for when you already trust it.
+    string vxWhat    = ""
+    color  vxWhatCol = vxTxt2
+    int    vxBest    = math.max(vxRankL, vxRankS)
+    float  vxTopScore = math.max(nz(scoreL, 0.0), nz(scoreS, 0.0))
+    if not warmupOk
+        vxWhat    := "WARMING UP - still collecting history. Nothing is evaluated yet."
+        vxWhatCol := vxWarnCol
+    else if not inWindow
+        // Without this branch the panel reports SECTION 13's verdict - possibly a
+        // clean OK on a high score - while SECTION 18 silently suppresses the
+        // marker, so the chart disagrees with the panel and neither says why.
+        vxWhat    := "OUTSIDE THE BACKTEST WINDOW - setups are still scored, but no signal is " +
+             "published. Set Rolling window (days back) to 0, or untick Use fixed date window."
+        vxWhatCol := vxWarnCol
+    else if not sessOk
+        vxWhat    := "DORMANT - outside the " + i_sessMode + " window, so every setup is vetoed. " +
+             "To watch it work right now, open Settings and set Active sessions to Off (24h)."
+        vxWhatCol := vxWarnCol
+    else if conflictNow
+        vxWhat    := "NO TRADE - both directions show evidence at once. Waiting for one side to win."
+        vxWhatCol := vxWarnCol
+    else if longSignal or shortSignal
+        vxWhat    := (longSignal ? "LONG" : "SHORT") + " SIGNAL on this bar - levels below."
+        vxWhatCol := longSignal ? i_bullCol : i_bearCol
+    else if vxBest >= 6
+        vxWhat    := "ARMED - structure has broken. Waiting for the retest to hold."
+        vxWhatCol := vxOkCol
+    else if vxBest >= 4
+        vxWhat    := "BUILDING - absorption zone found and structure broke. Needs a retest."
+    else if vxBest >= 1
+        vxWhat    := "BUILDING - possible absorption. Still needs displacement and a break of structure."
+    else
+        vxWhat    := "HUNTING - no absorption zone yet. Best side scores " +
+             str.tostring(vxTopScore, "#") + "/100 and needs " + str.tostring(i_minScore, "#") + "."
+    f_vxCell(vxMain, 0, 1, "STATUS", vxLblBg, vxTxt2, text.align_left)
+    f_vxCell(vxMain, 1, 1, vxWhat, vxValBg, vxWhatCol, text.align_left)
+
+    f_vxCell(vxMain, 0, 2, "Session", vxLblBg, vxTxt2, text.align_left)
+    f_vxCell(vxMain, 1, 2,
+         (sessOk ? "OPEN" : "BLOCKED") + "  q=" + str.tostring(sessQual, "#.00") +
+         "   HTF " + htfTf + " " + (htfReady ? f_dirName(htfBias) : "warming"),
+         vxValBg, sessOk ? vxTxt : vxWarnCol, text.align_left)
+
+    f_vxCell(vxMain, 0, 3, "Market", vxLblBg, vxTxt2, text.align_left)
+    f_vxCell(vxMain, 1, 3,
+         "ATR " + f_px(atr) + "   RVol " + f_vxNum(rvol, "#.00") +
+         "   Chop " + f_vxInt(chopScore) + "/3" + (isChoppy ? " CHOPPY" : "") +
+         "   Trend " + f_dirName(structTrend),
+         vxValBg, isChoppy ? vxWarnCol : vxTxt, text.align_left)
+
+    // Per-side score + the FIRST gate that blocked it. One reason, not ten:
+    // SECTION 13 is first-match-wins in a fixed upstream-first order, so the
+    // reason it returns is the one that must be fixed first.
+    f_vxCell(vxMain, 0, 4, "LONG", vxLblBg, i_bullCol, text.align_left)
+    f_vxCell(vxMain, 1, 4,
+         f_vxNum(scoreL, "#") + "/100   " + f_reason(gateL),
+         vxValBg, gateL == NoTradeReason.ok ? vxOkCol : vxTxt2, text.align_left)
+    f_vxCell(vxMain, 0, 5, "SHORT", vxLblBg, i_bearCol, text.align_left)
+    f_vxCell(vxMain, 1, 5,
+         f_vxNum(scoreS, "#") + "/100   " + f_reason(gateS),
+         vxValBg, gateS == NoTradeReason.ok ? vxOkCol : vxTxt2, text.align_left)
+
+    // The signal block, rendered by the SAME blockText() the chart label and the
+    // alert payload use. Three surfaces, one renderer, one set of numbers.
+    RiskPlan vxSp = vxLastDir > 0 ? sigPlanL : sigPlanS
+    float    vxSs = vxLastDir > 0 ? sigScoreL : sigScoreS
+    string   vxSigTxt = "No signal yet this session."
+    if vxLastDir != 0 and not na(vxSp)
+        vxSigTxt := vxSp.blockText(vxSs) +
+             "\n(" + str.tostring(bar_index - vxLastBar) + " bars ago)"
+    f_vxCell(vxMain, 0, 6, "Last signal", vxLblBg, vxTxt2, text.align_left)
+    color vxSigCol = vxLastDir > 0 ? i_bullCol : vxLastDir < 0 ? i_bearCol : vxTxt2
+    f_vxCell(vxMain, 1, 6, vxSigTxt, vxValBg, vxSigCol, text.align_left)
+
+    // Feed health. These are not cosmetic: a 0.001-mintick gold feed makes the
+    // strategy twin's const tick slippage model a tenth of the real friction.
+    string warn = ""
+    warn := warn + (tickWarn ? "mintick " + str.tostring(tick) + " (not 0.01) " : "")
+    warn := warn + (isGold ? "" : "symbol is not gold ")
+    warn := warn + (hasVol ? "" : "no volume feed - rvol gates bypassed ")
+    warn := warn + (warmupOk ? "" : "WARMING UP ")
+    f_vxCell(vxMain, 0, 7, "Feed check", vxLblBg, vxTxt2, text.align_left)
+    f_vxCell(vxMain, 1, 7, str.length(warn) == 0 ? "feed OK" : warn,
+         vxValBg, str.length(warn) == 0 ? vxOkCol : vxWarnCol, text.align_left)
+
+    f_vxCell(vxMain, 0, 8,
+         "Delta Proxy from TICK volume - no order book or bid/ask tape exists for spot XAU.",
+         vxHdrBg, vxTxt2, text.align_left)
+    f_vxCell(vxMain, 1, 8, "Confidence is a setup score, not a probability.",
+         vxHdrBg, vxTxt2, text.align_right)
+
+    // ------------------------------------------------------ DEBUG CHECKLIST
+    if vxDbg
+        array<bool> ckL = f_vxChecks(1,  vxRankL)
+        array<bool> ckS = f_vxChecks(-1, vxRankS)
+        f_vxCell(vxChk, 0, 0, "SETUP CHECKLIST", vxHdrBg, vxTxt,    text.align_left)
+        f_vxCell(vxChk, 1, 0, "LONG",            vxHdrBg, i_bullCol, text.align_center)
+        f_vxCell(vxChk, 2, 0, "SHORT",           vxHdrBg, i_bearCol, text.align_center)
+        for r = 0 to 9
+            bool bl = array.get(ckL, r)
+            bool bs = array.get(ckS, r)
+            f_vxCell(vxChk, 0, r + 1, array.get(vxChkName, r), vxLblBg, vxTxt2, text.align_left)
+            f_vxCell(vxChk, 1, r + 1, f_mark(bl), vxValBg, bl ? vxOkCol : vxNoCol, text.align_center)
+            f_vxCell(vxChk, 2, r + 1, f_mark(bs), vxValBg, bs ? vxOkCol : vxNoCol, text.align_center)
+        f_vxCell(vxChk, 0, 11, "Score (min " + str.tostring(i_minScore, "#") + ")",
+             vxLblBg, vxTxt2, text.align_left)
+        f_vxCell(vxChk, 1, 11, f_vxNum(scoreL, "#") + "/100", vxValBg,
+             nz(scoreL, 0.0) >= i_minScore ? vxOkCol : vxTxt2, text.align_center)
+        f_vxCell(vxChk, 2, 11, f_vxNum(scoreS, "#") + "/100", vxValBg,
+             nz(scoreS, 0.0) >= i_minScore ? vxOkCol : vxTxt2, text.align_center)
+        f_vxCell(vxChk, 0, 12, "Stage (rank 0-7)", vxLblBg, vxTxt2, text.align_left)
+        f_vxCell(vxChk, 1, 12, str.tostring(vxRankL), vxValBg, vxTxt, text.align_center)
+        f_vxCell(vxChk, 2, 12, str.tostring(vxRankS), vxValBg, vxTxt, text.align_center)
+        string verdict = conflictNow ? "VERDICT: DIRECTIONAL CONFLICT - stand down" :
+             gateL == NoTradeReason.ok ? "VERDICT: LONG " + f_vxNum(scoreL, "#") + "/100 - all gates pass" :
+             gateS == NoTradeReason.ok ? "VERDICT: SHORT " + f_vxNum(scoreS, "#") + "/100 - all gates pass" :
+             "VERDICT: NO TRADE - L:" + f_reason(gateL) + "  S:" + f_reason(gateS)
+        f_vxCell(vxChk, 0, 13, verdict, vxHdrBg,
+             gateL == NoTradeReason.ok or gateS == NoTradeReason.ok ? vxOkCol : vxTxt2,
+             text.align_left)
+        f_vxCell(vxChk, 1, 13, "", vxHdrBg, vxTxt2, text.align_center)
+        f_vxCell(vxChk, 2, 13, "", vxHdrBg, vxTxt2, text.align_center)
+
+    // ---------------------------------------------- STATS PANEL (SECTION 15)
+    if i_showStats and not na(statsL) and not na(statsS)
+        f_vxCell(vxStat, 0, 0, "VIRTUAL STATS", vxHdrBg, vxTxt,    text.align_left)
+        f_vxCell(vxStat, 1, 0, "LONG",          vxHdrBg, i_bullCol, text.align_center)
+        f_vxCell(vxStat, 2, 0, "SHORT",         vxHdrBg, i_bearCol, text.align_center)
+        f_vxCell(vxStat, 0, 1, "Signals",  vxLblBg, vxTxt2, text.align_left)
+        f_vxCell(vxStat, 1, 1, f_vxInt(statsL.signals), vxValBg, vxTxt, text.align_center)
+        f_vxCell(vxStat, 2, 1, f_vxInt(statsS.signals), vxValBg, vxTxt, text.align_center)
+        f_vxCell(vxStat, 0, 2, "TP1", vxLblBg, vxTxt2, text.align_left)
+        f_vxCell(vxStat, 1, 2, f_vxInt(statsL.tp1), vxValBg, vxOkCol, text.align_center)
+        f_vxCell(vxStat, 2, 2, f_vxInt(statsS.tp1), vxValBg, vxOkCol, text.align_center)
+        f_vxCell(vxStat, 0, 3, "TP2", vxLblBg, vxTxt2, text.align_left)
+        f_vxCell(vxStat, 1, 3, f_vxInt(statsL.tp2), vxValBg, vxOkCol, text.align_center)
+        f_vxCell(vxStat, 2, 3, f_vxInt(statsS.tp2), vxValBg, vxOkCol, text.align_center)
+        f_vxCell(vxStat, 0, 4, "TP3", vxLblBg, vxTxt2, text.align_left)
+        f_vxCell(vxStat, 1, 4, f_vxInt(statsL.tp3), vxValBg, vxOkCol, text.align_center)
+        f_vxCell(vxStat, 2, 4, f_vxInt(statsS.tp3), vxValBg, vxOkCol, text.align_center)
+        f_vxCell(vxStat, 0, 5, "SL", vxLblBg, vxTxt2, text.align_left)
+        f_vxCell(vxStat, 1, 5, f_vxInt(statsL.sl), vxValBg, vxNoCol, text.align_center)
+        f_vxCell(vxStat, 2, 5, f_vxInt(statsS.sl), vxValBg, vxNoCol, text.align_center)
+        f_vxCell(vxStat, 0, 6, "Breakeven", vxLblBg, vxTxt2, text.align_left)
+        f_vxCell(vxStat, 1, 6, f_vxInt(statsL.be), vxValBg, vxTxt, text.align_center)
+        f_vxCell(vxStat, 2, 6, f_vxInt(statsS.be), vxValBg, vxTxt, text.align_center)
+        f_vxCell(vxStat, 0, 7, "Win rate", vxLblBg, vxTxt2, text.align_left)
+        f_vxCell(vxStat, 1, 7, f_vxNum(f_vxWinRate(statsL), "#.0") + "%", vxValBg, vxTxt, text.align_center)
+        f_vxCell(vxStat, 2, 7, f_vxNum(f_vxWinRate(statsS), "#.0") + "%", vxValBg, vxTxt, text.align_center)
+        f_vxCell(vxStat, 0, 8, "Sum R", vxLblBg, vxTxt2, text.align_left)
+        f_vxCell(vxStat, 1, 8, f_vxNum(statsL.sumR, "#.00"), vxValBg, vxTxt, text.align_center)
+        f_vxCell(vxStat, 2, 8, f_vxNum(statsS.sumR, "#.00"), vxValBg, vxTxt, text.align_center)
+        f_vxCell(vxStat, 0, 9, "Expectancy R", vxLblBg, vxTxt2, text.align_left)
+        f_vxCell(vxStat, 1, 9, f_vxNum(f_vxExpectancy(statsL), "#.00"), vxValBg, vxTxt, text.align_center)
+        f_vxCell(vxStat, 2, 9, f_vxNum(f_vxExpectancy(statsS), "#.00"), vxValBg, vxTxt, text.align_center)
+        f_vxCell(vxStat, 0, 10, "Profit factor", vxLblBg, vxTxt2, text.align_left)
+        f_vxCell(vxStat, 1, 10, f_vxNum(f_vxPf(statsL), "#.00"), vxValBg, vxTxt, text.align_center)
+        f_vxCell(vxStat, 2, 10, f_vxNum(f_vxPf(statsS), "#.00"), vxValBg, vxTxt, text.align_center)
+        f_vxCell(vxStat, 0, 11, "Top death cause", vxLblBg, vxTxt2, text.align_left)
+        f_vxCell(vxStat, 1, 11, f_vxTopFail(), vxValBg, vxWarnCol, text.align_left)
+        f_vxCell(vxStat, 2, 11, "", vxValBg, vxTxt2, text.align_center)
+        f_vxCell(vxStat, 0, 12,
+             "Virtual tracker on CONFIRMED bars, stop assumed first on ambiguous bars. " +
+             "A TradingView Basic plan serves ~5k bars: on 1M gold that is under four " +
+             "days, far too few trades for these counts to mean anything.",
+             vxHdrBg, vxTxt2, text.align_left)
+        f_vxCell(vxStat, 1, 12, "", vxHdrBg, vxTxt2, text.align_center)
+        f_vxCell(vxStat, 2, 12, "", vxHdrBg, vxTxt2, text.align_center)
+
+    // ------------------------------------- DEBUG LEVEL MAP (full redraw)
+    // Deleted and rebuilt wholesale, so the object count is exactly the cap or
+    // fewer and can never creep. Level lines describe where liquidity is NOW;
+    // there is nothing historical to preserve.
+    int nOldLn = array.size(vxLvlLn)
+    if nOldLn > 0
+        for i = 0 to nOldLn - 1
+            line.delete(array.get(vxLvlLn, i))
+        array.clear(vxLvlLn)
+    int nOldLb = array.size(vxLvlLb)
+    if nOldLb > 0
+        for i = 0 to nOldLb - 1
+            label.delete(array.get(vxLvlLb, i))
+        array.clear(vxLvlLb)
+
+    if vxDbg and i_showLevelLines and i_maxLevelLines > 0
+        float band = 10.0 * aRef
+        int   nL   = array.size(levels)
+        if nL > 0
+            for i = 0 to nL - 1
+                if array.size(vxLvlLn) < i_maxLevelLines
+                    LiquidityLevel lv = array.get(levels, i)
+                    if lv.active and not na(lv.price) and math.abs(lv.price - close) <= band
+                        // side = +1 was born from a HIGH (resistance), so the
+                        // colour is the colour of the side that would TRADE it:
+                        // a support level is a LONG's level. Hence -lv.side.
+                        color lc = f_dirCol(-lv.side, i_bullCol, i_bearCol)
+                        int   lb0 = nz(lv.createdBar, bar_index)
+                        int   lx  = lb0 > bar_index - 300 ? lb0 : bar_index - 300
+                        array.push(vxLvlLn, line.new(x1 = lx, y1 = lv.price,
+                             x2 = bar_index + i_lineExtend, y2 = lv.price,
+                             xloc = xloc.bar_index, extend = extend.none,
+                             color = color.new(lc, 45), style = line.style_dotted, width = 1))
+                        array.push(vxLvlLb, label.new(x = bar_index + i_lineExtend,
+                             y = lv.price,
+                             text = str.tostring(lv.kind) + " " + f_px(lv.price) +
+                                     "  q" + str.tostring(lv.quality(), "#.00") +
+                                     "  t" + str.tostring(lv.touches),
+                             xloc = xloc.bar_index, yloc = yloc.price,
+                             color = color.new(color.black, 100),
+                             style = label.style_label_left,
+                             textcolor = color.new(lc, 20), size = size.tiny,
+                             textalign = text.align_left))
+
+// ============================================================================
+//  V11 : PLOTS. Zero drawing objects, 16 of the 64 plot slots.
+//  The six named price/score plots exist so SECTION 17's alertcondition() calls
+//  can interpolate {{plot("...")}}. They are PER SIDE on purpose: a single
+//  shared "Entry" plot would let a SHORT alert publish a LONG's entry and stop.
+//  Every UDT dereference is na-guarded - reading a field off an na object is a
+//  runtime error that kills the whole script, not a silent na.
+// ============================================================================
+plotshape(longSignal, "LONG signal", shape.triangleup, location.belowbar,
+     i_bullCol, size = size.small, text = "LONG", textcolor = i_bullCol)
+plotshape(shortSignal, "SHORT signal", shape.triangledown, location.abovebar,
+     i_bearCol, size = size.small, text = "SHORT", textcolor = i_bearCol)
+
+// PIVOT-anchored: offset = -i_pivotRight puts the glyph on the pivot bar itself.
+// The marks are NOT a claim about the current bar - they are backfilled onto the
+// bar where the pivot actually printed, i_pivotRight bars ago.
+vxSwingOn = vxDbg and i_showSwingMarks
+vxMarkHi  = vxSwingOn ? pvtHi : na
+vxMarkLo  = vxSwingOn ? pvtLo : na
+plotshape(vxMarkHi, "DBG Swing High", shape.xcross, location.absolute,
+     color.new(i_bearCol, 40), offset = -i_pivotRight, size = size.tiny)
+plotshape(vxMarkLo, "DBG Swing Low", shape.xcross, location.absolute,
+     color.new(i_bullCol, 40), offset = -i_pivotRight, size = size.tiny)
+
+// Transparency is clamped to 40..88. Letting it reach 100 makes a bar with
+// balanced pressure render invisible, which reads as a data gap, not as balance.
+// |buy - sell| IS |ratio| from SECTION 0, so this is symmetric by construction.
+vxBarTr  = int(math.max(40.0, math.min(88.0,
+     88.0 - 48.0 * math.abs(buyPressure - sellPressure))))
+vxBarHue = buyPressure > sellPressure ? i_bullCol : i_bearCol
+vxBarCol = vxDbg ? color.new(vxBarHue, vxBarTr) : na
+barcolor(vxBarCol, title = "DBG Delta Proxy")
+bgcolor(vxDbg and conflictNow ? color.new(vxWarnCol, 90) : na, title = "DBG Conflict")
+
+float vxPlotLE = na
+float vxPlotLS = na
+float vxPlotSE = na
+float vxPlotSS = na
+if not na(sigPlanL)
+    vxPlotLE := sigPlanL.entry
+    vxPlotLS := sigPlanL.stop
+if not na(sigPlanS)
+    vxPlotSE := sigPlanS.entry
+    vxPlotSS := sigPlanS.stop
+
+plot(vxPlotLE, "L Entry", display = display.data_window)
+plot(vxPlotLS, "L Stop",  display = display.data_window)
+plot(vxPlotSE, "S Entry", display = display.data_window)
+plot(vxPlotSS, "S Stop",  display = display.data_window)
+plot(scoreL, "LONG Score",  display = display.data_window)
+plot(scoreS, "SHORT Score", display = display.data_window)
+
+plot(vxDbg ? rvol : na, "DBG RVol", display = display.data_window)
+plot(vxDbg ? atr  : na, "DBG ATR",  display = display.data_window)
+plotchar(vxDbg and isChoppy,  "DBG Choppy", "o", location.top,
+     color.new(vxTxt2, 40), size = size.tiny)
+plotchar(vxDbg and not sessOk, "DBG Outside session", "x", location.bottom,
+     color.new(vxWarnCol, 40), size = size.tiny)
+// ========================= END SECTION 16 ===================================

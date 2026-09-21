@@ -1,0 +1,1290 @@
+- generic [active] [ref=f4e1]:
+  - alert [ref=f4e2]:
+    - generic [ref=f4e3]: Sample data — not real businesses
+    - generic [ref=f4e4]: •
+    - generic [ref=f4e5]: Wireframe of the campaign report screen. Every name, number, contact and source on this page is invented.
+  - banner [ref=f4e6]:
+    - generic [ref=f4e7]:
+      - generic [ref=f4e8]:
+        - generic [ref=f4e9]:
+          - generic [ref=f4e10]: AI BUSINESS OPPORTUNITY RESEARCH
+          - heading "SAMPLE campaign — Dhule-Shirpur-Nashik-Jalgaon — 26 Aug 2026" [level=1] [ref=f4e11]
+          - generic [ref=f4e12]:
+            - generic [ref=f4e13]: Search date 26 Aug 2026, 07:12 IST
+            - generic [ref=f4e14]: Cities Dhule, Shirpur, Nashik, Jalgaon
+            - generic [ref=f4e15]: Depth DEEP
+            - generic [ref=f4e16]: Min score 70
+            - generic [ref=f4e17]: Size filter all sizes
+            - generic [ref=f4e18]: Campaign cmp_01JSAMPLE0000000000000001
+        - group "Theme" [ref=f4e19]:
+          - button "Auto" [ref=f4e20] [cursor=pointer]
+          - button "Light" [ref=f4e21] [cursor=pointer]
+          - button "Dark" [pressed] [ref=f4e22] [cursor=pointer]
+      - generic [ref=f4e23]:
+        - generic [ref=f4e24]:
+          - term [ref=f4e25]: Businesses found
+          - definition [ref=f4e26]: "24"
+        - generic [ref=f4e27]:
+          - term [ref=f4e28]: Researched
+          - definition [ref=f4e29]: "22"
+        - generic [ref=f4e30]:
+          - term [ref=f4e31]: Qualified
+          - definition [ref=f4e32]: "15"
+        - generic [ref=f4e33]:
+          - term [ref=f4e34]: Skipped
+          - definition [ref=f4e35]: "2"
+        - generic [ref=f4e36]:
+          - term [ref=f4e37]: Requiring verification
+          - definition [ref=f4e38]: "6"
+        - generic [ref=f4e39]:
+          - term [ref=f4e40]: Ready for outreach
+          - definition [ref=f4e41]: "7"
+      - generic [ref=f4e42]:
+        - text: Read-only export. Generated 26 Aug 2026 19:04 IST; the figures are the data as of that moment. VERIFY / PREPARE OUTREACH open the live app at
+        - code [ref=f4e43]: http://127.0.0.1:8765
+        - text: . Selection in this file is preview-only — nothing here writes to the database, and there is no send control in this document by design (spec section 45). In this wireframe the action links do not navigate; they report where they would go.
+  - main [ref=f4e44]:
+    - region [ref=f4e45]:
+      - generic [ref=f4e46]:
+        - heading "Campaign KPIs" [level=2] [ref=f4e47]
+        - generic [ref=f4e48]: Every card is computed from the 24 rows below. Click a card to filter the table.
+      - generic [ref=f4e49]:
+        - button "Total businesses 24" [ref=f4e50] [cursor=pointer]:
+          - generic [ref=f4e51]: Total businesses
+          - generic "discovered in this campaign" [ref=f4e52]: "24"
+        - button "Qualified 15 score >= 70" [ref=f4e53] [cursor=pointer]:
+          - generic [ref=f4e54]: Qualified
+          - generic "15 of 22 researched" [ref=f4e55]: "15"
+          - generic [ref=f4e56]: score >= 70
+        - button "High opportunity 8 score 80-100" [ref=f4e57] [cursor=pointer]:
+          - generic [ref=f4e58]: High opportunity
+          - generic "8 of 22 scored" [ref=f4e59]: "8"
+          - generic [ref=f4e60]: score 80-100
+        - button "Medium opportunity 11 score 60-79" [ref=f4e61] [cursor=pointer]:
+          - generic [ref=f4e62]: Medium opportunity
+          - generic "11 of 22 scored" [ref=f4e63]: "11"
+          - generic [ref=f4e64]: score 60-79
+        - button "Low opportunity 3 score below 60" [ref=f4e65] [cursor=pointer]:
+          - generic [ref=f4e66]: Low opportunity
+          - generic "3 of 22 scored" [ref=f4e67]: "3"
+          - generic [ref=f4e68]: score below 60
+        - button "Website available 14 3 never checked" [ref=f4e69] [cursor=pointer]:
+          - generic [ref=f4e70]: Website available
+          - generic "website_status = PRESENT" [ref=f4e71]: "14"
+          - generic [ref=f4e72]: 3 never checked
+        - button "No website 7 a finding, not a gap" [ref=f4e73] [cursor=pointer]:
+          - generic [ref=f4e74]: No website
+          - generic "website_status = ABSENT" [ref=f4e75]: "7"
+          - generic [ref=f4e76]: a finding, not a gap
+        - generic "no single section-39 filter matches this definition" [ref=f4e77]:
+          - generic [ref=f4e78]: Potential software opportunity
+          - generic "no single section-39 filter matches this definition" [ref=f4e79]: "21"
+          - generic [ref=f4e80]: named solution and modules
+        - button "Need verification 6" [ref=f4e81] [cursor=pointer]:
+          - generic [ref=f4e82]: Need verification
+          - generic "AI_RESEARCHED or NEEDS_VERIFICATION" [ref=f4e83]: "6"
+        - button "Verified 16" [ref=f4e84] [cursor=pointer]:
+          - generic [ref=f4e85]: Verified
+          - generic "live verifications row with verdict VERIFIED" [ref=f4e86]: "16"
+        - button "Already contacted 8" [ref=f4e87] [cursor=pointer]:
+          - generic [ref=f4e88]: Already contacted
+          - generic "at least one SENT / DELIVERED / BOUNCED message" [ref=f4e89]: "8"
+        - button "Interested 1 the product metric" [ref=f4e90] [cursor=pointer]:
+          - generic [ref=f4e91]: Interested
+          - generic "responses classified in the interest set" [ref=f4e92]: "1"
+          - generic [ref=f4e93]: the product metric
+      - generic [ref=f4e94]: "Cards 3, 4 and 5 do not sum to card 1: 2 businesses are not scored yet. Cards 6 and 7 do not sum to card 1 either: the website check has not run for 3."
+    - region [ref=f4e95]:
+      - generic [ref=f4e96]:
+        - heading "City summary" [level=2] [ref=f4e97]
+        - generic [ref=f4e98]: Five figures per city, in campaign_cities.ordinal order.
+      - generic "City summary" [ref=f4e99]:
+        - article [ref=f4e100]:
+          - heading "Dhule DHULE" [level=3] [ref=f4e101]:
+            - text: Dhule
+            - generic [ref=f4e102]: DHULE
+          - generic [ref=f4e103]:
+            - generic [ref=f4e104]:
+              - term [ref=f4e105]: Businesses found
+              - definition [ref=f4e106]: "7"
+            - generic [ref=f4e107]:
+              - term [ref=f4e108]: Qualified
+              - definition [ref=f4e109]: "4"
+            - generic [ref=f4e110]:
+              - term [ref=f4e111]: High opportunity
+              - definition [ref=f4e112]: "2"
+            - generic [ref=f4e113]:
+              - term [ref=f4e114]: Verified
+              - definition [ref=f4e115]: "4"
+            - generic [ref=f4e116]:
+              - term [ref=f4e117]: Ready for outreach
+              - definition [ref=f4e118]: "1"
+          - button "Open Dhule" [ref=f4e119] [cursor=pointer]
+        - article [ref=f4e120]:
+          - heading "Shirpur SHIRPUR" [level=3] [ref=f4e121]:
+            - text: Shirpur
+            - generic [ref=f4e122]: SHIRPUR
+          - generic [ref=f4e123]:
+            - generic [ref=f4e124]:
+              - term [ref=f4e125]: Businesses found
+              - definition [ref=f4e126]: "5"
+            - generic [ref=f4e127]:
+              - term [ref=f4e128]: Qualified
+              - definition [ref=f4e129]: "3"
+            - generic [ref=f4e130]:
+              - term [ref=f4e131]: High opportunity
+              - definition [ref=f4e132]: "1"
+            - generic [ref=f4e133]:
+              - term [ref=f4e134]: Verified
+              - definition [ref=f4e135]: "3"
+            - generic [ref=f4e136]:
+              - term [ref=f4e137]: Ready for outreach
+              - definition [ref=f4e138]: "1"
+          - button "Open Shirpur" [ref=f4e139] [cursor=pointer]
+        - article [ref=f4e140]:
+          - heading "Nashik NASHIK" [level=3] [ref=f4e141]:
+            - text: Nashik
+            - generic [ref=f4e142]: NASHIK
+          - generic [ref=f4e143]:
+            - generic [ref=f4e144]:
+              - term [ref=f4e145]: Businesses found
+              - definition [ref=f4e146]: "8"
+            - generic [ref=f4e147]:
+              - term [ref=f4e148]: Qualified
+              - definition [ref=f4e149]: "6"
+            - generic [ref=f4e150]:
+              - term [ref=f4e151]: High opportunity
+              - definition [ref=f4e152]: "4"
+            - generic [ref=f4e153]:
+              - term [ref=f4e154]: Verified
+              - definition [ref=f4e155]: "6"
+            - generic [ref=f4e156]:
+              - term [ref=f4e157]: Ready for outreach
+              - definition [ref=f4e158]: "4"
+          - button "Open Nashik" [ref=f4e159] [cursor=pointer]
+        - article [ref=f4e160]:
+          - heading "Jalgaon JALGAON" [level=3] [ref=f4e161]:
+            - text: Jalgaon
+            - generic [ref=f4e162]: JALGAON
+          - generic [ref=f4e163]:
+            - generic [ref=f4e164]:
+              - term [ref=f4e165]: Businesses found
+              - definition [ref=f4e166]: "4"
+            - generic [ref=f4e167]:
+              - term [ref=f4e168]: Qualified
+              - definition [ref=f4e169]: "2"
+            - generic [ref=f4e170]:
+              - term [ref=f4e171]: High opportunity
+              - definition [ref=f4e172]: "1"
+            - generic [ref=f4e173]:
+              - term [ref=f4e174]: Verified
+              - definition [ref=f4e175]: "3"
+            - generic [ref=f4e176]:
+              - term [ref=f4e177]: Ready for outreach
+              - definition [ref=f4e178]: "1"
+          - button "Open Jalgaon" [ref=f4e179] [cursor=pointer]
+    - region [ref=f4e180]:
+      - generic [ref=f4e181]:
+        - heading "Filters, search and sort" [level=2] [ref=f4e182]
+        - generic [ref=f4e183]: A tab is a view; a filter is a predicate. A row shows when it is in the active pane and passes every filter.
+      - generic [ref=f4e184]:
+        - generic [ref=f4e185]:
+          - generic [ref=f4e186]:
+            - generic [ref=f4e187]: ⚲
+            - generic [ref=f4e188]: Search businesses
+            - searchbox "Search businesses try city:nashik score:>80" [ref=f4e189]
+            - generic [ref=f4e190]:
+              - text: try
+              - code [ref=f4e191]: city:nashik score:>80
+          - button "Filters" [expanded] [ref=f4e192] [cursor=pointer]
+          - button "Clear all filters" [ref=f4e193] [cursor=pointer]
+          - button "Sort across all groups" [ref=f4e194] [cursor=pointer]
+        - generic [ref=f4e195]:
+          - generic [ref=f4e196]:
+            - generic [ref=f4e197]: 1 · City
+            - generic [ref=f4e198]:
+              - button "Dhule 7" [ref=f4e199] [cursor=pointer]
+              - button "Shirpur 5" [ref=f4e200] [cursor=pointer]
+              - button "Nashik 8" [ref=f4e201] [cursor=pointer]
+              - button "Jalgaon 4" [ref=f4e202] [cursor=pointer]
+          - generic [ref=f4e203]:
+            - generic [ref=f4e204]: 2 · Industry
+            - generic [ref=f4e205]:
+              - button "Healthcare 4" [ref=f4e206] [cursor=pointer]
+              - button "Education 3" [ref=f4e207] [cursor=pointer]
+              - button "Automobile 2" [ref=f4e208] [cursor=pointer]
+              - button "Manufacturing 4" [ref=f4e209] [cursor=pointer]
+              - button "Retail 3" [ref=f4e210] [cursor=pointer]
+              - button "Hospitality 2" [ref=f4e211] [cursor=pointer]
+              - button "Distribution 4" [ref=f4e212] [cursor=pointer]
+              - button "Real estate 1" [ref=f4e213] [cursor=pointer]
+              - button "Professional services 1" [ref=f4e214] [cursor=pointer]
+          - generic [ref=f4e215]:
+            - generic [ref=f4e216]: 3 · Business size
+            - generic [ref=f4e217]:
+              - button "Micro 4" [ref=f4e218] [cursor=pointer]
+              - button "Small 8" [ref=f4e219] [cursor=pointer]
+              - button "Medium 7" [ref=f4e220] [cursor=pointer]
+              - button "Large 4" [ref=f4e221] [cursor=pointer]
+              - button "Unknown 1" [ref=f4e222] [cursor=pointer]
+          - generic [ref=f4e223]:
+            - generic [ref=f4e224]: 4 · Opportunity score
+            - generic [ref=f4e225]:
+              - button "80+" [ref=f4e226] [cursor=pointer]
+              - button "60-79" [ref=f4e227] [cursor=pointer]
+              - button "below 60" [ref=f4e228] [cursor=pointer]
+            - generic [ref=f4e229]:
+              - spinbutton "Minimum opportunity score" [ref=f4e230]
+              - generic [ref=f4e231]: –
+              - spinbutton "Maximum opportunity score" [ref=f4e232]
+            - generic [ref=f4e233]:
+              - checkbox "include unscored" [checked] [ref=f4e234]
+              - text: include unscored
+          - generic [ref=f4e235]:
+            - generic [ref=f4e236]: 5 · Website status
+            - generic [ref=f4e237]:
+              - button "Has website 14" [ref=f4e238] [cursor=pointer]
+              - button "No website 7" [ref=f4e239] [cursor=pointer]
+              - button "Not checked 3" [ref=f4e240] [cursor=pointer]
+          - generic [ref=f4e241]:
+            - generic [ref=f4e242]: 6 · Digital maturity
+            - generic [ref=f4e243]:
+              - spinbutton "Minimum digital maturity" [ref=f4e244]
+              - generic [ref=f4e245]: –
+              - spinbutton "Maximum digital maturity" [ref=f4e246]
+            - generic [ref=f4e247]:
+              - checkbox "include unassessed" [checked] [ref=f4e248]
+              - text: include unassessed
+          - generic [ref=f4e249]:
+            - generic [ref=f4e250]: 7 · Research confidence
+            - generic [ref=f4e251]:
+              - button "High 8" [ref=f4e252] [cursor=pointer]
+              - button "Medium 9" [ref=f4e253] [cursor=pointer]
+              - button "Low 5" [ref=f4e254] [cursor=pointer]
+              - button "No research 2" [ref=f4e255] [cursor=pointer]
+          - generic [ref=f4e256]:
+            - generic [ref=f4e257]: 8 · Verification status
+            - generic [ref=f4e258]:
+              - button "AI researched 3" [ref=f4e259] [cursor=pointer]
+              - button "Not verified 3" [ref=f4e260] [cursor=pointer]
+              - button "Verified 9" [ref=f4e261] [cursor=pointer]
+              - button "Ready 7" [ref=f4e262] [cursor=pointer]
+              - button "Rejected 1" [ref=f4e263] [cursor=pointer]
+              - button "Skipped 1" [ref=f4e264] [cursor=pointer]
+          - generic [ref=f4e265]:
+            - generic [ref=f4e266]:
+              - text: 9 · Contact status
+              - generic [ref=f4e267]: (any of)
+            - generic [ref=f4e268]:
+              - button "Email 15" [ref=f4e269] [cursor=pointer]
+              - button "Phone 12" [ref=f4e270] [cursor=pointer]
+              - button "WhatsApp 3" [ref=f4e271] [cursor=pointer]
+              - button "Unconfirmed 3" [ref=f4e272] [cursor=pointer]
+              - button "None 2" [ref=f4e273] [cursor=pointer]
+          - generic [ref=f4e274]:
+            - generic [ref=f4e275]: 10 · Outreach status
+            - generic [ref=f4e276]:
+              - button "Not contacted 14" [ref=f4e277] [cursor=pointer]
+              - button "Queued 1" [ref=f4e278] [cursor=pointer]
+              - button "Sent 1" [ref=f4e279] [cursor=pointer]
+              - button "Delivered 1" [ref=f4e280] [cursor=pointer]
+              - button "Bounced 1" [ref=f4e281] [cursor=pointer]
+              - button "Failed 1" [ref=f4e282] [cursor=pointer]
+              - button "Responded 2" [ref=f4e283] [cursor=pointer]
+              - button "Interested 1" [ref=f4e284] [cursor=pointer]
+              - button "Blocked 2" [ref=f4e285] [cursor=pointer]
+          - generic [ref=f4e286]:
+            - generic [ref=f4e287]: 11 · Date discovered
+            - generic [ref=f4e288]:
+              - button "26 Aug only" [ref=f4e289] [cursor=pointer]
+              - button "last 7 days" [ref=f4e290] [cursor=pointer]
+            - generic [ref=f4e291]:
+              - textbox "Discovered from" [ref=f4e292]
+              - generic [ref=f4e293]: –
+              - textbox "Discovered to" [ref=f4e294]
+        - generic [ref=f4e295]:
+          - status [ref=f4e296]: Showing 24 of 24 businesses
+          - generic [ref=f4e297]: no filters active
+          - generic [ref=f4e298]: Sorted by score desc (within category groups)
+    - region [ref=f4e299]:
+      - generic [ref=f4e300]:
+        - heading "Businesses" [level=2] [ref=f4e301]
+        - generic [ref=f4e302]: City tab, then industry tab within the city; category groups inside the pane.
+      - tablist "City" [ref=f4e303]:
+        - tab "All 24" [selected] [ref=f4e304] [cursor=pointer]:
+          - text: All
+          - generic [ref=f4e305]: "24"
+        - tab "Dhule 7" [ref=f4e306] [cursor=pointer]:
+          - text: Dhule
+          - generic [ref=f4e307]: "7"
+        - tab "Shirpur 5" [ref=f4e308] [cursor=pointer]:
+          - text: Shirpur
+          - generic [ref=f4e309]: "5"
+        - tab "Nashik 8" [ref=f4e310] [cursor=pointer]:
+          - text: Nashik
+          - generic [ref=f4e311]: "8"
+        - tab "Jalgaon 4" [ref=f4e312] [cursor=pointer]:
+          - text: Jalgaon
+          - generic [ref=f4e313]: "4"
+      - tablist "Industry" [ref=f4e314]:
+        - tab "All 24" [selected] [ref=f4e315] [cursor=pointer]:
+          - text: All
+          - generic [ref=f4e316]: "24"
+        - tab "Healthcare 4" [ref=f4e317] [cursor=pointer]:
+          - text: Healthcare
+          - generic [ref=f4e318]: "4"
+        - tab "Education 3" [ref=f4e319] [cursor=pointer]:
+          - text: Education
+          - generic [ref=f4e320]: "3"
+        - tab "Automobile 2" [ref=f4e321] [cursor=pointer]:
+          - text: Automobile
+          - generic [ref=f4e322]: "2"
+        - tab "Manufacturing 4" [ref=f4e323] [cursor=pointer]:
+          - text: Manufacturing
+          - generic [ref=f4e324]: "4"
+        - tab "Retail 3" [ref=f4e325] [cursor=pointer]:
+          - text: Retail
+          - generic [ref=f4e326]: "3"
+        - tab "Hospitality 2" [ref=f4e327] [cursor=pointer]:
+          - text: Hospitality
+          - generic [ref=f4e328]: "2"
+        - tab "Distribution 4" [ref=f4e329] [cursor=pointer]:
+          - text: Distribution
+          - generic [ref=f4e330]: "4"
+        - tab "Real estate 1" [ref=f4e331] [cursor=pointer]:
+          - text: Real estate
+          - generic [ref=f4e332]: "1"
+        - tab "Professional services 1" [ref=f4e333] [cursor=pointer]:
+          - text: Professional services
+          - generic [ref=f4e334]: "1"
+      - tabpanel "All 24" [ref=f4e335]:
+        - table [ref=f4e336]:
+          - caption [ref=f4e337]: All cities · all industries · 14 columns per spec section 9, plus Industry because the grouping context is gone in this pane
+          - rowgroup [ref=f4e338]:
+            - row [ref=f4e339]:
+              - columnheader [ref=f4e340]:
+                - checkbox "Select all eligible visible rows" [ref=f4e341]
+              - columnheader "Business" [ref=f4e342] [cursor=pointer]
+              - columnheader "City" [ref=f4e343] [cursor=pointer]
+              - columnheader "Industry" [ref=f4e344] [cursor=pointer]
+              - columnheader "Category" [ref=f4e345] [cursor=pointer]
+              - columnheader "Size" [ref=f4e346] [cursor=pointer]
+              - columnheader "Website" [ref=f4e347] [cursor=pointer]
+              - columnheader "Digital maturity" [ref=f4e348] [cursor=pointer]
+              - columnheader "Opportunity score▼" [ref=f4e349] [cursor=pointer]
+              - columnheader "Potential solution" [ref=f4e350] [cursor=pointer]
+              - columnheader "Contact available" [ref=f4e351] [cursor=pointer]
+              - columnheader "Research confidence" [ref=f4e352] [cursor=pointer]
+              - columnheader "Verification status" [ref=f4e353] [cursor=pointer]
+              - columnheader "Outreach status" [ref=f4e354] [cursor=pointer]
+              - columnheader "Actions" [ref=f4e355]
+          - rowgroup [ref=f4e356]:
+            - row [ref=f4e357]:
+              - columnheader "Distributors(4)" [ref=f4e358]
+            - row [ref=f4e359]:
+              - cell "Select Golf Agro Distributors Verified, but no confirmed contact yet." [ref=f4e360]:
+                - checkbox "Select Golf Agro Distributors" [disabled] [ref=f4e361]
+                - note [ref=f4e362]: i
+                - generic [ref=f4e363]: Verified, but no confirmed contact yet.
+              - cell "Golf Agro Distributors↗ Distributor · Dhule · discovered 22 Aug 2026" [ref=f4e364]:
+                - link "Golf Agro Distributors" [ref=f4e365] [cursor=pointer]:
+                  - /url: "#biz-A7"
+                - link "↗" [ref=f4e366] [cursor=pointer]:
+                  - /url: https://golf-agro.example/
+                - generic [ref=f4e367]: Distributor · Dhule · discovered 22 Aug 2026
+              - cell "Dhule" [ref=f4e368]
+              - cell "Distribution" [ref=f4e369]
+              - cell "Distributor" [ref=f4e370]
+              - cell "SMALL" [ref=f4e371]
+              - cell [ref=f4e373]:
+                - link "Yes" [ref=f4e374] [cursor=pointer]:
+                  - /url: https://golf-agro.example/
+              - cell "30" [ref=f4e375]
+              - cell "77" [ref=f4e378]:
+                - 'generic "MEDIUM: 60-79" [ref=f4e379]': "77"
+              - cell "Stock and Route Distribution System" [ref=f4e380]
+              - cell "?" [ref=f4e381]:
+                - generic "1 contact found; the confirmed address bounced and was retired" [ref=f4e382]: "?"
+              - cell "MEDIUM" [ref=f4e383]:
+                - generic "confidence 66%" [ref=f4e384]: MEDIUM
+              - cell "VERIFIED" [ref=f4e385]
+              - cell "BOUNCED" [ref=f4e387]
+              - cell [ref=f4e389]:
+                - button "Research" [ref=f4e390] [cursor=pointer]
+                - link "View" [ref=f4e391] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000A7
+                - link "Message" [ref=f4e392] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach/drf_A7
+                - button "History" [ref=f4e393] [cursor=pointer]
+                - link "No contact" [ref=f4e394] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000A7#contacts
+            - row [ref=f4e395]:
+              - cell "Select Whiskey Agri Traders This business still needs your verification." [ref=f4e396]:
+                - checkbox "Select Whiskey Agri Traders" [disabled] [ref=f4e397]
+                - note [ref=f4e398]: i
+                - generic [ref=f4e399]: This business still needs your verification.
+              - cell "Whiskey Agri Traders Distributor · Jalgaon · discovered 25 Aug 2026" [ref=f4e400]:
+                - link "Whiskey Agri Traders" [ref=f4e401] [cursor=pointer]:
+                  - /url: "#biz-D2"
+                - generic [ref=f4e402]: Distributor · Jalgaon · discovered 25 Aug 2026
+              - cell "Jalgaon" [ref=f4e403]
+              - cell "Distribution" [ref=f4e404]
+              - cell "Distributor" [ref=f4e405]
+              - cell "SMALL" [ref=f4e406]
+              - cell "No" [ref=f4e408]
+              - cell "20" [ref=f4e409]
+              - cell "67" [ref=f4e412]:
+                - 'generic "MEDIUM: 60-79" [ref=f4e413]': "67"
+              - cell "Stock and Route Distribution System" [ref=f4e414]
+              - cell "P" [ref=f4e415]:
+                - generic "Business phone available" [ref=f4e416]: P
+              - cell "MEDIUM" [ref=f4e417]:
+                - generic "confidence 57%" [ref=f4e418]: MEDIUM
+              - cell "NOT VERIFIED" [ref=f4e419]
+              - cell "NOT CONTACTED" [ref=f4e421]
+              - cell [ref=f4e423]:
+                - button "Research" [ref=f4e424] [cursor=pointer]
+                - link "View" [ref=f4e425] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000D2
+                - link "Verify" [ref=f4e426] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/verify/biz_01JSAMPLE00000000000000D2?from=export
+                - link "Needs verification" [ref=f4e427] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/verify/biz_01JSAMPLE00000000000000D2
+            - row [ref=f4e428]:
+              - cell "Select Lima Provisions Wholesale You rejected or skipped this business." [ref=f4e429]:
+                - checkbox "Select Lima Provisions Wholesale" [disabled] [ref=f4e430]
+                - note [ref=f4e431]: i
+                - generic [ref=f4e432]: You rejected or skipped this business.
+              - cell "Lima Provisions Wholesale Distributor · Shirpur · discovered 25 Aug 2026" [ref=f4e433]:
+                - link "Lima Provisions Wholesale" [ref=f4e434] [cursor=pointer]:
+                  - /url: "#biz-B4"
+                - generic [ref=f4e435]: Distributor · Shirpur · discovered 25 Aug 2026
+              - cell "Shirpur" [ref=f4e436]
+              - cell "Distribution" [ref=f4e437]
+              - cell "Distributor" [ref=f4e438]
+              - cell "SMALL" [ref=f4e439]
+              - cell "no data" [ref=f4e441]: —
+              - cell "18" [ref=f4e442]
+              - cell "55" [ref=f4e445]:
+                - 'generic "LOW: below 60" [ref=f4e446]': "55"
+              - cell "no data" [ref=f4e447]: —
+              - cell "?" [ref=f4e448]:
+                - generic "1 contact found, not confirmed" [ref=f4e449]: "?"
+              - cell "LOW" [ref=f4e450]:
+                - generic "confidence 38%" [ref=f4e451]: LOW
+              - cell "SKIPPED" [ref=f4e452]
+              - cell "NOT CONTACTED" [ref=f4e454]
+              - cell [ref=f4e456]:
+                - button "Research" [ref=f4e457] [cursor=pointer]
+                - link "View" [ref=f4e458] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000B4
+                - link "Out of scope" [ref=f4e459] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000B4
+            - row [ref=f4e460]:
+              - cell "Select Uniform Cold Storage This business still needs your verification." [ref=f4e461]:
+                - checkbox "Select Uniform Cold Storage" [disabled] [ref=f4e462]
+                - note [ref=f4e463]: i
+                - generic [ref=f4e464]: This business still needs your verification.
+              - cell "Uniform Cold Storage Distributor · Nashik · discovered 26 Aug 2026" [ref=f4e465]:
+                - link "Uniform Cold Storage" [ref=f4e466] [cursor=pointer]:
+                  - /url: "#biz-C8"
+                - generic [ref=f4e467]: Distributor · Nashik · discovered 26 Aug 2026
+              - cell "Nashik" [ref=f4e468]
+              - cell "Distribution" [ref=f4e469]
+              - cell "Distributor" [ref=f4e470]
+              - cell "UNKNOWN" [ref=f4e471]
+              - cell "no data" [ref=f4e473]: —
+              - cell "no data" [ref=f4e474]: —
+              - cell "no data" [ref=f4e475]: —
+              - cell "no data" [ref=f4e476]: —
+              - cell "no data" [ref=f4e477]: —
+              - cell "no data" [ref=f4e478]: —
+              - cell "AI RESEARCHED" [ref=f4e479]
+              - cell "NOT CONTACTED" [ref=f4e481]
+              - cell "Research View Verify Not researched" [ref=f4e483]:
+                - button "Research" [ref=f4e484] [cursor=pointer]
+                - link "View" [ref=f4e485] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000C8
+                - link "Verify" [ref=f4e486] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/verify/biz_01JSAMPLE00000000000000C8?from=export
+                - generic [ref=f4e487]: Not researched
+          - rowgroup [ref=f4e488]:
+            - row [ref=f4e489]:
+              - columnheader "Manufacturers(4)" [ref=f4e490]
+            - row [ref=f4e491]:
+              - cell "Select November Wine Estates This is a live lead - the machine stops here and you take it." [ref=f4e492]:
+                - checkbox "Select November Wine Estates" [disabled] [ref=f4e493]
+                - note [ref=f4e494]: i
+                - generic [ref=f4e495]: This is a live lead - the machine stops here and you take it.
+              - cell "November Wine Estates↗ Manufacturer · Nashik · discovered 20 Aug 2026" [ref=f4e496]:
+                - link "November Wine Estates" [ref=f4e497] [cursor=pointer]:
+                  - /url: "#biz-C1"
+                - link "↗" [ref=f4e498] [cursor=pointer]:
+                  - /url: https://november-wine.example/
+                - generic [ref=f4e499]: Manufacturer · Nashik · discovered 20 Aug 2026
+              - cell "Nashik" [ref=f4e500]
+              - cell "Manufacturing" [ref=f4e501]
+              - cell "Manufacturer" [ref=f4e502]
+              - cell "MEDIUM" [ref=f4e503]
+              - cell [ref=f4e505]:
+                - link "Yes" [ref=f4e506] [cursor=pointer]:
+                  - /url: https://november-wine.example/
+              - cell "58" [ref=f4e507]
+              - cell "88" [ref=f4e510]:
+                - 'generic "HIGH: 80-100" [ref=f4e511]': "88"
+              - cell "Production and Dispatch Control" [ref=f4e512]
+              - cell "E P W" [ref=f4e513]:
+                - generic "Business email available" [ref=f4e514]: E
+                - generic "Business phone available" [ref=f4e515]: P
+                - generic "WhatsApp number available" [ref=f4e516]: W
+              - cell "HIGH" [ref=f4e517]:
+                - generic "confidence 90%" [ref=f4e518]: HIGH
+              - cell "VERIFIED" [ref=f4e519]
+              - cell "INTERESTED" [ref=f4e521]
+              - cell [ref=f4e523]:
+                - button "Research" [ref=f4e524] [cursor=pointer]
+                - link "View" [ref=f4e525] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000C1
+                - link "Message" [ref=f4e526] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach/drf_C1
+                - button "History" [ref=f4e527] [cursor=pointer]
+                - link "With you - live lead" [ref=f4e528] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/handoffs
+            - row [ref=f4e529]:
+              - cell [ref=f4e530]:
+                - checkbox "Select Mike Cotton Ginning Works" [ref=f4e531]
+              - cell "Mike Cotton Ginning Works Manufacturer · Shirpur · discovered 23 Aug 2026" [ref=f4e532]:
+                - link "Mike Cotton Ginning Works" [ref=f4e533] [cursor=pointer]:
+                  - /url: "#biz-B5"
+                - generic [ref=f4e534]: Manufacturer · Shirpur · discovered 23 Aug 2026
+              - cell "Shirpur" [ref=f4e535]
+              - cell "Manufacturing" [ref=f4e536]
+              - cell "Manufacturer" [ref=f4e537]
+              - cell "MEDIUM" [ref=f4e538]
+              - cell "No" [ref=f4e540]
+              - cell "26" [ref=f4e541]
+              - cell "79" [ref=f4e544]:
+                - 'generic "MEDIUM: 60-79" [ref=f4e545]': "79"
+              - cell "Lot Tracking and Weighbridge Log" [ref=f4e546]
+              - cell "E P" [ref=f4e547]:
+                - generic "Business email available" [ref=f4e548]: E
+                - generic "Business phone available" [ref=f4e549]: P
+              - cell "MEDIUM" [ref=f4e550]:
+                - generic "confidence 59%" [ref=f4e551]: MEDIUM
+              - cell "READY" [ref=f4e552]
+              - cell "NOT CONTACTED" [ref=f4e554]
+              - cell [ref=f4e556]:
+                - button "Research" [ref=f4e557] [cursor=pointer]
+                - link "View" [ref=f4e558] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000B5
+                - link "Prepare" [ref=f4e559] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000B5
+                - link "Ready to prepare" [ref=f4e560] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000B5
+            - row [ref=f4e561]:
+              - cell [ref=f4e562]:
+                - checkbox "Select Papa Polymers Private Limited" [ref=f4e563]
+              - cell "Papa Polymers Private Limited↗ Manufacturer · Nashik · discovered 21 Aug 2026" [ref=f4e564]:
+                - link "Papa Polymers Private Limited" [ref=f4e565] [cursor=pointer]:
+                  - /url: "#biz-C3"
+                - link "↗" [ref=f4e566] [cursor=pointer]:
+                  - /url: https://papa-polymers.example/
+                - generic [ref=f4e567]: Manufacturer · Nashik · discovered 21 Aug 2026
+              - cell "Nashik" [ref=f4e568]
+              - cell "Manufacturing" [ref=f4e569]
+              - cell "Manufacturer" [ref=f4e570]
+              - cell "LARGE" [ref=f4e571]
+              - cell [ref=f4e573]:
+                - link "Yes" [ref=f4e574] [cursor=pointer]:
+                  - /url: https://papa-polymers.example/
+              - cell "52" [ref=f4e575]
+              - cell "76" [ref=f4e578]:
+                - 'generic "MEDIUM: 60-79" [ref=f4e579]': "76"
+              - cell "Plant Maintenance and QC Log" [ref=f4e580]
+              - cell "E" [ref=f4e581]:
+                - generic "Business email available" [ref=f4e582]: E
+              - cell "MEDIUM" [ref=f4e583]:
+                - generic "confidence 68%" [ref=f4e584]: MEDIUM
+              - cell "READY" [ref=f4e585]
+              - cell "POLICY BLOCKED" [ref=f4e587]
+              - cell [ref=f4e589]:
+                - button "Research" [ref=f4e590] [cursor=pointer]
+                - link "View" [ref=f4e591] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000C3
+                - link "Prepare" [ref=f4e592] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000C3
+                - link "Message" [ref=f4e593] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach/drf_C3
+                - link "Policy blocked" [ref=f4e594] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach/drf_C3
+            - row [ref=f4e595]:
+              - cell "Select Foxtrot Steel Fabricators You rejected or skipped this business." [ref=f4e596]:
+                - checkbox "Select Foxtrot Steel Fabricators" [disabled] [ref=f4e597]
+                - note [ref=f4e598]: i
+                - generic [ref=f4e599]: You rejected or skipped this business.
+              - cell "Foxtrot Steel Fabricators Manufacturer · Dhule · discovered 24 Aug 2026" [ref=f4e600]:
+                - link "Foxtrot Steel Fabricators" [ref=f4e601] [cursor=pointer]:
+                  - /url: "#biz-A6"
+                - generic [ref=f4e602]: Manufacturer · Dhule · discovered 24 Aug 2026
+              - cell "Dhule" [ref=f4e603]
+              - cell "Manufacturing" [ref=f4e604]
+              - cell "Manufacturer" [ref=f4e605]
+              - cell "SMALL" [ref=f4e606]
+              - cell "No" [ref=f4e608]
+              - cell "22" [ref=f4e609]
+              - cell "59" [ref=f4e612]:
+                - 'generic "LOW: below 60" [ref=f4e613]': "59"
+              - cell "Job Card and Dispatch Tracker" [ref=f4e614]
+              - cell "P" [ref=f4e615]:
+                - generic "Business phone available" [ref=f4e616]: P
+              - cell "LOW" [ref=f4e617]:
+                - generic "confidence 41%" [ref=f4e618]: LOW
+              - cell "REJECTED" [ref=f4e619]
+              - cell "NOT CONTACTED" [ref=f4e621]
+              - cell [ref=f4e623]:
+                - button "Research" [ref=f4e624] [cursor=pointer]
+                - link "View" [ref=f4e625] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000A6
+                - link "Out of scope" [ref=f4e626] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000A6
+          - rowgroup [ref=f4e627]:
+            - row [ref=f4e628]:
+              - columnheader "Colleges(2)" [ref=f4e629]
+            - row [ref=f4e630]:
+              - cell [ref=f4e631]:
+                - checkbox "Select Tango Institute of Technology" [ref=f4e632]
+              - cell "Tango Institute of Technology↗ College · Nashik · discovered 20 Aug 2026" [ref=f4e633]:
+                - link "Tango Institute of Technology" [ref=f4e634] [cursor=pointer]:
+                  - /url: "#biz-C7"
+                - link "↗" [ref=f4e635] [cursor=pointer]:
+                  - /url: https://tango-institute.example/
+                - generic [ref=f4e636]: College · Nashik · discovered 20 Aug 2026
+              - cell "Nashik" [ref=f4e637]
+              - cell "Education" [ref=f4e638]
+              - cell "College" [ref=f4e639]
+              - cell "LARGE" [ref=f4e640]
+              - cell [ref=f4e642]:
+                - link "Yes" [ref=f4e643] [cursor=pointer]:
+                  - /url: https://tango-institute.example/
+              - cell "66" [ref=f4e644]
+              - cell "89" [ref=f4e647]:
+                - 'generic "HIGH: 80-100" [ref=f4e648]': "89"
+              - cell "Campus and Attendance System" [ref=f4e649]
+              - cell "E P" [ref=f4e650]:
+                - generic "Business email available" [ref=f4e651]: E
+                - generic "Business phone available" [ref=f4e652]: P
+              - cell "HIGH" [ref=f4e653]:
+                - generic "confidence 92%" [ref=f4e654]: HIGH
+              - cell "READY" [ref=f4e655]
+              - cell "NOT CONTACTED" [ref=f4e657]
+              - cell [ref=f4e659]:
+                - button "Research" [ref=f4e660] [cursor=pointer]
+                - link "View" [ref=f4e661] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000C7
+                - link "Prepare" [ref=f4e662] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000C7
+                - link "Ready to prepare" [ref=f4e663] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000C7
+            - row [ref=f4e664]:
+              - cell "Select Juliet Junior College This business replied that it is not interested." [ref=f4e665]:
+                - checkbox "Select Juliet Junior College" [disabled] [ref=f4e666]
+                - note [ref=f4e667]: i
+                - generic [ref=f4e668]: This business replied that it is not interested.
+              - cell "Juliet Junior College↗ College · Shirpur · discovered 21 Aug 2026" [ref=f4e669]:
+                - link "Juliet Junior College" [ref=f4e670] [cursor=pointer]:
+                  - /url: "#biz-B2"
+                - link "↗" [ref=f4e671] [cursor=pointer]:
+                  - /url: https://juliet-college.example/
+                - generic [ref=f4e672]: College · Shirpur · discovered 21 Aug 2026
+              - cell "Shirpur" [ref=f4e673]
+              - cell "Education" [ref=f4e674]
+              - cell "College" [ref=f4e675]
+              - cell "MEDIUM" [ref=f4e676]
+              - cell [ref=f4e678]:
+                - link "Yes" [ref=f4e679] [cursor=pointer]:
+                  - /url: https://juliet-college.example/
+              - cell "48" [ref=f4e680]
+              - cell "83" [ref=f4e683]:
+                - 'generic "HIGH: 80-100" [ref=f4e684]': "83"
+              - cell "Campus and Attendance System" [ref=f4e685]
+              - cell "E" [ref=f4e686]:
+                - generic "Business email available" [ref=f4e687]: E
+              - cell "HIGH" [ref=f4e688]:
+                - generic "confidence 81%" [ref=f4e689]: HIGH
+              - cell "VERIFIED" [ref=f4e690]
+              - cell "RESPONDED" [ref=f4e692]
+              - cell [ref=f4e694]:
+                - button "Research" [ref=f4e695] [cursor=pointer]
+                - link "View" [ref=f4e696] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000B2
+                - link "Message" [ref=f4e697] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach/drf_B2
+                - button "History" [ref=f4e698] [cursor=pointer]
+                - 'link "Blocked: this business replied that it is not interested" [ref=f4e699] [cursor=pointer]':
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000B2#history
+          - rowgroup [ref=f4e700]:
+            - row [ref=f4e701]:
+              - columnheader "Diagnostic centres(2)" [ref=f4e702]
+            - row [ref=f4e703]:
+              - cell [ref=f4e704]:
+                - checkbox "Select Bravo Diagnostics Centre" [ref=f4e705]
+              - cell "Bravo Diagnostics Centre Diagnostic centre · Dhule · discovered 24 Aug 2026" [ref=f4e706]:
+                - link "Bravo Diagnostics Centre" [ref=f4e707] [cursor=pointer]:
+                  - /url: "#biz-A2"
+                - generic [ref=f4e708]: Diagnostic centre · Dhule · discovered 24 Aug 2026
+              - cell "Dhule" [ref=f4e709]
+              - cell "Healthcare" [ref=f4e710]
+              - cell "Diagnostic centre" [ref=f4e711]
+              - cell "SMALL" [ref=f4e712]
+              - cell "No" [ref=f4e714]
+              - cell "38" [ref=f4e715]
+              - cell "74" [ref=f4e718]:
+                - 'generic "MEDIUM: 60-79" [ref=f4e719]': "74"
+              - cell "Diagnostics Workflow and Reporting" [ref=f4e720]
+              - cell "E P" [ref=f4e721]:
+                - generic "Business email available" [ref=f4e722]: E
+                - generic "Business phone available" [ref=f4e723]: P
+              - cell "HIGH" [ref=f4e724]:
+                - generic "confidence 88%" [ref=f4e725]: HIGH
+              - cell "READY" [ref=f4e726]
+              - cell "NOT CONTACTED" [ref=f4e728]
+              - cell [ref=f4e730]:
+                - button "Research" [ref=f4e731] [cursor=pointer]
+                - link "View" [ref=f4e732] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000A2
+                - link "Prepare" [ref=f4e733] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000A2
+                - link "Ready to prepare" [ref=f4e734] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000A2
+            - row [ref=f4e735]:
+              - 'cell "Select Xray Diagnostics Lab Do not contact: an opt-out or suppression is recorded." [ref=f4e736]':
+                - checkbox "Select Xray Diagnostics Lab" [disabled] [ref=f4e737]
+                - note [ref=f4e738]: i
+                - generic [ref=f4e739]: "Do not contact: an opt-out or suppression is recorded."
+              - cell "Xray Diagnostics Lab↗ Diagnostic centre · Jalgaon · discovered 21 Aug 2026" [ref=f4e740]:
+                - link "Xray Diagnostics Lab" [ref=f4e741] [cursor=pointer]:
+                  - /url: "#biz-D3"
+                - link "↗" [ref=f4e742] [cursor=pointer]:
+                  - /url: https://xray-diagnostics.example/
+                - generic [ref=f4e743]: Diagnostic centre · Jalgaon · discovered 21 Aug 2026
+              - cell "Jalgaon" [ref=f4e744]
+              - cell "Healthcare" [ref=f4e745]
+              - cell "Diagnostic centre" [ref=f4e746]
+              - cell "MICRO" [ref=f4e747]
+              - cell [ref=f4e749]:
+                - link "Yes" [ref=f4e750] [cursor=pointer]:
+                  - /url: https://xray-diagnostics.example/
+              - cell "28" [ref=f4e751]
+              - cell "58" [ref=f4e754]:
+                - 'generic "LOW: below 60" [ref=f4e755]': "58"
+              - cell "Diagnostics Workflow and Reporting" [ref=f4e756]
+              - cell "E" [ref=f4e757]:
+                - generic "Business email available" [ref=f4e758]: E
+              - cell "LOW" [ref=f4e759]:
+                - generic "confidence 43%" [ref=f4e760]: LOW
+              - cell "VERIFIED" [ref=f4e761]
+              - cell "DO NOT CONTACT" [ref=f4e763]
+              - cell [ref=f4e765]:
+                - button "Research" [ref=f4e766] [cursor=pointer]
+                - link "View" [ref=f4e767] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000D3
+                - link "Message" [ref=f4e768] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach/drf_D3
+                - button "History" [ref=f4e769] [cursor=pointer]
+                - link "DO NOT CONTACT" [ref=f4e770] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000D3#suppression
+          - rowgroup [ref=f4e771]:
+            - row [ref=f4e772]:
+              - columnheader "Hospitals(2)" [ref=f4e773]
+            - row [ref=f4e774]:
+              - cell "Select Oscar Speciality Hospital A message for this business is already awaiting approval." [ref=f4e775]:
+                - checkbox "Select Oscar Speciality Hospital" [disabled] [ref=f4e776]
+                - note [ref=f4e777]: i
+                - generic [ref=f4e778]: A message for this business is already awaiting approval.
+              - cell "Oscar Speciality Hospital↗ Hospital · Nashik · discovered 20 Aug 2026" [ref=f4e779]:
+                - link "Oscar Speciality Hospital" [ref=f4e780] [cursor=pointer]:
+                  - /url: "#biz-C2"
+                - link "↗" [ref=f4e781] [cursor=pointer]:
+                  - /url: https://oscar-hospital.example/
+                - generic [ref=f4e782]: Hospital · Nashik · discovered 20 Aug 2026
+              - cell "Nashik" [ref=f4e783]
+              - cell "Healthcare" [ref=f4e784]
+              - cell "Hospital" [ref=f4e785]
+              - cell "LARGE" [ref=f4e786]
+              - cell [ref=f4e788]:
+                - link "Yes" [ref=f4e789] [cursor=pointer]:
+                  - /url: https://oscar-hospital.example/
+              - cell "71" [ref=f4e790]
+              - cell "91" [ref=f4e793]:
+                - 'generic "HIGH: 80-100" [ref=f4e794]': "91"
+              - cell "Hospital Operations Platform" [ref=f4e795]
+              - cell "E" [ref=f4e796]:
+                - generic "Business email available" [ref=f4e797]: E
+              - cell "HIGH" [ref=f4e798]:
+                - generic "confidence 86%" [ref=f4e799]: HIGH
+              - cell "READY" [ref=f4e800]
+              - cell "QUEUED" [ref=f4e802]
+              - cell [ref=f4e804]:
+                - button "Research" [ref=f4e805] [cursor=pointer]
+                - link "View" [ref=f4e806] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000C2
+                - link "Message" [ref=f4e807] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach/drf_C2
+                - link "Approved - send in Outreach" [ref=f4e808] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach/drf_C2
+            - row [ref=f4e809]:
+              - cell "Select ABC Hospital This business still needs your verification." [ref=f4e810]:
+                - checkbox "Select ABC Hospital" [disabled] [ref=f4e811]
+                - note [ref=f4e812]: i
+                - generic [ref=f4e813]: This business still needs your verification.
+              - cell "ABC Hospital↗ Hospital · Dhule · discovered 26 Aug 2026" [ref=f4e814]:
+                - link "ABC Hospital" [ref=f4e815] [cursor=pointer]:
+                  - /url: "#biz-A1"
+                - link "↗" [ref=f4e816] [cursor=pointer]:
+                  - /url: https://abc-hospital.example/
+                - generic [ref=f4e817]: Hospital · Dhule · discovered 26 Aug 2026
+              - cell "Dhule" [ref=f4e818]
+              - cell "Healthcare" [ref=f4e819]
+              - cell "Hospital" [ref=f4e820]
+              - cell "MEDIUM" [ref=f4e821]
+              - cell [ref=f4e823]:
+                - link "Yes" [ref=f4e824] [cursor=pointer]:
+                  - /url: https://abc-hospital.example/
+              - cell "62" [ref=f4e825]
+              - cell "86" [ref=f4e828]:
+                - 'generic "HIGH: 80-100" [ref=f4e829]': "86"
+              - cell "Hospital Operations Platform" [ref=f4e830]
+              - cell "E" [ref=f4e831]:
+                - generic "Business email available" [ref=f4e832]: E
+              - cell "MEDIUM" [ref=f4e833]:
+                - generic "confidence 64%" [ref=f4e834]: MEDIUM
+              - cell "NOT VERIFIED" [ref=f4e835]
+              - cell "NOT CONTACTED" [ref=f4e837]
+              - cell [ref=f4e839]:
+                - button "Research" [ref=f4e840] [cursor=pointer]
+                - link "View" [ref=f4e841] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000A1
+                - link "Verify" [ref=f4e842] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/verify/biz_01JSAMPLE00000000000000A1?from=export
+                - link "Needs verification" [ref=f4e843] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/verify/biz_01JSAMPLE00000000000000A1
+          - rowgroup [ref=f4e844]:
+            - row [ref=f4e845]:
+              - columnheader "Hotels(2)" [ref=f4e846]
+            - row [ref=f4e847]:
+              - cell [ref=f4e848]:
+                - checkbox "Select Yankee Hotels and Resorts" [ref=f4e849]
+              - cell "Yankee Hotels and Resorts↗ Hotel · Jalgaon · discovered 22 Aug 2026" [ref=f4e850]:
+                - link "Yankee Hotels and Resorts" [ref=f4e851] [cursor=pointer]:
+                  - /url: "#biz-D4"
+                - link "↗" [ref=f4e852] [cursor=pointer]:
+                  - /url: https://yankee-resorts.example/
+                - generic [ref=f4e853]: Hotel · Jalgaon · discovered 22 Aug 2026
+              - cell "Jalgaon" [ref=f4e854]
+              - cell "Hospitality" [ref=f4e855]
+              - cell "Hotel" [ref=f4e856]
+              - cell "LARGE" [ref=f4e857]
+              - cell [ref=f4e859]:
+                - link "Yes" [ref=f4e860] [cursor=pointer]:
+                  - /url: https://yankee-resorts.example/
+              - cell "61" [ref=f4e861]
+              - cell "80" [ref=f4e864]:
+                - 'generic "HIGH: 80-100" [ref=f4e865]': "80"
+              - cell "Front Desk and Booking Console" [ref=f4e866]
+              - cell "E P W" [ref=f4e867]:
+                - generic "Business email available" [ref=f4e868]: E
+                - generic "Business phone available" [ref=f4e869]: P
+                - generic "WhatsApp number available" [ref=f4e870]: W
+              - cell "HIGH" [ref=f4e871]:
+                - generic "confidence 83%" [ref=f4e872]: HIGH
+              - cell "VERIFIED" [ref=f4e873]
+              - cell "RESPONDED" [ref=f4e875]
+              - cell [ref=f4e877]:
+                - button "Research" [ref=f4e878] [cursor=pointer]
+                - link "View" [ref=f4e879] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000D4
+                - link "Prepare" [ref=f4e880] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000D4
+                - link "Message" [ref=f4e881] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach/drf_D4
+                - button "History" [ref=f4e882] [cursor=pointer]
+                - link "Follow-up available" [ref=f4e883] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000D4
+            - row [ref=f4e884]:
+              - cell "Select Hotel India Residency Contacted too recently - the minimum gap has not elapsed." [ref=f4e885]:
+                - checkbox "Select Hotel India Residency" [disabled] [ref=f4e886]
+                - note [ref=f4e887]: i
+                - generic [ref=f4e888]: Contacted too recently - the minimum gap has not elapsed.
+              - cell "Hotel India Residency↗ Hotel · Shirpur · discovered 23 Aug 2026" [ref=f4e889]:
+                - link "Hotel India Residency" [ref=f4e890] [cursor=pointer]:
+                  - /url: "#biz-B1"
+                - link "↗" [ref=f4e891] [cursor=pointer]:
+                  - /url: https://hotel-india-residency.example/
+                - generic [ref=f4e892]: Hotel · Shirpur · discovered 23 Aug 2026
+              - cell "Shirpur" [ref=f4e893]
+              - cell "Hospitality" [ref=f4e894]
+              - cell "Hotel" [ref=f4e895]
+              - cell "SMALL" [ref=f4e896]
+              - cell [ref=f4e898]:
+                - link "Yes" [ref=f4e899] [cursor=pointer]:
+                  - /url: https://hotel-india-residency.example/
+              - cell "41" [ref=f4e900]
+              - cell "72" [ref=f4e903]:
+                - 'generic "MEDIUM: 60-79" [ref=f4e904]': "72"
+              - cell "Front Desk and Booking Console" [ref=f4e905]
+              - cell "E P" [ref=f4e906]:
+                - generic "Business email available" [ref=f4e907]: E
+                - generic "Business phone available" [ref=f4e908]: P
+              - cell "MEDIUM" [ref=f4e909]:
+                - generic "confidence 63%" [ref=f4e910]: MEDIUM
+              - cell "VERIFIED" [ref=f4e911]
+              - cell "SENT" [ref=f4e913]
+              - cell [ref=f4e915]:
+                - button "Research" [ref=f4e916] [cursor=pointer]
+                - link "View" [ref=f4e917] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000B1
+                - link "Message" [ref=f4e918] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach/drf_B1
+                - button "History" [ref=f4e919] [cursor=pointer]
+                - 'link "Blocked: contacted too recently - the minimum gap has not elapsed" [ref=f4e920] [cursor=pointer]':
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000B1#history
+          - rowgroup [ref=f4e921]:
+            - row [ref=f4e922]:
+              - columnheader "Retail stores(2)" [ref=f4e923]
+            - row [ref=f4e924]:
+              - cell "Select Sierra Supermart The maximum number of outreach attempts has been reached." [ref=f4e925]:
+                - checkbox "Select Sierra Supermart" [disabled] [ref=f4e926]
+                - note [ref=f4e927]: i
+                - generic [ref=f4e928]: The maximum number of outreach attempts has been reached.
+              - cell "Sierra Supermart Retail store · Nashik · discovered 21 Aug 2026" [ref=f4e929]:
+                - link "Sierra Supermart" [ref=f4e930] [cursor=pointer]:
+                  - /url: "#biz-C6"
+                - generic [ref=f4e931]: Retail store · Nashik · discovered 21 Aug 2026
+              - cell "Nashik" [ref=f4e932]
+              - cell "Retail" [ref=f4e933]
+              - cell "Retail store" [ref=f4e934]
+              - cell "MEDIUM" [ref=f4e935]
+              - cell "No" [ref=f4e937]
+              - cell "40" [ref=f4e938]
+              - cell "84" [ref=f4e941]:
+                - 'generic "HIGH: 80-100" [ref=f4e942]': "84"
+              - cell "Retail Billing and Stock Suite" [ref=f4e943]
+              - cell "E" [ref=f4e944]:
+                - generic "Business email available" [ref=f4e945]: E
+              - cell "HIGH" [ref=f4e946]:
+                - generic "confidence 79%" [ref=f4e947]: HIGH
+              - cell "VERIFIED" [ref=f4e948]
+              - cell "FAILED" [ref=f4e950]
+              - cell [ref=f4e952]:
+                - button "Research" [ref=f4e953] [cursor=pointer]
+                - link "View" [ref=f4e954] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000C6
+                - link "Message" [ref=f4e955] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach/drf_C6
+                - button "History" [ref=f4e956] [cursor=pointer]
+                - 'link "Blocked: the maximum number of outreach attempts has been reached" [ref=f4e957] [cursor=pointer]':
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000C6#history
+            - row [ref=f4e958]:
+              - cell [ref=f4e959]:
+                - checkbox "Select Victor Gold Jewellers" [ref=f4e960]
+              - cell "Victor Gold Jewellers↗ Retail store · Jalgaon · discovered 24 Aug 2026" [ref=f4e961]:
+                - link "Victor Gold Jewellers" [ref=f4e962] [cursor=pointer]:
+                  - /url: "#biz-D1"
+                - link "↗" [ref=f4e963] [cursor=pointer]:
+                  - /url: https://victor-jewellers.example/
+                - generic [ref=f4e964]: Retail store · Jalgaon · discovered 24 Aug 2026
+              - cell "Jalgaon" [ref=f4e965]
+              - cell "Retail" [ref=f4e966]
+              - cell "Retail store" [ref=f4e967]
+              - cell "SMALL" [ref=f4e968]
+              - cell [ref=f4e970]:
+                - link "Yes" [ref=f4e971] [cursor=pointer]:
+                  - /url: https://victor-jewellers.example/
+              - cell "33" [ref=f4e972]
+              - cell "73" [ref=f4e975]:
+                - 'generic "MEDIUM: 60-79" [ref=f4e976]': "73"
+              - cell "Retail Billing and Stock Suite" [ref=f4e977]
+              - cell "E" [ref=f4e978]:
+                - generic "Business email available" [ref=f4e979]: E
+              - cell "MEDIUM" [ref=f4e980]:
+                - generic "confidence 65%" [ref=f4e981]: MEDIUM
+              - cell "READY" [ref=f4e982]
+              - cell "NOT CONTACTED" [ref=f4e984]
+              - cell [ref=f4e986]:
+                - button "Research" [ref=f4e987] [cursor=pointer]
+                - link "View" [ref=f4e988] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000D1
+                - link "Prepare" [ref=f4e989] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000D1
+                - link "Ready to prepare" [ref=f4e990] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000D1
+          - rowgroup [ref=f4e991]:
+            - row [ref=f4e992]:
+              - columnheader "Bakeries(1)" [ref=f4e993]
+            - row [ref=f4e994]:
+              - cell "Select Echo Sweets and Bakery This business still needs your verification." [ref=f4e995]:
+                - checkbox "Select Echo Sweets and Bakery" [disabled] [ref=f4e996]
+                - note [ref=f4e997]: i
+                - generic [ref=f4e998]: This business still needs your verification.
+              - cell "Echo Sweets and Bakery Bakery · Dhule · discovered 26 Aug 2026" [ref=f4e999]:
+                - link "Echo Sweets and Bakery" [ref=f4e1000] [cursor=pointer]:
+                  - /url: "#biz-A5"
+                - generic [ref=f4e1001]: Bakery · Dhule · discovered 26 Aug 2026
+              - cell "Dhule" [ref=f4e1002]
+              - cell "Retail" [ref=f4e1003]
+              - cell "Bakery" [ref=f4e1004]
+              - cell "MICRO" [ref=f4e1005]
+              - cell "no data" [ref=f4e1007]: —
+              - cell "no data" [ref=f4e1008]: —
+              - cell "no data" [ref=f4e1009]: —
+              - cell "no data" [ref=f4e1010]: —
+              - cell "no data" [ref=f4e1011]: —
+              - cell "no data" [ref=f4e1012]: —
+              - cell "AI RESEARCHED" [ref=f4e1013]
+              - cell "NOT CONTACTED" [ref=f4e1015]
+              - cell "Research View Verify Not researched" [ref=f4e1017]:
+                - button "Research" [ref=f4e1018] [cursor=pointer]
+                - link "View" [ref=f4e1019] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000A5
+                - link "Verify" [ref=f4e1020] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/verify/biz_01JSAMPLE00000000000000A5?from=export
+                - generic [ref=f4e1021]: Not researched
+          - rowgroup [ref=f4e1022]:
+            - row [ref=f4e1023]:
+              - columnheader "Garages(1)" [ref=f4e1024]
+            - row [ref=f4e1025]:
+              - cell "Select Kilo Auto Garage This business still needs your verification." [ref=f4e1026]:
+                - checkbox "Select Kilo Auto Garage" [disabled] [ref=f4e1027]
+                - note [ref=f4e1028]: i
+                - generic [ref=f4e1029]: This business still needs your verification.
+              - cell "Kilo Auto Garage Garage · Shirpur · discovered 25 Aug 2026" [ref=f4e1030]:
+                - link "Kilo Auto Garage" [ref=f4e1031] [cursor=pointer]:
+                  - /url: "#biz-B3"
+                - generic [ref=f4e1032]: Garage · Shirpur · discovered 25 Aug 2026
+              - cell "Shirpur" [ref=f4e1033]
+              - cell "Automobile" [ref=f4e1034]
+              - cell "Garage" [ref=f4e1035]
+              - cell "MICRO" [ref=f4e1036]
+              - cell "No" [ref=f4e1038]
+              - cell "12" [ref=f4e1039]
+              - cell "64" [ref=f4e1042]:
+                - 'generic "MEDIUM: 60-79" [ref=f4e1043]': "64"
+              - cell "Workshop Job Tracker" [ref=f4e1044]
+              - cell "P" [ref=f4e1045]:
+                - generic "Business phone available" [ref=f4e1046]: P
+              - cell "LOW" [ref=f4e1047]:
+                - generic "confidence 44%" [ref=f4e1048]: LOW
+              - cell "NOT VERIFIED" [ref=f4e1049]
+              - cell "NOT CONTACTED" [ref=f4e1051]
+              - cell [ref=f4e1053]:
+                - button "Research" [ref=f4e1054] [cursor=pointer]
+                - link "View" [ref=f4e1055] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000B3
+                - link "Verify" [ref=f4e1056] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/verify/biz_01JSAMPLE00000000000000B3?from=export
+                - link "Needs verification" [ref=f4e1057] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/verify/biz_01JSAMPLE00000000000000B3
+          - rowgroup [ref=f4e1058]:
+            - row [ref=f4e1059]:
+              - columnheader "Real estate agencies(1)" [ref=f4e1060]
+            - row [ref=f4e1061]:
+              - cell [ref=f4e1062]:
+                - checkbox "Select Quebec Realty Advisors" [ref=f4e1063]
+              - cell "Quebec Realty Advisors↗ Real estate agency · Nashik · discovered 23 Aug 2026" [ref=f4e1064]:
+                - link "Quebec Realty Advisors" [ref=f4e1065] [cursor=pointer]:
+                  - /url: "#biz-C4"
+                - link "↗" [ref=f4e1066] [cursor=pointer]:
+                  - /url: https://quebec-realty.example/
+                - generic [ref=f4e1067]: Real estate agency · Nashik · discovered 23 Aug 2026
+              - cell "Nashik" [ref=f4e1068]
+              - cell "Real estate" [ref=f4e1069]
+              - cell "Real estate agency" [ref=f4e1070]
+              - cell "SMALL" [ref=f4e1071]
+              - cell [ref=f4e1073]:
+                - link "Yes" [ref=f4e1074] [cursor=pointer]:
+                  - /url: https://quebec-realty.example/
+              - cell "44" [ref=f4e1075]
+              - cell "70" [ref=f4e1078]:
+                - 'generic "MEDIUM: 60-79" [ref=f4e1079]': "70"
+              - cell "Site Visit and Lead Desk" [ref=f4e1080]
+              - cell "E P" [ref=f4e1081]:
+                - generic "Business email available" [ref=f4e1082]: E
+                - generic "Business phone available" [ref=f4e1083]: P
+              - cell "MEDIUM" [ref=f4e1084]:
+                - generic "confidence 60%" [ref=f4e1085]: MEDIUM
+              - cell "READY" [ref=f4e1086]
+              - cell "NOT CONTACTED" [ref=f4e1088]
+              - cell [ref=f4e1090]:
+                - button "Research" [ref=f4e1091] [cursor=pointer]
+                - link "View" [ref=f4e1092] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000C4
+                - link "Prepare" [ref=f4e1093] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000C4
+                - link "Ready to prepare" [ref=f4e1094] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000C4
+          - rowgroup [ref=f4e1095]:
+            - row [ref=f4e1096]:
+              - columnheader "Schools(1)" [ref=f4e1097]
+            - row [ref=f4e1098]:
+              - cell "Select Charlie English High School Verified, but no confirmed contact yet." [ref=f4e1099]:
+                - checkbox "Select Charlie English High School" [disabled] [ref=f4e1100]
+                - note [ref=f4e1101]: i
+                - generic [ref=f4e1102]: Verified, but no confirmed contact yet.
+              - cell "Charlie English High School↗ School · Dhule · discovered 24 Aug 2026" [ref=f4e1103]:
+                - link "Charlie English High School" [ref=f4e1104] [cursor=pointer]:
+                  - /url: "#biz-A3"
+                - link "↗" [ref=f4e1105] [cursor=pointer]:
+                  - /url: https://charlie-school.example/
+                - generic [ref=f4e1106]: School · Dhule · discovered 24 Aug 2026
+              - cell "Dhule" [ref=f4e1107]
+              - cell "Education" [ref=f4e1108]
+              - cell "School" [ref=f4e1109]
+              - cell "MEDIUM" [ref=f4e1110]
+              - cell [ref=f4e1112]:
+                - link "Yes" [ref=f4e1113] [cursor=pointer]:
+                  - /url: https://charlie-school.example/
+              - cell "45" [ref=f4e1114]
+              - cell "68" [ref=f4e1117]:
+                - 'generic "MEDIUM: 60-79" [ref=f4e1118]': "68"
+              - cell "School Administration Suite" [ref=f4e1119]
+              - cell "?" [ref=f4e1120]:
+                - generic "2 contacts found, neither confirmed by you" [ref=f4e1121]: "?"
+              - cell "MEDIUM" [ref=f4e1122]:
+                - generic "confidence 61%" [ref=f4e1123]: MEDIUM
+              - cell "VERIFIED" [ref=f4e1124]
+              - cell "NOT CONTACTED" [ref=f4e1126]
+              - cell [ref=f4e1128]:
+                - button "Research" [ref=f4e1129] [cursor=pointer]
+                - link "View" [ref=f4e1130] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000A3
+                - link "No contact" [ref=f4e1131] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000A3#contacts
+          - rowgroup [ref=f4e1132]:
+            - row [ref=f4e1133]:
+              - columnheader "Vehicle dealers(1)" [ref=f4e1134]
+            - row [ref=f4e1135]:
+              - cell [ref=f4e1136]:
+                - checkbox "Select Delta Motors Sales and Service" [ref=f4e1137]
+              - cell "Delta Motors Sales and Service↗ Vehicle dealer · Dhule · discovered 22 Aug 2026" [ref=f4e1138]:
+                - link "Delta Motors Sales and Service" [ref=f4e1139] [cursor=pointer]:
+                  - /url: "#biz-A4"
+                - link "↗" [ref=f4e1140] [cursor=pointer]:
+                  - /url: https://delta-motors.example/
+                - generic [ref=f4e1141]: Vehicle dealer · Dhule · discovered 22 Aug 2026
+              - cell "Dhule" [ref=f4e1142]
+              - cell "Automobile" [ref=f4e1143]
+              - cell "Vehicle dealer" [ref=f4e1144]
+              - cell "MEDIUM" [ref=f4e1145]
+              - cell [ref=f4e1147]:
+                - link "Yes" [ref=f4e1148] [cursor=pointer]:
+                  - /url: https://delta-motors.example/
+              - cell "55" [ref=f4e1149]
+              - cell "81" [ref=f4e1152]:
+                - 'generic "HIGH: 80-100" [ref=f4e1153]': "81"
+              - cell "Dealership Service Desk" [ref=f4e1154]
+              - cell "E P W" [ref=f4e1155]:
+                - generic "Business email available" [ref=f4e1156]: E
+                - generic "Business phone available" [ref=f4e1157]: P
+                - generic "WhatsApp number available" [ref=f4e1158]: W
+              - cell "HIGH" [ref=f4e1159]:
+                - generic "confidence 84%" [ref=f4e1160]: HIGH
+              - cell "VERIFIED" [ref=f4e1161]
+              - cell "DELIVERED" [ref=f4e1163]
+              - cell [ref=f4e1165]:
+                - button "Research" [ref=f4e1166] [cursor=pointer]
+                - link "View" [ref=f4e1167] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000A4
+                - link "Prepare" [ref=f4e1168] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000A4
+                - link "Message" [ref=f4e1169] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach/drf_A4
+                - button "History" [ref=f4e1170] [cursor=pointer]
+                - link "Follow-up available" [ref=f4e1171] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/outreach?business=biz_01JSAMPLE00000000000000A4
+          - rowgroup [ref=f4e1172]:
+            - row [ref=f4e1173]:
+              - columnheader "Other(1)" [ref=f4e1174]
+            - row [ref=f4e1175]:
+              - cell "Select Romeo Tax Consultants This business still needs your verification." [ref=f4e1176]:
+                - checkbox "Select Romeo Tax Consultants" [disabled] [ref=f4e1177]
+                - note [ref=f4e1178]: i
+                - generic [ref=f4e1179]: This business still needs your verification.
+              - cell "Romeo Tax Consultants Other · Nashik · discovered 26 Aug 2026" [ref=f4e1180]:
+                - link "Romeo Tax Consultants" [ref=f4e1181] [cursor=pointer]:
+                  - /url: "#biz-C5"
+                - generic [ref=f4e1182]: Other · Nashik · discovered 26 Aug 2026
+              - cell "Nashik" [ref=f4e1183]
+              - cell "Professional services" [ref=f4e1184]
+              - cell "Other" [ref=f4e1185]
+              - cell "MICRO" [ref=f4e1186]
+              - cell "No" [ref=f4e1188]
+              - cell "35" [ref=f4e1189]
+              - cell "62" [ref=f4e1192]:
+                - 'generic "MEDIUM: 60-79" [ref=f4e1193]': "62"
+              - cell "Client Filing Tracker" [ref=f4e1194]
+              - cell "P" [ref=f4e1195]:
+                - generic "Business phone available" [ref=f4e1196]: P
+              - cell "LOW" [ref=f4e1197]:
+                - generic "confidence 47%" [ref=f4e1198]: LOW
+              - cell "AI RESEARCHED" [ref=f4e1199]
+              - cell "NOT CONTACTED" [ref=f4e1201]
+              - cell [ref=f4e1203]:
+                - button "Research" [ref=f4e1204] [cursor=pointer]
+                - link "View" [ref=f4e1205] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/business/biz_01JSAMPLE00000000000000C5
+                - link "Verify" [ref=f4e1206] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/verify/biz_01JSAMPLE00000000000000C5?from=export
+                - link "Needs verification" [ref=f4e1207] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8765/verify/biz_01JSAMPLE00000000000000C5
+  - contentinfo [ref=f4e1208]:
+    - generic [ref=f4e1209]:
+      - heading "What the numbers mean" [level=2] [ref=f4e1210]
+      - generic [ref=f4e1211]:
+        - generic [ref=f4e1212]:
+          - term [ref=f4e1213]: Businesses found
+          - definition [ref=f4e1214]: every businesses row for the campaign, whatever its status
+        - generic [ref=f4e1215]:
+          - term [ref=f4e1216]: Researched
+          - definition [ref=f4e1217]: at least one research_runs row with status = COMPLETE
+        - generic [ref=f4e1218]:
+          - term [ref=f4e1219]: Qualified
+          - definition [ref=f4e1220]: research complete, a current opportunity score, score >= campaigns.min_opportunity_score (70), status not SKIPPED/REJECTED
+        - generic [ref=f4e1221]:
+          - term [ref=f4e1222]: Skipped
+          - definition [ref=f4e1223]: status IN (SKIPPED, REJECTED); the tooltip splits pipeline skips from your rejections
+        - generic [ref=f4e1224]:
+          - term [ref=f4e1225]: Requiring verification
+          - definition [ref=f4e1226]: status IN (AI_RESEARCHED, NEEDS_VERIFICATION)
+        - generic [ref=f4e1227]:
+          - term [ref=f4e1228]: Ready for outreach
+          - definition [ref=f4e1229]: "status = CONTACT_READY: verified and a human-confirmed contact exists"
+        - generic [ref=f4e1230]:
+          - term [ref=f4e1231]: Em dash
+          - definition [ref=f4e1232]: not measured. A zero means we looked and the answer was none. They are never rendered the same way.
+      - generic [ref=f4e1233]: "Note: this is a wireframe, not a campaign output. The counter-drift line that the real report prints here compares campaigns.n_* against the live aggregate and always renders the aggregate."
+      - heading "Provenance" [level=2] [ref=f4e1234]
+      - generic [ref=f4e1235]:
+        - generic [ref=f4e1236]:
+          - term [ref=f4e1237]: Report generated
+          - definition [ref=f4e1238]: 2026-08-26T19:04:11+05:30 by radar/report.py
+        - generic [ref=f4e1239]:
+          - term [ref=f4e1240]: Campaign
+          - definition [ref=f4e1241]: cmp_01JSAMPLE0000000000000001
+        - generic [ref=f4e1242]:
+          - term [ref=f4e1243]: Research model
+          - definition [ref=f4e1244]: gemini-2.5-flash (Google AI Studio free tier), prompt research-v4
+        - generic [ref=f4e1245]:
+          - term [ref=f4e1246]: Scoring
+          - definition [ref=f4e1247]: radar/score.py, weights score-v3; scores are read from opportunities.score, never recomputed at render time
+        - generic [ref=f4e1248]:
+          - term [ref=f4e1249]: Discovery sources
+          - definition [ref=f4e1250]: OpenStreetMap Overpass + Nominatim, business websites, MCA21 and GST public search. No paid data vendor.
+        - generic [ref=f4e1251]:
+          - term [ref=f4e1252]: Rows rendered
+          - definition [ref=f4e1253]: 24 businesses, 22 with completed research, 45 source records
+        - generic [ref=f4e1254]:
+          - term [ref=f4e1255]: Contact data sent to an LLM
+          - definition [ref=f4e1256]: none, ever. business_contacts values are substituted locally after generation.
+        - generic [ref=f4e1257]:
+          - term [ref=f4e1258]: Status of this file
+          - definition [ref=f4e1259]: Wireframe. Fictional data. Not a research output.

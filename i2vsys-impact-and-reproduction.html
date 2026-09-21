@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>i2vsys.com — Impact &amp; Reproduction Guide</title>
+<style>
+  :root{
+    --bg:#0f1419; --panel:#1a212b; --panel2:#232c38; --text:#e7edf3; --muted:#9fb0c0;
+    --border:#2d3947; --high:#ef4444; --med:#f59e0b; --low:#eab308; --pass:#22c55e;
+    --accent:#3b82f6; --impact:#fb7185; --repro:#38bdf8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:32px 20px 80px}
+  header.top{border-bottom:1px solid var(--border);padding-bottom:24px;margin-bottom:8px}
+  .brand{font-weight:800;font-size:30px;letter-spacing:-.5px}
+  .brand span{color:var(--accent)}
+  .sub{color:var(--muted);margin-top:4px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;font-size:13px;color:var(--muted)}
+  .meta b{color:var(--text);font-weight:600}
+  h2{font-size:22px;margin:42px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+  .finding{background:var(--panel);border:1px solid var(--border);border-left-width:5px;border-radius:10px;padding:16px 18px;margin:14px 0}
+  .finding.high{border-left-color:var(--high)} .finding.med{border-left-color:var(--med)} .finding.low{border-left-color:var(--low)}
+  .ftitle{font-weight:700;font-size:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em}
+  .badge.high{background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.4)}
+  .badge.med{background:rgba(245,158,11,.15);color:#fcd34d;border:1px solid rgba(245,158,11,.4)}
+  .badge.low{background:rgba(234,179,8,.13);color:#fde047;border:1px solid rgba(234,179,8,.35)}
+  .tag{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--border);padding:2px 8px;border-radius:6px}
+  .block{margin-top:12px;border-radius:8px;padding:11px 14px;font-size:13.5px}
+  .block.impact{background:rgba(251,113,133,.07);border:1px solid rgba(251,113,133,.28)}
+  .block.repro{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.25)}
+  .block h4{margin:0 0 6px;font-size:12.5px;text-transform:uppercase;letter-spacing:.05em}
+  .block.impact h4{color:#fda4af}
+  .block.repro h4{color:#7dd3fc}
+  .block.impact ul{color:#fecdd3}
+  .block ul,.block ol{margin:4px 0 0;padding-left:22px}
+  .block li{margin:4px 0;color:var(--muted)}
+  .block.repro li{color:#cfe3f2}
+  code{background:#0b0f14;color:#f0b86c;padding:1px 6px;border-radius:5px;font-size:12.5px}
+  .exp{margin-top:8px;font-size:12.5px;color:#86efac;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.25);border-radius:8px;padding:8px 12px}
+  .exp b{color:#bbf7d0}
+  .note{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;color:var(--muted);font-size:13.5px;margin:16px 0}
+  .toc{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}
+  .toc a{font-size:13px;color:var(--accent);text-decoration:none;background:var(--panel);border:1px solid var(--border);padding:6px 12px;border-radius:8px}
+  .toc a:hover{background:var(--panel2)}
+  footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:12.5px}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">Impact &amp; Reproduction Guide — <span>i2vsys.com</span></div>
+    <div class="sub">For each finding: what happens if it is left unfixed, and exact steps to reproduce it.</div>
+    <div class="meta">
+      <span><b>Date:</b> 2026-06-02</span>
+      <span><b>Site:</b> https://www.i2vsys.com/</span>
+      <span><b>Companion to:</b> Final Website Test Report</span>
+    </div>
+  </header>
+
+  <div class="note">
+    Each card below has two parts — <b style="color:#fda4af">⚠ If this persists</b> (the business/technical consequence of not fixing it)
+    and <b style="color:#7dd3fc">🔁 Steps to reproduce</b> (manual, browser-only steps anyone can follow). Reproduction uses only a
+    standard browser and its built-in Developer Tools (F12) — no special software required. A green <b style="color:#bbf7d0">Expected
+    result</b> line states what you should observe if the issue is present.
+  </div>
+
+  <div class="toc">
+    <a href="#high">🔴 High</a>
+    <a href="#med">🟠 Medium</a>
+    <a href="#low">🟡 Low</a>
+  </div>
+
+  <!-- ===================== HIGH ===================== -->
+  <h2 id="high">🔴 High-Severity Issues</h2>
+
+  <!-- H1 -->
+  <div class="finding high">
+    <div class="ftitle"><span class="badge high">High</span> Excessive page weight (Why i2V ≈ 12–15 MB) <span class="tag">Performance</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Lost visitors &amp; leads:</b> a 12–15 MB page can take 18–58 s on 3G/4G; most users abandon after ~3 s, so demo/contact conversions drop.</li>
+        <li><b>SEO ranking penalty:</b> Core Web Vitals (LCP) stay poor, lowering Google ranking and organic traffic over time.</li>
+        <li><b>Higher bandwidth cost &amp; server load</b> for both the visitor (mobile data) and the origin server.</li>
+        <li><b>Worse on slower engines:</b> the same page took ~27.8 s to load in Safari/WebKit vs ~4.9 s in Chrome — Safari/iPhone users suffer most.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li>Open <code>https://www.i2vsys.com/why-choose-i2v/</code> in Chrome.</li>
+        <li>Press <code>F12</code> → open the <b>Network</b> tab.</li>
+        <li>Tick <b>Disable cache</b>, then reload the page (<code>Ctrl+R</code>).</li>
+        <li>Read the summary bar at the bottom: <b>“… transferred”</b> total and request count.</li>
+        <li>Sort the list by the <b>Size</b> column to see the heaviest images.</li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> total transfer ≈ <b>12–15 MB</b>; several <code>.webp</code> images ≈ 1.3 MB each (e.g. <code>multi-level-permissions.webp</code>, <code>system-hardening.webp</code>).</div>
+    </div>
+  </div>
+
+  <!-- H2 -->
+  <div class="finding high">
+    <div class="ftitle"><span class="badge high">High</span> Broken footer “terms of service” link on sub-pages (404) <span class="tag">Links</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Legal exposure:</b> visitors on most pages cannot reach the Terms of Use, weakening the enforceability of site terms.</li>
+        <li><b>Broken trust:</b> a 404 on a legal/footer link looks unprofessional and erodes credibility for a security vendor.</li>
+        <li><b>SEO:</b> repeated 404s across many pages waste crawl budget and can be flagged in Search Console.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li>Open any sub-page, e.g. <code>https://www.i2vsys.com/products/</code>.</li>
+        <li>Scroll to the footer and click <b>“terms of service”</b>.</li>
+        <li>Observe the URL it navigates to and the page shown.</li>
+        <li>Compare with the correct page: open <code>https://www.i2vsys.com/terms-of-use/</code> directly.</li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> the footer link goes to <code>/products/terms-of-use</code> → <b>404 Not Found</b>, while <code>/terms-of-use/</code> loads fine (200). Root cause: the href is the relative <code>terms-of-use</code> (no leading slash).</div>
+    </div>
+  </div>
+
+  <!-- H3 -->
+  <div class="finding high">
+    <div class="ftitle"><span class="badge high">High</span> Hundreds of images missing alt text <span class="tag">Accessibility</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Screen-reader users excluded:</b> meaningful images are announced as “image” or skipped, making content inaccessible.</li>
+        <li><b>Legal/compliance risk:</b> fails WCAG 2.1 §1.1.1 — relevant for ADA / EN 301 549 / accessibility procurement requirements.</li>
+        <li><b>Lost image SEO:</b> search engines can’t index images without alt text, reducing image-search traffic.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li>Open <code>https://www.i2vsys.com/</code> and press <code>F12</code> → <b>Console</b> tab.</li>
+        <li>Paste and run:<br><code>document.querySelectorAll('img').length</code></li>
+        <li>Then run:<br><code>[...document.querySelectorAll('img')].filter(i=>!i.alt.trim()).length</code></li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> ≈ <b>575</b> total images and ≈ <b>401</b> with empty/missing alt (~70%).</div>
+    </div>
+  </div>
+
+  <!-- ===================== MEDIUM ===================== -->
+  <h2 id="med">🟠 Medium-Severity Issues</h2>
+
+  <!-- M1 -->
+  <div class="finding med">
+    <div class="ftitle"><span class="badge med">Medium</span> Unusable on real mobile networks <span class="tag">Mobile</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Mobile visitors bounce:</b> ~57 s on Fast-3G / timeout on Slow-3G means many phone users never see the content.</li>
+        <li>Mobile is typically the majority of traffic — this directly suppresses leads from the largest segment.</li>
+        <li>Compounds the page-weight and SEO problems above for the worst-connected users.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li>Open <code>https://www.i2vsys.com/</code> in Chrome → <code>F12</code> → <b>Network</b> tab.</li>
+        <li>In the <b>Throttling</b> dropdown choose <b>“Fast 3G”</b> (or “Slow 3G”).</li>
+        <li>Tick <b>Disable cache</b> and reload; watch the <b>Load</b> time in the status bar.</li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> Fast 3G ≈ <b>57 s</b> load; Slow 3G times out (&gt; 90 s).</div>
+    </div>
+  </div>
+
+  <!-- M2 -->
+  <div class="finding med">
+    <div class="ftitle"><span class="badge med">Medium</span> Slow server response (TTFB ~1.3–1.9 s) <span class="tag">Performance</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Everything starts late:</b> a slow first byte delays rendering on every page, hurting perceived speed and Core Web Vitals.</li>
+        <li>Indicates no edge/page caching — the site is vulnerable to traffic spikes and slower for distant visitors.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li>Open any page → <code>F12</code> → <b>Network</b> tab → reload.</li>
+        <li>Click the first (document) request → <b>Timing</b> sub-tab.</li>
+        <li>Read <b>“Waiting for server response (TTFB)”</b>.</li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> TTFB ≈ <b>1.3–1.9 s</b> (occasionally higher), well above the &lt; 0.8 s “good” threshold.</div>
+    </div>
+  </div>
+
+  <!-- M3 -->
+  <div class="finding med">
+    <div class="ftitle"><span class="badge med">Medium</span> Email used as link without <code>mailto:</code> + broken resource link (404) <span class="tag">Links</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Dead contact path:</b> clicking the email leads to a 404 instead of opening the mail client — a lost sales/contact opportunity.</li>
+        <li><b>Broken download:</b> the dead resource link frustrates prospects trying to get the VMS pre-installer.</li>
+        <li>Both add 404s that look unprofessional and hurt SEO crawl quality.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li>Visit the Contact page and click the <code>mandeep.panwar@i2vsys.com</code> link (or open <code>https://www.i2vsys.com/contact-us/mandeep.panwar@i2vsys.com</code>).</li>
+        <li>Open the resource link <code>https://www.i2vsys.com/resources/i2v-vms-pre-installer-1/</code> directly.</li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> both return <b>404 Not Found</b>. The email should instead use <code>mailto:</code> and open the mail app.</div>
+    </div>
+  </div>
+
+  <!-- M4 -->
+  <div class="finding med">
+    <div class="ftitle"><span class="badge med">Medium</span> Missing semantic landmarks (<code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>) <span class="tag">Accessibility</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Harder screen-reader navigation:</b> assistive tech relies on landmarks to jump to main content / footer; without them users must tab through everything.</li>
+        <li>Contributes to WCAG non-conformance and a lower automated accessibility score.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li>Open <code>https://www.i2vsys.com/</code> → <code>F12</code> → <b>Console</b>.</li>
+        <li>Run: <code>document.querySelectorAll('main').length</code></li>
+        <li>Run: <code>document.querySelectorAll('footer').length</code></li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> both return <b>0</b> (no <code>&lt;main&gt;</code> / <code>&lt;footer&gt;</code>), and there is no <code>role="main"</code>/<code>role="contentinfo"</code> fallback.</div>
+    </div>
+  </div>
+
+  <!-- M5 -->
+  <div class="finding med">
+    <div class="ftitle"><span class="badge med">Medium</span> Inconsistent keyboard focus styling (verify per-component) <span class="tag">Accessibility</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Keyboard users get lost:</b> if any interactive control lacks a visible focus ring, sighted keyboard/AT users can’t tell where they are.</li>
+        <li>Risks WCAG 2.4.7 (Focus Visible) failures on the affected components.</li>
+        <li><i>Note:</i> the main nav links <b>do</b> show a focus ring, so this is a targeted check, not a site-wide gap.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li>Open any page and click once in an empty area, then press <code>Tab</code> repeatedly.</li>
+        <li>Watch each focused element (links, buttons, form fields, CTAs) for a visible outline/ring.</li>
+        <li>For a suspect element, inspect it (<code>F12</code>) and check the computed <code>outline</code> / <code>box-shadow</code> on <code>:focus</code>.</li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> nav links show a 2px ring (good); flag any styled button/CTA whose computed <code>outline-width</code> is <code>0px</code> with no <code>box-shadow</code>.</div>
+    </div>
+  </div>
+
+  <!-- M6 -->
+  <div class="finding med">
+    <div class="ftitle"><span class="badge med">Medium</span> Mobile menu toggle is not a real <code>&lt;button&gt;</code> <span class="tag">Mobile / A11y</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Keyboard/AT users can’t open the menu:</b> a non-button <code>&lt;div&gt;</code> isn’t focusable or operable by Enter/Space, and screen readers don’t announce it as a toggle.</li>
+        <li>No <code>aria-expanded</code> means assistive tech can’t tell whether the menu is open or closed.</li>
+        <li>WCAG 4.1.2 (Name, Role, Value) failure on mobile navigation.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li>Open <code>https://www.i2vsys.com/</code> → <code>F12</code> → toggle the <b>device toolbar</b> (<code>Ctrl+Shift+M</code>) and pick a phone (≈390px).</li>
+        <li>Right-click the hamburger (☰) → <b>Inspect</b>; check the element’s tag and attributes.</li>
+        <li>In the Console run: <code>document.querySelector('header').querySelectorAll('button').length</code></li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> the toggle is a <code>&lt;div&gt;</code> (not <code>&lt;button&gt;</code>) with no <code>role</code>/<code>aria-expanded</code>/<code>tabindex</code>; header button count = <b>0</b>.</div>
+    </div>
+  </div>
+
+  <!-- ===================== LOW ===================== -->
+  <h2 id="low">🟡 Low-Severity Issues</h2>
+
+  <!-- L1 -->
+  <div class="finding low">
+    <div class="ftitle"><span class="badge low">Low</span> Inconsistent brand capitalization <span class="tag">Content</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Weaker brand consistency:</b> mixing “i2V systems” and “i2V Systems” looks careless and dilutes brand identity.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li>On the Home page, press <code>F12</code> → <b>Console</b>.</li>
+        <li>Run: <code>(document.body.innerText.match(/i2V systems/g)||[]).length</code> and <code>(document.body.innerText.match(/i2V Systems/g)||[]).length</code></li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> both forms appear (≈ 3 lowercase “systems” vs 1 “Systems”).</div>
+    </div>
+  </div>
+
+  <!-- L2 -->
+  <div class="finding low">
+    <div class="ftitle"><span class="badge low">Low</span> Two <code>&lt;h1&gt;</code> elements on Home <span class="tag">SEO / A11y</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Diluted SEO signal:</b> multiple h1s muddy the page’s primary topic for search engines.</li>
+        <li>Slightly confuses screen-reader heading navigation.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li>Open Home → <code>F12</code> → <b>Console</b>.</li>
+        <li>Run: <code>document.querySelectorAll('h1').length</code> then <code>[...document.querySelectorAll('h1')].map(h=>h.innerText)</code></li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> count = <b>2</b> (“Integrated solutions…” and “Video”).</div>
+    </div>
+  </div>
+
+  <!-- L3 -->
+  <div class="finding low">
+    <div class="ftitle"><span class="badge low">Low</span> No skip-to-content link <span class="tag">Accessibility</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Slower keyboard navigation:</b> users must tab through the whole nav on every page to reach content.</li>
+        <li>Best-practice WCAG 2.4.1 (Bypass Blocks) gap.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li>Open any page and immediately press <code>Tab</code> once from the very top.</li>
+        <li>Observe whether a “Skip to content” link appears as the first focusable item.</li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> no skip link appears; the first focusable items are empty <code>javascript:void(0)</code> links.</div>
+    </div>
+  </div>
+
+  <!-- L4 -->
+  <div class="finding low">
+    <div class="ftitle"><span class="badge low">Low</span> reCAPTCHA 401 console noise in Safari/WebKit <span class="tag">Cross-browser</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Mostly cosmetic:</b> forms still work, but the console errors can mask real issues during debugging and look untidy.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li>Open any page in <b>Safari</b> (or a WebKit-based browser) → open the <b>Web Inspector → Console</b>.</li>
+        <li>Reload and watch the console.</li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> <b>4–5</b> entries of “Failed to load resource: … 401” from <code>recaptcha/api2/pat</code> per page. Chrome shows none.</div>
+    </div>
+  </div>
+
+  <!-- L5 -->
+  <div class="finding low">
+    <div class="ftitle"><span class="badge low">Low</span> YouTube cookie SameSite warnings in Firefox <span class="tag">Cross-browser</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Benign:</b> third-party YouTube embed cookies are flagged; no functional impact, but adds console noise in Firefox.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li>Open <code>https://www.i2vsys.com/why-choose-i2v/</code> in <b>Firefox</b> → <code>F12</code> → <b>Console</b>.</li>
+        <li>Reload and look for cookie warnings.</li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> ≈ 2 warnings about the <code>__Secure-YEC</code> cookie being rejected (SameSite / cross-site).</div>
+    </div>
+  </div>
+
+  <!-- L6 -->
+  <div class="finding low">
+    <div class="ftitle"><span class="badge low">Low</span> Minimal CSP &amp; missing form attributes <span class="tag">Security / Forms</span></div>
+    <div class="block impact">
+      <h4>⚠ If this persists</h4>
+      <ul>
+        <li><b>Weaker XSS defense:</b> a thin Content-Security-Policy provides little protection against injected scripts.</li>
+        <li><b>Worse form UX:</b> missing <code>required</code>/<code>autocomplete</code> means no instant client-side feedback or browser autofill.</li>
+      </ul>
+    </div>
+    <div class="block repro">
+      <h4>🔁 Steps to reproduce</h4>
+      <ol>
+        <li><b>CSP:</b> open <code>F12</code> → <b>Network</b> → click the document request → <b>Headers</b> → look for <code>content-security-policy</code>.</li>
+        <li><b>Form:</b> on the Contact page, right-click a required field → <b>Inspect</b> and check for <code>required</code> / <code>autocomplete</code> attributes.</li>
+      </ol>
+      <div class="exp"><b>Expected result:</b> CSP is only <code>upgrade-insecure-requests</code> (or absent as a meta tag); contact fields lack <code>required</code>/<code>autocomplete</code>.</div>
+    </div>
+  </div>
+
+  <footer>
+    Companion to the Final Website Test Report for i2vsys.com · 2026-06-02 · impact statements describe consequences of leaving each issue unfixed; reproduction steps use a standard browser and its Developer Tools only.
+  </footer>
+
+</div>
+</body>
+</html>

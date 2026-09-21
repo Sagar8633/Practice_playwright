@@ -1,0 +1,1304 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e6]:
+      - 'button "Logged in as patilkareena208 Active layout: Unnamed" [ref=e7]'
+      - generic [ref=e8]: "11"
+    - toolbar [ref=e12]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - button "XAUUSD" [ref=e5290]:
+              - generic [ref=e20]: XAUUSD
+            - button "Switch data type" [ref=e21]:
+              - img [ref=e22]:
+                - img [ref=e23]
+          - button "Compare symbols" [ref=e25]:
+            - img [ref=e26]:
+              - img [ref=e27]
+        - generic [ref=e33]:
+          - radiogroup [ref=e34]:
+            - radio "5 minutes" [ref=e35]:
+              - generic [ref=e37]: 5m
+            - radio "15 minutes" [checked] [ref=e38]:
+              - generic [ref=e40]: 15m
+            - radio "45 minutes" [ref=e41]:
+              - generic [ref=e43]: 45m
+            - radio "1 hour" [ref=e44]:
+              - generic [ref=e46]: 1h
+          - button "Chart interval" [ref=e47]:
+            - img [ref=e50]:
+              - img [ref=e51]
+        - button "Candles" [ref=e57]:
+          - img [ref=e59]:
+            - img [ref=e60]
+        - generic [ref=e67]:
+          - generic [ref=e68]:
+            - button "Indicators, metrics, and strategies" [ref=e69]:
+              - img [ref=e70]:
+                - img [ref=e71]
+              - generic [ref=e74]: Indicators
+            - button "Favorite indicators" [ref=e75]:
+              - img [ref=e78]:
+                - img [ref=e79]
+          - button "Indicator templates" [ref=e82]:
+            - img [ref=e84]:
+              - img [ref=e85]
+        - generic [ref=e89]:
+          - button "Create alert" [ref=e90]:
+            - img [ref=e91]:
+              - img [ref=e92]
+            - generic [ref=e95]: Alert
+          - button "Bar replay" [ref=e96]:
+            - img [ref=e97]:
+              - img [ref=e98]
+            - generic [ref=e100]: Replay
+        - generic [ref=e104]:
+          - button "Undo scroll" [ref=e6917]:
+            - img [ref=e106]:
+              - img [ref=e107]
+          - button [disabled] [ref=e109]:
+            - img [ref=e110]:
+              - img [ref=e111]
+        - generic [ref=e114]:
+          - button "Layout setup" [ref=e115]:
+            - img [ref=e116]:
+              - img
+          - generic [ref=e118]:
+            - button "All changes saved" [disabled] [ref=e7755]:
+              - generic [ref=e121]:
+                - generic [ref=e122]: Unnamed
+                - generic: Save
+            - button "Manage layouts" [ref=e124]:
+              - img [ref=e127]:
+                - img [ref=e128]
+        - generic [ref=e132]:
+          - button "Quick search" [ref=e133]:
+            - img [ref=e134]:
+              - img [ref=e135]
+          - button "Settings" [ref=e138]:
+            - img [ref=e139]:
+              - img [ref=e140]
+          - button "Fullscreen mode" [ref=e144]:
+            - img [ref=e145]:
+              - img [ref=e146]
+          - button "Take a snapshot" [ref=e148]:
+            - img [ref=e150]:
+              - img [ref=e151]
+      - button "Trade" [ref=e157]:
+        - generic [ref=e163]: Trade
+      - button "Share your idea with the trade community" [ref=e165]:
+        - generic [ref=e167]: Publish
+    - toolbar [ref=e169]:
+      - generic [ref=e173]:
+        - generic [ref=e174]:
+          - generic [ref=e177]:
+            - button "Cross" [ref=e179]:
+              - img [ref=e180]:
+                - img [ref=e181]
+            - button "Cursors" [pressed] [ref=e185]:
+              - img [ref=e186]:
+                - img [ref=e187]
+          - generic [ref=e191]:
+            - button "Trendline" [ref=e193]:
+              - img [ref=e194]:
+                - img [ref=e195]
+            - button "Trend tools" [ref=e199]:
+              - img [ref=e200]:
+                - img [ref=e201]
+          - generic [ref=e205]:
+            - button "Fib retracement" [ref=e207]:
+              - img [ref=e208]:
+                - img [ref=e209]
+            - button "Gann and Fibonacci tools" [ref=e216]:
+              - img [ref=e217]:
+                - img [ref=e218]
+          - generic [ref=e222]:
+            - button "XABCD pattern" [ref=e224]:
+              - img [ref=e225]:
+                - img [ref=e226]
+            - button "Patterns" [ref=e230]:
+              - img [ref=e231]:
+                - img [ref=e232]
+          - generic [ref=e236]:
+            - button "Long position" [ref=e238]:
+              - img [ref=e239]:
+                - img [ref=e240]
+            - button "Forecasting and measurement tools" [ref=e242]:
+              - img [ref=e243]:
+                - img [ref=e244]
+          - generic [ref=e248]:
+            - button "Circle" [ref=e5292]:
+              - img [ref=e251]:
+                - img [ref=e5293]
+            - button "Geometric shapes" [ref=e256]:
+              - img [ref=e257]:
+                - img [ref=e258]
+          - generic [ref=e262]:
+            - button "Text" [ref=e264]:
+              - img [ref=e265]:
+                - img [ref=e266]
+            - button "Annotation tools" [ref=e268]:
+              - img [ref=e269]:
+                - img [ref=e270]
+          - generic [ref=e273]:
+            - button "Icon" [ref=e275]:
+              - img [ref=e276]:
+                - img [ref=e277]
+            - button "Icons" [ref=e279]:
+              - img [ref=e280]:
+                - img [ref=e281]
+        - generic [ref=e283]:
+          - button "Measure" [ref=e284]:
+            - img [ref=e285]:
+              - img [ref=e286]
+          - button "Zoom in" [ref=e288]:
+            - img [ref=e289]:
+              - img [ref=e290]
+        - generic [ref=e295]:
+          - generic [ref=e298]:
+            - button "Magnet mode snaps drawings placed near price bars to the closest OHLC value" [ref=e300]:
+              - img [ref=e301]:
+                - img [ref=e302]
+            - button "Magnets" [ref=e306]:
+              - img [ref=e307]:
+                - img [ref=e308]
+          - button "Keep drawing" [ref=e310]:
+            - img [ref=e311]:
+              - img [ref=e312]
+          - button "Lock all drawings" [ref=e314]:
+            - img [ref=e315]:
+              - img [ref=e316]
+          - generic [ref=e319]:
+            - button "Hide all drawings" [ref=e321]:
+              - img [ref=e322]:
+                - img [ref=e323]
+            - button "Hide options" [ref=e325]:
+              - img [ref=e326]:
+                - img [ref=e327]
+        - generic [ref=e331]:
+          - button "Remove objects" [ref=e333]:
+            - img [ref=e334]:
+              - img [ref=e335]
+          - button "Remove options" [ref=e337]:
+            - img [ref=e338]:
+              - img [ref=e339]
+    - generic [ref=e343]:
+      - 'region "Chart #1" [ref=e346]':
+        - generic [ref=e348]:
+          - generic [ref=e350]:
+            - generic:
+              - generic:
+                - toolbar:
+                  - generic:
+                    - generic [ref=e351]:
+                      - generic "Change symbol" [ref=e5306]:
+                        - generic [ref=e353]:
+                          - img [ref=e5307]
+                          - generic [ref=e356]: B
+                        - button "Change symbol" [ref=e5308]: Gold Spot / U.S. Dollar
+                      - generic "Change interval" [ref=e5309]:
+                        - text: ·
+                        - button "Change interval" [ref=e5310]: "15"
+                      - generic [ref=e5311]:
+                        - text: ·
+                        - generic [ref=e5312]: OANDA
+                    - generic:
+                      - generic:
+                        - button "Flag symbol":
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img
+                        - button "More":
+                          - generic:
+                            - img
+                    - button [ref=e5314]:
+                      - img [ref=e5315]:
+                        - img [ref=e5316]
+                      - img [ref=e5318]:
+                        - img [ref=e5319]
+                  - generic [ref=e371]:
+                    - generic [ref=e372]:
+                      - generic [ref=e373]: O
+                      - generic [ref=e374]: 4,126.015
+                    - generic [ref=e375]:
+                      - generic [ref=e376]: H
+                      - generic [ref=e377]: 4,128.685
+                    - generic [ref=e378]:
+                      - generic [ref=e379]: L
+                      - generic [ref=e380]: 4,122.055
+                    - generic [ref=e381]:
+                      - generic [ref=e382]: C
+                      - generic [ref=e383]: 4,124.100
+                    - generic [ref=e385]: −1.890 (−0.05%)
+                - generic [ref=e388]:
+                  - generic [ref=e390]:
+                    - generic: 4,123.710
+                    - generic: Sell
+                  - generic "Spread" [ref=e392]: "57.0"
+                  - generic [ref=e394]:
+                    - generic: 4,124.280
+                    - generic: Buy
+              - generic:
+                - button "Hide indicators legend" [ref=e2989]:
+                  - img [ref=e397]
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e401]: SRK Trading Swing Indicator
+                      - generic [ref=e1771]:
+                        - button "Hide" [ref=e1772]:
+                          - img [ref=e1774]
+                        - button "Settings" [ref=e1778]:
+                          - img [ref=e1780]
+                        - button "Remove" [ref=e1782]:
+                          - img [ref=e1784]
+                        - button "More" [ref=e1786]:
+                          - img [ref=e1788]
+                    - generic [ref=e403]:
+                      - generic "5 EMA" [ref=e405]: 4,123.016
+                      - generic "10 EMA" [ref=e407]: 4,122.458
+                      - generic [ref=e5321]: 4,122.618
+                      - generic [ref=e5322]: "0.000"
+                      - generic "Bearish Signal" [ref=e413]: "0.000"
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e2990]:
+                        - generic [ref=e2992]: SRK VWAP+EMA Regime v3
+                        - generic [ref=e2993]:
+                          - generic [ref=e2995]: "50"
+                          - generic [ref=e2997]: "200"
+                      - generic [ref=e6889]:
+                        - button "Hide" [ref=e6890]:
+                          - img [ref=e6892]
+                        - button "Settings" [ref=e6896]:
+                          - img [ref=e6898]
+                        - generic "Source code" [ref=e6900]:
+                          - img [ref=e6902]
+                        - button "Remove" [ref=e6904]:
+                          - img [ref=e6906]
+                        - button "More" [ref=e6908]:
+                          - img [ref=e6910]
+                      - button "Active strategy · Opened in Pine Editor" [ref=e6926]:
+                        - img [ref=e3000]:
+                          - img [ref=e3001]
+                        - img [ref=e6927]:
+                          - img [ref=e6928]
+                    - generic [ref=e3007]:
+                      - generic "EMA50" [ref=e3009]: 4,119.890
+                      - generic "EMA200" [ref=e3011]: 4,108.773
+                      - generic "VWAP" [ref=e3013]: 4,122.045
+                      - generic [ref=e5325]: "0.000"
+                      - generic "S" [ref=e3017]: "0.000"
+            - generic "Chart for OANDA:XAUUSD, 15 minutes" [ref=e5326]
+          - generic [ref=e467]:
+            - generic [ref=e468]: USD
+            - img [ref=e470]
+      - toolbar [ref=e481]:
+        - generic [ref=e483]:
+          - generic [ref=e484]:
+            - button "1 day in 1 minute intervals" [ref=e485]:
+              - generic [ref=e486]: 1D
+            - button "5 days in 5 minutes intervals" [ref=e487]:
+              - generic [ref=e488]: 5D
+            - button "1 month in 30 minutes intervals" [ref=e489]:
+              - generic [ref=e490]: 1M
+            - button "3 months in 1 hour intervals" [ref=e491]:
+              - generic [ref=e492]: 3M
+            - button "6 months in 2 hours intervals" [ref=e493]:
+              - generic [ref=e494]: 6M
+            - button "Year to day in 1 day intervals" [ref=e495]:
+              - generic [ref=e496]: YTD
+            - button "1 year in 1 day intervals" [ref=e497]:
+              - generic [ref=e498]: 1Y
+            - button "5 years in 1 week intervals" [ref=e499]:
+              - generic [ref=e500]: 5Y
+            - button "All data in 1 month intervals" [ref=e501]:
+              - generic [ref=e502]: All
+          - button "Go to" [ref=e504]:
+            - img [ref=e505]:
+              - img [ref=e506]
+        - button "Timezone" [ref=e511]:
+          - generic [ref=e512]: 08:11:52 UTC+5:30
+    - generic [ref=e514]:
+      - toolbar [ref=e519]:
+        - button "Watchlist, details, and news" [pressed] [ref=e520]:
+          - img [ref=e521]:
+            - img [ref=e522]
+        - button "Alerts" [ref=e525]:
+          - img [ref=e526]:
+            - img [ref=e527]
+        - button "Object tree and data window" [ref=e530]:
+          - img [ref=e531]:
+            - img [ref=e532]
+        - button "Chats" [ref=e534]:
+          - img [ref=e535]:
+            - img [ref=e536]
+        - button "Screeners" [ref=e539]:
+          - img [ref=e540]:
+            - img [ref=e541]
+        - button "Pine" [ref=e545]:
+          - img [ref=e546]:
+            - img [ref=e547]
+        - button "Calendars" [ref=e550]:
+          - img [ref=e551]:
+            - img [ref=e552]
+        - button "Community" [ref=e554]:
+          - img [ref=e555]:
+            - img [ref=e556]
+        - button "Notifications" [ref=e561]:
+          - img [ref=e562]:
+            - img [ref=e563]
+        - button "Products" [ref=e565]:
+          - img [ref=e566]:
+            - img [ref=e567]
+        - button "Help Center" [ref=e570]:
+          - img [ref=e571]:
+            - img [ref=e572]
+      - generic [ref=e575]:
+        - generic [ref=e576]:
+          - generic [ref=e577]:
+            - generic [ref=e580]:
+              - button "Watchlist" [ref=e582]:
+                - generic [ref=e585]: Watchlist
+                - img [ref=e588]:
+                  - img [ref=e589]
+              - generic [ref=e592]:
+                - button "Add symbol" [ref=e593]:
+                  - img [ref=e594]:
+                    - img [ref=e595]
+                - button "Advanced view" [ref=e597]:
+                  - img [ref=e598]:
+                    - img [ref=e599]
+                - button "Settings" [ref=e601]:
+                  - img [ref=e602]:
+                    - img [ref=e603]
+            - generic [ref=e608]:
+              - generic [ref=e610]:
+                - button [ref=e1389]:
+                  - img [ref=e1390]:
+                    - img [ref=e1391]
+                - button "Symbol" [ref=e612]
+                - button "Last" [ref=e614]
+                - button "Chg" [ref=e616]
+                - button "Chg%" [ref=e618]
+              - generic [ref=e1395]:
+                - generic [ref=e1400]:
+                  - generic [ref=e1402]:
+                    - generic [ref=e1403]:
+                      - img [ref=e1405]
+                      - generic [ref=e1407]: H
+                    - generic [ref=e1409]:
+                      - generic [ref=e1410]: HINDUNILVR
+                      - generic "Market closed" [ref=e1411]
+                  - generic [ref=e1414]: 2,144.50
+                  - generic [ref=e1416]: "8.70"
+                  - generic [ref=e1418]: 0.41%
+                - generic [ref=e1421]:
+                  - generic [ref=e1423]:
+                    - generic [ref=e1424]:
+                      - img [ref=e1426]
+                      - generic [ref=e1428]: R
+                    - generic [ref=e1430]:
+                      - generic [ref=e1431]: RELIANCE
+                      - generic "Market closed" [ref=e1432]
+                  - generic [ref=e1435]: 1,279.80
+                  - generic [ref=e1437]: "3.90"
+                  - generic [ref=e1439]: 0.31%
+                - generic [ref=e1442]:
+                  - generic [ref=e1444]:
+                    - generic [ref=e1445]:
+                      - img [ref=e1447]
+                      - generic [ref=e1449]: M
+                    - generic [ref=e1451]:
+                      - generic [ref=e1452]: MARUTI
+                      - generic "Market closed" [ref=e1453]
+                  - generic [ref=e1456]: 13,728.00
+                  - generic [ref=e1458]: −223.00
+                  - generic [ref=e1460]: −1.60%
+                - generic [ref=e1463]:
+                  - generic [ref=e1465]:
+                    - generic [ref=e1466]:
+                      - img [ref=e1468]
+                      - generic [ref=e1470]: T
+                    - generic [ref=e1472]:
+                      - generic [ref=e1473]: TATACONSUM
+                      - generic "Market closed" [ref=e1474]
+                  - generic [ref=e1477]: 1,106.70
+                  - generic [ref=e1479]: "16.90"
+                  - generic [ref=e1481]: 1.55%
+                - generic [ref=e1484]:
+                  - generic [ref=e1486]:
+                    - generic [ref=e1487]:
+                      - img [ref=e1489]
+                      - generic [ref=e1491]: H
+                    - generic [ref=e1493]:
+                      - generic [ref=e1494]: HEROMOTOCO1!
+                      - generic "Market closed" [ref=e1495]
+                  - generic [ref=e1498]: 4,829.80
+                  - generic [ref=e1500]: "1.40"
+                  - generic [ref=e1502]: 0.03%
+                - generic [ref=e1506]:
+                  - img [ref=e1507]:
+                    - img [ref=e1508]
+                  - generic [ref=e1510]: Stocks
+                - generic [ref=e1514]:
+                  - img [ref=e1515]:
+                    - img [ref=e1516]
+                  - generic [ref=e1518]: Forex
+                - generic [ref=e1521]:
+                  - generic [ref=e1523]:
+                    - generic [ref=e1524]:
+                      - generic [ref=e1526]:
+                        - img [ref=e1528]
+                        - img [ref=e1530]
+                      - generic [ref=e1533]: U
+                    - generic [ref=e1536]: USDINR
+                  - generic [ref=e1538]: "95.3700"
+                  - generic [ref=e1540]: −0.0080
+                  - generic [ref=e1542]: −0.01%
+                - generic [ref=e1545]:
+                  - generic [ref=e1547]:
+                    - generic [ref=e1548]:
+                      - generic [ref=e1550]:
+                        - img [ref=e1552]
+                        - img [ref=e1554]
+                      - generic [ref=e1557]: E
+                    - generic [ref=e1560]: EURUSD
+                  - generic [ref=e1562]:
+                    - text: "1.1457"
+                    - superscript [ref=e8004]: "5"
+                  - generic [ref=e1566]: "0.00276"
+                  - generic [ref=e1568]: 0.24%
+                - generic [ref=e1571]:
+                  - generic [ref=e1573]:
+                    - generic [ref=e1574]:
+                      - generic [ref=e1576]:
+                        - img [ref=e1578]
+                        - img [ref=e1580]
+                      - generic [ref=e1583]: G
+                    - generic [ref=e1586]: GBPUSD
+                  - generic [ref=e1588]:
+                    - text: "1.3446"
+                    - superscript [ref=e8006]: "0"
+                  - generic [ref=e1591]: "0.00382"
+                  - generic [ref=e1593]: 0.28%
+                - generic [ref=e1596]:
+                  - generic [ref=e1598]:
+                    - generic [ref=e1599]:
+                      - generic [ref=e1601]:
+                        - img [ref=e1603]
+                        - img [ref=e1605]
+                      - generic [ref=e1608]: U
+                    - generic [ref=e1611]: USDJPY
+                  - generic [ref=e1613]:
+                    - text: "161.39"
+                    - superscript [ref=e8008]: "6"
+                  - generic [ref=e1617]: −0.952
+                  - generic [ref=e1619]: −0.59%
+                - generic [ref=e1623]:
+                  - img [ref=e1624]:
+                    - img [ref=e1625]
+                  - generic [ref=e1627]: Crypto
+                - generic [ref=e1630]:
+                  - generic [ref=e1632]:
+                    - generic [ref=e1633]:
+                      - img [ref=e1635]
+                      - generic [ref=e1637]: B
+                    - generic [ref=e1640]: BTCUSD
+                  - generic [ref=e1642]: 63,804
+                  - generic [ref=e1644]: "618"
+                  - generic [ref=e1646]: 0.98%
+                - generic [ref=e1649]:
+                  - generic [ref=e1651]:
+                    - generic [ref=e1652]:
+                      - img [ref=e1654]
+                      - generic [ref=e1656]: E
+                    - generic [ref=e1659]: ETHUSD
+                  - generic [ref=e1661]: 1,768.0
+                  - generic [ref=e1663]: "24.0"
+                  - generic [ref=e1665]: 1.37%
+                - generic [ref=e1668]:
+                  - generic [ref=e1670]:
+                    - generic [ref=e1671]:
+                      - img [ref=e1673]
+                      - generic [ref=e1675]: X
+                    - generic [ref=e1678]: XRPUSD
+                  - generic [ref=e1680]: "1.10554"
+                  - generic [ref=e1682]: "0.01296"
+                  - generic [ref=e1684]: 1.19%
+                - generic [ref=e1687]:
+                  - generic [ref=e1689]:
+                    - generic [ref=e1690]:
+                      - img [ref=e1692]
+                      - generic [ref=e1694]: L
+                    - generic [ref=e1697]: LTCUSD
+                  - generic [ref=e1699]: "44.31"
+                  - generic [ref=e1701]: "0.55"
+                  - generic [ref=e1703]: 1.26%
+                - generic [ref=e1706]:
+                  - generic [ref=e1708]:
+                    - generic [ref=e1709]:
+                      - img [ref=e1711]
+                      - generic [ref=e1713]: J
+                    - generic [ref=e1715]:
+                      - generic [ref=e1716]: JSL
+                      - generic "Market closed" [ref=e1717]
+                  - generic [ref=e1720]: "709.60"
+                  - generic [ref=e1722]: "13.85"
+                  - generic [ref=e1724]: 1.99%
+                - generic [ref=e1727]:
+                  - generic [ref=e1729]:
+                    - generic [ref=e1730]:
+                      - img [ref=e1732]
+                      - generic [ref=e1734]: P
+                    - generic [ref=e1736]:
+                      - generic [ref=e1737]: PARAS
+                      - generic "Market closed" [ref=e1738]
+                  - generic [ref=e1741]: 1,216.80
+                  - generic [ref=e1743]: −59.60
+                  - generic [ref=e1745]: −4.67%
+                - generic [ref=e1748]:
+                  - generic [ref=e1750]:
+                    - generic [ref=e1751]:
+                      - img [ref=e1753]
+                      - generic [ref=e1755]: C
+                    - generic [ref=e1757]:
+                      - generic [ref=e1758]: CIPLA
+                      - generic "Market closed" [ref=e1759]
+                  - generic [ref=e1762]: 1,441.30
+                  - generic [ref=e1764]: "9.50"
+                  - generic [ref=e1766]: 0.66%
+          - generic [ref=e622]:
+            - generic [ref=e624]:
+              - generic [ref=e625]:
+                - img [ref=e5332]
+                - generic [ref=e629]: X
+              - generic [ref=e630]: XAUUSD
+              - generic [ref=e631]:
+                - button "Metrics" [ref=e632]:
+                  - img [ref=e633]:
+                    - img [ref=e634]
+                - generic "Add note" [ref=e636]:
+                  - img [ref=e637]:
+                    - img [ref=e638]
+                - generic "Settings" [ref=e641]:
+                  - img [ref=e642]:
+                    - img [ref=e643]
+            - generic [ref=e647]:
+              - generic [ref=e648]:
+                - generic [ref=e650]:
+                  - link "Gold Spot / U.S. Dollar" [ref=e5333] [cursor=pointer]:
+                    - /url: https://in.tradingview.com/symbols/XAUUSD/
+                    - text: Gold Spot / U.S. Dollar
+                    - img [ref=e652]:
+                      - img [ref=e653]
+                  - text: OANDA
+                - generic [ref=e658]:
+                  - text: Commodity
+                  - text: Cfd
+              - generic [ref=e661]:
+                - generic [ref=e662]:
+                  - generic [ref=e5334]:
+                    - text: 4,12
+                    - generic [ref=e8002]:
+                      - text: "3.99"
+                      - superscript [ref=e8003]: "0"
+                  - generic [ref=e666]: USD
+                - generic [ref=e667]:
+                  - generic [ref=e668]: "+0.200"
+                  - generic [ref=e669]: 0.00%
+              - generic [ref=e672]:
+                - img [ref=e673]:
+                  - img [ref=e674]
+                - generic [ref=e676]: Market open
+              - generic [ref=e5338]:
+                - generic [ref=e5339]:
+                  - text: News
+                  - generic "Jul 10, 2026, 07:02 GMT+5:30" [ref=e5342]
+                - generic [ref=e5343]: Gold Steady Amid Mideast Tensions — Market Talk
+                - generic [ref=e5344]:
+                  - generic [ref=e5345]: More events
+                  - img [ref=e5346]:
+                    - img [ref=e5347]
+              - generic [ref=e5349]:
+                - generic [ref=e5351]: Performance
+                - generic [ref=e5352]:
+                  - generic [ref=e5353]:
+                    - generic [ref=e5354]: −0.02%
+                    - generic [ref=e5355]: 1W
+                  - generic [ref=e5356]:
+                    - generic [ref=e5357]: −3.08%
+                    - generic [ref=e5358]: 1M
+                  - generic [ref=e5359]:
+                    - generic [ref=e5360]: −13.57%
+                    - generic [ref=e5361]: 3M
+                  - generic [ref=e5362]:
+                    - generic [ref=e5363]: −7.86%
+                    - generic [ref=e5364]: 6M
+                  - generic [ref=e5365]:
+                    - generic [ref=e5366]: −4.66%
+                    - generic [ref=e5367]: YTD
+                  - generic [ref=e5368]:
+                    - generic [ref=e5369]: 24.40%
+                    - generic [ref=e5370]: 1Y
+              - generic [ref=e5371]:
+                - generic [ref=e5372]: Seasonals
+                - table [ref=e5376]:
+                  - row [ref=e5377]:
+                    - cell
+                    - cell [ref=e5378]
+                    - cell
+                  - row [ref=e5382]:
+                    - cell
+                    - cell [ref=e5383]
+                    - cell
+                - generic [ref=e5387]:
+                  - generic [ref=e5388]: "2026"
+                  - generic [ref=e5390]: "2025"
+                  - generic [ref=e5392]: "2024"
+              - button "More seasonals" [ref=e5395]
+              - generic [ref=e5396]:
+                - generic [ref=e5397]: Technicals
+                - generic [ref=e5398]:
+                  - generic [ref=e5399]:
+                    - generic [ref=e5400]: Neutral
+                    - generic [ref=e5401]:
+                      - generic [ref=e5402]: Sell
+                      - generic [ref=e5403]: Buy
+                    - generic [ref=e5404]:
+                      - generic [ref=e5405]: Strong sell
+                      - generic [ref=e5406]: Strong buy
+                  - img [ref=e5415]:
+                    - img [ref=e5416]
+                  - generic [ref=e5418]:
+                    - generic [ref=e5419]: Strong sell
+                    - generic [ref=e5420]: Sell
+                    - generic [ref=e5421]: Neutral
+                    - generic [ref=e5422]: Buy
+                    - generic [ref=e5423]: Strong buy
+              - button "More technicals" [ref=e5426]
+              - generic [ref=e5428]:
+                - img [ref=e5429]:
+                  - img [ref=e5430]
+                - text: Browse community
+                - generic [ref=e5432]:
+                  - text: posts
+                  - img [ref=e5433]:
+                    - img [ref=e5434]
+        - text: "[] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] –"
+      - generic "Hide Tab" [ref=e779]:
+        - img [ref=e780]
+    - generic [ref=e784]:
+      - toolbar [ref=e786]:
+        - generic [ref=e3023]:
+          - button "Close strategy report" [ref=e3024]:
+            - img [ref=e3026]:
+              - img [ref=e3027]
+            - generic [ref=e3032]: SRK VWAP+EMA Regime v3
+          - button "Open context menu" [ref=e3034]:
+            - img [ref=e3036]:
+              - img [ref=e3037]
+        - generic [ref=e805]:
+          - button "Collapse panel" [ref=e806]:
+            - img [ref=e807]:
+              - img [ref=e808]
+          - button "Maximize panel" [ref=e810]:
+            - img [ref=e811]:
+              - img [ref=e812]
+      - generic [ref=e3039]:
+        - generic [ref=e3041]:
+          - tablist [ref=e3043]:
+            - tab [selected] [ref=e3044]:
+              - generic "Metrics" [ref=e3045]:
+                - img [ref=e3046]:
+                  - img [ref=e3047]
+            - tab [ref=e3049]:
+              - generic "Trades" [ref=e3050]:
+                - img [ref=e3051]:
+                  - img [ref=e3052]
+          - button "Apr 1, 2026 — Jul 10, 2026" [ref=e3740]:
+            - generic [ref=e3059]:
+              - generic [ref=e3060]:
+                - img [ref=e3061]:
+                  - img [ref=e3062]
+                - generic [ref=e3064]: Apr 1, 2026 — Jul 10, 2026
+              - img [ref=e3066]:
+                - img [ref=e3067]
+          - button "100 K USD" [ref=e3071]:
+            - generic [ref=e3074]:
+              - generic [ref=e3075]:
+                - img [ref=e3076]:
+                  - img [ref=e3077]
+                - generic [ref=e3079]: 100 K USD
+              - img [ref=e3081]:
+                - img [ref=e3082]
+          - button "Default detalization" [ref=e3086]:
+            - generic [ref=e3089]:
+              - generic [ref=e3090]:
+                - img [ref=e3091]:
+                  - img [ref=e3092]
+                - generic [ref=e3094]: Default detalization
+              - img [ref=e3096]:
+                - img [ref=e3097]
+          - button "Script execution 1" [ref=e3101]:
+            - generic [ref=e3104]:
+              - generic [ref=e3105]:
+                - img [ref=e3106]:
+                  - img [ref=e3107]
+                - generic [ref=e3109]: Script execution
+                - generic [ref=e3110]: "1"
+              - img [ref=e3112]:
+                - img [ref=e3113]
+        - generic [ref=e3116]:
+          - paragraph [ref=e3117]: Key stats
+          - generic [ref=e3118]:
+            - generic [ref=e3120]:
+              - generic [ref=e3122]:
+                - generic [ref=e3124]: Total PnL
+                - generic [ref=e3125]:
+                  - generic [ref=e3126]: "+298.36"
+                  - generic [ref=e3127]: USD
+                  - generic [ref=e3128]: +0.30%
+              - generic [ref=e3129]:
+                - generic [ref=e3131]: Max drawdown
+                - generic [ref=e3132]:
+                  - generic [ref=e3133]: "601.46"
+                  - generic [ref=e3134]: USD
+                  - generic [ref=e3135]: 0.60%
+              - generic [ref=e3136]:
+                - generic [ref=e3138]: Profitable trades
+                - generic [ref=e3139]:
+                  - generic [ref=e3140]: 16.22%
+                  - generic [ref=e3141]: 30/185
+              - generic [ref=e3142]:
+                - generic [ref=e3144]: Profit factor
+                - generic [ref=e3146]: "1.095"
+            - generic [ref=e3148]:
+              - generic [ref=e3149]:
+                - generic [ref=e3150]:
+                  - generic [ref=e3151]: Performance
+                  - link "Show description" [ref=e3152] [cursor=pointer]:
+                    - /url: /support/solutions/43000681735
+                    - img:
+                      - img
+                - generic [ref=e3153]:
+                  - button "Scale" [ref=e3154]:
+                    - img [ref=e3156]:
+                      - img [ref=e3157]
+                  - button "Take a snapshot" [ref=e3160]:
+                    - img [ref=e3162]:
+                      - img [ref=e3163]
+                  - button "Expand chart" [ref=e3165]:
+                    - img [ref=e3167]:
+                      - img [ref=e3168]
+              - generic [ref=e3171]:
+                - generic:
+                  - generic:
+                    - generic [ref=e3174]: Cumulative PnL
+                    - generic [ref=e3176]:
+                      - generic [ref=e3177]: Buy and hold
+                      - button "Show" [ref=e3178]:
+                        - img [ref=e3180]:
+                          - img [ref=e3181]
+                    - generic [ref=e3187]: Trades excursions
+                    - generic [ref=e3190]: Run-ups and drawdowns
+                    - button "Hide metrics legend" [ref=e3191]:
+                      - img [ref=e3192]:
+                        - img [ref=e3193]
+                - table [ref=e3196]:
+                  - row [ref=e3197]:
+                    - cell
+                    - cell [ref=e3198]
+                    - cell [ref=e3202]
+                  - row [ref=e3206]:
+                    - cell
+                    - cell [ref=e3207]
+                    - cell [ref=e3211]
+          - generic [ref=e3214]:
+            - generic [ref=e3215]:
+              - paragraph [ref=e3216]: Return details
+              - tablist [ref=e3218]:
+                - tab "Overview" [selected] [ref=e3219]:
+                  - generic [ref=e3220]: Overview
+                - tab "Returns" [ref=e3221]:
+                  - generic [ref=e3222]: Returns
+                - tab "Benchmarking" [ref=e3223]:
+                  - generic [ref=e3224]: Benchmarking
+                - tab "Risk-adjusted performance" [ref=e3225]:
+                  - generic [ref=e3226]: Risk-adjusted performance
+                - button:
+                  - generic: More
+                  - img:
+                    - img
+              - generic [ref=e3229]:
+                - generic [ref=e3231]:
+                  - generic [ref=e3233]: Open PnL
+                  - generic [ref=e3234]:
+                    - generic [ref=e3235]: −3.84
+                    - generic [ref=e3236]: USD
+                    - generic [ref=e3237]: 0.00%
+                - generic [ref=e3238]:
+                  - generic [ref=e3240]: Expected payoff
+                  - generic [ref=e3241]:
+                    - generic [ref=e3242]: "1.63"
+                    - generic [ref=e3243]: USD
+                - generic [ref=e3244]:
+                  - generic [ref=e3246]: Strategy outperformance
+                  - generic [ref=e3247]:
+                    - generic [ref=e3248]: +12,305.12
+                    - generic [ref=e3249]: USD
+                    - generic [ref=e3250]: +12.31%
+                - generic [ref=e3251]:
+                  - generic [ref=e3253]: Sharpe ratio
+                  - generic [ref=e3255]: −0.251
+              - generic [ref=e3258]:
+                - generic [ref=e3259]:
+                  - generic [ref=e3260]: Profit structure
+                  - generic [ref=e3261]:
+                    - generic [ref=e3279]:
+                      - generic [ref=e3280]: ‪0.00‬
+                      - generic [ref=e3281]: ‪‪1.00 K‬‬
+                      - generic [ref=e3282]: ‪‪2.00 K‬‬
+                      - generic [ref=e3283]: ‪‪3.00 K‬‬
+                      - generic [ref=e3284]: ‪‪4.00 K‬‬
+                    - generic [ref=e3285]:
+                      - generic [ref=e3288]: Total profit
+                      - generic [ref=e3294]: Total loss
+                      - generic [ref=e5438]: Open PnL
+                      - generic [ref=e3297]: Commission
+                      - generic [ref=e3300]: Total PnL
+                - generic [ref=e3301]:
+                  - generic [ref=e3303]: Benchmarking
+                  - generic [ref=e3304]:
+                    - table [ref=e3307]:
+                      - row [ref=e3308]:
+                        - cell
+                        - cell [ref=e3309]
+                        - cell [ref=e3313]
+                    - generic [ref=e3317]:
+                      - generic [ref=e3320]: Buy and hold PnL
+                      - generic [ref=e3323]: Strategy PnL
+            - generic [ref=e3324]:
+              - paragraph [ref=e3325]: Trades analysis
+              - tablist [ref=e3327]:
+                - tab "Overview" [selected] [ref=e3328]:
+                  - generic [ref=e3329]: Overview
+                - tab "Trades analysis details" [ref=e3330]:
+                  - generic [ref=e3331]: Trades analysis details
+                - button:
+                  - generic: More
+                  - img:
+                    - img
+              - generic [ref=e3334]:
+                - generic [ref=e3336]:
+                  - generic [ref=e3338]: Average PnL
+                  - generic [ref=e3339]:
+                    - generic [ref=e3340]: "1.63"
+                    - generic [ref=e3341]: USD
+                    - generic [ref=e3342]: 0.02%
+                - generic [ref=e3343]:
+                  - generic [ref=e3345]: Average bars in trades
+                  - generic [ref=e3347]: "16"
+                - generic [ref=e3348]:
+                  - generic [ref=e3350]: Largest profit
+                  - button "Upgrade to get full access to Strategy report data" [ref=e3351]:
+                    - img [ref=e3352]:
+                      - img [ref=e3353]
+                - generic [ref=e3355]:
+                  - generic [ref=e3357]: Largest loss
+                  - button "Upgrade to get full access to Strategy report data" [ref=e3358]:
+                    - img [ref=e3359]:
+                      - img [ref=e3360]
+              - generic [ref=e3364]:
+                - generic [ref=e3365]:
+                  - generic [ref=e3367]: Returns distribution
+                  - generic [ref=e3368]:
+                    - table [ref=e3371]:
+                      - row [ref=e3372]:
+                        - cell
+                        - cell [ref=e3373]
+                        - cell [ref=e3377]
+                      - row [ref=e3381]:
+                        - cell
+                        - cell [ref=e3382]
+                        - cell [ref=e3386]
+                    - generic [ref=e3389]:
+                      - generic [ref=e3390]:
+                        - generic [ref=e3393]: Losers
+                        - generic [ref=e3396]: Winners
+                      - generic [ref=e3397]:
+                        - generic [ref=e3398]:
+                          - img [ref=e3399]:
+                            - img [ref=e3400]
+                          - generic [ref=e3401]: Average loss
+                          - generic [ref=e3402]: −0.21%
+                        - generic [ref=e3403]:
+                          - img [ref=e3404]:
+                            - img [ref=e3405]
+                          - generic [ref=e3406]: Average profit
+                          - generic [ref=e3407]: 0.49%
+                - generic [ref=e3408]:
+                  - generic [ref=e3410]: Trades distribution
+                  - generic [ref=e3411]:
+                    - generic [ref=e3414]:
+                      - generic [ref=e3416]:
+                        - generic [ref=e3417]: "185"
+                        - generic [ref=e3418]: Total trades
+                      - img [ref=e3419]
+                    - generic [ref=e3424]:
+                      - generic [ref=e3425]:
+                        - generic [ref=e3427]: Winners
+                        - generic [ref=e3428]:
+                          - generic [ref=e3429]: 30 trades
+                          - generic [ref=e3430]: 16.22%
+                      - generic [ref=e3431]:
+                        - generic [ref=e3433]: Losers
+                        - generic [ref=e3434]:
+                          - generic [ref=e3435]: 155 trades
+                          - generic [ref=e3436]: 83.78%
+                      - generic [ref=e3437]:
+                        - generic [ref=e3439]: Breakevens
+                        - generic [ref=e3440]:
+                          - generic [ref=e3441]: 0 trades
+                          - generic [ref=e3442]: 0.00%
+            - generic [ref=e3443]:
+              - paragraph [ref=e3444]: Equity run-ups and drawdowns
+              - tablist [ref=e3446]:
+                - tab "Overview" [selected] [ref=e3447]:
+                  - generic [ref=e3448]: Overview
+                - tab "Run-ups" [ref=e3449]:
+                  - generic [ref=e3450]: Run-ups
+                - tab "Drawdowns" [ref=e3451]:
+                  - generic [ref=e3452]: Drawdowns
+                - button:
+                  - generic: More
+                  - img:
+                    - img
+              - generic [ref=e3455]:
+                - generic [ref=e3457]:
+                  - generic [ref=e3459]: Average run-up duration
+                  - generic [ref=e3461]: 9 days
+                - generic [ref=e3462]:
+                  - generic [ref=e3464]: Average drawdown duration
+                  - generic [ref=e3466]: 10 days
+                - generic [ref=e3467]:
+                  - generic [ref=e3469]: Max drawdown as % of initial capital
+                  - button "Upgrade to get full access to Strategy report data" [ref=e3470]:
+                    - img [ref=e3471]:
+                      - img [ref=e3472]
+                - generic [ref=e3474]:
+                  - generic [ref=e3476]: Return of max drawdown
+                  - button "Upgrade to get full access to Strategy report data" [ref=e3477]:
+                    - img [ref=e3478]:
+                      - img [ref=e3479]
+              - generic [ref=e3483]:
+                - generic [ref=e3484]:
+                  - generic [ref=e3486]: Alternating growth and decline
+                  - generic [ref=e3487]:
+                    - table [ref=e3491]:
+                      - row [ref=e3492]:
+                        - cell
+                        - cell [ref=e3493]
+                        - cell [ref=e3497]
+                    - generic [ref=e3501]:
+                      - generic [ref=e3504]: Run-up
+                      - generic [ref=e3507]: Drawdown
+                      - generic [ref=e3510]: Current run-up
+                - generic [ref=e3511]:
+                  - generic [ref=e3513]: Comparison of growth and decline periods
+                  - generic [ref=e3514]:
+                    - generic [ref=e3515]:
+                      - generic [ref=e3516]: Run-up
+                      - generic [ref=e3517]:
+                        - generic [ref=e3518]:
+                          - generic [ref=e3519]: Maximum
+                          - generic [ref=e3521]: 0.99%
+                        - generic [ref=e3522]:
+                          - generic [ref=e3523]: Average
+                          - generic [ref=e3525]: 0.44%
+                        - generic [ref=e5439]:
+                          - generic [ref=e5440]: Current
+                          - generic [ref=e5442]: 0.06%
+                    - generic [ref=e3530]:
+                      - generic [ref=e3531]: Drawdown
+                      - generic [ref=e3532]:
+                        - generic [ref=e3533]:
+                          - generic [ref=e3534]: Maximum
+                          - generic [ref=e3536]: 0.60%
+                        - generic [ref=e3537]:
+                          - generic [ref=e3538]: Average
+                          - generic [ref=e3540]: 0.34%
+            - generic [ref=e3541]:
+              - paragraph [ref=e3542]: Capital efficiency
+              - tablist [ref=e3544]:
+                - tab "Overview" [selected] [ref=e3545]:
+                  - generic [ref=e3546]: Overview
+                - tab "Capital usage" [ref=e3547]:
+                  - generic [ref=e3548]: Capital usage
+                - tab "Margin usage" [ref=e3549]:
+                  - generic [ref=e3550]: Margin usage
+                - button:
+                  - generic: More
+                  - img:
+                    - img
+              - generic [ref=e3553]:
+                - generic [ref=e3555]:
+                  - generic [ref=e3557]: CAGR
+                  - generic [ref=e3559]: 1.11%
+                - generic [ref=e3560]:
+                  - generic [ref=e3562]: Account size required
+                  - generic [ref=e3563]:
+                    - generic [ref=e3564]: 10,988.95
+                    - generic [ref=e3565]: USD
+                - generic [ref=e3566]:
+                  - generic [ref=e3568]: Return on initial capital
+                  - generic [ref=e3570]: 0.30%
+                - generic [ref=e3571]:
+                  - generic [ref=e3573]: Margin calls
+                  - button "Upgrade to get full access to Strategy report data" [ref=e3574]:
+                    - img [ref=e3575]:
+                      - img [ref=e3576]
+              - generic [ref=e3580]:
+                - generic [ref=e3581]:
+                  - generic [ref=e3582]: Margin usage
+                  - button "Scale" [ref=e3584]:
+                    - img [ref=e3586]:
+                      - img [ref=e3587]
+                - table [ref=e3594]:
+                  - row [ref=e3595]:
+                    - cell
+                    - cell [ref=e3596]
+                    - cell [ref=e3600]
+                  - row [ref=e3604]:
+                    - cell
+                    - cell [ref=e3605]
+                    - cell [ref=e3609]
+    - generic "Trading panel"
+  - generic:
+    - generic:
+      - generic:
+        - generic: Move overlay to split-view
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+    - generic [ref=e6941]:
+      - generic [ref=e6942]:
+        - generic [ref=e6944]: Pine Editor
+        - generic [ref=e6945]:
+          - button "Move overlay to split-view" [ref=e6946]:
+            - img [ref=e6948]:
+              - img [ref=e6949]
+          - button "Close" [ref=e6951]:
+            - img [ref=e6953]:
+              - img [ref=e6954]
+      - generic [ref=e6959]:
+        - generic [ref=e6961]:
+          - generic [ref=e6962]:
+            - button "Untitled script" [ref=e6963]:
+              - img [ref=e6964]:
+                - img [ref=e6965]
+              - heading "Untitled script" [level=2] [ref=e6967]
+              - img [ref=e6968]:
+                - img [ref=e6969]
+            - button "Update on chart" [ref=e6971]:
+              - img [ref=e6973]:
+                - img [ref=e6974]
+            - button "Save" [ref=e6976]:
+              - img [ref=e6978]:
+                - img [ref=e6979]
+              - generic [ref=e6982]: Save
+          - generic [ref=e6983]:
+            - button "Publish script" [ref=e6984]:
+              - img [ref=e6986]:
+                - img [ref=e6987]
+              - generic [ref=e6990]: Publish script
+            - button "More" [ref=e6992]:
+              - img [ref=e6994]:
+                - img [ref=e6995]
+        - code [ref=e7000]:
+          - generic [ref=e7001]:
+            - generic [ref=e7003]:
+              - generic [ref=e7005]: "1"
+              - generic [ref=e7761]:
+                - generic [ref=e7762] [cursor=pointer]: 
+                - generic [ref=e7764]: "2"
+              - generic [ref=e7766]: "3"
+              - generic [ref=e7012]: "4"
+              - generic [ref=e7014]: "5"
+              - generic [ref=e7016]: "6"
+              - generic [ref=e7769]: "7"
+              - generic [ref=e7772]: "8"
+              - generic [ref=e7022]: "9"
+              - generic [ref=e7775]: "10"
+              - generic [ref=e7026]: "11"
+              - generic [ref=e7028]: "12"
+              - generic [ref=e7030]: "13"
+              - generic [ref=e7032]: "14"
+              - generic [ref=e7034]: "15"
+              - generic [ref=e7036]: "16"
+              - generic [ref=e7038]: "17"
+              - generic [ref=e7040]: "18"
+              - generic [ref=e7042]: "19"
+              - generic [ref=e7044]: "20"
+              - generic [ref=e7046]: "21"
+              - generic [ref=e7048]: "22"
+              - generic [ref=e7050]: "23"
+              - generic [ref=e7052]: "24"
+              - generic [ref=e7054]: "25"
+              - generic [ref=e7778]: "26"
+              - generic [ref=e7781]: "27"
+              - generic [ref=e7061]: "28"
+              - generic [ref=e7782]:
+                - generic [ref=e7783] [cursor=pointer]: 
+                - generic [ref=e7784]: "29"
+              - generic [ref=e7787]: "30"
+              - generic [ref=e7790]: "31"
+              - generic [ref=e7070]: "32"
+              - generic [ref=e7791]:
+                - generic [ref=e7792] [cursor=pointer]: 
+                - generic [ref=e7793]: "33"
+              - generic [ref=e7796]: "34"
+              - generic [ref=e7799]: "35"
+              - generic [ref=e7801]: "36"
+              - generic [ref=e7082]: "37"
+              - generic [ref=e7802]:
+                - generic [ref=e7803] [cursor=pointer]: 
+                - generic [ref=e7804]: "38"
+              - generic [ref=e7807]: "39"
+              - generic [ref=e7808]:
+                - generic [ref=e7809] [cursor=pointer]: 
+                - generic [ref=e7810]: "40"
+              - generic [ref=e7813]: "41"
+              - generic [ref=e7094]: "42"
+              - generic [ref=e7096]: "43"
+              - generic [ref=e7098]: "44"
+              - generic [ref=e7816]: "45"
+            - generic [ref=e7172]:
+              - generic [ref=e7883]: //@version=6
+              - generic [ref=e7885]: strategy("SRK VWAP+EMA v4 1:3", overlay=true, initial_capital=100000,
+              - generic [ref=e7887]: default_qty_type=strategy.percent_of_equity, default_qty_value=10,
+              - generic [ref=e7889]: commission_type=strategy.commission.percent, commission_value=0.03,
+              - generic [ref=e7891]: pyramiding=0, calc_on_every_tick=false)
+              - generic [ref=e7893]: emaPullLen = input.int(50, "Pullback EMA", group="EMAs")
+              - generic [ref=e7895]: emaRegLen = input.int(200, "Regime EMA", group="EMAs")
+              - generic [ref=e7897]: useVwap = input.bool(true,"Require correct side of session VWAP", group="Filter")
+              - generic [ref=e7899]: rr = input.float(3.0,"Reward:Risk", group="Exit")
+              - generic [ref=e7902]: ema50 = ta.ema(close, emaPullLen)
+              - generic [ref=e7904]: ema200 = ta.ema(close, emaRegLen)
+              - generic [ref=e7977]: vwap = ta.vwap(hlc3)
+              - generic [ref=e7979]:
+                - text: plot(ema50, "EMA50", color=
+                - text: color.orange, linewidth=2)
+              - generic [ref=e7982]:
+                - text: plot(ema200, "EMA200", color=
+                - text: color.blue, linewidth=2)
+              - generic [ref=e7985]:
+                - text: plot(vwap, "VWAP", color=
+                - text: color.purple)
+              - generic [ref=e7919]: longRegime = close > ema200 and (not useVwap or close > vwap)
+              - generic [ref=e7921]: shortRegime = close < ema200 and (not useVwap or close < vwap)
+              - generic [ref=e7924]: longRej = longRegime and low <= ema50 and close > ema50 and close > open
+              - generic [ref=e7926]: shortRej = shortRegime and high >= ema50 and close < ema50 and close < open
+              - generic [ref=e7929]: var float slP = na
+              - generic [ref=e7931]: var float tpP = na
+              - generic [ref=e7934]: if longRej and strategy.position_size == 0
+              - generic [ref=e7936]: slP := low
+              - generic [ref=e7938]: tpP := close + rr * (close - low)
+              - generic [ref=e7940]: strategy.entry("L", strategy.long)
+              - generic [ref=e7942]: if shortRej and strategy.position_size == 0
+              - generic [ref=e7944]: slP := high
+              - generic [ref=e7946]: tpP := close - rr * (high - close)
+              - generic [ref=e7948]: strategy.entry("S", strategy.short)
+              - generic [ref=e7951]: if strategy.position_size > 0
+              - generic [ref=e7953]: strategy.exit("L-x", from_entry="L", stop=slP, limit=tpP)
+              - generic [ref=e7955]: if strategy.position_size < 0
+              - generic [ref=e7957]: strategy.exit("S-x", from_entry="S", stop=slP, limit=tpP)
+              - generic [ref=e7988]:
+                - text: plotshape(longRej and strategy.position_size==0, "L", shape.triangleup, location.belowbar,
+                - text: color.new(color.green,0), size=size.small)
+              - generic [ref=e7991]:
+                - text: plotshape(shortRej and strategy.position_size==0, "S", shape.triangledown, location.abovebar,
+                - text: color.new(color.red,0), size=size.small)
+              - generic [ref=e7994]:
+                - text: bgcolor(longRegime ?
+                - text: "color.new(color.green,95) : shortRegime ?"
+                - text: "color.new(color.red,95) : na)"
+            - textbox "Editor content;Press Alt+F1 for Accessibility Options." [ref=e7268]: "strategy.exit(\"S-x\", from_entry=\"S\", stop=slP, limit=tpP) plotshape(longRej and strategy.position_size==0, \"L\", shape.triangleup, location.belowbar, color.new(color.green,0), size=size.small) plotshape(shortRej and strategy.position_size==0, \"S\", shape.triangledown, location.abovebar, color.new(color.red,0), size=size.small) bgcolor(longRegime ? color.new(color.green,95) : shortRegime ? color.new(color.red,95) : na)"
+        - generic [ref=e7276]:
+          - button [ref=e7279]:
+            - img [ref=e7280]:
+              - img [ref=e7281]
+          - generic [ref=e7287]:
+            - button "Line 45, Col 93" [ref=e7288]
+            - link "Pine Script® v6" [ref=e7289]:
+              - /url: https://in.tradingview.com/pine-script-reference/v6
+  - generic [ref=e2229]:
+    - alert
+    - alert

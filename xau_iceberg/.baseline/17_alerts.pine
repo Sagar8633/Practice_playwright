@@ -1,0 +1,306 @@
+
+// ============================================================================
+//  SECTION 17 : ALERTS  --  13 EVENTS, ONE PAYLOAD BUILDER
+//
+//  ////////////////////////////////////////////////////////////////////////
+//  //  READ THIS FIRST IF YOUR ALERT WILL NOT SAVE                        //
+//  //                                                                      //
+//  //  A TradingView BASIC (free) plan allows ZERO technical alerts.       //
+//  //  Not "a few". Zero. Any alert whose condition is an indicator -      //
+//  //  including every alert in this section, and including the "Any       //
+//  //  alert() function call" condition - is refused at CREATION time with //
+//  //                                                                      //
+//  //      "you have a limit of 0 technical alerts in your plan"           //
+//  //                                                                      //
+//  //  Nothing in this file can work around that: it is an account limit   //
+//  //  enforced on TradingView's servers, not a scripting problem. Until   //
+//  //  the account is on ESSENTIAL or above, THIS ENTIRE SECTION IS INERT. //
+//  //  The script still runs, the panel still updates and the chart art is //
+//  //  unaffected - you simply cannot attach an alert to it.               //
+//  //                                                                      //
+//  //  What DOES still work on Basic: plain PRICE alerts ("XAUUSD crosses  //
+//  //  4407.00"), created from the price scale or the alert dialog with    //
+//  //  the symbol - not the indicator - as the condition. The practical    //
+//  //  workaround is to read Entry / SL / TP1-3 off the chart label or the //
+//  //  Data Window and set price alerts on those numbers by hand.          //
+//  ////////////////////////////////////////////////////////////////////////
+//
+//  DELIVERY MODEL, and why alert() carries the load:
+//    alert()          - dynamic message, built at runtime, so it can carry the
+//                       real Entry/SL/TP numbers for THIS setup. Costs the user
+//                       exactly ONE alert: they pick the condition
+//                       "Any alert() function call" and every one of the 13
+//                       events below is routed through it. Cannot be toggled
+//                       per event in the UI, which is why the i_alert* inputs
+//                       exist - the filtering happens here instead.
+//    alertcondition() - appears as its own named condition in the dropdown, so
+//                       the user can create four separately named alerts and
+//                       switch them on and off independently. The cost: the
+//                       message is a CONST STRING fixed at compile time. It can
+//                       only interpolate {{placeholders}}, so the numbers have
+//                       to be published as plots (SECTION 16 does this, per
+//                       side, so a SHORT alert can never quote a LONG's entry).
+//    PREFER alert(). Use the alertcondition() set only if you want the four
+//    headline events as separate, individually mutable alerts - and be aware
+//    each one you create consumes an alert slot of its own.
+//
+//  NON-REPAINTING: every alert() call sits inside `if confirmed and warmupOk`
+//  and uses alert.freq_once_per_bar_close, so an event is announced once, after
+//  the bar that caused it has closed, and is never retracted. The two guards are
+//  belt and braces on purpose: the freq argument alone would still let an alert
+//  fire from an intrabar evaluation if a future edit moved the call.
+// ============================================================================
+
+// ---------------------------------------------------------------- A1 GROUP
+G17 = "17 - Alerts"
+
+i_alertsOn   = input.bool(true, "Enable alert() events", group = G17,
+     tooltip = "Master switch for all 13 events. Off silences every alert() call " +
+               "without touching the chart art. It does NOT remove the four " +
+               "alertcondition() entries from the dropdown - those are compile-time.",
+     display = display.none)
+i_alertZones = input.bool(true, "Alert on iceberg zones", group = G17,
+     tooltip = "BULLISH ICEBERG, BEARISH ICEBERG and ZONE INVALIDATION. These are " +
+               "EARLY, pre-entry warnings - a zone is born at the absorption step, " +
+               "long before rejection, displacement, BOS and retest are known. " +
+               "On at 15M this is a useful heads-up; on 1M it is a firehose.",
+     display = display.none)
+i_alertEntries = input.bool(true, "Alert on entries", group = G17,
+     tooltip = "LONG ENTRY and SHORT ENTRY - the only two events that carry a full " +
+               "tradeable plan. If you keep one thing on, keep this.",
+     display = display.none)
+i_alertLevels  = input.bool(true, "Alert on TP / SL hits", group = G17,
+     tooltip = "The eight trade-management events, read off SECTION 15's VIRTUAL " +
+               "tracker. They tell you what the model's bookkeeping did, which is " +
+               "not necessarily what your broker did. On a bar that spans both the " +
+               "stop and a target, the STOP is assumed first and the target alert " +
+               "for that bar is suppressed - see the mutual exclusion below.",
+     display = display.none)
+i_alertTag     = input.string("", "Routing tag", group = G17,
+     tooltip = "Optional free text prefixed to the first payload line, for webhook " +
+               "routers that fan out on a keyword. Empty (the default) leaves the " +
+               "first line as the exact 'XAUUSD LONG' form.",
+     display = display.none)
+
+// ONE honesty line, appended to every payload. See rule: this system reads TICK
+// volume. There is no order book, no bid/ask tape and no aggressor flag for spot
+// XAUUSD on TradingView, so nothing here is real order flow.
+VX_PROXY = "Delta Proxy from tick volume - not order-book flow. " +
+           "Confidence is a setup score, not a probability."
+
+f_vxTag() => str.length(i_alertTag) > 0 ? "[" + i_alertTag + "] " : ""
+
+// --------------------------------------------------------- A2 PAYLOAD
+// Every price goes through f_px(), which is str.tostring(p, format.mintick) -
+// the instrument's own precision, so the payload is correct on a 0.01 gold feed
+// and on a 0.001 one without a single hardcoded decimal count anywhere.
+f_vxRr(RiskPlan pl, int k) =>
+    float r = na
+    if not na(pl)
+        r := k == 1 ? pl.rr1 : k == 2 ? pl.rr2 : pl.rr3
+    na(r) ? "n/a" : "1:" + str.tostring(r, "#.0#")
+
+// The nine lines below "XAUUSD LONG" are the user's exact block, in the user's
+// exact order. Two lines are added after it: the full RR LADDER (because one
+// scalar cannot honestly summarise a three-target exit - the headline RR is the
+// TP2 figure that i_rrMin actually gates on, and the ladder shows what TP1 and
+// TP3 really pay), and the proxy disclaimer.
+f_vxPayload(string evt, int dir, RiskPlan pl, float sc) =>
+    bool isEntry = evt == "LONG ENTRY" or evt == "SHORT ENTRY"
+    // UDT fields are read inside an `if`, never from a ternary's untaken branch:
+    // dereferencing an na object is a runtime error that kills the script.
+    float  e  = na
+    float  s  = na
+    float  t1 = na
+    float  t2 = na
+    float  t3 = na
+    string rr = "n/a"
+    if not na(pl)
+        e  := pl.entry
+        s  := pl.stop
+        t1 := pl.tp1
+        t2 := pl.tp2
+        t3 := pl.tp3
+        rr := pl.rrText()
+    string m = isEntry ? "" : evt + "\n"
+    m := m + f_vxTag() + syminfo.ticker + " " + f_dirName(dir)
+    m := m + "\nSetup: " + f_dirWord(dir) + " Iceberg / " +
+             (dir > 0 ? "Buy" : "Sell") + " Absorption"
+    m := m + "\nConfidence: " + (na(sc) ? "n/a" : str.tostring(sc, "#") + "/100")
+    m := m + "\nEntry: " + f_px(e)
+    m := m + "\nSL: "    + f_px(s)
+    m := m + "\nTP1: "   + f_px(t1)
+    m := m + "\nTP2: "   + f_px(t2)
+    m := m + "\nTP3: "   + f_px(t3)
+    m := m + "\nRR: "    + rr
+    m := m + "\nRR ladder: TP1 " + f_vxRr(pl, 1) +
+             " | TP2 " + f_vxRr(pl, 2) + " | TP3 " + f_vxRr(pl, 3)
+    m := m + "\n" + VX_PROXY
+    m
+
+// Zone events have no plan yet - a zone is born six chain steps before an entry
+// exists. Printing "Entry: n/a" five times would be worse than saying what IS
+// known, so these get their own compact body.
+f_vxZoneMsg(string evt, int dir) =>
+    float top = dir > 0 ? zoneTopL : zoneTopS
+    float bot = dir > 0 ? zoneBotL : zoneBotS
+    float sc  = dir > 0 ? scoreL   : scoreS
+    int   tst = dir > 0 ? zoneTestsL : zoneTestsS
+    string m = evt + "\n" + f_vxTag() + syminfo.ticker + " " + f_dirName(dir)
+    m := m + "\nPotential " + f_dirWord(dir) + " Iceberg / " +
+             (dir > 0 ? "Buy" : "Sell") + " Absorption"
+    m := m + "\nZone: " + f_px(bot) + " - " + f_px(top) +
+             "   tests: " + str.tostring(tst)
+    m := m + "\nSetup score so far: " +
+             (na(sc) ? "n/a" : str.tostring(sc, "#") + "/100")
+    m := m + "\nNo entry plan yet - this is a pre-entry warning, not a trade."
+    m := m + "\n" + VX_PROXY
+    m
+
+f_vxTradeMsg(string evt, VTrade t, string note) =>
+    string m = evt + "\n" + f_vxTag() + syminfo.ticker + " " + f_dirName(t.dir)
+    m := m + "\nEntry: " + f_px(t.entry)
+    m := m + "\nSL: "    + f_px(t.stop)
+    m := m + "\nTP1: "   + f_px(t.tp1)
+    m := m + "\nTP2: "   + f_px(t.tp2)
+    m := m + "\nTP3: "   + f_px(t.tp3)
+    m := m + "\nResult so far: " + t.rText()
+    m := m + (str.length(note) > 0 ? "\n" + note : "")
+    m := m + "\n" + VX_PROXY
+    m
+
+// ------------------------------------------------ A3 TRADE-EVENT MEMORY
+// SECTION 15 mutates VTrade objects IN PLACE, so `t.tp1Hit[1]` does not exist -
+// an object field has no series history. This section therefore keeps its own
+// one-bar memory of what it has already announced, per direction, and resets it
+// whenever a new trade opens. Index 0 = LONG, 1 = SHORT, via f_slot() from 2B.
+var array<int>  vxAlBar = array.new<int>(2, na)
+var array<bool> vxAlT1  = array.new<bool>(2, false)
+var array<bool> vxAlT2  = array.new<bool>(2, false)
+var array<bool> vxAlT3  = array.new<bool>(2, false)
+
+// Newest VTrade on this side, open or closed. The downward loop is guarded on
+// n > 0 because `for i = -1 to 0` counts UPWARD and would index array slot -1.
+f_vxCurTrade(int dir) =>
+    VTrade out = na
+    int    n   = array.size(vtrades)
+    if n > 0
+        for i = n - 1 to 0
+            VTrade t = array.get(vtrades, i)
+            if t.dir == dir
+                out := t
+                break
+    out
+
+// ============================================================================
+//  A4 : THE 13 EVENTS. Confirmed bars only, once per bar close, no exceptions.
+//    1  BULLISH ICEBERG      5  LONG TP1     9  SHORT TP1
+//    2  BEARISH ICEBERG      6  LONG TP2    10  SHORT TP2
+//    3  LONG ENTRY           7  LONG TP3    11  SHORT TP3
+//    4  SHORT ENTRY          8  LONG SL     12  SHORT SL
+//                                           13  ZONE INVALIDATION
+// ============================================================================
+if confirmed and warmupOk and i_alertsOn
+
+    // --- 1, 2 : zone birth (mirror pair) -----------------------------------
+    if i_alertZones
+        if absSigL
+            alert(f_vxZoneMsg("BULLISH ICEBERG", 1), alert.freq_once_per_bar_close)
+        if absSigS
+            alert(f_vxZoneMsg("BEARISH ICEBERG", -1), alert.freq_once_per_bar_close)
+
+        // --- 13 : zone invalidation, routed by SIDE -------------------------
+        // A falling edge on the exported alive flag. A bool is never na, so the
+        // [1] read is safe on the first bar and needs no nz() - which would be
+        // a compile error on a bool anyway.
+        if zoneAliveL[1] and not zoneAliveL
+            alert(f_vxZoneMsg("ZONE INVALIDATION", 1), alert.freq_once_per_bar_close)
+        if zoneAliveS[1] and not zoneAliveS
+            alert(f_vxZoneMsg("ZONE INVALIDATION", -1), alert.freq_once_per_bar_close)
+
+    // --- 3, 4 : entries (mirror pair) --------------------------------------
+    if i_alertEntries
+        if longSignal
+            alert(f_vxPayload("LONG ENTRY", 1, sigPlanL, sigScoreL),
+                 alert.freq_once_per_bar_close)
+        if shortSignal
+            alert(f_vxPayload("SHORT ENTRY", -1, sigPlanS, sigScoreS),
+                 alert.freq_once_per_bar_close)
+
+    // --- 5..12 : trade management, ONE path walked for both directions ------
+    // MUTUAL EXCLUSION, implemented here rather than merely documented: when a
+    // single bar's range covers both the stop and a target, TradingView cannot
+    // tell which came first, so the STOP is assumed first and the target alert
+    // for that bar is suppressed. That under-reports winners, which is the only
+    // safe direction for the error - firing both would let one bar book a win
+    // AND a loss, and the stats panel would count both.
+    if i_alertLevels
+        for k = 0 to 1
+            int    dir  = k == 0 ? 1 : -1
+            int    slot = f_slot(dir)
+            VTrade t    = f_vxCurTrade(dir)
+            if not na(t)
+                // A new trade wipes the memory of the previous one's targets.
+                if na(array.get(vxAlBar, slot)) or array.get(vxAlBar, slot) != t.openBar
+                    array.set(vxAlBar, slot, t.openBar)
+                    array.set(vxAlT1, slot, false)
+                    array.set(vxAlT2, slot, false)
+                    array.set(vxAlT3, slot, false)
+
+                // NOTE, stated rather than hidden: the event set is exactly 13,
+                // so a trade that dies of dTimeStop or dSessionEnd produces no
+                // alert. That is a deliberate omission, not an oversight - those
+                // exits are visible in the panel and in SECTION 15's histogram.
+                bool closedNow = not t.isOpen and t.closeBar == bar_index
+                bool rawSl  = closedNow and t.outcome == NoTradeReason.dStopped
+                bool rawTp3 = closedNow and t.outcome == NoTradeReason.dTarget and
+                              not array.get(vxAlT3, slot)
+                bool rawTp2 = t.tp2Hit and not array.get(vxAlT2, slot)
+                bool rawTp1 = t.tp1Hit and not array.get(vxAlT1, slot)
+
+                // Stop wins the bar; below it, only the FURTHEST target reached
+                // is announced, so one bar produces at most one management event.
+                bool fSl  = rawSl
+                bool fTp3 = rawTp3 and not fSl
+                bool fTp2 = rawTp2 and not fSl and not fTp3
+                bool fTp1 = rawTp1 and not fSl and not fTp3 and not fTp2
+
+                string side = f_dirName(dir)
+                string amb  = " (bar spanned stop and target - stop assumed first)"
+                if fSl
+                    alert(f_vxTradeMsg(side + " SL HIT", t, rawTp1 ? amb : ""),
+                         alert.freq_once_per_bar_close)
+                if fTp3
+                    alert(f_vxTradeMsg(side + " TP3 HIT", t, ""),
+                         alert.freq_once_per_bar_close)
+                if fTp2
+                    alert(f_vxTradeMsg(side + " TP2 HIT", t, ""),
+                         alert.freq_once_per_bar_close)
+                if fTp1
+                    alert(f_vxTradeMsg(side + " TP1 HIT", t, ""),
+                         alert.freq_once_per_bar_close)
+
+                // Latch from the OBJECT, not from what was announced: a target
+                // suppressed by the stop this bar must not re-announce next bar.
+                array.set(vxAlT1, slot, t.tp1Hit)
+                array.set(vxAlT2, slot, t.tp2Hit)
+                array.set(vxAlT3, slot, array.get(vxAlT3, slot) or rawTp3)
+
+// ============================================================================
+//  A5 : STATIC alertcondition() SET  (four headline events)
+//  Must sit at global scope with a const message, so the numbers arrive through
+//  {{plot("...")}} placeholders pointing at SECTION 16's PER-SIDE plots. Using
+//  one shared "Entry" plot here is the classic bug: activeView-style plumbing
+//  lets a SHORT alert publish the LONG's entry and an inverted stop.
+//  These are OPTIONAL. Each one the user creates costs an alert slot; the
+//  alert() route above covers all 13 events for the price of one.
+// ============================================================================
+alertcondition(longSignal and confirmed, "LONG ENTRY",
+     "ICEBERG LONG {{ticker}} {{interval}} @ {{close}} | Entry {{plot(\"L Entry\")}} | SL {{plot(\"L Stop\")}} | Score {{plot(\"LONG Score\")}}/100 (setup score, not a probability)")
+alertcondition(shortSignal and confirmed, "SHORT ENTRY",
+     "ICEBERG SHORT {{ticker}} {{interval}} @ {{close}} | Entry {{plot(\"S Entry\")}} | SL {{plot(\"S Stop\")}} | Score {{plot(\"SHORT Score\")}}/100 (setup score, not a probability)")
+alertcondition(absSigL and confirmed, "BULLISH ICEBERG",
+     "Potential BULLISH ICEBERG (buy absorption) {{ticker}} {{interval}} @ {{close}} | Score {{plot(\"LONG Score\")}}/100 | Pre-entry warning, no plan yet. Delta Proxy from tick volume.")
+alertcondition(absSigS and confirmed, "BEARISH ICEBERG",
+     "Potential BEARISH ICEBERG (sell absorption) {{ticker}} {{interval}} @ {{close}} | Score {{plot(\"SHORT Score\")}}/100 | Pre-entry warning, no plan yet. Delta Proxy from tick volume.")
+// ========================= END SECTION 17 ===================================

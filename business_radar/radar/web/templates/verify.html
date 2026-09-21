@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% from "_macros.html" import status_badge, score_badge, confidence_badge, findings_groups,
+                              source_link, history_table %}
+{% block title %}Verify {{ business.name }} - business_radar{% endblock %}
+{% block content %}
+
+<div class="panel">
+  <div class="spread">
+    <div>
+      <p class="small">{{ business.city }} &middot; {{ business.industry|pretty }} /
+        {{ business.category|pretty }}</p>
+      <div class="row">
+        <h1>{{ business.name }}</h1>
+        {{ status_badge(business.status) }}
+        {{ score_badge(business.opportunity_score, business.opportunity_band) }}
+      </div>
+      <p class="mono">{{ business.id }} &middot; {{ verification.id }}</p>
+    </div>
+    <div class="row">
+      <a class="btn" href="{{ url_for('business', business_id=business.id) }}">Business page</a>
+      <span class="small">{{ queue|length }} waiting in the queue</span>
+    </div>
+  </div>
+</div>
+
+{% if suppressions %}
+<div class="flash bad" role="alert">
+  A suppression is recorded for this business. It cannot be verified into the outreach pool.
+</div>
+{% endif %}
+
+<form method="post" action="{{ url_for('verify_submit', business_id=business.id) }}">
+<input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+<div class="cols">
+
+  {# ---------------------------------------------------------- evidence -- #}
+  <section class="stack">
+    <div class="panel" id="z2">
+      <header><span class="panel-title">Z2 &middot; Identity</span></header>
+      <dl class="facts">
+        <dt>Website</dt>
+        <dd>{% if business.website %}{{ source_link(business.website, business.website) }}
+              <span class="badge {{ 'ok' if business.website_status == 'PRESENT' else 'mute' }}">{{ business.website_status }}</span>
+            {% else %}<span class="na">&mdash;</span>{% endif %}</dd>
+        <dt>Listing</dt>
+        <dd>{% if business.listing_url %}{{ source_link(business.listing_url, business.listing_url) }}
+            {% else %}<span class="na">&mdash;</span>{% endif %}</dd>
+        <dt>Address</dt><dd>{{ business.address|dash }}</dd>
+        <dt>Size</dt><dd>{{ business.size_band }}</dd>
+        <dt>Discovered</dt><dd>{{ business.first_discovered_at|day }}</dd>
+      </dl>
+    </div>
+
+    <div class="panel" id="z3">
+      <header><span class="panel-title">Z3 &middot; Contacts</span></header>
+      {% if contacts %}
+        {% for c in contacts %}
+          <div style="padding:var(--s-2) 0;border-bottom:1px solid var(--grid)">
+            <div class="row"><strong>{{ c.value_display }}</strong>
+              <span class="badge mute">{{ c.kind }}</span>
+              {% if c.human_verified %}<span class="badge ok">human-confirmed</span>
+              {% else %}<span class="badge warn">not confirmed</span>{% endif %}</div>
+            <div class="finding-meta">
+              {% if c.source_url %}<span>{{ source_link(c.source_url, 'source') }}</span>{% endif %}
+              <span>captured {{ c.captured_at|day }}</span>
+            </div>
+          </div>
+        {% endfor %}
+        {% if contacts|selectattr('human_verified')|list|length == 0 %}
+          <p class="reason">No contact is confirmed yet. Verifying is still worth doing;
+            the business will sit at VERIFIED until a contact is confirmed on its page.</p>
+        {% endif %}
+      {% else %}
+        <p class="empty">No contact stored.</p>
+      {% endif %}
+    </div>
+
+    <div class="panel" id="z4">
+      <header>
+        <span class="panel-title">Z4 &middot; Findings</span>
+        <span class="small">{% if run %}{{ run.model_id or '—' }} /
+          {{ run.prompt_version or '—' }} &middot; {{ run.finished_at|stamp }}{% endif %}</span>
+      </header>
+      {{ findings_groups(findings) }}
+    </div>
+
+    <div class="panel" id="z4-sources">
+      <header><span class="panel-title">Z4 &middot; Sources</span></header>
+      {% if sources %}
+        <ul style="margin:0;padding-left:var(--s-4)">
+          {% for s in sources %}
+            <li style="margin-bottom:var(--s-2)">
+              {{ source_link(s.url, s.name) }}
+              <span class="badge mute">{{ s.source_type }}</span>
+              <span class="small">{{ s.checked_at|day }} &middot; {{ s.information_obtained }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="empty">No sources stored. Check 1 and check 6 are hard to answer without one.</p>
+      {% endif %}
+    </div>
+
+    <div class="panel" id="z5">
+      <header><span class="panel-title">Z5 &middot; Opportunity</span></header>
+      {% if opportunity %}
+        <div class="row" style="margin-bottom:var(--s-3)">
+          {{ score_badge(opportunity.score, opportunity.band) }}
+          {{ confidence_badge(opportunity.confidence, opportunity.confidence_pct) }}
+        </div>
+        <dl class="facts">
+          <dt>Problem</dt><dd>{{ opportunity.potential_problem }}</dd>
+          <dt>Solution</dt><dd>{{ opportunity.potential_solution }}</dd>
+          <dt>Modules</dt>
+          <dd>{% if modules %}{{ modules|map(attribute='module')|map('pretty')|join(' · ') }}
+              {% else %}<span class="na">&mdash;</span>{% endif %}</dd>
+          <dt>Benefit</dt><dd>{{ opportunity.expected_benefit }}</dd>
+        </dl>
+      {% else %}
+        <p class="empty">Not scored. Check 7 cannot honestly be ticked.</p>
+      {% endif %}
+    </div>
+
+    <div class="panel" id="z6">
+      <header><span class="panel-title">Z6 &middot; Suppression and history</span></header>
+      <dl class="facts">
+        <dt>Opt-out records</dt>
+        <dd>{% if suppressions %}{{ suppressions|length }} &mdash; do not contact
+            {% else %}none{% endif %}</dd>
+        <dt>Prior outreach</dt>
+        <dd>{% if history %}{{ history|length }} message(s){% else %}none{% endif %}</dd>
+      </dl>
+      {{ history_table(history) }}
+    </div>
+  </section>
+
+  {# --------------------------------------------------------- checklist -- #}
+  <section class="panel" style="align-self:start;position:sticky;top:70px">
+    <header>
+      <span class="panel-title">Checklist</span>
+      <span class="small">Nine checks, all of them, before VERIFIED.</span>
+    </header>
+
+    <ol style="margin:0;padding-left:var(--s-5)">
+      {% for key, prompt, helper in checklist %}
+        {% set answer = answers.get(key) %}
+        <li style="margin-bottom:var(--s-3)">
+          <label style="text-transform:none;letter-spacing:0;font-weight:600;
+                        color:var(--text-1);font-size:var(--t-sm);display:flex;gap:8px">
+            <input type="checkbox" name="check_{{ key }}" style="width:auto"
+                   {% if answer and answer.passed == 1 %}checked{% endif %}>
+            <span>{{ prompt }}</span>
+          </label>
+          <p class="help" style="margin-left:22px">{{ helper }}</p>
+          <input type="text" name="note_{{ key }}" style="margin-left:22px;width:calc(100% - 22px)"
+                 placeholder="if you are saying no, why (10 characters or more)"
+                 value="{{ answer.note if answer and answer.note else '' }}">
+        </li>
+      {% endfor %}
+    </ol>
+
+    <div class="field">
+      <label for="why_note">Why (minimum 15 characters)</label>
+      <textarea id="why_note" name="why_note" rows="3"
+                placeholder="What convinced you. This is stored and read back in the audit."></textarea>
+      <p class="help">A note byte-identical to the previous business's is the thing this field
+        exists to catch, so write the sentence about this one.</p>
+    </div>
+
+    <div class="field">
+      <label>Time on this screen</label>
+      <div class="bar" aria-hidden="true">
+        <span id="dwell-bar" style="width:0%"></span>
+      </div>
+      <p class="help" id="dwell-text">
+        The approve control needs {{ (verification.dwell_required_ms / 1000)|round(0,'floor')|int }}s
+        on this screen. Reject and Skip have no dwell at all and are live from the first second.
+      </p>
+    </div>
+
+    <div class="row">
+      <button class="btn primary" type="submit" name="action" value="approve">
+        Approve &mdash; VERIFIED</button>
+    </div>
+    <p class="reason">Every predicate is re-checked when this posts. A client that enables the
+      button early lands back here with the step it skipped named.</p>
+
+    <hr style="border:0;border-top:1px solid var(--grid);margin:var(--s-4) 0">
+
+    <div class="field">
+      <label for="reason_code">Rejection reason</label>
+      <select id="reason_code" name="reason_code">
+        <option value="">choose one</option>
+        {% for r in reason_codes %}
+          <option value="{{ r.code }}">{{ r.label }}{% if r.writes_suppression %}
+            (writes a permanent suppression){% endif %}</option>
+        {% endfor %}
+      </select>
+      <p class="help">Rejecting needs a reason and nothing else.</p>
+    </div>
+    <div class="field">
+      <label for="reason_note">Note</label>
+      <input id="reason_note" name="reason_note" type="text">
+    </div>
+    <div class="row">
+      <button class="btn danger" type="submit" name="action" value="reject">Reject</button>
+      <button class="btn" type="submit" name="action" value="skip">Skip</button>
+    </div>
+  </section>
+</div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+/* The dwell meter is a floor, not a deadline, so it fills rather than counting down. The
+   number that decides anything is computed on the server from verifications.started_at; this
+   only tells the operator where he is. */
+(function () {
+  var required = {{ verification.dwell_required_ms|int }};
+  var elapsed = {{ elapsed_ms|int }};
+  var bar = document.getElementById("dwell-bar");
+  var text = document.getElementById("dwell-text");
+  if (!bar) { return; }
+  function tick() {
+    elapsed += 500;
+    var pct = Math.min(100, Math.round(100 * elapsed / required));
+    bar.style.width = pct + "%";
+    if (pct >= 100 && text) {
+      text.textContent = "The dwell floor is met. Reject and Skip never had one.";
+    }
+  }
+  tick();
+  setInterval(tick, 500);
+})();
+</script>
+{% endblock %}

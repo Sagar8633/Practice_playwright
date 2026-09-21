@@ -1,0 +1,438 @@
+// ============================================================================
+//  SECTION 10 : RETEST / ENTRY MODES
+//
+//  This section owns the ONE question "does the confirmed BOS ever become an
+//  order, and at what price is the thesis dead?". It owns nothing else:
+//    * cooldown, duplicate suppression and every other hygiene gate belong to
+//      SECTION 13 (that is why i_cooldownBars does NOT exist here),
+//    * the stop / TP / RR arithmetic belongs to SECTION 11,
+//    * the setup lifecycle and the slot arrays belong to SECTION 14.
+//  What leaves here is a raw per-direction trigger plus the two prices the rest
+//  of the file needs: the level price had to defend, and the invalidation
+//  anchor that becomes a stop candidate in f_riskPlan().
+//
+//  WHY THE BOS BAR MUST LATCH ITS LEVELS
+//  The absorption zone was tagged several bars before the BOS, and the
+//  displacement leg one or more bars before that. Reading those detectors on
+//  the BOS bar and hoping they still publish a value is the single most
+//  dangerous failure mode available here: if they are per-bar pulses, NOTHING
+//  ever arms, every setup dies as "no level", and total silence is
+//  indistinguishable from the design working as intended. So the BOS bar takes
+//  a SNAPSHOT into var state, and the displacement origin additionally carries
+//  its own last-seen latch with a freshness bound.
+//
+//  WHY THE ARM-TIME SIDE GUARD IS NOT OPTIONAL
+//  "Nearest of three" is a max() for a long and a min() for a short, which is
+//  only "nearest" if every candidate genuinely sits on the retracement side of
+//  the BOS close. A zone top that straddles the broken level, or a displacement
+//  origin that began above it, lands the touch level AT or BEYOND the close -
+//  and then the very next bar satisfies `low <= lvl + tol` trivially, a phantom
+//  retest prints one bar after the BOS, and the invalidation anchor ends up on
+//  the wrong side of entry where math.abs() in the risk module hides the sign
+//  error completely. Every candidate is therefore filtered to STRICTLY the
+//  retracement side and at least f_tol(i_rtMinSep) away before anything folds.
+//
+//  MODES
+//    "Retest (default)"  arm at the BOS bar, signal only when price returns and
+//                        the level is DEFENDED. Fewer, more selective trades -
+//                        which is what was asked for, hence the default.
+//    "Confirmation"      signal on the close of the BOS bar itself. Zero extra
+//                        lag, wider stop, materially more signals.
+//  Both modes still require a surviving level: the anchor is the stop.
+// ============================================================================
+
+GRT = "10 - Retest / Entry"
+
+i_entryMode      = input.string("Retest (default)", "Entry mode",
+     options = ["Retest (default)", "Confirmation"], group = GRT,
+     tooltip = "RETEST (default): after the BOS the setup is ARMED, and a signal " +
+               "prints only when price comes back to the chosen level and DEFENDS " +
+               "it. Far fewer trades, much tighter stop, and NO TRADE is the normal " +
+               "outcome. CONFIRMATION: the signal prints on the close of the BOS bar " +
+               "itself - zero extra lag, a wider stop and several times the signal " +
+               "count. Both modes still need a level on the retracement side, " +
+               "because that level IS the stop reference.",
+     display = display.none)
+
+i_retestTarget   = input.string("Nearest of three", "Retest target",
+     options = ["Nearest of three", "Broken structure", "Absorption zone",
+                 "Displacement origin", "Any of three (wide)"], group = GRT,
+     tooltip = "Which price the retest must reach. The three candidates are the " +
+               "broken structure level, the near edge of the absorption zone and " +
+               "the displacement origin. NEAREST OF THREE (default) uses the one " +
+               "closest to the BOS close as BOTH the touch level and the " +
+               "invalidation anchor - the tightest and most selective setting. ANY " +
+               "OF THREE (wide) touches the nearest but only invalidates past the " +
+               "deepest, which tolerates a full retrace into the zone at the cost " +
+               "of a wider stop; that is the right trade on 15M and wrong on 1M.",
+     display = display.none)
+
+i_retestMinBars  = input.int(1, "Min bars after BOS before a touch counts",
+     minval = 1, maxval = 20, group = GRT,
+     tooltip = "The structural floor is 1 and cannot be lowered: the BOS bar can " +
+               "never be its own retest. Raising it forces price to leave the level " +
+               "before coming back, which discards the shallow same-bar graze.",
+     display = display.none)
+
+i_retestMaxBars  = input.int(15, "Max bars a setup may stay armed",
+     minval = 2, maxval = 100, group = GRT,
+     tooltip = "After this many bars the armed setup EXPIRES with no signal. This " +
+               "is a BAR count, so it means 15 minutes on 1M and nearly 4 hours on " +
+               "15M - retune it whenever the timeframe changes. At the maximum a " +
+               "stale absorption can be paired with an unrelated break much later; " +
+               "at the minimum most genuine retests never get the chance to print.",
+     display = display.none)
+
+i_rtRejectBars   = input.int(3, "Max bars from the last touch to the rejection",
+     minval = 0, maxval = 20, group = GRT,
+     tooltip = "Once price is AT the level the defence must print within this many " +
+               "bars. The clock is refreshed on EVERY touch, not just the first, so " +
+               "it measures 'price has walked away from the level' rather than " +
+               "'bars since price first came near it' - a shallow graze must not be " +
+               "allowed to burn the window before the real retest arrives. 0 means " +
+               "the defence has to be the touch bar itself.",
+     display = display.none)
+
+i_rtTolAtr       = input.float(0.12, "Touch tolerance (x ATR)",
+     minval = 0.0, maxval = 1.0, step = 0.01, group = GRT,
+     tooltip = "How close price must come to count as a touch. Applied through " +
+               "f_tol(), so it can never fall below one spread no matter how dead " +
+               "the tape is - without that floor, a 1M ATR of 0.5 USD would make " +
+               "the broker's quote, not price action, decide whether a touch " +
+               "registered. At 0 the tolerance IS one spread; at 1.0 almost any " +
+               "bar in the neighbourhood counts as a touch.",
+     display = display.none)
+
+i_rtMinSep       = input.float(0.20, "Min level separation from the BOS close (x ATR)",
+     minval = 0.0, maxval = 2.0, step = 0.05, group = GRT,
+     tooltip = "A candidate closer to the BOS close than this - or on the WRONG " +
+               "side of it - is discarded, and if nothing survives the setup does " +
+               "not arm at all. Without it the 'retest' can be satisfied by the bar " +
+               "immediately after the break, which is not a retest, and the " +
+               "invalidation anchor can land on the wrong side of entry. Raising it " +
+               "demands a deeper pullback and produces fewer, better entries.",
+     display = display.none)
+
+i_rtInvalAtr     = input.float(0.25, "Invalidation buffer past the anchor (x ATR)",
+     minval = 0.0, maxval = 2.0, step = 0.05, group = GRT,
+     tooltip = "CLOSE-based. The setup dies when a bar CLOSES this far beyond the " +
+               "invalidation anchor (below it for a long, above for a short). Wicks " +
+               "through the anchor are allowed and expected - that is precisely " +
+               "what a retest looks like. Routed through f_tol() so a spread blip " +
+               "can never kill a setup.",
+     display = display.none)
+
+i_rtWickKill     = input.float(0.0, "Extra wick kill past the buffer (x ATR, 0 = off)",
+     minval = 0.0, maxval = 3.0, step = 0.1, group = GRT,
+     tooltip = "Optional SECOND kill: also invalidate when the bar's low (long) or " +
+               "high (short) runs this much further again past the close-based " +
+               "invalidation price. 0 disables it entirely. Turn it on only if " +
+               "setups keep surviving a violent spike and then failing anyway.",
+     display = display.none)
+
+i_rtWickFrac     = input.float(0.45, "Defence: min wick (fraction of bar range)",
+     minval = 0.0, maxval = 0.90, step = 0.05, group = GRT,
+     tooltip = "A LONG needs a lower wick of at least this fraction of the bar's " +
+               "range; a SHORT needs the mirror upper wick. Identical threshold " +
+               "both ways - the measure itself is f_wickFrac(dir), so the two sides " +
+               "cannot drift apart. At 0 the wick stops filtering; above ~0.6 only " +
+               "extreme pin bars qualify and the stop they imply is wide.",
+     display = display.none)
+
+i_rtCloseLoc     = input.float(0.60, "Defence: min directional close location (0..1)",
+     minval = 0.50, maxval = 1.0, step = 0.05, group = GRT,
+     tooltip = "A LONG needs (close - low) / range at or above this; a SHORT needs " +
+               "the exact mirror, and f_closeLoc(+1) + f_closeLoc(-1) == 1 on every " +
+               "bar so no directional bias is possible. 0.60 puts the close in the " +
+               "far 40% of the bar in the trade's direction. At 1.0 only a close " +
+               "exactly on the extreme passes.",
+     display = display.none)
+
+i_rtEngulf       = input.bool(false, "Defence: also require body engulfment", group = GRT,
+     tooltip = "Optional. LONG: the bullish body fully engulfs the previous body; " +
+               "SHORT is the exact mirror. Raises quality and cuts the signal count " +
+               "hard, especially on 1M.",
+     display = display.none)
+
+i_rtReqVol       = input.bool(true, "Defence: also require a relative-volume surge",
+     group = GRT,
+     tooltip = "ON by default, and deliberately NOT a delta-lean test. With the " +
+               "default CLV estimator buyPressure is arithmetically IDENTICAL to " +
+               "the close-location number already tested above, so a delta gate " +
+               "would be the same fact counted twice and could never reject a bar " +
+               "that passed. Relative volume is the one piece of evidence close " +
+               "location cannot produce. On a feed with no usable volume the test " +
+               "BYPASSES rather than failing, per the file's one na policy.",
+     display = display.none)
+
+i_rtVolMult      = input.float(1.20, "Defence: relative volume multiple",
+     minval = 1.0, maxval = 5.0, step = 0.05, group = GRT,
+     tooltip = "The defence bar must carry at least this much relative volume. " +
+               "TICK volume, never contracts and never real order flow. At 1.0 the " +
+               "test is inert; above ~2.0 only the heaviest bars of the session " +
+               "qualify and most genuine retests are discarded.",
+     display = display.none)
+
+// An empty retest window (min > max) would silently expire every setup with no
+// diagnostic, and the two minval/maxval ranges permit it. Clamp rather than
+// raise a runtime error - a misconfigured input must not kill the whole script.
+rtMaxBars = math.max(i_retestMaxBars, i_retestMinBars + 1)
+
+// --------------------------------------------------------- GLOBAL BAR READS
+// Hoisted OUT of f_rtDefended on purpose. v6 evaluates `and`/`or` lazily, so any
+// history reference living inside a conditionally-reached function body is
+// evaluated on an irregular subset of bars. These are cheap; keep them global.
+rtPrevTop = math.max(open[1], close[1])
+rtPrevBot = math.min(open[1], close[1])
+rtEngBull = close > open and close >= rtPrevTop and open <= rtPrevBot
+rtEngBear = close < open and close <= rtPrevBot and open >= rtPrevTop
+
+// ------------------------------------------------------------- PURE HELPERS
+// A candidate is eligible only if it sits STRICTLY on the retracement side of
+// the reference (the BOS close) AND at least `sep` away from it. Returning na
+// for a failure lets the folds below skip it without poisoning the result.
+f_rtCand(int dir, float c, float ref, float sep) =>
+    na(c) ? na : (dir > 0 ? (c <= ref - sep ? c : na) : (c >= ref + sep ? c : na))
+
+// na-skipping fold toward the reference. Every eligible long candidate sits
+// BELOW the BOS close, so "nearest" is the maximum; shorts mirror exactly.
+// Call it with -dir to get the DEEPEST candidate instead - one helper, two uses,
+// and the two can never disagree about what "nearest" means.
+f_rtPick(int dir, float a, float b) =>
+    na(a) ? b : na(b) ? a : (dir > 0 ? math.max(a, b) : math.min(a, b))
+
+// A LONG retest that HOLDS and a SHORT retest that FAILS are the same event
+// mirrored: the level defends and price closes back on the BOS side of it. One
+// name, one code path, parameterised by dir - symmetry is structural here, not
+// something a reviewer has to verify by eye.
+f_rtDefended(int dir, float lvl) =>
+    bool okRange = barRange > tick and not na(lvl)
+    bool okWick  = f_wickFrac(dir) >= i_rtWickFrac
+    bool okLoc   = f_closeLoc(dir) >= i_rtCloseLoc
+    bool okSide  = na(lvl) ? false : (dir > 0 ? close > lvl : close < lvl)
+    bool okEng   = not i_rtEngulf or (dir > 0 ? rtEngBull : rtEngBear)
+    // Unknown volume BYPASSES, never fails - a thin-volume veto that fires on a
+    // volumeless feed is a 100% kill switch wearing a filter's clothes.
+    bool okVol   = not i_rtReqVol or not hasVol or na(rvol) or rvol >= i_rtVolMult
+    okRange and okWick and okLoc and okSide and okEng and okVol
+
+// 0..1 GRADE of the trigger bar as a retest event - never a probability, and
+// never binary. Components that do not exist on this bar (no level in
+// Confirmation mode, no volume on the feed) are SKIPPED, not scored zero:
+// scoring a missing measurement as zero is how a mode the user chose ends up
+// penalised for the evidence it was never meant to have.
+f_rtGrade(int dir, float lvl) =>
+    float gWick = f_ramp(f_wickFrac(dir), 0.15, 0.55)
+    float gLoc  = f_ramp(f_closeLoc(dir), 0.50, 0.85)
+    float gRcl  = na(lvl) ? na : f_clamp01(math.abs(close - lvl) / f_tol(0.30))
+    float gVol  = na(rvol) ? na : f_ramp(rvol, 0.80, 1.80)
+    float sum   = 0.0
+    float cnt   = 0.0                        // float on purpose: int/int is a fraction in v6
+    if not na(gWick)
+        sum += gWick
+        cnt += 1.0
+    if not na(gLoc)
+        sum += gLoc
+        cnt += 1.0
+    if not na(gRcl)
+        sum += gRcl
+        cnt += 1.0
+    if not na(gVol)
+        sum += gVol
+        cnt += 1.0
+    cnt > 0.0 ? f_clamp01(sum / cnt) : 0.0
+
+// -------------------------------------------------------------- ARMED STATE
+// Slot 0 = LONG, slot 1 = SHORT - the same mapping f_slot(dir) uses in SECTION
+// 2B, so a reader never has to hold two conventions at once. Arrays rather
+// than two mirrored variable sets so the whole machine below is ONE loop over
+// both directions: there is literally no long-only or short-only statement in
+// this section, which is what makes the mirror structural.
+var array<bool>  rtArmed   = array.new<bool>(2, false)
+var array<int>   rtBosBar  = array.new<int>(2, na)
+var array<float> rtLvl     = array.new<float>(2, na)   // the touch level
+var array<float> rtAnch    = array.new<float>(2, na)   // the invalidation anchor
+var array<bool>  rtTouch   = array.new<bool>(2, false)
+var array<int>   rtTchBar  = array.new<int>(2, na)
+var array<float> rtQual    = array.new<float>(2, 0.0)
+var array<bool>  rtFire    = array.new<bool>(2, false)
+
+// Defensive latch of the displacement leg. The BOS bar is at least one bar
+// after the displacement, so reading dispOrg on the BOS bar reads na whenever
+// the detector is a per-bar pulse. Freshness is bounded by the same window the
+// retest itself uses - a displacement older than that belongs to another move.
+var array<float> rtDispOrg = array.new<float>(2, na)
+var array<float> rtDispFar = array.new<float>(2, na)
+var array<int>   rtDispBar = array.new<int>(2, na)
+
+// ============================================================================
+//  THE MACHINE - every mutation below is inside `if confirmed and warmupOk`.
+// ============================================================================
+if confirmed and warmupOk
+    for q = 0 to 1
+        int   qd = q == 0 ? 1 : -1
+        float dO = qd > 0 ? dispOrgL : dispOrgS
+        float dF = qd > 0 ? dispFarL : dispFarS
+        float dP = array.get(rtDispOrg, q)
+        // Stamp the bar only when the published origin CHANGES. SECTION 8 holds
+        // its origin live for i_dispMemBars bars rather than pulsing it, so
+        // re-stamping on every bar it is non-na slides the freshness window
+        // along with it and the bound below never bites: the real horizon
+        // silently becomes i_dispMemBars + rtMaxBars instead of rtMaxBars.
+        if not na(dO) and (na(dP) or dP != dO)
+            array.set(rtDispOrg, q, dO)
+            array.set(rtDispFar, q, dF)
+            array.set(rtDispBar, q, bar_index)
+
+    for s = 0 to 1
+        int dir = s == 0 ? 1 : -1
+        // The trigger is a one-bar pulse and must never survive its own bar -
+        // and the level it fired on dies WITH it. Without this release the
+        // anchor outlives the signal indefinitely (forever in Confirmation
+        // mode, where nothing ever expires a setup), SECTION 11 keeps folding
+        // that dead price into `anchor` as a stop FLOOR, and every later plan
+        // on that side is widened until the width gate rejects the direction
+        // outright. Guarded on rtArmed so a slot that fired and re-armed on one
+        // bar keeps the NEW level.
+        if array.get(rtFire, s) and not array.get(rtArmed, s)
+            array.set(rtLvl,  s, na)
+            array.set(rtAnch, s, na)
+            array.set(rtQual, s, 0.0)
+        array.set(rtFire, s, false)
+
+        // ---- direction-local view of everything upstream --------------------
+        bool  bosNow   = dir > 0 ? bosSigL : bosSigS
+        bool  bosOpp   = dir > 0 ? bosSigS : bosSigL
+        bool  bosAmbig = bosSigL and bosSigS       // a two-sided bar has NO opinion
+        float bosLvl   = dir > 0 ? bosLvlL : bosLvlS
+        bool  zAlive   = dir > 0 ? zoneAliveL : zoneAliveS
+        float zTopD    = dir > 0 ? zoneTopL : zoneTopS
+        float zBotD    = dir > 0 ? zoneBotL : zoneBotS
+        // A dead zone is not a level. Price approaching from above meets the TOP
+        // first on a long and the BOTTOM first on a short - hence near/far.
+        float zNear    = zAlive ? (dir > 0 ? zTopD : zBotD) : na
+        float zFar     = zAlive ? (dir > 0 ? zBotD : zTopD) : na
+        int   dBar     = array.get(rtDispBar, s)
+        bool  dFresh   = not na(dBar) and (bar_index - dBar) <= rtMaxBars
+        float dOrg     = dFresh ? array.get(rtDispOrg, s) : na
+        float dFar     = dFresh ? array.get(rtDispFar, s) : na
+
+        float tol = f_tol(i_rtTolAtr)
+        float buf = f_tol(i_rtInvalAtr)
+
+        // ---- (a) resolve a setup that is already armed ----------------------
+        if array.get(rtArmed, s)
+            float lvl  = array.get(rtLvl,  s)
+            float anch = array.get(rtAnch, s)
+            int   k    = bar_index - nz(array.get(rtBosBar, s), bar_index)
+            float hard = na(anch) ? na : (dir > 0 ? anch - buf : anch + buf)
+            bool  cBad = na(hard) ? false : (dir > 0 ? close < hard : close > hard)
+            float wx   = f_tol(i_rtWickKill)
+            bool  wkOn = i_rtWickKill > 0.0 and not na(hard)
+            bool  wBad = wkOn and (dir > 0 ? low < hard - wx : high > hard + wx)
+            // An ambiguous bar cannot advance the chain, so it must not be
+            // allowed to kill one either - a tie is "no opinion", both ways.
+            bool  oppB = bosOpp and not bosAmbig
+            bool  dead = cBad or wBad or oppB
+
+            bool tNow = na(lvl) ? false : (dir > 0 ? low <= lvl + tol : high >= lvl - tol)
+            // Refresh on EVERY touch. Latching the first graze makes the reject
+            // window measure "bars since price first came near", which expires
+            // the setup one bar before the deep retest it was built to take.
+            if not dead and k >= i_retestMinBars and tNow
+                array.set(rtTouch,  s, true)
+                array.set(rtTchBar, s, bar_index)
+
+            bool touched = array.get(rtTouch, s)
+            int  tb      = nz(array.get(rtTchBar, s), bar_index)
+            bool gone    = k > rtMaxBars or (touched and (bar_index - tb) > i_rtRejectBars)
+            bool fire    = not dead and not gone and touched and f_rtDefended(dir, lvl)
+
+            if fire
+                array.set(rtFire,  s, true)
+                array.set(rtQual,  s, f_rtGrade(dir, lvl))
+                array.set(rtArmed, s, false)      // one signal per armed setup, ever
+            else if dead or gone
+                array.set(rtArmed, s, false)
+                array.set(rtLvl,   s, na)
+                array.set(rtAnch,  s, na)
+                array.set(rtQual,  s, 0.0)
+
+        // ---- (b) a fresh BOS supersedes: arm, or fire in Confirmation mode ---
+        // Runs AFTER (a) so a bar can resolve the old setup and arm a new one -
+        // EXCEPT on a bar where (a) actually fired. There is exactly ONE level
+        // and ONE anchor exported per direction, so re-arming on the signal bar
+        // publishes the NEW setup's kill price as the stop reference of a
+        // signal that belongs to the OLD one, and zeroes the retest grade the
+        // fire just computed. The BOS pulse is dropped instead; SECTION 13's
+        // duplicate and cooldown gates would have suppressed a same-direction
+        // re-entry one bar later in any case.
+        if bosNow and not bosAmbig and not array.get(rtFire, s)
+            float ref  = close
+            float sep  = f_tol(i_rtMinSep)
+            float cS   = f_rtCand(dir, bosLvl, ref, sep)
+            float cZn  = f_rtCand(dir, zNear,  ref, sep)
+            float cZf  = f_rtCand(dir, zFar,   ref, sep)
+            float cD   = f_rtCand(dir, dOrg,   ref, sep)
+            float cDf  = f_rtCand(dir, dFar,   ref, sep)
+            float near = f_rtPick(dir,  f_rtPick(dir,  cS, cZn), cD)
+            float far  = f_rtPick(-dir, f_rtPick(-dir, cS, cZf), cDf)
+            float lv   = na
+            float an   = na
+            if i_retestTarget == "Broken structure"
+                lv := cS
+                an := cS
+            else if i_retestTarget == "Absorption zone"
+                lv := cZn
+                an := na(cZf) ? cZn : cZf
+            else if i_retestTarget == "Displacement origin"
+                lv := cD
+                an := cD
+            else if i_retestTarget == "Any of three (wide)"
+                lv := near
+                an := na(far) ? near : far
+            else
+                lv := near
+                an := near
+
+            // Validate exactly the levels the chosen target actually uses. A
+            // blanket "all upstream levels present" check would force NO TRADE
+            // on a Broken-Structure setup that had everything it needed.
+            if not na(lv) and not na(an)
+                array.set(rtLvl,    s, lv)
+                array.set(rtAnch,   s, an)
+                array.set(rtBosBar, s, bar_index)
+                array.set(rtTouch,  s, false)
+                array.set(rtTchBar, s, na)
+                if i_entryMode == "Confirmation"
+                    array.set(rtFire,  s, true)
+                    array.set(rtQual,  s, f_rtGrade(dir, float(na)))
+                    array.set(rtArmed, s, false)
+                else
+                    array.set(rtArmed, s, true)
+                    array.set(rtQual,  s, 0.0)   // nothing has been retested yet
+            else
+                // Nothing survived the side/separation guard. The setup is
+                // already sitting at its own retest, so the trigger would be
+                // meaningless. NO TRADE is the correct outcome.
+                array.set(rtArmed, s, false)
+                array.set(rtLvl,   s, na)
+                array.set(rtAnch,  s, na)
+                array.set(rtQual,  s, 0.0)
+
+// ------------------------------------------------------------------ EXPORTS
+// `and confirmed and warmupOk` keeps the pulse pinned to the bar that produced
+// it: during the next forming bar the array still holds the old value, and
+// without the guard every plot and every alert would re-fire on it.
+entryRawL  = confirmed and warmupOk and array.get(rtFire, 0)
+entryRawS  = confirmed and warmupOk and array.get(rtFire, 1)
+// These PERSIST while armed (SECTION 16 draws the pending level from them) and
+// are cleared the moment a setup expires or is invalidated, so non-na means
+// "armed, or fired on this bar" and nothing else.
+retestLvlL = array.get(rtLvl,  0)
+retestLvlS = array.get(rtLvl,  1)
+invAnchorL = array.get(rtAnch, 0)
+invAnchorS = array.get(rtAnch, 1)
+qRetestL   = array.get(rtQual, 0)
+qRetestS   = array.get(rtQual, 1)
+// ========================= END SECTION 10 ===================================

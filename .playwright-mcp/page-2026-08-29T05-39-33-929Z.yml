@@ -1,0 +1,57 @@
+- generic [ref=e2]:
+  - generic [ref=e3]: Sagar Jadhav · SDET upskilling · 29 Aug – 27 Oct 2026
+  - heading "Two documents, one plan" [level=1] [ref=e4]
+  - paragraph [ref=e5]: "Both built from your own scan data: 571 job postings, 60 analysed job descriptions and a 598-question interview bank. One is organised by day, the other by skill. Open either in any browser — no login, no internet account required."
+  - generic [ref=e6]:
+    - 'link "Document 1 · by day 60-Day SDET Reforge The schedule. What to do, in what order, and why that order. Diagnosis: your 5 real blockers, ranked Demand table — 32 skills vs your status Six phases, day by day, with ship dates Daily rhythm and the 252-hour budget Apply-gates: when to start interviewing" [ref=e7] [cursor=pointer]':
+      - /url: 60-day-plan.html
+      - generic [ref=e8]: Document 1 · by day
+      - heading "60-Day SDET Reforge" [level=2] [ref=e9]
+      - paragraph [ref=e10]: The schedule. What to do, in what order, and why that order.
+      - list [ref=e11]:
+        - listitem [ref=e12]: "Diagnosis: your 5 real blockers, ranked"
+        - listitem [ref=e13]: Demand table — 32 skills vs your status
+        - listitem [ref=e14]: Six phases, day by day, with ship dates
+        - listitem [ref=e15]: Daily rhythm and the 252-hour budget
+        - listitem [ref=e16]: "Apply-gates: when to start interviewing"
+    - link "Document 2 · by skill SDET Skill Manual The reference. Twenty-six skills, each with code you can run. Plain-English explanation of every skill 40+ named free learning resources 38 annotated, runnable code examples 15 sets of coding problems, graded Built-in daily tracker — saves in your browser" [ref=e17] [cursor=pointer]:
+      - /url: skill-manual.html
+      - generic [ref=e18]: Document 2 · by skill
+      - heading "SDET Skill Manual" [level=2] [ref=e19]
+      - paragraph [ref=e20]: The reference. Twenty-six skills, each with code you can run.
+      - list [ref=e21]:
+        - listitem [ref=e22]: Plain-English explanation of every skill
+        - listitem [ref=e23]: 40+ named free learning resources
+        - listitem [ref=e24]: 38 annotated, runnable code examples
+        - listitem [ref=e25]: 15 sets of coding problems, graded
+        - listitem [ref=e26]:
+          - strong [ref=e27]: Built-in daily tracker
+          - text: — saves in your browser
+  - generic [ref=e28]:
+    - heading "How to open these" [level=3] [ref=e29]
+    - paragraph [ref=e30]: "They are ordinary HTML files on your disk. Double-click either one, or from a terminal:"
+    - list [ref=e31]:
+      - listitem [ref=e32]:
+        - code [ref=e33]: start local\index.html
+        - text: — from the
+        - code [ref=e34]: roadmap
+        - text: folder in cmd
+      - listitem [ref=e35]:
+        - code [ref=e36]: ii .\local\index.html
+        - text: — from PowerShell
+      - listitem [ref=e37]: Or drag the file into any browser window
+  - generic [ref=e38]:
+    - heading "The tracker saves locally" [level=3] [ref=e39]
+    - paragraph [ref=e40]:
+      - text: The Skill Manual's daily tracker stores your log, streak and skill states in that browser's own storage. It survives refreshes and reboots, but it is tied to
+      - emphasis [ref=e41]: one browser on one machine
+      - text: — so open it from the same browser each day, and use the
+      - strong [ref=e42]: Export JSON
+      - text: button weekly to keep a backup in your repo.
+  - generic [ref=e43]:
+    - heading "If you are offline" [level=3] [ref=e44]
+    - paragraph [ref=e45]: Fonts and code syntax-colouring load from public CDNs. Without internet the pages still render and every word is readable — you just get system fonts and uncoloured code. Nothing breaks, and no login is involved anywhere.
+  - contentinfo [ref=e46]:
+    - text: "Source data:"
+    - code [ref=e47]: naukri_profile/data
+    - text: — 6 scan runs between 21 and 29 Aug 2026, 571 unique postings across Naukri and LinkedIn, 60 job descriptions with per-skill gap scoring, 598-question interview bank.

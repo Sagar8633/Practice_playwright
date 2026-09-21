@@ -1,0 +1,228 @@
+//@version=5
+// =====================================================================
+//  SimpleSMA18 Strategy  —  Pine v5 port of SimpleSMA18Bot.mq5
+//  NOTE: This is an approximation of the MQL5 Expert Advisor. MQL5 code
+//  cannot run on TradingView; this reproduces the trading LOGIC so it
+//  can be backtested here.
+//
+//  Core rules (mirrors the EA):
+//   - Trend filter: price above/below 200 SMA
+//   - Two consecutive closes above/below the 18 SMA
+//   - Volume above its 20-period average
+//   - Enter with a STOP order beyond the last bar's high/low + buffer
+//   - Initial stop = last confirmed swing low/high
+//   - Exit when a close crosses back through the 18 SMA
+//   - Break-even + selectable protection (Swing / Chandelier / Trailing)
+//   - Trailing uses a step gate (TrailingStepPoints)
+//   - Optional partial close (EnablePartialClose / Trigger / Percent)
+//   - ProtectionStartMode: Immediately vs After Points
+//   NOT ported (MT5-only): LotSize (Pine uses % equity) and MagicNumber.
+// =====================================================================
+strategy("SimpleSMA18 Strategy (MQL5 port)", overlay=true,
+     initial_capital=10000,
+     default_qty_type=strategy.percent_of_equity, default_qty_value=10,
+     pyramiding=0, calc_on_every_tick=false, process_orders_on_close=false)
+
+// ================= Inputs =================
+// Defaults below match the MT5 optimization "Value" column (1D single test).
+fastLen     = input.int(18,  "Fast MA Period",  group="Signal")
+trendLen    = input.int(200, "Trend MA Period", group="Signal")
+volLen      = input.int(20,  "Volume MA Period",group="Signal")
+swingStr    = input.int(2,   "Swing Strength",  group="Signal")
+bufferTicks = input.int(20,  "Entry Buffer (ticks)", group="Signal")
+
+enableBE    = input.bool(false, "Enable Break-Even", group="Break-Even")
+beTrigger   = input.int(10000, "Break-Even Trigger (ticks)", group="Break-Even")
+beOffset    = input.int(5000,  "Break-Even Offset (ticks)",  group="Break-Even")
+
+protMode      = input.string("None", "Protection Mode", options=["None","Swing","Chandelier","Trailing"], group="Protection")
+protStartMode = input.string("After Points", "Protection Start Mode", options=["Immediately","After Points"], group="Protection")
+protStart     = input.int(2000,  "Protection Start Points (ticks)", group="Protection")
+swingBuf      = input.int(200,   "Swing Buffer (ticks)", group="Protection")
+chLookback    = input.int(22,    "Chandelier Lookback",  group="Protection")
+atrLen        = input.int(22,    "ATR Period",   group="Protection")
+atrMult       = input.float(3.0, "ATR Multiplier", group="Protection")
+trailStart    = input.int(1000,  "Trailing Start (ticks)", group="Protection")
+trailDist     = input.int(500,   "Trailing Distance (ticks)", group="Protection")
+trailStep     = input.int(200,   "Trailing Step (ticks)", group="Protection")
+
+// ---- Partial Close (mirrors EA EnablePartialClose / Trigger / Percent) ----
+enablePartial = input.bool(true,  "Enable Partial Close", group="Partial Close")
+partialTrig   = input.int(6000,  "Partial Close Trigger (ticks)", group="Partial Close")
+partialPct    = input.float(50.0,"Partial Close Percent", minval=1, maxval=99, group="Partial Close")
+
+// ---- Point/tick scaling ----
+// MT5 "points" != TradingView "ticks" unless sizes match. Set this to your MT5
+// broker's point size for gold (e.g. 0.01) so every *_ticks input above is read
+// as MT5 points. Leave 0.0 to auto-use the symbol's mintick.
+pointOverride = input.float(0.0, "MT5 Point Size (0 = auto mintick)", group="Scaling")
+pt = pointOverride > 0 ? pointOverride : syminfo.mintick
+
+// ---- Targets & Telegram alerts ----
+useTP     = input.bool(true, "Use Take-Profit target (Reward:Risk)", group="Targets & Alerts")
+rrTarget  = input.float(2.0, "Reward : Risk", step=0.5, group="Targets & Alerts")
+alertsOn  = input.bool(true, "Send Telegram alerts",  group="Targets & Alerts")
+tgChatId  = input.string("", "Telegram chat_id",      group="Targets & Alerts")
+
+// ================= Indicators =================
+ma18   = ta.sma(close, fastLen)
+ma200  = ta.sma(close, trendLen)
+avgVol = ta.sma(volume, volLen)
+atrV   = ta.atr(atrLen)
+
+plot(ma18,  "MA 18",  color=color.new(color.aqua, 0))
+plot(ma200, "MA 200", color=color.new(color.orange, 0))
+
+// ================= Swing points =================
+var float lastSwingLow  = na
+var float lastSwingHigh = na
+pl = ta.pivotlow(low,  swingStr, swingStr)
+ph = ta.pivothigh(high, swingStr, swingStr)
+if not na(pl)
+    lastSwingLow := pl
+if not na(ph)
+    lastSwingHigh := ph
+
+// ================= Entry signals =================
+buySignal  = close > ma200 and close > ma18 and close[1] > ma18[1] and volume > avgVol
+sellSignal = close < ma200 and close < ma18 and close[1] < ma18[1] and volume > avgVol
+
+flat = strategy.position_size == 0
+var bool longPending  = false
+var bool shortPending = false
+
+// ---- cancel invalidated pendings (close crossed back through MA18) ----
+if longPending and close < ma18
+    strategy.cancel("Long")
+    longPending := false
+if shortPending and close > ma18
+    strategy.cancel("Short")
+    shortPending := false
+
+// ---- once a position is live, clear pending flags ----
+if strategy.position_size != 0
+    longPending  := false
+    shortPending := false
+
+// ---- place new stop entries ----
+if flat and not longPending and not shortPending
+    if buySignal and not na(lastSwingLow)
+        strategy.entry("Long", strategy.long, stop = high + bufferTicks * pt)
+        strategy.exit("Long-Prot", "Long", stop = lastSwingLow)
+        longPending := true
+    else if sellSignal and not na(lastSwingHigh)
+        strategy.entry("Short", strategy.short, stop = low - bufferTicks * pt)
+        strategy.exit("Short-Prot", "Short", stop = lastSwingHigh)
+        shortPending := true
+
+// ================= Targets + Telegram alerts =================
+var float tpLevel   = na
+var float slAtEntry = na
+
+longOpened  = strategy.position_size > 0 and strategy.position_size[1] <= 0
+shortOpened = strategy.position_size < 0 and strategy.position_size[1] >= 0
+justFlat    = strategy.position_size == 0 and strategy.position_size[1] != 0
+
+// wrap plain text into the JSON body Telegram's sendMessage expects
+tgWrap(txt) => '{"chat_id":"' + tgChatId + '","text":"' + txt + '"}'
+
+if longOpened
+    slAtEntry := nz(lastSwingLow, low)
+    risk = strategy.position_avg_price - slAtEntry
+    tpLevel := (useTP and risk > 0) ? strategy.position_avg_price + rrTarget * risk : na
+    if alertsOn
+        m = "🟢 LONG " + syminfo.ticker + " " + timeframe.period + "  Entry " + str.tostring(strategy.position_avg_price, format.mintick) + "  SL " + str.tostring(slAtEntry, format.mintick) + (na(tpLevel) ? "" : "  TP " + str.tostring(tpLevel, format.mintick))
+        alert(tgWrap(m), alert.freq_once_per_bar)
+    label.new(bar_index, low, "LONG " + str.tostring(strategy.position_avg_price, format.mintick) + "\nSL " + str.tostring(slAtEntry, format.mintick) + (na(tpLevel) ? "" : "\nTP " + str.tostring(tpLevel, format.mintick)), yloc=yloc.belowbar, style=label.style_label_up, color=color.new(color.green, 10), textcolor=color.white, size=size.small)
+
+if shortOpened
+    slAtEntry := nz(lastSwingHigh, high)
+    risk = slAtEntry - strategy.position_avg_price
+    tpLevel := (useTP and risk > 0) ? strategy.position_avg_price - rrTarget * risk : na
+    if alertsOn
+        m = "🔴 SHORT " + syminfo.ticker + " " + timeframe.period + "  Entry " + str.tostring(strategy.position_avg_price, format.mintick) + "  SL " + str.tostring(slAtEntry, format.mintick) + (na(tpLevel) ? "" : "  TP " + str.tostring(tpLevel, format.mintick))
+        alert(tgWrap(m), alert.freq_once_per_bar)
+    label.new(bar_index, high, "SHORT " + str.tostring(strategy.position_avg_price, format.mintick) + "\nSL " + str.tostring(slAtEntry, format.mintick) + (na(tpLevel) ? "" : "\nTP " + str.tostring(tpLevel, format.mintick)), yloc=yloc.abovebar, style=label.style_label_down, color=color.new(color.red, 10), textcolor=color.white, size=size.small)
+
+if justFlat
+    if alertsOn
+        pnl = strategy.closedtrades > 0 ? strategy.closedtrades.profit(strategy.closedtrades - 1) : 0.0
+        m = "⚪ CLOSED " + syminfo.ticker + " " + timeframe.period + "  Px " + str.tostring(close, format.mintick) + "  lastTradePnL " + str.tostring(pnl, "#.##")
+        alert(tgWrap(m), alert.freq_once_per_bar)
+    tpLevel   := na
+    slAtEntry := na
+
+// ================= Hard exit on MA18 cross (EA ExitSignal) =================
+if strategy.position_size > 0 and close <= ma18
+    strategy.close("Long", comment="MA18 exit")
+if strategy.position_size < 0 and close >= ma18
+    strategy.close("Short", comment="MA18 exit")
+
+// ================= Stop management (Break-even + Protection + Partial) =====
+var float stopLvl = na
+var bool  partialDone = false
+
+if strategy.position_size > 0
+    ep = strategy.position_avg_price
+    stopLvl := na(stopLvl) ? lastSwingLow : stopLvl
+    profitPts = (close - ep) / pt
+    // partial close (once)
+    if enablePartial and not partialDone and profitPts >= partialTrig
+        strategy.close("Long", qty_percent = partialPct, comment = "Partial")
+        partialDone := true
+    if enableBE and profitPts >= beTrigger
+        stopLvl := math.max(nz(stopLvl, ep + beOffset * pt), ep + beOffset * pt)
+    active = protStartMode == "Immediately" or profitPts >= protStart
+    if active and protMode == "Swing" and not na(lastSwingLow)
+        ns = lastSwingLow - swingBuf * pt
+        stopLvl := math.max(nz(stopLvl, ns), ns)
+    if active and protMode == "Chandelier"
+        ns = ta.highest(high, chLookback) - atrV * atrMult
+        stopLvl := math.max(nz(stopLvl, ns), ns)
+    if active and protMode == "Trailing" and profitPts >= trailStart
+        ns = close - trailDist * pt
+        // only ratchet if the improvement clears the step (EA TrailingStepPoints)
+        if na(stopLvl) or (ns - stopLvl) >= trailStep * pt
+            stopLvl := math.max(nz(stopLvl, ns), ns)
+    if not na(stopLvl)
+        strategy.exit("Long-Prot", "Long", stop = stopLvl, limit = tpLevel)
+else if strategy.position_size < 0
+    ep = strategy.position_avg_price
+    stopLvl := na(stopLvl) ? lastSwingHigh : stopLvl
+    profitPts = (ep - close) / pt
+    // partial close (once)
+    if enablePartial and not partialDone and profitPts >= partialTrig
+        strategy.close("Short", qty_percent = partialPct, comment = "Partial")
+        partialDone := true
+    if enableBE and profitPts >= beTrigger
+        stopLvl := math.min(nz(stopLvl, ep - beOffset * pt), ep - beOffset * pt)
+    active = protStartMode == "Immediately" or profitPts >= protStart
+    if active and protMode == "Swing" and not na(lastSwingHigh)
+        ns = lastSwingHigh + swingBuf * pt
+        stopLvl := math.min(nz(stopLvl, ns), ns)
+    if active and protMode == "Chandelier"
+        ns = ta.lowest(low, chLookback) + atrV * atrMult
+        stopLvl := math.min(nz(stopLvl, ns), ns)
+    if active and protMode == "Trailing" and profitPts >= trailStart
+        ns = close + trailDist * pt
+        // only ratchet if the improvement clears the step (EA TrailingStepPoints)
+        if na(stopLvl) or (stopLvl - ns) >= trailStep * pt
+            stopLvl := math.min(nz(stopLvl, ns), ns)
+    if not na(stopLvl)
+        strategy.exit("Short-Prot", "Short", stop = stopLvl, limit = tpLevel)
+else
+    stopLvl := na
+    partialDone := false
+
+// ================= Visual SL / TP lines =================
+plot(strategy.position_size != 0 ? tpLevel : na, "Target (TP)", color=color.new(color.green, 0), style=plot.style_linebr, linewidth=2)
+plot(strategy.position_size != 0 ? stopLvl  : na, "Stop (SL)",  color=color.new(color.red,   0), style=plot.style_linebr, linewidth=2)
+
+// ================= "Criteria matched" markers on the chart =================
+// Fires on the first bar the entry criteria are met while flat (the setup bar).
+buySetup  = buySignal  and not buySignal[1]  and strategy.position_size == 0
+sellSetup = sellSignal and not sellSignal[1] and strategy.position_size == 0
+plotshape(buySetup,  title="Long criteria",  style=shape.triangleup,   location=location.belowbar, color=color.new(color.lime,   0), size=size.small, text="LONG")
+plotshape(sellSetup, title="Short criteria", style=shape.triangledown, location=location.abovebar, color=color.new(color.orange, 0), size=size.small, text="SHORT")
+// background tint on setup bars for extra visibility
+bgcolor(buySetup ? color.new(color.green, 85) : sellSetup ? color.new(color.red, 85) : na)

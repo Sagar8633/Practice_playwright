@@ -1,0 +1,658 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e6]:
+      - 'button "Logged in as patilkareena208 Active layout: Unnamed" [ref=e7]'
+      - generic [ref=e8]: "11"
+    - toolbar [ref=e12]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - button "TATACONSUM" [ref=e19]:
+              - generic [ref=e20]: TATACONSUM
+            - button "Switch data type" [ref=e21]:
+              - img [ref=e22]:
+                - img [ref=e23]
+          - button "Compare symbols" [ref=e25]:
+            - img [ref=e26]:
+              - img [ref=e27]
+        - generic [ref=e33]:
+          - radiogroup [ref=e34]:
+            - radio "5 minutes" [checked] [ref=e35]:
+              - generic [ref=e37]: 5m
+            - radio "15 minutes" [ref=e38]:
+              - generic [ref=e40]: 15m
+            - radio "45 minutes" [ref=e41]:
+              - generic [ref=e43]: 45m
+          - button "Chart interval" [ref=e44]:
+            - img [ref=e47]:
+              - img [ref=e48]
+        - button "Candles" [ref=e54]:
+          - img [ref=e56]:
+            - img [ref=e57]
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - button "Indicators, metrics, and strategies" [ref=e66]:
+              - img [ref=e67]:
+                - img [ref=e68]
+              - generic [ref=e3372]: Indicators
+            - button "Favorite indicators" [ref=e72]:
+              - img [ref=e75]:
+                - img [ref=e76]
+          - button "Indicator templates" [ref=e79]:
+            - img [ref=e81]:
+              - img [ref=e82]
+        - generic [ref=e86]:
+          - button "Create alert" [ref=e87]:
+            - img [ref=e88]:
+              - img [ref=e89]
+            - generic [ref=e3373]: Alert
+          - button "Bar replay" [ref=e93]:
+            - img [ref=e94]:
+              - img [ref=e95]
+            - generic [ref=e3374]: Replay
+        - generic [ref=e101]:
+          - button "Undo remove trade_with_kareena (top_right, 20, 1)" [ref=e4302]:
+            - img [ref=e103]:
+              - img [ref=e104]
+          - button "Redo insert trade_with_kareena Tracker" [ref=e4303]:
+            - img [ref=e107]:
+              - img [ref=e108]
+        - generic [ref=e111]:
+          - button "Layout setup" [ref=e112]:
+            - img [ref=e113]:
+              - img
+          - generic [ref=e115]:
+            - button "Save all charts for all symbols and intervals on your layout" [ref=e3267]:
+              - generic [ref=e118]:
+                - generic [ref=e119]: Unnamed
+                - generic [ref=e3268]: Save
+            - button "Manage layouts" [ref=e121]:
+              - img [ref=e124]:
+                - img [ref=e125]
+        - generic [ref=e129]:
+          - button "Quick search" [ref=e130]:
+            - img [ref=e131]:
+              - img [ref=e132]
+          - button "Settings" [ref=e135]:
+            - img [ref=e136]:
+              - img [ref=e137]
+          - button "Fullscreen mode" [ref=e141]:
+            - img [ref=e142]:
+              - img [ref=e143]
+          - button "Take a snapshot" [ref=e145]:
+            - img [ref=e147]:
+              - img [ref=e148]
+      - button "Trade" [ref=e154]:
+        - generic [ref=e160]: Trade
+      - button "Share your idea with the trade community" [ref=e162]:
+        - generic [ref=e164]: Publish
+    - toolbar [ref=e166]:
+      - generic [ref=e170]:
+        - generic [ref=e171]:
+          - generic [ref=e174]:
+            - button "Cross" [ref=e176]:
+              - img [ref=e177]:
+                - img [ref=e178]
+            - button "Cursors" [pressed] [ref=e182]:
+              - img [ref=e183]:
+                - img [ref=e184]
+          - generic [ref=e188]:
+            - button "Trendline" [ref=e190]:
+              - img [ref=e191]:
+                - img [ref=e192]
+            - button "Trend tools" [ref=e196]:
+              - img [ref=e197]:
+                - img [ref=e198]
+          - generic [ref=e202]:
+            - button "Fib retracement" [ref=e204]:
+              - img [ref=e205]:
+                - img [ref=e206]
+            - button "Gann and Fibonacci tools" [ref=e213]:
+              - img [ref=e214]:
+                - img [ref=e215]
+          - generic [ref=e219]:
+            - button "XABCD pattern" [ref=e221]:
+              - img [ref=e222]:
+                - img [ref=e223]
+            - button "Patterns" [ref=e227]:
+              - img [ref=e228]:
+                - img [ref=e229]
+          - generic [ref=e233]:
+            - button "Long position" [ref=e235]:
+              - img [ref=e236]:
+                - img [ref=e237]
+            - button "Forecasting and measurement tools" [ref=e239]:
+              - img [ref=e240]:
+                - img [ref=e241]
+          - generic [ref=e245]:
+            - button "Brush" [ref=e247]:
+              - img [ref=e248]:
+                - img [ref=e249]
+            - button "Geometric shapes" [ref=e253]:
+              - img [ref=e254]:
+                - img [ref=e255]
+          - generic [ref=e259]:
+            - button "Text" [ref=e261]:
+              - img [ref=e262]:
+                - img [ref=e263]
+            - button "Annotation tools" [ref=e265]:
+              - img [ref=e266]:
+                - img [ref=e267]
+          - generic [ref=e270]:
+            - button "Icon" [ref=e272]:
+              - img [ref=e273]:
+                - img [ref=e274]
+            - button "Icons" [ref=e276]:
+              - img [ref=e277]:
+                - img [ref=e278]
+        - generic [ref=e280]:
+          - button "Measure" [ref=e281]:
+            - img [ref=e282]:
+              - img [ref=e283]
+          - button "Zoom in" [ref=e285]:
+            - img [ref=e286]:
+              - img [ref=e287]
+        - generic [ref=e292]:
+          - generic [ref=e295]:
+            - button "Magnet mode snaps drawings placed near price bars to the closest OHLC value" [ref=e297]:
+              - img [ref=e298]:
+                - img [ref=e299]
+            - button "Magnets" [ref=e303]:
+              - img [ref=e304]:
+                - img [ref=e305]
+          - button "Keep drawing" [ref=e307]:
+            - img [ref=e308]:
+              - img [ref=e309]
+          - button "Lock all drawings" [ref=e311]:
+            - img [ref=e312]:
+              - img [ref=e313]
+          - generic [ref=e316]:
+            - button "Hide all drawings" [ref=e318]:
+              - img [ref=e319]:
+                - img [ref=e320]
+            - button "Hide options" [ref=e322]:
+              - img [ref=e323]:
+                - img [ref=e324]
+        - generic [ref=e328]:
+          - button "Remove objects" [ref=e330]:
+            - img [ref=e331]:
+              - img [ref=e332]
+          - button "Remove options" [ref=e334]:
+            - img [ref=e335]:
+              - img [ref=e336]
+    - generic [ref=e340]:
+      - 'region "Chart #1" [ref=e343]':
+        - generic [ref=e345]:
+          - generic [ref=e347]:
+            - generic:
+              - generic:
+                - toolbar:
+                  - generic:
+                    - generic [ref=e348]:
+                      - generic "Change symbol" [ref=e1154]:
+                        - generic [ref=e350]:
+                          - img [ref=e352]
+                          - generic [ref=e353]: T
+                        - button "Change symbol" [ref=e1155]: Tata Consumer Products Limited
+                      - generic "Change interval" [ref=e1156]:
+                        - text: ·
+                        - button "Change interval" [ref=e1157]: "5"
+                      - generic [ref=e1158]:
+                        - text: ·
+                        - generic [ref=e1159]: NSE
+                    - generic:
+                      - generic:
+                        - button "Flag symbol":
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img
+                        - button "More":
+                          - generic:
+                            - img
+                    - button "Market closed" [ref=e360]:
+                      - img [ref=e361]:
+                        - img [ref=e362]
+                  - generic [ref=e365]:
+                    - generic [ref=e366]:
+                      - generic [ref=e367]: O
+                      - generic [ref=e368]: 1,129.60
+                    - generic [ref=e369]:
+                      - generic [ref=e370]: H
+                      - generic [ref=e371]: 1,131.50
+                    - generic [ref=e372]:
+                      - generic [ref=e373]: L
+                      - generic [ref=e374]: 1,128.20
+                    - generic [ref=e375]:
+                      - generic [ref=e376]: C
+                      - generic [ref=e377]: 1,131.50
+                    - generic [ref=e379]: +2.60 (+0.23%)
+                - generic [ref=e382]:
+                  - generic [ref=e384]:
+                    - generic: 1,131.30
+                    - generic: Sell
+                  - generic "Spread" [ref=e386]: "0.00"
+                  - generic [ref=e388]:
+                    - generic: 1,131.30
+                    - generic: Buy
+            - generic "Chart for NSE:TATACONSUM, 5 minutes" [ref=e390]
+          - generic [ref=e395]:
+            - generic [ref=e396]: INR
+            - img [ref=e398]
+      - toolbar [ref=e445]:
+        - generic [ref=e447]:
+          - generic [ref=e448]:
+            - button "1 day in 1 minute intervals" [ref=e449]:
+              - generic [ref=e450]: 1D
+            - button "5 days in 5 minutes intervals" [ref=e451]:
+              - generic [ref=e452]: 5D
+            - button "1 month in 30 minutes intervals" [ref=e453]:
+              - generic [ref=e454]: 1M
+            - button "3 months in 1 hour intervals" [ref=e455]:
+              - generic [ref=e456]: 3M
+            - button "6 months in 2 hours intervals" [ref=e457]:
+              - generic [ref=e458]: 6M
+            - button "Year to day in 1 day intervals" [ref=e459]:
+              - generic [ref=e460]: YTD
+            - button "1 year in 1 day intervals" [ref=e461]:
+              - generic [ref=e462]: 1Y
+            - button "5 years in 1 week intervals" [ref=e463]:
+              - generic [ref=e464]: 5Y
+            - button "All data in 1 month intervals" [ref=e465]:
+              - generic [ref=e466]: All
+          - button "Go to" [ref=e468]:
+            - img [ref=e469]:
+              - img [ref=e470]
+        - generic [ref=e472]:
+          - button "Timezone" [ref=e475]:
+            - generic [ref=e476]: 15:47:16 UTC+5:30
+          - button "Regular" [ref=e479]: RTH
+          - button "Adjust data for dividends" [ref=e483]:
+            - generic [ref=e484]: ADJ
+    - generic [ref=e486]:
+      - toolbar [ref=e491]:
+        - button "Watchlist, details, and news" [ref=e492]:
+          - img [ref=e493]:
+            - img [ref=e494]
+        - button "Alerts" [ref=e497]:
+          - img [ref=e498]:
+            - img [ref=e499]
+        - button "Object tree and data window" [ref=e502]:
+          - img [ref=e503]:
+            - img [ref=e504]
+        - button "Chats" [ref=e506]:
+          - img [ref=e507]:
+            - img [ref=e508]
+        - button "Screeners" [ref=e511]:
+          - img [ref=e512]:
+            - img [ref=e513]
+        - button "Pine" [ref=e517]:
+          - img [ref=e518]:
+            - img [ref=e519]
+        - button "Calendars" [ref=e522]:
+          - img [ref=e523]:
+            - img [ref=e524]
+        - button "Community" [ref=e526]:
+          - img [ref=e527]:
+            - img [ref=e528]
+        - button "Notifications" [ref=e533]:
+          - img [ref=e534]:
+            - img [ref=e535]
+        - button "Products" [ref=e537]:
+          - img [ref=e538]:
+            - img [ref=e539]
+        - button "Help Center" [ref=e542]:
+          - img [ref=e543]:
+            - img [ref=e544]
+      - generic [ref=e546]: "[] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] –"
+    - generic "Trading panel"
+  - generic:
+    - generic:
+      - generic:
+        - generic: trade_with_kareena Tracker
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+    - generic [ref=e555]:
+      - generic [ref=e556]:
+        - generic [ref=e558]: Pine Editor
+        - generic [ref=e559]:
+          - button "Move overlay to split-view" [ref=e560]:
+            - img [ref=e562]:
+              - img [ref=e563]
+          - button "Close" [ref=e565]:
+            - img [ref=e567]:
+              - img [ref=e568]
+      - generic [ref=e576]:
+        - generic [ref=e578]:
+          - generic [ref=e579]:
+            - button "trade_with_kareena Tracker" [expanded] [ref=e3258]:
+              - img [ref=e581]:
+                - img [ref=e582]
+              - heading "trade_with_kareena Tracker" [level=2] [ref=e3259]
+              - img [ref=e585]:
+                - img [ref=e586]
+            - button "Add to chart" [ref=e4304]:
+              - img [ref=e4299]:
+                - img [ref=e4305]
+          - generic [ref=e593]:
+            - button [ref=e3376]:
+              - img [ref=e596]:
+                - img [ref=e597]
+            - button "More" [ref=e602]:
+              - img [ref=e604]:
+                - img [ref=e605]
+        - code [ref=e1232]:
+          - generic [ref=e1233]:
+            - generic [ref=e1235]:
+              - generic [ref=e3378]: "20"
+              - generic [ref=e3380]: "21"
+              - generic [ref=e3382]: "22"
+              - generic [ref=e3384]: "23"
+              - generic [ref=e3386]: "24"
+              - generic [ref=e3388]: "25"
+              - generic [ref=e3390]: "26"
+              - generic [ref=e3392]: "27"
+              - generic [ref=e3393]:
+                - generic [ref=e3394] [cursor=pointer]: 
+                - generic [ref=e3395]: "28"
+              - generic [ref=e3397]: "29"
+              - generic [ref=e3399]: "30"
+              - generic [ref=e3401]: "31"
+              - generic [ref=e3402]:
+                - generic [ref=e3403] [cursor=pointer]: 
+                - generic [ref=e3404]: "32"
+              - generic [ref=e3406]: "33"
+              - generic [ref=e3408]: "34"
+              - generic [ref=e3410]: "35"
+              - generic [ref=e3411]:
+                - generic [ref=e3412] [cursor=pointer]: 
+                - generic [ref=e3413]: "36"
+              - generic [ref=e3415]: "37"
+              - generic [ref=e3417]: "38"
+              - generic [ref=e3419]: "39"
+              - generic [ref=e3421]: "40"
+              - generic [ref=e3423]: "41"
+              - generic [ref=e3425]: "42"
+              - generic [ref=e3427]: "43"
+              - generic [ref=e3429]: "44"
+              - generic [ref=e3431]: "45"
+              - generic [ref=e3433]: "46"
+              - generic [ref=e3435]: "47"
+              - generic [ref=e3437]: "48"
+              - generic [ref=e3439]: "49"
+              - generic [ref=e3441]: "50"
+              - generic [ref=e3443]: "51"
+              - generic [ref=e3445]: "52"
+              - generic [ref=e3447]: "53"
+              - generic [ref=e3449]: "54"
+              - generic [ref=e3450]:
+                - generic [ref=e3451] [cursor=pointer]: 
+                - generic [ref=e3452]: "55"
+              - generic [ref=e3454]: "56"
+              - generic [ref=e3456]: "57"
+              - generic [ref=e3458]: "58"
+              - generic [ref=e3460]: "59"
+              - generic [ref=e3462]: "60"
+              - generic [ref=e3464]: "61"
+              - generic [ref=e3466]: "62"
+              - generic [ref=e3467]:
+                - generic [ref=e3468] [cursor=pointer]: 
+                - generic [ref=e3469]: "63"
+              - generic [ref=e3471]: "64"
+              - generic [ref=e3473]: "65"
+              - generic [ref=e3475]: "66"
+              - generic [ref=e3477]: "67"
+              - generic [ref=e3479]: "68"
+              - generic [ref=e3481]: "69"
+              - generic [ref=e3483]: "70"
+              - generic [ref=e3484]:
+                - generic [ref=e3485] [cursor=pointer]: 
+                - generic [ref=e3486]: "71"
+              - generic [ref=e3487]:
+                - generic [ref=e3488] [cursor=pointer]: 
+                - generic [ref=e3489]: "72"
+              - generic [ref=e3491]: "73"
+            - generic [ref=e1251]:
+              - img [ref=e3496]
+              - img [ref=e3509]
+              - img [ref=e3544]
+              - img [ref=e3551]
+              - img [ref=e3562]
+              - img [ref=e3576]
+              - img [ref=e3591]
+              - img [ref=e3596]
+              - img [ref=e3611]
+              - img [ref=e3631]
+              - img [ref=e3636]
+              - img [ref=e3651]
+              - img [ref=e3671]
+              - img [ref=e3676]
+              - img [ref=e3691]
+              - img [ref=e3707]
+              - img [ref=e3731]
+              - img [ref=e3748]
+              - img [ref=e3765]
+              - img [ref=e3785]
+              - img [ref=e3801]
+              - img [ref=e3811]
+              - img [ref=e3823]
+              - img [ref=e3833]
+              - img [ref=e3840]
+              - img [ref=e3849]
+              - img [ref=e3856]
+              - img [ref=e3862]
+              - img [ref=e3876]
+              - img [ref=e3885]
+              - img [ref=e3892]
+              - img [ref=e3902]
+              - img [ref=e3933]
+              - img [ref=e3954]
+              - img [ref=e3971]
+              - img [ref=e3988]
+              - img [ref=e4008]
+              - img [ref=e4018]
+              - img [ref=e4042]
+              - img [ref=e4064]
+              - img [ref=e4085]
+              - img [ref=e4116]
+              - img [ref=e4126]
+              - img [ref=e4135]
+              - img [ref=e4142]
+              - img [ref=e4152]
+              - generic [ref=e1260]:
+                - generic [ref=e4167]: rLen = input.int(14, "R-Factor lookback", minval=2, group=grpR)
+                - generic [ref=e4169]: benchSym = input.symbol("NSE:NIFTY", "Benchmark for Sector Strength", group=grpR, tooltip="Index/sector to measure relative strength against. For crypto try CRYPTOCAP:TOTAL or BINANCE:BTCUSDT. Invalid symbols are ignored (score = 0).")
+                - generic [ref=e4172]: grpC = "Colors"
+                - generic [ref=e4174]:
+                  - text: colBuy = input.color(
+                  - text: color.new(#26a69a, 0), "Buy / Positive", group=grpC)
+                - generic [ref=e4177]:
+                  - text: colSell = input.color(
+                  - text: color.new(#ef5350, 0), "Sell / Negative", group=grpC)
+                - generic [ref=e4181]: // ---------------- Buy/Sell volume split (close position in bar range) --------
+                - generic [ref=e4183]: buyingVolume() =>
+                - generic [ref=e4185]: rng = math.max(high - low, syminfo.mintick)
+                - generic [ref=e4187]: volume * ((close - low) / rng)
+                - generic [ref=e4190]: sellingVolume() =>
+                - generic [ref=e4192]: rng = math.max(high - low, syminfo.mintick)
+                - generic [ref=e4194]: volume * ((high - close) / rng)
+                - generic [ref=e4197]: f_tf(tf) =>
+                - generic [ref=e4199]: bv = request.security(syminfo.tickerid, tf, buyingVolume(), barmerge.gaps_off, barmerge.lookahead_off)
+                - generic [ref=e4201]: sv = request.security(syminfo.tickerid, tf, sellingVolume(), barmerge.gaps_off, barmerge.lookahead_off)
+                - generic [ref=e4203]: v = request.security(syminfo.tickerid, tf, volume, barmerge.gaps_off, barmerge.lookahead_off)
+                - generic [ref=e4205]: va = request.security(syminfo.tickerid, tf, ta.sma(volume, 20), barmerge.gaps_off, barmerge.lookahead_off)
+                - generic [ref=e4207]: base = (bv - sv) / math.max(bv + sv, 1)
+                - generic [ref=e4209]: "strength = useVolStr ? math.max(v / math.max(va, 1), 0.0) : 1.0"
+                - generic [ref=e4211]: "[bv, sv, base * strength]"
+                - generic [ref=e4214]: "[bv1, sv1, sc1] = f_tf(\"1\")"
+                - generic [ref=e4216]: "[bv3, sv3, sc3] = f_tf(\"3\")"
+                - generic [ref=e4218]: "[bv5, sv5, sc5] = f_tf(\"5\")"
+                - generic [ref=e4220]: "[bv15, sv15, sc15] = f_tf(\"15\")"
+                - generic [ref=e4222]: "[bv30, sv30, sc30] = f_tf(\"30\")"
+                - generic [ref=e4224]: "[bv60, sv60, sc60] = f_tf(\"60\")"
+                - generic [ref=e4226]: "[bv240,sv240,sc240]= f_tf(\"240\")"
+                - generic [ref=e4228]: "[bvD, svD, scD] = f_tf(\"1D\")"
+                - generic [ref=e4231]: // ---------------- helpers (global) ----------------
+                - generic [ref=e4233]: f_fmt(x) =>
+                - generic [ref=e4235]: a = math.abs(x)
+                - generic [ref=e4237]: "a >= 1e9 ? str.tostring(x/1e9, \"#.##\")+\"B\" : a >= 1e6 ? str.tostring(x/1e6, \"#.##\")+\"M\" : a >= 1e3 ? str.tostring(x/1e3, \"#.##\")+\"K\" : str.tostring(x, \"#.##\")"
+                - generic [ref=e4239]: "f_resTxt(s) => s > 0 ? \"Positive (BUY)\" : s < 0 ? \"Negative (SELL)\" : \"Neutral\""
+                - generic [ref=e4241]:
+                  - text: "f_resCol(s) => s > 0 ? colBuy : s < 0 ? colSell :"
+                  - text: color.gray
+                - generic [ref=e4244]: "f_pos(p) => p==\"top_left\"?position.top_left : p==\"top_right\"?position.top_right : p==\"bottom_left\"?position.bottom_left : p==\"bottom_right\"?position.bottom_right : p==\"middle_left\"?position.middle_left : position.middle_right"
+                - generic [ref=e4246]: "f_sc(v) => (v >= 0 ? \"+\" : \"\") + str.tostring(v, \"#0.0\")"
+                - generic [ref=e4249]: f_row(tbl, row, label, bv, sv, sc) =>
+                - generic [ref=e4251]:
+                  - text: table.cell(tbl, 0, row, label, text_color=
+                  - text: color.white, bgcolor=
+                  - text: color.new(color.gray,70), text_size=size.small)
+                - generic [ref=e4255]:
+                  - text: table.cell(tbl, 1, row, f_fmt(bv), text_color=colBuy, bgcolor=
+                  - text: color.new(color.black,60), text_size=size.small)
+                - generic [ref=e4258]:
+                  - text: table.cell(tbl, 2, row, f_fmt(sv), text_color=colSell, bgcolor=
+                  - text: color.new(color.black,60), text_size=size.small)
+                - generic [ref=e4261]:
+                  - text: table.cell(tbl, 3, row, f_resTxt(sc), text_color=
+                  - text: color.white, bgcolor=f_resCol(sc), text_size=size.small)
+                - generic [ref=e4265]: // ---------------- MTF momentum table ----------------
+                - generic [ref=e4267]: var table mt = na
+                - generic [ref=e4269]: if showTbl
+                - generic [ref=e4271]: if na(mt)
+                - generic [ref=e4273]: mt := table.new(f_pos(tblPos), 4, 9, border_width=1)
+            - textbox "Editor content;Press Alt+F1 for Accessibility Options." [ref=e1279]: "//@version=6 // ============================================================================= // trade_with_kareena — TRACKER (overlay on price chart) // • Multi-timeframe Buying/Selling volume table (BUY / SELL per TF) // • R-Factor composite strength panel: // R = Price Momentum + Volume + Sector Strength + OI/Derivatives + Smart Money Flow // Pair this with the \"trade_with_kareena Flow\" indicator (separate bottom pane). // ========================================================…k,60), text_size=size.small) table.cell(rt,0,5,\"Smart Money Flow\", text_color=color.white, bgcolor=color.new(color.gray,70), text_size=size.small) table.cell(rt,1,5,f_sc(smartScore), text_color=color.white, bgcolor=color.new(color.black,60), text_size=size.small) table.cell(rt,0,6,\"Bias\", text_color=color.white, bgcolor=color.new(color.gray,70), text_size=size.small) table.cell(rt,1,6,rBias, text_color=color.white, bgcolor=rCol, text_size=size.small)"
+        - generic [ref=e630]:
+          - button [ref=e633]:
+            - img [ref=e634]:
+              - img [ref=e635]
+          - generic [ref=e641]:
+            - button "1 ∙ Today, 15:40" [ref=e3265]
+            - button "Line 119, Col 1" [ref=e3219]
+    - menu "trade_with_kareena Tracker" [ref=e4307]:
+      - generic [ref=e4312]:
+        - menuitem "Save script" [disabled] [active] [ref=e4314]:
+          - generic [ref=e4315]:
+            - img [ref=e4318]:
+              - img [ref=e4319]
+            - generic [ref=e4322]: Save script
+            - generic [ref=e4325]: Ctrl + S
+        - menuitem "Make a copy…" [ref=e4327]:
+          - generic [ref=e4328]:
+            - img [ref=e4331]:
+              - img [ref=e4332]
+            - generic [ref=e4335]: Make a copy…
+        - menuitem "Rename…" [ref=e4337]:
+          - generic [ref=e4338]:
+            - img [ref=e4341]:
+              - img [ref=e4342]
+            - generic [ref=e4345]: Rename…
+        - menuitem "Version history…" [ref=e4347]:
+          - generic [ref=e4348]:
+            - img [ref=e4351]:
+              - img [ref=e4352]
+            - generic [ref=e4356]: Version history…
+        - menuitem "Move script to bottom" [ref=e4358]:
+          - generic [ref=e4359]:
+            - img [ref=e4362]:
+              - img [ref=e4363]
+            - generic [ref=e4366]: Move script to bottom
+        - separator [ref=e4367]
+        - menuitem "Create new" [ref=e4370]:
+          - generic [ref=e4371]:
+            - img [ref=e4374]:
+              - img [ref=e4375]
+            - generic [ref=e4378]: Create new
+            - img [ref=e4382]:
+              - img [ref=e4383]
+        - separator [ref=e4385]
+        - generic [ref=e4387]:
+          - generic "Recently used" [ref=e4388]:
+            - generic [ref=e4392]: Recently used
+          - menu "Recently used"
+        - group "Recently used" [ref=e4393]:
+          - menuitemcheckbox "trade_with_kareena Tracker" [checked] [ref=e4395]:
+            - generic [ref=e4398]: trade_with_kareena Tracker
+          - menuitemcheckbox "trade_with_kareena" [ref=e4400]:
+            - generic [ref=e4403]: trade_with_kareena
+          - menuitemcheckbox "Smart Money Concepts (SMC) [LuxAlgo] by LuxAl..." [ref=e4405]:
+            - generic [ref=e4408]: Smart Money Concepts (SMC) [LuxAlgo] by LuxAl...
+          - menuitemcheckbox "Volume Weighted Average Price" [ref=e4410]:
+            - generic [ref=e4413]: Volume Weighted Average Price
+        - separator [ref=e4414]
+        - menuitem "Open script…" [ref=e4417]:
+          - generic [ref=e4418]:
+            - img [ref=e4421]:
+              - img [ref=e4422]
+            - generic [ref=e4425]: Open script…
+            - generic [ref=e4428]: Ctrl + O
+  - generic [ref=e644]:
+    - alert
+    - alert

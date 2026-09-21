@@ -1,0 +1,253 @@
+[
+{
+  "id": "L3-Q01", "level": 3, "difficulty": "easy",
+  "title": "Events with real camera names",
+  "scenario": "Raw event rows only carry a camera UUID. Nobody can read a report full of UUIDs.",
+  "task": "Return the camera Name as camera and the event count as n, for every camera that has produced at least one event. Sort by n descending then camera.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["INNER JOIN", "GROUP BY", "COUNT"],
+  "expected": "One row per camera that exists AND has events — 40 of the 42 cameras.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "You need the count from Events and the name from VideoSources, so the two tables must be joined.",
+    "The join key is Events.VideoSourceId matching VideoSources.Id.",
+    "Group by the camera name once the tables are joined.",
+    "FROM \"Events\" e JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\" GROUP BY v.\"Name\"."
+  ],
+  "solution": "SELECT v.\"Name\" AS camera, count(*) AS n\nFROM \"Events\" e\nJOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nGROUP BY v.\"Name\"\nORDER BY n DESC, camera;",
+  "explanation": {
+    "breakdown": "An inner join keeps only pairs that match on both sides, then GROUP BY collapses to one row per camera name.",
+    "why": "Because the join is inner, two groups of rows silently disappear: events whose camera was deleted, and events with a NULL camera. The total here is less than count(*) on Events.",
+    "commonMistake": "Assuming the numbers add up to the full event table. They do not, and the difference is the orphan population.",
+    "performance": "Hash join on an indexed UUID column. Fine at this scale.",
+    "qaRelevance": "Whenever a joined report shows a lower total than the raw table, the gap is a finding, not a rounding error."
+  }
+},
+{
+  "id": "L3-Q02", "level": 3, "difficulty": "medium",
+  "title": "Cameras that have never produced an event",
+  "scenario": "A camera with zero events is invisible to any report built from the Events table. Those are exactly the ones operations needs to hear about.",
+  "task": "Return the Name of every camera that has no events at all, sorted by Name.",
+  "tables": ["VideoSources", "Events"],
+  "skills": ["LEFT JOIN", "IS NULL", "anti-join"],
+  "expected": "The cameras absent from the event stream.",
+  "orderMatters": true,
+  "hints": [
+    "Start from the table you want all the rows of — the cameras — not from Events.",
+    "A LEFT JOIN keeps every camera and fills the event columns with NULL where there is no match.",
+    "After a LEFT JOIN, the non-matching rows are exactly the ones where the right-hand side is NULL.",
+    "LEFT JOIN \"Events\" e ON e.\"VideoSourceId\" = v.\"Id\" WHERE e.\"Id\" IS NULL."
+  ],
+  "solution": "SELECT v.\"Name\"\nFROM \"VideoSources\" v\nLEFT JOIN \"Events\" e ON e.\"VideoSourceId\" = v.\"Id\"\nWHERE e.\"Id\" IS NULL\nORDER BY v.\"Name\";",
+  "explanation": {
+    "breakdown": "LEFT JOIN keeps all left rows. Testing a NOT NULL column of the right table for NULL isolates the rows that found no partner. This is the anti-join pattern.",
+    "why": "The IS NULL test must be on a column that could never legitimately be NULL in a matched row — a primary key is the safe choice.",
+    "commonMistake": "Putting the condition in the ON clause instead of WHERE. ON e.\"Id\" IS NULL still returns every camera, because the filter is applied before the join is completed rather than after.",
+    "alternative": "WHERE NOT EXISTS (SELECT 1 FROM \"Events\" e WHERE e.\"VideoSourceId\" = v.\"Id\") expresses the same intent more explicitly and often plans better.",
+    "performance": "The anti-join can stop at the first match per camera; NOT EXISTS makes that explicit and is usually the faster form on large tables.",
+    "qaRelevance": "This is the query that finds a camera nobody noticed had died, because absence never appears in a dashboard built on inner joins."
+  }
+},
+{
+  "id": "L3-Q03", "level": 3, "difficulty": "medium",
+  "title": "Orphan events",
+  "scenario": "QA reports that some events reference cameras that no longer appear anywhere in the UI. Because Events.VideoSourceId has no foreign key, this is possible.",
+  "task": "Return each orphaned VideoSourceId and the number of events referencing it as n. An orphan is a non-NULL VideoSourceId with no matching row in VideoSources. Sort by n descending then VideoSourceId.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["LEFT JOIN", "IS NULL", "anti-join", "GROUP BY"],
+  "expected": "Three dead camera IDs, with 90, 75 and 55 events.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "This is the mirror image of finding cameras without events — now you want events without a camera.",
+    "Start FROM Events and LEFT JOIN to VideoSources.",
+    "Keep rows where the camera side came back NULL, but exclude events that never named a camera at all.",
+    "WHERE v.\"Id\" IS NULL AND e.\"VideoSourceId\" IS NOT NULL, then group by e.\"VideoSourceId\"."
+  ],
+  "solution": "SELECT e.\"VideoSourceId\", count(*) AS n\nFROM \"Events\" e\nLEFT JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nWHERE v.\"Id\" IS NULL\n  AND e.\"VideoSourceId\" IS NOT NULL\nGROUP BY e.\"VideoSourceId\"\nORDER BY n DESC, e.\"VideoSourceId\";",
+  "explanation": {
+    "breakdown": "The LEFT JOIN plus IS NULL finds unmatched events. The extra IS NOT NULL is essential: events with a NULL camera also fail to match, but they are a different defect.",
+    "why": "Two distinct data problems produce an unmatched row. Reporting them together makes the defect report ambiguous and the fix wrong.",
+    "commonMistake": "Omitting the IS NOT NULL and reporting 70 extra rows as orphans when they are actually manager-level events that never had a camera.",
+    "alternative": "NOT EXISTS with the same conditions, or EXCEPT on the two id sets.",
+    "performance": "Indexed on both sides. The anti-join is cheap.",
+    "qaRelevance": "This is the direct consequence of the missing foreign key. In production these rows break any report that joins events to cameras, and they can never be repaired by the database itself — only by a data migration."
+  }
+},
+{
+  "id": "L3-Q04", "level": 3, "difficulty": "medium",
+  "title": "Cameras whose active configuration does not exist",
+  "scenario": "VideoSources.activeConfigId is NOT NULL but has no foreign key. Nothing stops it pointing at a configuration that was deleted.",
+  "task": "Return the Name of every camera whose activeConfigId does not match any Id in VideoSourceConfigs, sorted by Name.",
+  "tables": ["VideoSources", "VideoSourceConfigs"],
+  "skills": ["LEFT JOIN", "IS NULL", "anti-join", "unenforced FK"],
+  "expected": "Two cameras: LOBBY-Atrium-39 (which has no configuration rows at all) and SAFETY-Paint-40 (whose pointer is stale).",
+  "orderMatters": true,
+  "hints": [
+    "The join is not on the usual VideoSourceId — it is on the camera's activeConfigId matching the configuration's primary key.",
+    "LEFT JOIN \"VideoSourceConfigs\" c ON c.\"Id\" = v.\"activeConfigId\".",
+    "Keep the rows where the configuration side is NULL.",
+    "Note activeConfigId is camelCase, and it is never NULL — so no extra NULL guard is needed."
+  ],
+  "solution": "SELECT v.\"Name\"\nFROM \"VideoSources\" v\nLEFT JOIN \"VideoSourceConfigs\" c ON c.\"Id\" = v.\"activeConfigId\"\nWHERE c.\"Id\" IS NULL\nORDER BY v.\"Name\";",
+  "explanation": {
+    "breakdown": "The join key is a pointer column on the parent pointing at the child's primary key — the reverse of the usual direction.",
+    "why": "Because activeConfigId is NOT NULL, the column always holds a UUID. That makes the defect invisible to any NULL check; only a join reveals that the UUID is meaningless.",
+    "commonMistake": "Assuming NOT NULL means valid. NOT NULL guarantees a value is present, never that it is correct.",
+    "alternative": "WHERE NOT EXISTS (SELECT 1 FROM \"VideoSourceConfigs\" c WHERE c.\"Id\" = v.\"activeConfigId\").",
+    "qaRelevance": "A camera in this state loads no configuration at runtime, so it silently runs no analytics while still appearing healthy in the camera list. It is a high-severity defect that no UI would show you."
+  }
+},
+{
+  "id": "L3-Q05", "level": 3, "difficulty": "medium",
+  "title": "The configuration flag is lying",
+  "scenario": "VideoSources.configurationsAdded drives a green tick in the UI. You want to verify it against the actual contents of VideoSourceConfigs.",
+  "task": "Return Name, configurationsAdded and the real number of configuration rows as real_configs, for every camera where the flag disagrees with reality. Sort by Name.",
+  "tables": ["VideoSources", "VideoSourceConfigs"],
+  "skills": ["LEFT JOIN", "GROUP BY", "HAVING", "boolean logic"],
+  "expected": "Three cameras: two flagged false that do have configs, and LOBBY-Atrium-39 flagged true with none.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Count each camera's configuration rows with a LEFT JOIN so cameras with none still appear with a count of zero.",
+    "count(c.\"Id\") counts only non-NULL values, so unmatched cameras count zero. count(*) would wrongly count 1.",
+    "Disagreement means: flag is true but count is 0, or flag is false but count is greater than 0.",
+    "Put that condition in HAVING, since it involves the aggregate."
+  ],
+  "solution": "SELECT v.\"Name\",\n       v.\"configurationsAdded\",\n       count(c.\"Id\") AS real_configs\nFROM \"VideoSources\" v\nLEFT JOIN \"VideoSourceConfigs\" c ON c.\"VideoSourceId\" = v.\"Id\"\nGROUP BY v.\"Name\", v.\"configurationsAdded\"\nHAVING (v.\"configurationsAdded\" AND count(c.\"Id\") = 0)\n    OR (NOT v.\"configurationsAdded\" AND count(c.\"Id\") > 0)\nORDER BY v.\"Name\";",
+  "explanation": {
+    "breakdown": "LEFT JOIN preserves cameras with no configuration. count(c.\"Id\") is the crucial detail — counting a column from the right-hand table yields 0 for unmatched rows, whereas count(*) counts the single NULL-filled row and yields 1.",
+    "why": "HAVING can combine an aggregate with a grouped column, which is how the flag and the count are compared in one expression.",
+    "commonMistake": "Using count(*) after a LEFT JOIN. Every camera then appears to have at least one configuration, and the defect vanishes.",
+    "alternative": "A scalar subquery per camera, or a FILTER-based count, both give the same answer.",
+    "qaRelevance": "Denormalised flags are supposed to be a cache of the truth. Verifying them against the source is a standard data-consistency test, and this one catches a genuine UI lie in both directions."
+  }
+},
+{
+  "id": "L3-Q06", "level": 3, "difficulty": "hard",
+  "title": "Three tables: events, cameras, managers",
+  "scenario": "The regional report needs event volume broken down by manager and camera, using readable names throughout.",
+  "task": "Return the manager Name as manager, the camera Name as camera, and the event count as n, for cameras belonging to the manager named 'AM-Edge-North'. Sort by n descending then camera.",
+  "tables": ["Events", "VideoSources", "AnalyticManagers"],
+  "skills": ["multiple JOINs", "GROUP BY", "WHERE"],
+  "expected": "The north-site cameras with their event volumes.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Three tables means two join conditions.",
+    "Events joins to VideoSources on the camera id; VideoSources joins to AnalyticManagers on AnalyticManagerId.",
+    "Filter on the manager's name, not its UUID.",
+    "Group by both names, since both appear un-aggregated in the select list."
+  ],
+  "solution": "SELECT m.\"Name\" AS manager,\n       v.\"Name\" AS camera,\n       count(*)  AS n\nFROM \"Events\" e\nJOIN \"VideoSources\"    v ON v.\"Id\" = e.\"VideoSourceId\"\nJOIN \"AnalyticManagers\" m ON m.\"Id\" = v.\"AnalyticManagerId\"\nWHERE m.\"Name\" = 'AM-Edge-North'\nGROUP BY m.\"Name\", v.\"Name\"\nORDER BY n DESC, camera;",
+  "explanation": {
+    "breakdown": "Joins chain left to right: each new table is joined to something already in the query. Both selected names must appear in GROUP BY.",
+    "why": "The manager could equally be reached through Events.AnalyticManagerId. Going through VideoSources instead answers a subtly different question — which manager owns the camera, rather than which manager recorded the event. In a correctly behaving system they agree; verifying that they do is itself a good test.",
+    "commonMistake": "Joining through Events.AnalyticManagerId and assuming it is equivalent. Two paths to the same table are two different questions.",
+    "performance": "Two hash joins over indexed UUIDs.",
+    "qaRelevance": "When two join paths to the same entity disagree, you have found a data-integrity bug. Deliberately comparing them is a strong test."
+  }
+},
+{
+  "id": "L3-Q07", "level": 3, "difficulty": "hard",
+  "title": "Watch a join multiply your rows",
+  "scenario": "A colleague's report shows five times more events than the Events table contains. They joined in the user access-control table to filter by permission.",
+  "task": "For the camera named 'ANPR-Gate-01', return three counts in one row: the true number of events as true_events, the number after joining UserVideoSources as after_user_join, and the number of users with access as user_count.",
+  "tables": ["Events", "VideoSources", "UserVideoSources"],
+  "skills": ["JOIN fan-out", "scalar subquery", "COUNT"],
+  "expected": "after_user_join equals true_events multiplied by user_count.",
+  "checkColumnNames": true,
+  "hints": [
+    "Three independent numbers on one row means three scalar subqueries.",
+    "The first counts events for that camera. The second repeats it with a join to UserVideoSources added.",
+    "The third counts rows in UserVideoSources for that camera.",
+    "Each subquery needs its own join from VideoSources to find the camera by name."
+  ],
+  "solution": "SELECT\n  (SELECT count(*) FROM \"Events\" e\n     JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\n    WHERE v.\"Name\" = 'ANPR-Gate-01')                       AS true_events,\n  (SELECT count(*) FROM \"Events\" e\n     JOIN \"VideoSources\"     v ON v.\"Id\" = e.\"VideoSourceId\"\n     JOIN \"UserVideoSources\" u ON u.\"VideoSourceId\" = v.\"Id\"\n    WHERE v.\"Name\" = 'ANPR-Gate-01')                       AS after_user_join,\n  (SELECT count(*) FROM \"UserVideoSources\" u\n     JOIN \"VideoSources\" v ON v.\"Id\" = u.\"VideoSourceId\"\n    WHERE v.\"Name\" = 'ANPR-Gate-01')                       AS user_count;",
+  "explanation": {
+    "breakdown": "Joining a one-to-many table without aggregating multiplies the left side by the number of matches. Each event is duplicated once per user who can see that camera.",
+    "why": "This is the single most common cause of inflated numbers in analytics reports, and it produces no error — just a bigger, wrong number.",
+    "commonMistake": "Adding a join purely to filter, without realising it also multiplies. If you only need to test existence, use EXISTS instead of a join.",
+    "alternative": "WHERE EXISTS (SELECT 1 FROM \"UserVideoSources\" u WHERE u.\"VideoSourceId\" = v.\"Id\") filters without ever duplicating a row.",
+    "performance": "Fan-out also wastes work: the engine materialises rows only to have them collapsed by a later DISTINCT.",
+    "qaRelevance": "When a stakeholder says a number looks too high, this is the first thing to check. Count the base table, then count again with each join added, and find the one that changes the number."
+  }
+},
+{
+  "id": "L3-Q08", "level": 3, "difficulty": "hard",
+  "title": "Pipelines over their camera limit",
+  "scenario": "PipeLines.MaxVideoSourceAllowed is a capacity limit that nothing in the database enforces. You want to know whether any pipeline has been over-subscribed.",
+  "task": "Return the pipeline Name as pipeline, MaxVideoSourceAllowed as capacity, and the number of assigned cameras as assigned, for pipelines where assigned exceeds capacity. Sort by pipeline.",
+  "tables": ["PipeLines", "PipeLineVideoSources"],
+  "skills": ["LEFT JOIN", "GROUP BY", "HAVING", "aggregate vs column"],
+  "expected": "One pipeline: PL-Face-Bank-A, capacity 4, assigned 5.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Count assigned cameras per pipeline by joining PipeLines to PipeLineVideoSources.",
+    "The comparison is between an aggregate and a plain column, so it belongs in HAVING.",
+    "Group by both the pipeline name and its capacity so both can be selected.",
+    "HAVING count(pv.\"Id\") > p.\"MaxVideoSourceAllowed\"."
+  ],
+  "solution": "SELECT p.\"Name\"                  AS pipeline,\n       p.\"MaxVideoSourceAllowed\" AS capacity,\n       count(pv.\"Id\")            AS assigned\nFROM \"PipeLines\" p\nLEFT JOIN \"PipeLineVideoSources\" pv ON pv.\"PipeLineId\" = p.\"Id\"\nGROUP BY p.\"Name\", p.\"MaxVideoSourceAllowed\"\nHAVING count(pv.\"Id\") > p.\"MaxVideoSourceAllowed\"\nORDER BY pipeline;",
+  "explanation": {
+    "breakdown": "HAVING can reference both aggregates and grouped columns, which is what makes the comparison possible in a single statement.",
+    "why": "A LEFT JOIN with count(pv.\"Id\") also lets you find under-used pipelines by changing the comparison — the same query shape answers both questions.",
+    "commonMistake": "Grouping only by name and then referencing MaxVideoSourceAllowed, which PostgreSQL rejects because it is not functionally dependent on the grouping key. Grouping by the primary key instead would make it legal.",
+    "alternative": "Group by p.\"Id\" and PostgreSQL will allow selecting any other column of p, since the primary key determines them all.",
+    "qaRelevance": "Any limit stored as a plain number, with no constraint behind it, will eventually be exceeded. Every such column deserves a standing test."
+  }
+},
+{
+  "id": "L3-Q09", "level": 3, "difficulty": "hard",
+  "title": "Failover pairs, via a self join",
+  "scenario": "Analytic servers can nominate a failover partner through FailoverServerId, which points back into the same table. You need the pairing documented.",
+  "task": "Return the primary server Name as primary_server and its failover partner's Name as failover_server, for every server that has a partner configured. Sort by primary_server.",
+  "tables": ["AnalyticServers"],
+  "skills": ["self join", "table aliases"],
+  "expected": "Two rows: AS-GPU-01 and AS-GPU-02, both pointing at AS-FAILOVER-01.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "The table needs to appear twice in the same query, once as the primary and once as the partner.",
+    "Aliases are what make that possible — the same table with two different names.",
+    "Join the alias representing the partner on its Id matching the primary's FailoverServerId.",
+    "FROM \"AnalyticServers\" p JOIN \"AnalyticServers\" f ON f.\"Id\" = p.\"FailoverServerId\"."
+  ],
+  "solution": "SELECT p.\"Name\" AS primary_server,\n       f.\"Name\" AS failover_server\nFROM \"AnalyticServers\" p\nJOIN \"AnalyticServers\" f ON f.\"Id\" = p.\"FailoverServerId\"\nORDER BY primary_server;",
+  "explanation": {
+    "breakdown": "A self join treats one table as two logical roles. Aliases are mandatory, otherwise every column reference is ambiguous.",
+    "why": "The inner join automatically excludes servers with no partner, since NULL never matches. Switching to LEFT JOIN would list unprotected servers too — a useful variant.",
+    "commonMistake": "Forgetting the aliases, or writing the join condition backwards so each server matches itself.",
+    "alternative": "A recursive CTE would follow a failover chain of arbitrary depth; a plain self join only sees one hop.",
+    "qaRelevance": "Failover configuration is safety-critical and rarely exercised. A server with no partner, or a partner that is itself marked IsFailoverOnly and already serving, is a real availability risk."
+  }
+},
+{
+  "id": "L3-Q10", "level": 3, "difficulty": "hard",
+  "title": "Assignment versus actual placement",
+  "scenario": "PipeLineVideoSources records where a camera is supposed to run. AnalyticServerDeviceMapping records where it is actually placed. Operations suspects they have drifted apart.",
+  "task": "Return the camera Name as camera and a status of 'assigned_not_placed' or 'placed_not_assigned' as status, for every camera present in one table but not the other. Sort by status then camera.",
+  "tables": ["PipeLineVideoSources", "AnalyticServerDeviceMapping", "VideoSources"],
+  "skills": ["anti-join", "NOT EXISTS", "UNION ALL"],
+  "expected": "Three rows: two cameras assigned but never placed, and one placed without an assignment.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "This is two separate anti-joins, one in each direction, combined into one result.",
+    "UNION ALL stacks them. Each branch supplies its own literal status string.",
+    "For each branch, start from one mapping table and exclude rows that exist in the other.",
+    "NOT EXISTS is the clearest way to express 'has no counterpart'."
+  ],
+  "solution": "SELECT v.\"Name\" AS camera, 'assigned_not_placed' AS status\nFROM \"PipeLineVideoSources\" pv\nJOIN \"VideoSources\" v ON v.\"Id\" = pv.\"VideoSourceId\"\nWHERE NOT EXISTS (\n  SELECT 1 FROM \"AnalyticServerDeviceMapping\" m\n   WHERE m.\"VideoSourceId\" = pv.\"VideoSourceId\")\nUNION ALL\nSELECT v.\"Name\", 'placed_not_assigned'\nFROM \"AnalyticServerDeviceMapping\" m\nJOIN \"VideoSources\" v ON v.\"Id\" = m.\"VideoSourceId\"\nWHERE NOT EXISTS (\n  SELECT 1 FROM \"PipeLineVideoSources\" pv\n   WHERE pv.\"VideoSourceId\" = m.\"VideoSourceId\")\nORDER BY status, camera;",
+  "explanation": {
+    "breakdown": "Each branch is an anti-join expressed with NOT EXISTS. UNION ALL concatenates the two directions, and a literal column labels which direction each row came from.",
+    "why": "A full outer join could do this in one pass, but the two-branch form makes the direction explicit and the output far easier to read in a defect report.",
+    "commonMistake": "Checking only one direction. Drift is not symmetric, and the direction tells you which subsystem is at fault.",
+    "alternative": "FULL OUTER JOIN with CASE, or EXCEPT on the two sets of camera ids.",
+    "performance": "Two anti-joins on indexed columns. NOT EXISTS short-circuits on the first match.",
+    "qaRelevance": "Whenever two tables independently record the same fact, they will eventually disagree. A standing reconciliation query in both directions is the only way to catch it, and drift here means a camera is either running unmonitored or configured but dark."
+  }
+}
+]

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% from "_macros.html" import status_badge %}
+{% block title %}Handoffs - business_radar{% endblock %}
+{% block content %}
+
+<div class="spread" style="margin-bottom:var(--s-4)">
+  <div>
+    <h1>Handoffs</h1>
+    <p class="small">An interested reply stops the machine. Nothing here replies to anybody;
+      the recommended action is text for you to act on.</p>
+  </div>
+  <div class="row">
+    {% for key, label in [('open','Open'),('closed','Closed'),('all','All')] %}
+      <a class="btn {% if state == key %}primary{% endif %}"
+         href="{{ url_for('handoffs', state=key) }}">{{ label }}</a>
+    {% endfor %}
+  </div>
+</div>
+
+{% if handoffs %}
+  <div class="card-list">
+    {% for h in handoffs %}
+      <article class="card {{ h.priority|lower }}">
+        <div class="spread">
+          <div>
+            <div class="row">
+              <span class="badge {{ 'bad' if h.priority == 'URGENT' else ('warn' if h.priority == 'HIGH' else 'info') }}">
+                {{ h.priority }}</span>
+              {{ status_badge(h.state) }}
+              <strong><a href="{{ url_for('business', business_id=h.business_id) }}">{{ h.business_name }}</a></strong>
+            </div>
+            <p class="small" style="margin-top:var(--s-2)">
+              {{ h.city }} &middot; {{ h.classification or h.trigger_classification or h.trigger_rule }}
+              &middot; opened {{ h.created_at|stamp }}
+              &middot; ack due {{ h.sla_ack_due_at|stamp }}</p>
+            {% if h.body_excerpt %}
+              <p class="small"><em>&ldquo;{{ h.body_excerpt }}&rdquo;</em></p>
+            {% endif %}
+            <p>{{ h.recommended_action }}</p>
+            {% if h.recommended_channel %}
+              <p class="small">Suggested channel: {{ h.recommended_channel }}
+                {% if h.recommended_by_when %}by {{ h.recommended_by_when|stamp }}{% endif %}</p>
+            {% endif %}
+            <p class="mono">{{ h.id }}</p>
+          </div>
+          <div class="row">
+            {% if h.state == 'OPEN' %}
+              <form method="post" action="{{ url_for('handoff_ack', handoff_id=h.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button class="btn" type="submit">Acknowledge</button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="panel">
+    <p class="empty">No handoffs. This is the queue that fills when somebody replies with
+      interest, so an empty one means nobody has yet.</p>
+  </div>
+{% endif %}
+{% endblock %}

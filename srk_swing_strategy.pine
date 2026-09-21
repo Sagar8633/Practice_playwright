@@ -1,0 +1,76 @@
+//@version=6
+// =============================================================================
+//  SRK Swing Backtest — RGB/BGR crossover + ADX filter
+//  Reproduces the SRK Trading Swing Indicator with 3 EMAs (red/green/blue).
+//  Rules:
+//    Long  : stack flips to R>G>B (RGB, red on top) AND ADX(14) > 20
+//            -> enter NEXT bar open
+//            SL  = low of the candle BEFORE the crossover candle
+//            Exit= candle CLOSES below Blue/EMA20  (or SL hit)
+//    Short : stack flips to B>G>R (BGR, blue on top) AND ADX(14) > 20
+//            -> enter NEXT bar open
+//            SL  = high of the candle BEFORE the crossover candle
+//            Exit= candle CLOSES above Blue/EMA20  (or SL hit)
+//  Designed for NSE:RELIANCE, 5-min. No fixed target (RR = EMA-exit result).
+// =============================================================================
+strategy("SRK Swing — RGB/BGR + ADX", overlay=true,
+     initial_capital=100000,
+     default_qty_type=strategy.percent_of_equity, default_qty_value=100,
+     commission_type=strategy.commission.percent, commission_value=0.03,
+     slippage=0, calc_on_every_tick=false, process_orders_on_close=false,
+     pyramiding=0)
+
+// ---------------- Inputs ----------------
+fastLen = input.int(5,  "Red EMA (fast)",  minval=1, group="EMAs")
+midLen  = input.int(10, "Green EMA (mid)", minval=1, group="EMAs")
+slowLen = input.int(20, "Blue EMA (slow / exit)", minval=1, group="EMAs")
+adxLen  = input.int(14, "ADX length",      minval=1, group="ADX filter")
+adxThr  = input.float(20, "ADX threshold", group="ADX filter")
+
+// ---------------- EMAs (the 3 lines) ----------------
+emaR = ta.ema(close, fastLen)   // red   (fast)
+emaG = ta.ema(close, midLen)    // green (mid)
+emaB = ta.ema(close, slowLen)   // blue  (slow = your "20 EMA" exit line)
+
+plot(emaR, "Red EMA",   color=color.red,   linewidth=2)
+plot(emaG, "Green EMA", color=color.green, linewidth=2)
+plot(emaB, "Blue EMA",  color=color.blue,  linewidth=2)
+
+// ---------------- ADX (Wilder DMI) ----------------
+[diP, diM, adx] = ta.dmi(adxLen, adxLen)
+adxOk = adx > adxThr
+
+// ---------------- Stack state & the single crossover point ----------------
+longStack  = emaR > emaG and emaG > emaB   // RGB: red on top
+shortStack = emaB > emaG and emaG > emaR   // BGR: blue on top
+
+longCross  = longStack  and not longStack[1]   // first bar the stack aligns up
+shortCross = shortStack and not shortStack[1]   // first bar the stack aligns down
+
+// ---------------- SL reference: candle BEFORE the crossover candle ----------------
+var float slPrice = na
+
+// ---------------- Entries (fill on NEXT bar open) ----------------
+if longCross and adxOk and strategy.position_size == 0
+    slPrice := low[1]
+    strategy.entry("Long", strategy.long)
+
+if shortCross and adxOk and strategy.position_size == 0
+    slPrice := high[1]
+    strategy.entry("Short", strategy.short)
+
+// ---------------- Exits: SL stop + close on candle-close beyond Blue EMA ----------------
+if strategy.position_size > 0
+    strategy.exit("L-SL", from_entry="Long", stop=slPrice)
+    if close < emaB
+        strategy.close("Long", comment="EMA20 exit")
+
+if strategy.position_size < 0
+    strategy.exit("S-SL", from_entry="Short", stop=slPrice)
+    if close > emaB
+        strategy.close("Short", comment="EMA20 exit")
+
+// ---------------- Visuals ----------------
+plotshape(longCross  and adxOk, "Long signal",  shape.triangleup,   location.belowbar, color.new(color.green,0), size=size.small)
+plotshape(shortCross and adxOk, "Short signal", shape.triangledown, location.abovebar, color.new(color.red,0),   size=size.small)
+bgcolor(longStack ? color.new(color.green, 92) : shortStack ? color.new(color.red, 92) : na)

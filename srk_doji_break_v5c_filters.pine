@@ -1,0 +1,75 @@
+//@version=6
+// SRK Doji Break 1:3 + FILTERS — same entries as v5, with toggles so we can read
+// the Strategy Tester win rate for each segment (direction / trend / session).
+strategy("SRK Doji Break 1:3 + Filters", overlay=true, initial_capital=100000,
+     default_qty_type=strategy.percent_of_equity, default_qty_value=10,
+     commission_type=strategy.commission.percent, commission_value=0.03, pyramiding=0)
+
+rr        = input.float(3.0,  "Reward : Risk")
+bodyMax   = input.float(0.10, "Max body / range")
+wickMin   = input.float(0.60, "Min dominant wick / range")
+oppMax    = input.float(0.15, "Max opposite wick / range")
+validBars = input.int(3,      "Breakout valid for N bars")
+
+allowLong  = input.bool(true,  "Allow LONGs (dragonfly)",  group="Filters")
+allowShort = input.bool(true,  "Allow SHORTs (gravestone)", group="Filters")
+reqTrend   = input.bool(false, "Only WITH 200-EMA trend",   group="Filters")
+sessMode   = input.string("All", "Session", options=["All","London","NY","Asia"], group="Filters")
+
+ema200 = ta.ema(close, 200)
+
+rng  = high - low
+body = math.abs(close - open)
+upW  = high - math.max(open, close)
+loW  = math.min(open, close) - low
+
+isDoji     = rng > 0 and body <= bodyMax * rng
+dragonfly  = isDoji and loW >= wickMin * rng and upW <= oppMax * rng
+gravestone = isDoji and upW >= wickMin * rng and loW <= oppMax * rng
+
+h = hour(time, "UTC")
+inSess = sessMode == "All" or (sessMode == "London" and h >= 7 and h < 12) or (sessMode == "NY" and h >= 12 and h < 21) or (sessMode == "Asia" and (h >= 21 or h < 7))
+
+longOK  = allowLong  and (not reqTrend or close > ema200) and inSess
+shortOK = allowShort and (not reqTrend or close < ema200) and inSess
+
+var float lEntry = na
+var float lSL    = na
+var float lTP    = na
+var int   lBars  = 0
+var float sEntry = na
+var float sSL    = na
+var float sTP    = na
+var int   sBars  = 0
+
+if dragonfly and longOK
+    lEntry := high
+    lSL    := low
+    lTP    := high + rr * (high - low)
+    lBars  := validBars
+if gravestone and shortOK
+    sEntry := low
+    sSL    := high
+    sTP    := low - rr * (high - low)
+    sBars  := validBars
+
+if lBars > 0 and strategy.position_size == 0
+    strategy.entry("L", strategy.long, stop=lEntry)
+lBars := math.max(lBars - 1, 0)
+if lBars == 0
+    strategy.cancel("L")
+
+if sBars > 0 and strategy.position_size == 0
+    strategy.entry("S", strategy.short, stop=sEntry)
+sBars := math.max(sBars - 1, 0)
+if sBars == 0
+    strategy.cancel("S")
+
+if strategy.position_size > 0
+    strategy.exit("L-x", from_entry="L", stop=lSL, limit=lTP)
+if strategy.position_size < 0
+    strategy.exit("S-x", from_entry="S", stop=sSL, limit=sTP)
+
+plot(ema200, "EMA200", color=color.blue)
+plotshape(dragonfly,  "Dragonfly",  shape.triangleup,   location.belowbar, color.new(color.green,0), size=size.tiny)
+plotshape(gravestone, "Gravestone", shape.triangledown, location.abovebar, color.new(color.red,0),   size=size.tiny)

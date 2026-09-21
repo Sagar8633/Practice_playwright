@@ -1,0 +1,53 @@
+# Naukri Remote Job Finder - Search Configuration
+#
+# Naukri is India-only, so "across the globe" here means searching all of India
+# for fully-remote roles.
+
+# Search keywords - each one triggers a separate Naukri search
+# "remote" is appended to each keyword to force the remote-work filter.
+keywords:
+  - SDET
+  - QA Automation
+  - Automation Test Lead
+  - Python Automation Testing
+  - Playwright Automation
+  - Software Development Engineer in Test
+  - Test Automation
+  - Quality Engineer
+
+# Search all of India (null = no location restriction)
+# Naukri's remote filter via the "wfh" / location=Remote facet is applied below.
+location: null
+
+# Only show jobs posted in the last N days (1 = last 24 hours)
+# Naukri applies this as its own jobAge freshness facet at the source.
+posted_days: 1
+
+# How many pages to scrape per keyword (20 results per page)
+# Higher = more results. Leave unlimited for all results (use a large number
+# to go deep, e.g. 50+ pages per keyword).
+pages_per_keyword: 3
+
+# Naukri location string that marks a remote role
+remote_location_markers:
+  - "remote"
+  - "work from home"
+  - "wfh"
+  - "anywhere in india"
+
+# Exclude these title keywords (case-insensitive substring match)
+exclude_titles:
+  - intern
+  - fresher
+  - trainee
+  - junior
+  - entry level
+  - hardware
+  - sales
+  - marketing
+
+# Exclude these companies (case-insensitive substring match)
+exclude_companies: []
+
+# Preferred experience years range (your profile) - used only for tagging, not filtering strictly
+experience_years: 6

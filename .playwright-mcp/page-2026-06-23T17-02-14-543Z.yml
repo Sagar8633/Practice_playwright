@@ -1,0 +1,698 @@
+- generic [active] [ref=e1]:
+  - list [ref=e6]:
+    - listitem [ref=e7]:
+      - link "Option Chain" [ref=e8] [cursor=pointer]:
+        - /url: /option-chain
+    - listitem [ref=e9]:
+      - link "Market Turnover" [ref=e10] [cursor=pointer]:
+        - /url: "#modal_market_turnover_popup"
+    - listitem [ref=e11]:
+      - link "Listings" [ref=e12] [cursor=pointer]:
+        - /url: /market-data/new-stock-exchange-listings-today
+    - listitem [ref=e13]:
+      - link "IPO" [ref=e14] [cursor=pointer]:
+        - /url: /market-data/all-upcoming-issues-ipo
+    - listitem [ref=e15]:
+      - link "Circulars" [ref=e16] [cursor=pointer]:
+        - /url: /resources/exchange-communication-circulars
+    - listitem [ref=e17]:
+      - link "Daily Report" [ref=e18] [cursor=pointer]:
+        - /url: /all-reports
+    - listitem [ref=e19]:
+      - link "Holidays" [ref=e20] [cursor=pointer]:
+        - /url: /resources/exchange-communication-holidays
+    - listitem [ref=e21]:
+      - link "Corporates" [ref=e22] [cursor=pointer]:
+        - /url: /companies-listing/corporate-filings-application
+    - listitem [ref=e23]:
+      - link "Press Releases" [ref=e24] [cursor=pointer]:
+        - /url: /resources/exchange-communication-press-releases
+    - listitem [ref=e25]:
+      - link "Contact Us" [ref=e26] [cursor=pointer]:
+        - /url: /contact/contact-us
+    - listitem [ref=e27]:
+      - generic [ref=e28] [cursor=pointer]:
+        - generic [ref=e29]: English
+        - img "down-arrow" [ref=e30]
+    - listitem [ref=e31]:
+      - button "Accessibility List" [ref=e32] [cursor=pointer]:
+        - img [ref=e33]: 
+    - listitem [ref=e34]:
+      - button "Events List" [ref=e35] [cursor=pointer]:
+        - img [ref=e36]: 
+  - banner [ref=e37]:
+    - navigation [ref=e38]:
+      - generic [ref=e39]:
+        - link "NSE India" [ref=e40] [cursor=pointer]:
+          - /url: /
+          - img "NSE India" [ref=e41]
+        - generic [ref=e43]:
+          - generic [ref=e44]:
+            - generic [ref=e45]:
+              - combobox "Search by Company name, Index or Symbol..." [ref=e46]
+              - status [ref=e47]
+            - text: 
+            - button "Click to Search" [ref=e48] [cursor=pointer]:
+              - img "Get Quote Search" [ref=e49]
+          - generic [ref=e50]:
+            - list
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - figure [ref=e55]:
+              - link "NSE - NIFTY 50" [ref=e56] [cursor=pointer]:
+                - /url: /index-tracker/NIFTY%2050
+                - img "NSE - NIFTY 50" [ref=e57]
+            - generic [ref=e59]:
+              - generic [ref=e61]:
+                - text: (
+                - text: "%)"
+              - generic:
+                - paragraph
+              - generic [ref=e62]:
+                - text: Streaming
+                - img "Streaming" [ref=e63]
+          - generic "Market Ticker Carousel" [ref=e64]:
+            - generic [ref=e66]:
+              - generic [ref=e68]:
+                - figure [ref=e69]:
+                  - link [ref=e70] [cursor=pointer]:
+                    - /url: "#"
+                    - text: Market Capitalization
+                - paragraph [ref=e71]:
+                  - generic [ref=e72]: 
+                  - text: "|"
+              - tabpanel [ref=e73]:
+                - generic [ref=e74]:
+                  - generic [ref=e75]:
+                    - img "GiftNifty" [ref=e77]
+                    - generic [ref=e80]:
+                      - text: (
+                      - text: "%)"
+                  - generic:
+                    - paragraph
+              - tabpanel [ref=e81]:
+                - generic [ref=e82]:
+                  - figure [ref=e83]: Futures
+                  - paragraph [ref=e84]:
+                    - text: "|"
+                    - generic [ref=e85]: 
+              - tabpanel [ref=e86]:
+                - generic [ref=e87]:
+                  - figure [ref=e88]:
+                    - link [ref=e89] [cursor=pointer]:
+                      - /url: "#"
+                      - text: Market Capitalization
+                  - paragraph [ref=e90]:
+                    - generic [ref=e91]: 
+                    - text: "|"
+              - generic [ref=e94]:
+                - img [ref=e96]
+                - generic [ref=e99]: (%)
+              - generic [ref=e101]:
+                - figure [ref=e102]: Futures
+                - paragraph [ref=e103]:
+                  - text: "|"
+                  - generic [ref=e104]: 
+              - generic [ref=e106]:
+                - figure [ref=e107]:
+                  - link [ref=e108] [cursor=pointer]:
+                    - /url: "#"
+                    - text: Market Capitalization
+                - paragraph [ref=e109]:
+                  - generic [ref=e110]: 
+                  - text: "|"
+            - tablist [ref=e111]:
+              - tab "Slide 1" [selected] [ref=e112] [cursor=pointer]: "01"
+              - tab "Slide 2" [ref=e113] [cursor=pointer]: "02"
+              - tab "Slide 3" [ref=e114] [cursor=pointer]: "03"
+          - button "playpause" [ref=e115] [cursor=pointer]:
+            - generic [ref=e116]: 
+      - navigation [ref=e119]:
+        - list [ref=e120]:
+          - listitem [ref=e121]:
+            - link "Home" [ref=e122] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e123]:
+            - link "About" [ref=e124] [cursor=pointer]:
+              - /url: javascript:;
+          - listitem [ref=e125]:
+            - link "Market Data" [ref=e126] [cursor=pointer]:
+              - /url: javascript:;
+          - listitem [ref=e127]:
+            - link "Invest" [ref=e128] [cursor=pointer]:
+              - /url: javascript:;
+          - listitem [ref=e129]:
+            - link "List" [ref=e130] [cursor=pointer]:
+              - /url: javascript:;
+          - listitem [ref=e131]:
+            - link "Trade" [ref=e132] [cursor=pointer]:
+              - /url: javascript:;
+          - listitem [ref=e133]:
+            - link "Regulation" [ref=e134] [cursor=pointer]:
+              - /url: javascript:;
+          - listitem [ref=e135]:
+            - link "Learn" [ref=e136] [cursor=pointer]:
+              - /url: javascript:;
+          - listitem [ref=e137]:
+            - link "Resources" [ref=e138] [cursor=pointer]:
+              - /url: javascript:;
+          - listitem [ref=e139]:
+            - link "Complaints" [ref=e140] [cursor=pointer]:
+              - /url: javascript:;
+          - listitem [ref=e141]:
+            - link "RESEARCH" [ref=e142] [cursor=pointer]:
+              - /url: javascript:;
+          - listitem [ref=e143]:
+            - link "Investor Relations" [ref=e144] [cursor=pointer]:
+              - /url: /static/investor-relations/announcements
+  - generic:      
+  - generic [ref=e145]:
+    - generic [ref=e146]:
+      - generic [ref=e148]:
+        - list [ref=e149]:
+          - listitem [ref=e150]:
+            - link "Home" [ref=e151] [cursor=pointer]:
+              - /url: /
+            - text: 
+          - listitem [ref=e152]: Corporate Filings
+        - heading "Shareholding Patterns" [level=1] [ref=e153]
+      - generic [ref=e157]:
+        - navigation [ref=e158]:
+          - list [ref=e159]:
+            - listitem [ref=e160]:
+              - link "Dashboard" [ref=e161] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-application
+            - listitem [ref=e162]:
+              - link "Announcements" [ref=e163] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-announcements
+            - listitem [ref=e164]:
+              - link "Announcements XBRL" [ref=e165] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-announcements-xbrl
+            - listitem [ref=e166]:
+              - link "Annual Reports" [ref=e167] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-annual-reports
+            - listitem [ref=e168]:
+              - link "Annual Reports XBRL" [ref=e169] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-annual-reports-xbrl
+            - listitem [ref=e170]:
+              - link "Business Responsibility and Sustainability Report" [ref=e171] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-bussiness-sustainabilitiy-reports
+            - listitem [ref=e172]:
+              - link "Board Meetings" [ref=e173] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-board-meetings
+            - listitem [ref=e174]:
+              - link "Corporate Actions" [ref=e175] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-actions
+            - listitem [ref=e176]:
+              - link "Company Directory" [ref=e177] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-directory
+            - listitem [ref=e178]:
+              - link "Corporate Governance" [ref=e179] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-governance
+            - listitem [ref=e180]:
+              - link "Daily Buy Back / Redemption" [ref=e181] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-daily-buy-back
+            - listitem [ref=e182]:
+              - list [ref=e183]:
+                - listitem [ref=e184]:
+                  - generic [ref=e185]: Debt Centralised Database
+                - listitem [ref=e186]:
+                  - link "Credit Rating Details" [ref=e187] [cursor=pointer]:
+                    - /url: /companies-listing/debt-centralised-database/crd
+                - listitem [ref=e188]:
+                  - link "Default Payment Details" [ref=e189] [cursor=pointer]:
+                    - /url: /companies-listing/debt-centralised-database/dpd
+                - listitem [ref=e190]:
+                  - link "Interest Payment Details" [ref=e191] [cursor=pointer]:
+                    - /url: /companies-listing/debt-centralised-database/ipd
+                - listitem [ref=e192]:
+                  - link "Redemption Payment Details" [ref=e193] [cursor=pointer]:
+                    - /url: /companies-listing/debt-centralised-database/rpd
+                - listitem [ref=e194]:
+                  - link "Regulation 60" [ref=e195] [cursor=pointer]:
+                    - /url: /companies-listing/debt-centralised-database
+            - listitem [ref=e196]:
+              - link "Debt Liquidity Window" [ref=e197] [cursor=pointer]:
+                - /url: /companies-listing/announcement-liquidity-window
+            - listitem [ref=e198]:
+              - link "Debt – Regulation 50 Intimations" [ref=e199] [cursor=pointer]:
+                - /url: /companies-listing/debt-centralised-database/debtreg50
+            - listitem [ref=e200]:
+              - link "Event Calendar" [ref=e201] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-event-calendar
+            - listitem [ref=e202]:
+              - link "Financial Results" [ref=e203] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-financial-results
+            - listitem [ref=e204]:
+              - link "Financial Results Comparision" [ref=e205] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-financial-results-comparision
+            - listitem [ref=e206]:
+              - list [ref=e207]:
+                - listitem [ref=e208]:
+                  - generic [ref=e209]: Further Issues XBRL Fillings
+                - listitem [ref=e210]:
+                  - link "American Depository Receipt" [ref=e211] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-ADR
+                - listitem [ref=e212]:
+                  - link "Global Depository Receipt" [ref=e213] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-GDR
+                - listitem [ref=e214]:
+                  - link "Qualified Institutional Placement" [ref=e215] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-QIP
+                - listitem [ref=e216]:
+                  - link "Foreign Currency Convertible Bonds" [ref=e217] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-FCCB
+                - listitem [ref=e218]:
+                  - link "Preferential Issue" [ref=e219] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-PREF
+                - listitem [ref=e220]:
+                  - link "Right Issue" [ref=e221] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-RI
+            - listitem [ref=e222]:
+              - link "Insider Trading" [ref=e223] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-insider-trading
+            - listitem [ref=e224]:
+              - link "Insider Trading-Plan" [ref=e225] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-insider-trading-plan
+            - listitem [ref=e226]:
+              - list [ref=e227]:
+                - listitem [ref=e228]:
+                  - generic [ref=e229]: Integrated Filing XBRL
+                - listitem [ref=e230]:
+                  - link "Integrated Filing- Financials" [ref=e231] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-integrated-filing?integratedType=integratedfilingfinancials
+                - listitem [ref=e232]:
+                  - link "Integrated Filing- Governance" [ref=e233] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-integrated-filing?integratedType=integratedfilinggovernance
+            - listitem [ref=e234]:
+              - link "Investor Complaints" [ref=e235] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-investor-complaints
+            - listitem [ref=e236]:
+              - list [ref=e237]:
+                - listitem [ref=e238]:
+                  - generic [ref=e239]: Issuer Offer Documents/Issue Summary Document
+                - listitem [ref=e240]:
+                  - link "Issuer Offer documents" [ref=e241] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-offer-documents
+                - listitem [ref=e242]:
+                  - link "Issue Summary Document" [ref=e243] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-summary-documents
+                - listitem [ref=e244]:
+                  - link "Rights & QIP" [ref=e245] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-rights
+                - listitem [ref=e246]:
+                  - link "Scheme of Arrangements" [ref=e247] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-scheme-document
+                - listitem [ref=e248]:
+                  - link "Information Memorandum" [ref=e249] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-information-memorandum
+            - listitem [ref=e250]:
+              - link "Loss/Duplicate-Share Certificate- XBRL" [ref=e251] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-announcements-xbrl-loss-share
+            - listitem [ref=e252]:
+              - list [ref=e253]:
+                - listitem [ref=e254]:
+                  - generic [ref=e255]: Mutual Fund PIT Disclosure
+                - listitem [ref=e256]:
+                  - link "Alignment of interest - Reg 25 (16B)" [ref=e257] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-Alignmentofinterest
+                - listitem [ref=e258]:
+                  - link "Event based disclosures - Reg 5E (2) - RTA" [ref=e259] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-EBD
+                - listitem [ref=e260]:
+                  - link "Off market transaction – Reg 5D(1)(I)" [ref=e261] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-OffermarketTranction
+                - listitem [ref=e262]:
+                  - link "Quarterly Disclosures - Reg 5E (1) - RTA" [ref=e263] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-QD
+                - listitem [ref=e264]:
+                  - link "Trading Plan - Reg 5D(1)(IV)" [ref=e265] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-TradingPlan
+                - listitem [ref=e266]:
+                  - link "UPSI" [ref=e267] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-UPSI
+            - listitem [ref=e268]:
+              - link "Mutual Funds Updates" [ref=e269] [cursor=pointer]:
+                - /url: /companies-listing/mutual-funds-updates
+            - listitem [ref=e270]:
+              - link "Related Party Transactions" [ref=e271] [cursor=pointer]:
+                - /url: /companies-listing/related-party-transactions
+            - listitem [ref=e272]:
+              - list [ref=e273]:
+                - listitem [ref=e274]:
+                  - generic [ref=e275]: SAST Regulations
+                - listitem [ref=e276]:
+                  - link "Regulation 29" [ref=e277] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-regulation-29
+                - listitem [ref=e278]:
+                  - link "Regulation 31(1) & 31(2)" [ref=e279] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-regulation-31
+                - listitem [ref=e280]:
+                  - link "Reason for Encumbrance" [ref=e281] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-encumbrance
+                - listitem [ref=e282]:
+                  - link "Pledged Data" [ref=e283] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-pledged-data
+            - listitem [ref=e284]:
+              - list [ref=e285]:
+                - listitem [ref=e286]:
+                  - generic [ref=e287]: SDD - Credit Rating
+                - listitem [ref=e288]:
+                  - link "ESG" [ref=e289] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-sdd-credit-rating-esg
+                - listitem [ref=e290]:
+                  - link "Regulation 30" [ref=e291] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-sdd-credit-rating-reg30
+            - listitem [ref=e292]:
+              - link "Statement of deviation/variation" [ref=e293] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-statement-of-deviation-variation
+            - listitem [ref=e294]:
+              - list [ref=e295]:
+                - listitem [ref=e296]:
+                  - link "System Driven Disclosures – PIT" [ref=e297] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-pit-annual
+            - listitem [ref=e298]:
+              - list [ref=e299]:
+                - listitem [ref=e300]:
+                  - generic [ref=e301]: System Driven Disclosures – SAST
+                - listitem [ref=e302]:
+                  - link "Regulation 7 (Promoter)" [ref=e303] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-regulation-7-promoter
+                - listitem [ref=e304]:
+                  - link "Regulation 7 (Non Promoters)" [ref=e305] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-regulation-7-non-promoter
+                - listitem [ref=e306]:
+                  - link "Regulation 29 (Promoters)" [ref=e307] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-regulation-29-promoters
+                - listitem [ref=e308]:
+                  - link "Regulation 29 (Non Promoters)" [ref=e309] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-regulation-29-non-promoters
+                - listitem [ref=e310]:
+                  - link "Regulation 30 (Annual)" [ref=e311] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-regulation-30-annual
+                - listitem [ref=e312]:
+                  - link "Regulation 31 (Event Based)" [ref=e313] [cursor=pointer]:
+                    - /url: /companies-listing/corporate-filings-regulation-31-event
+            - listitem [ref=e314]:
+              - link "Secretarial Compliance" [ref=e315] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-secretarial-compliance-report
+            - listitem [ref=e316]:
+              - link "Share Transfers" [ref=e317] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-share-transfers
+            - listitem [ref=e318]:
+              - link "Shareholder’s Meetings" [ref=e319] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-postal-ballot
+            - listitem [ref=e320]:
+              - link "Shareholding Patterns" [ref=e321] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-shareholding-pattern
+            - listitem [ref=e322]:
+              - link "Shareholding Patterns SDD" [ref=e323] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-shareholding-pattern-sdd
+            - listitem [ref=e324]:
+              - link "Statement on Impact of Audit qualification" [ref=e325] [cursor=pointer]:
+                - /url: /companies-listing/statement-on-impact-of-audit-qualification
+            - listitem [ref=e326]:
+              - link "Trading Window Disclosure- XBRL" [ref=e327] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-announcements-xbrl-trading-window-disclosure
+            - listitem [ref=e328]:
+              - link "Unitholding Patterns" [ref=e329] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-unitholding-pattern
+            - listitem [ref=e330]:
+              - link "Voting Results" [ref=e331] [cursor=pointer]:
+                - /url: /companies-listing/corporate-filings-voting-results
+        - tabpanel [ref=e333]:
+          - generic [ref=e334]:
+            - heading "Shareholding Patterns" [level=2] [ref=e335]
+            - link "" [ref=e336] [cursor=pointer]:
+              - /url: https://nsearchives.nseindia.com//content/RSS/Shareholding_Pattern.xml
+              - generic [ref=e337]: 
+          - tablist [ref=e338]:
+            - tab "Equity" [selected] [ref=e339] [cursor=pointer]
+            - tab "SME" [ref=e340] [cursor=pointer]
+          - tabpanel [ref=e342]:
+            - generic [ref=e345]:
+              - generic [ref=e347]: Company
+              - generic [ref=e348]:
+                - combobox "Company" [ref=e349]
+                - status [ref=e350]
+            - list [ref=e356]:
+              - listitem [ref=e357]:
+                - link "1D" [ref=e358] [cursor=pointer]:
+                  - /url: JavaScript:;
+              - listitem [ref=e359]:
+                - link "1W" [ref=e360] [cursor=pointer]:
+                  - /url: JavaScript:;
+              - listitem [ref=e361]:
+                - link "1M" [ref=e362] [cursor=pointer]:
+                  - /url: JavaScript:;
+              - listitem [ref=e363]:
+                - link "3M" [ref=e364] [cursor=pointer]:
+                  - /url: JavaScript:;
+              - listitem [ref=e365]:
+                - link "6M" [ref=e366] [cursor=pointer]:
+                  - /url: JavaScript:;
+              - listitem [ref=e367]:
+                - link "1Y" [ref=e368] [cursor=pointer]:
+                  - /url: JavaScript:;
+              - listitem [ref=e369]:
+                - link "Custom" [ref=e370] [cursor=pointer]:
+                  - /url: JavaScript:;
+              - listitem [ref=e371]:
+                - link "Clear" [ref=e372] [cursor=pointer]:
+                  - /url: JavaScript:;
+            - generic [ref=e373]:
+              - generic [ref=e374]:
+                - link "csv Download (.csv)" [ref=e376] [cursor=pointer]:
+                  - /url: javascript:downloadCSV('ShareholderPattern-download')
+                  - img "csv" [ref=e377]
+                  - text: Download (.csv)
+                - link "xbrl Convert XBRL into Excel" [ref=e379] [cursor=pointer]:
+                  - /url: http://ec2-3-221-41-38.compute-1.amazonaws.com/
+                  - img "xbrl" [ref=e380]
+                  - text: Convert XBRL into Excel
+              - link "RefreshRefresh" [ref=e383] [cursor=pointer]:
+                - /url: javascript:;
+                - img "Refresh" [ref=e384]
+                - text: Refresh
+            - text:  
+            - table [ref=e387]:
+              - caption [ref=e388]
+              - rowgroup [ref=e389]:
+                - row "Company SHAREHOLDING AS A % OF TOTAL NO. OF SHARES (CALCULATED AS PER SCRR, 1957) AS A % OF (A+B+C2) STATUS As on Date SUBMISSION DATE REVISION DATE XBRL FILE LINK** BROADCAST DATE/TIME" [ref=e390]:
+                  - columnheader "Company" [ref=e391]:
+                    - link "Company" [ref=e392] [cursor=pointer]:
+                      - /url: javascript:;
+                  - columnheader "SHAREHOLDING AS A % OF TOTAL NO. OF SHARES (CALCULATED AS PER SCRR, 1957) AS A % OF (A+B+C2)" [ref=e393]
+                  - columnheader "STATUS" [ref=e394]
+                  - columnheader "As on Date" [ref=e395]
+                  - columnheader "SUBMISSION DATE" [ref=e396]
+                  - columnheader "REVISION DATE" [ref=e397]
+                  - columnheader "XBRL FILE LINK**" [ref=e398]
+                  - columnheader "BROADCAST DATE/TIME" [ref=e399]
+                - row "Promoter & Promoter Group (A) Public (B) Shares held by Employee Trusts (C2)" [ref=e400]:
+                  - columnheader "Promoter & Promoter Group (A)" [ref=e401]
+                  - columnheader "Public (B)" [ref=e402]
+                  - columnheader "Shares held by Employee Trusts (C2)" [ref=e403]
+    - text: + - - + + + + + - - + + + - -
+  - contentinfo [ref=e404]:
+    - generic [ref=e405]:
+      - generic [ref=e406]:
+        - generic [ref=e408]:
+          - generic [ref=e409]: About NSE
+          - list [ref=e410]:
+            - listitem [ref=e411]:
+              - link "About Us" [ref=e412] [cursor=pointer]:
+                - /url: /national-stock-exchange/about-nse-company
+            - listitem [ref=e413]:
+              - link "Structure & Key Personnel" [ref=e414] [cursor=pointer]:
+                - /url: /structure-key-personnel/corporate-structure
+            - listitem [ref=e415]:
+              - link "Awards and Recognitions" [ref=e416] [cursor=pointer]:
+                - /url: /national-stock-exchange/awards-recognition
+            - listitem [ref=e417]:
+              - link "Regulations" [ref=e418] [cursor=pointer]:
+                - /url: /regulations/exchange-market-regulations-rules-byelaws-nseil
+            - listitem [ref=e419]:
+              - link "Event Gallery" [ref=e420] [cursor=pointer]:
+                - /url: /event-gallery
+            - listitem [ref=e421]:
+              - link "Media" [ref=e422] [cursor=pointer]:
+                - /url: /resources/exchange-communication-media-center
+            - listitem [ref=e423]:
+              - link "Holidays" [ref=e424] [cursor=pointer]:
+                - /url: /resources/exchange-communication-holidays
+            - listitem [ref=e425]:
+              - link "Careers" [ref=e426] [cursor=pointer]:
+                - /url: /careers-at-nse
+            - listitem [ref=e427]:
+              - link "Contact Us" [ref=e428] [cursor=pointer]:
+                - /url: /contact/contact-us
+            - listitem [ref=e429]:
+              - link "Web Information Manager" [ref=e430] [cursor=pointer]:
+                - /url: /static/contact/contact-us
+        - generic [ref=e432]:
+          - generic [ref=e433]: NSE Group Companies
+          - list [ref=e434]:
+            - listitem [ref=e435]:
+              - link "NAL Academy Limited" [ref=e436] [cursor=pointer]:
+                - /url: /nse-academy/nse-academy-overview
+            - listitem [ref=e437]:
+              - link "NSE Clearing" [ref=e438] [cursor=pointer]:
+                - /url: /nse-clearing
+            - listitem [ref=e439]:
+              - link "NSE Data & Analytics" [ref=e440] [cursor=pointer]:
+                - /url: /nse-data-and-analytics
+            - listitem [ref=e441]:
+              - link "NSE Foundation" [ref=e442] [cursor=pointer]:
+                - /url: /nse-foundation/about-us
+            - listitem [ref=e443]:
+              - link "NSE Indices" [ref=e444] [cursor=pointer]:
+                - /url: /nse-indices
+            - listitem [ref=e445]:
+              - link "NSE International Exchange" [ref=e446] [cursor=pointer]:
+                - /url: /nse-international-exchange/about
+            - listitem [ref=e447]:
+              - link "NSE International Clearing" [ref=e448] [cursor=pointer]:
+                - /url: /nseint_clearing/nse-international-clearing-overview
+            - listitem [ref=e449]:
+              - link "NSE Investments" [ref=e450] [cursor=pointer]:
+                - /url: /nse-investments
+            - listitem [ref=e451]:
+              - link "View all" [ref=e452] [cursor=pointer]:
+                - /url: /national-stock-exchange/our-group
+        - generic [ref=e454]:
+          - generic [ref=e455]: Products & Services
+          - list [ref=e456]:
+            - listitem [ref=e457]:
+              - link "Equity Market" [ref=e458] [cursor=pointer]:
+                - /url: /products-services/about-equity-market
+            - listitem [ref=e459]:
+              - link "Indices" [ref=e460] [cursor=pointer]:
+                - /url: /products-services/about-indices
+            - listitem [ref=e461]:
+              - link "Emerge Platform" [ref=e462] [cursor=pointer]:
+                - /url: /products-services/emerge-platform-about-sme
+            - listitem [ref=e463]:
+              - link "Mutual Funds" [ref=e464] [cursor=pointer]:
+                - /url: /products-services/mf-about-mfss
+            - listitem [ref=e465]:
+              - link "Equity Derivatives" [ref=e466] [cursor=pointer]:
+                - /url: /products-services/about-equity-derivatives
+            - listitem [ref=e467]:
+              - link "Currency Derivatives" [ref=e468] [cursor=pointer]:
+                - /url: /products-services/about-currency-derivatives
+            - listitem [ref=e469]:
+              - link "Commodity Derivatives" [ref=e470] [cursor=pointer]:
+                - /url: /products-services/about-commodity-derivatives
+            - listitem [ref=e471]:
+              - link "Interest Rate Derivatives" [ref=e472] [cursor=pointer]:
+                - /url: /products-services/about-interest-rate-derivatives
+            - listitem [ref=e473]:
+              - link "Fixed Income and Debt" [ref=e474] [cursor=pointer]:
+                - /url: /products-services/fixed-income-debt-overview
+            - listitem [ref=e475]:
+              - link "Public Issues" [ref=e476] [cursor=pointer]:
+                - /url: /products-services/about-initial-public-offerings
+        - generic [ref=e478]:
+          - list [ref=e480]:
+            - listitem [ref=e481]:
+              - link "Disclaimer" [ref=e482] [cursor=pointer]:
+                - /url: /nse-disclaimer
+            - listitem [ref=e483]:
+              - link "Privacy Policy" [ref=e484] [cursor=pointer]:
+                - /url: /privacy-policy
+            - listitem [ref=e485]:
+              - link "Terms of Use" [ref=e486] [cursor=pointer]:
+                - /url: /nse-terms-of-use
+            - listitem [ref=e487]:
+              - link "Copyright" [ref=e488] [cursor=pointer]:
+                - /url: /nse-copyright
+            - listitem [ref=e489]:
+              - link "Feedback" [ref=e490] [cursor=pointer]:
+                - /url: /feedback/new
+            - listitem [ref=e491]:
+              - link "Site Map" [ref=e492] [cursor=pointer]:
+                - /url: /sitemap
+            - listitem [ref=e493]:
+              - link "Website Policies" [ref=e494] [cursor=pointer]:
+                - /url: /website-policies
+            - listitem [ref=e495]:
+              - link "Empanelment of Internal Auditors/System Auditor of Members" [ref=e496] [cursor=pointer]:
+                - /url: https://inspection.nseindia.com/empanelment_auditor/auditor/auditorRegistration/
+                - text: Empanelment of Internal
+                - text: Auditors/System Auditor of Members
+            - listitem [ref=e497]:
+              - link "List of Empaneled Audit Firms" [ref=e498] [cursor=pointer]:
+                - /url: https://inspection.nseindia.com/empanelment_auditor/auditor/viewEmpanelledAuditors/
+            - listitem [ref=e499]:
+              - link "Help" [ref=e500] [cursor=pointer]:
+                - /url: /static/help
+          - generic:
+            - list
+      - generic [ref=e502]:
+        - generic [ref=e503]:
+          - generic [ref=e504]: Download NSE App
+          - generic [ref=e505]:
+            - link "appstore" [ref=e506] [cursor=pointer]:
+              - /url: https://apps.apple.com/in/app/nseindia/id6736678487
+              - img "appstore" [ref=e507]
+            - link "playstore" [ref=e508] [cursor=pointer]:
+              - /url: https://play.google.com/store/apps/details?id=com.nse.nseindia
+              - img "playstore" [ref=e509]
+        - generic [ref=e510]:
+          - generic [ref=e511]:
+            - generic [ref=e512]: Scan QR to
+            - generic [ref=e513]: Download App
+          - img "qr-code" [ref=e515]
+        - generic [ref=e516]:
+          - link "NSE GO-BID" [ref=e520] [cursor=pointer]:
+            - /url: https://eipo.nseindia.com/eipodc/rest/login
+          - generic [ref=e522]:
+            - generic [ref=e523]: Login to
+            - link "NCFM" [ref=e525] [cursor=pointer]:
+              - /url: https://www.ncfm-india.com/ORE/OREloginPage.jsp
+  - generic [ref=e529]:
+    - generic [ref=e531]:
+      - paragraph [ref=e532]:
+        - link "Copyright ©" [ref=e533] [cursor=pointer]:
+          - /url: /nse-copyright
+        - text: National Stock Exchange of India Ltd. All rights reserved. Best viewed in Chrome and 1366 X 768 resolution. Recommended to use latest browser versions.
+      - paragraph [ref=e534]:
+        - generic [ref=e535]:
+          - img "GIGW" [ref=e536]
+          - text: GIGW Compliant
+    - generic [ref=e538]:
+      - list [ref=e539]:
+        - listitem [ref=e540]:
+          - link "Whatsapp chatbot of National Stock Exchange" [ref=e541] [cursor=pointer]:
+            - /url: https://wa.me/918655986573?text=Hi
+            - generic [ref=e542]: 
+        - listitem [ref=e543]:
+          - link "Facebook Page of National Stock Exchange" [ref=e544] [cursor=pointer]:
+            - /url: https://www.facebook.com/NationalStockExchange/
+            - generic [ref=e545]: 
+        - listitem [ref=e546]:
+          - link "Twitter Profile of NSEIndia" [ref=e547] [cursor=pointer]:
+            - /url: https://twitter.com/NSEIndia?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor
+            - img [ref=e548]
+        - listitem [ref=e550]:
+          - link "LinkedIn Profile of NSEIndia" [ref=e551] [cursor=pointer]:
+            - /url: https://in.linkedin.com/company/national-stock-exchange-of-india-limited
+            - generic [ref=e552]: 
+        - listitem [ref=e553]:
+          - link "YouTube Channel of NSEIndia" [ref=e554] [cursor=pointer]:
+            - /url: https://www.youtube.com/user/NSEIL1india
+            - generic [ref=e555]: 
+        - listitem [ref=e556]:
+          - link "Instagram Profile of NSEIndia" [ref=e557] [cursor=pointer]:
+            - /url: https://www.instagram.com/nseindia
+            - generic [ref=e558]: 
+        - listitem [ref=e559]:
+          - link "RSS Feed of NSEIndia" [ref=e560] [cursor=pointer]:
+            - /url: https://www.nseindia.com/rss-feed
+            - generic [ref=e561]: 
+      - text: 23 Jun 2026 | 22:32 (IST)
+  - text:  
+  - generic "Go to Top" [ref=e562] [cursor=pointer]:
+    - img [ref=e563]:
+      - generic [ref=e566]: ↑

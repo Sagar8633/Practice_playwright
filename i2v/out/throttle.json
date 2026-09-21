@@ -1,0 +1,20 @@
+[
+  {
+    "label": "Slow-3G",
+    "wallMs": 90004,
+    "loadEvent": "timeout/TimeoutError: page.goto: Timeout 90000ms exceeded.",
+    "fcp": null
+  },
+  {
+    "label": "Fast-3G",
+    "wallMs": 57359,
+    "loadEvent": 57338,
+    "fcp": 7092
+  },
+  {
+    "label": "4G",
+    "wallMs": 12648,
+    "loadEvent": 12543,
+    "fcp": 3184
+  }
+]

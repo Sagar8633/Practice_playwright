@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analytics Manager SQL Lab</title>
+<link rel="stylesheet" href="./vendor/codemirror/codemirror.css">
+<link rel="stylesheet" href="./vendor/codemirror/addon/hint/show-hint.css">
+<link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">AM</span>
+    <div>
+      <div class="brand-title">Analytics Manager SQL Lab</div>
+      <div class="brand-sub">PostgreSQL · Test Engineer track</div>
+    </div>
+  </div>
+
+  <nav class="tabs" id="tabs">
+    <button data-view="dashboard" class="tab active">Dashboard</button>
+    <button data-view="practice"  class="tab">Practice</button>
+    <button data-view="exam"      class="tab">Exam</button>
+    <button data-view="senior"    class="tab">Senior QA</button>
+    <button data-view="schema"    class="tab">Schema</button>
+  </nav>
+
+  <div class="db-pill" id="dbPill" title="Read-only PostgreSQL running in this browser tab">
+    <span class="dot"></span><span id="dbPillText">starting…</span>
+  </div>
+</header>
+
+<div id="boot" class="boot">
+  <div class="boot-card">
+    <div class="spinner"></div>
+    <h2>Starting PostgreSQL in your browser</h2>
+    <p id="bootMsg">Loading WebAssembly…</p>
+    <p id="bootNote" class="boot-note">
+      This builds a private practice database inside this tab. Nothing connects to
+      any real server. First start takes a few seconds.
+    </p>
+  </div>
+</div>
+
+<script>
+/* Non-module guard: this runs even if the ES-module scripts below never load.
+   The #1 cause of a permanent "Loading WebAssembly…" spinner is opening
+   index.html directly from disk, where Chrome refuses to run module scripts. */
+(function () {
+  var note = document.getElementById('bootNote');
+
+  if (window.location.protocol === 'file:') {
+    document.getElementById('bootMsg').innerHTML =
+      '<span style="color:#e35d6a">This app must be served over http:// — module scripts are blocked on file://</span>';
+    note.innerHTML =
+      'Open a terminal in this folder and run <code>node server.js</code>, then visit ' +
+      '<b>http://localhost:4173</b>. <span style="opacity:.6">Double-clicking index.html will not work.</span>';
+    document.querySelector('.spinner').style.display = 'none';
+  }
+
+  /* If the app takes more than 45s (wasm download + seed on a slow first load),
+     surface that something is genuinely wrong instead of spinning forever. */
+  setTimeout(function () {
+    var msg = document.getElementById('bootMsg');
+    if (msg && msg.textContent === 'Loading WebAssembly…' && window.location.protocol !== 'file:') {
+      msg.innerHTML =
+        '<span style="color:#e35d6a">Still loading after 45s. Something is blocking the requests.</span>';
+      note.innerHTML =
+        'Check that <code>node server.js</code> is running and the browser has finished downloading the ~16 MB ' +
+        'PostgreSQL engine. Refresh once, and if it persists, report the browser console (F12) output.';
+    }
+  }, 45000);
+})();
+</script>
+
+<main id="app" hidden></main>
+
+<div class="safety-strip">
+  <strong>Read-only.</strong>
+  Validator blocks non-SELECT SQL · PostgreSQL session is <code>default_transaction_read_only</code>
+  · database is WebAssembly in this tab, with no driver, socket or credentials to anywhere else.
+</div>
+
+<script src="./vendor/codemirror/codemirror.js"></script>
+<script src="./vendor/codemirror/mode/sql/sql.js"></script>
+<script src="./vendor/codemirror/addon/edit/matchbrackets.js"></script>
+<script src="./vendor/codemirror/addon/edit/closebrackets.js"></script>
+<script src="./vendor/codemirror/addon/display/placeholder.js"></script>
+<script src="./vendor/codemirror/addon/selection/active-line.js"></script>
+<script src="./vendor/codemirror/addon/comment/comment.js"></script>
+<script src="./vendor/codemirror/addon/hint/show-hint.js"></script>
+<script src="./vendor/codemirror/addon/hint/sql-hint.js"></script>
+<script type="module" src="./js/app.js"></script>
+</body>
+</html>

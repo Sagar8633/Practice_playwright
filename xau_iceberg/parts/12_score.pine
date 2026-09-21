@@ -1,0 +1,297 @@
+// ============================================================================
+//  SECTION 12 : CONFIDENCE + CONFLICT   --   THE ONE 0-100 SCORE
+//
+//  Every upstream module publishes q_* in [0,1] and NOTHING else in this file
+//  mints points. This is the only place a 0-100 number is built, and SECTION 0's
+//  i_minScore is the only gate on it (conflict resolution [13]).
+//
+//  WHAT THE NUMBER IS: a SETUP CONFIDENCE score - a weighted sum of PROXY
+//  evidence derived from OHLC and TICK volume. There is no order book, no
+//  bid/ask tape and no aggressor flag on a spot XAUUSD feed. It is NOT a win
+//  probability, NOT an edge estimate and NOT a forecast. A score of 90 does not
+//  mean nine trades in ten work.
+//
+//  EIGHT ROWS, MAXIMA FIXED BY THE BRIEF:
+//     liquidity level 15 | sweep 15 | rel. volume 10 | absorption 20 |
+//     rejection 10 | displacement 10 | structure break 10 | retest 10  = 100
+//  Every row is GRADED (row = weight * q), never binary. Eight binary flags can
+//  take only 2^8 values and, with near-uniform weights, degenerate into "how
+//  many boxes were ticked" - which destroys three things at once: threshold
+//  tuning glides instead of stepping, the score stops ordering outcomes, and
+//  the conflict test loses its meaning (two equal BINARY scores may just be
+//  different boxes; two equal GRADED scores really are two-sided evidence).
+//
+//  PURE SECTION. No var, no arrays, no drawings, no alerts, no ta.* calls.
+//  Every value below is a function of this bar's already-committed upstream
+//  values, so there is nothing here to guard with `if confirmed` - SECTION 14
+//  applies the confirmed gate to the SIGNAL that consumes these numbers.
+// ============================================================================
+
+// ---------------------------------------------------------------- 12.0 GROUPS
+G12S = "12 - Confidence Score"
+G12C = "12 - Conflict Filter"
+
+// Repeated verbatim on every score-bearing tooltip. The claim this file is NOT
+// allowed to make is the one a user most wants to read into a 0-100 number.
+SC_NOTPROB = "\n\nThis is a SETUP CONFIDENCE score built from PROXY evidence (tick volume and OHLC geometry). It is NOT a win probability and NOT an expected-value estimate: 80/100 does not mean an 80% chance of profit, it means four fifths of the evidence this rubric can measure was present."
+
+// ------------------------------------------------- 12.1 WEIGHTS (all inputs)
+// Every weight is an input so the rubric can be re-weighted after backtesting
+// without editing code. Keep the sum at 100 or leave renormalisation to do it.
+i_wLevel  = input.float(15.0, "Liquidity level", minval = 0.0, maxval = 50.0,
+     step = 0.5, group = G12S,
+     tooltip = "Max points for resting liquidity at a meaningful level. Graded by the level's own quality (kind and touch count), so one untested swing scores a fraction of a three-times-tested previous-day high. 0 removes the row entirely: the remaining weights are renormalised back to 100, so the top of the scale does not drop - the other rows simply become worth proportionally more." + SC_NOTPROB,
+     display = display.none)
+i_wSweep  = input.float(15.0, "Liquidity sweep", minval = 0.0, maxval = 50.0,
+     step = 0.5, group = G12S,
+     tooltip = "Max points for the stop-run through that level which then failed. Graded by penetration depth and how quickly price reclaimed the level." + SC_NOTPROB,
+     display = display.none)
+i_wRvol   = input.float(10.0, "Relative volume", minval = 0.0, maxval = 50.0,
+     step = 0.5, group = G12S,
+     tooltip = "Max points for participation. XAUUSD volume on TradingView is TICK volume (the count of price updates), not contracts - an activity proxy only. On a feed with no usable volume this row is REMOVED and the other seven weights are renormalised back to 100, so a volumeless feed is not silently capped below the threshold." + SC_NOTPROB,
+     display = display.none)
+i_wAbsorb = input.float(20.0, "Absorption (Delta Proxy)", minval = 0.0, maxval = 50.0,
+     step = 0.5, group = G12S,
+     tooltip = "Max points for Potential Absorption. The largest single row because it is the thesis - and the least directly measurable quantity in the file, since it is inferred from effort-vs-result on tick volume rather than read from a tape. If you distrust the proxy, move points from here to sweep and retest, which are visible in price alone." + SC_NOTPROB,
+     display = display.none)
+i_wReject = input.float(10.0, "Rejection", minval = 0.0, maxval = 50.0,
+     step = 0.5, group = G12S,
+     tooltip = "Max points for the rejection / failure-to-continue bar at the level. Graded by wick fraction and close location." + SC_NOTPROB,
+     display = display.none)
+i_wDisp   = input.float(10.0, "Displacement", minval = 0.0, maxval = 50.0,
+     step = 0.5, group = G12S,
+     tooltip = "Max points for the impulse leg away from the level, graded in ATR units of body travel." + SC_NOTPROB,
+     display = display.none)
+i_wBos    = input.float(10.0, "Structure break", minval = 0.0, maxval = 50.0,
+     step = 0.5, group = G12S,
+     tooltip = "Max points for the break of structure that confirms the reversal, graded by how decisively the swing was taken." + SC_NOTPROB,
+     display = display.none)
+i_wRetest = input.float(10.0, "Retest", minval = 0.0, maxval = 50.0,
+     step = 0.5, group = G12S,
+     tooltip = "Max points for the retest of the broken level, graded by precision and by whether it held. In Confirmation entry mode this row is usually 0 by construction - expect scores roughly ten points lower in that mode and set i_minScore accordingly." + SC_NOTPROB,
+     display = display.none)
+
+i_rvolQLo = input.float(1.0, "rvol scoring: zero-point", minval = 0.0, maxval = 10.0,
+     step = 0.05, group = G12S,
+     tooltip = "Relative volume that scores 0 on the volume row. 1.0 = an average bar earns nothing, which is the intent: average participation is not evidence.",
+     display = display.none)
+i_rvolQHi = input.float(2.5, "rvol scoring: full-mark point", minval = 0.1, maxval = 20.0,
+     step = 0.05, group = G12S,
+     tooltip = "Relative volume that scores the full row. Set it at or below the zero-point and the row scores 0 for every bar - a misconfigured ramp never hands out a free full mark.",
+     display = display.none)
+
+// ------------------------------------------------ 12.2 MODIFIER MAGNITUDES
+// Each modifier supplies a signed scalar in [-1,+1]; these are its point value
+// at |s| = 1. maxval = 15 is LOAD-BEARING, not cosmetic: VWAP and session are
+// penalty-only, so only HTF and R:R can be positive and the bonus is capped at
+// 30, and the headroom rule below is only proved to stay under 100 while the
+// total possible bonus is under 100.
+i_mHtf  = input.float(6.0, "HTF alignment (+/- pts)", minval = 0.0, maxval = 15.0,
+     step = 0.5, group = G12S,
+     tooltip = "Points added when the higher-timeframe bias agrees with the trade and subtracted when it opposes. An UNKNOWN bias is 0 for both sides - never a penalty on one side and a bonus on its mirror. Note the deliberate asymmetry: bonuses are scaled by remaining headroom (at a base of 85 a 6-point bonus is worth ~0.9) while penalties apply at full face value. 0 disables." + SC_NOTPROB,
+     display = display.none)
+i_mVwap = input.float(4.0, "VWAP extension (+/- pts)", minval = 0.0, maxval = 15.0,
+     step = 0.5, group = G12S,
+     tooltip = "PENALTY ONLY, on both sides. Points subtracted when price is already extended away from session VWAP in the direction you are entering (chasing); full penalty at 2 ATR of extension. Being extended AGAINST a trade is not evidence FOR it, so the opposite side is never credited - a zero-sum transfer would lift the losing side toward the conflict floor and veto clean signals during gold trend days. 0 disables." + SC_NOTPROB,
+     display = display.none)
+i_mSess = input.float(5.0, "Session quality (+/- pts)", minval = 0.0, maxval = 15.0,
+     step = 0.5, group = G12S,
+     tooltip = "PENALTY ONLY, direction-neutral. 0 in the London/NY overlap, -0.20 of this in a single session, -0.65 in Asia and the full penalty outside all sessions (rollover, where the XAUUSD spread widens well beyond the usual 0.15-0.35 USD and tick volume is noise). A good session is not evidence for a setup; a dead one is evidence against. 0 disables." + SC_NOTPROB,
+     display = display.none)
+i_mRr   = input.float(5.0, "Net R:R quality (+/- pts)", minval = 0.0, maxval = 15.0,
+     step = 0.5, group = G12S,
+     tooltip = "Points from the risk module's own qRr, measured NET of spread and slippage on a provisional plan priced at this bar's close. A plan that cannot be built at all scores the full penalty, and the POOR RR gate in SECTION 13 blocks it outright anyway. 0 disables." + SC_NOTPROB,
+     display = display.none)
+
+// --------------------------------------------- 12.3 GATES / CONFLICT INPUTS
+i_coreMin    = input.float(0.30, "Core evidence floor (0..1)", minval = 0.0, maxval = 1.0,
+     step = 0.05, group = G12C,
+     tooltip = "Absorption, displacement AND structure break must EACH reach this quality. Pure summation lets eight mediocre rows add up to a high score; this is the anti-mediocrity gate. 0 disables it. Above ~0.6 expect very few setups, because all three must clear it on the same evaluation." + SC_NOTPROB,
+     display = display.none)
+i_conflictOn = input.bool(true, "Enable directional conflict filter", group = G12C,
+     tooltip = "When BOTH sides are in contention on the same bar, emit CONFLICT and suppress both. This is the common XAUUSD compression / news case, where the absorption proxy fires on both sides of one level. Turning it OFF does not permit a simultaneous long and short - that case is blocked unconditionally.",
+     display = display.none)
+i_conflictBand = input.float(15.0, "Conflict band (pts below the score gate)",
+     minval = 0.0, maxval = 60.0, step = 1.0, group = G12C,
+     tooltip = "Conflict floor = i_minScore - this band, and BOTH sides must EXCEED the floor. At the default gate of 75 the floor is 60. Larger values veto more: the floor is clamped so it can never fall below 30% of the gate, because a floor near zero would make every bar with any two-sided evidence a conflict and stop the script trading entirely without saying so.",
+     display = display.none)
+
+// -------------------------------------------------------------- 12.4 HELPERS
+// TWO na policies, split by RANGE - this is the single most load-bearing detail
+// in the section. SECTION 0's f_clamp PROPAGATES na (correctly: callers must
+// state their own policy). Here:
+//   quality  [0,1]  : na -> 0    (no evidence)
+//   scalar  [-1,+1] : na -> 0    (NEUTRAL)
+// Substituting the lower bound for na on the SIGNED path - the obvious way to
+// write one helper for both - would turn a missing HTF bias into a full penalty
+// on one side and, because the bear scalar is a negated mirror, a full bonus on
+// the other. That is a directional bias manufactured out of missing data.
+f_scQ(float x)      => math.max(0.0, math.min(1.0,  nz(x, 0.0)))
+f_scSigned(float x) => math.max(-1.0, math.min(1.0, nz(x, 0.0)))
+
+// ------------------------------------------- 12.5 THE RELATIVE-VOLUME ROW
+// This section owns the rvol row because rvol itself is direction-free: it is
+// the SAME number for both sides. Both names exist so the per-direction API is
+// uniform for the panel and the Setup snapshot, and the value is deliberately
+// identical - the conflict test below excludes this row for exactly that
+// reason, so a common-mode term can never manufacture a veto.
+scQRvolRaw = f_scQ(f_ramp(rvol, i_rvolQLo, i_rvolQHi))
+qRvolL   = scQRvolRaw
+qRvolS   = scQRvolRaw
+
+// ------------------------------------------- 12.6 VWAP EXTENSION (shared)
+// Signed distance from the session VWAP in ATR units. SECTION 4 owns vwapS; a
+// missing VWAP reads 0.0, which is neutral for this modifier and FAILS OPEN for
+// SECTION 13's VWAP ceiling - one definition, consumed twice, never recomputed.
+vwapExtAtr = na(vwapS) ? 0.0 : (close - vwapS) / math.max(aRef, tick)
+
+// ------------------------------------------------ 12.7 WEIGHT NORMALISATION
+// TWO scales, computed once and shared by both directions.
+//   scKAll : the SCORING scale. When the feed carries no usable volume the rvol
+//          row is REMOVED and the other seven weights are renormalised back to
+//          100. Scoring that row 0 would cap every setup on a volumeless gold
+//          feed at 90 - below every shipped preset, so the script would simply
+//          never trade and never say why. Scoring it 1 would invent evidence.
+//   scKCon : the CONTENTION scale, used by the conflict test only. It ALWAYS
+//          removes the rvol row, because a term that is identical on both sides
+//          carries zero directional information while lifting both sides toward
+//          the floor together - i.e. it manufactures vetoes out of nothing.
+scWSum  = i_wLevel + i_wSweep + i_wRvol + i_wAbsorb + i_wReject + i_wDisp + i_wBos + i_wRetest
+scWSumNoRv = scWSum - i_wRvol
+scKAll     = hasVol ? (scWSum  > 0.0 ? 100.0 / scWSum  : 0.0) :
+                     (scWSumNoRv > 0.0 ? 100.0 / scWSumNoRv : 0.0)
+scKCon     = scWSumNoRv > 0.0 ? 100.0 / scWSumNoRv : 0.0
+// All weights zeroed -> k = 0 -> every score 0 -> LOW CONFIDENCE on every bar.
+// That is the honest outcome of deleting the entire rubric, not a silent pass.
+
+// ---------------------------------------------------------- 12.8 BASE SCORE
+// ONE code path parameterised by dir. Long and short are mirrors STRUCTURALLY:
+// there is no second copy of this arithmetic to drift out of step.
+f_scBase(int dir, float kScale, bool useRv) =>
+    float s = 0.0
+    s += i_wLevel  * f_scQ(dir > 0 ? qLevelL  : qLevelS)
+    s += i_wSweep  * f_scQ(dir > 0 ? qSweepL  : qSweepS)
+    s += (useRv ? i_wRvol * f_scQ(dir > 0 ? qRvolL : qRvolS) : 0.0)
+    s += i_wAbsorb * f_scQ(dir > 0 ? qAbsorbL : qAbsorbS)
+    s += i_wReject * f_scQ(dir > 0 ? qRejectL : qRejectS)
+    s += i_wDisp   * f_scQ(dir > 0 ? qDispL   : qDispS)
+    s += i_wBos    * f_scQ(dir > 0 ? qBosL    : qBosS)
+    s += i_wRetest * f_scQ(dir > 0 ? qRetestL : qRetestS)
+    math.max(0.0, math.min(100.0, s * kScale))
+
+// ------------------------------------------ 12.9 PROVISIONAL RISK PLAN
+// SECTION 11 owns f_riskPlan(). It is called here with entryPx = close for a
+// PROVISIONAL qRr, and SECTION 14 calls it once more on the signal bar to
+// freeze the real plan. On the signal bar both calls pass entryPx = close, so
+// they agree by construction - that is why RISK is declared before SCORE.
+// SECTION 13 consumes these two plans rather than building a third.
+f_scPlan(int dir) =>
+    float aLo = dir > 0 ? zoneBotL    : zoneBotS
+    float aHi = dir > 0 ? zoneTopL    : zoneTopS
+    float inv = dir > 0 ? invAnchorL  : invAnchorS
+    f_riskPlan(dir, close, aLo, aHi, sweepExtL, sweepExtS, lastSwLo, lastSwHi, inv)
+
+scPlanL = f_scPlan(1)
+scPlanS = f_scPlan(-1)
+
+// Field access on an `na` object is a runtime error, so the guard is an `if`
+// block and not a ternary (a ternary evaluates both arms).
+float scQRrL = 0.0
+float scQRrS = 0.0
+if not na(scPlanL)
+    scQRrL := f_scQ(scPlanL.qRr)
+if not na(scPlanS)
+    scQRrS := f_scQ(scPlanS.qRr)
+
+// ----------------------------------------------------------- 12.10 MODIFIERS
+// Four signed scalars in [-1,+1], mirrored between directions by construction.
+// `dirOnly` drops the direction-neutral session term for the conflict test.
+f_scMods(int dir, float qRr, bool dirOnly) =>
+    float sHtf  = f_scSigned(f_htfScalar(dir))            // 0 for BOTH sides when unknown
+    float sVwap = -f_scQ((dir > 0 ? vwapExtAtr : -vwapExtAtr) / 2.0)   // [-1,0] penalty only
+    float sSess = f_scSigned(sessQual - 1.0)              // [-1,0] penalty only
+    float sRr   = f_scSigned(2.0 * f_scQ(qRr) - 1.0)      // qRr 0.5 is the neutral point
+    float t = i_mHtf * sHtf + i_mVwap * sVwap + i_mRr * sRr
+    dirOnly ? t : t + i_mSess * sSess
+
+// THE CLAMPING RULE.
+//   bonus  (pts >= 0): scaled by REMAINING HEADROOM, adj = b + pts*(100-b)/100.
+//     Proof it cannot reach 100: adj = 100 - (100-b)*(1 - pts/100), which is
+//     < 100 for every b < 100 while pts < 100. Only HTF and R:R can be positive,
+//     so pts <= 30 at maxval, hence adj == 100 only when b == 100. A naive
+//     min(100, b+pts)
+//     would instead flatten an 88 and a 99 onto the same 100 and destroy
+//     exactly the grading the rubric was built to create.
+//   penalty (pts < 0): UNDAMPED, so a penalty can kill a setup outright. This
+//     is a conservatism asymmetry applied identically to both directions, so it
+//     introduces no directional bias.
+f_scApply(float base, float pts) =>
+    float b   = math.max(0.0, math.min(100.0, nz(base, 0.0)))
+    float m   = nz(pts, 0.0)
+    float adj = m >= 0.0 ? b + m * (100.0 - b) / 100.0 : b + m
+    math.max(0.0, math.min(100.0, adj))
+
+// ------------------------------------------------------ 12.11 CORE EVIDENCE
+// The three irreducible links of the chain. A setup that is only "absorption"
+// or only "break" is not this model's setup, however many context points it
+// accumulated on a wide-range bar.
+f_scCore(int dir) =>
+    float qA = f_scQ(dir > 0 ? qAbsorbL : qAbsorbS)
+    float qD = f_scQ(dir > 0 ? qDispL   : qDispS)
+    float qB = f_scQ(dir > 0 ? qBosL    : qBosS)
+    i_coreMin <= 0.0 or (qA >= i_coreMin and qD >= i_coreMin and qB >= i_coreMin)
+
+// ---------------------------------------------------------- 12.12 THE SCORES
+scBaseL = f_scBase(1,  scKAll, hasVol)
+scBaseS = f_scBase(-1, scKAll, hasVol)
+scModL  = f_scMods(1,  scQRrL, false)
+scModS  = f_scMods(-1, scQRrS, false)
+
+scoreL = f_scApply(scBaseL, scModL)
+scoreS = f_scApply(scBaseS, scModS)
+
+coreOkL = f_scCore(1)
+coreOkS = f_scCore(-1)
+
+// Contention scores: same arithmetic, rvol row and session term removed.
+scConBaseL  = f_scBase(1,  scKCon, false)
+scConBaseS  = f_scBase(-1, scKCon, false)
+scConScoreL = f_scApply(scConBaseL, f_scMods(1,  scQRrL, true))
+scConScoreS = f_scApply(scConBaseS, f_scMods(-1, scQRrS, true))
+
+// ------------------------------------------------- 12.13 CONFLICT FILTER
+// The floor test is the WHOLE test. A second "minimum decisive gap" veto was
+// deleted as provably dead: if one side qualifies then its score >= i_minScore
+// > floor, so the floor test can only be false when the loser sits at or below
+// the floor, which already forces a gap of at least the band. Any gap threshold
+// at or under the band is therefore a strict subset of the floor test, and
+// every shipped preset had it strictly under. It was an input, a tooltip and a
+// documented veto that could never change an outcome.
+//
+// CORE EVIDENCE APPLIES TO CONTENDERS, NOT ONLY TO SIGNALS. Without that, a
+// side the system has already declared untradeable can still veto the side that
+// can fire - and it happens on exactly the bars this model is built for, since
+// a wide-range bar at a level hands BOTH directions the four cheap rows (level,
+// sweep, rvol, rejection) regardless of which way the absorption went.
+scConfFloor = math.max(0.30 * i_minScore, i_minScore - i_conflictBand)
+
+scQualL = scoreL >= i_minScore and coreOkL
+scQualS = scoreS >= i_minScore and coreOkS
+
+scContendL = scConScoreL > scConfFloor and coreOkL
+scContendS = scConScoreS > scConfFloor and coreOkS
+
+// The first term is unconditional: with the filter switched off, two sides that
+// both clear the gate must still not emit a long and a short on one bar.
+conflictNow = (scQualL and scQualS) or (i_conflictOn and scContendL and scContendS)
+
+// WORKED EXAMPLE THAT MUST HOLD - bull 82 / bear 79, modifiers netting to zero.
+//   Defaults i_minScore = 75, band 15 -> floor = max(22.5, 60) = 60.
+//   Both clear 75, so (scQualL and scQualS) is true -> CONFLICT -> NO TRADE, and it
+//   stays NO TRADE even with the filter disabled.
+//   At the stricter preset i_minScore = 85 neither side qualifies and the floor
+//   test carries it: floor = max(25.5, 70) = 70. Strip the common-mode rvol row
+//   (q 0.70 x weight 10 = 7.0 points) and renormalise over the remaining 90:
+//   bull (82 - 7)/90*100 = 83.3 > 70 and bear (79 - 7)/90*100 = 80.0 > 70.
+//   -> CONFLICT -> NO TRADE. The mandated example holds on both presets.
+// ========================= END SECTION 12 ===================================

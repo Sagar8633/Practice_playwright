@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% from "_macros.html" import status_badge %}
+{% block title %}Campaigns - business_radar{% endblock %}
+{% block content %}
+
+<div class="spread" style="margin-bottom:var(--s-4)">
+  <h1>Campaigns</h1>
+  <div class="row">
+    {% for key, label in [('all','All'),('active','Active'),('complete','Complete'),('draft','Draft')] %}
+      <a class="btn {% if status_filter == key %}primary{% endif %}"
+         href="{{ url_for('index', filter=key) }}">{{ label }}</a>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="cols">
+  <section class="stack">
+    {% if campaigns %}
+      <div class="card-list">
+        {% for c in campaigns %}
+          <article class="card {% if c.status in ('RESEARCHING','DISCOVERING','QUEUED') %}normal{% elif c.status == 'PAUSED' %}high{% endif %}">
+            <div class="spread">
+              <div>
+                <div class="row">
+                  {{ status_badge(c.status, c.paused_reason or '') }}
+                  <h2><a href="{{ url_for('campaign', campaign_id=c.id) }}">{{ c.name }}</a></h2>
+                </div>
+                <p class="small" style="margin-top:var(--s-2)">
+                  {{ c.n_cities }} cit{{ 'y' if c.n_cities == 1 else 'ies' }}
+                  &middot; {{ c.city_list or 'no cities' }}
+                  &middot; created {{ c.created_at|day }} by {{ c.created_by_name or '—' }}
+                </p>
+                <p class="small">Min score {{ c.min_opportunity_score }}
+                  &middot; depth {{ c.research_depth }}
+                  &middot; {{ c.n_members }} business{{ '' if c.n_members == 1 else 'es' }}
+                  in this campaign</p>
+                {% if c.status == 'PAUSED' and c.paused_reason == 'RATE_LIMIT' %}
+                  <p class="small">Paused on the Gemini quota. This resumes on its own after
+                    the reset; nothing here can hurry it.</p>
+                {% endif %}
+              </div>
+              <a class="btn" href="{{ url_for('campaign', campaign_id=c.id) }}">Open</a>
+            </div>
+            <p class="mono" style="margin:var(--s-2) 0 0">{{ c.id }}</p>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="panel">
+        <p class="empty">No campaigns yet. The form beside this creates one; discovery and
+          research then run from the command line and fill it.</p>
+      </div>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <header><span class="panel-title">New search campaign</span></header>
+    <form method="post" action="{{ url_for('create_campaign') }}" class="stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" placeholder="leave blank to name it after the cities and today">
+      </div>
+
+      <div class="field">
+        <label for="cities">Target cities <span class="na">required</span></label>
+        <input id="cities" name="cities" type="text" required
+               value="{{ default_cities }}" placeholder="Dhule, Shirpur, Nashik">
+        <p class="help">Comma separated. Order is kept: the report's city sections follow it.</p>
+      </div>
+
+      <div class="field">
+        <label>Industries <span class="na">leave all unticked for no filter</span></label>
+        <div class="checks">
+          {% for value in industries %}
+            <label><input type="checkbox" name="industries" value="{{ value }}">
+              {{ value|pretty }}</label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Categories</label>
+        <div class="checks">
+          {% for value in categories %}
+            <label><input type="checkbox" name="categories" value="{{ value }}">
+              {{ value|pretty }}</label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Business size</label>
+        <div class="checks">
+          {% for value in size_bands %}
+            <label><input type="checkbox" name="size_filter" value="{{ value }}"
+                          {% if value in ('MEDIUM','LARGE') %}checked{% endif %}>
+              {{ value|pretty }}</label>
+          {% endfor %}
+        </div>
+        <p class="help">Unknown size is off by default: an unsized business is usually a stub.</p>
+      </div>
+
+      <div class="field">
+        <label for="min_opportunity_score">Minimum opportunity score</label>
+        <input id="min_opportunity_score" name="min_opportunity_score" type="number"
+               min="0" max="100" value="60">
+        <p class="help">Businesses below this are researched, then skipped with reason
+          BELOW_MIN_SCORE. They are not deleted and not re-researched.</p>
+      </div>
+
+      <div class="field">
+        <label for="research_depth">Research depth</label>
+        <select id="research_depth" name="research_depth">
+          <option value="STANDARD">Standard - one Gemini call per business</option>
+          <option value="DEEP">Deep - up to three, about 3x the daily quota per business</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="max_businesses">Cap</label>
+        <input id="max_businesses" name="max_businesses" type="number" min="1"
+               placeholder="blank means uncapped">
+      </div>
+
+      <button class="btn primary" type="submit">Create campaign</button>
+    </form>
+  </section>
+</div>
+{% endblock %}

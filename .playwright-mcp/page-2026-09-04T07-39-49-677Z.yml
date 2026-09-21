@@ -1,0 +1,438 @@
+- generic [ref=f9e1]:
+  - generic [ref=f9e3]:
+    - 'button "Logged in as patilkareena208 Active layout: Unnamed" [ref=f9e7]'
+    - toolbar [ref=f9e11]:
+      - generic [ref=f9e15]:
+        - generic [ref=f9e16]:
+          - generic [ref=f9e17]:
+            - button "KOTAKBANK" [ref=f9e18]
+            - button "Switch data type" [ref=f9e20]
+          - button "Compare symbols" [ref=f9e24]
+        - generic [ref=f9e32]:
+          - radiogroup [ref=f9e33]:
+            - radio "5 minutes" [ref=f9e34]:
+              - generic [ref=f9e35]: 5m
+            - radio "15 minutes" [checked] [ref=f9e37]:
+              - generic [ref=f9e38]: 15m
+            - radio "45 minutes" [ref=f9e40]:
+              - generic [ref=f9e41]: 45m
+          - button "Chart interval" [ref=f9e43]
+        - button "Candles" [ref=f9e53]
+        - generic [ref=f9e63]:
+          - generic [ref=f9e64]:
+            - button "Indicators, metrics, and strategies" [ref=f9e65]:
+              - generic [ref=f9e70]: Indicators
+            - button "Favorite indicators" [ref=f9e71]
+          - button "Indicator templates" [ref=f9e78]
+        - generic [ref=f9e85]:
+          - button "Create alert" [ref=f9e86]:
+            - generic [ref=f9e91]: Alert
+          - button "Bar replay" [ref=f9e92]:
+            - generic [ref=f9e96]: Replay
+        - generic [ref=f9e100]:
+          - button "Undo change resolution" [ref=f9e711]
+          - button [disabled] [ref=f9e105]
+        - generic [ref=f9e110]:
+          - button "Layout setup" [ref=f9e111]
+          - generic [ref=f9e113]:
+            - button "Save all charts for all symbols and intervals on your layout" [ref=f9e712]:
+              - generic [ref=f9e116]:
+                - generic [ref=f9e117]: Unnamed
+                - generic [ref=f9e713]: Save
+            - button "Manage layouts" [ref=f9e119]
+        - generic [ref=f9e127]:
+          - button "Quick search" [ref=f9e128]
+          - button "Settings" [ref=f9e133]
+          - button "Fullscreen mode" [ref=f9e139]
+          - button "Take a snapshot" [ref=f9e143]
+      - button "Trade" [ref=f9e152]
+      - button "Share your idea with the trade community" [ref=f9e160]:
+        - generic [ref=f9e161]: Publish
+    - toolbar [ref=f9e164]:
+      - generic [ref=f9e168]:
+        - generic [ref=f9e169]:
+          - generic [ref=f9e172]:
+            - button "Cross" [ref=f9e174]
+            - button "Cursors" [pressed] [ref=f9e180]
+          - generic [ref=f9e186]:
+            - button "Trendline" [ref=f9e188]
+            - button "Trend tools" [ref=f9e194]
+          - generic [ref=f9e200]:
+            - button "Fib retracement" [ref=f9e202]
+            - button "Gann and Fibonacci tools" [ref=f9e211]
+          - generic [ref=f9e217]:
+            - button "XABCD pattern" [ref=f9e219]
+            - button "Patterns" [ref=f9e225]
+          - generic [ref=f9e231]:
+            - button "Long position" [ref=f9e233]
+            - button "Forecasting and measurement tools" [ref=f9e237]
+          - generic [ref=f9e243]:
+            - button "Brush" [ref=f9e245]
+            - button "Geometric shapes" [ref=f9e251]
+          - generic [ref=f9e257]:
+            - button "Text" [ref=f9e259]
+            - button "Annotation tools" [ref=f9e263]
+          - generic [ref=f9e268]:
+            - button "Icon" [ref=f9e270]
+            - button "Icons" [ref=f9e274]
+        - generic [ref=f9e278]:
+          - button "Measure" [ref=f9e279]
+          - button "Zoom in" [ref=f9e283]
+        - generic [ref=f9e290]:
+          - generic [ref=f9e293]:
+            - button "Magnet mode snaps drawings placed near price bars to the closest OHLC value" [ref=f9e295]
+            - button "Magnets" [ref=f9e301]
+          - button "Keep drawing" [ref=f9e305]
+          - generic [ref=f9e310]:
+            - button "Lock drawings and indicators" [ref=f9e312]
+            - button "Lock options" [ref=f9e316]
+          - generic [ref=f9e321]:
+            - button "Hide all drawings" [ref=f9e323]
+            - button "Hide options" [ref=f9e327]
+        - generic [ref=f9e333]:
+          - button "Remove objects" [ref=f9e335]
+          - button "Remove options" [ref=f9e339]
+    - generic [ref=f9e345]:
+      - 'region "Chart #1" [ref=f9e348]':
+        - generic [ref=f9e349]:
+          - generic [ref=f9e350]:
+            - generic [ref=f9e352]:
+              - generic:
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=f9e353]:
+                        - generic "Change symbol" [ref=f9e714]:
+                          - generic [ref=f9e355]: K
+                          - button "Change symbol" [ref=f9e715]: Kotak Mahindra Bank Limited
+                        - generic "Change interval" [ref=f9e716]:
+                          - text: ·
+                          - button "Change interval" [ref=f9e717]: "15"
+                        - generic "NSE — National Stock Exchange of India" [ref=f9e718]:
+                          - text: ·
+                          - generic [ref=f9e719]: NSE
+                      - generic:
+                        - generic:
+                          - button "Flag symbol"
+                          - button "More"
+                      - button "Market open" [ref=f9e365]
+                    - generic [ref=f9e370]:
+                      - generic [ref=f9e371]:
+                        - generic [ref=f9e372]: O
+                        - generic [ref=f9e373]: "425.20"
+                      - generic [ref=f9e374]:
+                        - generic [ref=f9e375]: H
+                        - generic [ref=f9e376]: "425.35"
+                      - generic [ref=f9e377]:
+                        - generic [ref=f9e378]: L
+                        - generic [ref=f9e379]: "424.75"
+                      - generic [ref=f9e380]:
+                        - generic [ref=f9e381]: C
+                        - generic [ref=f9e382]: "424.95"
+                      - generic [ref=f9e383]: −0.20 (−0.05%)
+                  - generic [ref=f9e387]:
+                    - generic [ref=f9e389]:
+                      - generic: "424.95"
+                      - generic: Sell
+                    - generic "Spread" [ref=f9e391]: "0.05"
+                    - generic [ref=f9e393]:
+                      - generic: "425.00"
+                      - generic: Buy
+                - generic:
+                  - button "Hide indicators legend" [ref=f9e394]
+                  - generic:
+                    - toolbar:
+                      - generic:
+                        - generic [ref=f9e398]:
+                          - generic [ref=f9e399]: SimpleSMA18 Strategy (MQL5 port)
+                          - generic [ref=f9e401]:
+                            - generic "Fast MA Period" [ref=f9e402]: "18"
+                            - generic "Trend MA Period" [ref=f9e404]: "200"
+                            - generic "Volume MA Period" [ref=f9e406]: "20"
+                            - generic "Swing Strength" [ref=f9e408]: "2"
+                            - generic "Entry Buffer (ticks)" [ref=f9e410]: "20"
+                            - generic "Break-Even Trigger (ticks)" [ref=f9e412]: 10,000
+                            - generic "Break-Even Offset (ticks)" [ref=f9e414]: 5,000
+                            - generic "Protection Mode" [ref=f9e416]: None
+                            - generic "Protection Start Mode" [ref=f9e418]: After Points
+                            - generic "Protection Start Points (ticks)" [ref=f9e420]: 2,000
+                            - generic "Swing Buffer (ticks)" [ref=f9e422]: "200"
+                            - generic "Chandelier Lookback" [ref=f9e424]: "22"
+                            - generic "ATR Period" [ref=f9e426]: "22"
+                            - generic "ATR Multiplier" [ref=f9e428]: "3"
+                            - generic "Trailing Start (ticks)" [ref=f9e430]: 1,000
+                            - generic "Trailing Distance (ticks)" [ref=f9e432]: "500"
+                            - generic "Trailing Step (ticks)" [ref=f9e434]: "200"
+                            - generic "Partial Close Trigger (ticks)" [ref=f9e436]: 6,000
+                            - generic "Partial Close Percent" [ref=f9e438]: "50"
+                            - generic "MT5 Point Size (0 = auto mintick)" [ref=f9e440]: "0"
+                            - 'generic "Reward : Risk" [ref=f9e442]': "2"
+                        - generic:
+                          - generic:
+                            - button "Show" [ref=f9e444]
+                            - button "Settings"
+                            - generic "Source code"
+                            - button "Remove"
+                            - button "More"
+                    - toolbar:
+                      - generic:
+                        - generic [ref=f9e451]: SRK Trading Swing Indicator
+                        - generic:
+                          - generic:
+                            - button "Show" [ref=f9e454]
+                            - button "Settings"
+                            - button "Remove"
+                            - button "More"
+                    - toolbar:
+                      - generic:
+                        - generic [ref=f9e461]:
+                          - generic "trade_with_kareena Tracker" [ref=f9e462]: TWK Tracker
+                          - generic [ref=f9e464]:
+                            - generic "Table position" [ref=f9e465]: top_right
+                            - generic "Volume MA Length (bars)" [ref=f9e467]: "20"
+                            - generic "Row color opacity" [ref=f9e469]: "15"
+                            - generic "Table font size" [ref=f9e471]: small
+                            - generic "R-Factor lookback" [ref=f9e473]: "14"
+                            - generic "Benchmark for Sector Strength" [ref=f9e475]: NIFTY
+                            - generic "Multiplier" [ref=f9e477]: "1.5"
+                            - generic "ATR length" [ref=f9e479]: "10"
+                            - generic "Volume average length" [ref=f9e481]: "20"
+                            - generic "Volume threshold (x avg)" [ref=f9e483]: "1.8"
+                            - generic "Pivot strength (bars each side)" [ref=f9e485]: "5"
+                            - 'generic "Reward : Risk" [ref=f9e487]': "2"
+                            - generic "Projection width (bars)" [ref=f9e489]: "24"
+                        - generic:
+                          - generic:
+                            - button "Hide"
+                            - button "Settings"
+                            - generic "Source code"
+                            - button "Remove"
+                            - button "More"
+                      - generic [ref=f9e720]:
+                        - generic "Smart Trail" [ref=f9e722]: "423.94"
+                        - generic "Pivot High Dot" [ref=f9e724]: "1.00"
+                        - generic "Pivot Low Dot" [ref=f9e726]: "0.00"
+              - generic "Chart for NSE:KOTAKBANK, 15 minutes" [ref=f9e727]
+            - generic [aria-hidden] [ref=f9e500]:
+              - generic: INR
+          - generic [ref=f9e512]:
+            - generic:
+              - generic:
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=f9e513]:
+                        - generic "Relative Strength Index" [ref=f9e514]: RSI
+                        - generic [ref=f9e516]:
+                          - generic "RSI Length" [ref=f9e517]: "14"
+                          - generic "Source" [ref=f9e519]: close
+                      - generic:
+                        - generic:
+                          - button "Hide"
+                          - button "Settings"
+                          - generic "Source code"
+                          - button "Remove"
+                          - button "More"
+                    - generic [ref=f9e522]:
+                      - generic "RSI" [ref=f9e524]: "58.31"
+                      - generic "RSI-based MA" [ref=f9e526]: "58.07"
+      - toolbar [ref=f9e542]:
+        - generic [ref=f9e544]:
+          - generic [ref=f9e545]:
+            - button "1 day in 1 minute intervals" [ref=f9e546]:
+              - generic [ref=f9e547]: 1D
+            - button "5 days in 5 minutes intervals" [ref=f9e548]:
+              - generic [ref=f9e549]: 5D
+            - button "1 month in 30 minutes intervals" [ref=f9e550]:
+              - generic [ref=f9e551]: 1M
+            - button "3 months in 1 hour intervals" [ref=f9e552]:
+              - generic [ref=f9e553]: 3M
+            - button "6 months in 2 hours intervals" [ref=f9e554]:
+              - generic [ref=f9e555]: 6M
+            - button "Year to day in 1 day intervals" [ref=f9e556]:
+              - generic [ref=f9e557]: YTD
+            - button "1 year in 1 day intervals" [ref=f9e558]:
+              - generic [ref=f9e559]: 1Y
+            - button "5 years in 1 week intervals" [ref=f9e560]:
+              - generic [ref=f9e561]: 5Y
+            - button "All data in 1 month intervals" [ref=f9e562]:
+              - generic [ref=f9e563]: All
+          - button "Go to" [ref=f9e565]
+        - generic [ref=f9e569]:
+          - button "Timezone" [ref=f9e572]:
+            - generic [ref=f9e573]: 13:09:49 UTC+5:30
+          - button "Regular" [ref=f9e577]: RTH
+          - button "Adjust data for dividends" [ref=f9e581]:
+            - generic [ref=f9e582]: ADJ
+    - generic [ref=f9e584]:
+      - toolbar [ref=f9e589]:
+        - button "Watchlist, details, and news" [ref=f9e590]
+        - button "Alerts" [pressed] [ref=f9e595]
+        - button "Object tree and data window" [ref=f9e600]
+        - button "Chats" [ref=f9e604]
+        - button "Screeners" [ref=f9e609]
+        - button "Pine" [ref=f9e615]
+        - button "Calendars" [ref=f9e620]
+        - button "Community" [ref=f9e624]
+        - button "Notifications" [ref=f9e631]
+        - button "Products" [ref=f9e635]
+        - button "Help Center" [ref=f9e640]
+      - generic [ref=f9e645]:
+        - generic [ref=f9e647]:
+          - tablist [ref=f9e651]:
+            - tab "Alerts" [selected] [ref=f9e652]
+            - tab "Log" [ref=f9e655]
+          - generic "Alerts" [ref=f9e659]:
+            - generic [ref=f9e662]:
+              - button "Create Alert" [ref=f9e665]
+              - generic [ref=f9e669]:
+                - button "Search" [ref=f9e670]
+                - button "Sorted by date created (newest first)" [ref=f9e674]
+                - button "Options" [ref=f9e678]
+            - generic [ref=f9e685]:
+              - generic [ref=f9e686]:
+                - generic: GMRAIRPORT Crossing Down 87.00
+                - generic [ref=f9e688]:
+                  - generic [ref=f9e689]: GMRAIRPORT•
+                  - generic [ref=f9e690]: Stopped — Expired
+              - generic [ref=f9e691]:
+                - generic: BTCUSD Crossing Down 73,700
+                - generic [ref=f9e693]:
+                  - generic [ref=f9e694]: BTCUSD•
+                  - generic [ref=f9e695]: Stopped — Expired
+              - generic [ref=f9e696]:
+                - generic: BTCUSD Crossing 71,800
+                - generic [ref=f9e698]:
+                  - generic [ref=f9e699]: BTCUSD•
+                  - generic [ref=f9e700]: Stopped — Triggered •
+                  - generic [ref=f9e701]: Mon 13 Apr '26 20:04:49
+        - text: "[] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] –"
+      - generic "Hide Tab" [ref=f9e704]
+    - generic "Trading panel"
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic: Create Alert
+          - generic:
+            - generic: Alt
+            - generic: +
+            - generic: A
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+    - generic [ref=f9e728]:
+      - generic [ref=f9e733]:
+        - text: Create alert on
+        - button "KOTAKBANK" [ref=f9e737]
+        - generic [ref=f9e748]:
+          - button "Alert presets" [ref=f9e750]
+          - button "Close menu" [ref=f9e756]
+      - generic [ref=f9e762]:
+        - generic [ref=f9e764]:
+          - group [ref=f9e767]:
+            - generic [ref=f9e768]: Condition
+            - generic [ref=f9e770]:
+              - generic [ref=f9e771]:
+                - button "SRK Trading Swing Indicator" [active] [ref=f9e920]
+                - button "5 EMA" [ref=f9e922]
+              - button [ref=f9e787]:
+                - paragraph [ref=f9e794]: Crossing
+              - generic [ref=f9e800]:
+                - button "Value" [ref=f9e802]
+                - generic [ref=f9e815]:
+                  - textbox [ref=f9e817]: "0.00"
+                  - generic [ref=f9e819]:
+                    - button "Increase" [ref=f9e820]
+                    - button "Decrease" [ref=f9e824]
+          - group [ref=f9e934]:
+            - generic [ref=f9e935]: Interval
+            - button [ref=f9e938]:
+              - generic [ref=f9e941]:
+                - paragraph [ref=f9e942]: Same as chart
+                - paragraph [ref=f9e943]: 15 minutes
+          - generic [ref=f9e828]:
+            - button "Add condition" [ref=f9e829]
+            - link "Click here to learn more about multi-condition alerts" [ref=f9e835] [cursor=pointer]:
+              - /url: "?solution=43000761492"
+          - group [ref=f9e837]:
+            - generic [ref=f9e838]: Trigger
+            - button "Once only" [ref=f9e841]
+          - group [ref=f9e847]:
+            - generic [ref=f9e848]: Expiration
+            - button "October 4, 2026 at 13:08" [ref=f9e851]
+          - group [ref=f9e857]:
+            - generic [ref=f9e858]: Message
+            - button "SRK Trading Swing Indicator Crossing 0.00 on KOTAKBANK, 15" [ref=f9e948]
+          - group [ref=f9e867]:
+            - generic [ref=f9e868]: Notifications
+            - button "App, Toasts, Sound" [ref=f9e871]
+        - generic [ref=f9e879]:
+          - button "Cancel" [ref=f9e880]
+          - button "Create" [ref=f9e882]

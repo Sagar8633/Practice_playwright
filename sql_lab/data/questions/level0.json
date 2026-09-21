@@ -1,0 +1,251 @@
+[
+{
+  "id": "L0-Q01", "level": 0, "difficulty": "beginner",
+  "title": "Inventory the schema",
+  "scenario": "You have just been handed the Analytics Manager database and asked to write test cases against it. Nobody has documentation. Before anything else you need to know what tables actually exist.",
+  "task": "List the names of every base table in the public schema, alphabetically. Return one column.",
+  "tables": ["information_schema.tables"],
+  "skills": ["SELECT", "WHERE", "ORDER BY", "catalog"],
+  "expected": "One row per table (19 of them), name only, A-Z.",
+  "orderMatters": true,
+  "hints": [
+    "PostgreSQL describes itself. The catalog view information_schema.tables lists every table the database knows about.",
+    "You want table_name from information_schema.tables, filtered to the public schema.",
+    "There is also a table_type column. Views and system tables are not base tables.",
+    "Filter on table_schema = 'public' AND table_type = 'BASE TABLE', then ORDER BY table_name."
+  ],
+  "solution": "SELECT table_name\nFROM information_schema.tables\nWHERE table_schema = 'public'\n  AND table_type = 'BASE TABLE'\nORDER BY table_name;",
+  "explanation": {
+    "breakdown": "information_schema.tables is a standard SQL catalog view. table_schema='public' excludes the internal pg_catalog and information_schema schemas; table_type='BASE TABLE' excludes views.",
+    "why": "Reading the catalog is how you orient yourself in an unfamiliar database. It is faster and more reliable than asking a developer.",
+    "commonMistake": "Omitting the table_type filter, which pulls in views, or omitting table_schema, which returns hundreds of internal PostgreSQL tables.",
+    "alternative": "SELECT tablename FROM pg_tables WHERE schemaname='public' — a PostgreSQL-specific view with the same effect.",
+    "performance": "Catalog queries are tiny. No concern.",
+    "qaRelevance": "Step one of any database test plan: confirm the schema you are testing matches the schema you were given. A table that exists in staging but not production is a release blocker."
+  }
+},
+{
+  "id": "L0-Q02", "level": 0, "difficulty": "beginner",
+  "title": "Time is not a timestamp",
+  "scenario": "A developer tells you \"just filter Events by Time\". Your first query with a date comparison fails with a type error. You need to see what these columns really are before writing any date logic.",
+  "task": "For the Events table, return column_name, data_type and is_nullable for the columns Time, ReceivedTime, VideoSourceId and TrackId. Order by column_name.",
+  "tables": ["information_schema.columns"],
+  "skills": ["SELECT", "WHERE", "IN", "ORDER BY", "catalog"],
+  "expected": "Four rows. Time and ReceivedTime are bigint, not timestamp. VideoSourceId is nullable; TrackId is not.",
+  "orderMatters": true,
+  "hints": [
+    "information_schema.columns has one row per column in the database.",
+    "Filter by table_name. Remember the table is called Events with a capital E — in the catalog the name is stored as plain text, so no double quotes are needed there.",
+    "Use IN (...) to pick the four columns you care about.",
+    "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = 'Events' AND column_name IN (...)."
+  ],
+  "solution": "SELECT column_name, data_type, is_nullable\nFROM information_schema.columns\nWHERE table_schema = 'public'\n  AND table_name = 'Events'\n  AND column_name IN ('Time','ReceivedTime','VideoSourceId','TrackId')\nORDER BY column_name;",
+  "explanation": {
+    "breakdown": "The catalog stores identifier names as text with their real casing. Because the table was created as \"Events\", the catalog value is exactly 'Events' — a string literal in single quotes, not a quoted identifier.",
+    "why": "Time and ReceivedTime are bigint holding epoch MILLISECONDS. Every date question in this lab depends on knowing that: you must convert with to_timestamp(\"Time\"/1000.0) before any date function will work.",
+    "commonMistake": "Assuming a column named Time is a timestamp. It is a number. WHERE \"Time\" > now() is a type error, and WHERE \"Time\" > 1700000000 silently compares against seconds instead of milliseconds — off by a factor of 1000.",
+    "alternative": "\\d \"Events\" in psql shows the same information interactively.",
+    "performance": "Not applicable.",
+    "qaRelevance": "Type assumptions cause some of the most expensive test-data bugs. VideoSourceId being nullable is the reason NOT IN misbehaves later in this course."
+  }
+},
+{
+  "id": "L0-Q03", "level": 0, "difficulty": "easy",
+  "title": "Map every foreign key",
+  "scenario": "You are designing referential-integrity tests. You need the real, enforced relationship map — not the one in the architecture diagram.",
+  "task": "List every foreign key constraint in the public schema. Return the constraint name, the child table, the child column, the parent table and the parent column. Order by child table then constraint name.",
+  "tables": ["information_schema.table_constraints", "information_schema.key_column_usage", "information_schema.constraint_column_usage"],
+  "skills": ["JOIN", "catalog", "ORDER BY"],
+  "expected": "Around 24 rows: one per foreign key column, showing which table points at which.",
+  "orderMatters": true,
+  "hints": [
+    "Foreign keys live in information_schema.table_constraints where constraint_type = 'FOREIGN KEY'.",
+    "That view gives you the constraint name and the child table, but not the columns. You need to join to key_column_usage for the child column.",
+    "constraint_column_usage gives you the parent side — the table and column being referenced.",
+    "Join all three on constraint_name (and constraint_schema), filtering table_constraints to constraint_type = 'FOREIGN KEY'."
+  ],
+  "solution": "SELECT tc.constraint_name,\n       tc.table_name  AS child_table,\n       kcu.column_name AS child_column,\n       ccu.table_name  AS parent_table,\n       ccu.column_name AS parent_column\nFROM information_schema.table_constraints tc\nJOIN information_schema.key_column_usage kcu\n  ON kcu.constraint_name = tc.constraint_name\n JOIN information_schema.constraint_column_usage ccu\n  ON ccu.constraint_name = tc.constraint_name\nWHERE tc.constraint_type = 'FOREIGN KEY'\n  AND tc.table_schema = 'public'\nORDER BY tc.table_name, tc.constraint_name;",
+  "explanation": {
+    "breakdown": "Three catalog views, joined on constraint_name. table_constraints identifies the constraint and its child table; key_column_usage names the child column; constraint_column_usage names the parent table and column.",
+    "why": "This is the ground truth of what the database will actually enforce on your behalf. Anything not on this list is enforced only by application code — or not at all.",
+    "commonMistake": "Trusting the entity-relationship diagram instead of the catalog. In this schema they disagree in six places.",
+    "alternative": "pg_catalog.pg_constraint with contype='f' gives the same answer with less joining, at the cost of PostgreSQL-specific syntax.",
+    "performance": "Catalog joins on tiny tables. Irrelevant.",
+    "qaRelevance": "Every foreign key on this list is a relationship you can trust and do not need to test. Every relationship NOT on this list is one you must test by hand — which is exactly what the rest of this course does."
+  }
+},
+{
+  "id": "L0-Q04", "level": 0, "difficulty": "medium",
+  "title": "The relationship the database does not enforce",
+  "scenario": "Events.VideoSourceId clearly refers to a camera. You want to prove, from the catalog rather than by reading the DDL, whether the database will actually stop someone deleting a camera that still has events.",
+  "task": "Return one row containing: the number of indexes on Events that cover VideoSourceId, and the number of foreign key constraints on the Events table whose child column is VideoSourceId. Name the columns index_count and fk_count.",
+  "tables": ["pg_indexes", "information_schema.table_constraints", "information_schema.key_column_usage"],
+  "skills": ["scalar subquery", "catalog", "COUNT"],
+  "expected": "A single row: index_count = 1, fk_count = 0. An index exists; the constraint does not.",
+  "checkColumnNames": true,
+  "hints": [
+    "Two independent counts in one row means two scalar subqueries in the SELECT list.",
+    "pg_indexes has an indexdef column containing the CREATE INDEX statement as text. You can search it.",
+    "For the constraint side, join table_constraints to key_column_usage and filter constraint_type = 'FOREIGN KEY' and column_name = 'VideoSourceId'.",
+    "SELECT (SELECT count(*) FROM pg_indexes WHERE tablename='Events' AND indexdef LIKE '%VideoSourceId%') AS index_count, (SELECT count(*) FROM ...) AS fk_count;"
+  ],
+  "solution": "SELECT\n  (SELECT count(*)\n     FROM pg_indexes\n    WHERE schemaname = 'public'\n      AND tablename = 'Events'\n      AND indexdef LIKE '%VideoSourceId%')                AS index_count,\n  (SELECT count(*)\n     FROM information_schema.table_constraints tc\n     JOIN information_schema.key_column_usage kcu\n       ON kcu.constraint_name = tc.constraint_name\n    WHERE tc.table_schema = 'public'\n      AND tc.table_name = 'Events'\n      AND tc.constraint_type = 'FOREIGN KEY'\n      AND kcu.column_name = 'VideoSourceId')              AS fk_count;",
+  "explanation": {
+    "breakdown": "Two scalar subqueries, each returning exactly one value, used directly in the SELECT list. A scalar subquery must return at most one row and one column — count(*) always satisfies that.",
+    "why": "The result — an index but no constraint — is the single most consequential fact about this schema. The index makes lookups by camera fast; the missing constraint means nothing prevents an event from referencing a camera that no longer exists.",
+    "commonMistake": "Concluding from the presence of an index that a relationship is enforced. Indexes are about speed. Constraints are about correctness. They are unrelated.",
+    "alternative": "You could return the two counts as two rows via UNION ALL, but scalar subqueries keep them on one row, which is easier to assert against in an automated test.",
+    "performance": "Both subqueries hit catalog tables and run instantly.",
+    "qaRelevance": "This is the finding that justifies a whole category of test cases. Because there is no FK, you must write explicit orphan-detection tests, and you must expect orphans to exist in production data."
+  }
+},
+{
+  "id": "L0-Q05", "level": 0, "difficulty": "easy",
+  "title": "Composite primary keys",
+  "scenario": "You are writing a de-duplication utility and need to know which tables are not keyed by a single Id column, because your usual assumption breaks on them.",
+  "task": "Find every table in the public schema whose primary key is made of more than one column. Return the table name and the number of columns in its primary key, ordered by table name.",
+  "tables": ["information_schema.table_constraints", "information_schema.key_column_usage"],
+  "skills": ["JOIN", "GROUP BY", "HAVING", "catalog"],
+  "expected": "Three tables: AspNetUserLogins (2), AspNetUserRoles (2), AspNetUserTokens (3).",
+  "orderMatters": true,
+  "hints": [
+    "Primary keys are in table_constraints with constraint_type = 'PRIMARY KEY'.",
+    "key_column_usage gives one row per column participating in the constraint — so a two-column key produces two rows.",
+    "Group by the table, count the rows, and keep only groups with more than one.",
+    "GROUP BY tc.table_name HAVING count(*) > 1."
+  ],
+  "solution": "SELECT tc.table_name, count(*) AS pk_columns\nFROM information_schema.table_constraints tc\nJOIN information_schema.key_column_usage kcu\n  ON kcu.constraint_name = tc.constraint_name\nWHERE tc.constraint_type = 'PRIMARY KEY'\n  AND tc.table_schema = 'public'\nGROUP BY tc.table_name\nHAVING count(*) > 1\nORDER BY tc.table_name;",
+  "explanation": {
+    "breakdown": "key_column_usage emits one row per key column, so counting rows per constraint counts the columns in the key. HAVING filters after grouping.",
+    "why": "HAVING filters groups; WHERE filters rows. You cannot write WHERE count(*) > 1 — the count does not exist until after grouping.",
+    "commonMistake": "Trying WHERE count(*) > 1, which is a syntax error, or forgetting that a table with a single-column PK also appears in these views and must be filtered out by the HAVING.",
+    "alternative": "array_agg(kcu.column_name) instead of count(*) shows you which columns they are, which is often more useful.",
+    "performance": "Negligible.",
+    "qaRelevance": "Composite keys break naive test helpers that assume every row is addressable by a single Id. AspNetUserTokens needs all three of UserId, LoginProvider and Name to identify a row."
+  }
+},
+{
+  "id": "L0-Q06", "level": 0, "difficulty": "easy",
+  "title": "Which camera columns accept NULL",
+  "scenario": "You are writing negative tests for camera creation. You need to know which fields the database will refuse to leave empty and which it will happily accept as NULL.",
+  "task": "For the VideoSources table, list every nullable column with its data type, ordered by column name.",
+  "tables": ["information_schema.columns"],
+  "skills": ["SELECT", "WHERE", "ORDER BY", "catalog"],
+  "expected": "The nullable columns of VideoSources — including ExternalSourceId, Snapshot and UseStreamType. Note that activeConfigId is NOT among them.",
+  "orderMatters": true,
+  "hints": [
+    "information_schema.columns has an is_nullable column holding the text 'YES' or 'NO'.",
+    "It is a string, not a boolean, so compare it to 'YES'.",
+    "Filter on table_name = 'VideoSources' as well, or you will get every nullable column in the database.",
+    "WHERE table_name = 'VideoSources' AND is_nullable = 'YES'."
+  ],
+  "solution": "SELECT column_name, data_type\nFROM information_schema.columns\nWHERE table_schema = 'public'\n  AND table_name = 'VideoSources'\n  AND is_nullable = 'YES'\nORDER BY column_name;",
+  "explanation": {
+    "breakdown": "is_nullable is text ('YES'/'NO'), a quirk of the SQL standard information_schema. Comparing it to a boolean fails.",
+    "why": "Nullability tells you which fields need negative tests and which are guaranteed populated.",
+    "commonMistake": "Writing is_nullable = true. The column is character data, not boolean.",
+    "alternative": "pg_attribute.attnotnull is a real boolean if you prefer PostgreSQL's own catalog.",
+    "qaRelevance": "activeConfigId is NOT NULL yet has no default and no foreign key. That combination means the application must always supply a value, but nothing checks the value is meaningful — the source of a whole class of dangling-pointer bugs."
+  }
+},
+{
+  "id": "L0-Q07", "level": 0, "difficulty": "medium",
+  "title": "How big is each table really",
+  "scenario": "Before designing performance tests you need a sense of scale: which tables hold thousands of rows and which hold a handful.",
+  "task": "Return the row count of these five tables as five rows, with columns named table_name and row_count: Events, VideoSources, PipeLineVideoSources, AspNetUsers, SystemConfig. Order by row_count descending.",
+  "tables": ["Events", "VideoSources", "PipeLineVideoSources", "AspNetUsers", "SystemConfig"],
+  "skills": ["UNION ALL", "COUNT", "ORDER BY", "aliases"],
+  "expected": "Five rows, Events by far the largest.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Counting five different tables means five separate SELECT statements combined into one result.",
+    "UNION ALL stacks result sets vertically. Each branch must return the same number of columns, in the same order, with compatible types.",
+    "Give the first branch its column aliases — SELECT 'Events' AS table_name, count(*) AS row_count FROM \"Events\". Later branches inherit the names.",
+    "Wrap the whole UNION ALL chain and apply ORDER BY row_count DESC at the end — a single ORDER BY applies to the entire union."
+  ],
+  "solution": "SELECT 'Events' AS table_name, count(*) AS row_count FROM \"Events\"\nUNION ALL SELECT 'VideoSources', count(*) FROM \"VideoSources\"\nUNION ALL SELECT 'PipeLineVideoSources', count(*) FROM \"PipeLineVideoSources\"\nUNION ALL SELECT 'AspNetUsers', count(*) FROM \"AspNetUsers\"\nUNION ALL SELECT 'SystemConfig', count(*) FROM \"SystemConfig\"\nORDER BY row_count DESC;",
+  "explanation": {
+    "breakdown": "Each branch produces one row: a literal label and a count. UNION ALL concatenates them. The trailing ORDER BY sorts the combined result, not just the last branch.",
+    "why": "UNION ALL rather than UNION: UNION removes duplicates, which costs a sort and could in principle collapse two tables that happen to have identical counts into one row. Here that would be a bug.",
+    "commonMistake": "Using UNION out of habit. Also: putting ORDER BY inside a branch, which PostgreSQL rejects unless the branch is parenthesised.",
+    "alternative": "For approximate counts on huge tables, pg_class.reltuples is instant but only as fresh as the last ANALYZE. count(*) is exact but scans.",
+    "performance": "count(*) on Events scans ~37,000 rows here. On a production Events table with hundreds of millions of rows this is a slow query — reach for reltuples when an estimate will do.",
+    "qaRelevance": "Table sizes drive test design. A join that is instant against 42 cameras may be unusable against 37,000 events if written carelessly."
+  }
+},
+{
+  "id": "L0-Q08", "level": 0, "difficulty": "medium",
+  "title": "Find the junction tables",
+  "scenario": "You want to identify the many-to-many relationships in the schema, because those are where duplicate rows come from when you join carelessly.",
+  "task": "Find every table in the public schema that has exactly two foreign key constraints. Return the table name and the two parent table names as a single comma-separated string named parents, ordered by table name.",
+  "tables": ["information_schema.table_constraints", "information_schema.constraint_column_usage"],
+  "skills": ["JOIN", "GROUP BY", "HAVING", "string_agg", "catalog"],
+  "expected": "The junction tables: AspNetUserRoles, PipeLineVideoSources, UserVideoSources, and VideoSources (which points at both a manager and an external source).",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Start from table_constraints filtered to FOREIGN KEY, and group by table_name.",
+    "HAVING count(*) = 2 keeps only tables with exactly two foreign keys.",
+    "To collect the parent names into one string, join to constraint_column_usage and use string_agg.",
+    "string_agg(ccu.table_name, ', ' ORDER BY ccu.table_name) gives a deterministic comma-separated list."
+  ],
+  "solution": "SELECT tc.table_name,\n       string_agg(DISTINCT ccu.table_name, ', ') AS parents\nFROM information_schema.table_constraints tc\nJOIN information_schema.constraint_column_usage ccu\n  ON ccu.constraint_name = tc.constraint_name\nWHERE tc.constraint_type = 'FOREIGN KEY'\n  AND tc.table_schema = 'public'\nGROUP BY tc.table_name\nHAVING count(DISTINCT tc.constraint_name) = 2\nORDER BY tc.table_name;",
+  "explanation": {
+    "breakdown": "Group foreign keys by child table, keep the groups of exactly two, and aggregate the parent names into a string. count(DISTINCT constraint_name) is used rather than count(*) because a multi-column foreign key would otherwise be counted more than once.",
+    "why": "string_agg is PostgreSQL's way of flattening a group into one delimited string. The DISTINCT inside it removes repeated parent names.",
+    "commonMistake": "Using count(*) instead of count(DISTINCT constraint_name) — the join to constraint_column_usage multiplies rows, so a table with one two-column FK would falsely look like it has two FKs.",
+    "alternative": "array_agg returns a real array instead of a string, which is easier to work with programmatically.",
+    "performance": "Catalog-only. Instant.",
+    "qaRelevance": "Junction tables are where a naive join fans out. Joining Events to VideoSources and then to both PipeLineVideoSources and UserVideoSources multiplies every event by (pipelines x users) — an easy way to report wildly inflated counts."
+  }
+},
+{
+  "id": "L0-Q09", "level": 0, "difficulty": "medium",
+  "title": "The two sources of truth for a user's role",
+  "scenario": "You are reviewing the authorization model. Someone mentions that a user's role is stored in two different places. You want to see both structures before deciding whether that matters.",
+  "task": "Return every column of AspNetUsers and AspNetUserRoles that has 'RoleId' or 'UserId' in its name. Show table_name, column_name and is_nullable, ordered by table_name then column_name.",
+  "tables": ["information_schema.columns"],
+  "skills": ["SELECT", "WHERE", "LIKE", "IN", "ORDER BY"],
+  "expected": "AspNetUserRoles contributes RoleId and UserId; AspNetUsers contributes RoleId. Three rows, none nullable.",
+  "orderMatters": true,
+  "hints": [
+    "You need columns from two named tables, so filter table_name with IN.",
+    "Matching a column name that contains a word calls for LIKE with % wildcards.",
+    "column_name LIKE '%RoleId%' OR column_name LIKE '%UserId%' — remember to parenthesise the OR when combining it with the AND on table_name.",
+    "WHERE table_name IN ('AspNetUsers','AspNetUserRoles') AND (column_name LIKE '%RoleId%' OR column_name LIKE '%UserId%')."
+  ],
+  "solution": "SELECT table_name, column_name, is_nullable\nFROM information_schema.columns\nWHERE table_schema = 'public'\n  AND table_name IN ('AspNetUsers','AspNetUserRoles')\n  AND (column_name LIKE '%RoleId%' OR column_name LIKE '%UserId%')\nORDER BY table_name, column_name;",
+  "explanation": {
+    "breakdown": "IN restricts to the two tables; the parenthesised OR of two LIKE patterns restricts to the columns of interest. The parentheses are essential — AND binds tighter than OR, so without them the table filter would apply to only the first LIKE.",
+    "why": "Seeing both structures side by side makes the design problem obvious: AspNetUsers.RoleId holds one role, and AspNetUserRoles can hold many. Nothing keeps them in agreement.",
+    "commonMistake": "Dropping the parentheses around the OR. The query still runs, returns more rows, and looks plausible — the worst kind of bug.",
+    "alternative": "column_name ~ 'RoleId|UserId' uses a POSIX regular expression instead of two LIKEs.",
+    "qaRelevance": "Duplicate sources of truth are a permanent test target. Later in this course you will find the user whose two role records disagree — and in a real system, that discrepancy decides what a person is allowed to do."
+  }
+},
+{
+  "id": "L0-Q10", "level": 0, "difficulty": "medium",
+  "title": "Where do the defaults come from",
+  "scenario": "You are writing tests for row creation and need to know which columns the database will fill in by itself when the application omits them.",
+  "task": "List every column in the public schema that has a column default containing 'gen_random_uuid'. Return table_name and column_name, ordered by both.",
+  "tables": ["information_schema.columns"],
+  "skills": ["SELECT", "WHERE", "LIKE", "IS NOT NULL"],
+  "expected": "Every Id column with a UUID default, plus one that is not an Id: Events.TrackId.",
+  "orderMatters": true,
+  "hints": [
+    "information_schema.columns has a column_default column holding the default expression as text.",
+    "Most columns have no default at all, so that column is NULL for them.",
+    "LIKE on a NULL value yields NULL, not true, so rows without defaults are excluded automatically — but being explicit is clearer.",
+    "WHERE column_default LIKE '%gen_random_uuid%'."
+  ],
+  "solution": "SELECT table_name, column_name\nFROM information_schema.columns\nWHERE table_schema = 'public'\n  AND column_default LIKE '%gen_random_uuid%'\nORDER BY table_name, column_name;",
+  "explanation": {
+    "breakdown": "column_default stores the default as SQL text, so a substring match finds every column defaulted to a generated UUID.",
+    "why": "The interesting row is Events.TrackId. Every other match is a primary key, where a generated UUID is exactly right. TrackId is not a key — it is supposed to carry the analytic engine's tracking identifier.",
+    "commonMistake": "Assuming a default is harmless. A default on an identity column is correct; a default on a business column hides missing data behind a plausible-looking value.",
+    "alternative": "In production this schema uses uuid_generate_v4() from the uuid-ossp extension; this practice database uses the built-in gen_random_uuid(). Behaviour is identical.",
+    "qaRelevance": "Because TrackId defaults, an event with no track information does not fail and does not look wrong — it gets a unique random value. Any de-duplication keyed on TrackId then silently treats duplicates as distinct. That is the bug behind one of the Senior investigations."
+  }
+}
+]

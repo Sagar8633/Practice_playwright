@@ -1,0 +1,4 @@
+- generic [active] [ref=e1]:
+  - heading "Pine clipboard bridge" [level=3] [ref=e2]
+  - paragraph [ref=e3]: Fetches the .pine from this local server and writes it to the clipboard verbatim.
+  - button "Copy to clipboard" [ref=e4]

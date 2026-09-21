@@ -1,0 +1,532 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e6]:
+      - 'button "Logged in as patilkareena208 Active layout: Unnamed" [ref=e7]'
+      - generic [ref=e8]: "11"
+    - toolbar [ref=e12]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - button "TATACONSUM" [ref=e19]:
+              - generic [ref=e20]: TATACONSUM
+            - button "Switch data type" [ref=e21]:
+              - img [ref=e22]:
+                - img [ref=e23]
+          - button "Compare symbols" [ref=e25]:
+            - img [ref=e26]:
+              - img [ref=e27]
+        - generic [ref=e33]:
+          - radiogroup [ref=e34]:
+            - radio "5 minutes" [checked] [ref=e35]:
+              - generic [ref=e37]: 5m
+            - radio "15 minutes" [ref=e38]:
+              - generic [ref=e40]: 15m
+            - radio "45 minutes" [ref=e41]:
+              - generic [ref=e43]: 45m
+          - button "Chart interval" [ref=e44]:
+            - img [ref=e47]:
+              - img [ref=e48]
+        - button "Candles" [ref=e54]:
+          - img [ref=e56]:
+            - img [ref=e57]
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - button "Indicators, metrics, and strategies" [ref=e66]:
+              - img [ref=e67]:
+                - img [ref=e68]
+              - generic [ref=e3372]: Indicators
+            - button "Favorite indicators" [ref=e72]:
+              - img [ref=e75]:
+                - img [ref=e76]
+          - button "Indicator templates" [ref=e79]:
+            - img [ref=e81]:
+              - img [ref=e82]
+        - generic [ref=e86]:
+          - button "Create alert" [ref=e87]:
+            - img [ref=e88]:
+              - img [ref=e89]
+            - generic [ref=e3373]: Alert
+          - button "Bar replay" [ref=e93]:
+            - img [ref=e94]:
+              - img [ref=e95]
+            - generic [ref=e3374]: Replay
+        - generic [ref=e101]:
+          - button "Undo insert trade_with_kareena Tracker" [ref=e4990]:
+            - img [ref=e103]:
+              - img [ref=e104]
+          - button [disabled] [ref=e4774]:
+            - img [ref=e107]:
+              - img [ref=e108]
+        - generic [ref=e111]:
+          - button "Layout setup" [ref=e112]:
+            - img [ref=e113]:
+              - img
+          - generic [ref=e115]:
+            - button "Save all charts for all symbols and intervals on your layout" [ref=e4991]:
+              - generic [ref=e118]:
+                - generic [ref=e119]: Unnamed
+                - generic [ref=e3268]: Save
+            - button "Manage layouts" [ref=e121]:
+              - img [ref=e124]:
+                - img [ref=e125]
+        - generic [ref=e129]:
+          - button "Quick search" [ref=e130]:
+            - img [ref=e131]:
+              - img [ref=e132]
+          - button "Settings" [ref=e135]:
+            - img [ref=e136]:
+              - img [ref=e137]
+          - button "Fullscreen mode" [ref=e141]:
+            - img [ref=e142]:
+              - img [ref=e143]
+          - button "Take a snapshot" [ref=e145]:
+            - img [ref=e147]:
+              - img [ref=e148]
+      - button "Trade" [ref=e154]:
+        - generic [ref=e160]: Trade
+      - button "Share your idea with the trade community" [ref=e162]:
+        - generic [ref=e164]: Publish
+    - toolbar [ref=e166]:
+      - generic [ref=e170]:
+        - generic [ref=e171]:
+          - generic [ref=e174]:
+            - button "Cross" [ref=e176]:
+              - img [ref=e177]:
+                - img [ref=e178]
+            - button "Cursors" [pressed] [ref=e182]:
+              - img [ref=e183]:
+                - img [ref=e184]
+          - generic [ref=e188]:
+            - button "Trendline" [ref=e190]:
+              - img [ref=e191]:
+                - img [ref=e192]
+            - button "Trend tools" [ref=e196]:
+              - img [ref=e197]:
+                - img [ref=e198]
+          - generic [ref=e202]:
+            - button "Fib retracement" [ref=e204]:
+              - img [ref=e205]:
+                - img [ref=e206]
+            - button "Gann and Fibonacci tools" [ref=e213]:
+              - img [ref=e214]:
+                - img [ref=e215]
+          - generic [ref=e219]:
+            - button "XABCD pattern" [ref=e221]:
+              - img [ref=e222]:
+                - img [ref=e223]
+            - button "Patterns" [ref=e227]:
+              - img [ref=e228]:
+                - img [ref=e229]
+          - generic [ref=e233]:
+            - button "Long position" [ref=e235]:
+              - img [ref=e236]:
+                - img [ref=e237]
+            - button "Forecasting and measurement tools" [ref=e239]:
+              - img [ref=e240]:
+                - img [ref=e241]
+          - generic [ref=e245]:
+            - button "Brush" [ref=e247]:
+              - img [ref=e248]:
+                - img [ref=e249]
+            - button "Geometric shapes" [ref=e253]:
+              - img [ref=e254]:
+                - img [ref=e255]
+          - generic [ref=e259]:
+            - button "Text" [ref=e261]:
+              - img [ref=e262]:
+                - img [ref=e263]
+            - button "Annotation tools" [ref=e265]:
+              - img [ref=e266]:
+                - img [ref=e267]
+          - generic [ref=e270]:
+            - button "Icon" [ref=e272]:
+              - img [ref=e273]:
+                - img [ref=e274]
+            - button "Icons" [ref=e276]:
+              - img [ref=e277]:
+                - img [ref=e278]
+        - generic [ref=e280]:
+          - button "Measure" [ref=e281]:
+            - img [ref=e282]:
+              - img [ref=e283]
+          - button "Zoom in" [ref=e285]:
+            - img [ref=e286]:
+              - img [ref=e287]
+        - generic [ref=e292]:
+          - generic [ref=e295]:
+            - button "Magnet mode snaps drawings placed near price bars to the closest OHLC value" [ref=e297]:
+              - img [ref=e298]:
+                - img [ref=e299]
+            - button "Magnets" [ref=e303]:
+              - img [ref=e304]:
+                - img [ref=e305]
+          - button "Keep drawing" [ref=e307]:
+            - img [ref=e308]:
+              - img [ref=e309]
+          - button "Lock all drawings" [ref=e311]:
+            - img [ref=e312]:
+              - img [ref=e313]
+          - generic [ref=e316]:
+            - button "Hide all drawings" [ref=e318]:
+              - img [ref=e319]:
+                - img [ref=e320]
+            - button "Hide options" [ref=e322]:
+              - img [ref=e323]:
+                - img [ref=e324]
+        - generic [ref=e328]:
+          - button "Remove objects" [ref=e330]:
+            - img [ref=e331]:
+              - img [ref=e332]
+          - button "Remove options" [ref=e334]:
+            - img [ref=e335]:
+              - img [ref=e336]
+    - generic [ref=e340]:
+      - 'region "Chart #1" [ref=e343]':
+        - generic [ref=e344]:
+          - generic [ref=e345]:
+            - generic [ref=e347]:
+              - generic:
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e348]:
+                        - generic "Change symbol" [ref=e1154]:
+                          - generic [ref=e350]:
+                            - img [ref=e352]
+                            - generic [ref=e353]: T
+                          - button "Change symbol" [ref=e1155]: Tata Consumer Products Limited
+                        - generic "Change interval" [ref=e1156]:
+                          - text: ·
+                          - button "Change interval" [ref=e1157]: "5"
+                        - generic [ref=e1158]:
+                          - text: ·
+                          - generic [ref=e1159]: NSE
+                      - generic:
+                        - generic:
+                          - button "Flag symbol":
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - img
+                          - button "More":
+                            - generic:
+                              - img
+                      - button "Market closed" [ref=e360]:
+                        - img [ref=e361]:
+                          - img [ref=e362]
+                    - generic [ref=e365]:
+                      - generic [ref=e366]:
+                        - generic [ref=e367]: O
+                        - generic [ref=e368]: 1,129.60
+                      - generic [ref=e369]:
+                        - generic [ref=e370]: H
+                        - generic [ref=e371]: 1,131.50
+                      - generic [ref=e372]:
+                        - generic [ref=e373]: L
+                        - generic [ref=e374]: 1,128.20
+                      - generic [ref=e375]:
+                        - generic [ref=e376]: C
+                        - generic [ref=e377]: 1,131.50
+                      - generic [ref=e379]: +2.60 (+0.23%)
+                  - generic [ref=e382]:
+                    - generic [ref=e384]:
+                      - generic: 1,131.30
+                      - generic: Sell
+                    - generic "Spread" [ref=e386]: "0.00"
+                    - generic [ref=e388]:
+                      - generic: 1,131.30
+                      - generic: Buy
+                - generic:
+                  - button "Hide indicator legend" [ref=e4276]:
+                    - img [ref=e4278]
+                  - generic:
+                    - toolbar:
+                      - generic:
+                        - generic [ref=e4992]:
+                          - generic "trade_with_kareena Tracker" [ref=e4993]:
+                            - generic [ref=e4994]: TWK Tracker
+                          - generic [ref=e4995]:
+                            - generic "Table position" [ref=e4996]:
+                              - generic [ref=e4997]: top_right
+                            - generic "R-Factor position" [ref=e4998]:
+                              - generic [ref=e4999]: top_left
+                            - generic "R-Factor lookback" [ref=e5000]:
+                              - generic [ref=e5001]: "14"
+                            - generic "Benchmark for Sector Strength" [ref=e5002]:
+                              - generic [ref=e5003]: NIFTY
+                        - generic:
+                          - generic:
+                            - button "Hide":
+                              - generic:
+                                - img
+                            - button "Settings":
+                              - generic:
+                                - img
+                            - generic "Source code":
+                              - generic:
+                                - img
+                            - button "Remove":
+                              - generic:
+                                - img
+                            - button "More":
+                              - generic:
+                                - img
+              - generic "Chart for NSE:TATACONSUM, 5 minutes" [ref=e390]
+            - generic [ref=e395]:
+              - generic [ref=e396]: INR
+              - img [ref=e398]
+          - generic [ref=e4779]:
+            - generic:
+              - generic:
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e4780]:
+                        - generic "trade_with_kareena Flow" [ref=e4781]:
+                          - generic [ref=e4782]: TWK Flow
+                        - generic [ref=e4783]:
+                          - generic "Flow smoothing length" [ref=e4784]:
+                            - generic [ref=e4785]: "20"
+                          - generic "Flow visual scale" [ref=e4786]:
+                            - generic [ref=e4787]: "1"
+                          - generic "ADX DI length" [ref=e4788]:
+                            - generic [ref=e4789]: "14"
+                          - generic "ADX smoothing" [ref=e4790]:
+                            - generic [ref=e4791]: "14"
+                          - generic "Strong-trend threshold" [ref=e4792]:
+                            - generic [ref=e4793]: "25"
+                      - generic:
+                        - generic:
+                          - button "Hide":
+                            - generic:
+                              - img
+                          - button "Settings":
+                            - generic:
+                              - img
+                          - generic "Source code":
+                            - generic:
+                              - img
+                          - button "Remove":
+                            - generic:
+                              - img
+                          - button "More":
+                            - generic:
+                              - img
+                    - generic [ref=e4800]:
+                      - generic "Momentum Flow Hist" [ref=e4802]: "0.34"
+                      - generic "Momentum Flow Line" [ref=e4804]: "0.34"
+                      - generic "Flow Up" [ref=e4806]: "0.00"
+                      - generic "Flow Down" [ref=e4808]: "0.00"
+                      - generic "ADX" [ref=e4810]: ∅
+      - toolbar [ref=e445]:
+        - generic [ref=e447]:
+          - generic [ref=e448]:
+            - button "1 day in 1 minute intervals" [ref=e449]:
+              - generic [ref=e450]: 1D
+            - button "5 days in 5 minutes intervals" [ref=e451]:
+              - generic [ref=e452]: 5D
+            - button "1 month in 30 minutes intervals" [ref=e453]:
+              - generic [ref=e454]: 1M
+            - button "3 months in 1 hour intervals" [ref=e455]:
+              - generic [ref=e456]: 3M
+            - button "6 months in 2 hours intervals" [ref=e457]:
+              - generic [ref=e458]: 6M
+            - button "Year to day in 1 day intervals" [ref=e459]:
+              - generic [ref=e460]: YTD
+            - button "1 year in 1 day intervals" [ref=e461]:
+              - generic [ref=e462]: 1Y
+            - button "5 years in 1 week intervals" [ref=e463]:
+              - generic [ref=e464]: 5Y
+            - button "All data in 1 month intervals" [ref=e465]:
+              - generic [ref=e466]: All
+          - button "Go to" [ref=e468]:
+            - img [ref=e469]:
+              - img [ref=e470]
+        - generic [ref=e472]:
+          - button "Timezone" [ref=e475]:
+            - generic [ref=e476]: 15:51:57 UTC+5:30
+          - button "Regular" [ref=e479]: RTH
+          - button "Adjust data for dividends" [ref=e483]:
+            - generic [ref=e484]: ADJ
+    - generic [ref=e486]:
+      - toolbar [ref=e491]:
+        - button "Watchlist, details, and news" [ref=e492]:
+          - img [ref=e493]:
+            - img [ref=e494]
+        - button "Alerts" [ref=e497]:
+          - img [ref=e498]:
+            - img [ref=e499]
+        - button "Object tree and data window" [ref=e502]:
+          - img [ref=e503]:
+            - img [ref=e504]
+        - button "Chats" [ref=e506]:
+          - img [ref=e507]:
+            - img [ref=e508]
+        - button "Screeners" [ref=e511]:
+          - img [ref=e512]:
+            - img [ref=e513]
+        - button "Pine" [ref=e517]:
+          - img [ref=e518]:
+            - img [ref=e519]
+        - button "Calendars" [ref=e522]:
+          - img [ref=e523]:
+            - img [ref=e524]
+        - button "Community" [ref=e526]:
+          - img [ref=e527]:
+            - img [ref=e528]
+        - button "Notifications" [ref=e533]:
+          - img [ref=e534]:
+            - img [ref=e535]
+        - button "Products" [ref=e537]:
+          - img [ref=e538]:
+            - img [ref=e539]
+        - button "Help Center" [ref=e542]:
+          - img [ref=e543]:
+            - img [ref=e544]
+      - generic [ref=e546]: "[] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] –"
+    - generic "Trading panel"
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+    - dialog "Indicators, metrics, and strategies" [ref=e4824]:
+      - generic [ref=e4825]:
+        - generic [ref=e4827]: Indicators, metrics, and strategies
+        - button "Close menu" [ref=e4828]:
+          - img [ref=e4830]:
+            - img [ref=e4831]
+          - generic [ref=e4833]: Close menu
+      - generic [ref=e4835]:
+        - img [ref=e4837]:
+          - img [ref=e4838]
+        - searchbox "Search" [active] [ref=e4841]
+      - generic [ref=e4842]:
+        - generic [ref=e4844]:
+          - generic [ref=e4845]:
+            - generic [ref=e4846]: Personal
+            - generic [ref=e4847]:
+              - img [ref=e4849]:
+                - img [ref=e4971]
+              - generic [ref=e4852]: Favorites
+            - generic [ref=e4853]:
+              - img [ref=e4855]:
+                - img [ref=e4973]
+              - generic [ref=e4858]: My scripts
+            - generic [ref=e4859]:
+              - img [ref=e4861]:
+                - img [ref=e4862]
+              - generic [ref=e4864]: Invite-only
+            - generic [ref=e4865]:
+              - img [ref=e4867]:
+                - img [ref=e4868]
+              - generic [ref=e4870]: Purchased
+          - generic [ref=e4871]:
+            - generic [ref=e4872]: Built-In
+            - generic [ref=e4873]:
+              - img [ref=e4875]:
+                - img [ref=e4876]
+              - generic [ref=e4878]: Technicals
+            - generic [ref=e4879]:
+              - img [ref=e4881]:
+                - img [ref=e4882]
+              - generic [ref=e4884]: Fundamentals
+          - generic [ref=e4885]:
+            - generic [ref=e4886]: Community
+            - generic [ref=e4887]:
+              - img [ref=e4889]:
+                - img [ref=e4890]
+              - generic [ref=e4892]: Editors' picks
+            - generic [ref=e4893]:
+              - img [ref=e4895]:
+                - img [ref=e4896]
+              - generic [ref=e4898]: Top
+            - generic [ref=e4899]:
+              - img [ref=e4901]:
+                - img [ref=e4902]
+              - generic [ref=e4904]: Trending
+            - generic [ref=e4905]:
+              - img [ref=e4907]:
+                - img [ref=e4908]
+              - generic [ref=e4910]: Store
+        - generic [ref=e4978]:
+          - heading "Script name" [level=3] [ref=e5005]
+          - generic [ref=e5008]: trade_with_kareena
+          - generic [ref=e5011]: trade_with_kareena Flow
+          - generic [ref=e5012]:
+            - generic [ref=e5013]:
+              - img "Add to favorites" [ref=e5014]:
+                - img [ref=e5015]
+              - generic [ref=e5017]: trade_with_kareena Tracker
+            - generic [ref=e5018]:
+              - img "Source code" [ref=e5019]:
+                - img [ref=e5020]
+              - img "Delete script" [ref=e5022]:
+                - img [ref=e5023]
+  - generic [ref=e644]:
+    - alert
+    - alert

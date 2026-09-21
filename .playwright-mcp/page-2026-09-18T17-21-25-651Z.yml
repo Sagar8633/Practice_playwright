@@ -1,0 +1,364 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e6]:
+      - 'button "Logged in as patilkareena208 Active layout: Unnamed" [ref=e7]'
+      - generic [ref=e8]: "11"
+    - toolbar [ref=e12]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - button "XAUUSD" [ref=e19]
+            - button "Switch data type" [ref=e21]
+          - button "Compare symbols" [ref=e25]
+        - generic [ref=e33]:
+          - radiogroup [ref=e34]:
+            - radio "5 minutes" [checked] [ref=e35]:
+              - generic [ref=e36]: 5m
+            - radio "15 minutes" [ref=e38]:
+              - generic [ref=e39]: 15m
+            - radio "45 minutes" [ref=e41]:
+              - generic [ref=e42]: 45m
+          - button "Chart interval" [ref=e44]
+        - button "Candles" [ref=e54]
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - button "Indicators, metrics, and strategies" [ref=e66]
+            - button "Favorite indicators" [ref=e71]
+          - button "Indicator templates" [ref=e78]
+        - generic [ref=e85]:
+          - button "Create alert" [ref=e86]
+          - button "Bar replay" [ref=e91]
+        - generic [ref=e98]:
+          - button [disabled] [ref=e99]
+          - button [disabled] [ref=e103]
+        - generic [ref=e108]:
+          - button "Layout setup" [ref=e109]
+          - generic [ref=e111]:
+            - button "All changes saved" [disabled] [ref=e112]:
+              - generic [ref=e114]:
+                - generic [ref=e115]: Unnamed
+                - generic: Save
+            - button "Manage layouts" [ref=e117]
+        - generic [ref=e125]:
+          - button "Quick search" [ref=e126]
+          - button "Settings" [ref=e131]
+          - button "Fullscreen mode" [ref=e137]
+          - button "Take a snapshot" [ref=e141]
+      - button "Trade" [ref=e150]
+      - button "Share your idea with the trade community" [ref=e158]:
+        - generic [ref=e159]: Publish
+    - toolbar [ref=e162]:
+      - generic [ref=e166]:
+        - generic [ref=e167]:
+          - generic [ref=e170]:
+            - button "Cross" [ref=e172]
+            - button "Cursors" [pressed] [ref=e178]
+          - generic [ref=e184]:
+            - button "Trendline" [ref=e186]
+            - button "Trend tools" [ref=e192]
+          - generic [ref=e198]:
+            - button "Fib retracement" [ref=e200]
+            - button "Gann and Fibonacci tools" [ref=e209]
+          - generic [ref=e215]:
+            - button "XABCD pattern" [ref=e217]
+            - button "Patterns" [ref=e223]
+          - generic [ref=e229]:
+            - button "Long position" [ref=e231]
+            - button "Forecasting and measurement tools" [ref=e235]
+          - generic [ref=e241]:
+            - button "Brush" [ref=e243]
+            - button "Geometric shapes" [ref=e249]
+          - generic [ref=e255]:
+            - button "Text" [ref=e257]
+            - button "Annotation tools" [ref=e261]
+          - generic [ref=e266]:
+            - button "Icon" [ref=e268]
+            - button "Icons" [ref=e272]
+        - generic [ref=e276]:
+          - button "Measure" [ref=e277]
+          - button "Zoom in" [ref=e281]
+        - generic [ref=e288]:
+          - generic [ref=e291]:
+            - button "Magnet mode snaps drawings placed near price bars to the closest OHLC value" [ref=e293]
+            - button "Magnets" [ref=e299]
+          - button "Keep drawing" [ref=e303]
+          - generic [ref=e308]:
+            - button "Lock drawings and indicators" [ref=e310]
+            - button "Lock options" [ref=e314]
+          - generic [ref=e319]:
+            - button "Hide all drawings" [ref=e321]
+            - button "Hide options" [ref=e325]
+        - generic [ref=e331]:
+          - button "Remove objects" [ref=e333]
+          - button "Remove options" [ref=e337]
+    - generic [ref=e343]:
+      - 'region "Chart #1" [ref=e346]':
+        - generic [ref=e347]:
+          - generic [ref=e350] [cursor=pointer]:
+            - generic:
+              - generic:
+                - toolbar:
+                  - generic:
+                    - generic [ref=e351]:
+                      - generic "Change symbol" [ref=e352]:
+                        - generic [ref=e353]: X
+                        - button "Change symbol" [ref=e357]: Gold Spot / U.S. Dollar
+                      - generic "Change interval" [ref=e358]:
+                        - text: ·
+                        - button "Change interval" [ref=e359]: "5"
+                      - generic [ref=e360]:
+                        - text: ·
+                        - generic [ref=e361]: OANDA
+                    - generic:
+                      - generic:
+                        - button "Flag symbol"
+                        - button "More"
+                    - button "Market open · One update every 5 seconds" [ref=e363]
+                  - generic [ref=e371]:
+                    - generic [ref=e372]:
+                      - generic [ref=e373]: O
+                      - generic [ref=e374]: 4,385.795
+                    - generic [ref=e375]:
+                      - generic [ref=e376]: H
+                      - generic [ref=e377]: 4,386.395
+                    - generic [ref=e378]:
+                      - generic [ref=e379]: L
+                      - generic [ref=e380]: 4,380.920
+                    - generic [ref=e381]:
+                      - generic [ref=e382]: C
+                      - generic [ref=e383]: 4,381.295
+                    - generic [ref=e384]: −4.450 (−0.10%)
+                - generic [ref=e388]:
+                  - generic [ref=e390]:
+                    - generic: 4,384.800
+                    - generic: Sell
+                  - generic "Spread" [ref=e392]: "32.0"
+                  - generic [ref=e394]:
+                    - generic: 4,385.120
+                    - generic: Buy
+              - generic:
+                - button "Hide indicators legend" [ref=e395]
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e399]:
+                        - generic [ref=e400]: SimpleSMA18 Strategy (MQL5 port)
+                        - generic [ref=e402]:
+                          - generic "Fast MA Period" [ref=e403]: "18"
+                          - generic "Trend MA Period" [ref=e405]: "200"
+                          - generic "Volume MA Period" [ref=e407]: "20"
+                          - generic "Swing Strength" [ref=e409]: "2"
+                          - generic "Entry Buffer (ticks)" [ref=e411]: "20"
+                          - generic "Break-Even Trigger (ticks)" [ref=e413]: 10,000
+                          - generic "Break-Even Offset (ticks)" [ref=e415]: 5,000
+                          - generic "Protection Mode" [ref=e417]: None
+                          - generic "Protection Start Mode" [ref=e419]: After Points
+                          - generic "Protection Start Points (ticks)" [ref=e421]: 2,000
+                          - generic "Swing Buffer (ticks)" [ref=e423]: "200"
+                          - generic "Chandelier Lookback" [ref=e425]: "22"
+                          - generic "ATR Period" [ref=e427]: "22"
+                          - generic "ATR Multiplier" [ref=e429]: "3"
+                          - generic "Trailing Start (ticks)" [ref=e431]: 1,000
+                          - generic "Trailing Distance (ticks)" [ref=e433]: "500"
+                          - generic "Trailing Step (ticks)" [ref=e435]: "200"
+                          - generic "Partial Close Trigger (ticks)" [ref=e437]: 6,000
+                          - generic "Partial Close Percent" [ref=e439]: "50"
+                          - generic "MT5 Point Size (0 = auto mintick)" [ref=e441]: "0"
+                          - 'generic "Reward : Risk" [ref=e443]': "2"
+                      - generic:
+                        - generic:
+                          - button "Show" [ref=e445]
+                          - button "Settings"
+                          - button "Remove"
+                          - button "More"
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e452]: SRK Trading Swing Indicator
+                      - generic:
+                        - generic:
+                          - button "Show" [ref=e455]
+                          - button "Settings"
+                          - button "Remove"
+                          - button "More"
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e462]:
+                        - generic "trade_with_kareena Tracker" [ref=e463]: TWK Tracker
+                        - generic [ref=e465]:
+                          - generic "Table position" [ref=e466]: top_right
+                          - generic "Volume MA Length (bars)" [ref=e468]: "20"
+                          - generic "Row color opacity" [ref=e470]: "15"
+                          - generic "Table font size" [ref=e472]: small
+                          - generic "R-Factor lookback" [ref=e474]: "14"
+                          - generic "Benchmark for Sector Strength" [ref=e476]: NSE:NIFTY
+                          - generic "Multiplier" [ref=e478]: "1.5"
+                          - generic "ATR length" [ref=e480]: "10"
+                          - generic "Volume average length" [ref=e482]: "20"
+                          - generic "Volume threshold (x avg)" [ref=e484]: "1.8"
+                          - generic "Pivot strength (bars each side)" [ref=e486]: "5"
+                          - 'generic "Reward : Risk" [ref=e488]': "2"
+                          - generic "Projection width (bars)" [ref=e490]: "24"
+                      - generic:
+                        - generic:
+                          - button "Show" [ref=e492]
+                          - button "Settings"
+                          - button "Remove"
+                          - button "More"
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e499]:
+                        - generic "Smart Money Concepts [LuxAlgo]" [ref=e500]: LuxAlgo - Smart Money Concepts
+                        - generic [ref=e502]:
+                          - generic "Mode" [ref=e503]: Historical
+                          - generic "Style" [ref=e505]: Colored
+                          - generic "Bullish Structure" [ref=e507]: All
+                          - generic "Bearish Structure" [ref=e509]: All
+                          - generic "Internal Label Size" [ref=e511]: tiny
+                          - generic "Bullish Structure" [ref=e513]: All
+                          - generic "Bearish Structure" [ref=e515]: All
+                          - generic "Swing Label Size" [ref=e517]: small
+                          - generic [ref=e519]: "50"
+                          - generic [ref=e521]: "5"
+                          - generic [ref=e523]: "5"
+                          - generic "Order Block Filter" [ref=e525]: Atr
+                          - generic "Order Block Mitigation" [ref=e527]: High/Low
+                          - generic "Bars Confirmation" [ref=e529]: "3"
+                          - generic "Threshold" [ref=e531]: "0.1"
+                          - generic "Label Size" [ref=e533]: tiny
+                          - generic "Extend FVG" [ref=e535]: "1"
+                          - generic [ref=e537]: ⎯⎯⎯
+                          - generic [ref=e539]: ⎯⎯⎯
+                          - generic [ref=e541]: ⎯⎯⎯
+                      - generic:
+                        - generic:
+                          - button "Show" [ref=e543]
+                          - button "Settings"
+                          - button "Remove"
+                          - button "More"
+            - generic "Chart for OANDA:XAUUSD, 5 minutes" [ref=e551]
+          - generic [ref=e571]:
+            - generic:
+              - generic:
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e572]:
+                        - generic "Relative Strength Index" [ref=e573]: RSI
+                        - generic [ref=e575]:
+                          - generic "RSI Length" [ref=e576]: "14"
+                          - generic "Source" [ref=e578]: close
+                      - generic:
+                        - generic:
+                          - button "Hide"
+                          - button "Settings"
+                          - button "Remove"
+                          - button "More"
+                    - generic [ref=e581]:
+                      - generic "RSI" [ref=e583]: "35.45"
+                      - generic "RSI-based MA" [ref=e585]: "49.96"
+      - toolbar [ref=e601]:
+        - generic [ref=e603]:
+          - generic [ref=e604]:
+            - button "1 day in 1 minute intervals" [ref=e605]:
+              - generic [ref=e606]: 1D
+            - button "5 days in 5 minutes intervals" [ref=e607]:
+              - generic [ref=e608]: 5D
+            - button "1 month in 30 minutes intervals" [ref=e609]:
+              - generic [ref=e610]: 1M
+            - button "3 months in 1 hour intervals" [ref=e611]:
+              - generic [ref=e612]: 3M
+            - button "6 months in 2 hours intervals" [ref=e613]:
+              - generic [ref=e614]: 6M
+            - button "Year to day in 1 day intervals" [ref=e615]:
+              - generic [ref=e616]: YTD
+            - button "1 year in 1 day intervals" [ref=e617]:
+              - generic [ref=e618]: 1Y
+            - button "5 years in 1 week intervals" [ref=e619]:
+              - generic [ref=e620]: 5Y
+            - button "All data in 1 month intervals" [ref=e621]:
+              - generic [ref=e622]: All
+          - button "Go to" [ref=e624]
+        - button "Timezone" [ref=e631]:
+          - generic [ref=e632]: 22:51:25 UTC+5:30
+    - toolbar [ref=e639]:
+      - button "Watchlist, details, and news" [ref=e640]
+      - button "Alerts" [ref=e644]
+      - button "Object tree and data window" [ref=e649]
+      - button "Chats" [ref=e653]
+      - button "Screeners" [ref=e658]
+      - button "Pine" [ref=e664]
+      - button "Calendars" [ref=e669]
+      - button "Community" [ref=e673]
+      - button "Notifications" [ref=e680]
+      - button "Products" [ref=e684]
+      - button "Help Center" [ref=e689]
+    - generic "Trading panel"
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list

@@ -1,0 +1,577 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - listitem [ref=e7]:
+            - link "Hamburger Menu" [ref=e8] [cursor=pointer]:
+              - /url: javascript:void(0)
+              - img "Hamburger Menu" [ref=e9]
+          - generic [ref=e11]:
+            - link "X Menu" [ref=e13] [cursor=pointer]:
+              - /url: javascript:void(0)
+              - img "X Menu" [ref=e14]
+            - list [ref=e15]:
+              - listitem [ref=e16]:
+                - link "Home" [ref=e17] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/
+              - listitem [ref=e18]:
+                - link "Why i2V?" [ref=e19] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/why-choose-i2v/
+              - listitem [ref=e20]:
+                - link "i2V products" [ref=e21] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products/
+                - list [ref=e22]:
+                  - listitem [ref=e23]:
+                    - link "i2V VMS" [ref=e24] [cursor=pointer]:
+                      - /url: https://www.i2vsys.com/products/video-management-software/
+                  - listitem [ref=e25]:
+                    - link "AI-Based Video Analytics (VA / VCA)" [ref=e26] [cursor=pointer]:
+                      - /url: https://www.i2vsys.com/products/ai-powered-video-analytics/
+                  - listitem [ref=e27]:
+                    - link "Command and control (ICCC / PSIM)" [ref=e28] [cursor=pointer]:
+                      - /url: https://www.i2vsys.com/products/integrated-command-and-control-center/
+                  - listitem [ref=e29]:
+                    - link "Central Monitoring Software (CMS)" [ref=e30] [cursor=pointer]:
+                      - /url: https://www.i2vsys.com/products/central-monitoring-system/
+                  - listitem [ref=e31]:
+                    - link "Automatic Number Plate Recognition (ANPR / LPR)" [ref=e32] [cursor=pointer]:
+                      - /url: https://www.i2vsys.com/products/automatic-number-plate-recognition/
+                  - listitem [ref=e33]:
+                    - link "Intelligent Traffic Management System (ITMS / ITS)" [ref=e34] [cursor=pointer]:
+                      - /url: https://www.i2vsys.com/products/intelligent-traffic-management-system/
+                  - listitem [ref=e35]:
+                    - link "AI Based Face Recognition Software (FRS)" [ref=e36] [cursor=pointer]:
+                      - /url: https://www.i2vsys.com/products/face-recognition-software/
+              - listitem [ref=e37]:
+                - link "Industries we serve" [ref=e38] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/industries-we-serve/
+              - listitem [ref=e39]:
+                - link "Our partners" [ref=e40] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/our-partners/
+              - listitem [ref=e41]:
+                - link "Careers We’re Hiring" [ref=e42] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/career/
+              - listitem [ref=e43]:
+                - link "Blogs and news" [ref=e44] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/newsroom-blog/
+              - listitem [ref=e45]:
+                - link "Resources" [ref=e46] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/resource-center/
+              - listitem [ref=e47]:
+                - link "Contact us" [ref=e48] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/contact-us/
+            - list [ref=e49]:
+              - listitem [ref=e50]:
+                - link "Follow us on" [ref=e51] [cursor=pointer]:
+                  - /url: javascript:void(0)
+                - link "LinkedIn LinkedIn" [ref=e52] [cursor=pointer]:
+                  - /url: https://in.linkedin.com/company/i2v-systems
+                  - img "LinkedIn" [ref=e54]
+                  - text: LinkedIn
+                - link "YouTube Youtube" [ref=e55] [cursor=pointer]:
+                  - /url: https://www.youtube.com/@i2vsystems120
+                  - img "YouTube" [ref=e57]
+                  - text: Youtube
+          - list [ref=e58]:
+            - listitem [ref=e59]:
+              - link "i2V" [ref=e60] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/
+                - img "i2V" [ref=e62]
+        - generic [ref=e63]:
+          - list [ref=e64]:
+            - listitem [ref=e65]:
+              - link "i2V products" [ref=e66] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/products/
+            - listitem [ref=e67]:
+              - link "Industries i2V serve" [ref=e68] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries-we-serve/
+          - list [ref=e69]:
+            - listitem [ref=e70]:
+              - link "Request a demo" [ref=e71] [cursor=pointer]:
+                - /url: "#"
+            - listitem
+            - listitem [ref=e72]:
+              - link "Search" [ref=e73] [cursor=pointer]:
+                - /url: javascript:void(0)
+                - img [ref=e75]
+            - listitem [ref=e77]:
+              - img [ref=e79] [cursor=pointer]
+    - generic [ref=e81]:
+      - generic [ref=e82]:
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - generic [ref=e94]:
+              - heading "Secure your operations with intelligent video security solutions" [level=2] [ref=e96]
+              - generic [ref=e97]:
+                - paragraph
+                - paragraph [ref=e98]: Purpose-built for high-stakes environments, our platform provides real-time insights and total operational visibility.
+                - paragraph
+              - generic [ref=e99]:
+                - link "Request a demo" [ref=e100] [cursor=pointer]:
+                  - /url: "#"
+                - link "Explore i2V's solutions" [ref=e101] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products/integrated-command-and-control-center
+            - generic [ref=e105]:
+              - heading "Transform security with next-gen AI video management solutions" [level=2] [ref=e107]
+              - generic [ref=e108]:
+                - paragraph
+                - paragraph [ref=e109]: Empowering enterprises and governments with intelligent security, AI-driven video management solutions for seamless surveillance and future-ready protection.
+                - paragraph
+              - generic [ref=e110]:
+                - link "Request a demo" [ref=e111] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/contact-us/
+                - link "Explore i2V's solutions" [ref=e112] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products
+            - generic [ref=e116]:
+              - heading "i2V– smart & scalable video surveillance platform" [level=2] [ref=e118]
+              - generic [ref=e119]:
+                - paragraph
+                - paragraph [ref=e120]: AI-powered video management, analytics, and security solutions tailored for enterprises, public sector agencies, and critical infrastructure.
+                - paragraph
+              - generic [ref=e121]:
+                - link "Speak to our experts" [ref=e122] [cursor=pointer]:
+                  - /url: "#"
+                - link "Explore our AI-powered platform" [ref=e123] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products/ai-powered-video-analytics
+            - generic [ref=e127]:
+              - heading "Comprehensive enterprise video security solutions for every industry" [level=2] [ref=e129]
+              - generic [ref=e130]:
+                - paragraph
+                - paragraph [ref=e131]: From advanced VMS to intelligent ai analytics, i2V offers flexible, high-performance solutions for diverse sectors and use cases.
+                - paragraph
+              - generic [ref=e132]:
+                - link "Request a demo today" [ref=e133] [cursor=pointer]:
+                  - /url: "#"
+                - link "Explore our industry solutions" [ref=e134] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/industries-we-serve/
+            - generic [ref=e138]:
+              - heading "Secure your operations with intelligent video security solutions" [level=2] [ref=e140]
+              - generic [ref=e141]:
+                - paragraph
+                - paragraph [ref=e142]: Purpose-built for high-stakes environments, our platform provides real-time insights and total operational visibility.
+                - paragraph
+              - generic [ref=e143]:
+                - link "Request a demo" [ref=e144] [cursor=pointer]:
+                  - /url: "#"
+                - link "Explore i2V's solutions" [ref=e145] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products/integrated-command-and-control-center
+            - generic [ref=e149]:
+              - heading "Transform security with next-gen AI video management solutions" [level=2] [ref=e151]
+              - generic [ref=e152]:
+                - paragraph
+                - paragraph [ref=e153]: Empowering enterprises and governments with intelligent security, AI-driven video management solutions for seamless surveillance and future-ready protection.
+                - paragraph
+              - generic [ref=e154]:
+                - link "Request a demo" [ref=e155] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/contact-us/
+                - link "Explore i2V's solutions" [ref=e156] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products
+          - generic [ref=e157]:
+            - button "Go to slide 1" [ref=e158] [cursor=pointer]:
+              - img [ref=e159]
+              - generic [ref=e162]: "2"
+            - button "Go to slide 2" [ref=e163] [cursor=pointer]
+            - button "Go to slide 3" [ref=e164] [cursor=pointer]
+            - button "Go to slide 4" [ref=e165] [cursor=pointer]
+          - generic:
+            - generic:
+              - button "Next slide" [ref=e166] [cursor=pointer]:
+                - img "Next" [ref=e167]
+              - button "Previous slide" [ref=e168] [cursor=pointer]:
+                - img "Prev" [ref=e169]
+        - generic [ref=e179]:
+          - text: Trusted by leading global brands for intelligent, integrated security.
+          - generic [ref=e180] [cursor=pointer]:
+            - paragraph [ref=e181]:
+              - img "ℹ" [ref=e182]
+            - paragraph
+        - generic [ref=e271]:
+          - heading "Integrated solutions to secure and streamline every facet of your operations" [level=1] [ref=e273]
+          - generic [ref=e274]:
+            - list [ref=e276]:
+              - listitem [ref=e277] [cursor=pointer]:
+                - link "i2V’s VMS" [ref=e278]:
+                  - /url: "#content0"
+              - listitem [ref=e279] [cursor=pointer]:
+                - link "AI-Based Video Analytics (VA / VCA)" [ref=e280]:
+                  - /url: "#content1"
+              - listitem [ref=e281] [cursor=pointer]:
+                - link "Command And Control (ICCC)" [ref=e282]:
+                  - /url: "#content2"
+              - listitem [ref=e283] [cursor=pointer]:
+                - link "CMS" [ref=e284]:
+                  - /url: "#content3"
+              - listitem [ref=e285] [cursor=pointer]:
+                - link "ITMS / ITS" [ref=e286]:
+                  - /url: "#content4"
+              - listitem [ref=e287] [cursor=pointer]:
+                - link "ANPR / LPR" [ref=e288]:
+                  - /url: "#content5"
+              - listitem [ref=e289] [cursor=pointer]:
+                - link "FRS" [ref=e290]:
+                  - /url: "#content6"
+            - generic [ref=e295]:
+              - generic [ref=e297]:
+                - heading "Enterprise video management system (VMS) by i2V" [level=4] [ref=e298]
+                - paragraph [ref=e299]: i2V’s enterprise-grade Video Management System is a powerful IP-based solution engineered for large-scale, mission-critical environments. It offers seamless integration with unlimited cameras, servers, and users delivering real-time monitoring, playback, and analytics from a single, unified platform.
+                - paragraph [ref=e300]: Whether you're managing a city-wide network or a multi-site enterprise, i2V’s VMS ensures secure, scalable surveillance with complete operational control.
+                - list [ref=e301]:
+                  - listitem [ref=e302]:
+                    - img [ref=e304]
+                    - paragraph [ref=e306]: Manage more cameras with less hardware, cutting costs and energy.
+                  - listitem [ref=e307]:
+                    - img [ref=e309]
+                    - paragraph [ref=e311]: Run seamlessly on both Windows and Linux for flexibility.
+                  - listitem [ref=e312]:
+                    - img [ref=e314]
+                    - paragraph [ref=e316]: Real-time monitoring with smart AI analytics and fewer false alerts.
+                  - listitem [ref=e317]:
+                    - img [ref=e319]
+                    - paragraph [ref=e321]: Built for heavy workloads and mission-critical deployments.
+                  - listitem [ref=e322]:
+                    - img [ref=e324]
+                    - paragraph [ref=e326]: Connect with third-party NVRs without replacing existing systems.
+                  - listitem [ref=e327]:
+                    - img [ref=e329]
+                    - paragraph [ref=e331]: Simple interface to manage cameras, alerts, and playback.
+                - link "Learn i2V VMS solutions" [ref=e333] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products/video-management-software
+              - generic [ref=e334]:
+                - list [ref=e335]:
+                  - listitem [ref=e336]:
+                    - generic [ref=e337]: Configuration client
+                  - listitem [ref=e338]:
+                    - generic [ref=e339]: Live view and playback client
+                  - listitem [ref=e340]:
+                    - generic [ref=e341]: eMap client
+                  - listitem [ref=e342]:
+                    - generic [ref=e343]: Auto ptz tracking
+                  - listitem [ref=e344]:
+                    - generic [ref=e345]: Playback client
+                  - listitem [ref=e346]:
+                    - generic [ref=e347]: Recordings and storage
+                  - listitem [ref=e348]:
+                    - generic [ref=e349]: Alarm management
+                  - listitem [ref=e350]:
+                    - generic [ref=e351]: Multi monitoring and video wall
+                - link "View all features" [ref=e353] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products/video-management-software/?#vmsfeature
+        - generic [ref=e357]:
+          - generic [ref=e360]:
+            - heading "Secure your operations with intelligent solutions." [level=6] [ref=e362]
+            - heading "Book a free i2V demo with our video security experts" [level=3] [ref=e364]
+          - link "Request a demo now" [ref=e367] [cursor=pointer]:
+            - /url: "#"
+        - generic [ref=e371]:
+          - generic [ref=e372]:
+            - generic [ref=e373]:
+              - heading "Industry-specific video surveillance solutions" [level=3] [ref=e375]
+              - generic [ref=e376]: i2V delivers advanced VMS and security solutions designed to meet the unique needs of diverse sectors—helping them enhance safety, ensure compliance, and secure their assets at scale.
+            - link "Explore industry-wise solutions" [ref=e380] [cursor=pointer]:
+              - /url: https://www.i2vsys.com/industries-we-serve/
+          - generic [ref=e382]:
+            - generic [ref=e384]:
+              - link "Oil and gas" [ref=e386] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries/oil-and-gas
+                - img [ref=e387]
+              - link "Oil and gas" [ref=e392] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries/oil-and-gas
+            - generic [ref=e394]:
+              - link "Government" [ref=e396] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries/law-enforcement
+                - img [ref=e397]
+              - link "Government" [ref=e403] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries/law-enforcement
+            - generic [ref=e405]:
+              - link "Energy" [ref=e407] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries/energy/
+                - img [ref=e408]
+              - link "Energy" [ref=e417] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries/energy/
+            - generic [ref=e419]:
+              - link "Retail" [ref=e421] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries/retail
+                - img [ref=e422]
+              - link "Retail" [ref=e429] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries/retail
+            - generic [ref=e431]:
+              - link "Smart cities" [ref=e433] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries/smart-cities
+                - img [ref=e434]
+              - link "Smart cities" [ref=e440] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries/smart-cities
+            - generic [ref=e442]:
+              - link "Education" [ref=e444] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries/education
+                - img [ref=e445]
+              - link "Education" [ref=e453] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries/education
+            - generic [ref=e455]:
+              - link "Transportation" [ref=e457] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries/transportation
+                - img [ref=e458]
+              - link "Transportation" [ref=e464] [cursor=pointer]:
+                - /url: https://www.i2vsys.com/industries/transportation
+            - link "View all" [ref=e468] [cursor=pointer]:
+              - /url: https://www.i2vsys.com/industries-we-serve/
+        - generic [ref=e469]:
+          - generic [ref=e470]:
+            - generic [ref=e472]:
+              - heading "Why choose i2V for AI-powered video security" [level=3] [ref=e474]
+              - paragraph [ref=e476]: i2V provides a robust, scalable, and intelligent video management platform engineered for mission-critical surveillance. With seamless integration, AI-powered analytics, and enterprise-grade reliability, we help organisations stay secure and future-ready.
+            - generic [ref=e479]:
+              - generic [ref=e481]:
+                - img [ref=e484]
+                - generic [ref=e488]:
+                  - generic [ref=e489]: Seamless integration
+                  - paragraph [ref=e490]: Works effortlessly with third-party devices and industry protocols to create a unified and connected security ecosystem.
+              - generic [ref=e492]:
+                - img [ref=e495]
+                - generic [ref=e499]:
+                  - generic [ref=e500]: Platform-agnostic and enterprise-ready
+                  - paragraph [ref=e501]: Deploy seamlessly across Linux and Windows environments, ensuring flexibility, stability, and compatibility with enterprise IT ecosystems.
+              - generic [ref=e503]:
+                - img [ref=e506]
+                - generic [ref=e510]:
+                  - generic [ref=e511]: Optimized hardware utilization with flexible deployment
+                  - paragraph [ref=e512]: Achieve high performance with minimal hardware through intelligent resource optimization and support for multiple CPUs and GPUs.
+              - generic [ref=e514]:
+                - img [ref=e517]
+                - generic [ref=e520]:
+                  - generic [ref=e521]: User-friendly interface with high-accuracy ai models
+                  - paragraph [ref=e522]: Operate effortlessly using an intuitive GUI while benefiting from customized AI models tuned for higher accuracy and real-world reliability.
+          - generic [ref=e532]:
+            - text: Trusted by leading global brands for intelligent, integrated security.
+            - paragraph [ref=e534] [cursor=pointer]:
+              - img "ℹ" [ref=e535]
+        - generic [ref=e621]:
+          - heading "Award-winning video security solutions by i2V" [level=3] [ref=e623]
+          - paragraph [ref=e625]: i2V has been honoured with prestigious industry awards that reflect our commitment to innovation, advanced security, and breakthrough technologies in video management and surveillance.
+          - generic [ref=e626]:
+            - generic [ref=e630]:
+              - button "Winner" [ref=e632]:
+                - generic [ref=e634]: Winner
+              - paragraph [ref=e636]:
+                - text: ‘R&D Efforts of the year in
+                - text: security – software
+              - paragraph [ref=e638]: SECONA shield awards 2016
+            - generic [ref=e643]:
+              - button "Featured" [ref=e645]:
+                - generic [ref=e647]: Featured
+              - generic [ref=e648]: Featured as one of the best VMS companies of Asia
+              - paragraph [ref=e650]: A&S asia magazine
+          - heading "Certifications and compliance standards" [level=4] [ref=e654]
+          - generic [ref=e655]:
+            - generic [ref=e659]:
+              - text: ONVIF profile
+              - text: S,G,T & M
+            - generic [ref=e662]:
+              - text: STQC
+              - text: certificate
+            - generic [ref=e666]:
+              - text: CDAC cert in
+              - text: cyber security
+            - generic [ref=e670]:
+              - text: CMMI
+              - text: level 3
+            - generic [ref=e674]:
+              - text: SIRA
+              - text: certificate
+            - generic [ref=e678]:
+              - text: CERT-In
+              - text: certificate
+            - generic [ref=e682]:
+              - text: ISO 9001, 14001
+              - text: and 27001
+        - generic [ref=e687]:
+          - heading "Partner with i2V for smart surveillance solutions" [level=3] [ref=e690]
+          - paragraph [ref=e693]: Join a growing community of technology leaders building smarter, more secure solutions together. At i2V, we believe innovation thrives through collaboration—without limits. Let’s shape the future of surveillance, together.
+          - link "Join our partner community" [ref=e697] [cursor=pointer]:
+            - /url: https://www.i2vsys.com/our-partners
+        - generic [ref=e699]:
+          - heading "Our technology partners" [level=6] [ref=e701]
+          - generic [ref=e720]:
+            - link "Become a technology partner" [ref=e721] [cursor=pointer]:
+              - /url: https://www.i2vsys.com/our-partners/#techsection
+            - link "View all technology partners" [ref=e722] [cursor=pointer]:
+              - /url: https://www.i2vsys.com/partners/technology-partners/
+        - generic [ref=e729]:
+          - generic [ref=e730]:
+            - heading "i2V insights, news & video security updates" [level=3] [ref=e731]
+            - paragraph [ref=e733]: Explore the latest from i2V — blogs, press releases, webinars, events, and industry insights.
+          - generic [ref=e735]:
+            - 'link "Securing critical infrastructure in 2026: from oil & gas to smart cities Industry solutions Securing critical infrastructure in 2026: from oil & gas to smart cities i2V systems Product marketing manager 9 April 2025 Apr 09, 2025 tertiary Jagdish" [ref=e737] [cursor=pointer]':
+              - /url: https://www.i2vsys.com/newsroom/securing-critical-infrastructure-in-2026-from-oil-gas-to-smart-cities/
+              - generic [ref=e738]:
+                - 'img "Securing critical infrastructure in 2026: from oil & gas to smart cities" [ref=e740]'
+                - generic [ref=e741]:
+                  - list [ref=e742]:
+                    - listitem [ref=e743]:
+                      - generic [ref=e744]: Industry solutions
+                  - 'heading "Securing critical infrastructure in 2026: from oil & gas to smart cities" [level=4] [ref=e745]'
+                  - paragraph [ref=e747]: i2V systems Product marketing manager 9 April 2025
+                  - paragraph [ref=e749]:
+                    - generic [ref=e750]: Apr 09, 2025
+                    - generic [ref=e751]:
+                      - img "tertiary" [ref=e753]
+                      - text: Jagdish
+            - generic [ref=e755]:
+              - 'link "Passenger safety in a changing world: the role of intelligent surveillance in aviation and transportation Passenger safety in a changing world: the role of intelligent surveillance in aviation and transportation Dec 14, 2025 tertiary Jagdish" [ref=e756] [cursor=pointer]':
+                - /url: https://www.i2vsys.com/newsroom/passenger-safety-in-a-changing-world-the-role-of-intelligent-surveillance-in-aviation-and-transportation/
+                - 'img "Passenger safety in a changing world: the role of intelligent surveillance in aviation and transportation" [ref=e758]'
+                - generic [ref=e759]:
+                  - 'heading "Passenger safety in a changing world: the role of intelligent surveillance in aviation and transportation" [level=5] [ref=e760]'
+                  - paragraph [ref=e762]:
+                    - generic [ref=e763]: Dec 14, 2025
+                    - generic [ref=e764]:
+                      - img "tertiary" [ref=e766]
+                      - text: Jagdish
+              - 'link "Modern border security in a changing world: the role of intelligent surveillance Modern border security in a changing world: the role of intelligent surveillance Feb 21, 2026 tertiary i2V Systems" [ref=e767] [cursor=pointer]':
+                - /url: https://www.i2vsys.com/newsroom/modern-border-security-in-a-changing-world-the-role-of-intelligent-surveillance/
+                - 'img "Modern border security in a changing world: the role of intelligent surveillance" [ref=e769]'
+                - generic [ref=e770]:
+                  - 'heading "Modern border security in a changing world: the role of intelligent surveillance" [level=5] [ref=e771]'
+                  - paragraph [ref=e773]:
+                    - generic [ref=e774]: Feb 21, 2026
+                    - generic [ref=e775]:
+                      - img "tertiary" [ref=e777]
+                      - text: i2V Systems
+        - generic [ref=e781]:
+          - generic [ref=e782]:
+            - heading "Get started with i2V’s intelligent video surveillance" [level=3] [ref=e784]
+            - paragraph [ref=e786]: Protect what matters with an advanced video security platform that brings everything together—intelligence, scale, and real-time control.
+          - generic [ref=e789]:
+            - link "Contact us" [ref=e790] [cursor=pointer]:
+              - /url: https://www.i2vsys.com/contact-us/
+            - link "Explore i2V’s solutions" [ref=e791] [cursor=pointer]:
+              - /url: https://www.i2vsys.com/products
+      - generic [ref=e795]:
+        - generic [ref=e797]:
+          - list [ref=e799]:
+            - listitem [ref=e800]:
+              - heading "Products" [level=3]
+            - list [ref=e802]:
+              - listitem [ref=e803]:
+                - link "i2V VMS" [ref=e804] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products/video-management-software/
+              - listitem [ref=e805]:
+                - link "AI Based Video Analytics / VCA" [ref=e806] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products/ai-powered-video-analytics/
+              - listitem [ref=e807]:
+                - link "Command and Control (ICCC / PSIM)" [ref=e808] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products/integrated-command-and-control-center/
+              - listitem [ref=e809]:
+                - link "Central Monitoring Software (CMS)" [ref=e810] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products/central-monitoring-system/
+              - listitem [ref=e811]:
+                - link "FRS" [ref=e812] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products/face-recognition-software/
+              - listitem [ref=e813]:
+                - link "ITMS / ITS" [ref=e814] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products/intelligent-traffic-management-system/
+              - listitem [ref=e815]:
+                - link "ANPR / LPR" [ref=e816] [cursor=pointer]:
+                  - /url: https://www.i2vsys.com/products/automatic-number-plate-recognition/
+          - generic [ref=e818]:
+            - list [ref=e820]:
+              - listitem [ref=e821]:
+                - heading "Industries" [level=3]
+              - list [ref=e823]:
+                - listitem [ref=e824]:
+                  - link "Oil and gas" [ref=e825] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/industries/oil-and-gas/
+                - listitem [ref=e826]:
+                  - link "Energy" [ref=e827] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/industries/energy/
+                - listitem [ref=e828]:
+                  - link "Industrial" [ref=e829] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/industries/industrial/
+                - listitem [ref=e830]:
+                  - link "Transportation" [ref=e831] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/industries/transportation/
+                - listitem [ref=e832]:
+                  - link "Smart cities" [ref=e833] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/industries/smart-cities/
+                - listitem [ref=e834]:
+                  - link "Airport" [ref=e835] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/industries/airport/
+                - listitem [ref=e836]:
+                  - link "Law-enforcement" [ref=e837] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/industries/law-enforcement/
+                - listitem [ref=e838]:
+                  - link "Retail" [ref=e839] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/industries/retail/
+                - listitem [ref=e840]:
+                  - link "Railway & metro" [ref=e841] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/industries/railway-metro/
+                - listitem [ref=e842]:
+                  - link "Education" [ref=e843] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/industries/education/
+                - listitem [ref=e844]:
+                  - link "Healthcare" [ref=e845] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/industries/healthcare/
+                - listitem [ref=e846]:
+                  - link "Hospitality" [ref=e847] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/industries/hospitality/
+                - listitem [ref=e848]:
+                  - link "Financial institutions" [ref=e849] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/industries/financial-institutions/
+            - list [ref=e851]:
+              - listitem [ref=e852]:
+                - heading "Company" [level=3]
+              - list [ref=e854]:
+                - listitem [ref=e855]:
+                  - link "Why i2V?" [ref=e856] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/why-choose-i2v/
+                - listitem [ref=e857]:
+                  - link "Our partners" [ref=e858] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/our-partners/
+                - listitem [ref=e859]:
+                  - link "Blogs and news" [ref=e860] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/newsroom-blog/
+                - listitem [ref=e861]:
+                  - link "Careers" [ref=e862] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/career/
+                - listitem [ref=e863]:
+                  - link "Contact us" [ref=e864] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/contact-us/
+            - list [ref=e866]:
+              - listitem [ref=e867]:
+                - heading "Resources" [level=3]
+              - list [ref=e869]:
+                - listitem [ref=e870]:
+                  - link "Resource" [ref=e871] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/resource-center/
+                - listitem [ref=e872]:
+                  - link "Blogs" [ref=e873] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/newsroom-blog/
+                - listitem [ref=e874]:
+                  - link "Sitemap" [ref=e875] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/html-sitemap/
+            - list [ref=e877]:
+              - listitem [ref=e878]:
+                - heading "Legal" [level=3]
+              - list [ref=e880]:
+                - listitem [ref=e881]:
+                  - link "Terms of service" [ref=e882] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/terms-of-use/
+                - listitem [ref=e883]:
+                  - link "Privacy policy" [ref=e884] [cursor=pointer]:
+                    - /url: https://www.i2vsys.com/privacy-policy/
+        - paragraph [ref=e888]:
+          - img "i2V" [ref=e890]
+          - generic [ref=e891]:
+            - strong [ref=e892]: "Legal disclaimer:"
+            - text: Performance metrics, deployment figures, analytics outputs, and results displayed on this website are based on specific implementation scenarios, controlled environments, or selected use cases. Actual performance may vary depending on hardware specifications, camera quality, network conditions, system configuration, site environment, lighting conditions, operational workflows, and other external factors. All images, videos, illustrations, dashboards, maps, and demonstrations shown on this website are for representational, illustrative, and informational purposes only. They are intended to showcase product capabilities and possible deployment scenarios. Unless explicitly stated, no visual content should be interpreted as depicting an actual customer site, live project, installation, location, organization, or real-world event. Any names, layouts, footage, environments, or scenarios presented may be simulated, sample-based, licensed, generic, or recreated for demonstration purposes. Similarity to any actual site, entity, or project is purely coincidental. i2V systems accepts no responsibility and shall not be held liable for any errors, omissions, misuse, assumptions, or misinterpretation of product outputs, website content, visuals, or performance claims.
+        - generic [ref=e894]:
+          - img "i2V" [ref=e896]
+          - paragraph [ref=e898]: © 2026 all rights reserved. i2V systems pvt. ltd.
+          - generic [ref=e899]:
+            - link "link" [ref=e900] [cursor=pointer]:
+              - /url: https://in.linkedin.com/company/i2v-systems
+              - img "link" [ref=e901]
+            - link "youtube" [ref=e902] [cursor=pointer]:
+              - /url: https://www.youtube.com/@i2vsystems120
+              - img "youtube" [ref=e903]
+  - generic [ref=e904]: desktop

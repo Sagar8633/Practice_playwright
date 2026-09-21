@@ -1,0 +1,251 @@
+[
+{
+  "id": "L2-Q01", "level": 2, "difficulty": "easy",
+  "title": "How many events per camera",
+  "scenario": "The daily health report starts with a simple question: how much is each camera producing?",
+  "task": "Return VideoSourceId and the number of events for each, as event_count. Exclude events with no camera. Sort by event_count descending, then VideoSourceId.",
+  "tables": ["Events"],
+  "skills": ["GROUP BY", "COUNT", "ORDER BY", "IS NOT NULL"],
+  "expected": "One row per camera that has produced events, busiest first.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Counting 'per something' always means GROUP BY that something.",
+    "Every non-aggregated column in the SELECT list must appear in GROUP BY.",
+    "Exclude the camera-less events with a WHERE clause before grouping.",
+    "SELECT \"VideoSourceId\", count(*) AS event_count FROM \"Events\" WHERE \"VideoSourceId\" IS NOT NULL GROUP BY \"VideoSourceId\"."
+  ],
+  "solution": "SELECT \"VideoSourceId\", count(*) AS event_count\nFROM \"Events\"\nWHERE \"VideoSourceId\" IS NOT NULL\nGROUP BY \"VideoSourceId\"\nORDER BY event_count DESC, \"VideoSourceId\";",
+  "explanation": {
+    "breakdown": "WHERE filters rows, then GROUP BY collapses them into one row per distinct VideoSourceId, then count(*) counts the rows in each group.",
+    "why": "The result includes camera IDs that no longer exist in VideoSources — this query cannot tell you that, which is exactly why Level 3 joins to the camera table.",
+    "commonMistake": "Selecting a column that is neither grouped nor aggregated. PostgreSQL rejects it outright; MySQL historically allowed it and returned arbitrary values.",
+    "performance": "count(*) per group over 37,000 rows is a hash aggregate. The index on VideoSourceId helps the filter, not the grouping.",
+    "qaRelevance": "Per-camera volume is the baseline metric for spotting a camera that has stopped or gone haywire."
+  }
+},
+{
+  "id": "L2-Q02", "level": 2, "difficulty": "easy",
+  "title": "Events versus distinct tracks",
+  "scenario": "Each detection should have its own TrackId. If a camera reports far more events than tracks, something is retransmitting.",
+  "task": "Return the total number of events as total_events and the number of distinct TrackId values as distinct_tracks, in a single row.",
+  "tables": ["Events"],
+  "skills": ["COUNT", "COUNT DISTINCT"],
+  "expected": "One row, two numbers. They differ — total_events is larger.",
+  "checkColumnNames": true,
+  "hints": [
+    "Two aggregates in one SELECT, with no GROUP BY, produce a single summary row.",
+    "count(*) counts rows; you need a second count that ignores repeats.",
+    "count(DISTINCT column) counts unique non-null values.",
+    "SELECT count(*) AS total_events, count(DISTINCT \"TrackId\") AS distinct_tracks FROM \"Events\";"
+  ],
+  "solution": "SELECT count(*)                    AS total_events,\n       count(DISTINCT \"TrackId\")  AS distinct_tracks\nFROM \"Events\";",
+  "explanation": {
+    "breakdown": "An aggregate with no GROUP BY treats the whole table as one group, producing exactly one row.",
+    "why": "The gap between these two numbers is the number of events sharing a track. Some sharing is legitimate — one track can produce several events — but a sudden change in the ratio means a delivery bug.",
+    "commonMistake": "count(DISTINCT a, b) is not valid PostgreSQL. To count distinct combinations use count(DISTINCT (a, b)) with the row constructor, or count(DISTINCT ROW(a,b)).",
+    "performance": "count(DISTINCT ...) needs to sort or hash all values, so it is markedly more expensive than count(*). On a large Events table this is a real cost.",
+    "qaRelevance": "This two-number comparison is the cheapest possible duplicate-detection smoke test, and it belongs in a nightly data-quality suite."
+  }
+},
+{
+  "id": "L2-Q03", "level": 2, "difficulty": "easy",
+  "title": "Event mix by type",
+  "scenario": "Product wants to know which analytics are actually being exercised in the field.",
+  "task": "Return EventName and its count as n, ordered by n descending then EventName. Only include event names occurring more than 1000 times.",
+  "tables": ["Events"],
+  "skills": ["GROUP BY", "COUNT", "HAVING", "ORDER BY"],
+  "expected": "The high-volume event types only.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Group by the event name and count each group.",
+    "You need to filter on the count itself, which is not possible in WHERE.",
+    "WHERE runs before grouping, so the count does not exist yet. HAVING runs after.",
+    "GROUP BY \"EventName\" HAVING count(*) > 1000."
+  ],
+  "solution": "SELECT \"EventName\", count(*) AS n\nFROM \"Events\"\nGROUP BY \"EventName\"\nHAVING count(*) > 1000\nORDER BY n DESC, \"EventName\";",
+  "explanation": {
+    "breakdown": "Logical order: FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY. HAVING is the only place a filter can see an aggregate.",
+    "why": "WHERE count(*) > 1000 is a syntax error, and it is the single most common beginner mistake in aggregation.",
+    "commonMistake": "Trying to reference the alias n inside HAVING. PostgreSQL evaluates HAVING before the select list, so you must repeat count(*).",
+    "performance": "HAVING does not reduce the work of grouping — every group is still formed, then discarded. Filtering in WHERE, when possible, is cheaper.",
+    "qaRelevance": "Event-mix drift between releases is a strong regression signal: if Face_Recognition suddenly halves as a share of traffic, something changed."
+  }
+},
+{
+  "id": "L2-Q04", "level": 2, "difficulty": "medium",
+  "title": "Average ingestion latency per manager",
+  "scenario": "Events carry both the time they occurred and the time the manager received them. You want the average delay, grouped by manager, as a health indicator.",
+  "task": "For each AnalyticManagerId, return the number of events as n and the average of (ReceivedTime - Time) rounded to 0 decimal places as avg_latency_ms. Exclude rows where AnalyticManagerId is NULL. Sort by avg_latency_ms descending.",
+  "tables": ["Events"],
+  "skills": ["GROUP BY", "AVG", "arithmetic", "ROUND"],
+  "expected": "One row per manager with its average latency in milliseconds.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "The latency of one event is the difference between two bigint columns.",
+    "You can aggregate an expression, not just a bare column: avg(\"ReceivedTime\" - \"Time\").",
+    "avg() on integers returns numeric, which round() accepts directly.",
+    "SELECT \"AnalyticManagerId\", count(*) AS n, round(avg(\"ReceivedTime\" - \"Time\")) AS avg_latency_ms ... GROUP BY \"AnalyticManagerId\"."
+  ],
+  "solution": "SELECT \"AnalyticManagerId\",\n       count(*)                                AS n,\n       round(avg(\"ReceivedTime\" - \"Time\"))     AS avg_latency_ms\nFROM \"Events\"\nWHERE \"AnalyticManagerId\" IS NOT NULL\nGROUP BY \"AnalyticManagerId\"\nORDER BY avg_latency_ms DESC;",
+  "explanation": {
+    "breakdown": "The aggregate is applied to a computed expression. Each row's latency is computed first, then averaged per group.",
+    "why": "Because both columns are epoch milliseconds, their difference is a duration in milliseconds — no date functions needed.",
+    "commonMistake": "round(avg(x), 2) fails if avg returns double precision; here the inputs are bigint so avg returns numeric and round works with or without a precision argument.",
+    "alternative": "percentile_cont(0.95) WITHIN GROUP (ORDER BY \"ReceivedTime\" - \"Time\") gives a p95, which is far more useful than a mean for latency.",
+    "performance": "A full scan and hash aggregate. Unavoidable without a pre-aggregated table.",
+    "qaRelevance": "Averages hide outliers. One camera in this dataset reports latency of about 45 seconds and another reports negative latency; neither is visible in a manager-level mean. Level 5 and 7 dig them out."
+  }
+},
+{
+  "id": "L2-Q05", "level": 2, "difficulty": "medium",
+  "title": "Confidence statistics for face recognition",
+  "scenario": "The recognition confidence lives inside the JSON payload. QA wants minimum, maximum and average confidence across all Face_Recognition events.",
+  "task": "For EventName = 'Face_Recognition', return the count as n, and the minimum, maximum and average confidence from _EventProperties, rounded to 3 decimals, as min_conf, max_conf and avg_conf.",
+  "tables": ["Events"],
+  "skills": ["jsonb", "MIN", "MAX", "AVG", "casting"],
+  "expected": "A single row summarising recognition confidence.",
+  "checkColumnNames": true,
+  "hints": [
+    "The confidence is a key inside the _EventProperties jsonb column.",
+    "The ->> operator extracts a value as text; -> extracts it as jsonb.",
+    "Text cannot be averaged, so cast it: (\"_EventProperties\" ->> 'confidence')::numeric.",
+    "Wrap that expression in min(), max() and avg(), and round the average."
+  ],
+  "solution": "SELECT count(*) AS n,\n       min((\"_EventProperties\" ->> 'confidence')::numeric)          AS min_conf,\n       max((\"_EventProperties\" ->> 'confidence')::numeric)          AS max_conf,\n       round(avg((\"_EventProperties\" ->> 'confidence')::numeric), 3) AS avg_conf\nFROM \"Events\"\nWHERE \"EventName\" = 'Face_Recognition';",
+  "explanation": {
+    "breakdown": "->> returns text; ::numeric casts it so numeric aggregates apply. The parentheses around the extraction are required before the cast binds.",
+    "why": "jsonb is where all the analytic detail lives in this schema. Extracting and casting is the single most valuable jsonb skill for this database.",
+    "commonMistake": "Using -> instead of ->>. -> returns jsonb, and jsonb cannot be cast straight to numeric in older versions and compares as JSON, not as a number, giving wrong min/max.",
+    "alternative": "PostgreSQL 14+ also supports \"_EventProperties\"['confidence'] subscripting, which returns jsonb like ->.",
+    "performance": "This scans every Face_Recognition row and parses JSON for each. A production system would add an expression index on ((\"_EventProperties\"->>'confidence')::numeric) or promote the value to a real column.",
+    "qaRelevance": "Recognition confidence is the core quality metric of a face pipeline. Tracking min/max/avg per release is how you detect a model regression."
+  }
+},
+{
+  "id": "L2-Q06", "level": 2, "difficulty": "medium",
+  "title": "Cameras with suspiciously low volume",
+  "scenario": "A camera producing almost nothing is usually broken rather than quiet. You want the low-volume tail.",
+  "task": "Return VideoSourceId and count as n for cameras with fewer than 700 events, excluding NULL camera ids. Sort by n ascending then VideoSourceId.",
+  "tables": ["Events"],
+  "skills": ["GROUP BY", "HAVING", "COUNT", "ORDER BY"],
+  "expected": "The quietest cameras, including the one that stopped reporting entirely.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Same shape as counting per camera, with a threshold applied to the count.",
+    "The threshold applies to an aggregate, so it belongs in HAVING.",
+    "Filter out NULL camera ids in WHERE, before grouping.",
+    "GROUP BY \"VideoSourceId\" HAVING count(*) < 700."
+  ],
+  "solution": "SELECT \"VideoSourceId\", count(*) AS n\nFROM \"Events\"\nWHERE \"VideoSourceId\" IS NOT NULL\nGROUP BY \"VideoSourceId\"\nHAVING count(*) < 700\nORDER BY n ASC, \"VideoSourceId\";",
+  "explanation": {
+    "breakdown": "WHERE removes camera-less rows before grouping; HAVING removes whole groups after counting. Both filters are needed and they are not interchangeable.",
+    "why": "This finds cameras with low output but cannot find cameras with zero output — a camera with no rows at all forms no group. That blind spot is the subject of a Level 3 question.",
+    "commonMistake": "Believing this query finds 'dead' cameras. It finds quiet ones. Completely dead cameras are invisible to any query that starts FROM Events.",
+    "qaRelevance": "The distinction between 'low' and 'absent' is exactly the distinction between an inner join and a left join, and it is the most valuable idea in the whole course."
+  }
+},
+{
+  "id": "L2-Q07", "level": 2, "difficulty": "medium",
+  "title": "Pipeline load per server",
+  "scenario": "Capacity planning wants to know how many pipelines each analytic server is carrying, and their total allowed camera capacity.",
+  "task": "For each AnalyticServerId return the number of pipelines as pipeline_count and the sum of MaxVideoSourceAllowed as total_capacity. Sort by total_capacity descending then AnalyticServerId.",
+  "tables": ["PipeLines"],
+  "skills": ["GROUP BY", "COUNT", "SUM", "ORDER BY"],
+  "expected": "One row per server that owns at least one pipeline.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Group the pipelines by their owning server.",
+    "Two different aggregates over the same group: one counting rows, one summing a column.",
+    "SUM ignores NULLs; MaxVideoSourceAllowed is NOT NULL here so that does not bite.",
+    "SELECT \"AnalyticServerId\", count(*) AS pipeline_count, sum(\"MaxVideoSourceAllowed\") AS total_capacity ... GROUP BY \"AnalyticServerId\"."
+  ],
+  "solution": "SELECT \"AnalyticServerId\",\n       count(*)                        AS pipeline_count,\n       sum(\"MaxVideoSourceAllowed\")    AS total_capacity\nFROM \"PipeLines\"\nGROUP BY \"AnalyticServerId\"\nORDER BY total_capacity DESC, \"AnalyticServerId\";",
+  "explanation": {
+    "breakdown": "Several aggregates can share one GROUP BY; each is computed over the same set of grouped rows.",
+    "why": "count(*) counts rows including those with NULL columns; sum() skips NULLs entirely and returns NULL for an all-NULL group, not 0.",
+    "commonMistake": "Assuming sum() of an empty or all-NULL group is zero. Use coalesce(sum(x), 0) when zero is the meaningful answer.",
+    "qaRelevance": "Declared capacity here is only a number in a column — nothing enforces it. Level 3 compares it against actual assignments and finds a pipeline over its limit."
+  }
+},
+{
+  "id": "L2-Q08", "level": 2, "difficulty": "medium",
+  "title": "Recognition outcomes",
+  "scenario": "A face event either matched a person or did not. You want the split, so you can compute a recognition success rate.",
+  "task": "For Face_Recognition events, group by the 'matched' flag from _EventProperties and return matched_flag (as text) and count as n. Sort by matched_flag.",
+  "tables": ["Events"],
+  "skills": ["jsonb", "GROUP BY", "COUNT"],
+  "expected": "Two rows: true and false, with the matched count far exceeding the unmatched.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "You can GROUP BY any expression, including a jsonb extraction.",
+    "Extract with ->> to get the flag as text.",
+    "The same expression must appear in both the SELECT list and the GROUP BY clause.",
+    "SELECT \"_EventProperties\" ->> 'matched' AS matched_flag, count(*) AS n ... GROUP BY \"_EventProperties\" ->> 'matched'."
+  ],
+  "solution": "SELECT \"_EventProperties\" ->> 'matched' AS matched_flag,\n       count(*)                           AS n\nFROM \"Events\"\nWHERE \"EventName\" = 'Face_Recognition'\nGROUP BY \"_EventProperties\" ->> 'matched'\nORDER BY matched_flag;",
+  "explanation": {
+    "breakdown": "Grouping by an expression is allowed anywhere grouping by a column is. PostgreSQL also lets you write GROUP BY 1 to refer to the first select-list item.",
+    "why": "->> returns the JSON boolean as the text 'true' or 'false', which sorts and groups as text.",
+    "commonMistake": "Expecting a real boolean. Cast with ::boolean if you need one, and be ready for NULL when the key is absent.",
+    "alternative": "count(*) FILTER (WHERE (\"_EventProperties\"->>'matched')::boolean) gives the matched count on a single row instead of two rows — see Level 5.",
+    "qaRelevance": "Success rate is the headline quality number for a recognition pipeline. Computing it per camera, as Level 5 does, is how you find the one bad camera."
+  }
+},
+{
+  "id": "L2-Q09", "level": 2, "difficulty": "hard",
+  "title": "Busiest hour of the day, fleet-wide",
+  "scenario": "Load testing needs a realistic peak-hour profile. You need the event distribution across hours of the day.",
+  "task": "Return the hour of day (0-23) as hour_of_day and the event count as n, across all events. Sort by n descending, then hour_of_day. Return only the top 5.",
+  "tables": ["Events"],
+  "skills": ["GROUP BY", "COUNT", "epoch conversion", "EXTRACT", "LIMIT"],
+  "expected": "Five rows showing the busiest hours.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Time is epoch milliseconds, so it must be converted before any date function will work.",
+    "to_timestamp() expects seconds, so divide by 1000.",
+    "EXTRACT(HOUR FROM ts) pulls the hour out of a timestamp.",
+    "GROUP BY extract(hour from to_timestamp(\"Time\"/1000)) and select the same expression."
+  ],
+  "solution": "SELECT extract(hour FROM to_timestamp(\"Time\" / 1000))::int AS hour_of_day,\n       count(*)                                            AS n\nFROM \"Events\"\nGROUP BY 1\nORDER BY n DESC, hour_of_day\nLIMIT 5;",
+  "explanation": {
+    "breakdown": "\"Time\"/1000 converts milliseconds to seconds; to_timestamp turns that into a timestamptz; extract pulls out the hour. GROUP BY 1 refers to the first select-list expression, avoiding repetition.",
+    "why": "Integer division truncates, which is fine here since we only need the hour. If you needed sub-second precision you would divide by 1000.0.",
+    "commonMistake": "Forgetting the /1000 entirely. to_timestamp of a millisecond value produces a date roughly 50,000 years in the future, and the query returns nonsense without erroring.",
+    "alternative": "date_part('hour', ...) is the function-call form of EXTRACT and behaves identically.",
+    "performance": "Converting every row's timestamp prevents index use. For repeated reporting, a generated column or an expression index pays for itself.",
+    "qaRelevance": "A load profile taken from real traffic is far more credible than a flat synthetic one, and peak-hour behaviour is where systems actually fail."
+  }
+},
+{
+  "id": "L2-Q10", "level": 2, "difficulty": "hard",
+  "title": "Cameras with more than one configuration row",
+  "scenario": "Each camera should normally have a single configuration. Extra rows are either intentional profiles or leftovers from a failed edit.",
+  "task": "Return VideoSourceId and the number of configuration rows as config_count for cameras having more than one row in VideoSourceConfigs. Sort by config_count descending then VideoSourceId.",
+  "tables": ["VideoSourceConfigs"],
+  "skills": ["GROUP BY", "HAVING", "COUNT"],
+  "expected": "Three cameras, each with two configuration rows.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Group the configuration rows by the camera they belong to.",
+    "Count the rows in each group.",
+    "Keep only groups larger than one, which is a HAVING filter.",
+    "GROUP BY \"VideoSourceId\" HAVING count(*) > 1."
+  ],
+  "solution": "SELECT \"VideoSourceId\", count(*) AS config_count\nFROM \"VideoSourceConfigs\"\nGROUP BY \"VideoSourceId\"\nHAVING count(*) > 1\nORDER BY config_count DESC, \"VideoSourceId\";",
+  "explanation": {
+    "breakdown": "The canonical duplicate-detection shape: group by what should be unique, count, keep groups above one.",
+    "why": "Multiple configurations are not automatically wrong — VideoSources.activeConfigId names which one is live. What matters is whether the active one actually exists, which Level 3 checks.",
+    "commonMistake": "Reporting these as duplicates without checking activeConfigId. Context decides whether a repeat is a bug.",
+    "alternative": "Adding array_agg(\"Id\") shows exactly which configuration rows are involved, which is what you want in a defect report.",
+    "qaRelevance": "This GROUP BY ... HAVING count(*) > 1 pattern is the workhorse of data-quality testing and applies to any column combination that is supposed to be unique."
+  }
+}
+]

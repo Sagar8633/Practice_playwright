@@ -1,0 +1,150 @@
+//@version=6
+// SRK Doji Break 1:3 + WINNER ANALYSIS — same entries as v5, plus a table that
+// breaks down win rate by direction / trend-alignment / session / doji-size so we
+// can see what the winning trades have in common and filter the rest out.
+strategy("SRK Doji Break 1:3 + Analysis", overlay=true, initial_capital=100000,
+     default_qty_type=strategy.percent_of_equity, default_qty_value=10,
+     commission_type=strategy.commission.percent, commission_value=0.03, pyramiding=0)
+
+rr        = input.float(3.0,  "Reward : Risk")
+bodyMax   = input.float(0.10, "Max body / range (doji)")
+wickMin   = input.float(0.60, "Min dominant wick / range")
+oppMax    = input.float(0.15, "Max opposite wick / range")
+validBars = input.int(3,      "Breakout valid for N bars")
+
+ema200 = ta.ema(close, 200)
+atr    = ta.atr(14)
+
+rng  = high - low
+body = math.abs(close - open)
+upW  = high - math.max(open, close)
+loW  = math.min(open, close) - low
+
+isDoji     = rng > 0 and body <= bodyMax * rng
+dragonfly  = isDoji and loW >= wickMin * rng and upW <= oppMax * rng
+gravestone = isDoji and upW >= wickMin * rng and loW <= oppMax * rng
+
+var float lEntry = na
+var float lSL    = na
+var float lTP    = na
+var int   lBars  = 0
+var float sEntry = na
+var float sSL    = na
+var float sTP    = na
+var int   sBars  = 0
+
+if dragonfly
+    lEntry := high
+    lSL    := low
+    lTP    := high + rr * (high - low)
+    lBars  := validBars
+if gravestone
+    sEntry := low
+    sSL    := high
+    sTP    := low - rr * (high - low)
+    sBars  := validBars
+
+if lBars > 0 and strategy.position_size == 0
+    strategy.entry("L", strategy.long, stop=lEntry)
+lBars := math.max(lBars - 1, 0)
+if lBars == 0
+    strategy.cancel("L")
+
+if sBars > 0 and strategy.position_size == 0
+    strategy.entry("S", strategy.short, stop=sEntry)
+sBars := math.max(sBars - 1, 0)
+if sBars == 0
+    strategy.cancel("S")
+
+if strategy.position_size > 0
+    strategy.exit("L-x", from_entry="L", stop=lSL, limit=lTP)
+if strategy.position_size < 0
+    strategy.exit("S-x", from_entry="S", stop=sSL, limit=sTP)
+
+// ---- capture features at each fill, keyed by entry time ----
+var tArr     = array.new_int()
+var dirArr   = array.new_int()
+var sessArr  = array.new_int()
+var trendArr = array.new_int()
+var sizeArr  = array.new_int()
+
+flatToPos = strategy.position_size != 0 and strategy.position_size[1] == 0
+if flatToPos
+    isLong = strategy.position_size > 0
+    array.push(tArr,   time)
+    array.push(dirArr, isLong ? 1 : 0)
+    h = hour(time, "UTC")
+    sess = (h >= 7 and h < 12) ? 1 : (h >= 12 and h < 21) ? 2 : 0   // 1=London 2=NY 0=Asia
+    array.push(sessArr, sess)
+    aligned = ((isLong and close > ema200) or (not isLong and close < ema200)) ? 1 : 0
+    array.push(trendArr, aligned)
+    r = isLong ? (lEntry - lSL) : (sSL - sEntry)
+    array.push(sizeArr, r >= atr ? 1 : 0)   // 1 = big doji (>= 1 ATR)
+
+row(t, rIdx, nm, tr, wn) =>
+    table.cell(t, 0, rIdx, nm, text_size=size.normal, text_halign=text.align_left, bgcolor=color.white, text_color=color.black)
+    table.cell(t, 1, rIdx, str.tostring(wn) + "/" + str.tostring(tr), text_size=size.normal, bgcolor=color.white, text_color=color.black)
+    table.cell(t, 2, rIdx, tr > 0 ? str.tostring(math.round(100.0 * wn / tr)) + "%" : "-", text_size=size.normal, bgcolor=color.new(color.yellow,60), text_color=color.black)
+
+var table t = table.new(position.middle_left, 3, 12, frame_width=2, frame_color=color.black, border_width=1, border_color=color.gray)
+
+if barstate.islast
+    n = strategy.closedtrades
+    int twT=0, twW=0, lgT=0, lgW=0, shT=0, shW=0
+    int alT=0, alW=0, ctT=0, ctW=0
+    int asT=0, asW=0, loT=0, loW=0, nyT=0, nyW=0
+    int bgT=0, bgW=0, smT=0, smW=0, un=0
+    for i = 0 to n - 1
+        et  = strategy.closedtrades.entry_time(i)
+        w   = strategy.closedtrades.profit(i) > 0 ? 1 : 0
+        idx = array.indexof(tArr, et)
+        twT += 1
+        twW += w
+        if idx >= 0
+            if array.get(dirArr, idx) == 1
+                lgT += 1
+                lgW += w
+            else
+                shT += 1
+                shW += w
+            if array.get(trendArr, idx) == 1
+                alT += 1
+                alW += w
+            else
+                ctT += 1
+                ctW += w
+            se = array.get(sessArr, idx)
+            if se == 1
+                loT += 1
+                loW += w
+            else if se == 2
+                nyT += 1
+                nyW += w
+            else
+                asT += 1
+                asW += w
+            if array.get(sizeArr, idx) == 1
+                bgT += 1
+                bgW += w
+            else
+                smT += 1
+                smW += w
+        else
+            un += 1
+    table.cell(t, 0, 0, "Segment", bgcolor=color.gray, text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 0, "W/T",     bgcolor=color.gray, text_color=color.white, text_size=size.small)
+    table.cell(t, 2, 0, "Win%",    bgcolor=color.gray, text_color=color.white, text_size=size.small)
+    row(t, 1,  "ALL",           twT, twW)
+    row(t, 2,  "Long",          lgT, lgW)
+    row(t, 3,  "Short",         shT, shW)
+    row(t, 4,  "Trend-aligned", alT, alW)
+    row(t, 5,  "Counter-trend", ctT, ctW)
+    row(t, 6,  "Asia sess",     asT, asW)
+    row(t, 7,  "London sess",   loT, loW)
+    row(t, 8,  "NY sess",       nyT, nyW)
+    row(t, 9,  "Big doji>=ATR", bgT, bgW)
+    row(t, 10, "Small doji",    smT, smW)
+    row(t, 11, "Unmatched",     un,  0)
+
+plotshape(dragonfly,  "Dragonfly",  shape.triangleup,   location.belowbar, color.new(color.green,0), size=size.tiny)
+plotshape(gravestone, "Gravestone", shape.triangledown, location.abovebar, color.new(color.red,0),   size=size.tiny)

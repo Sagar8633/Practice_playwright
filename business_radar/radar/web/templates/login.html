@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Sign in - business_radar{% endblock %}
+{% block content %}
+<div class="auth">
+  <div class="panel stack">
+    <h1>business_radar</h1>
+    <p class="small">This app runs on 127.0.0.1 and is not reachable from the internet.
+      The password is here because the laptop leaves the building, not because the port does.</p>
+    {% if error %}<div class="flash bad" role="alert">{{ error }}</div>{% endif %}
+    <form method="post" class="stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="username" required autofocus>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password"
+               autocomplete="current-password" required>
+      </div>
+      <button class="btn primary" type="submit">Sign in</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

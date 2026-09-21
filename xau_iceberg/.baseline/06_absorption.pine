@@ -1,0 +1,540 @@
+// ============================================================================
+//  SECTION 6 : ABSORPTION + ICEBERG ZONES
+//
+//  THIS SECTION OWNS THE ONE array<IcebergZone> AND THE ONE ZONE LIFECYCLE IN
+//  THE ENTIRE FILE. Seven modules originally carried their own zone birth,
+//  invalidation and touch rules; a zone could be simultaneously alive in one,
+//  dead in another and never created in a third. Everything below is the single
+//  source of truth: SECTION 9 links its BOS clock to the exported zone id,
+//  SECTION 10 retests the exported bounds, SECTION 11 anchors a stop on them,
+//  SECTION 13 gates on `not zoneAlive`, SECTION 16 draws one box per live zone.
+//  No one else creates, ages, breaks or expires a zone.
+//
+//  THE EFFORT-VS-RESULT TEST, AND WHY IT IS NOT CIRCULAR
+//  A single bar's close-within-range cannot measure both "how hard the aggressor
+//  pushed" and "how little they got for it": with a CLV-derived delta proxy those
+//  two quantities are the SAME NUMBER, so "heavy selling that failed to push
+//  price down" is self-contradictory on one bar and the test degenerates into a
+//  tautology. This module therefore measures them over DIFFERENT WINDOWS:
+//
+//      EFFORT  = cumulative deltaProxy over the cluster's FIRST n-1 bars,
+//                normalised by the tick volume of those same bars
+//                -> a volume-weighted mean aggressor lean in [-1, +1]
+//      RESULT  = net displacement across the WHOLE cluster (all n bars),
+//                normalised by BOTH the total path traded and by the
+//                ATR x rvol move that much activity implied
+//
+//  The final bar of the cluster is excluded from the effort window on purpose:
+//  it is the bar that carries the rejection, and letting it vote on effort is
+//  what made the two measurements collapse into one.
+//
+//  EVERYTHING HERE IS A PROXY. TradingView exposes no order book and no bid/ask
+//  tape for spot XAUUSD, and `volume` is TICK COUNT. There is no way to see a
+//  hidden iceberg order from this data. What this module detects is a cluster
+//  where a lot of one-sided activity produced almost no price result and then
+//  reversed - a shape consistent with absorption. The user-facing word is
+//  "Potential", the number is a setup score, and neither is a probability.
+// ============================================================================
+
+G6A = "6 - Absorption"
+G6Z = "6 - Iceberg Zones"
+
+// ------------------------------------------------------------- 6.1 INPUTS
+i_absClusterBars = input.int(3, "Cluster bars", minval = 2, maxval = 8, group = G6A,
+     tooltip = "Consecutive CONFIRMED bars that form one absorption cluster. " +
+               "Minimum 2 and that is structural, not stylistic: the earlier bars " +
+               "carry the aggressor's EFFORT and the final bar carries the " +
+               "RESULT, and a 1-bar cluster would measure both on the same close. " +
+               "3 suits 1M/5M gold, 2 suits 15M. Larger clusters are steadier but " +
+               "start the zone later.",
+     display = display.none)
+i_absRvolThresh = input.float(1.50, "Relative tick-volume threshold", minval = 1.0,
+     maxval = 5.0, step = 0.05, group = G6A,
+     tooltip = "Mean relative TICK volume across the cluster. XAUUSD volume on " +
+               "TradingView is the number of price updates, not contracts, so " +
+               "this measures ACTIVITY, not size - re-tune it per broker feed. " +
+               "It is a veto AND a graded sub-score. On a feed with no volume at " +
+               "all the veto BYPASSES and the row is dropped from the score with " +
+               "the remaining weights renormalised, rather than scoring it 0 " +
+               "(which would silently disable the module) or 1 (which would " +
+               "invent participation that was never measured).",
+     display = display.none)
+i_absMaxProgress = input.float(0.35, "Max price progress (effort vs result)",
+     minval = 0.05, maxval = 0.90, step = 0.01, group = G6A,
+     tooltip = "Ceiling on what the aggressor NETTED, as a fraction of (a) the " +
+               "price path they traded through and (b) the ATR x rvol move their " +
+               "activity implied. The WORSE of the two is used, so both " +
+               "denominators must agree that effort produced no result. Lower is " +
+               "stricter: at 0.05 only a dead-stall cluster qualifies, at 0.90 " +
+               "almost any pullback does. The SCORE uses the absolute value, so a " +
+               "cluster that already ran hard in the zone's own direction is " +
+               "penalised too - there is nothing left there to absorb.",
+     display = display.none)
+i_absMinWick = input.float(0.33, "Min rejection wick (fraction of cluster range)",
+     minval = 0.10, maxval = 0.90, step = 0.01, group = G6A,
+     tooltip = "Cluster lower wick (bullish absorption) or upper wick (bearish) " +
+               "as a fraction of the cluster's whole high-low range. This is the " +
+               "veto that keeps the two directions mutually exclusive on the same " +
+               "cluster. Raising it demands a more violent rejection and produces " +
+               "far fewer zones; below ~0.25 a plain trend pullback qualifies.",
+     display = display.none)
+i_absLookback = input.int(8, "Prior-test lookback (bars)", minval = 4, maxval = 60,
+     group = G6A,
+     tooltip = "How far back to count bars that ALREADY probed this shelf and " +
+               "closed back out of it, excluding the cluster's own bars. Those " +
+               "prior tests are what separate a shelf from a single wick. Also " +
+               "sets the hard zone expiry (this x 8 bars). Too short and the test " +
+               "count is always 0; too long and ancient unrelated wicks count.",
+     display = display.none)
+i_absZoneAtr = input.float(0.60, "Zone thickness cap (x ATR)", minval = 0.10,
+     maxval = 4.0, step = 0.05, group = G6A,
+     tooltip = "Caps how thick the absorption shelf may be and centres the " +
+               "containment sub-score. The cluster is vetoed outright if its own " +
+               "range exceeds 1.5x this - a cluster that will not fit inside one " +
+               "and a half zone widths is volatility, not absorption. Thicker " +
+               "zones are easier to retest and give worse stops.",
+     display = display.none)
+i_absMinTests = input.int(2, "Prior tests for a full test score", minval = 1,
+     maxval = 10, group = G6A,
+     tooltip = "The number of prior probes that scores 0.5 on the test row. This " +
+               "is SOFT-SCORED, never a veto, and that is deliberate: as a hard " +
+               "minimum it deadlocks against the max-touches ceiling and the " +
+               "system emits nothing at all. Raise it to prefer well-tested " +
+               "shelves over fresh ones.",
+     display = display.none)
+i_absMinReact = input.float(0.50, "Min reaction to promote a zone (x ATR)",
+     minval = 0.10, maxval = 4.0, step = 0.05, group = G6A,
+     tooltip = "Stage-2 trigger: price must CLOSE this many ATR beyond the " +
+               "cluster's far extreme, in the absorption direction, within the " +
+               "reaction window. Measured on the CLOSE and from OUTSIDE the range " +
+               "the cluster already traded, so neither a wick spike nor a move " +
+               "the cluster itself already made can promote a zone. Keep it well " +
+               "above the 0.15-0.35 USD spread. Higher = later, surer, worse entry.",
+     display = display.none)
+i_absMinStrength = input.float(0.55, "Min absorption strength (0..1)", minval = 0.0,
+     maxval = 1.0, step = 0.01, group = G6A,
+     tooltip = "Gate on the fused 0..1 score. This is the quality-over-quantity " +
+               "knob: raise it and the module simply says NO TRADE more often. It " +
+               "is a SETUP score built from proxies, never a win probability. The " +
+               "score is a weighted blend of graded sub-scores, so a cluster that " +
+               "is exceptional on five axes and marginal on one still qualifies - " +
+               "which a pure AND of thresholds could never do.",
+     display = display.none)
+
+i_absBreakBars = input.int(2, "Confirmed closes that break a zone", minval = 1,
+     maxval = 6, group = G6Z,
+     tooltip = "A zone dies only after this many CONSECUTIVE confirmed CLOSES " +
+               "beyond its invalidation level. A WICK THROUGH THE ZONE IS THE " +
+               "ABSORPTION and must never kill it; one non-breaking close resets " +
+               "the counter. 1 makes zones fragile on gold's spike-and-revert " +
+               "tape; above 3 a genuinely broken shelf keeps blocking new zones.",
+     display = display.none)
+i_zoneMaxTouches = input.int(4, "Max touches before a zone is worn out", minval = 2,
+     maxval = 20, group = G6Z,
+     tooltip = "A shelf that keeps being probed is being EATEN. After this many " +
+               "post-birth touches the zone retires. The cluster's own bars are " +
+               "never counted - counting them is what previously killed every " +
+               "zone at the exact moment it qualified, so the system emitted " +
+               "nothing forever. Must stay comfortably above the prior-test score " +
+               "anchor, which counts a different window entirely.",
+     display = display.none)
+i_absMaxZones = input.int(8, "Max live zones", minval = 1, maxval = 20, group = G6Z,
+     tooltip = "Cap on simultaneously tracked zones across BOTH directions. When " +
+               "full, the WEAKEST is dropped and a promoted (live) zone outranks a " +
+               "pending one, because the live zone is the one the rest of the " +
+               "chain is currently working on. Keep it below SECTION 16's box " +
+               "budget or zones will exist that are never drawn.",
+     display = display.none)
+
+// ------------------------------------------------ 6.2 DERIVED, NOT INPUTS
+// Two more inputs for these would be two more things to keep consistent with
+// the cluster length and the lookback. They are derived from both.
+abReactWin = math.max(4, i_absClusterBars * 3)   // bars a PENDING zone may wait
+abMaxAge   = i_absLookback * 8                   // hard expiry for a LIVE zone
+
+// Score weights. They sum to 1.00, and qAbsorb is exported in [0,1] - SECTION 12
+// owns the only 0-100 number in this file. EFFORT and RESULT carry the most
+// weight because together they are the definition of absorption; everything else
+// is corroboration.
+AB_W_EFF  = 0.22
+AB_W_PROG = 0.22
+AB_W_RVOL = 0.14
+AB_W_WICK = 0.16
+AB_W_CONT = 0.12
+AB_W_TEST = 0.14
+// A volume-weighted mean lean of 0.60 is an emphatic one-sided cluster; the ramp
+// from 0 to there is the graded effort row.
+AB_EFF_HI = 0.60
+
+// -------------------------------------------- 6.3 CLUSTER AGGREGATES
+// GLOBAL SCOPE, every bar, unconditionally. These use the history operator, and
+// a series that is only assembled on some bars has holes in its own history.
+// Nothing here mutates state - the confirmed-bar gate is further down, and on a
+// forming bar these values are simply read by nobody.
+abN = i_absClusterBars
+
+abHi      = high
+abLo      = low
+abTravel  = 0.0
+abDelta   = 0.0     // EFFORT window only: cluster bars 1..n-1
+abVolSum  = 0.0     // EFFORT window only, so the normaliser matches the numerator
+abRvolSum = 0.0
+abRvolCnt = 0
+for i = 0 to abN - 1
+    abHi := math.max(abHi, high[i])
+    abLo := math.min(abLo, low[i])
+    abTravel += math.max(high[i] - low[i], 0.0)
+    float rv = rvol[i]
+    if not na(rv)
+        abRvolSum += rv
+        abRvolCnt += 1
+    if i > 0
+        abDelta  += nz(deltaProxy[i], 0.0)
+        abVolSum += nz(effVol[i], 0.0)
+
+abRvolMean = abRvolCnt > 0 ? abRvolSum / float(abRvolCnt) : na
+abOpen     = open[abN - 1]
+abNet      = close - abOpen
+abBodyTop  = math.max(abOpen, close)
+abBodyBot  = math.min(abOpen, close)
+abRng      = math.max(abHi - abLo, tick)
+abSpan     = (abHi - abLo) / math.max(aRef, tick)
+
+// ------------------------------------------------ 6.4 DIRECTIONAL MEASURES
+// EFFORT: the volume-weighted mean lean of the delta proxy over the cluster's
+// first n-1 bars, signed so that a POSITIVE value means the aggressor leaned
+// AGAINST dir - i.e. sellers for a bullish zone. Because effort(+1) is exactly
+// -effort(-1), only one direction can ever pass the effort veto on a given
+// cluster: the mutual exclusivity is algebraic, not a tuned threshold.
+f_absEffort(int dir) =>
+    abVolSum > 0.0 ? f_clamp(-dir * abDelta / abVolSum, -1.0, 1.0) : 0.0
+
+// RESULT: what the aggressor actually netted, over the WHOLE cluster, measured
+// against two independent denominators. The max() is the conservative choice -
+// both the path and the volume-scaled expectation must agree that the effort
+// went nowhere. A negative value means price moved AGAINST the aggressor, which
+// is the strongest form of failure.
+f_absProg(int dir) =>
+    float adv = -dir * abNet
+    math.max(adv / math.max(abTravel, i_spreadUsd),
+             adv / math.max(math.max(aRef, tick) * nz(abRvolMean, 1.0), i_spreadUsd))
+
+// The rejection wick at CLUSTER level, on the raw range - the same measure
+// SECTION 0 defines per bar, lifted to the cluster.
+f_absWick(int dir) =>
+    dir > 0 ? (abBodyBot - abLo) / abRng : (abHi - abBodyTop) / abRng
+
+// The shelf: the wick region price was pushed into and refused to hold, floored
+// so a body-heavy cluster still yields a usable band and capped at the thickness
+// ceiling. Written once with the dir sign, so the two zones are exact mirrors.
+f_absZone(int dir) =>
+    float far = dir > 0 ? abBodyBot : abBodyTop
+    float raw = dir > 0 ? far - abLo : abHi - far
+    float flr = f_tol(0.20)
+    // math.max() on the ceiling so a thickness cap set below the floor cannot
+    // invert the clamp and hand back a band wider than the cap it asked for.
+    float dep = f_clamp(raw, flr, math.max(f_tol(i_absZoneAtr), flr))
+    [dir > 0 ? abLo + dep : abHi, dir > 0 ? abLo : abHi - dep]
+
+// Prior tests: bars BEFORE the cluster that probed this shelf and closed back
+// OUT of it. "Closed back out" means exactly that - a bar that closed inside the
+// shelf accepted the price and is not a rejection. Uses the history operator, so
+// it is called from global scope only.
+f_absTests(int dir, float zt, float zb) =>
+    int   cnt  = 0
+    float tol  = f_tol(0.15)
+    int   last = i_absLookback - 1
+    if last >= abN
+        for i = abN to last
+            bool probe = dir > 0 ? (low[i] <= zt and low[i] >= zb - tol) :
+                                   (high[i] >= zb and high[i] <= zt + tol)
+            bool out   = dir > 0 ? close[i] >= zt : close[i] <= zb
+            if probe and out
+                cnt += 1
+    cnt
+
+// -------------------------------------------------- 6.5 SCORE AND VETOES
+// GRADED sub-scores fused, then gated. Not a pure AND: a knife-edge AND on rvol
+// flips the whole signal between 1.49 and 1.51 on a tick-volume series that
+// differs between brokers, it cannot rank anything for the score downstream, and
+// it treats a cluster that is exceptional on five axes and marginal on one
+// identically to one that barely cleared every threshold.
+f_absScore(float eff, float prog, float wick, int tests) =>
+    bool  hasRv = hasVol and not na(abRvolMean)
+    float sEff  = nz(f_ramp(eff, 0.0, AB_EFF_HI), 0.0)
+    // |prog|: the aggressor getting paid AND the cluster having already run in
+    // the zone's own direction are both disqualifying, and a plain clamp at zero
+    // scored the second case a perfect 1.0.
+    float sProg = nz(f_ramp(i_absMaxProgress - math.abs(prog),
+         -i_absMaxProgress, i_absMaxProgress), 0.0)
+    float sRvol = hasRv ? nz(f_ramp(abRvolMean, 1.0, i_absRvolThresh * 1.5), 0.0) : 0.0
+    float sWick = nz(f_ramp(wick, 0.0, math.min(0.95, i_absMinWick * 2.0)), 0.0)
+    float sCont = nz(f_ramp(i_absZoneAtr - abSpan, -i_absZoneAtr, i_absZoneAtr), 0.0)
+    float sTest = nz(f_ramp(float(tests), math.max(0.0, i_absMinTests - 2.0),
+         float(i_absMinTests) + 2.0), 0.0)
+    float wSum  = AB_W_EFF + AB_W_PROG + AB_W_WICK + AB_W_CONT + AB_W_TEST +
+                  (hasRv ? AB_W_RVOL : 0.0)
+    float s     = AB_W_EFF * sEff + AB_W_PROG * sProg + AB_W_WICK * sWick +
+                  AB_W_CONT * sCont + AB_W_TEST * sTest +
+                  (hasRv ? AB_W_RVOL * sRvol : 0.0)
+    f_clamp01(wSum > 0.0 ? s / wSum : 0.0)
+
+// The definitional vetoes. Each one is part of what the word "absorption" MEANS,
+// which is why they are not merely score rows: a 0.80 blend with no rejection
+// wick at all is not absorption, and labelling it so would be a lie.
+f_absOk(float eff, float prog, float wick, float strength) =>
+    bool vEff  = eff > 0.0
+    bool vRvol = not hasVol or na(abRvolMean) or abRvolMean >= i_absRvolThresh
+    bool vProg = prog <= i_absMaxProgress
+    bool vWick = wick >= i_absMinWick
+    bool vSpan = abSpan <= i_absZoneAtr * 1.5
+    vEff and vRvol and vProg and vWick and vSpan and strength >= i_absMinStrength
+
+// ------------------------------------------- 6.6 GLOBAL-SCOPE EVALUATION
+// One line per direction, no branch: the long and short numbers come out of the
+// same functions on every bar whether or not anything will be created.
+absEffL = f_absEffort(1)
+absEffS = f_absEffort(-1)
+absPrgL = f_absProg(1)
+absPrgS = f_absProg(-1)
+absWkL  = f_absWick(1)
+absWkS  = f_absWick(-1)
+[absZtL, absZbL] = f_absZone(1)
+[absZtS, absZbS] = f_absZone(-1)
+absTstL = f_absTests(1, absZtL, absZbL)
+absTstS = f_absTests(-1, absZtS, absZbS)
+absStrL = f_absScore(absEffL, absPrgL, absWkL, absTstL)
+absStrS = f_absScore(absEffS, absPrgS, absWkS, absTstS)
+absOkL  = f_absOk(absEffL, absPrgL, absWkL, absStrL)
+absOkS  = f_absOk(absEffS, absPrgS, absWkS, absStrS)
+
+// ------------------------------------------------------- 6.7 THE ZONE ARRAY
+// THE array. One per file.
+var array<IcebergZone> zones = array.new<IcebergZone>()
+
+// ---------------------------------------------------------- 6.8 EXPORTS
+var bool  absSigL    = false    // promotion event: pending -> live, this bar only
+var bool  absSigS    = false
+var float qAbsorbL   = 0.0      // 0..1 evidence for SECTION 12's rubric
+var float qAbsorbS   = 0.0
+var float zoneTopL   = na
+var float zoneBotL   = na
+var bool  zoneAliveL = false
+var int   zoneTestsL = 0
+var int   zoneIdL    = na
+var float zoneTopS   = na
+var float zoneBotS   = na
+var bool  zoneAliveS = false
+var int   zoneTestsS = 0
+var int   zoneIdS    = na
+
+// ------------------------------------------------------ 6.9 THE LIFECYCLE
+// ONE pass, on confirmed bars, walking DOWN so a removal never disturbs an index
+// still to be visited. It runs BEFORE creation, which is what guarantees a zone
+// can never be promoted on its own birth bar.
+//
+// Returns [firedLong, firedShort] - the promotion events for this bar.
+f_absLife() =>
+    bool fL = false
+    bool fS = false
+    int  n  = array.size(zones)
+    if n > 0
+        for i = n - 1 to 0
+            IcebergZone z = array.get(zones, i)
+            bool bull = z.dir > 0
+            int  age  = bar_index - z.bornBar
+
+            // --- touch counting -------------------------------------------
+            // age > 0 is the fix for a deadlock that produced zero signals
+            // forever: when the cluster's own bars counted as touches, a zone
+            // hit the max-touch ceiling on the same bar it was born.
+            if age > 0 and z.touched()
+                bool out = bull ? close >= z.top : close <= z.bottom
+                if out
+                    z.tests    := z.tests + 1
+                    z.lastTest := bar_index
+                    if z.tests > i_zoneMaxTouches
+                        z.state := ZoneState.zExpired   // worn out, not broken
+
+            // --- decisive break -------------------------------------------
+            // CLOSES only, against the buffer frozen against z.atrRef at birth
+            // (SECTION 2 owns breachPx()/closedBeyond(), so this rule exists in
+            // exactly one place). A wick through the zone IS the absorption.
+            z.breakRun := z.closedBeyond() ? z.breakRun + 1 : 0
+            if z.breakRun >= i_absBreakBars
+                z.state := ZoneState.zBroken
+
+            // --- stage 2: promotion ---------------------------------------
+            if z.state == ZoneState.zPending
+                // Age is checked FIRST and unconditionally, so the window means
+                // what it says and a late reaction cannot confirm past it.
+                if age > abReactWin
+                    z.state := ZoneState.zExpired
+                else if age > 0
+                    // The anchor sits OUTSIDE the range the cluster already
+                    // traded (z.swpExt is the cluster's far extreme, frozen at
+                    // birth). Anchoring on the zone edge instead would let a
+                    // "reaction" be satisfied by price merely returning to the
+                    // cluster's own high, which is no reaction at all.
+                    float anch = bull ? math.max(z.top, z.swpExt) :
+                                         math.min(z.bottom, z.swpExt)
+                    float aRf  = math.max(nz(z.atrRef, aRef), i_spreadUsd)
+                    float rct  = (bull ? close - anch : anch - close) / aRf
+                    // CLOSE-based, exactly like invalidation. A wick may not
+                    // promote a zone when a wick is not allowed to kill one.
+                    if rct >= i_absMinReact
+                        z.state := ZoneState.zLive
+                        if bull
+                            fL := true
+                        else
+                            fS := true
+                    // Too small a reaction leaves the zone PENDING: the window
+                    // keeps running and a real move can still promote it. The
+                    // strength score is NOT touched here - it is the setup
+                    // quality, and inflating it by how far price has already run
+                    // would score the worst available entry the highest.
+            else if z.state == ZoneState.zLive and age > abMaxAge
+                z.state := ZoneState.zExpired
+
+            // --- retire ----------------------------------------------------
+            // Drawing handles belong to SECTION 16, which keys its own pool by
+            // zone id and notices the disappearance itself. Deleting its boxes
+            // from here would fight it for ownership.
+            if not z.isLive()
+                array.remove(zones, i)
+    [fL, fS]
+
+// Does a candidate zone overlap a LIVE same-direction zone by more than half?
+// Normalised by the NEW zone's width, so a wide new zone that merely contains a
+// narrow old one is not suppressed - it covers ground the old one never did.
+f_absOverlap(int dir, float zt, float zb) =>
+    bool hit = false
+    for z in zones
+        if z.dir == dir and z.isLive()
+            float ov = math.min(z.top, zt) - math.max(z.bottom, zb)
+            float w  = math.max(zt - zb, i_spreadUsd)
+            if ov / w > 0.5
+                hit := true
+    hit
+
+// Weakest-first eviction. A LIVE zone outranks every pending one because it is
+// the zone the rest of the chain is currently working on; dropping it would
+// orphan a setup mid-flight. `guard` bounds the loop no matter what the cap is.
+f_absCap() =>
+    int guard = 0
+    while array.size(zones) > i_absMaxZones and guard < 32
+        int   worst = 0
+        float wk    = 1.0e9
+        int   n     = array.size(zones)
+        if n > 0
+            for j = 0 to n - 1
+                IcebergZone z = array.get(zones, j)
+                float k = f_clamp01(z.strength) +
+                          (z.state == ZoneState.zLive ? 1.0 : 0.0)
+                if k < wk
+                    wk    := k
+                    worst := j
+            array.remove(zones, worst)
+        guard += 1
+
+// Which zone represents this side right now? Promoted beats pending, and among
+// equals the YOUNGEST wins - the chain works forward from the most recent shelf.
+// Returns an array index, or -1 when this side has no zone at all.
+f_absPick(int dir) =>
+    int best  = -1
+    int bRank = -1
+    int bBar  = -1
+    int n     = array.size(zones)
+    if n > 0
+        for j = 0 to n - 1
+            IcebergZone z = array.get(zones, j)
+            if z.dir == dir and z.isLive()
+                int rk = z.state == ZoneState.zLive ? 1 : 0
+                if rk > bRank or (rk == bRank and z.bornBar > bBar)
+                    bRank := rk
+                    bBar  := z.bornBar
+                    best  := j
+    best
+
+// -------------------------------------------------------- 6.10 PER-BAR RUN
+if confirmed and warmupOk
+    // A. age, promote and prune BEFORE anything is created. The two flags are
+    //    assigned outright rather than cleared first: a promotion is a one-bar
+    //    event and f_absLife() reports it for every zone on the bar it happens.
+    [fL, fS] = f_absLife()
+    absSigL := fL
+    absSigS := fS
+
+    // B. overlap is tested HERE, against the PRUNED array. Testing it at global
+    //    scope would compare against zones that died earlier on this same bar,
+    //    and so would suppress the single most valuable case there is: a shelf
+    //    that breaks and immediately re-forms.
+    bool ovL = f_absOverlap(1, absZtL, absZbL)
+    bool ovS = f_absOverlap(-1, absZtS, absZbS)
+
+    // C. birth. Two blocks rather than one loop because zoneSeq is a global and
+    //    Pine forbids assigning a global inside a function; they are otherwise a
+    //    line-for-line mirror.
+    if absOkL and not ovL
+        zoneSeq := zoneSeq + 1
+        IcebergZone zNewL = IcebergZone.new(id = zoneSeq, dir = 1, top = absZtL,
+             bottom = absZbL, bornBar = bar_index, bornTime = time,
+             atrRef = aRef, strength = absStrL, tests = absTstL,
+             lastTest = bar_index, state = ZoneState.zPending,
+             swpExt = abHi, breakRun = 0)
+        // Derived from the method rather than re-typed, so the published
+        // invalidation price and the break test can never disagree.
+        zNewL.invalid := zNewL.breachPx()
+        array.push(zones, zNewL)
+    if absOkS and not ovS
+        zoneSeq := zoneSeq + 1
+        IcebergZone zNewS = IcebergZone.new(id = zoneSeq, dir = -1, top = absZtS,
+             bottom = absZbS, bornBar = bar_index, bornTime = time,
+             atrRef = aRef, strength = absStrS, tests = absTstS,
+             lastTest = bar_index, state = ZoneState.zPending,
+             swpExt = abLo, breakRun = 0)
+        zNewS.invalid := zNewS.breachPx()
+        array.push(zones, zNewS)
+
+    // D. cap.
+    f_absCap()
+
+    // E. publish the representative zone per side. Mirrored blocks, again
+    //    because these are assignments to globals.
+    int iL = f_absPick(1)
+    if iL >= 0
+        IcebergZone zSelL = array.get(zones, iL)
+        zoneAliveL := true
+        zoneTopL   := zSelL.top
+        zoneBotL   := zSelL.bottom
+        zoneTestsL := zSelL.tests
+        zoneIdL    := zSelL.id
+        qAbsorbL   := f_clamp01(zSelL.strength)
+    else
+        zoneAliveL := false
+        zoneTopL   := na
+        zoneBotL   := na
+        zoneTestsL := 0
+        zoneIdL    := na
+        qAbsorbL   := 0.0
+    int iS = f_absPick(-1)
+    if iS >= 0
+        IcebergZone zSelS = array.get(zones, iS)
+        zoneAliveS := true
+        zoneTopS   := zSelS.top
+        zoneBotS   := zSelS.bottom
+        zoneTestsS := zSelS.tests
+        zoneIdS    := zSelS.id
+        qAbsorbS   := f_clamp01(zSelS.strength)
+    else
+        zoneAliveS := false
+        zoneTopS   := na
+        zoneBotS   := na
+        zoneTestsS := 0
+        zoneIdS    := na
+        qAbsorbS   := 0.0
+// When a zone dies the exports go dark on the SAME bar. That is deliberate and it
+// is what stops a stale "absorption happened here" flag outliving the shelf it
+// described: SECTION 9's BOS clock, SECTION 13's gate and SECTION 16's box all
+// read these and all fall silent together.
+// ========================= END SECTION 6 ====================================

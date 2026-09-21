@@ -1,0 +1,314 @@
+// ============================================================================
+//  SECTION 8 : DISPLACEMENT + FAIR VALUE GAP
+//
+//  WHAT IT MEASURES: the impulse leg that leaves the absorption. Not "a green
+//  candle" - a leg whose GEOMETRY is inconsistent with ordinary two-way trade:
+//  large relative to ATR, body-dominant, closing at its own extreme, on elevated
+//  participation. Four hard gates decide ADMISSION; a graded 0..1 score decides
+//  RANK. Those two jobs are kept apart on purpose (see 8.2).
+//
+//  THREE CORRECTIONS FROM REVIEW, APPLIED HERE, EACH OF WHICH KILLED THE MODULE
+//  AS DESIGNED:
+//   (1) Every sub-score used to be anchored to its OWN gate, so a leg that
+//       passed all four gates exactly scored 0.000 and the 0.60 minimum could
+//       never be met. Worse, the gate value silently rescaled the score, so the
+//       documented thresholds were never the operative constraint and tightening
+//       one input tightened twice. Sub-scores are now anchored to FIXED absolute
+//       scales. Gates admit; anchors rank; i_dispMinScore means the same thing
+//       at every gate setting.
+//   (2) The FVG scan used to run over the whole leg and keep the WIDEST gap. The
+//       window at offset k spans bars t-k-2 .. t-k, so for k >= n-1 its two older
+//       bars lie entirely OUTSIDE the leg, and widest-wins systematically picked
+//       that out-of-leg gap - publishing a retest band below the leg's own floor
+//       and collecting the strength bonus for an imbalance the leg never created.
+//       The scan is now the SINGLE three-bar window ending on the confirmation
+//       bar, and i_dispMaxLegBars is capped at 2.
+//   (3) The FVG bonus used to be added BEFORE the i_dispMinScore comparison, so
+//       it admitted every leg scoring 0.50-0.59 while the comment claimed it
+//       could "rank, never admit". Admission now compares the UNBONUSED score
+//       and the bonus moves rank only.
+//
+//  Plus a contiguity guard the design had nowhere: XAUUSD has a daily settlement
+//  break and a Sunday reopen. The first bar after either is huge versus ATR,
+//  body-dominant, closes at its extreme and carries elevated tick counts - a
+//  maximum-strength displacement made of nothing but a gap, with the session gap
+//  itself registering as a giant "imbalance".
+//
+//  ORIGIN CONVENTION (the architect's conversion rule, so band and scalar agree):
+//     dispOrg = the leg's FIRST-BAR OPEN  - the NEAR edge, the price a pullback
+//               retraces to, consumed by SECTION 10 (retest).
+//     dispFar = the OPPOSITE edge (the leg's hostile extreme) - a stop-anchor
+//               candidate consumed by SECTION 11 (risk).
+//  The band between them is widened to a minimum width, because the score
+//  actively rewards driving that wick to zero and a zero-width retest band is a
+//  band price steps over without ever registering a touch.
+// ============================================================================
+
+G8 = "8 - Displacement & FVG"
+
+i_dispBodyRatio    = input.float(0.55, "Min body / range of the leg",
+     minval = 0.0, maxval = 1.0, step = 0.01, group = G8,
+     tooltip = "HARD GATE. Body dominance separates a decisive leg from a wide, indecisive " +
+               "bar that closed mid-range. At 0 the gate is off and long-wicked two-way bars " +
+               "qualify as displacement; at 1 only a perfect marubozu passes, i.e. nothing.",
+     display = display.none)
+i_dispAtrMult      = input.float(1.10, "Min leg range (x ATR, per sqrt(bars))",
+     minval = 0.0, maxval = 10.0, step = 0.05, group = G8,
+     tooltip = "HARD GATE on legRange / (ATR * sqrt(n)). The sqrt(n) term is what stops a " +
+               "2-bar leg qualifying by drift alone. Setting this to 0 disables the SIZE " +
+               "REQUIREMENT only - it can no longer hand every bar a free maximum sub-score, " +
+               "because the size sub-score is anchored at a fixed 1.00-3.00 ATR scale and " +
+               "not at this input. Above ~3 nothing but a news candle passes.",
+     display = display.none)
+i_dispRvol         = input.float(1.25, "Min relative volume of the leg",
+     minval = 0.0, maxval = 10.0, step = 0.05, group = G8,
+     tooltip = "HARD GATE, written to BYPASS when the feed carries no usable volume (several " +
+               "XAUUSD feeds report none) rather than to reject everything. Relative TICK " +
+               "volume is a participation PROXY, not contracts. Note it does NOT reject the " +
+               "rollover window: post-break and rollover bars carry ELEVATED tick counts.",
+     display = display.none)
+i_dispCloseLoc     = input.float(0.65, "Min close location within the leg",
+     minval = 0.0, maxval = 1.0, step = 0.01, group = G8,
+     tooltip = "HARD GATE. 1.00 means the leg closed exactly on its extreme - it gave nothing " +
+               "back. Below 0.50 the leg closed on the wrong half of its own range and the " +
+               "gate stops discriminating; at 1.00 it is effectively off because nothing prints.",
+     display = display.none)
+i_dispMaxLegBars   = input.int(2, "Max leg length (bars)",
+     minval = 1, maxval = 2, group = G8,
+     tooltip = "CAPPED AT 2 deliberately. The FVG window ending on the confirmation bar spans " +
+               "three bars; with longer legs the same window stops being contained by the leg " +
+               "and an out-of-leg gap wins. 1 = single-bar impulses only (fewest, cleanest).",
+     display = display.none)
+i_dispReqFvg       = input.bool(false, "Require a fair value gap",
+     group = G8,
+     tooltip = "Promotes the imbalance from a ranking bonus to a HARD GATE. On, it cuts the " +
+               "signal count very hard - a 3-bar imbalance is largely a CONSEQUENCE of a big " +
+               "fast bar, which the size gate has already tested, so this mostly pays twice " +
+               "for one fact. Off by default for that reason.",
+     display = display.none)
+i_dispMinScore     = input.float(0.60, "Min displacement score (0-1)",
+     minval = 0.0, maxval = 1.0, step = 0.01, group = G8,
+     tooltip = "Compared against the UNBONUSED score, so the FVG bonus can never buy admission. " +
+               "This is a setup-geometry score, not a probability. Because the sub-scores are " +
+               "anchored to fixed scales, this input means the same thing at every gate setting. " +
+               "Above ~0.85 it is an off switch: it needs all four features saturated at once.",
+     display = display.none)
+i_dispFvgMinAtr    = input.float(0.15, "Min FVG size (x ATR, floored at spread)",
+     minval = 0.0, maxval = 2.0, step = 0.01, group = G8,
+     tooltip = "Measured with f_tol(), never in ticks: mintick is 0.01 on most XAUUSD feeds " +
+               "and 0.001 on others, so a tick-denominated floor mis-scales tenfold between " +
+               "feeds. At 0 it collapses to one spread and nearly every gap qualifies.",
+     display = display.none)
+i_dispFvgBonus     = input.float(0.10, "FVG rank bonus (0-1)",
+     minval = 0.0, maxval = 0.5, step = 0.01, group = G8,
+     tooltip = "Applied AFTER the i_dispMinScore comparison, so it orders competing legs and " +
+               "never admits one. At 0 the imbalance affects rank not at all; large values " +
+               "make an imbalance outrank genuinely bigger legs.",
+     display = display.none)
+i_dispOriginMinAtr = input.float(0.25, "Min origin band width (x ATR, floored at spread)",
+     minval = 0.0, maxval = 2.0, step = 0.01, group = G8,
+     tooltip = "The retest band is widened INTO the leg to at least this, keeping the far " +
+               "(invalidation) edge fixed. Without it the highest-scoring legs publish a " +
+               "band a few cents wide - the score rewards driving that wick to zero - and " +
+               "price steps over it without ever registering a touch. Large values make the " +
+               "band so deep that a retest of it is a full retracement.",
+     display = display.none)
+i_dispMemBars      = input.int(12, "Displacement evidence memory (bars)",
+     minval = 1, maxval = 200, group = G8,
+     tooltip = "How long the published origin band, FVG and qDisp stay on the books after the " +
+               "leg. SECTION 12 reads qDisp on the signal bar, which is later than the leg. " +
+               "Too long and a stale leg keeps inflating the setup score; too short and the " +
+               "rubric row reads 0 at the moment the signal fires.",
+     display = display.none)
+
+// -------------------------------------------- 8.1 SYNTHETIC LEG AGGREGATES
+// Every aggregate is computed UNCONDITIONALLY at global scope for both candidate
+// lengths, then selected by name. Nothing is read from inside a branch, so no
+// history buffer can be skipped and no lazily-evaluated `and` can hide a read.
+dispTfMs  = timeframe.in_seconds() * 1000.0
+
+dispO1 = open
+dispH1 = high
+dispL1 = low
+dispO2 = open[1]
+dispH2 = math.max(high, high[1])
+dispL2 = math.min(low,  low[1])
+
+// rvol is na when the feed carries no usable volume. That na is left to
+// propagate: the gate bypasses on `not hasVol` and the score weight is zeroed
+// and renormalised. It is never coerced to 0 (which would make a bypassing gate
+// a kill switch) nor to 1 (which fabricates average participation).
+dispRv1 = rvol
+dispRv2 = (rvol + rvol[1]) / 2.0
+
+// CONTIGUITY: the leg must be one continuous stretch of trade. Two tests, both
+// needed - a session break shows up as a time discontinuity, a weekend reopen as
+// a price discontinuity, and the daily gold settlement break can be either.
+dispGap1  = math.abs(open    - close[1]) <= f_tol(0.5)
+dispGap2  = math.abs(open[1] - close[2]) <= f_tol(0.5)
+dispCont1 = (time    - time[1]) <= dispTfMs * 1.5 and dispGap1
+dispCont2 = dispCont1 and (time[1] - time[2]) <= dispTfMs * 1.5 and dispGap2
+
+// --------------------------------------------------- 8.2 THE LEG EVALUATOR
+// Gates ADMIT. Anchors RANK. They are separate numbers on purpose: anchoring a
+// sub-score to its own gate means a leg that clears every gate by exactly zero
+// scores exactly zero, and it makes every gate input a hidden rescaling of the
+// whole score. ONE function, parameterised by dir - long and short are the same
+// arithmetic with one sign flipped, not two blocks to keep in step.
+f_dispEval(int dir, int n, float lgO, float lgH, float lgL, float lgRv, bool cont) =>
+    float rng  = math.max(lgH - lgL, tick)
+    float br   = math.abs(close - lgO) / rng
+    float clv  = dir > 0 ? (close - lgL) / rng : (lgH - close) / rng
+    float srN  = rng / (aRef * math.sqrt(float(n)))   // leg size per sqrt(n), in ATR units
+
+    // --- the four hard gates, plus direction and continuity -----------------
+    bool gDir  = dir * (close - lgO) > 0
+    bool gSize = srN >= i_dispAtrMult
+    bool gBody = br  >= i_dispBodyRatio
+    bool gLoc  = clv >= i_dispCloseLoc
+    bool gVol  = not hasVol or (not na(lgRv) and lgRv >= i_dispRvol)
+    bool gates = cont and gDir and gSize and gBody and gLoc and gVol
+
+    // --- the rank score, on fixed absolute scales ---------------------------
+    float sSize = f_ramp(srN,  1.00, 3.00)
+    float sBody = f_ramp(br,   0.40, 0.90)
+    float sLoc  = f_ramp(clv,  0.50, 0.95)
+    float sRvol = f_ramp(lgRv, 1.00, 2.50)
+
+    // Volume contributes 0.20 when the feed supports it and 0.00 when it does
+    // not, with the denominator renormalised so the score keeps its full 0..1
+    // range on a volumeless feed instead of being capped at 0.80.
+    float wRv = hasVol and not na(sRvol) ? 0.20 : 0.0
+    float den = 0.35 + 0.25 + 0.20 + wRv
+    float base = (0.35 * nz(sSize, 0.0) +
+                  0.25 * nz(sBody, 0.0) +
+                  0.20 * nz(sLoc,  0.0) +
+                  wRv  * nz(sRvol, 0.0)) / den
+    [gates, f_clamp01(base)]
+
+[dispOkL1, dispBsL1] = f_dispEval( 1, 1, dispO1, dispH1, dispL1, dispRv1, dispCont1)
+[dispOkL2, dispBsL2] = f_dispEval( 1, 2, dispO2, dispH2, dispL2, dispRv2, dispCont2)
+[dispOkS1, dispBsS1] = f_dispEval(-1, 1, dispO1, dispH1, dispL1, dispRv1, dispCont1)
+[dispOkS2, dispBsS2] = f_dispEval(-1, 2, dispO2, dispH2, dispL2, dispRv2, dispCont2)
+
+// ------------------------------------------------------------- 8.3 THE FVG
+// ONE window: bars t-2, t-1, t - the three-bar window ending on the confirmation
+// bar. It is the only window guaranteed to contain the impulse and never to
+// reach outside the leg. Honest description of what it is: a band that only the
+// MIDDLE bar traded through, whose two neighbours did not overlap it. That is a
+// statement about printed OHLC and nothing more - it is not evidence of resting
+// institutional orders.
+dispFvgMin  = f_tol(i_dispFvgMinAtr)
+dispFvgCont = (time - time[2]) <= dispTfMs * 2.5 and dispGap1 and dispGap2
+dispGapUpPx = low     - high[2]
+dispGapDnPx = low[2]  - high
+dispFvgOkL  = dispFvgCont and dispGapUpPx >= dispFvgMin
+dispFvgOkS  = dispFvgCont and dispGapDnPx >= dispFvgMin
+dispFvgLoRawL = high[2]
+dispFvgHiRawL = low
+dispFvgLoRawS = high
+dispFvgHiRawS = low[2]
+
+// ------------------------------------------------- 8.4 ADMISSION AND RANK
+// Admission compares the UNBONUSED score. The bonus is added afterwards and only
+// decides which of two admitted candidates is the better one.
+dispAllow2 = i_dispMaxLegBars >= 2
+
+dispQL1 = dispOkL1 and (not i_dispReqFvg or dispFvgOkL) and dispBsL1 >= i_dispMinScore
+dispQL2 = dispAllow2 and dispOkL2 and (not i_dispReqFvg or dispFvgOkL) and dispBsL2 >= i_dispMinScore
+dispQS1 = dispOkS1 and (not i_dispReqFvg or dispFvgOkS) and dispBsS1 >= i_dispMinScore
+dispQS2 = dispAllow2 and dispOkS2 and (not i_dispReqFvg or dispFvgOkS) and dispBsS2 >= i_dispMinScore
+
+dispBonusL = dispFvgOkL ? i_dispFvgBonus : 0.0
+dispBonusS = dispFvgOkS ? i_dispFvgBonus : 0.0
+dispRkL1 = math.min(1.0, dispBsL1 + dispBonusL)
+dispRkL2 = math.min(1.0, dispBsL2 + dispBonusL)
+dispRkS1 = math.min(1.0, dispBsS1 + dispBonusS)
+dispRkS2 = math.min(1.0, dispBsS2 + dispBonusS)
+
+// Ties go to the SHORTER leg: a 1-bar impulse is the same displacement stated
+// with less ambiguity, and it dates the event more precisely.
+dispUseL1 = dispQL1 and (not dispQL2 or dispRkL1 >= dispRkL2)
+dispUseL2 = dispQL2 and not dispUseL1
+dispUseS1 = dispQS1 and (not dispQS2 or dispRkS1 >= dispRkS2)
+dispUseS2 = dispQS2 and not dispUseS1
+
+dispOkL = dispUseL1 or dispUseL2
+dispOkS = dispUseS1 or dispUseS2
+dispRkL = dispUseL1 ? dispRkL1 : dispRkL2
+dispRkS = dispUseS1 ? dispRkS1 : dispRkS2
+
+// ----------------------------------------------------- 8.5 THE ORIGIN BAND
+// The INVALIDATION edge is fixed at the leg's hostile extreme; the band is
+// widened INTO the leg to reach the minimum width. Mirror-exact, so the symmetry
+// argument survives the widening.
+dispLegOL = dispUseL1 ? dispO1 : dispO2
+dispLegLL = dispUseL1 ? dispL1 : dispL2
+dispLegOS = dispUseS1 ? dispO1 : dispO2
+dispLegHS = dispUseS1 ? dispH1 : dispH2
+dispMinW  = f_tol(i_dispOriginMinAtr)
+
+dispOrgRawL = math.max(dispLegOL, dispLegLL + dispMinW)   // near edge - retest target
+dispFarRawL = dispLegLL                                   // far edge  - stop anchor
+dispOrgRawS = math.min(dispLegOS, dispLegHS - dispMinW)
+dispFarRawS = dispLegHS
+
+// --------------------------------------------------------- 8.6 THE SIGNALS
+dispSigL = dispOkL and confirmed and warmupOk
+dispSigS = dispOkS and confirmed and warmupOk
+
+// ------------------------------------------- 8.7 PUBLISHED STATE (frozen)
+// SECTION 10 retests this band and SECTION 11 anchors a stop on it, both LATER
+// than the leg, so these are frozen at the leg and expire on a fixed horizon.
+// They are never live series: a live origin band would move under the retest
+// that is trying to touch it.
+var float dispOrgL = na
+var float dispFarL = na
+var float dispOrgS = na
+var float dispFarS = na
+var float fvgLoL   = na
+var float fvgHiL   = na
+var float fvgLoS   = na
+var float fvgHiS   = na
+var bool  hasFvgL  = false
+var bool  hasFvgS  = false
+var float qDispL   = 0.0
+var float qDispS   = 0.0
+var int   dispBarL = na
+var int   dispBarS = na
+
+if confirmed and warmupOk
+    if dispSigL
+        dispOrgL := dispOrgRawL
+        dispFarL := dispFarRawL
+        hasFvgL  := dispFvgOkL
+        fvgLoL   := dispFvgOkL ? dispFvgLoRawL : na
+        fvgHiL   := dispFvgOkL ? dispFvgHiRawL : na
+        qDispL   := dispRkL
+        dispBarL := bar_index
+    else if not na(dispBarL) and bar_index - dispBarL > i_dispMemBars
+        dispOrgL := na
+        dispFarL := na
+        hasFvgL  := false
+        fvgLoL   := na
+        fvgHiL   := na
+        qDispL   := 0.0
+        dispBarL := na
+
+    if dispSigS
+        dispOrgS := dispOrgRawS
+        dispFarS := dispFarRawS
+        hasFvgS  := dispFvgOkS
+        fvgLoS   := dispFvgOkS ? dispFvgLoRawS : na
+        fvgHiS   := dispFvgOkS ? dispFvgHiRawS : na
+        qDispS   := dispRkS
+        dispBarS := bar_index
+    else if not na(dispBarS) and bar_index - dispBarS > i_dispMemBars
+        dispOrgS := na
+        dispFarS := na
+        hasFvgS  := false
+        fvgLoS   := na
+        fvgHiS   := na
+        qDispS   := 0.0
+        dispBarS := na
+// ========================= END SECTION 8 ====================================

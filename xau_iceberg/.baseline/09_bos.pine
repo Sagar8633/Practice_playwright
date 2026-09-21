@@ -1,0 +1,273 @@
+// ============================================================================
+//  SECTION 9 : BREAK OF STRUCTURE  /  CHANGE OF CHARACTER
+//
+//  WHAT IT DECIDES: whether the displacement leg actually BROKE the structural
+//  skeleton SECTION 3 maintains, and whether that break is a continuation of the
+//  existing sequence (BOS) or a reversal of it (CHoCH). This is the last piece
+//  of evidence before the retest, and it is the one that most easily manufactures
+//  false confidence, so three specific traps are closed here.
+//
+//  TRAP 1 - THE CHoCH THAT IS ONLY A WHIPSAW. Classifying a break as a reversal
+//  because it runs COUNTER TO THE PREVIOUS BREAK is circular: the break engine
+//  is self-clearing, so inside a range breaks NECESSARILY alternate (up through
+//  the range high, down through the range low, up again) and the swing trend is
+//  0 throughout. Under that rule every whipsaw in a range certifies as a CHoCH -
+//  in exactly the market the whole system is built to sit out. A CHoCH here
+//  therefore requires a genuine opposing swing sequence (structTrend == -dir)
+//  AND chopScore <= 1. The chop measure is admitted into the classification, not
+//  left outside it as a separate downstream filter that arrives too late.
+//
+//  TRAP 2 - THE BUFFER THAT SITS UNDER THE SPREAD. A 0.05 x ATR buffer is
+//  0.05-0.20 USD on 1M/5M gold, i.e. at or BELOW the 0.15-0.35 USD spread, while
+//  the thing it is meant to survive - a stop run - routinely spikes 1-3 USD
+//  through a swing. And a syminfo.mintick floor is decorative: mintick is 0.01
+//  on most XAUUSD feeds, two orders of magnitude under the ATR term, so it never
+//  binds. The buffer is f_tol(i_bosBufMult), which is floored at one full spread
+//  and denominated in USD on every feed.
+//
+//  TRAP 3 - THE OUTSIDE BAR THAT QUIETLY SETS THE TREND. A bar that breaks both
+//  sides is not structure. Suppressing only the two TRIGGERS while still running
+//  both mutation blocks flags swings broken on both sides and leaves the last
+//  break direction set to whichever block happens to be written second. Here an
+//  outside bar is consumed whole: no trigger, no broken flags, no state, on
+//  EITHER side.
+//
+//  LINKAGE: the break is tied to the LIVE zone exported by SECTION 6 - read
+//  every bar, never copied into a private lifecycle that outlives the zone,
+//  which is how a long-dead absorption ends up permanently inflating the break
+//  level. Age is capped at i_maxBarsAbsToBos and the post-absorption leg must
+//  have traded into the zone BODY, not merely brushed its outer edge (touching
+//  the edge is true within one bar of every zone and filters nothing).
+// ============================================================================
+
+G9 = "9 - Break of Structure"
+
+i_bosMode         = input.string("Close", "Break confirmation",
+     options = ["Close", "Wick"], group = G9,
+     tooltip = "Close: the bar must CLOSE beyond the swing plus the buffer - slower, and it " +
+               "will not register the stop run itself as structure. Wick: the high/low " +
+               "suffices, which is faster but hands every liquidity spike a break, including " +
+               "the ones this system is designed to trade AGAINST.",
+     display = display.none)
+i_bosBufMult      = input.float(0.25, "Break buffer (x ATR, floored at spread)",
+     minval = 0.0, maxval = 2.0, step = 0.05, group = G9,
+     tooltip = "Clearance required beyond the swing, via f_tol(), so it can never fall below " +
+               "one spread on any feed. At 0 it IS one spread and marginal ticks through a " +
+               "level count as structure; above ~1 ATR the break is so far past the swing " +
+               "that the retest which follows is already a new leg.",
+     display = display.none)
+i_maxBarsAbsToBos = input.int(12, "Max bars from absorption to BOS",
+     minval = 1, maxval = 100, group = G9,
+     tooltip = "The causal link between the zone and the break, and also how long the BOS " +
+               "stays on the books as evidence. Short values demand the break follow the " +
+               "absorption immediately; long values let an unrelated break borrow the credit " +
+               "of an old zone that merely happens to still be alive.",
+     display = display.none)
+i_bosStructReq    = input.string("Either", "Structural requirement",
+     options = ["CHoCH (reversal)", "BOS (continuation)", "Either"], group = G9,
+     tooltip = "CHoCH only: reversal trades exclusively - fewest signals, and it stands down " +
+               "in chop by construction. BOS only: continuation trades exclusively. Either is " +
+               "the union of the two, with the chop requirement still attached to the CHoCH " +
+               "branch alone, so widening the mode never weakens the reversal test.",
+     display = display.none)
+i_bosAllowAmbig   = input.bool(false, "Allow breaks with no confirmed swing sequence",
+     group = G9,
+     tooltip = "When the swing sequence is mixed, structTrend is 0 and a break is neither BOS " +
+               "nor CHoCH; by default nothing fires. Switched on, such a break counts as a " +
+               "continuation ONLY when all three chop votes say the tape is trending " +
+               "(chopScore == 0). Off is the honest default - it is an admission that the " +
+               "structure has not stated a direction yet.",
+     display = display.none)
+
+// --------------------------------------------------------- 9.1 THE HELPERS
+// The PRICE of the most recent UNBROKEN swing on a side. Recency is taken from
+// .bar, never from array position, because the ordering convention of the array
+// belongs to SECTION 3 and this section must not silently depend on it. It
+// returns na for "none" rather than an index sentinel: in v6 a negative array
+// index is legal and counts from the end, so an out-of-band index no longer
+// fails loudly, but na still propagates into every comparison as false.
+f_bosRef(array<Swing> arr) =>
+    float px = na
+    int   bb = -1
+    int   sz = array.size(arr)
+    if sz > 0
+        for i = 0 to sz - 1
+            Swing s = array.get(arr, i)
+            if not s.broken and not na(s.price) and s.bar > bb
+                px := s.price
+                bb := s.bar
+    px
+
+// SELF-CLEARING BROKEN FLAGS. This runs on EVERY confirmed bar, not only on a
+// break bar, and that is the whole point: a swing price has already traded
+// through must not linger unbroken, waiting to become the "most recent unbroken"
+// reference the moment the real one is consumed and to fire a break that already
+// happened. SECTION 3 owns the arrays' membership; SECTION 9 owns .broken, which
+// needs no reset because a freshly confirmed pivot always enters unbroken and
+// old pivots age out of the array.
+f_bosMark(array<Swing> arr, int dir, float px, float buf) =>
+    int sz  = array.size(arr)
+    int cnt = 0
+    if sz > 0
+        for i = 0 to sz - 1
+            Swing s = array.get(arr, i)
+            bool cleared = dir > 0 ? (s.price + buf < px) : (s.price - buf > px)
+            if not s.broken and not na(s.price) and cleared
+                s.broken := true
+                cnt += 1
+    cnt
+
+// Zone linkage, one path for both sides. na legExt means the break landed on the
+// absorption bar itself, which is maximal linkage, not missing evidence.
+f_bosLink(int dir, bool alive, float zTop, float zBot, int absBar, float legExt) =>
+    float zMid  = (zTop + zBot) * 0.5
+    bool  ageOk = not na(absBar) and (bar_index - absBar) <= i_maxBarsAbsToBos
+    bool  bodyOk = na(legExt) or (dir > 0 ? legExt <= zMid : legExt >= zMid)
+    alive and not na(zTop) and not na(zBot) and ageOk and bodyOk
+
+// Break quality, 0..1, graded on fixed scales. ONE function, both directions.
+f_bosQual(int dir, float refPx, float srcPx, int age, bool isCh) =>
+    float sMargin = f_ramp(dir * (srcPx - refPx) / aRef, 0.05, 0.60)  // how decisively it cleared
+    float sClose  = f_ramp(f_closeLoc(dir), 0.45, 0.90)               // and held the clearance
+    float sFresh  = f_clamp01(1.0 - float(age) / float(i_maxBarsAbsToBos))
+    float sClean  = f_clamp01(1.0 - float(chopScore) / 3.0)
+    float sKind   = isCh ? 1.0 : 0.65    // a reversal break is the higher-value event here
+    f_clamp01(0.30 * nz(sMargin, 0.0) +
+              0.20 * nz(sClose,  0.0) +
+              0.20 * sFresh +
+              0.15 * sClean +
+              0.15 * sKind)
+
+// ------------------------------------------------- 9.2 LEVELS AND RAW BREAK
+bosBuf   = f_tol(i_bosBufMult)
+bosSrcUp = i_bosMode == "Close" ? close : high
+bosSrcDn = i_bosMode == "Close" ? close : low
+
+// Read BEFORE this bar's marking pass runs, so the reference is the state as of
+// the previous close plus any pivot SECTION 3 confirmed on this bar. A pivot
+// confirmed on this bar is always still unbroken at registration.
+bosRefHi = f_bosRef(swHiArr)
+bosRefLo = f_bosRef(swLoArr)
+
+bosBreakRawL = not na(bosRefHi) and bosSrcUp > bosRefHi + bosBuf
+bosBreakRawS = not na(bosRefLo) and bosSrcDn < bosRefLo - bosBuf
+bosOutside   = bosBreakRawL and bosBreakRawS      // an outside bar is not structure
+
+// ------------------------------------------------------ 9.3 CLASSIFICATION
+// structTrend and chopScore are SECTION 3 exports and chart-timeframe only -
+// they are not, and must never be used as, the HTF bias.
+bosChopOk  = chopScore <= 1
+bosKChochL = structTrend == -1 and bosChopOk      // sellers were demonstrably in control
+bosKChochS = structTrend ==  1 and bosChopOk
+bosKContL  = structTrend ==  1
+bosKContS  = structTrend == -1
+bosKAmbigL = i_bosAllowAmbig and structTrend == 0 and chopScore == 0
+bosKAmbigS = bosKAmbigL
+
+bosKindOkL = i_bosStructReq == "CHoCH (reversal)"   ? bosKChochL :
+             i_bosStructReq == "BOS (continuation)" ? (bosKContL or bosKAmbigL) :
+                                                      (bosKChochL or bosKContL or bosKAmbigL)
+bosKindOkS = i_bosStructReq == "CHoCH (reversal)"   ? bosKChochS :
+             i_bosStructReq == "BOS (continuation)" ? (bosKContS or bosKAmbigS) :
+                                                      (bosKChochS or bosKContS or bosKAmbigS)
+
+// ------------------------------------------------------- 9.4 STATE + FIRE
+// bosSigL/bosSigS are var pulses cleared at the top of every confirmed bar. On a
+// forming bar they hold the previous confirmed value, which is why every
+// consumer reads them inside `if confirmed` and the display sections treat them
+// as already-committed history.
+var bool  bosSigL   = false
+var bool  bosSigS   = false
+var float bosLvlL   = na
+var float bosLvlS   = na
+var float qBosL     = 0.0
+var float qBosS     = 0.0
+var bool  isChochL  = false
+var bool  isChochS  = false
+var int   bosBarL   = na
+var int   bosBarS   = na
+
+// Zone identity clock. The bar a zone id first appears is the absorption anchor;
+// when the exported zone dies or its id changes, the clock and the leg extreme
+// reset with it. Nothing here survives the zone.
+var int   bosZidL    = na
+var int   bosZidS    = na
+var int   bosAbsBarL = na
+var int   bosAbsBarS = na
+var float bosLegLoL  = na
+var float bosLegHiS  = na
+
+// How many swings the maintenance pass retired on this bar. Debug-panel value
+// only: nothing gates on it, but a run of zeros on a trending chart means the
+// structure arrays are not being fed, which is otherwise silent.
+var int   bosMarked  = 0
+
+if confirmed and warmupOk
+    bosSigL   := false
+    bosSigS   := false
+    bosMarked := 0
+
+    // --- zone clock, LONG ---------------------------------------------------
+    if not zoneAliveL
+        bosZidL    := na
+        bosAbsBarL := na
+        bosLegLoL  := na
+    else if na(bosZidL) or bosZidL != zoneIdL
+        bosZidL    := zoneIdL
+        bosAbsBarL := bar_index
+        bosLegLoL  := na
+    else
+        bosLegLoL  := na(bosLegLoL) ? low : math.min(bosLegLoL, low)
+
+    // --- zone clock, SHORT (line-for-line mirror of the block above) --------
+    if not zoneAliveS
+        bosZidS    := na
+        bosAbsBarS := na
+        bosLegHiS  := na
+    else if na(bosZidS) or bosZidS != zoneIdS
+        bosZidS    := zoneIdS
+        bosAbsBarS := bar_index
+        bosLegHiS  := na
+    else
+        bosLegHiS  := na(bosLegHiS) ? high : math.max(bosLegHiS, high)
+
+    bool bosLinkL = f_bosLink( 1, zoneAliveL, zoneTopL, zoneBotL, bosAbsBarL, bosLegLoL)
+    bool bosLinkS = f_bosLink(-1, zoneAliveS, zoneTopS, zoneBotS, bosAbsBarS, bosLegHiS)
+
+    bool bosFireL = bosBreakRawL and not bosOutside and bosLinkL and bosKindOkL
+    bool bosFireS = bosBreakRawS and not bosOutside and bosLinkS and bosKindOkS
+
+    // --- LONG: fire, or expire the evidence --------------------------------
+    if bosFireL
+        bosSigL  := true
+        bosLvlL  := bosRefHi
+        isChochL := bosKChochL
+        qBosL    := f_bosQual( 1, bosRefHi, bosSrcUp, bar_index - bosAbsBarL, bosKChochL)
+        bosBarL  := bar_index
+    else if not na(bosBarL) and bar_index - bosBarL > i_maxBarsAbsToBos
+        bosLvlL  := na
+        isChochL := false
+        qBosL    := 0.0
+        bosBarL  := na
+
+    // --- SHORT: line-for-line mirror ---------------------------------------
+    if bosFireS
+        bosSigS  := true
+        bosLvlS  := bosRefLo
+        isChochS := bosKChochS
+        qBosS    := f_bosQual(-1, bosRefLo, bosSrcDn, bar_index - bosAbsBarS, bosKChochS)
+        bosBarS  := bar_index
+    else if not na(bosBarS) and bar_index - bosBarS > i_maxBarsAbsToBos
+        bosLvlS  := na
+        isChochS := false
+        qBosS    := 0.0
+        bosBarS  := na
+
+    // --- maintenance: clear every swing price has already traded through ----
+    // Runs unconditionally on both sides, EXCEPT on an outside bar, which is
+    // consumed whole and leaves neither side's flags touched.
+    if not bosOutside
+        int bosMkUp = f_bosMark(swHiArr,  1, bosSrcUp, bosBuf)
+        int bosMkDn = f_bosMark(swLoArr, -1, bosSrcDn, bosBuf)
+        bosMarked := bosMkUp + bosMkDn
+// ========================= END SECTION 9 ====================================

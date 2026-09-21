@@ -1,0 +1,381 @@
+//@version=6
+// ============================================================================
+//  XAU ICEBERG / ABSORPTION  --  SECTION 0 : CANONICAL SHARED GLOBALS
+//  Everything from here to the SECTION 18 banner is BYTE-IDENTICAL in the
+//  indicator file and the strategy file. The ONLY differences are:
+//     (a) the declaration call immediately below, and
+//     (b) SECTION 18 (plots + alerts  vs  orders + alert_message).
+//  NO module below SECTION 0 may re-declare anything defined here.
+// ============================================================================
+indicator("ICEburg", "ICEburg", overlay = true,
+     max_labels_count = 500, max_lines_count = 500, max_boxes_count = 500,
+     max_bars_back = 1000)
+
+// --- STRATEGY TWIN: swap the call above for exactly this, change nothing else.
+// strategy("XAU Iceberg / Absorption [S]", "XAU-ICE-S", overlay = true,
+//      initial_capital          = 10000,
+//      default_qty_type         = strategy.fixed,   // qty ALWAYS passed explicitly
+//      default_qty_value        = 1,
+//      commission_type          = strategy.commission.cash_per_contract,
+//      commission_value         = 0.25,             // == i_spreadUsd, charged per FILL
+//      slippage                 = 10,               // TICKS. 10 * 0.01 = 0.10 USD/side
+//      margin_long = 5.0, margin_short = 5.0,       // 20x max lev. v6 DEFAULT IS 100, not 0
+//      pyramiding = 0, process_orders_on_close = false,
+//      calc_on_every_tick = false,                  // strategy() ONLY - compile error on indicator()
+//      max_labels_count = 500, max_lines_count = 500, max_boxes_count = 500,
+//      max_bars_back = 1000)
+//
+// ---------------------------------------------------------------------------
+// LATENCY CONTRACT (stated once, here, contradicted nowhere):
+//   official signal = close of a CONFIRMED bar
+//     + i_pivotRight bars   pivot confirmation - the ONLY structural delay
+//     + 0 bars              every other gate reads the confirmed bar or earlier
+//     + 1 bar               strategy fill only (process_orders_on_close = false)
+//
+// PROXY CONTRACT: TradingView exposes no order book, no bid/ask tape and no
+// aggressor flag for spot XAUUSD. `volume` on these feeds is TICK COUNT - the
+// number of price changes, not contracts and not USD notional. Everything
+// derived from it (rvol, deltaProxy, buyPressure, sellPressure, cvdProxy and
+// every "absorption" number) is a PROXY. User-facing text never claims real
+// order flow, real delta, or knowledge of hidden institutional orders.
+//
+// PINE v6 NOTES THAT SHAPE THIS FILE (verified against the v6 migration guide):
+//   * a "bool" is ALWAYS true or false - never na. na()/nz()/fixnan() REJECT
+//     bool arguments. Do not wrap a bool in nz().
+//   * `and`/`or` evaluate LAZILY, so every ta.* call sits at global scope and is
+//     referenced by name inside conditions - never called inside one.
+//   * numbers do NOT auto-cast to bool - use bool(x).
+//   * int/int yields a FRACTION in v6, so all scoring maths is explicit float.
+//   * timeframe.period always carries a multiplier ("1D", not "D").
+// ============================================================================
+
+// ---------------------------------------------------------------- G1 GROUPS
+GC = "0 - Core"
+GV = "0 - Volume & Delta Proxy"
+GS = "0 - Session & Timezone"
+GH = "0 - Higher-Timeframe Bias"
+GR = "0 - Risk & Cost"
+GD = "0 - Display"
+
+// ------------------------------------------ G2 CORE INPUTS (SINGLE SOURCE)
+i_atrLen     = input.int(14, "ATR length", minval = 2, maxval = 200, group = GC,
+     tooltip = "ONE ATR for the whole script. Every ATR-scaled tolerance in every " +
+               "module reads this series. Do not shorten it on 1M: a short ATR on " +
+               "1M gold is dominated by spread bounce.",
+     display = display.none)
+i_pivotLeft  = input.int(5, "Pivot LEFT legs",  minval = 1, maxval = 50, group = GC,
+     tooltip = "LEFT legs cost ZERO delay - the condition is already satisfied when " +
+               "the pivot bar prints.",
+     display = display.none)
+i_pivotRight = input.int(3, "Pivot RIGHT legs", minval = 1, maxval = 50, group = GC,
+     tooltip = "ta.pivothigh(src,L,R) returns the pivot R bars AFTER it printed, so " +
+               "the pivot bar is bar_index - R. Take the PRICE from the function " +
+               "return, never from high[R]. THIS INPUT IS THE SYSTEM SIGNAL LATENCY.",
+     display = display.none)
+i_minScore   = input.float(75.0, "Min setup score (0-100)", minval = 0, maxval = 100,
+     step = 1, group = GC,
+     tooltip = "THE score gate - the only one in the file. Presets: 1M 80 / 5M 75 / " +
+               "15M 70. This is a SETUP CONFIDENCE score, NOT a win probability.",
+     display = display.none)
+i_mode       = input.string("Clean", "Display mode", options = ["Clean", "Debug"], group = GD, display = display.none)
+i_showStats  = input.bool(false, "Show stats / failure panel", group = GD, display = display.none)
+
+i_rvolLen    = input.int(50, "Relative-volume baseline (bars)", minval = 5, maxval = 500,
+     group = GV,
+     display = display.none)
+i_volTod     = input.bool(true, "Normalise volume by time of day", group = GV,
+     tooltip = "XAUUSD tick volume has a 5-10x diurnal profile. Without this, a flat " +
+               "volume/SMA is a session clock wearing a participation costume: every " +
+               "London bar looks like high relative volume and every Asian bar looks " +
+               "dead, regardless of what actually happened.",
+     display = display.none)
+i_deltaMode  = input.string("CLV x Volume (gap-aware)", "Delta proxy estimator",
+     options = ["CLV x Volume (gap-aware)", "Wick-weighted", "Tick rule (volume-free)"],
+     group = GV,
+     tooltip = "Lower-timeframe intrabar reconstruction (request.security_lower_tf) is " +
+               "deliberately NOT offered: TradingView own reference states such " +
+               "scripts may calculate differently on historical and realtime bars, " +
+               "which repaints. It is excluded from this file, not merely defaulted off.",
+     display = display.none)
+i_wickWeight = input.float(1.5, "Wick weight (lambda)", minval = 0.0, maxval = 5.0,
+     step = 0.1, group = GV,
+     tooltip = "lambda = 1 collapses EXACTLY back to plain CLV. Above 1 up-weights " +
+               "rejection wicks, which is the tell this system is built on.",
+     display = display.none)
+
+i_spreadUsd  = input.float(0.25, "Typical spread (USD / oz)", minval = 0.0, step = 0.01,
+     group = GR,
+     tooltip = "XAUUSD spot runs 0.15-0.35 USD. This is the NOISE FLOOR of the entire " +
+               "system: nothing in this file is denominated in ticks or points, because " +
+               "mintick is 0.01 on most gold feeds and 0.001 on others.",
+     display = display.none)
+i_slipUsd    = input.float(0.10, "Slippage per side (USD / oz)", minval = 0.0, step = 0.01,
+     group = GR,
+     display = display.none)
+i_riskPct    = input.float(0.50, "Risk per trade (% of equity)", minval = 0.01,
+     maxval = 5.0, step = 0.05, group = GR,
+     display = display.none)
+i_rrMin      = input.float(2.0, "Minimum NET R:R (gate on TP2)", minval = 0.5, step = 0.1,
+     group = GR,
+     tooltip = "Setups that cannot reach this after costs are rejected as POOR RR.",
+     display = display.none)
+
+i_tz         = input.string("America/New_York", "Trading-day timezone (IANA)", group = GS,
+     tooltip = "Governs the day and week boundary only. Each SESSION resolves in its " +
+               "own zone below, so DST is handled correctly even in the weeks when " +
+               "Europe and the US are out of step.",
+     display = display.none)
+i_sessMode   = input.string("London + NY", "Active sessions",
+     options = ["Off (24h)", "London + NY", "Overlap only", "All"], group = GS,
+     display = display.none)
+i_sessEdge   = input.int(5, "Session edge trim (minutes)", minval = 0, maxval = 90, group = GS, display = display.none)
+
+i_htfSel     = input.string("Auto", "HTF bias timeframe",
+     options = ["Auto", "5", "15", "60", "240", "1D"], group = GH,
+     display = display.none)
+i_htfMode    = input.string("Soft (score only)", "HTF bias mode",
+     options = ["Off", "Soft (score only)", "Block opposite", "Require aligned"], group = GH,
+     tooltip = "Soft is the default on purpose: this is a REVERSAL system, and a hard " +
+               "trend filter deletes the highest-value setup it has - absorption " +
+               "against an exhausted move.",
+     display = display.none)
+i_htfEmaLen  = input.int(50, "HTF EMA length", minval = 2, maxval = 400, group = GH, display = display.none)
+i_htfDeadAtr = input.float(0.25, "HTF neutral dead zone (x HTF ATR)", minval = 0.0,
+     step = 0.05, group = GH,
+     display = display.none)
+
+// ----------------------------------------------------- G3 UNIVERSAL HELPERS
+// na PROPAGATES. It is never silently replaced by a bound: substituting `lo` for
+// na is exactly what turns a missing HTF bias into a full penalty on one side and
+// a full bonus on its mirror. Callers state their own na policy at the call site.
+f_clamp(float x, float lo, float hi) => na(x) ? na : math.max(lo, math.min(hi, x))
+f_clamp01(float x) => f_clamp(x, 0.0, 1.0)
+
+// THE ramp - one definition, used by every sub-score in the file.
+// hi <= lo is a CONFIGURATION ERROR and returns na (so the gate reading it fails),
+// never 1.0 - "set the threshold to 0 to disable" must not hand a module a free
+// full sub-score.
+f_ramp(float x, float lo, float hi) =>
+    na(x) or hi <= lo ? na : f_clamp01((x - lo) / (hi - lo))
+
+f_sgnDead(float x, float dz) => na(x) ? 0 : x > dz ? 1 : x < -dz ? -1 : 0
+f_px(float p)  => na(p) ? "n/a" : str.tostring(p, format.mintick)
+f_pct(float x) => na(x) ? "n/a" : str.tostring(x * 100.0, "#.0") + "%"
+
+// --------------------------------------------------------- G4 CORE SERIES
+// THE definition of "confirmed". Every state mutation, counter, array push and
+// signal evaluation in every module sits inside `if confirmed and warmupOk`.
+// barstate.islast blocks are DISPLAY ONLY and read already-committed state.
+confirmed = barstate.isconfirmed
+
+tick    = syminfo.mintick
+atr     = ta.atr(i_atrLen)
+// The ATR floor is in USD, not ticks: a tick-denominated floor mis-scales 10x
+// between a 0.01 and a 0.001 gold feed.
+aRef    = math.max(nz(atr, 0.0), i_spreadUsd)
+atrPrev = nz(atr[1], aRef)                     // spike-free reference for the news guard
+costRt  = i_spreadUsd + 2.0 * i_slipUsd        // round-turn cost, USD/oz
+
+// THE tolerance primitive. Every "is this close enough to be the same price?" test
+// - EQ clusters, level proximity, retest touch, sweep reclaim buffer, zone break
+// buffer, duplicate suppression, FVG minimum - is f_tol(mult). Never a raw ATR
+// multiple (it collapses below spread in dead tape), never a tick count.
+f_tol(float mult) => math.max(mult * aRef, i_spreadUsd)
+
+barRange = math.max(high - low, tick)
+bodyAbs  = math.abs(close - open)
+bodyTop  = math.max(open, close)
+bodyBot  = math.min(open, close)
+
+// DIRECTION CONVENTION, stated once: dir = +1 LONG/bullish, dir = -1 SHORT.
+// A LiquidityLevel side field uses the OPPOSITE polarity (+1 = born from a high =
+// acts as resistance), so level eligibility is ALWAYS `lvl.side == -dir`.
+f_wickFrac(int dir) => dir > 0 ? (bodyBot - low) / barRange : (high - bodyTop) / barRange
+f_closeLoc(int dir) => dir > 0 ? (close - low) / barRange : (high - close) / barRange
+// Identity: f_closeLoc(1) + f_closeLoc(-1) == 1 exactly, on every bar. These are the
+// ONLY direction-dependent primitives in the file, which is what makes long/short
+// symmetry STRUCTURAL rather than something a reviewer has to check by eye.
+
+// ------------------------------- G5 TICK VOLUME (PROXY - NOT CONTRACTS)
+var bool hasVol = false
+if not hasVol and not na(volume) and volume > 0
+    hasVol := true
+
+vol    = nz(volume, 0.0)
+volSma = ta.sma(vol, i_rvolLen)
+
+// Time-of-day normalisation. Without it, rvol measures the clock, not participation.
+// 48 half-hour slots; each keeps its own EWMA baseline of volume.
+todSlot = hour(time, "Etc/UTC") * 2 + (minute(time, "Etc/UTC") >= 30 ? 1 : 0)
+var array<float> todBase = array.new<float>(48, na)
+todRef = array.get(todBase, todSlot)
+if confirmed and hasVol
+    array.set(todBase, todSlot, na(todRef) ? vol : todRef + 0.05 * (vol - todRef))
+
+// ONE na policy for rvol, stated once: na when the feed carries no usable volume -
+// never 0 (which would make every thin-volume veto a 100% kill switch) and never 1
+// (which fabricates average participation out of nothing).
+//   HARD GATES  : written `not hasVol or rvol >= t`   -> BYPASS when unknown
+//   SCORE WEIGHT: w_rvol is zeroed and the rubric renormalised to 100
+rvolFlat = hasVol and volSma > 0 ? vol / volSma : na
+rvolTod  = hasVol and not na(todRef) and todRef > 0 ? vol / todRef : na
+rvol     = i_volTod ? nz(rvolTod, rvolFlat) : rvolFlat
+effVol   = hasVol ? vol : 1.0
+
+// ---------------------- G6 DELTA PROXY (gap-aware; ratio in [-1, +1])
+trHi = math.max(high, nz(close[1], high))   // True-Range bounds. Reduce IDENTICALLY to
+trLo = math.min(low,  nz(close[1], low))    // H/L when there is no gap, and attribute
+trRn = trHi - trLo                          // the gap to a side when there is one.
+
+rClv  = trRn > 0 ? (2.0 * close - trHi - trLo) / trRn : na
+uWick = trHi - bodyTop
+dWick = bodyBot - trLo
+bUp   = math.max(close - open, 0.0) + i_wickWeight * dWick
+bDn   = math.max(open - close, 0.0) + i_wickWeight * uWick
+rWk   = (bUp + bDn) > 0 ? (bUp - bDn) / (bUp + bDn) : na
+
+// Tick rule: the universal fallback, and the only estimator that needs no volume.
+var float rTick = 0.0
+prevClose = nz(close[1], close)
+rTick := close > prevClose ?  1.0 :
+         close < prevClose ? -1.0 :
+         close > open      ?  1.0 :
+         close < open      ? -1.0 : nz(rTick[1], 0.0)
+
+rSel  = i_deltaMode == "Wick-weighted"           ? rWk   :
+         i_deltaMode == "Tick rule (volume-free)" ? rTick : rClv
+ratio = f_clamp(nz(rSel, rTick), -1.0, 1.0)
+
+deltaProxy   = ratio * effVol
+buyPressure  = (1.0 + ratio) / 2.0
+sellPressure = (1.0 - ratio) / 2.0          // b + s == 1 EXACTLY, by construction
+// Mirroring a bar maps ratio -> -ratio and swaps buyPressure <-> sellPressure.
+// Zero directional bias here is structural, not a threshold choice.
+
+// --------------- G7 TRADING DAY / WEEK / SESSIONS (one owner, one clock)
+dayId   = year(time, i_tz) * 10000 + month(time, i_tz) * 100 + dayofmonth(time, i_tz)
+weekId  = year(time, i_tz) * 100 + weekofyear(time, i_tz)
+newDay  = not na(dayId[1])  and dayId  != dayId[1]
+newWeek = not na(weekId[1]) and weekId != weekId[1]
+
+// Each session resolves in its OWN IANA zone, so DST is correct including the
+// ~4 weeks a year when the EU and US offsets are out of step and the overlap widens.
+tAsia     = time(timeframe.period, "0900-1500", "Asia/Tokyo")
+tLondon   = time(timeframe.period, "0800-1630", "Europe/London")
+tNy       = time(timeframe.period, "0800-1700", "America/New_York")
+inAsia    = not na(tAsia)
+inLondon  = not na(tLondon)
+inNy      = not na(tNy)
+inOverlap = inLondon and inNy
+
+sessSel = i_sessMode == "Off (24h)"    ? true      :
+          i_sessMode == "Overlap only" ? inOverlap :
+          i_sessMode == "All"          ? (inAsia or inLondon or inNy) :
+                                         (inLondon or inNy)
+
+// Session QUALITY: direction-free, 0..1. The ONLY session number the score reads.
+sessQual = inOverlap ? 1.0 : (inLondon or inNy) ? 0.80 : inAsia ? 0.35 : 0.0
+
+// Edge trim fires on EVERY session open, not only the first open of a contiguous
+// run - that is what makes it bite at the NY open while London is already active.
+anyOpen = (inAsia   and not inAsia[1])   or
+          (inLondon and not inLondon[1]) or
+          (inNy     and not inNy[1])
+var int lastOpenBar = na
+if anyOpen
+    lastOpenBar := bar_index
+edgeOk = i_sessEdge <= 0 or na(lastOpenBar) or
+         (bar_index - lastOpenBar) * timeframe.in_seconds() >= i_sessEdge * 60
+sessOk = sessSel and edgeOk
+// na(lastOpenBar) passing is deliberate: it stops sessOk latching false forever in
+// "Off (24h)" mode, where sessSel never has a false->true edge to latch on.
+
+// SESSION open price, NOT the chart-day open: on a gold CFD the daily boundary is
+// 17:00/18:00 NY, so a day open is 8-9 hours stale by the time London trades.
+var float sessOpenPx = na
+if anyOpen or na(sessOpenPx)
+    sessOpenPx := open
+
+// CVD epoch. EVERY divergence test - pivot-confirmed AND fast - must additionally
+// require cvdEpoch equality, or the first bars of every session compare a
+// post-reset value against a pre-reset extreme and diverge trivially every morning.
+var int   cvdEpoch = 0
+var float cvdProxy = 0.0
+cvdEpoch := nz(cvdEpoch[1], 0) + (newDay ? 1 : 0)
+cvdProxy := (newDay ? 0.0 : nz(cvdProxy[1], 0.0)) + deltaProxy
+
+// ------------------------------------ G8 NON-REPAINTING HTF BIAS
+// The delivered value is the last FULLY CLOSED HTF bar, identical on history and
+// in realtime. Staleness is D_h in [0, T_h): zero the instant HTF bar n opens, at
+// most one HTF period just before it closes.
+// The one-bar shift is done with EXPLICIT var state rather than `expr[1]` on a
+// function local, so there is no ambiguity about what is being offset.
+htfAuto = timeframe.in_seconds() <= 60   ? "15"  :
+          timeframe.in_seconds() <= 300  ? "60"  :
+          timeframe.in_seconds() <= 900  ? "240" :
+          timeframe.in_seconds() <= 3600 ? "1D"  : "1W"
+htfPick = i_htfSel == "Auto" ? htfAuto : i_htfSel
+// HARD GUARD: a "higher" timeframe that is <= the chart timeframe turns
+// lookahead_on into a genuine future leak. Fall back to Auto, never to the choice.
+htfTf   = timeframe.in_seconds(htfPick) > timeframe.in_seconds() ? htfPick : htfAuto
+
+f_htfBias() =>
+    float e  = ta.ema(close, i_htfEmaLen)      // hoisted: lazy and/or must not skip these
+    float a  = ta.atr(i_atrLen)
+    float ph = ta.pivothigh(high, 2, 2)
+    float pl = ta.pivotlow(low, 2, 2)
+    var float h1 = na
+    var float h2 = na
+    var float l1 = na
+    var float l2 = na
+    if not na(ph)
+        h2 := h1
+        h1 := ph
+    if not na(pl)
+        l2 := l1
+        l1 := pl
+    float dz  = i_htfDeadAtr * nz(a, 0.0)
+    int   bSt = na(h1) or na(h2) or na(l1) or na(l2) ? 0 :
+                 h1 > h2 and l1 > l2 ?  1 :
+                 h1 < h2 and l1 < l2 ? -1 : 0
+    // The EMA source is SIDE ONLY. "slope AND side must agree" is a TAUTOLOGY:
+    // e - e[1] = alpha*(close - e[1]) and close - e = (1-alpha)*(close - e[1]) are
+    // positive multiples of the same quantity and can never disagree.
+    // VWAP as a third source is DELETED: ta.vwap() raises a RUNTIME ERROR on
+    // volumeless gold feeds, and in a 1D/1W request context VWAP equals that bar
+    // own hlc3, so the source degenerates to "closed above its own midpoint".
+    int  bNow   = bSt != 0 and bSt == f_sgnDead(close - e, dz) ? bSt : 0
+    bool rdyNow = not na(e) and not na(h2) and not na(l2)
+    var int  bPrev   = 0
+    var bool rdyPrev = false
+    int  bOut   = bPrev
+    bool rdyOut = rdyPrev
+    bPrev   := bNow
+    rdyPrev := rdyNow
+    [bOut, rdyOut]
+
+[htfBiasRaw, htfReadyRaw] = request.security(syminfo.tickerid, htfTf, f_htfBias(),
+     gaps = barmerge.gaps_off, lookahead = barmerge.lookahead_on)
+htfBias  = nz(htfBiasRaw, 0)     // int CAN be na; a bool CANNOT, so htfReady is used raw
+htfReady = htfReadyRaw
+
+// ONE HTF contract. Unknown bias fails OPEN for the soft modes and CLOSED for
+// "Require aligned", so the hard mode is never weaker than Off.
+f_htfAllow(int dir) =>
+    i_htfMode == "Off" or i_htfMode == "Soft (score only)" ? true    :
+     not htfReady                  ? i_htfMode == "Block opposite"    :
+     i_htfMode == "Block opposite" ? (htfBias == 0 or htfBias == dir) :
+                                     htfBias == dir
+// Signed scalar for the score. Unknown bias is 0.0 for BOTH sides, so it can never
+// hand one direction a bonus and its mirror an equal penalty out of missing data.
+f_htfScalar(int dir) =>
+    not htfReady or htfBias == 0 ? 0.0 : htfBias == dir ? 1.0 : -1.0
+
+// ------------------------------ G9 WARMUP + FEED HEALTH (one gate)
+warmupOk = bar_index > math.max(i_rvolLen, i_atrLen * 3) + i_pivotLeft + i_pivotRight + 5
+       and not na(atr) and atr > 0
+isGold   = str.contains(str.upper(syminfo.ticker), "XAU") or
+           str.contains(str.upper(syminfo.ticker), "GOLD")
+tickWarn = tick != 0.01   // the strategy slippage is a const int and cannot follow the feed
+// Every module top-level trigger is exactly:  if confirmed and warmupOk
+// ========================= END SECTION 0 ====================================

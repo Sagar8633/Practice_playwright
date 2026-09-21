@@ -1,0 +1,370 @@
+// ============================================================================
+//  SECTION 19 : PRESETS + RUNTIME SELF-TESTS
+//
+//  (a) THE single recommended-settings block. Seven components shipped their
+//      own preset tables and they contradicted each other - the score threshold
+//      was 85/75/65 in one and 65 flat in another, the friction ratio k was
+//      4.0/3.0/2.0 with no owner, i_absMaxProgress was 0.35 in one and 0.40 in
+//      another. Those tables are all DELETED. This one is the source of truth,
+//      and every difference below is justified on its own line.
+//
+//  (b) RUNTIME SELF-TESTS. Every invariant this file asserts in prose is
+//      asserted here in code, on the last bar, and a failure renders as a RED
+//      panel row. A silent invariant is a decoration.
+// ============================================================================
+
+// --------------------------------------------------------------- 19 GROUP
+GTEST = "19 - Presets & Self-Test"
+
+// ============================================================================
+//  (a) RECOMMENDED SETTINGS - XAUUSD - 1M / 5M / 15M
+//
+//  WHAT VARIES BY TIMEFRAME, AND WHY
+//  ------------------------------------------------------------------------
+//  INPUT                    1M      5M      15M    WHY IT DIFFERS
+//  ------------------------------------------------------------------------
+//  i_minScore              80      75      70     1M has the worst evidence-to-
+//                                                 noise ratio, so demand more of
+//                                                 it where it is cheapest to fake.
+//  i_pivotLeft / Right     5 / 3   5 / 3   4 / 2  i_pivotRight IS the system
+//                                                 latency. 3 bars is 3 minutes at
+//                                                 1M and 45 minutes at 15M - the
+//                                                 legs must shorten as the bar
+//                                                 gets expensive.
+//  i_rvolLen               50      50      30     50 bars at 15M spans 12+ hours
+//                                                 and smears the whole diurnal
+//                                                 profile the baseline exists to
+//                                                 capture.
+//  i_sessMode              Overlap L+NY    L+NY   1M outside the London/NY
+//                          only                   overlap is mostly spread
+//                                                 bounce, not participation.
+//  i_sessEdge (min)        5       5       0      At 15M one bar already exceeds
+//                                                 a 5-minute trim, so the trim
+//                                                 would delete the open entirely.
+//  i_htfMode               Block   Soft    Soft   1M cannot absorb counter-trend
+//                          opposite               chop; at 5M+ the reversal setup
+//                                                 is worth more than the filter.
+//  i_riskPct (%)           0.25    0.50    0.50   The 1M sample is tiny and cost
+//                                                 is the largest share of R
+//                                                 there - size down until the
+//                                                 sample earns the risk.
+//  i_rrMin (NET)           1.8     2.0     2.2    Cost is ~25% of R at 1M, so a
+//                                                 NET 2.0 is unreachable inside a
+//                                                 20-bar horizon; 15M's wider stop
+//                                                 buys the room for 2.2.
+//  min stop / cost (k)     4.0     3.0     2.0    NOT a separate input. It is
+//                                                 delivered by f_riskPlan()'s
+//                                                 minStop clamp (SECTION 11) and
+//                                                 equals ~1.80 / 1.35 / 0.90 USD
+//                                                 against costRt = 0.45.
+//                                                 HONESTY NOTE: at 1M that
+//                                                 rejects ~80% of the stop
+//                                                 distribution, which is why 1M
+//                                                 below is inspection-only.
+//  i_absMaxProgress        0.35    0.40    0.40   1M bars are largely spread, so
+//                                                 "effort without result" has to
+//                                                 be measured more strictly.
+//  i_absMinTests           2       2       1      At 15M a zone rarely gets
+//                                                 re-tested twice inside one
+//                                                 session before it resolves.
+//  i_zoneMaxTouches        4       4       3      Mirror of the line above - keep
+//                                                 the gap, it is what stops the
+//                                                 deadlock (see self-test 13).
+//  i_cooldownBars          10      8       4      The input is BARS, so these are
+//                                                 10 / 40 / 60 minutes of wall
+//                                                 clock - NOT constant, and the
+//                                                 earlier draft of this table
+//                                                 claimed they were. The bar
+//                                                 count still has to FALL as the
+//                                                 bar grows or a flat 10 would be
+//                                                 2.5 hours at 15M and eat the
+//                                                 session; it just does not fall
+//                                                 fast enough to hold the clock.
+//  i_entryMode             Confirm Retest  Retest A 1M retest is spread noise -
+//                                                 there is no room between the
+//                                                 BOS and the level for one.
+//  i_lookbackDays          3       20      60     THE ACCOUNT CONSTRAINT. No Deep
+//                                                 Backtesting on this plan, so
+//                                                 history is what the chart holds:
+//                                                 ~5000 bars = ~3.6 days at 1M,
+//                                                 ~17 days at 5M, ~52 days at
+//                                                 15M. A larger value is a silent
+//                                                 no-op.
+//  STRATEGY BUILD ONLY (BLOCK 18-S)
+//  i_maxBarsInTrade        20      24      32     Same wall-clock ceiling, ~30
+//                                                 min / 2 h / 8 h.
+//  i_trailAtrMult          2.0     2.5     3.0    ATR arm only; the R-scaled cap
+//                                                 i_trailRmult = 1.5 is FLAT on
+//                                                 every timeframe and is usually
+//                                                 the binding one.
+//
+//  DO NOT VARY BY TIMEFRAME - these are properties of the SYMBOL, not the bar:
+//    i_atrLen 14 . i_spreadUsd 0.25 . i_slipUsd 0.10 (costRt = 0.45)
+//    i_maxLevels 40 . i_eqTolATR 0.15 . i_absMaxZones 8
+//    (the zone BREAK buffer is not an input at all - it is the hardcoded
+//     max(0.15 x atrRef, i_spreadUsd) in SECTION 2's breachPx(), frozen per
+//     zone at creation. Do not go looking for it in the Settings panel.)
+//    i_wickWeight 1.5 . i_volTod ON . i_deltaMode "CLV x Volume (gap-aware)"
+//    i_maxSetupsPerDir 2 . i_tz America/New_York . i_trailRmult 1.5
+//    RUBRIC WEIGHTS  level 15 . sweep 15 . rvol 10 . absorb 20 . reject 10 .
+//                    displace 10 . bos 10 . retest 10   = 100 EXACTLY.
+//                    Changing one without changing another breaks self-test 12.
+//
+//  HOW TO USE THE 1M COLUMN, HONESTLY:
+//    1M is EXECUTION INSPECTION ONLY. ~3.6 days of history times a ~20% pass
+//    rate through the minimum-stop clamp is one or two trades. That is not a
+//    sample, it is an anecdote. Do not tune a single input on it, do not quote a
+//    win rate from it, and do not run a walk-forward fold on it. Use it to watch
+//    where the entries land relative to the zones, and nothing else.
+//    Statistics come from 5M and 15M, over as many rolling folds as the loaded
+//    history allows - more folds of a shorter window, with the claims reduced to
+//    match, is the only protocol this account can actually execute.
+// ============================================================================
+
+// ============================================================================
+//  (b) RUNTIME SELF-TESTS
+//  All evaluated on the LAST BAR only, so they cost nothing on history. None of
+//  them calls a ta.* function, so none of them can perturb a recursive series.
+//  A failure NEVER halts the script - it renders red. A self-test that can kill
+//  a live chart is worse than the bug it was looking for.
+// ============================================================================
+
+i_selfTest = input.bool(true, "Run self-tests", group = GTEST,
+     tooltip = "Evaluates every structural invariant on the last bar. Costs one " +
+               "table and no drawing objects. Turn it OFF only to free the panel " +
+               "anchor - it does not measurably affect speed.",
+     display = display.none)
+i_testRows = input.string("Failures only", "Self-test panel",
+     options = ["Off", "Failures only", "All checks"], group = GTEST,
+     tooltip = "Failures only = the panel is invisible while everything passes, " +
+               "and appears in red the moment something breaks. All checks = the " +
+               "full list, useful once after any edit to the weights or caps.",
+     display = display.none)
+
+// Float comparison tolerance. Tight enough that a real arithmetic error is
+// caught, loose enough that IEEE-754 round-off in a sum of eight weights is not
+// reported as a bug.
+ST_EPS = 1e-6
+
+// A sub-score may legitimately be na (no contender on that side this bar); an
+// na is NOT a failure. An out-of-range NUMBER is.
+f_ok01(float _x)  => na(_x) or (_x >= -ST_EPS and _x <= 1.0 + ST_EPS)
+f_ok100(float _x) => na(_x) or (_x >= -ST_EPS and _x <= 100.0 + ST_EPS)
+
+// Appends one result. Mutating an array passed as a parameter is legal - it is
+// the OBJECT being changed, not a global variable being reassigned, which is
+// the thing Pine actually forbids inside a function body.
+f_stAdd(array<string> _n, array<bool> _p, string _label, bool _pass) =>
+    array.push(_n, _label)
+    array.push(_p, _pass)
+    array.size(_p)
+
+f_stRow(table _t, int _r, string _label, bool _pass) =>
+    table.cell(_t, 0, _r, _pass ? "OK" : "FAIL",
+         text_color = _pass ? color.new(color.gray, 20) : color.white,
+         bgcolor    = _pass ? color.new(color.gray, 90) : color.new(#EF5350, 0),
+         text_size = size.tiny, text_halign = text.align_center)
+    table.cell(_t, 1, _r, _label,
+         text_color = _pass ? color.new(color.silver, 20) : color.white,
+         bgcolor    = _pass ? color.new(color.gray, 95) : color.new(#EF5350, 25),
+         text_size = size.tiny, text_halign = text.align_left)
+
+// -------------------------------------------------------- THE ASSERTIONS
+// Evaluated at global scope so no lazy `and` can skip one, then read by name.
+
+// 1. The delta-proxy identity. b + s == 1 is what makes long/short symmetry
+//    structural rather than a threshold choice; if it ever drifts, every
+//    mirrored sub-score in the file is quietly biased.
+st01 = math.abs(buyPressure + sellPressure - 1.0) <= ST_EPS
+
+// 2. The direction primitive identity. GUARDED on range >= tick: on a bar where
+//    high == low, barRange is floored to tick and the sum is legitimately 0,
+//    not 1. That guard is the honest statement of the identity, not a dodge.
+st02 = (high - low) < tick or
+       math.abs(f_closeLoc(1) + f_closeLoc(-1) - 1.0) <= ST_EPS
+
+// 3. Same identity for the wick/body decomposition, same guard.
+st03 = (high - low) < tick or
+       math.abs(f_wickFrac(1) + f_wickFrac(-1) + bodyAbs / barRange - 1.0) <= ST_EPS
+
+// 4. The delta ratio must stay inside its declared domain - everything
+//    downstream assumes [-1, +1] and none of it re-clamps.
+st04 = na(ratio) or (ratio >= -1.0 - ST_EPS and ratio <= 1.0 + ST_EPS)
+
+// 5. The ONE 0-100 score, both sides.
+st05 = f_ok100(scoreL) and f_ok100(scoreS)
+
+// 6. Every rubric sub-score in [0,1], both sides. Sixteen numbers from eight
+//    modules; a single one escaping its range silently re-weights the rubric.
+st06 = f_ok01(qLevelL)  and f_ok01(qLevelS)  and f_ok01(qSweepL)  and f_ok01(qSweepS) and
+       f_ok01(qRvolL)   and f_ok01(qRvolS)   and f_ok01(qAbsorbL) and f_ok01(qAbsorbS) and
+       f_ok01(qRejectL) and f_ok01(qRejectS) and f_ok01(qDispL)   and f_ok01(qDispS) and
+       f_ok01(qBosL)    and f_ok01(qBosS)    and f_ok01(qRetestL) and f_ok01(qRetestS)
+
+// 7-9. Array caps. Each of these arrays has a prune step that is supposed to
+//      hold the cap; an overflow here means a prune path was missed.
+//      EACH BOUND IS THE ONE ITS OWNER DOCUMENTS, not the bare input, because a
+//      self-test that goes red on a healthy system is worse than no self-test:
+//        S4  evicts at most 4 levels per bar and never evicts a protected kind,
+//            of which there are 13 slots -> i_maxLevels + 13 + 4 (its own words,
+//            04_liquidity.pine i_maxLevels tooltip).
+//        S6  calls f_absCap() AFTER both births and loops until it is under the
+//            cap, so this one really is the bare input.
+//        S14 holds live <= 2 x per-dir, plus that many again killed on this bar
+//            and awaiting the next bar's GC, plus two births
+//            -> 4 x i_maxSetupsPerDir + 2 (its own words, 14_machine.pine).
+st07 = array.size(levels)  <= i_maxLevels + 17
+st08 = array.size(zones)   <= i_absMaxZones
+st09 = array.size(setups)  <= 4 * i_maxSetupsPerDir + 2
+
+// 10. The drawing budget, summed across ALL owners. Every component budgeted
+//     its own slice against 500/500/500 and nobody added them up. This does.
+//     At 500 TradingView starts silently evicting the OLDEST object, which
+//     looks like a drawing bug and is actually a budget bug.
+st10 = array.size(line.all) < 500 and array.size(box.all) < 500 and
+       array.size(label.all) < 500
+
+// 11. i_rrMin REACHABILITY. If TP2 is built to net exactly i_rrMin and then
+//     tested with rr2 >= i_rrMin, the gate rejects nothing except when mintick
+//     rounding drops it a hair below - i.e. it only ever fires spuriously. The
+//     target must sit strictly above the gate for the gate to mean anything.
+st11 = i_tp2R > i_rrMin
+
+// 12. i_minScore REACHABILITY. The eight weights must sum to 100 or the score's
+//     true maximum is not 100 and the threshold is denominated in a different
+//     unit than the user thinks.
+// NAME CHECK: SECTION 12 spells the displacement weight i_wDisp, not
+// i_wDisplace. The long spelling was an undeclared identifier here.
+stWSum = i_wLevel + i_wSweep + i_wRvol + i_wAbsorb + i_wReject + i_wDisp +
+       i_wBos + i_wRetest
+st12 = math.abs(stWSum - 100.0) <= ST_EPS and i_minScore <= 100.0
+
+// 13. THE DEADLOCK CHECK. A zone must be testable at least i_absMinTests times
+//     to qualify, and is invalidated after i_zoneMaxTouches. If min >= max, no
+//     zone can ever both qualify and survive, and the system emits zero signals
+//     forever while every individual module reports itself healthy.
+st13 = i_absMinTests < i_zoneMaxTouches
+
+// 14. mintick sanity. Gold feeds are 0.01 or 0.001. Anything else means the
+//     symbol is not what this file was calibrated for, and the strategy's
+//     const-int slippage silently models the wrong friction.
+st14 = tick > 0.0 and tick <= 0.01 + ST_EPS
+
+// 15. Warmup correctness: warmupOk must IMPLY that every series it guards has
+//     enough history and a usable ATR. Tested as an implication so it is not
+//     vacuously satisfied by warmupOk simply being false.
+stHist = bar_index > math.max(i_rvolLen, i_atrLen * 3) + i_pivotLeft + i_pivotRight + 5
+stAtrOk = not na(atr) and atr > 0.0
+st15 = not warmupOk or (stHist and stAtrOk)
+
+// 16. The tolerance floor. f_tol() must never return less than the spread, or
+//     every proximity test in the file collapses below the noise floor in dead
+//     tape and starts matching spread bounce as structure.
+st16 = f_tol(0.0) >= i_spreadUsd - ST_EPS and costRt > 0.0
+
+// 17. The degenerate-ramp contract. f_ramp with hi <= lo must return na, NOT
+//     1.0 - "set the threshold to 0 to disable it" must never hand a module a
+//     free full sub-score.
+st17 = na(f_ramp(0.5, 1.0, 1.0))
+
+// 18. The HTF guard. A "higher" timeframe at or below the chart timeframe turns
+//     lookahead_on into a genuine future leak. SECTION 0 falls back to Auto; if
+//     this ever fails the whole file is repainting.
+st18 = timeframe.in_seconds(htfTf) > timeframe.in_seconds()
+
+// 19. Session quality stays a weight, not a score.
+st19 = sessQual >= 0.0 and sessQual <= 1.0
+
+// 20. Both directions can never fire on the same bar - SECTION 12's conflict
+//     resolution exists precisely to make this impossible.
+st20 = not (longSignal and shortSignal)
+
+// ------------------------------------------------- PRESET ADVISORY (info)
+// Not an assertion - a preset mismatch is a choice, not a bug. It is surfaced
+// so the choice is a deliberate one.
+stTfSec    = timeframe.in_seconds()
+stPresetTf = stTfSec <= 60 ? "1M" : stTfSec <= 300 ? "5M" : stTfSec <= 900 ? "15M" : "other"
+stRecScore = stTfSec <= 60 ? 80.0 : stTfSec <= 300 ? 75.0 : 70.0
+stPresetOk = stPresetTf == "other" or math.abs(i_minScore - stRecScore) <= 0.5
+
+// ------------------------------------------------------ RENDER + EXPORT
+// Anchor: middle_left, reserved for SECTION 19 alone. SECTION 16 owns THREE
+// anchors - vxMain top_right, vxChk bottom_right, vxStat BOTTOM_LEFT - and
+// vxStat renders whenever i_showStats is on, which is exactly when a user is
+// also watching the self-test. bottom_left was therefore a real collision and
+// this is the panel that moves, because it is the only one that is normally
+// invisible. Do not move it back without re-checking 16_visuals table.new().
+var table stTbl = table.new(position.middle_left, 2, 24, border_width = 1)
+var string selfTestMsg = "SELF-TEST: not run"
+
+if barstate.islast
+    if not i_selfTest
+        selfTestMsg := "SELF-TEST: disabled"
+    else
+        array<string> nm = array.new<string>()
+        array<bool>   pv = array.new<bool>()
+        f_stAdd(nm, pv, "buyPressure + sellPressure == 1",        st01)
+        f_stAdd(nm, pv, "f_closeLoc(+1) + f_closeLoc(-1) == 1",   st02)
+        f_stAdd(nm, pv, "wick + body decomposition == 1",         st03)
+        f_stAdd(nm, pv, "delta ratio within [-1, +1]",            st04)
+        f_stAdd(nm, pv, "setup score within [0, 100]",            st05)
+        f_stAdd(nm, pv, "all 16 sub-scores within [0, 1]",        st06)
+        f_stAdd(nm, pv, "levels <= i_maxLevels + 17",             st07)
+        f_stAdd(nm, pv, "zones <= i_absMaxZones",                 st08)
+        f_stAdd(nm, pv, "setups <= 4 x i_maxSetupsPerDir + 2",    st09)
+        f_stAdd(nm, pv, "lines/boxes/labels each < 500",          st10)
+        f_stAdd(nm, pv, "i_rrMin reachable (i_tp2R > i_rrMin)",   st11)
+        f_stAdd(nm, pv, "i_minScore reachable (weights == 100)",  st12)
+        f_stAdd(nm, pv, "i_absMinTests < i_zoneMaxTouches",       st13)
+        f_stAdd(nm, pv, "mintick is a gold tick (0.01 / 0.001)",  st14)
+        f_stAdd(nm, pv, "warmupOk implies history + live ATR",    st15)
+        f_stAdd(nm, pv, "f_tol() floored at the spread",          st16)
+        f_stAdd(nm, pv, "degenerate f_ramp returns na",           st17)
+        f_stAdd(nm, pv, "HTF strictly above chart timeframe",     st18)
+        f_stAdd(nm, pv, "sessQual within [0, 1]",                 st19)
+        f_stAdd(nm, pv, "long and short never fire together",     st20)
+
+        int nAll  = array.size(pv)
+        int nFail = 0
+        string firstFail = ""
+        for i = 0 to nAll - 1
+            if not array.get(pv, i)
+                nFail += 1
+                if str.length(firstFail) == 0
+                    firstFail := array.get(nm, i)
+        selfTestMsg := nFail == 0 ?
+             "SELF-TEST OK (" + str.tostring(nAll) + "/" + str.tostring(nAll) + ")" :
+             "SELF-TEST: " + str.tostring(nFail) + " of " + str.tostring(nAll) +
+             " FAILED - first: " + firstFail
+
+        // The panel is deliberately invisible while everything passes, so a red
+        // block appearing on the chart is unambiguous.
+        bool showIt = i_testRows == "All checks" or
+                      (i_testRows == "Failures only" and nFail > 0)
+        table.clear(stTbl, 0, 0, 1, 23)
+        if showIt
+            table.cell(stTbl, 0, 0, nFail == 0 ? "OK" : "FAIL",
+                 text_color = color.white,
+                 bgcolor = nFail == 0 ? color.new(#26A69A, 0) : color.new(#EF5350, 0),
+                 text_size = size.tiny, text_halign = text.align_center)
+            table.cell(stTbl, 1, 0, selfTestMsg, text_color = color.white,
+                 bgcolor = nFail == 0 ? color.new(#26A69A, 40) : color.new(#EF5350, 20),
+                 text_size = size.tiny, text_halign = text.align_left)
+            int r = 1
+            for i = 0 to nAll - 1
+                bool stPass = array.get(pv, i)
+                if r <= 21 and (i_testRows == "All checks" or not stPass)
+                    f_stRow(stTbl, r, array.get(nm, i), stPass)
+                    r += 1
+            // Advisory row last: settings, not correctness.
+            if r <= 22
+                f_stRow(stTbl, r, stPresetTf + " preset: i_minScore " +
+                     str.tostring(i_minScore, "#") + " (recommended " +
+                     str.tostring(stRecScore, "#") + ")", stPresetOk)
+                r += 1
+            if r <= 23
+                f_stRow(stTbl, r, "Window: " + (inWindow ? "IN" : "OUT") + " . " +
+                     str.tostring(barsInWindow) + " bars . blocked " +
+                     str.tostring(wfBlockedL) + "L/" + str.tostring(wfBlockedS) + "S",
+                     inWindow)
+// ========================= END SECTION 19 ===================================

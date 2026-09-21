@@ -1,0 +1,20 @@
+# Secrets. config/.env holds the Gemini key and the Gmail app password; it is never committed.
+config/.env
+config/*.env
+.env
+
+# The operator's own configuration. config.example.yaml is the committed one.
+config.yaml
+
+# Everything the application writes: the contact database, fetched page snapshots, exported
+# reports, rendered messages. data/radar.db is a contact database subject to DPDP - it does not
+# belong in version control under any circumstances.
+data/
+logs/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/

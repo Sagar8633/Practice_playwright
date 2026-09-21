@@ -1,0 +1,2657 @@
+<!doctype html>
+<html lang="en" data-app="up" data-app-base="http://127.0.0.1:8765" data-mode="EXPORT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>SAMPLE - Campaign report mockup - business_radar</title>
+<script>
+/* Theme, before first paint, so a dark-theme reader gets no white flash (03-html-report.md 3.9.6). */
+try {
+  var t = localStorage.getItem("radar:theme");
+  if (t === "light" || t === "dark") { document.documentElement.dataset.theme = t; }
+} catch (e) { /* private window, blocked storage: Auto is a fine default */ }
+</script>
+<style>
+/* ------------------------------------------------------------------ *
+ * Tokens. Copied verbatim from 03-html-report.md 3.9.2.
+ * Complete light palette on bare :root; dark overrides guarded so an
+ * explicit light choice wins; a third block for the explicit dark choice.
+ * ------------------------------------------------------------------ */
+:root{
+  color-scheme: light;
+
+  --page:#f4f4f2; --surface-1:#ffffff; --surface-2:#f7f7f5; --surface-3:#efefec;
+  --rule:#dcdcd7;  --grid:#e6e6e2;
+
+  --text-1:#0b0b0b; --text-2:#52514e; --text-3:#6f6d68;
+
+  --ok-fg:#0f6b3f;   --ok-bg:#e6f4ea;   --ok-ln:#1f8a55;
+  --warn-fg:#7a5200; --warn-bg:#fdf2d6; --warn-ln:#b07d0a;
+  --bad-fg:#9f1f24;  --bad-bg:#fbe7e7;  --bad-ln:#c0393e;
+  --info-fg:#14508a; --info-bg:#e5eff9; --info-ln:#2e6fae;
+  --muted-fg:#4a4a46;--muted-bg:#eeeeea;--muted-ln:#9b9a94;
+
+  --accent:#14508a;  --focus:#14508a;
+  --r:8px;
+
+  --banner-h:34px;
+}
+
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --page:#0e0f11; --surface-1:#16171a; --surface-2:#1c1e22; --surface-3:#212429;
+    --rule:#2f3339; --grid:#26292e;
+    --text-1:#f2f3f5; --text-2:#a9adb6; --text-3:#8a8e97;
+    --ok-fg:#5cd08a;   --ok-bg:#10281c;   --ok-ln:#2f7d52;
+    --warn-fg:#e8b53d; --warn-bg:#2a2210; --warn-ln:#8a6c1c;
+    --bad-fg:#f08a8a;  --bad-bg:#2c1517;  --bad-ln:#8e3a3d;
+    --info-fg:#7ab4ec; --info-bg:#0f2237; --info-ln:#3a6c9e;
+    --muted-fg:#a9adb6;--muted-bg:#212429;--muted-ln:#5b5f66;
+    --accent:#7ab4ec;  --focus:#7ab4ec;
+  }
+}
+
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --page:#0e0f11; --surface-1:#16171a; --surface-2:#1c1e22; --surface-3:#212429;
+  --rule:#2f3339; --grid:#26292e;
+  --text-1:#f2f3f5; --text-2:#a9adb6; --text-3:#8a8e97;
+  --ok-fg:#5cd08a;   --ok-bg:#10281c;   --ok-ln:#2f7d52;
+  --warn-fg:#e8b53d; --warn-bg:#2a2210; --warn-ln:#8a6c1c;
+  --bad-fg:#f08a8a;  --bad-bg:#2c1517;  --bad-ln:#8e3a3d;
+  --info-fg:#7ab4ec; --info-bg:#0f2237; --info-ln:#3a6c9e;
+  --muted-fg:#a9adb6;--muted-bg:#212429;--muted-ln:#5b5f66;
+  --accent:#7ab4ec;  --focus:#7ab4ec;
+}
+
+/* ------------------------------------------------------------------ *
+ * Base
+ * ------------------------------------------------------------------ */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; overflow-x:hidden; }
+/* Several rules below set an explicit display, which would otherwise beat the
+   UA stylesheet's [hidden] rule. Filtering, panels and the tray all rely on
+   the hidden attribute, so it wins here unconditionally. */
+[hidden]{ display:none !important; }
+/* 3.14 puts overflow-x:hidden on body. It has to live on html instead: an
+   overflow value other than visible on body makes body a scroll container, and
+   the sticky SAMPLE banner and selection tray - both children of body - then
+   stick to a scrollport that never scrolls, which is to say not at all. */
+body{ margin:0; background:var(--page); color:var(--text-1);
+      font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+.num{ font-variant-numeric: tabular-nums; }
+a{ color:var(--accent); }
+h1,h2,h3,h4{ margin:0; font-weight:650; letter-spacing:-.01em; }
+:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+.sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+          overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+.wrap{ max-width:1680px; margin:0 auto; padding:0 clamp(10px,1.6vw,20px); }
+.na{ color:var(--muted-fg); cursor:help; }
+/* Ids, ISO timestamps and hostnames are single unbreakable tokens; on a phone
+   they are what pushes the page sideways. */
+.sub, .facts dd, .idgrid dd, footer.prov dd, .ro{ overflow-wrap:anywhere; }
+
+/* ------------------------------------------------------------------ *
+ * SAMPLE banner - sticky, unmissable, never scrolls away
+ * ------------------------------------------------------------------ */
+#sample-banner{
+  position:sticky; top:0; z-index:80;
+  background:var(--bad-bg); color:var(--bad-fg);
+  border-bottom:2px solid var(--bad-ln);
+  font-size:12px; font-weight:800; letter-spacing:.09em; text-transform:uppercase;
+  min-height:var(--banner-h);
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  text-align:center; padding:6px 12px;
+}
+#sample-banner .dot{ opacity:.55; }
+#sample-banner .soft{ font-weight:600; letter-spacing:.03em; text-transform:none; opacity:.92; }
+@media (max-width:719px){
+  :root{ --banner-h:48px; }
+  #sample-banner{ font-size:11px; letter-spacing:.06em; }
+  #sample-banner .dot{ display:none; }
+}
+
+/* ------------------------------------------------------------------ *
+ * Header block (section 6)
+ * ------------------------------------------------------------------ */
+.rpt-header{ background:var(--surface-1); border-bottom:1px solid var(--rule); padding:18px 0 16px; }
+.hdr-top{ display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap; }
+.hdr-top > .grow{ flex:1 1 320px; min-width:0; }
+.wordmark{ font-size:11px; font-weight:800; letter-spacing:.16em; color:var(--text-3); }
+.rpt-header h1{ font-size:clamp(18px,2.4vw,25px); margin:4px 0 8px; }
+.sub{ display:flex; flex-wrap:wrap; gap:6px 0; color:var(--text-2); font-size:12.5px; }
+.sub > span{ padding:0 12px; border-right:1px solid var(--rule); }
+.sub > span:first-child{ padding-left:0; }
+.sub > span:last-child{ border-right:0; }
+.sub b{ color:var(--text-1); font-weight:600; }
+
+.facts{ display:grid; gap:1px; margin:16px 0 0;
+        grid-template-columns:repeat(6,minmax(0,1fr));
+        background:var(--rule); border:1px solid var(--rule); border-radius:var(--r); overflow:hidden; }
+.facts > div{ background:var(--surface-1); padding:9px 12px; }
+.facts dt{ font-size:11px; color:var(--text-2); text-transform:uppercase; letter-spacing:.05em;
+           white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.facts dd{ margin:2px 0 0; font-size:21px; font-weight:650; }
+@media (max-width:1023px){ .facts{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (max-width:539px){ .facts{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
+.theme{ display:inline-flex; border:1px solid var(--rule); border-radius:999px; overflow:hidden;
+        background:var(--surface-2); flex:0 0 auto; }
+.theme button{ border:0; background:transparent; color:var(--text-2); font:inherit; font-size:11.5px;
+               padding:5px 11px; cursor:pointer; }
+.theme button[aria-pressed="true"]{ background:var(--surface-1); color:var(--text-1); font-weight:650;
+               box-shadow:inset 0 0 0 1px var(--rule); }
+
+.ro{ background:var(--info-bg); color:var(--info-fg); border:1px solid var(--info-ln);
+     border-radius:var(--r); padding:9px 12px; font-size:12.5px; margin:14px 0 0; }
+.ro b{ font-weight:700; }
+
+/* ------------------------------------------------------------------ *
+ * Section shell
+ * ------------------------------------------------------------------ */
+section.block{ margin:22px 0; }
+.blockhead{ display:flex; align-items:baseline; gap:10px; margin:0 0 9px; flex-wrap:wrap; }
+.blockhead h2{ font-size:12px; letter-spacing:.11em; text-transform:uppercase; color:var(--text-2); }
+.blockhead .note{ font-size:12px; color:var(--text-3); }
+
+/* ------------------------------------------------------------------ *
+ * KPI cards (section 7) - twelve
+ * ------------------------------------------------------------------ */
+.kpis{ display:grid; gap:8px; grid-template-columns:repeat(6,minmax(0,1fr)); }
+@media (max-width:1279px){ .kpis{ grid-template-columns:repeat(4,minmax(0,1fr)); } }
+@media (max-width:1023px){ .kpis{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (max-width:559px){  .kpis{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+.kpi{ background:var(--surface-1); border:1px solid var(--rule); border-radius:var(--r);
+      padding:10px 11px; text-align:left; font:inherit; color:inherit; cursor:pointer;
+      border-left:3px solid var(--muted-ln); min-width:0; }
+.kpi:hover{ background:var(--surface-2); }
+.kpi.tone-green{  border-left-color:var(--ok-ln); }
+.kpi.tone-yellow{ border-left-color:var(--warn-ln); }
+.kpi.tone-blue{   border-left-color:var(--info-ln); }
+.kpi.is-primary{ box-shadow:inset 0 0 0 1px var(--ok-ln); }
+.kpi-label{ font-size:11px; color:var(--text-2); text-transform:uppercase; letter-spacing:.045em;
+            line-height:1.25; min-height:2.5em; }
+.kpi-value{ font-size:26px; font-weight:650; line-height:1.1; margin-top:3px; }
+.kpi-sub{ font-size:11px; color:var(--text-3); margin-top:2px; }
+.kpi-foot{ font-size:11.5px; color:var(--text-3); margin-top:7px; }
+
+/* ------------------------------------------------------------------ *
+ * City summary cards (section 8)
+ * ------------------------------------------------------------------ */
+.city-cards{ display:grid; gap:8px; grid-template-columns:repeat(4,minmax(0,1fr)); }
+@media (max-width:1279px){ .city-cards{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (max-width:899px){  .city-cards{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:519px){  .city-cards{ grid-template-columns:1fr; } }
+.city-card{ background:var(--surface-1); border:1px solid var(--rule); border-radius:var(--r); padding:11px 12px; }
+.city-card.empty{ opacity:.72; }
+.city-card h3{ font-size:14.5px; display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+.city-card h3 .of{ font-size:11px; font-weight:500; color:var(--text-3); letter-spacing:.04em; }
+.city-card dl{ margin:9px 0 0; display:grid; gap:3px 10px; }
+.city-card dl > div{ display:flex; justify-content:space-between; align-items:baseline; gap:8px;
+                     font-size:12.5px; border-bottom:1px dotted var(--grid); padding-bottom:3px; }
+.city-card dt{ color:var(--text-2); }
+.city-card dd{ margin:0; font-weight:650; }
+.card-link{ display:inline-block; margin-top:9px; font-size:12px; background:none; border:0;
+            color:var(--accent); cursor:pointer; font-family:inherit; padding:0; text-decoration:underline; }
+.city-card .zero{ font-size:12px; color:var(--text-3); margin:8px 0 0; }
+
+/* ------------------------------------------------------------------ *
+ * Filter bar (section 39)
+ * ------------------------------------------------------------------ */
+.filterbar{ background:var(--surface-1); border:1px solid var(--rule); border-radius:var(--r); }
+.fb-top{ display:flex; gap:8px; align-items:center; padding:9px 11px; flex-wrap:wrap; }
+.fb-top .search{ flex:1 1 260px; min-width:0; display:flex; align-items:center; gap:7px;
+                 border:1px solid var(--rule); border-radius:999px; padding:5px 12px; background:var(--surface-2); }
+.fb-top .search input{ flex:1; border:0; background:transparent; color:inherit; font:inherit; font-size:13px; min-width:0; }
+.fb-top .search input:focus{ outline:none; }
+.fb-top .search .hint{ font-size:11px; color:var(--text-3); white-space:nowrap; }
+.btn{ border:1px solid var(--rule); background:var(--surface-2); color:var(--text-1);
+      font:inherit; font-size:12px; padding:5px 11px; border-radius:999px; cursor:pointer; white-space:nowrap; }
+.btn:hover{ background:var(--surface-3); }
+.btn.on{ background:var(--info-bg); color:var(--info-fg); border-color:var(--info-ln); font-weight:650; }
+.fb-body{ border-top:1px solid var(--rule); padding:10px 11px 12px; display:grid; gap:11px;
+          grid-template-columns:repeat(auto-fit,minmax(232px,1fr)); }
+.fb-body[hidden]{ display:none; }
+.fgroup > .flabel{ font-size:10.5px; text-transform:uppercase; letter-spacing:.07em;
+                   color:var(--text-2); margin-bottom:5px; display:flex; gap:6px; align-items:baseline; }
+.fgroup > .flabel .n{ color:var(--text-3); text-transform:none; letter-spacing:0; }
+.chips{ display:flex; flex-wrap:wrap; gap:4px; }
+.chip-f{ border:1px solid var(--rule); background:var(--surface-2); color:var(--text-2);
+         font-size:11.5px; padding:3px 9px; border-radius:999px; cursor:pointer; font-family:inherit; }
+.chip-f:hover{ background:var(--surface-3); color:var(--text-1); }
+.chip-f[aria-pressed="true"]{ background:var(--info-bg); border-color:var(--info-ln);
+                              color:var(--info-fg); font-weight:650; }
+.range{ display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+.range input[type=number], .range input[type=date]{
+  width:74px; border:1px solid var(--rule); border-radius:6px; background:var(--surface-2);
+  color:inherit; font:inherit; font-size:12px; padding:3px 6px; }
+.range input[type=date]{ width:138px; }
+.nullbox{ display:flex; align-items:center; gap:5px; font-size:11.5px; color:var(--text-2); margin-top:6px; }
+.resultline{ display:flex; gap:14px; align-items:center; flex-wrap:wrap;
+             padding:8px 11px; border-top:1px solid var(--rule); font-size:12.5px; color:var(--text-2); }
+.resultline b{ color:var(--text-1); }
+
+/* ------------------------------------------------------------------ *
+ * Tabs (sections 3, 4)
+ * ------------------------------------------------------------------ */
+.tabs{ display:flex; gap:3px; overflow-x:auto; border-bottom:1px solid var(--rule); scrollbar-width:thin; }
+.tabs button{ border:1px solid transparent; border-bottom:0; background:transparent; color:var(--text-2);
+              font:inherit; font-size:13px; padding:7px 13px; cursor:pointer; white-space:nowrap;
+              border-radius:var(--r) var(--r) 0 0; margin-bottom:-1px; }
+.tabs button:hover{ color:var(--text-1); background:var(--surface-2); }
+.tabs button[aria-selected="true"]{ background:var(--surface-1); border-color:var(--rule);
+              color:var(--text-1); font-weight:650; }
+.tabs .cnt{ display:inline-block; margin-left:6px; font-size:11px; color:var(--text-3);
+            font-variant-numeric:tabular-nums; }
+.tabs button[aria-selected="true"] .cnt{ color:var(--text-2); }
+.tabs.sub{ border-bottom:1px solid var(--rule); background:var(--surface-1); padding:5px 5px 0; }
+.tabs.sub button{ font-size:12px; padding:5px 10px; }
+.tabwarn{ background:var(--warn-bg); color:var(--warn-fg); border:1px solid var(--warn-ln);
+          border-radius:var(--r); padding:8px 11px; margin:10px 0; font-size:12.5px;
+          display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.tabwarn .btn{ background:var(--surface-1); border-color:var(--warn-ln); color:var(--warn-fg); }
+
+/* ------------------------------------------------------------------ *
+ * Badges and chips (3.9.4)
+ * ------------------------------------------------------------------ */
+.badge{
+  display:inline-flex; align-items:center; gap:5px;
+  padding:2px 7px; border-radius:999px;
+  font-size:10.5px; font-weight:600; letter-spacing:.02em; white-space:nowrap;
+  border:1px solid var(--rule);
+  color:var(--f); background:var(--b); border-color:color-mix(in srgb, var(--f) 28%, transparent);
+}
+.badge.ok   { --f:var(--ok-fg);    --b:var(--ok-bg);    }
+.badge.warn { --f:var(--warn-fg);  --b:var(--warn-bg);  }
+.badge.bad  { --f:var(--bad-fg);   --b:var(--bad-bg);   }
+.badge.info { --f:var(--info-fg);  --b:var(--info-bg);  }
+.badge.mute { --f:var(--muted-fg); --b:var(--muted-bg); }
+.badge.score{ min-width:34px; justify-content:center; font-variant-numeric:tabular-nums; }
+.chip{ display:inline-flex; align-items:center; justify-content:center; min-width:19px; height:19px;
+       border-radius:5px; font-size:10.5px; font-weight:700; margin-right:2px; padding:0 3px;
+       color:var(--info-fg); background:var(--info-bg);
+       border:1px solid color-mix(in srgb, var(--info-fg) 26%, transparent); }
+.chip.unk{ color:var(--muted-fg); background:var(--muted-bg);
+           border-color:color-mix(in srgb, var(--muted-fg) 26%, transparent); }
+.stype{ display:inline-block; font-size:9.5px; font-weight:700; letter-spacing:.09em;
+        color:var(--info-fg); background:var(--info-bg); border-radius:4px; padding:1px 5px;
+        border:1px solid color-mix(in srgb, var(--info-fg) 24%, transparent); }
+
+/* ------------------------------------------------------------------ *
+ * Business table (sections 9, 10)
+ * ------------------------------------------------------------------ */
+.tablewrap{ overflow-x:auto; background:var(--surface-1);
+            border:1px solid var(--rule); border-top:0;
+            border-radius:0 0 var(--r) var(--r); }
+.btable{ width:100%; border-collapse:collapse; font-size:12px; }
+.btable caption{ text-align:left; padding:8px 10px; font-size:11.5px; color:var(--text-2);
+                 border-bottom:1px solid var(--rule); }
+.btable thead th{ position:sticky; top:var(--banner-h); z-index:20;
+                  background:var(--surface-3); color:var(--text-2);
+                  font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; font-weight:700;
+                  text-align:left; padding:7px 7px; white-space:normal; line-height:1.2;
+                  border-bottom:1px solid var(--rule); vertical-align:bottom; }
+/* Long headers wrap to two lines rather than forcing a 200px column. */
+.btable thead th[data-sort]{ max-width:96px; }
+.btable thead th[data-sort="name"]{ max-width:none; }
+.btable thead th.sortable{ cursor:pointer; user-select:none; }
+.btable thead th{ padding:7px 6px; }
+.btable thead th.sortable:hover{ color:var(--text-1); background:var(--grid); }
+.btable thead th .ind{ font-size:9px; margin-left:3px; color:var(--accent); }
+.btable tbody td{ padding:5px 6px; border-bottom:1px solid var(--grid); vertical-align:top; }
+.btable tbody tr.brow:hover > td{ background:var(--surface-2); }
+.btable tbody tr.brow.is-open > td{ background:var(--surface-2); }
+.btable tbody tr.brow.suppressed > td{ background:var(--bad-bg); }
+.btable tbody tr.brow.selected > td{ box-shadow:inset 3px 0 0 0 var(--ok-ln); }
+tr.group-head th{ background:var(--surface-2); color:var(--text-2); text-align:left;
+                  font-size:10.5px; letter-spacing:.075em; text-transform:uppercase; font-weight:700;
+                  padding:6px 8px; border-bottom:1px solid var(--rule); border-top:1px solid var(--rule); }
+tr.group-head .gn{ color:var(--text-3); font-weight:500; letter-spacing:0; text-transform:none; margin-left:6px; }
+
+.c-sel{ width:34px; white-space:nowrap; }
+.c-sel input{ width:15px; height:15px; accent-color:var(--ok-ln); margin:1px 0 0; }
+.c-sel .why{ display:inline-block; width:14px; height:14px; line-height:13px; text-align:center;
+             border:1px solid var(--rule); border-radius:50%; font-size:9px; color:var(--text-3);
+             background:var(--surface-2); cursor:help; margin-left:2px; vertical-align:top; }
+.c-name{ min-width:150px; max-width:200px; }
+.c-name .bname{ font-weight:650; color:var(--text-1); text-decoration:none; font-size:13px; }
+.c-name .bname:hover{ text-decoration:underline; }
+.c-name .sub2{ color:var(--text-3); font-size:11px; margin-top:1px; }
+.ext{ text-decoration:none; font-size:11px; color:var(--text-3); margin-left:3px; }
+.ext:hover{ color:var(--accent); }
+.c-sol{ color:var(--text-2); }
+/* max-width on a <td> is advisory; a block child honours it, so the solution
+   truncates with an ellipsis and keeps its full text in the title (section 9 col 9). */
+.c-sol > .trunc{ display:block; max-width:152px; overflow:hidden;
+                 text-overflow:ellipsis; white-space:nowrap; }
+@media (max-width:719px){ .c-sol > .trunc{ max-width:none; white-space:normal; } }
+.c-dm{ white-space:nowrap; }
+.bar{ display:inline-block; width:34px; height:6px; background:var(--grid);
+      border-radius:3px; overflow:hidden; margin-right:6px; vertical-align:middle; }
+.bar > i{ display:block; height:100%; width:var(--v); background:var(--info-ln); }
+.c-act{ white-space:normal; min-width:148px; max-width:184px; }
+.act, .nav{ display:inline-block; font-size:10.5px; padding:2px 6px; margin:0 3px 2px 0;
+            border-radius:5px; border:1px solid var(--rule); background:var(--surface-2);
+            color:var(--text-2); text-decoration:none; cursor:pointer; font-family:inherit; }
+.act:hover, .nav:hover{ background:var(--surface-3); color:var(--text-1); }
+.nav[aria-expanded="true"]{ background:var(--info-bg); border-color:var(--info-ln); color:var(--info-fg); }
+.ready{ display:inline-block; font-size:10.5px; padding:1px 7px; border-radius:5px; margin-top:2px;
+        border:1px solid var(--rule); text-decoration:none; }
+.ready.ok  { color:var(--ok-fg);    background:var(--ok-bg);    border-color:color-mix(in srgb, var(--ok-fg) 26%, transparent); }
+.ready.warn{ color:var(--warn-fg);  background:var(--warn-bg);  border-color:color-mix(in srgb, var(--warn-fg) 26%, transparent); }
+.ready.bad { color:var(--bad-fg);   background:var(--bad-bg);   border-color:color-mix(in srgb, var(--bad-fg) 26%, transparent); }
+.ready.info{ color:var(--info-fg);  background:var(--info-bg);  border-color:color-mix(in srgb, var(--info-fg) 26%, transparent); }
+.ready.mute{ color:var(--muted-fg); background:var(--muted-bg); border-color:color-mix(in srgb, var(--muted-fg) 26%, transparent); }
+.emptyrow td{ padding:26px 10px; text-align:center; color:var(--text-3); font-size:13px; }
+
+/* ------------------------------------------------------------------ *
+ * Research / history panel (sections 11-14, 32)
+ * ------------------------------------------------------------------ */
+tr.panel-row > td{ padding:0 !important; background:var(--surface-2); border-bottom:2px solid var(--rule); }
+/* The panel cell is as wide as the (horizontally scrolling) table. Sticking it to
+   the left edge and capping its width keeps the panel readable at any scroll
+   position instead of stretching the identity grid across 1900px. */
+.panel{ padding:14px 16px 16px; position:sticky; left:0;
+        width:min(1180px, calc(100vw - 40px)); }
+.panel-head{ display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+             flex-wrap:wrap; border-bottom:1px solid var(--rule); padding-bottom:8px; margin-bottom:12px; }
+.panel-head h4{ font-size:15px; }
+.panel-head .meta{ font-size:11.5px; color:var(--text-3); }
+.psec{ margin:0 0 16px; }
+.psec > h5{ font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-2);
+            margin:0 0 7px; font-weight:700; }
+.idgrid{ display:grid; gap:2px 22px; grid-template-columns:repeat(auto-fit,minmax(238px,1fr)); }
+.idgrid > div{ display:flex; gap:10px; font-size:12.5px; border-bottom:1px dotted var(--grid); padding:3px 0; }
+.idgrid dt{ color:var(--text-2); flex:0 0 132px; }
+.idgrid dd{ margin:0; flex:1; min-width:0; word-break:break-word; }
+
+fieldset.findings{ border:1px solid var(--rule); border-left:3px solid var(--muted-ln);
+                   border-radius:0 var(--r) var(--r) 0; margin:0 0 9px; padding:8px 12px 10px;
+                   background:var(--surface-1); }
+fieldset.findings > legend{ font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+                            padding:1px 8px; border-radius:999px; }
+fieldset.kind-OBSERVED{ border-left-color:var(--ok-ln); }
+fieldset.kind-OBSERVED > legend{ color:var(--ok-fg); background:var(--ok-bg); }
+fieldset.kind-INFERRED{ border-left-color:var(--info-ln); }
+fieldset.kind-INFERRED > legend{ color:var(--info-fg); background:var(--info-bg); }
+fieldset.kind-UNKNOWN{ border-left-color:var(--muted-ln); }
+fieldset.kind-UNKNOWN > legend{ color:var(--muted-fg); background:var(--muted-bg); }
+fieldset.findings ul{ list-style:none; margin:0; padding:0; }
+fieldset.findings li{ display:flex; gap:10px; align-items:baseline; padding:4px 0;
+                      border-bottom:1px dotted var(--grid); font-size:12.5px; }
+fieldset.findings li:last-child{ border-bottom:0; }
+fieldset.findings li .stmt{ flex:1; min-width:0; }
+fieldset.kind-UNKNOWN li .stmt{ color:var(--text-2); }
+fieldset.kind-INFERRED li .stmt .pfx{ color:var(--info-fg); font-weight:650; }
+fieldset.findings .refs{ white-space:nowrap; }
+fieldset.findings .refs a{ font-size:11px; text-decoration:none; padding:0 1px; }
+fieldset.findings p.empty{ margin:4px 0 0; font-size:12.5px; color:var(--text-3); font-style:italic; }
+.nosrc{ font-size:9.5px; font-weight:700; letter-spacing:.06em; color:var(--bad-fg);
+        background:var(--bad-bg); border-radius:4px; padding:1px 5px;
+        border:1px solid color-mix(in srgb, var(--bad-fg) 24%, transparent); }
+
+.why{ margin-top:8px; }
+.whytable{ border-collapse:collapse; font-size:12px; width:100%; max-width:520px; }
+.whytable td{ padding:2px 8px 2px 0; border-bottom:1px dotted var(--grid); }
+.whytable td.pts{ text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; width:70px; }
+.whytable td.src{ width:110px; text-align:right; }
+.whytable tr.tot td{ font-weight:700; border-top:1px solid var(--rule); border-bottom:0; padding-top:4px; }
+.mods{ display:flex; flex-wrap:wrap; gap:4px; }
+.mod{ font-size:11px; padding:2px 8px; border-radius:5px; background:var(--surface-3);
+      border:1px solid var(--rule); color:var(--text-2); cursor:help; }
+
+ol.sources{ list-style:none; margin:0; padding:0; counter-reset:src; }
+ol.sources > li{ padding:7px 0 8px; border-bottom:1px dotted var(--grid); font-size:12.5px; }
+ol.sources > li:last-child{ border-bottom:0; }
+.srcline{ display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; }
+.srcnum{ color:var(--text-3); font-weight:700; font-size:11px; }
+.srcline .when{ font-size:11px; color:var(--text-3); }
+blockquote.excerpt{ margin:5px 0 0 22px; padding:4px 0 4px 10px; border-left:2px solid var(--grid);
+                    color:var(--text-2); font-size:12px; }
+.histtable{ width:100%; border-collapse:collapse; font-size:12px; }
+.histtable th{ text-align:left; font-size:10px; letter-spacing:.06em; text-transform:uppercase;
+               color:var(--text-2); padding:4px 8px 4px 0; border-bottom:1px solid var(--rule); }
+.histtable td{ padding:5px 8px 5px 0; border-bottom:1px dotted var(--grid); vertical-align:top; }
+.next{ font-weight:650; }
+.next.bad{ color:var(--bad-fg); } .next.ok{ color:var(--ok-fg); }
+.next.warn{ color:var(--warn-fg); } .next.mute{ color:var(--text-2); }
+.panel .absent{ font-size:12px; color:var(--text-3); font-style:italic; }
+
+/* ------------------------------------------------------------------ *
+ * Selection tray (section 18). No send control lives here or anywhere.
+ * ------------------------------------------------------------------ */
+#tray{ position:sticky; bottom:0; z-index:70; margin-top:14px;
+       background:var(--surface-1); border-top:2px solid var(--ok-ln);
+       box-shadow:0 -4px 14px rgba(0,0,0,.10); }
+#tray[hidden]{ display:none; }
+.tray-in{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; padding:9px 0; }
+.tray-counts{ display:flex; gap:6px; align-items:center; flex-wrap:wrap; font-size:12.5px; }
+.tray-counts .cc{ background:var(--ok-bg); color:var(--ok-fg); border-radius:999px; padding:2px 10px;
+                  font-weight:650; border:1px solid color-mix(in srgb, var(--ok-fg) 26%, transparent); }
+.tray-counts .sep{ color:var(--text-3); }
+.tray-total{ font-size:14px; font-weight:700; }
+.tray-note{ font-size:11.5px; color:var(--text-2); flex:1 1 260px; min-width:0; }
+.tray-note .warnnote{ color:var(--warn-fg); }
+.tray-actions{ display:flex; gap:6px; flex-wrap:wrap; }
+
+/* ------------------------------------------------------------------ *
+ * Footer
+ * ------------------------------------------------------------------ */
+footer.prov{ border-top:1px solid var(--rule); margin-top:26px; padding:16px 0 40px;
+             font-size:12px; color:var(--text-2); background:var(--surface-1); }
+footer.prov h2{ font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:var(--text-2); margin-bottom:8px; }
+footer.prov dl{ display:grid; gap:2px 20px; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); margin:0 0 12px; }
+footer.prov dl > div{ display:flex; gap:10px; padding:2px 0; border-bottom:1px dotted var(--grid); }
+footer.prov dt{ flex:0 0 190px; color:var(--text-3); }
+footer.prov dd{ margin:0; }
+footer.prov .warnings{ background:var(--warn-bg); color:var(--warn-fg); border:1px solid var(--warn-ln);
+                       border-radius:var(--r); padding:8px 11px; margin:10px 0; }
+
+/* toast for wireframe deep links */
+#toast{ position:fixed; left:50%; bottom:78px; transform:translateX(-50%);
+        background:var(--surface-1); color:var(--text-1); border:1px solid var(--rule);
+        border-left:3px solid var(--info-ln); border-radius:var(--r); padding:9px 13px;
+        font-size:12.5px; box-shadow:0 6px 20px rgba(0,0,0,.18); z-index:120; max-width:min(560px,92vw); }
+#toast[hidden]{ display:none; }
+
+/* ------------------------------------------------------------------ *
+ * Responsive: under 720px the table becomes cards (3.14).
+ * Same markup, same data attributes, so every filter and sort still works.
+ * ------------------------------------------------------------------ */
+@media (max-width:719px){
+  .btable thead{ display:none; }
+  .btable caption{ padding:8px 2px; }
+  .tablewrap{ border:0; background:transparent; overflow-x:visible; }
+  .btable, .btable tbody, .btable tr, .btable td, .btable th{ display:block; }
+  tr.group-head th{ border-radius:var(--r) var(--r) 0 0; margin-top:10px; }
+  .btable tbody tr.brow{ background:var(--surface-1); border:1px solid var(--rule);
+                         border-radius:var(--r); margin:8px 0; padding:4px 2px; }
+  .btable tbody tr.brow.selected{ border-color:var(--ok-ln); box-shadow:inset 3px 0 0 0 var(--ok-ln); }
+  .btable tbody td{ display:flex; justify-content:space-between; gap:14px; border:0;
+                    border-bottom:1px dotted var(--grid); padding:5px 10px; }
+  .btable tbody td:last-child{ border-bottom:0; }
+  .btable tbody td::before{ content:attr(data-label); color:var(--text-2); font-size:10.5px;
+                            text-transform:uppercase; letter-spacing:.05em; flex:0 0 44%; }
+  .btable tbody td.c-name{ flex-direction:column; align-items:flex-start; gap:2px; }
+  .btable tbody td.c-name::before{ display:none; }
+  .btable tbody td.c-act{ flex-wrap:wrap; justify-content:flex-start; gap:0; }
+  .btable tbody td.c-act::before{ flex:0 0 100%; margin-bottom:4px; }
+  .btable tbody td.c-act .act, .btable tbody td.c-act .nav, .btable tbody td.c-act .ready{ margin:0 4px 0 0; }
+  footer.prov dl > div{ flex-direction:column; gap:0; }
+  footer.prov dt{ flex:none; }
+  .btable tbody tr.brow:hover > td, .btable tbody tr.brow.is-open > td{ background:transparent; }
+  tr.panel-row > td{ border-bottom:0; }
+  tr.panel-row > td::before{ display:none; }
+  .panel{ padding:12px 10px 14px; position:static; width:auto; }
+  .idgrid dt{ flex:0 0 112px; }
+  .sub > span{ padding:0 9px; }
+  .tray-in{ gap:8px; }
+}
+/* 3.14 collapses Category into the Business cell's sub-line on narrow screens.
+   The threshold is 1500 rather than 1024 because the 15th column (Actions)
+   otherwise falls off a 1440 laptop, and the category is already named by the
+   group heading the row sits under. */
+@media (max-width:1499px) and (min-width:720px){
+  .btable .c-cat{ display:none; }
+}
+
+@media (prefers-reduced-motion: no-preference){
+  .kpi, .btn, .chip-f, .tabs button{ transition:background-color .12s ease, color .12s ease; }
+}
+
+@media print{
+  :root{ --page:#ffffff; --surface-1:#ffffff; --surface-2:#ffffff; --surface-3:#ffffff; }
+  #sample-banner{ position:static; }
+  .btable thead th{ position:static; }
+  #tray, .filterbar, .theme, #toast, .c-act{ display:none !important; }
+  .ok-bg,.warn-bg,.bad-bg,.info-bg,.muted-bg{ background:#ffffff; }
+  .badge{ background:#ffffff !important; }
+  tr.panel-row{ display:table-row !important; }
+  a[href]::after{ content:" (" attr(href) ")"; font-size:9px; color:#555; }
+  .brow{ break-inside:avoid; }
+}
+</style>
+</head>
+<body>
+
+<div id="sample-banner" role="alert">
+  <span>Sample data &mdash; not real businesses</span>
+  <span class="dot">&bull;</span>
+  <span class="soft">Wireframe of the campaign report screen. Every name, number, contact and source on this page is invented.</span>
+</div>
+
+<!-- ================= HEADER BLOCK (spec section 6): nine facts ================= -->
+<header class="rpt-header">
+  <div class="wrap">
+    <div class="hdr-top">
+      <div class="grow">
+        <div class="wordmark" data-fact="1">AI BUSINESS OPPORTUNITY RESEARCH</div>
+        <h1 data-fact="2">SAMPLE campaign &mdash; Dhule-Shirpur-Nashik-Jalgaon &mdash; 26 Aug 2026</h1>
+        <div class="sub">
+          <span data-fact="3">Search date <b>26 Aug 2026, 07:12 IST</b></span>
+          <span>Cities <b>Dhule, Shirpur, Nashik, Jalgaon</b></span>
+          <span>Depth <b>DEEP</b></span>
+          <span>Min score <b>70</b></span>
+          <span>Size filter <b>all sizes</b></span>
+          <span>Campaign <b>cmp_01JSAMPLE0000000000000001</b></span>
+        </div>
+      </div>
+      <div class="theme" role="group" aria-label="Theme">
+        <button type="button" data-theme-set="auto"  aria-pressed="true">Auto</button>
+        <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
+        <button type="button" data-theme-set="dark"  aria-pressed="false">Dark</button>
+      </div>
+    </div>
+
+    <dl class="facts" id="hdr-facts">
+      <div data-fact="4"><dt>Businesses found</dt>       <dd class="num" id="h_found">&mdash;</dd></div>
+      <div data-fact="5"><dt>Researched</dt>             <dd class="num" id="h_researched">&mdash;</dd></div>
+      <div data-fact="6"><dt>Qualified</dt>              <dd class="num" id="h_qualified">&mdash;</dd></div>
+      <div data-fact="7"><dt>Skipped</dt>                <dd class="num" id="h_skipped">&mdash;</dd></div>
+      <div data-fact="8"><dt>Requiring verification</dt> <dd class="num" id="h_needs">&mdash;</dd></div>
+      <div data-fact="9"><dt>Ready for outreach</dt>     <dd class="num" id="h_ready">&mdash;</dd></div>
+    </dl>
+
+    <div class="ro" id="banner-ro">
+      <b>Read-only export.</b> Generated 26 Aug 2026 19:04 IST; the figures are the data as of that
+      moment. VERIFY / PREPARE OUTREACH open the live app at <code>http://127.0.0.1:8765</code>.
+      Selection in this file is preview-only &mdash; nothing here writes to the database, and there is
+      no send control in this document by design (spec section 45).
+      <b>In this wireframe the action links do not navigate; they report where they would go.</b>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ================= KPI CARDS (spec section 7): twelve ================= -->
+  <section class="block" aria-labelledby="h-kpi">
+    <div class="blockhead">
+      <h2 id="h-kpi">Campaign KPIs</h2>
+      <span class="note">Every card is computed from the 24 rows below. Click a card to filter the table.</span>
+    </div>
+    <div class="kpis" id="kpis"></div>
+    <div class="kpi-foot" id="kpi-foot"></div>
+  </section>
+
+  <!-- ================= CITY SUMMARY CARDS (spec section 8) ================= -->
+  <section class="block" aria-labelledby="h-city">
+    <div class="blockhead">
+      <h2 id="h-city">City summary</h2>
+      <span class="note">Five figures per city, in campaign_cities.ordinal order.</span>
+    </div>
+    <div class="city-cards" id="city-cards" aria-label="City summary"></div>
+  </section>
+
+  <!-- ================= FILTERS (spec section 39): eleven ================= -->
+  <section class="block" aria-labelledby="h-filters">
+    <div class="blockhead">
+      <h2 id="h-filters">Filters, search and sort</h2>
+      <span class="note">A tab is a view; a filter is a predicate. A row shows when it is in the active pane and passes every filter.</span>
+    </div>
+    <div class="filterbar">
+      <div class="fb-top">
+        <label class="search">
+          <span aria-hidden="true">&#9906;</span>
+          <span class="sr-only">Search businesses</span>
+          <input type="search" id="q" placeholder="Search name, city, category, solution, id..." autocomplete="off">
+          <span class="hint">try <code>city:nashik score:&gt;80</code></span>
+        </label>
+        <button type="button" class="btn" id="toggle-filters" aria-expanded="true" aria-controls="fb-body">Filters</button>
+        <button type="button" class="btn" id="clear-filters">Clear all filters</button>
+        <button type="button" class="btn" id="flat-toggle" aria-pressed="false" title="Ignore category grouping and rank the whole pane">Sort across all groups</button>
+      </div>
+
+      <div class="fb-body" id="fb-body">
+        <div class="fgroup"><div class="flabel">1 &middot; City</div><div class="chips" id="f-city"></div></div>
+        <div class="fgroup"><div class="flabel">2 &middot; Industry</div><div class="chips" id="f-industry"></div></div>
+        <div class="fgroup"><div class="flabel">3 &middot; Business size</div><div class="chips" id="f-size"></div></div>
+
+        <div class="fgroup">
+          <div class="flabel">4 &middot; Opportunity score</div>
+          <div class="chips" style="margin-bottom:6px">
+            <button type="button" class="chip-f" data-preset="score" data-v="80-" aria-pressed="false">80+</button>
+            <button type="button" class="chip-f" data-preset="score" data-v="60-79" aria-pressed="false">60-79</button>
+            <button type="button" class="chip-f" data-preset="score" data-v="-59" aria-pressed="false">below 60</button>
+          </div>
+          <div class="range">
+            <input type="number" id="score-min" min="0" max="100" placeholder="min" aria-label="Minimum opportunity score">
+            <span aria-hidden="true">&ndash;</span>
+            <input type="number" id="score-max" min="0" max="100" placeholder="max" aria-label="Maximum opportunity score">
+          </div>
+          <label class="nullbox"><input type="checkbox" id="null-score" checked> include unscored</label>
+        </div>
+
+        <div class="fgroup"><div class="flabel">5 &middot; Website status</div><div class="chips" id="f-web"></div></div>
+
+        <div class="fgroup">
+          <div class="flabel">6 &middot; Digital maturity</div>
+          <div class="range">
+            <input type="number" id="dm-min" min="0" max="100" placeholder="min" aria-label="Minimum digital maturity">
+            <span aria-hidden="true">&ndash;</span>
+            <input type="number" id="dm-max" min="0" max="100" placeholder="max" aria-label="Maximum digital maturity">
+          </div>
+          <label class="nullbox"><input type="checkbox" id="null-dm" checked> include unassessed</label>
+        </div>
+
+        <div class="fgroup"><div class="flabel">7 &middot; Research confidence</div><div class="chips" id="f-conf"></div></div>
+        <div class="fgroup"><div class="flabel">8 &middot; Verification status</div><div class="chips" id="f-verif"></div></div>
+        <div class="fgroup"><div class="flabel">9 &middot; Contact status <span class="n">(any of)</span></div><div class="chips" id="f-contact"></div></div>
+        <div class="fgroup"><div class="flabel">10 &middot; Outreach status</div><div class="chips" id="f-outreach"></div></div>
+
+        <div class="fgroup">
+          <div class="flabel">11 &middot; Date discovered</div>
+          <div class="chips" style="margin-bottom:6px">
+            <button type="button" class="chip-f" data-preset="disc" data-v="2026-08-26.." aria-pressed="false">26 Aug only</button>
+            <button type="button" class="chip-f" data-preset="disc" data-v="2026-08-20.." aria-pressed="false">last 7 days</button>
+          </div>
+          <div class="range">
+            <input type="date" id="disc-from" aria-label="Discovered from">
+            <span aria-hidden="true">&ndash;</span>
+            <input type="date" id="disc-to" aria-label="Discovered to">
+          </div>
+        </div>
+      </div>
+
+      <div class="resultline">
+        <div role="status" aria-live="polite" id="resultline"><b>Showing 24 of 24 businesses</b></div>
+        <span id="activecount"></span>
+        <span id="sortstate"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CITY TABS -> INDUSTRY TABS -> TABLE ================= -->
+  <section class="block" aria-labelledby="h-table">
+    <div class="blockhead">
+      <h2 id="h-table">Businesses</h2>
+      <span class="note">City tab, then industry tab within the city; category groups inside the pane.</span>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="City" id="tabs-city"></div>
+    <div class="tabs sub" role="tablist" aria-label="Industry" id="tabs-industry"></div>
+
+    <div id="tabwarn" class="tabwarn" hidden></div>
+
+    <div class="tablewrap" role="tabpanel" id="pane" aria-labelledby="tab-ALL">
+      <table class="btable" id="btable">
+        <caption id="tcaption">All cities &middot; all industries</caption>
+        <thead>
+          <tr>
+            <th scope="col" class="c-sel">
+              <input type="checkbox" id="selall" aria-label="Select all eligible visible rows">
+            </th>
+            <th scope="col" class="sortable" data-sort="name"     data-sort-type="text" aria-sort="none">Business</th>
+            <th scope="col" class="sortable" data-sort="city"     data-sort-type="text" aria-sort="none">City</th>
+            <th scope="col" class="sortable c-ind" data-sort="industry" data-sort-type="text" aria-sort="none">Industry</th>
+            <th scope="col" class="sortable c-cat"  data-sort="cat"  data-sort-type="text" aria-sort="none">Category</th>
+            <th scope="col" class="sortable" data-sort="size"     data-sort-type="ord"  aria-sort="none">Size</th>
+            <th scope="col" class="sortable" data-sort="web"      data-sort-type="text" aria-sort="none">Website</th>
+            <th scope="col" class="sortable" data-sort="dm"       data-sort-type="num"  aria-sort="none">Digital maturity</th>
+            <th scope="col" class="sortable" data-sort="score"    data-sort-type="num"  aria-sort="descending">Opportunity score</th>
+            <th scope="col" class="sortable" data-sort="sol"      data-sort-type="text" aria-sort="none">Potential solution</th>
+            <th scope="col" class="sortable" data-sort="contact"  data-sort-type="ord"  aria-sort="none">Contact available</th>
+            <th scope="col" class="sortable" data-sort="conf"     data-sort-type="ord"  aria-sort="none">Research confidence</th>
+            <th scope="col" class="sortable" data-sort="verif"    data-sort-type="ord"  aria-sort="none">Verification status</th>
+            <th scope="col" class="sortable" data-sort="outreach" data-sort-type="ord"  aria-sort="none">Outreach status</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </section>
+</main>
+
+<!-- ================= SELECTION TRAY (spec section 18). No send control. ================= -->
+<div id="tray" hidden aria-label="Selection">
+  <div class="wrap">
+    <div class="tray-in">
+      <div class="tray-counts" id="tray-counts"></div>
+      <div class="tray-total" id="tray-total">0 selected</div>
+      <div class="tray-note" id="tray-note"></div>
+      <div class="tray-actions">
+        <button type="button" class="btn" id="tray-copy">Copy ids</button>
+        <button type="button" class="btn" id="tray-clear">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" hidden role="status"></div>
+
+<footer class="prov">
+  <div class="wrap">
+    <h2>What the numbers mean</h2>
+    <dl>
+      <div><dt>Businesses found</dt><dd>every businesses row for the campaign, whatever its status</dd></div>
+      <div><dt>Researched</dt><dd>at least one research_runs row with status = COMPLETE</dd></div>
+      <div><dt>Qualified</dt><dd>research complete, a current opportunity score, score &gt;= campaigns.min_opportunity_score (70), status not SKIPPED/REJECTED</dd></div>
+      <div><dt>Skipped</dt><dd>status IN (SKIPPED, REJECTED); the tooltip splits pipeline skips from your rejections</dd></div>
+      <div><dt>Requiring verification</dt><dd>status IN (AI_RESEARCHED, NEEDS_VERIFICATION)</dd></div>
+      <div><dt>Ready for outreach</dt><dd>status = CONTACT_READY: verified and a human-confirmed contact exists</dd></div>
+      <div><dt>Em dash</dt><dd>not measured. A zero means we looked and the answer was none. They are never rendered the same way.</dd></div>
+    </dl>
+
+    <div class="warnings" id="warnings"></div>
+
+    <h2>Provenance</h2>
+    <dl>
+      <div><dt>Report generated</dt><dd>2026-08-26T19:04:11+05:30 by radar/report.py</dd></div>
+      <div><dt>Campaign</dt><dd>cmp_01JSAMPLE0000000000000001</dd></div>
+      <div><dt>Research model</dt><dd>gemini-2.5-flash (Google AI Studio free tier), prompt research-v4</dd></div>
+      <div><dt>Scoring</dt><dd>radar/score.py, weights score-v3; scores are read from opportunities.score, never recomputed at render time</dd></div>
+      <div><dt>Discovery sources</dt><dd>OpenStreetMap Overpass + Nominatim, business websites, MCA21 and GST public search. No paid data vendor.</dd></div>
+      <div><dt>Rows rendered</dt><dd id="prov-rows">&mdash;</dd></div>
+      <div><dt>Contact data sent to an LLM</dt><dd>none, ever. business_contacts values are substituted locally after generation.</dd></div>
+      <div><dt>Status of this file</dt><dd><b>Wireframe. Fictional data. Not a research output.</b></dd></div>
+    </dl>
+  </div>
+</footer>
+
+<!--
+  The embedded data island (03-html-report.md 3.2.5). Data, not code: the browser never
+  executes a type="application/json" block. In the real export this is written by
+  radar/report.py from the twelve queries in radar/report_queries.py.
+
+  EVERYTHING BELOW IS INVENTED. The names are placeholders, the domains are all under the
+  reserved .example TLD and resolve to nothing, and no row corresponds to a real business.
+-->
+<script type="application/json" id="report-data">
+{
+"campaign": {
+  "id": "cmp_01JSAMPLE0000000000000001",
+  "name": "SAMPLE campaign - Dhule-Shirpur-Nashik-Jalgaon - 26 Aug 2026",
+  "min_score": 70,
+  "depth": "DEEP",
+  "exported_at": "2026-08-26T19:04:11+05:30",
+  "app_base": "http://127.0.0.1:8765"
+},
+"cities": [
+  {"city": "DHULE",   "label": "Dhule",   "ordinal": 1},
+  {"city": "SHIRPUR", "label": "Shirpur", "ordinal": 2},
+  {"city": "NASHIK",  "label": "Nashik",  "ordinal": 3},
+  {"city": "JALGAON", "label": "Jalgaon", "ordinal": 4}
+],
+"templates": {
+  "HOSPITAL": {
+    "siteObs": [["The site lists four clinical departments and a separate emergency number.", "HIGH", 88, ["SITE"]],
+                ["Appointments are taken by phone only; the site has no booking form.", "HIGH", 82, ["SITE"]]],
+    "baseObs": [["The listing records 24-hour opening and a public reception number.", "HIGH", 79, ["OSM"]]],
+    "inf": [["Patient records are likely kept department by department rather than in one system.", "MEDIUM", 62, ["SITE", "OSM"]],
+            ["Billing and pharmacy stock are probably reconciled by hand at month end.", "MEDIUM", 58, ["SITE"]]],
+    "unk": [["Whether any hospital information system is already in use."],
+            ["Bed count: no public figure was found for this hospital."]],
+    "problem": "Department-level records with no single view of a patient history or of daily throughput. Billing, pharmacy stock and admissions are reconciled by hand.",
+    "benefit": "One view of admissions, billing and stock; fewer reconciliations at month end and a shorter discharge cycle.",
+    "modules": [["Dashboard", "Daily admissions, occupancy and collections on one screen"],
+                ["Workflow", "Admission to discharge as a tracked path"],
+                ["Finance Tracking", "Billing, insurance claims and outstanding amounts"],
+                ["Inventory", "Pharmacy and consumables with reorder levels"],
+                ["Reports", "Department-wise throughput and revenue"],
+                ["Role Management", "Doctor, reception, pharmacy and accounts separation"],
+                ["Audit Logs", "Who changed which record, for medico-legal defence"]],
+    "siteExcerpt": "Departments: General Medicine, Orthopaedics, Paediatrics, Pathology. For appointments call the reception desk.",
+    "osmExcerpt": "amenity=hospital, opening_hours=24/7, phone tag present, website tag present"
+  },
+  "DIAGNOSTIC_CENTER": {
+    "siteObs": [["The site advertises home sample collection across the city.", "HIGH", 85, ["SITE"]]],
+    "baseObs": [["The listing shows a single branch and a landline number.", "HIGH", 80, ["OSM"]],
+                ["Reports are collected in person at the counter; no dispatch channel is mentioned.", "HIGH", 76, ["OSM"]]],
+    "inf": [["Test reports are probably typed and printed rather than dispatched from a system.", "MEDIUM", 60, ["OSM"]],
+            ["Referring doctors are likely tracked in a register, not a database.", "LOW", 44, ["OSM"]]],
+    "unk": [["Daily sample volume."],
+            ["Whether a laboratory information system is in place."]],
+    "problem": "Sample intake, result entry and report dispatch are three separate manual steps with no shared record, so a delayed report is only noticed when the patient asks.",
+    "benefit": "One tracked path from sample to report, with referring-doctor totals available without a manual count.",
+    "modules": [["Workflow", "Sample intake to report dispatch"],
+                ["Reports", "Turnaround time and referring-doctor volume"],
+                ["Finance Tracking", "Counter collections and pending payments"],
+                ["Role Management", "Technician, pathologist and front-desk separation"],
+                ["Audit Logs", "Amended results are recorded, never overwritten silently"]],
+    "siteExcerpt": "Home collection available. Reports usually ready the same evening; collect from the counter.",
+    "osmExcerpt": "healthcare=laboratory, phone tag present, no website tag"
+  },
+  "SCHOOL": {
+    "siteObs": [["The site publishes a fee structure PDF dated for the previous academic year.", "HIGH", 83, ["SITE"]],
+                ["Admission enquiries are handled by a downloadable form, returned by hand.", "HIGH", 78, ["SITE"]]],
+    "baseObs": [["The listing records a single campus and an office landline.", "MEDIUM", 68, ["OSM"]]],
+    "inf": [["Attendance and fee receipts are probably maintained in spreadsheets per class.", "MEDIUM", 61, ["SITE"]]],
+    "unk": [["Student headcount."],
+            ["Whether an ERP is already licensed through the education board."]],
+    "problem": "Fee collection, attendance and parent communication live in three unconnected places, so a defaulter list takes a day to produce and is stale by the time it is used.",
+    "benefit": "Fee status and attendance in one place, and parent messages sent from the same record rather than a personal phone.",
+    "modules": [["Dashboard", "Collections, attendance and pending fees at a glance"],
+                ["Finance Tracking", "Fee heads, instalments and receipts"],
+                ["Workflow", "Admission enquiry to enrolment"],
+                ["Reports", "Class-wise attendance and defaulter lists"],
+                ["Role Management", "Office, class teacher and principal separation"]],
+    "siteExcerpt": "Fee structure 2025-26 (PDF). Admission form may be downloaded and submitted at the school office.",
+    "osmExcerpt": "amenity=school, operator tag present, phone tag present"
+  },
+  "COLLEGE": {
+    "siteObs": [["The site lists six departments and a placement cell with a separate contact.", "HIGH", 86, ["SITE"]],
+                ["Examination results are published as scanned PDFs.", "HIGH", 81, ["SITE"]]],
+    "baseObs": [["The listing records a campus address and two landlines.", "MEDIUM", 70, ["OSM"]]],
+    "inf": [["Attendance is likely collected on paper and entered later, if at all.", "MEDIUM", 63, ["SITE"]],
+            ["Placement records are probably kept by one coordinator in a personal file.", "MEDIUM", 57, ["SITE"]]],
+    "unk": [["Enrolled student count."],
+            ["Whether the affiliating university mandates a particular student portal."]],
+    "problem": "Attendance, internal marks and placement records sit with individual staff. Nobody can answer a university audit question without collecting files from six departments.",
+    "benefit": "One student record across departments, and audit answers in minutes rather than a week.",
+    "modules": [["Dashboard", "Attendance and internal marks by department"],
+                ["Workflow", "Enquiry, admission, semester registration"],
+                ["Reports", "University-format attendance and result summaries"],
+                ["Role Management", "Department, examination cell and principal separation"],
+                ["Audit Logs", "Mark changes are attributable"]],
+    "siteExcerpt": "Departments: Computer, Mechanical, Civil, Electrical, Electronics, Applied Science. Placement cell contact on the contact page.",
+    "osmExcerpt": "amenity=college, website tag present, phone tag present"
+  },
+  "MANUFACTURER": {
+    "siteObs": [["The site describes a product range but publishes no capacity or certification detail.", "HIGH", 84, ["SITE"]]],
+    "baseObs": [["The listing shows one industrial-estate address and a works landline.", "HIGH", 77, ["OSM"]]],
+    "inf": [["Job cards and dispatch are probably tracked in a register at the gate.", "MEDIUM", 64, ["OSM"]],
+            ["Raw material stock is likely counted physically rather than held in a system.", "MEDIUM", 59, ["SITE"]]],
+    "unk": [["Monthly production volume."],
+            ["Whether any accounting package is already extended to the shop floor."]],
+    "problem": "Order, job card, dispatch and invoice are four documents that never meet. A delayed order is discovered when the customer calls, and material shortage is discovered at the machine.",
+    "benefit": "A live order-to-dispatch position, and a material requirement that is known before the shift, not during it.",
+    "modules": [["Dashboard", "Open orders, work in progress and dispatch due today"],
+                ["Workflow", "Order to job card to dispatch"],
+                ["Inventory", "Raw material and finished goods with reorder levels"],
+                ["Finance Tracking", "Invoices raised and outstanding recovery"],
+                ["Reports", "On-time dispatch and rejection rates"],
+                ["Audit Logs", "Rate and quantity changes are attributable"]],
+    "siteExcerpt": "Product range and enquiry form. Capacity, certifications and client list are not published.",
+    "osmExcerpt": "landuse=industrial, name tag present, phone tag present"
+  },
+  "DISTRIBUTOR": {
+    "siteObs": [["The site lists the brands carried but has no order or stock page.", "HIGH", 82, ["SITE"]]],
+    "baseObs": [["The listing shows a godown address and a mobile number.", "MEDIUM", 72, ["OSM"]]],
+    "inf": [["Orders are likely taken over the phone and written into a day book.", "MEDIUM", 63, ["OSM"]],
+            ["Salesman-wise outstanding is probably reconciled weekly by hand.", "MEDIUM", 55, ["OSM"]]],
+    "unk": [["Number of retail outlets served."],
+            ["Whether any billing software is already in use at the godown."]],
+    "problem": "Orders, delivery and collection are tracked on paper per salesman, so stock at the godown and money on the road are both estimates until somebody counts.",
+    "benefit": "Order to delivery to collection on one record, with route-wise outstanding available daily instead of weekly.",
+    "modules": [["Dashboard", "Stock, orders and outstanding by route"],
+                ["Inventory", "Godown stock with expiry and reorder levels"],
+                ["Workflow", "Order, dispatch, delivery confirmation"],
+                ["Finance Tracking", "Salesman-wise collection and credit limits"],
+                ["Reports", "Route and brand performance"]],
+    "siteExcerpt": "Authorised distributor for the brands listed. Contact the office for rates.",
+    "osmExcerpt": "shop=wholesale, phone tag present, opening_hours tag present"
+  },
+  "VEHICLE_DEALER": {
+    "siteObs": [["The site has a service-booking form that posts to a generic mail address.", "HIGH", 85, ["SITE"]],
+                ["A workshop and a showroom are described at the same address.", "HIGH", 80, ["SITE"]]],
+    "baseObs": [["The listing records showroom hours and a sales number.", "MEDIUM", 71, ["OSM"]]],
+    "inf": [["Service history is likely held in the manufacturer portal, not in the dealership.", "MEDIUM", 60, ["SITE"]],
+            ["Follow-up for due services is probably a manual call list.", "MEDIUM", 57, ["SITE"]]],
+    "unk": [["Monthly service throughput."],
+            ["Whether the manufacturer mandates a dealer management system."]],
+    "problem": "Service due dates, job cards and spare parts are tracked in three places, and a customer who skips a service is noticed only if somebody remembers to call.",
+    "benefit": "Automatic service-due lists, a job card that carries parts and labour, and a workshop load that is visible before the day starts.",
+    "modules": [["Dashboard", "Bay load, jobs open and services due"],
+                ["Workflow", "Job card from intake to delivery"],
+                ["Inventory", "Spare parts with reorder levels"],
+                ["Finance Tracking", "Invoices, warranty claims and recovery"],
+                ["Reports", "Service retention and revenue per bay"]],
+    "siteExcerpt": "Book a service. Showroom and workshop at the same premises; timings on the contact page.",
+    "osmExcerpt": "shop=car, opening_hours tag present, phone tag present"
+  },
+  "GARAGE": {
+    "baseObs": [["The listing records a roadside workshop with a mobile number and no fixed hours.", "HIGH", 74, ["OSM"]]],
+    "siteObs": [],
+    "inf": [["Job estimates are probably verbal and unrecorded.", "MEDIUM", 58, ["OSM"]]],
+    "unk": [["Number of vehicles handled per week."],
+            ["Whether the proprietor keeps any written service record at all."]],
+    "problem": "Nothing is recorded. An estimate, the work done and the amount collected exist only in conversation, so a dispute is unanswerable and a repeat customer is unrecognised.",
+    "benefit": "A simple job card on a phone, a printed estimate, and a customer history that survives the proprietor being away.",
+    "modules": [["Workflow", "Estimate, job, delivery"],
+                ["Finance Tracking", "Cash collected against jobs"],
+                ["Reports", "Repeat customers and monthly totals"]],
+    "siteExcerpt": "",
+    "osmExcerpt": "shop=car_repair, phone tag present, no website tag, no opening_hours tag"
+  },
+  "HOTEL": {
+    "siteObs": [["The site takes booking enquiries by form and by phone; no live availability is shown.", "HIGH", 86, ["SITE"]],
+                ["A banquet hall and a restaurant are listed as separate facilities.", "HIGH", 81, ["SITE"]]],
+    "baseObs": [["The listing records the address, phone and check-in time.", "MEDIUM", 70, ["OSM"]]],
+    "inf": [["Room availability is likely maintained on a paper chart at the desk.", "MEDIUM", 62, ["SITE"]],
+            ["Banquet bookings are probably held in a separate diary from room bookings.", "MEDIUM", 56, ["SITE"]]],
+    "unk": [["Room count."],
+            ["Whether an OTA channel manager is already in use."]],
+    "problem": "Rooms, banquet and restaurant are booked in three books that nobody can see at once, so a double booking is found on the day and a slow week is found at month end.",
+    "benefit": "One availability view across rooms and banquet, and a month-end position that does not require adding up diaries.",
+    "modules": [["Dashboard", "Occupancy, arrivals and banquet bookings today"],
+                ["Workflow", "Enquiry, booking, check-in, check-out"],
+                ["Finance Tracking", "Folio, advances and settlement"],
+                ["Inventory", "Kitchen and housekeeping consumables"],
+                ["Reports", "Occupancy and average rate by month"]],
+    "siteExcerpt": "Rooms, banquet hall and multi-cuisine restaurant. For reservations call the front desk or use the enquiry form.",
+    "osmExcerpt": "tourism=hotel, phone tag present, website tag present"
+  },
+  "BAKERY": {
+    "baseObs": [["The listing records a counter shop with morning and evening hours.", "MEDIUM", 66, ["OSM"]]],
+    "siteObs": [],
+    "inf": [["Daily production is probably decided from memory of yesterday sales.", "LOW", 42, ["OSM"]]],
+    "unk": [["Daily counter volume."],
+            ["Whether any billing device is in use at the counter."]],
+    "problem": "",
+    "benefit": "",
+    "modules": [],
+    "siteExcerpt": "",
+    "osmExcerpt": "shop=bakery, opening_hours tag present, no phone tag"
+  },
+  "RETAIL_STORE": {
+    "baseObs": [["The listing records a single storefront with evening peak hours and a mobile number.", "HIGH", 78, ["OSM"]]],
+    "siteObs": [["The site is a single page with a photo gallery and a phone number.", "HIGH", 76, ["SITE"]]],
+    "inf": [["Billing is likely handled by a standalone machine that does not hold stock.", "MEDIUM", 61, ["OSM"]],
+            ["Stock is probably counted at the shelf when a customer asks.", "MEDIUM", 55, ["OSM"]]],
+    "unk": [["Number of SKUs carried."],
+            ["Whether any GST billing software is already in place."]],
+    "problem": "Billing and stock are separate, so what is on the shelf is only known by looking, and a fast-moving item is reordered after it runs out rather than before.",
+    "benefit": "Billing that updates stock, reorder alerts before a shelf empties, and a monthly view of what actually sells.",
+    "modules": [["Dashboard", "Sales today, stock alerts and dues"],
+                ["Inventory", "SKU-level stock with reorder levels"],
+                ["Finance Tracking", "Daily collection and GST-ready summaries"],
+                ["Reports", "Fast and slow movers by month"]],
+    "siteExcerpt": "Photo gallery and a phone number. No catalogue, no prices, no enquiry form.",
+    "osmExcerpt": "shop tag present, opening_hours tag present, phone tag present"
+  },
+  "REAL_ESTATE_AGENCY": {
+    "siteObs": [["The site lists current properties as images with a phone number on each.", "HIGH", 83, ["SITE"]]],
+    "baseObs": [["The listing records an office address and two mobile numbers.", "MEDIUM", 69, ["OSM"]]],
+    "inf": [["Enquiries are likely tracked in a phone contact list rather than a pipeline.", "MEDIUM", 60, ["SITE"]],
+            ["Site-visit scheduling is probably coordinated over messaging apps.", "MEDIUM", 54, ["SITE"]]],
+    "unk": [["Number of active listings."],
+            ["Whether any CRM is already in use."]],
+    "problem": "Enquiries arrive on two mobiles and live in call logs. A lead that goes cold is invisible, and no one can say which listing generated which visit.",
+    "benefit": "One pipeline from enquiry to site visit to closure, and a record of which property and which channel actually produces visits.",
+    "modules": [["Dashboard", "Live enquiries, visits scheduled, closures this month"],
+                ["Workflow", "Enquiry, site visit, negotiation, closure"],
+                ["Reports", "Source-wise lead quality"],
+                ["Role Management", "Agent-level visibility of own leads"]],
+    "siteExcerpt": "Current properties. Call the number on the listing for a site visit.",
+    "osmExcerpt": "office=estate_agent, phone tag present"
+  },
+  "OTHER": {
+    "baseObs": [["The listing records a first-floor office and one landline.", "MEDIUM", 68, ["OSM"]]],
+    "siteObs": [],
+    "inf": [["Client filings are probably tracked in a spreadsheet keyed to due dates.", "MEDIUM", 58, ["OSM"]]],
+    "unk": [["Number of clients on the books."],
+            ["Whether practice-management software is already licensed."]],
+    "problem": "Statutory due dates for every client sit in one spreadsheet that only the proprietor maintains. A missed date is discovered by the client, not by the firm.",
+    "benefit": "Due dates and document status per client in one place, visible to whoever is in the office.",
+    "modules": [["Dashboard", "Filings due this week"],
+                ["Workflow", "Document collection, preparation, filing"],
+                ["Reports", "Client-wise compliance status"],
+                ["Audit Logs", "Who filed what, and when"]],
+    "siteExcerpt": "",
+    "osmExcerpt": "office=accountant, phone tag present, no website tag"
+  }
+},
+"businesses": [
+  {"id":"biz_01JSAMPLE00000000000000A1","name":"ABC Hospital","city":"DHULE","industry":"HEALTHCARE","cat":"HOSPITAL",
+   "size":"MEDIUM","score":86,"dm":62,"opcx":71,"web":"PRESENT","domain":"abc-hospital.example","osm":"246810135",
+   "sol":"Hospital Operations Platform","contact":"EMAIL","contactNote":"1 confirmed business email, 1 unconfirmed",
+   "conf":"MEDIUM","confPct":64,"status":"NEEDS_VERIFICATION","verified":0,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":null,
+   "block":"D_NOT_VERIFIED","sel":0,"disc":"2026-08-26","researchedAt":"2026-08-23T07:41:00+05:30",
+   "note":"Four consultants are named on the site, three of them visiting rather than resident.","unote":null,"extra":null,"history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000A2","name":"Bravo Diagnostics Centre","city":"DHULE","industry":"HEALTHCARE","cat":"DIAGNOSTIC_CENTER",
+   "size":"SMALL","score":74,"dm":38,"opcx":58,"web":"ABSENT","domain":null,"osm":"246810221",
+   "sol":"Diagnostics Workflow and Reporting","contact":"EMAIL PHONE","contactNote":"2 confirmed contacts",
+   "conf":"HIGH","confPct":88,"status":"CONTACT_READY","verified":1,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":null,
+   "block":"","sel":1,"disc":"2026-08-24","researchedAt":"2026-08-24T09:02:00+05:30",
+   "note":"A printed rate card photographed in the directory listing shows 31 tests.","unote":null,
+   "extraFinding":"A trade directory entry records pathology and radiology at this address since 2014.",
+   "extra":{"name":"Dhule trade directory entry","type":"DIRECTORY","url":"https://directory.example/dhule/bravo-diagnostics","checked":"2026-08-24","excerpt":"Bravo Diagnostics Centre, pathology and radiology, established 2014. Reports collected at the counter.","conf":"MEDIUM"},
+   "history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000A3","name":"Charlie English High School","city":"DHULE","industry":"EDUCATION","cat":"SCHOOL",
+   "size":"MEDIUM","score":68,"dm":45,"opcx":54,"web":"PRESENT","domain":"charlie-school.example","osm":"246810307",
+   "sol":"School Administration Suite","contact":"UNVERIFIED","contactNote":"2 contacts found, neither confirmed by you",
+   "conf":"MEDIUM","confPct":61,"status":"VERIFIED","verified":1,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":null,
+   "block":"E_CONTACT_MISSING","sel":0,"disc":"2026-08-24","researchedAt":"2026-08-24T09:20:00+05:30",
+   "note":"The fee PDF on the site is dated for the previous academic year and has not been replaced.","unote":null,"extra":null,"history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000A4","name":"Delta Motors Sales and Service","city":"DHULE","industry":"AUTOMOBILE","cat":"VEHICLE_DEALER",
+   "size":"MEDIUM","score":81,"dm":55,"opcx":66,"web":"PRESENT","domain":"delta-motors.example","osm":"246810414",
+   "sol":"Dealership Service Desk","contact":"EMAIL PHONE WHATSAPP","contactNote":"3 confirmed contacts",
+   "conf":"HIGH","confPct":84,"status":"CONTACTED","verified":1,"sup":0,"interested":0,"nResp":0,"nSent":1,"lastMsg":"DELIVERED",
+   "block":"","sel":1,"disc":"2026-08-22","researchedAt":"2026-08-22T11:15:00+05:30",
+   "note":"The service booking form posts to a generic mail address, not to a named service manager.","unote":null,"extra":null,
+   "history":[{"date":"2026-08-24T10:12:00+05:30","channel":"EMAIL","seq":1,"subject":"Service desk software for Delta Motors","status":"DELIVERED","sender":"Sagar","resp":null,"respConf":null,"respAt":null,"excerpt":null,"next":"Follow-up available","nextTone":"mute"}]},
+
+  {"id":"biz_01JSAMPLE00000000000000A5","name":"Echo Sweets and Bakery","city":"DHULE","industry":"RETAIL","cat":"BAKERY",
+   "size":"MICRO","score":null,"dm":null,"opcx":null,"web":"UNKNOWN","domain":null,"osm":"246810522",
+   "sol":null,"contact":"NONE","contactNote":null,
+   "conf":"","confPct":null,"status":"AI_RESEARCHED","verified":0,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":null,
+   "block":"D_NOT_VERIFIED","sel":0,"disc":"2026-08-26","researchedAt":null,
+   "note":null,"unote":"Everything about this business except its name, category and location.","extra":null,"history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000A6","name":"Foxtrot Steel Fabricators","city":"DHULE","industry":"MANUFACTURING","cat":"MANUFACTURER",
+   "size":"SMALL","score":59,"dm":22,"opcx":47,"web":"ABSENT","domain":null,"osm":"246810618",
+   "sol":"Job Card and Dispatch Tracker","contact":"PHONE","contactNote":"1 confirmed phone",
+   "conf":"LOW","confPct":41,"status":"REJECTED","verified":0,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":null,
+   "block":"D_VERIFICATION_REVOKED","sel":0,"disc":"2026-08-24","researchedAt":"2026-08-24T14:41:00+05:30",
+   "note":"The works address in the listing is a plot number in a residential lane, not an industrial estate.","unote":null,
+   "flag":"You rejected this business on 24 Aug 2026: too small to carry a licence fee.","extra":null,"history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000A7","name":"Golf Agro Distributors","city":"DHULE","industry":"DISTRIBUTION","cat":"DISTRIBUTOR",
+   "size":"SMALL","score":77,"dm":30,"opcx":63,"web":"PRESENT","domain":"golf-agro.example","osm":"246810733",
+   "sol":"Stock and Route Distribution System","contact":"UNVERIFIED","contactNote":"1 contact found; the confirmed address bounced and was retired",
+   "conf":"MEDIUM","confPct":66,"status":"CONTACTED","verified":1,"sup":0,"interested":0,"nResp":0,"nSent":1,"lastMsg":"BOUNCED",
+   "block":"E_CONTACT_MISSING","sel":0,"disc":"2026-08-22","researchedAt":"2026-08-22T16:08:00+05:30",
+   "note":"The site lists eleven brands but gives one mobile number for all of them.","unote":null,"extra":null,
+   "history":[{"date":"2026-08-25T09:40:00+05:30","channel":"EMAIL","seq":1,"subject":"Route and stock visibility for Golf Agro","status":"BOUNCED","sender":"Sagar","resp":null,"respConf":null,"respAt":null,"excerpt":null,"next":"Delivery failed - check the contact","nextTone":"bad"}]},
+
+  {"id":"biz_01JSAMPLE00000000000000B1","name":"Hotel India Residency","city":"SHIRPUR","industry":"HOSPITALITY","cat":"HOTEL",
+   "size":"SMALL","score":72,"dm":41,"opcx":55,"web":"PRESENT","domain":"hotel-india-residency.example","osm":"357911024",
+   "sol":"Front Desk and Booking Console","contact":"EMAIL PHONE","contactNote":"2 confirmed contacts",
+   "conf":"MEDIUM","confPct":63,"status":"CONTACTED","verified":1,"sup":0,"interested":0,"nResp":0,"nSent":1,"lastMsg":"SENT",
+   "block":"G_MIN_DAYS","sel":0,"disc":"2026-08-23","researchedAt":"2026-08-23T12:30:00+05:30",
+   "note":"The banquet hall is advertised for 300 guests but shares the hotel reception number.","unote":null,"extra":null,
+   "history":[{"date":"2026-08-26T08:05:00+05:30","channel":"EMAIL","seq":1,"subject":"One availability view for rooms and banquet","status":"SENT","sender":"Sagar","resp":null,"respConf":null,"respAt":null,"excerpt":null,"next":"Contacted 0 days ago; the minimum gap is 21 days","nextTone":"mute"}]},
+
+  {"id":"biz_01JSAMPLE00000000000000B2","name":"Juliet Junior College","city":"SHIRPUR","industry":"EDUCATION","cat":"COLLEGE",
+   "size":"MEDIUM","score":83,"dm":48,"opcx":69,"web":"PRESENT","domain":"juliet-college.example","osm":"357911138",
+   "sol":"Campus and Attendance System","contact":"EMAIL","contactNote":"1 confirmed office email",
+   "conf":"HIGH","confPct":81,"status":"RESPONDED","verified":1,"sup":0,"interested":0,"nResp":1,"nSent":1,"lastMsg":"DELIVERED",
+   "block":"G_STOP_AFTER_REJECTION","sel":0,"disc":"2026-08-21","researchedAt":"2026-08-21T10:02:00+05:30",
+   "note":"Results are published as scans, which means marks are re-typed at least twice.","unote":null,"extra":null,
+   "history":[{"date":"2026-08-22T09:15:00+05:30","channel":"EMAIL","seq":1,"subject":"Attendance and internal marks in one record","status":"DELIVERED","sender":"Sagar","resp":"NOT_INTERESTED","respConf":"HIGH","respAt":"2026-08-22T18:44:00+05:30","excerpt":"We already have a portal provided by the university. Please do not write again.","next":"Stop - no further outreach","nextTone":"bad"}]},
+
+  {"id":"biz_01JSAMPLE00000000000000B3","name":"Kilo Auto Garage","city":"SHIRPUR","industry":"AUTOMOBILE","cat":"GARAGE",
+   "size":"MICRO","score":64,"dm":12,"opcx":49,"web":"ABSENT","domain":null,"osm":"357911247",
+   "sol":"Workshop Job Tracker","contact":"PHONE","contactNote":"1 confirmed phone",
+   "conf":"LOW","confPct":44,"status":"NEEDS_VERIFICATION","verified":0,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":null,
+   "block":"D_NOT_VERIFIED","sel":0,"disc":"2026-08-25","researchedAt":"2026-08-25T15:22:00+05:30",
+   "note":"The only trace of this business anywhere is one OpenStreetMap node with a phone tag.","unote":null,"extra":null,"history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000B4","name":"Lima Provisions Wholesale","city":"SHIRPUR","industry":"DISTRIBUTION","cat":"DISTRIBUTOR",
+   "size":"SMALL","score":55,"dm":18,"opcx":40,"web":"UNKNOWN","domain":null,"osm":"357911355",
+   "sol":null,"contact":"UNVERIFIED","contactNote":"1 contact found, not confirmed",
+   "conf":"LOW","confPct":38,"status":"SKIPPED","verified":0,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":null,
+   "block":"D_VERIFICATION_REVOKED","sel":0,"disc":"2026-08-25","researchedAt":"2026-08-25T15:40:00+05:30",
+   "note":null,"unote":"Whether this firm still trades: the website check never ran and the listing is four years old.",
+   "flag":"You skipped this business on 25 Aug 2026: the listing looks stale and nothing corroborates it.","extra":null,"history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000B5","name":"Mike Cotton Ginning Works","city":"SHIRPUR","industry":"MANUFACTURING","cat":"MANUFACTURER",
+   "size":"MEDIUM","score":79,"dm":26,"opcx":64,"web":"ABSENT","domain":null,"osm":"357911463",
+   "sol":"Lot Tracking and Weighbridge Log","contact":"EMAIL PHONE","contactNote":"2 confirmed contacts",
+   "conf":"MEDIUM","confPct":59,"status":"CONTACT_READY","verified":1,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":null,
+   "block":"","sel":1,"disc":"2026-08-23","researchedAt":"2026-08-23T13:55:00+05:30",
+   "note":"The listing records a weighbridge on the premises.","unote":null,
+   "extraFinding":"The company master record shows an active private limited company in cotton ginning and pressing.",
+   "extra":{"name":"MCA21 company master (record SAMPLE-0004)","type":"REGISTRY","url":"https://mca21.example/company/SAMPLE-0004","checked":"2026-08-23","excerpt":"Class: Private company. Status: Active. Activity: cotton ginning and pressing.","conf":"HIGH"},
+   "history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000C1","name":"November Wine Estates","city":"NASHIK","industry":"MANUFACTURING","cat":"MANUFACTURER",
+   "size":"MEDIUM","score":88,"dm":58,"opcx":74,"web":"PRESENT","domain":"november-wine.example","osm":"468012011",
+   "sol":"Production and Dispatch Control","contact":"EMAIL PHONE WHATSAPP","contactNote":"3 confirmed contacts",
+   "conf":"HIGH","confPct":90,"status":"INTERESTED","verified":1,"sup":0,"interested":1,"nResp":1,"nSent":1,"lastMsg":"DELIVERED",
+   "block":"D_HUMAN_OWNED","sel":0,"disc":"2026-08-20","researchedAt":"2026-08-20T09:11:00+05:30",
+   "note":"The site publishes a visitor booking page but no trade or dispatch information.","unote":null,
+   "extraFinding":"A local news item reports a second bottling line added this season and supply to four states.",
+   "extra":{"name":"Local business news item","type":"NEWS","url":"https://news.example/nashik/november-wine-expansion","checked":"2026-08-20","excerpt":"The estate said it added a second bottling line this season and now supplies four states.","conf":"MEDIUM"},
+   "history":[{"date":"2026-08-21T09:30:00+05:30","channel":"EMAIL","seq":1,"subject":"Dispatch visibility across four states","status":"DELIVERED","sender":"Sagar","resp":"DEMO_REQUESTED","respConf":"HIGH","respAt":"2026-08-21T20:10:00+05:30","excerpt":"Interesting. Can you show us how the dispatch tracking works? Call any weekday after 4pm.","next":"Human action required","nextTone":"ok"}]},
+
+  {"id":"biz_01JSAMPLE00000000000000C2","name":"Oscar Speciality Hospital","city":"NASHIK","industry":"HEALTHCARE","cat":"HOSPITAL",
+   "size":"LARGE","score":91,"dm":71,"opcx":79,"web":"PRESENT","domain":"oscar-hospital.example","osm":"468012129",
+   "sol":"Hospital Operations Platform","contact":"EMAIL","contactNote":"1 confirmed administrator email",
+   "conf":"HIGH","confPct":86,"status":"CONTACT_READY","verified":1,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":"QUEUED",
+   "block":"F_IN_FLIGHT","sel":0,"disc":"2026-08-20","researchedAt":"2026-08-20T10:45:00+05:30",
+   "note":"Nine departments are listed, each with its own extension number and no shared reception.","unote":null,
+   "extraFinding":"The company master record shows an active private limited company in hospital and medical care services.",
+   "extra":{"name":"MCA21 company master (record SAMPLE-0009)","type":"REGISTRY","url":"https://mca21.example/company/SAMPLE-0009","checked":"2026-08-20","excerpt":"Class: Private company. Status: Active. Activity: hospital and medical care services.","conf":"HIGH"},
+   "history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000C3","name":"Papa Polymers Private Limited","city":"NASHIK","industry":"MANUFACTURING","cat":"MANUFACTURER",
+   "size":"LARGE","score":76,"dm":52,"opcx":61,"web":"PRESENT","domain":"papa-polymers.example","osm":"468012238",
+   "sol":"Plant Maintenance and QC Log","contact":"EMAIL","contactNote":"1 confirmed works email",
+   "conf":"MEDIUM","confPct":68,"status":"CONTACT_READY","verified":1,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":"POLICY_BLOCKED",
+   "block":"","sel":1,"disc":"2026-08-21","researchedAt":"2026-08-21T11:30:00+05:30",
+   "note":"The site claims ISO certification but names no certificate number, so the claim is not citable.","unote":null,
+   "extraFinding":"The company master record shows an active private limited company manufacturing plastic products.",
+   "extra":{"name":"MCA21 company master (record SAMPLE-0011)","type":"REGISTRY","url":"https://mca21.example/company/SAMPLE-0011","checked":"2026-08-21","excerpt":"Class: Private company. Status: Active. Activity: manufacture of plastic products.","conf":"HIGH"},
+   "history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000C4","name":"Quebec Realty Advisors","city":"NASHIK","industry":"REAL_ESTATE","cat":"REAL_ESTATE_AGENCY",
+   "size":"SMALL","score":70,"dm":44,"opcx":57,"web":"PRESENT","domain":"quebec-realty.example","osm":"468012347",
+   "sol":"Site Visit and Lead Desk","contact":"EMAIL PHONE","contactNote":"2 confirmed contacts",
+   "conf":"MEDIUM","confPct":60,"status":"CONTACT_READY","verified":1,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":null,
+   "block":"","sel":1,"disc":"2026-08-23","researchedAt":"2026-08-23T16:20:00+05:30",
+   "note":"Fourteen listings on the site carry two different mobile numbers between them.","unote":null,
+   "unsourced":"A walk-in visit noted a whiteboard being used to track site visits. Recorded by hand, so no source row exists and this statement may never appear in a message.",
+   "extra":null,"history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000C5","name":"Romeo Tax Consultants","city":"NASHIK","industry":"PROFESSIONAL_SERVICES","cat":"OTHER",
+   "size":"MICRO","score":62,"dm":35,"opcx":52,"web":"ABSENT","domain":null,"osm":"468012455",
+   "sol":"Client Filing Tracker","contact":"PHONE","contactNote":"1 confirmed phone",
+   "conf":"LOW","confPct":47,"status":"AI_RESEARCHED","verified":0,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":null,
+   "block":"D_NOT_VERIFIED","sel":0,"disc":"2026-08-26","researchedAt":"2026-08-26T08:30:00+05:30",
+   "note":"A single OpenStreetMap node with office=accountant and a landline is the whole footprint.","unote":null,"extra":null,"history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000C6","name":"Sierra Supermart","city":"NASHIK","industry":"RETAIL","cat":"RETAIL_STORE",
+   "size":"MEDIUM","score":84,"dm":40,"opcx":70,"web":"ABSENT","domain":null,"osm":"468012563",
+   "sol":"Retail Billing and Stock Suite","contact":"EMAIL","contactNote":"1 confirmed email",
+   "conf":"HIGH","confPct":79,"status":"CONTACTED","verified":1,"sup":0,"interested":0,"nResp":0,"nSent":1,"lastMsg":"FAILED",
+   "block":"G_MAX_ATTEMPTS","sel":0,"disc":"2026-08-21","researchedAt":"2026-08-21T17:05:00+05:30",
+   "note":"Three storefronts share one name in the listing data; only one has an address.","unote":null,"extra":null,
+   "history":[{"date":"2026-08-25T07:50:00+05:30","channel":"EMAIL","seq":1,"subject":"Billing that updates your shelf stock","status":"FAILED","sender":"Sagar","resp":null,"respConf":null,"respAt":null,"excerpt":null,"next":"Delivery failed - check the contact","nextTone":"bad"}]},
+
+  {"id":"biz_01JSAMPLE00000000000000C7","name":"Tango Institute of Technology","city":"NASHIK","industry":"EDUCATION","cat":"COLLEGE",
+   "size":"LARGE","score":89,"dm":66,"opcx":72,"web":"PRESENT","domain":"tango-institute.example","osm":"468012671",
+   "sol":"Campus and Attendance System","contact":"EMAIL PHONE","contactNote":"2 confirmed contacts",
+   "conf":"HIGH","confPct":92,"status":"CONTACT_READY","verified":1,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":null,
+   "block":"","sel":1,"disc":"2026-08-20","researchedAt":"2026-08-20T14:12:00+05:30",
+   "note":"Six departments publish attendance separately; three of the six PDFs are from 2024.","unote":null,"extra":null,"history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000C8","name":"Uniform Cold Storage","city":"NASHIK","industry":"DISTRIBUTION","cat":"DISTRIBUTOR",
+   "size":"UNKNOWN","score":null,"dm":null,"opcx":null,"web":"UNKNOWN","domain":null,"osm":"468012789",
+   "sol":null,"contact":"NONE","contactNote":null,
+   "conf":"","confPct":null,"status":"AI_RESEARCHED","verified":0,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":null,
+   "block":"D_NOT_VERIFIED","sel":0,"disc":"2026-08-26","researchedAt":null,
+   "note":null,"unote":"Size, digital maturity and whether the facility is still operating. The research job for this row has not run.","extra":null,"history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000D1","name":"Victor Gold Jewellers","city":"JALGAON","industry":"RETAIL","cat":"RETAIL_STORE",
+   "size":"SMALL","score":73,"dm":33,"opcx":60,"web":"PRESENT","domain":"victor-jewellers.example","osm":"579113016",
+   "sol":"Retail Billing and Stock Suite","contact":"EMAIL","contactNote":"1 confirmed email",
+   "conf":"MEDIUM","confPct":65,"status":"CONTACT_READY","verified":1,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":null,
+   "block":"","sel":1,"disc":"2026-08-24","researchedAt":"2026-08-24T11:45:00+05:30",
+   "note":"The site is one page of photographs with no catalogue, no prices and no enquiry form.","unote":null,"extra":null,"history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000D2","name":"Whiskey Agri Traders","city":"JALGAON","industry":"DISTRIBUTION","cat":"DISTRIBUTOR",
+   "size":"SMALL","score":67,"dm":20,"opcx":53,"web":"ABSENT","domain":null,"osm":"579113124",
+   "sol":"Stock and Route Distribution System","contact":"PHONE","contactNote":"1 confirmed phone",
+   "conf":"MEDIUM","confPct":57,"status":"NEEDS_VERIFICATION","verified":0,"sup":0,"interested":0,"nResp":0,"nSent":0,"lastMsg":null,
+   "block":"D_NOT_VERIFIED","sel":0,"disc":"2026-08-25","researchedAt":"2026-08-25T10:15:00+05:30",
+   "note":"Two directory entries give two different addresses for the same firm name.","unote":null,
+   "extraFinding":"A trade directory entry gives a godown address that differs from the office address.",
+   "extra":{"name":"Jalgaon trade directory entry","type":"DIRECTORY","url":"https://directory.example/jalgaon/whiskey-agri","checked":"2026-08-25","excerpt":"Whiskey Agri Traders - seeds, fertiliser and pesticide distribution. Godown address differs from the office address.","conf":"LOW"},
+   "history":[]},
+
+  {"id":"biz_01JSAMPLE00000000000000D3","name":"Xray Diagnostics Lab","city":"JALGAON","industry":"HEALTHCARE","cat":"DIAGNOSTIC_CENTER",
+   "size":"MICRO","score":58,"dm":28,"opcx":45,"web":"PRESENT","domain":"xray-diagnostics.example","osm":"579113232",
+   "sol":"Diagnostics Workflow and Reporting","contact":"EMAIL","contactNote":"1 contact, suppressed and permanently blocked",
+   "conf":"LOW","confPct":43,"status":"CONTACTED","verified":1,"sup":1,"interested":0,"nResp":1,"nSent":1,"lastMsg":"DELIVERED",
+   "block":"A_SUPPRESSED","sel":0,"disc":"2026-08-21","researchedAt":"2026-08-21T09:05:00+05:30",
+   "note":"The site advertises home collection but gives no coverage area or timing.","unote":null,
+   "flag":"DO NOT CONTACT. Opt-out recorded 24 Aug 2026 from a mailto: unsubscribe. The block is permanent, covers every channel, and the app cannot clear it.","extra":null,
+   "history":[{"date":"2026-08-23T08:20:00+05:30","channel":"EMAIL","seq":1,"subject":"Report turnaround for Xray Diagnostics","status":"DELIVERED","sender":"Sagar","resp":"OPT_OUT","respConf":"HIGH","respAt":"2026-08-24T07:02:00+05:30","excerpt":"unsubscribe","next":"Do not contact","nextTone":"bad"}]},
+
+  {"id":"biz_01JSAMPLE00000000000000D4","name":"Yankee Hotels and Resorts","city":"JALGAON","industry":"HOSPITALITY","cat":"HOTEL",
+   "size":"LARGE","score":80,"dm":61,"opcx":68,"web":"PRESENT","domain":"yankee-resorts.example","osm":"579113340",
+   "sol":"Front Desk and Booking Console","contact":"EMAIL PHONE WHATSAPP","contactNote":"3 confirmed contacts",
+   "conf":"HIGH","confPct":83,"status":"RESPONDED","verified":1,"sup":0,"interested":0,"nResp":1,"nSent":1,"lastMsg":"DELIVERED",
+   "block":"","sel":1,"disc":"2026-08-22","researchedAt":"2026-08-22T15:30:00+05:30",
+   "note":"Two properties are advertised under one brand with a single shared reservations number.","unote":null,
+   "extraFinding":"The company master record shows an active private limited company in hotels and resorts.",
+   "extra":{"name":"MCA21 company master (record SAMPLE-0021)","type":"REGISTRY","url":"https://mca21.example/company/SAMPLE-0021","checked":"2026-08-22","excerpt":"Class: Private company. Status: Active. Activity: hotels and resorts.","conf":"HIGH"},
+   "history":[{"date":"2026-08-24T09:00:00+05:30","channel":"EMAIL","seq":1,"subject":"One availability view across both properties","status":"DELIVERED","sender":"Sagar","resp":"MORE_INFORMATION","respConf":"MEDIUM","respAt":"2026-08-25T11:26:00+05:30","excerpt":"Send some details on what it costs and how long it takes to set up.","next":"Human action required","nextTone":"warn"}]}
+]
+}
+</script>
+
+<script>
+/* =====================================================================
+   report.js - mockup edition. Vanilla ES5-ish, no framework, no CDN,
+   no build step, exactly as 03-html-report.md 3.6 requires.
+
+   Everything on this page is computed from the rows in the data island
+   above. Nothing is hard-coded, because 03-html-report.md 3.5 and
+   _CONTEXT.md invariant 5 both say report numbers come from the rows.
+   ===================================================================== */
+(function () {
+"use strict";
+
+var D = JSON.parse(document.getElementById("report-data").textContent);
+
+/* ---------------------------------------------------------------- *
+ * Label maps (03-html-report.md 3.4.4). The report never shows a raw enum.
+ * ---------------------------------------------------------------- */
+var INDUSTRY_ORDER = ["HEALTHCARE","EDUCATION","AUTOMOBILE","MANUFACTURING","RETAIL",
+                      "HOSPITALITY","DISTRIBUTION","REAL_ESTATE","PROFESSIONAL_SERVICES","OTHER"];
+var INDUSTRY_LABEL = {
+  HEALTHCARE:"Healthcare", EDUCATION:"Education", AUTOMOBILE:"Automobile",
+  MANUFACTURING:"Manufacturing", RETAIL:"Retail", HOSPITALITY:"Hospitality",
+  DISTRIBUTION:"Distribution", REAL_ESTATE:"Real estate",
+  PROFESSIONAL_SERVICES:"Professional services", OTHER:"Other"
+};
+var CATEGORY_LABEL = {
+  HOSPITAL:"Hospitals", DIAGNOSTIC_CENTER:"Diagnostic centres", SCHOOL:"Schools",
+  COLLEGE:"Colleges", MANUFACTURER:"Manufacturers", DISTRIBUTOR:"Distributors",
+  VEHICLE_DEALER:"Vehicle dealers", GARAGE:"Garages", HOTEL:"Hotels",
+  RESTAURANT:"Restaurants", BAKERY:"Bakeries", RETAIL_STORE:"Retail stores",
+  REAL_ESTATE_AGENCY:"Real estate agencies", OTHER:"Other"
+};
+var CATEGORY_ONE = {
+  HOSPITAL:"Hospital", DIAGNOSTIC_CENTER:"Diagnostic centre", SCHOOL:"School",
+  COLLEGE:"College", MANUFACTURER:"Manufacturer", DISTRIBUTOR:"Distributor",
+  VEHICLE_DEALER:"Vehicle dealer", GARAGE:"Garage", HOTEL:"Hotel",
+  RESTAURANT:"Restaurant", BAKERY:"Bakery", RETAIL_STORE:"Retail store",
+  REAL_ESTATE_AGENCY:"Real estate agency", OTHER:"Other"
+};
+var CITY_LABEL = {};
+D.cities.forEach(function (c) { CITY_LABEL[c.city] = c.label; });
+
+/* 03-html-report.md 3.7.1 - one map, so the report, the live grid and the
+   outreach workspace all say the same sentence about the same row. */
+var BLOCK_REASON = {
+  A_SUPPRESSED:           "Do not contact: an opt-out or suppression is recorded.",
+  D_HUMAN_OWNED:          "This is a live lead - the machine stops here and you take it.",
+  D_VERIFICATION_REVOKED: "You rejected or skipped this business.",
+  D_NOT_VERIFIED:         "This business still needs your verification.",
+  D_VERIFICATION_STALE:   "The verification has expired - re-verify before selecting.",
+  E_CONTACT_MISSING:      "Verified, but no confirmed contact yet.",
+  F_IN_FLIGHT:            "A message for this business is already awaiting approval.",
+  G_STOP_AFTER_REJECTION: "This business replied that it is not interested.",
+  G_MAX_ATTEMPTS:         "The maximum number of outreach attempts has been reached.",
+  G_MAX_FOLLOWUPS:        "The maximum number of follow-ups has been reached.",
+  G_MIN_DAYS:             "Contacted too recently - the minimum gap has not elapsed."
+};
+
+/* Ordinal scales for badge columns (3.6.4). */
+var ORD = {
+  MICRO:1, SMALL:2, MEDIUM:3, LARGE:4, UNKNOWN:0,
+  LOW:1, MEDIUM_C:2, HIGH:3,
+  AI_RESEARCHED:1, NEEDS_VERIFICATION:2, VERIFIED:3, CONTACT_READY:4,
+  SKIPPED:0, REJECTED:0,
+  NOT_CONTACTED:0, QUEUED:1, SENT:2, DELIVERED:3, BOUNCED:1,
+  FAILED:1, RESPONDED:4, INTERESTED:5, BLOCKED:0
+};
+var CONF_ORD = { HIGH:3, MEDIUM:2, LOW:1 };
+
+/* ---------------------------------------------------------------- *
+ * Small helpers
+ * ---------------------------------------------------------------- */
+function esc(s) {
+  return String(s === null || s === undefined ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+/* 3.5 - the em dash is not decoration and it is never silent. */
+function na(why) { return '<span class="na" title="' + esc(why || "No data") + '" aria-label="no data">&mdash;</span>'; }
+function dash(v, why) {
+  return (v === null || v === undefined || v === "") ? na(why) : esc(v);
+}
+function fmtDate(iso) {
+  if (!iso) { return null; }
+  var M = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var d = iso.slice(0, 10).split("-");
+  return Number(d[2]) + " " + M[Number(d[1]) - 1] + " " + d[0];
+}
+function fmtDateTime(iso) {
+  if (!iso) { return null; }
+  return fmtDate(iso) + " " + iso.slice(11, 16) + " IST";
+}
+function el(html) { var t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; }
+
+/* ---------------------------------------------------------------- *
+ * Derived row model - the report renders selectability, it never computes it
+ * ---------------------------------------------------------------- */
+function verifState(b) {                       /* 3.6.1 */
+  if (b.status === "REJECTED" || b.status === "SKIPPED") { return b.status; }
+  if (b.status === "CONTACT_READY") { return "CONTACT_READY"; }
+  if (b.verified) { return "VERIFIED"; }
+  return b.status;
+}
+var VERIF_BADGE = {
+  CONTACT_READY:["ok","READY"], VERIFIED:["ok","VERIFIED"],
+  NEEDS_VERIFICATION:["warn","NOT VERIFIED"], AI_RESEARCHED:["warn","AI RESEARCHED"],
+  REJECTED:["bad","REJECTED"], SKIPPED:["mute","SKIPPED"]
+};
+function outreachBadge(b) {                    /* 3.9.5, ordered by severity */
+  if (b.sup)                     { return ["bad",  "DO NOT CONTACT"]; }
+  if (b.interested)              { return ["ok",   "INTERESTED"]; }
+  if (b.nResp > 0)               { return ["info", "RESPONDED"]; }
+  if (b.lastMsg === "BOUNCED" || b.lastMsg === "FAILED" || b.lastMsg === "POLICY_BLOCKED") {
+    return ["bad", b.lastMsg.replace(/_/g, " ")];
+  }
+  if (b.lastMsg === "DELIVERED") { return ["ok",   "DELIVERED"]; }
+  if (b.lastMsg === "SENT")      { return ["info", "SENT"]; }
+  if (b.lastMsg === "QUEUED")    { return ["info", "QUEUED"]; }
+  if (b.nSent > 0)               { return ["info", "SENT"]; }
+  return ["mute", "NOT CONTACTED"];
+}
+var OUT_ATTR = {
+  "DO NOT CONTACT":"BLOCKED", "POLICY BLOCKED":"BLOCKED", "INTERESTED":"INTERESTED",
+  "RESPONDED":"RESPONDED", "BOUNCED":"BOUNCED", "FAILED":"FAILED",
+  "DELIVERED":"DELIVERED", "SENT":"SENT", "QUEUED":"QUEUED", "NOT CONTACTED":"NOT_CONTACTED"
+};
+function scoreBand(s) { return s === null ? null : (s >= 80 ? "HIGH" : (s >= 60 ? "MEDIUM" : "LOW")); }
+function scoreClass(s) { return s === null ? "mute" : (s >= 80 ? "ok" : (s >= 60 ? "warn" : "mute")); }
+function confClass(c) { return c === "HIGH" ? "ok" : (c === "MEDIUM" ? "warn" : "mute"); }
+
+/* Sources, numbered per business in first-citation order (3.4.6.3). */
+function buildSources(b) {
+  var tpl = D.templates[b.cat], list = [], roles = {};
+  if (b.domain) {
+    list.push({ role:"SITE", name:b.name + " website", type:"SITE",
+                url:"https://" + b.domain + "/", checked:(b.researchedAt || "2026-08-26").slice(0,10),
+                excerpt:tpl.siteExcerpt, conf:"HIGH" });
+  }
+  list.push({ role:"OSM", name:"OpenStreetMap node " + b.osm, type:"LISTING",
+              url:"https://www.openstreetmap.example/node/" + b.osm,
+              checked:(b.researchedAt || "2026-08-26").slice(0,10),
+              excerpt:tpl.osmExcerpt, conf:"MEDIUM" });
+  if (b.extra) {
+    list.push({ role:"EXTRA", name:b.extra.name, type:b.extra.type, url:b.extra.url,
+                checked:b.extra.checked, excerpt:b.extra.excerpt, conf:b.extra.conf });
+  }
+  list.forEach(function (s, i) { s.n = i + 1; roles[s.role] = s.n; });
+  return { list:list, roles:roles };
+}
+
+function buildFindings(b, roles) {
+  var tpl = D.templates[b.cat], obs = [], inf = [], unk = [];
+  function mk(f) {
+    var refs = (f[3] || []).map(function (r) { return roles[r]; })
+                           .filter(function (n) { return !!n; });
+    if ((f[3] || []).length && refs.length === 0) { return null; }   /* source gone, statement goes */
+    return { stmt:f[0], conf:f[1] || null, pct:f[2] || null, refs:refs };
+  }
+  function push(into, arr) {
+    (arr || []).forEach(function (f) { var m = mk(f); if (m) { into.push(m); } });
+  }
+
+  if (b.researchedAt) {
+    if (b.domain) { push(obs, tpl.siteObs); }
+    push(obs, tpl.baseObs);
+    if (b.web === "ABSENT") {
+      push(obs, [["No website was found for this business under its name or its listing tags.", "HIGH", 80, ["OSM"]]]);
+    }
+    if (b.note) { push(obs, [[b.note, "HIGH", 84, [b.domain ? "SITE" : "OSM"]]]); }
+    if (b.extraFinding) { push(obs, [[b.extraFinding, b.extra.conf, 86, ["EXTRA"]]]); }
+    if (b.unsourced) { obs.push({ stmt:b.unsourced, conf:"MEDIUM", pct:55, refs:[] }); }
+    push(inf, tpl.inf);
+    push(unk, tpl.unk);
+  } else {
+    push(unk, tpl.unk);
+  }
+  if (b.web === "UNKNOWN") {
+    unk.unshift({ stmt:"Whether this business has a website: the check did not run in this campaign.",
+                  conf:null, pct:null, refs:[] });
+  }
+  if (b.unote) { unk.unshift({ stmt:b.unote, conf:null, pct:null, refs:[] }); }
+  return { OBSERVED:obs, INFERRED:inf, UNKNOWN:unk };
+}
+
+/* "Why 86" (3.4.6.2). Stored score_breakdown in the real thing; here it is
+   allocated against fixed component caps so the lines always sum to the score. */
+var SIZE_PTS = { MICRO:8, SMALL:12, MEDIUM:15, LARGE:20, UNKNOWN:5 };
+var WEB_PTS  = { ABSENT:10, PRESENT:5, UNKNOWN:3 };
+var SECTOR_PTS = { HEALTHCARE:5, EDUCATION:5, MANUFACTURING:5, AUTOMOBILE:4, DISTRIBUTION:4,
+                   HOSPITALITY:4, RETAIL:4, REAL_ESTATE:3, PROFESSIONAL_SERVICES:3, OTHER:2 };
+function clamp(v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); }
+function breakdown(b) {
+  if (b.score === null) { return null; }
+  var sz = SIZE_PTS[b.size], wb = WEB_PTS[b.web];
+  var cn = b.contact === "NONE" ? 0
+         : (b.contact === "UNVERIFIED" ? 1 : Math.min(5, 2 * b.contact.split(" ").length));
+  var sc = SECTOR_PTS[b.industry];
+  var rest = b.score - (sz + wb + cn + sc);
+  var op = clamp(Math.round((b.opcx || 0) / 100 * 30), Math.max(0, rest - 30), Math.min(30, rest));
+  var dmp = rest - op;
+  return [
+    { c:"Operational complexity", p:op,  of:30, why:"INFERRED" },
+    { c:"Digital maturity gap",   p:dmp, of:30, why:"OBSERVED" },
+    { c:"Size band",              p:sz,  of:20, why:null },
+    { c:"Website quality",        p:wb,  of:10, why:"OBSERVED" },
+    { c:"Contactability",         p:cn,  of:5,  why:null },
+    { c:"Sector fit",             p:sc,  of:5,  why:null }
+  ];
+}
+
+var ROWS = D.businesses.map(function (b) {
+  var src = buildSources(b);
+  var ob = outreachBadge(b);
+  var vs = verifState(b);
+  var short = b.id.slice(-2);
+  return {
+    b:b, short:short, sources:src.list, roles:src.roles,
+    findings:buildFindings(b, src.roles), breakdown:breakdown(b),
+    verif:vs, verifBadge:VERIF_BADGE[vs] || ["mute", vs],
+    outCls:ob[0], outLabel:ob[1], outAttr:OUT_ATTR[ob[1]] || "NOT_CONTACTED",
+    researched:b.score !== null,
+    qualified:(b.score !== null && b.score >= D.campaign.min_score &&
+               b.status !== "SKIPPED" && b.status !== "REJECTED"),
+    softwareOpp:!!b.sol,
+    q:[b.name, CITY_LABEL[b.city], CATEGORY_LABEL[b.cat], INDUSTRY_LABEL[b.industry],
+       b.sol || "", b.domain || "", b.id].join(" ").toLowerCase()
+  };
+});
+
+/* =====================================================================
+   Header block (spec section 6) - facts 4 to 9, from live counts
+   ===================================================================== */
+(function header() {
+  function n(id, v, title) {
+    var node = document.getElementById(id);
+    node.innerHTML = (v === null ? na("Not measured") : String(v));
+    if (title) { node.setAttribute("title", title); }
+  }
+  var found = ROWS.length;
+  var researched = ROWS.filter(function (r) { return r.researched; }).length;
+  var qualified = ROWS.filter(function (r) { return r.qualified; }).length;
+  var skippedPipeline = ROWS.filter(function (r) { return r.b.status === "SKIPPED"; }).length;
+  var rejected = ROWS.filter(function (r) { return r.b.status === "REJECTED"; }).length;
+  var needs = ROWS.filter(function (r) {
+    return r.b.status === "AI_RESEARCHED" || r.b.status === "NEEDS_VERIFICATION"; }).length;
+  var ready = ROWS.filter(function (r) { return r.b.status === "CONTACT_READY"; }).length;
+
+  n("h_found", found, "every businesses row for this campaign");
+  n("h_researched", researched, researched + " of " + found + " have a completed research run");
+  n("h_qualified", qualified, "score >= " + D.campaign.min_score + ", of " + researched + " researched");
+  n("h_skipped", skippedPipeline + rejected,
+    skippedPipeline + " skipped by the pipeline, " + rejected + " rejected by you");
+  n("h_needs", needs, "AI_RESEARCHED or NEEDS_VERIFICATION");
+  n("h_ready", ready, "CONTACT_READY: verified and a human-confirmed contact exists");
+  document.getElementById("prov-rows").textContent =
+    found + " businesses, " + researched + " with completed research, " +
+    ROWS.reduce(function (a, r) { return a + r.sources.length; }, 0) + " source records";
+  document.getElementById("warnings").innerHTML =
+    "Note: this is a wireframe, not a campaign output. The counter-drift line that the real report " +
+    "prints here compares campaigns.n_* against the live aggregate and always renders the aggregate.";
+})();
+
+/* =====================================================================
+   KPI cards (spec section 7) - twelve, in order
+   ===================================================================== */
+var KPI = (function kpis() {
+  var k = {};
+  function count(fn) { return ROWS.filter(fn).length; }
+  k.total      = ROWS.length;
+  k.researched = count(function (r) { return r.researched; });
+  k.scored     = count(function (r) { return r.b.score !== null; });
+  k.qualified  = count(function (r) { return r.qualified; });
+  k.high       = count(function (r) { return r.b.score !== null && r.b.score >= 80; });
+  k.medium     = count(function (r) { return r.b.score !== null && r.b.score >= 60 && r.b.score <= 79; });
+  k.low        = count(function (r) { return r.b.score !== null && r.b.score < 60; });
+  k.unscored   = count(function (r) { return r.b.score === null; });
+  k.webYes     = count(function (r) { return r.b.web === "PRESENT"; });
+  k.webNo      = count(function (r) { return r.b.web === "ABSENT"; });
+  k.webUnknown = count(function (r) { return r.b.web === "UNKNOWN"; });
+  k.softwareOpp= count(function (r) { return r.softwareOpp; });
+  k.needVerif  = count(function (r) {
+    return r.b.status === "AI_RESEARCHED" || r.b.status === "NEEDS_VERIFICATION"; });
+  k.verified   = count(function (r) { return !!r.b.verified; });
+  k.contacted  = count(function (r) { return r.b.nSent > 0; });
+  k.interested = count(function (r) { return !!r.b.interested; });
+  return k;
+})();
+
+(function renderKpis() {
+  var cards = [
+    ["Total businesses",              KPI.total,       null,                       "discovered in this campaign", "neutral", false, {clear:1}],
+    ["Qualified",                     KPI.researched ? KPI.qualified : null, "score >= " + D.campaign.min_score,
+                                      KPI.qualified + " of " + KPI.researched + " researched", "neutral", false, {score:[D.campaign.min_score, null]}],
+    ["High opportunity",              KPI.scored ? KPI.high : null,   "score 80-100", KPI.high + " of " + KPI.scored + " scored", "green",  false, {score:[80,100]}],
+    ["Medium opportunity",            KPI.scored ? KPI.medium : null, "score 60-79",  KPI.medium + " of " + KPI.scored + " scored", "yellow", false, {score:[60,79]}],
+    ["Low opportunity",               KPI.scored ? KPI.low : null,    "score below 60", KPI.low + " of " + KPI.scored + " scored", "neutral", false, {score:[0,59]}],
+    ["Website available",             KPI.webYes,      KPI.webUnknown ? (KPI.webUnknown + " never checked") : null, "website_status = PRESENT", "blue", false, {web:["PRESENT"]}],
+    ["No website",                    KPI.webNo,       "a finding, not a gap",     "website_status = ABSENT", "blue", false, {web:["ABSENT"]}],
+    ["Potential software opportunity",KPI.researched ? KPI.softwareOpp : null, "named solution and modules", "no single section-39 filter matches this definition", "neutral", false, null],
+    ["Need verification",             KPI.needVerif,   null,                       "AI_RESEARCHED or NEEDS_VERIFICATION", "yellow", false, {verif:["AI_RESEARCHED","NEEDS_VERIFICATION"]}],
+    ["Verified",                      KPI.verified,    null,                       "live verifications row with verdict VERIFIED", "green", false, {verif:["VERIFIED","CONTACT_READY"]}],
+    ["Already contacted",             KPI.contacted,   null,                       "at least one SENT / DELIVERED / BOUNCED message", "neutral", false, {outreach:["SENT","DELIVERED","BOUNCED","FAILED","RESPONDED","INTERESTED","BLOCKED"]}],
+    ["Interested",                    KPI.interested,  "the product metric",       "responses classified in the interest set", "green", true, {outreach:["INTERESTED"]}]
+  ];
+  var host = document.getElementById("kpis");
+  cards.forEach(function (c) {
+    var clickable = !!c[6];
+    var tag = clickable ? "button" : "div";
+    var cls = "kpi tone-" + c[4] + (c[5] ? " is-primary" : "") + (clickable ? "" : " static");
+    var inner =
+      '<div class="kpi-label">' + esc(c[0]) + "</div>" +
+      '<div class="kpi-value num" title="' + esc(c[3]) + '">' +
+        (c[1] === null ? na("Nothing has been scored or researched yet") : c[1]) + "</div>" +
+      (c[2] ? '<div class="kpi-sub">' + esc(c[2]) + "</div>" : "");
+    var node = el("<" + tag + ' class="' + cls + '"' +
+                  (clickable ? ' type="button"' : ' title="' + esc(c[3]) + '"') + ">" +
+                  inner + "</" + tag + ">");
+    if (clickable) { node.addEventListener("click", function () { applyKpiFilter(c[6]); }); }
+    else { node.style.cursor = "default"; }
+    host.appendChild(node);
+  });
+  var foot = [];
+  if (KPI.unscored) { foot.push("Cards 3, 4 and 5 do not sum to card 1: " + KPI.unscored + " businesses are not scored yet."); }
+  if (KPI.webUnknown) { foot.push("Cards 6 and 7 do not sum to card 1 either: the website check has not run for " + KPI.webUnknown + "."); }
+  document.getElementById("kpi-foot").textContent = foot.join(" ");
+})();
+
+/* =====================================================================
+   City summary cards (spec section 8)
+   ===================================================================== */
+(function cityCards() {
+  var host = document.getElementById("city-cards");
+  D.cities.forEach(function (c) {
+    var rows = ROWS.filter(function (r) { return r.b.city === c.city; });
+    var researched = rows.filter(function (r) { return r.researched; }).length;
+    var scored = rows.filter(function (r) { return r.b.score !== null; }).length;
+    var found = rows.length;
+    var qualified = rows.filter(function (r) { return r.qualified; }).length;
+    var high = rows.filter(function (r) { return r.b.score !== null && r.b.score >= 80; }).length;
+    var verified = rows.filter(function (r) { return !!r.b.verified; }).length;
+    var ready = rows.filter(function (r) { return r.b.status === "CONTACT_READY"; }).length;
+
+    var card = el(
+      '<article class="city-card' + (found ? "" : " empty") + '" data-city="' + c.city + '">' +
+      "<h3>" + esc(c.label) + '<span class="of">' + esc(c.city) + "</span></h3>" +
+      (found ?
+        "<dl>" +
+        '<div><dt>Businesses found</dt><dd class="num">' + found + "</dd></div>" +
+        '<div><dt>Qualified</dt><dd class="num" title="of ' + researched + ' researched">' +
+            (researched ? qualified : na("Nothing researched in this city yet")) + "</dd></div>" +
+        '<div><dt>High opportunity</dt><dd class="num" title="of ' + scored + ' scored">' +
+            (scored ? high : na("Nothing scored in this city yet")) + "</dd></div>" +
+        '<div><dt>Verified</dt><dd class="num">' + verified + "</dd></div>" +
+        '<div><dt>Ready for outreach</dt><dd class="num">' + ready + "</dd></div>" +
+        "</dl>"
+        : '<p class="zero">Discovery returned no businesses for this city.</p>') +
+      '<button type="button" class="card-link">Open ' + esc(c.label) + "</button>" +
+      "</article>");
+    card.querySelector(".card-link").addEventListener("click", function () {
+      F.tabCity = c.city; F.tabIndustry = "ALL";
+      F.city = [c.city];
+      syncChips(); renderTabs(); applyView();
+      document.getElementById("btable").scrollIntoView({ block:"start" });
+    });
+    host.appendChild(card);
+  });
+})();
+
+/* =====================================================================
+   Filter state (spec section 39) - the whole thing, one object
+   ===================================================================== */
+var F = {
+  city:[], industry:[], size:[], web:[], conf:[], verif:[], contact:[], outreach:[],
+  score:[null, null], dm:[null, null], disc:[null, null],
+  q:"", scoped:{},
+  nullScore:true, nullDm:true,
+  tabCity:"ALL", tabIndustry:"ALL",
+  flat:false,
+  sort:[{ key:"score", dir:"desc" }]
+};
+
+var CHIP_GROUPS = [
+  { key:"city",     host:"f-city",     values:D.cities.map(function (c) { return [c.city, c.label]; }) },
+  { key:"industry", host:"f-industry",
+    values:INDUSTRY_ORDER.filter(function (i) {
+      return ROWS.some(function (r) { return r.b.industry === i; });
+    }).map(function (i) { return [i, INDUSTRY_LABEL[i]]; }) },
+  { key:"size",     host:"f-size",
+    values:[["MICRO","Micro"],["SMALL","Small"],["MEDIUM","Medium"],["LARGE","Large"],["UNKNOWN","Unknown"]] },
+  { key:"web",      host:"f-web",
+    values:[["PRESENT","Has website"],["ABSENT","No website"],["UNKNOWN","Not checked"]] },
+  { key:"conf",     host:"f-conf",
+    values:[["HIGH","High"],["MEDIUM","Medium"],["LOW","Low"],["NONE","No research"]] },
+  { key:"verif",    host:"f-verif",
+    values:[["AI_RESEARCHED","AI researched"],["NEEDS_VERIFICATION","Not verified"],
+            ["VERIFIED","Verified"],["CONTACT_READY","Ready"],["REJECTED","Rejected"],["SKIPPED","Skipped"]] },
+  { key:"contact",  host:"f-contact",
+    values:[["EMAIL","Email"],["PHONE","Phone"],["WHATSAPP","WhatsApp"],
+            ["UNVERIFIED","Unconfirmed"],["NONE","None"]] },
+  { key:"outreach", host:"f-outreach",
+    values:[["NOT_CONTACTED","Not contacted"],["QUEUED","Queued"],["SENT","Sent"],["DELIVERED","Delivered"],
+            ["BOUNCED","Bounced"],["FAILED","Failed"],["RESPONDED","Responded"],
+            ["INTERESTED","Interested"],["BLOCKED","Blocked"]] }
+];
+
+function rowAttrValue(r, key) {
+  switch (key) {
+    case "city": return r.b.city;
+    case "industry": return r.b.industry;
+    case "size": return r.b.size;
+    case "web": return r.b.web;
+    case "conf": return r.b.conf || "NONE";
+    case "verif": return r.verif;
+    case "contact": return r.b.contact;
+    case "outreach": return r.outAttr;
+  }
+  return "";
+}
+
+(function buildChips() {
+  CHIP_GROUPS.forEach(function (g) {
+    var host = document.getElementById(g.host);
+    g.values.forEach(function (v) {
+      var n = ROWS.filter(function (r) {
+        return g.key === "contact"
+          ? rowAttrValue(r, "contact").split(" ").indexOf(v[0]) !== -1
+          : rowAttrValue(r, g.key) === v[0];
+      }).length;
+      var btn = el('<button type="button" class="chip-f" aria-pressed="false" data-group="' +
+                   g.key + '" data-v="' + v[0] + '" title="' + esc(v[0]) + '">' +
+                   esc(v[1]) + ' <span class="n">' + n + "</span></button>");
+      btn.addEventListener("click", function () {
+        var i = F[g.key].indexOf(v[0]);
+        if (i === -1) { F[g.key].push(v[0]); } else { F[g.key].splice(i, 1); }
+        syncChips(); applyView();
+      });
+      host.appendChild(btn);
+    });
+  });
+})();
+
+function syncChips() {
+  document.querySelectorAll(".chip-f[data-group]").forEach(function (btn) {
+    var on = F[btn.dataset.group].indexOf(btn.dataset.v) !== -1;
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+  document.querySelectorAll('.chip-f[data-preset="score"]').forEach(function (btn) {
+    var p = btn.dataset.v.split("-");
+    var lo = p[0] === "" ? null : Number(p[0]), hi = p[1] === "" ? null : Number(p[1]);
+    btn.setAttribute("aria-pressed", (F.score[0] === lo && F.score[1] === hi) ? "true" : "false");
+  });
+  document.querySelectorAll('.chip-f[data-preset="disc"]').forEach(function (btn) {
+    var p = btn.dataset.v.split("..");
+    btn.setAttribute("aria-pressed",
+      (F.disc[0] === (p[0] || null) && F.disc[1] === (p[1] || null)) ? "true" : "false");
+  });
+  document.getElementById("score-min").value = F.score[0] === null ? "" : F.score[0];
+  document.getElementById("score-max").value = F.score[1] === null ? "" : F.score[1];
+  document.getElementById("dm-min").value    = F.dm[0] === null ? "" : F.dm[0];
+  document.getElementById("dm-max").value    = F.dm[1] === null ? "" : F.dm[1];
+  document.getElementById("disc-from").value = F.disc[0] || "";
+  document.getElementById("disc-to").value   = F.disc[1] || "";
+  document.getElementById("null-score").checked = F.nullScore;
+  document.getElementById("null-dm").checked    = F.nullDm;
+  if (document.getElementById("q").value !== F.q) { document.getElementById("q").value = F.q; }
+}
+
+function applyKpiFilter(spec) {
+  clearFilters(true);
+  if (spec.clear) { syncChips(); applyView(); return; }
+  Object.keys(spec).forEach(function (k) {
+    if (k === "score") { F.score = spec.score.slice(); F.nullScore = false; }
+    else { F[k] = spec[k].slice(); }
+  });
+  syncChips(); applyView();
+  document.getElementById("btable").scrollIntoView({ block:"start" });
+}
+
+function clearFilters(silent) {
+  ["city","industry","size","web","conf","verif","contact","outreach"].forEach(function (k) { F[k] = []; });
+  F.score = [null, null]; F.dm = [null, null]; F.disc = [null, null];
+  F.nullScore = true; F.nullDm = true; F.q = ""; F.scoped = {};
+  if (!silent) { syncChips(); applyView(); }
+}
+
+/* =====================================================================
+   The predicate (3.6.2). Eleven filters, plus search, plus the active tab.
+   ===================================================================== */
+function inSet(list, value) { return list.length === 0 || list.indexOf(value) !== -1; }
+function inSetAny(list, spaceSeparated) {
+  if (list.length === 0) { return true; }
+  var have = spaceSeparated ? spaceSeparated.split(" ") : [];
+  for (var i = 0; i < list.length; i++) { if (have.indexOf(list[i]) !== -1) { return true; } }
+  return false;
+}
+function inRange(raw, range, includeNull) {
+  if (raw === "" || raw === null || raw === undefined) { return includeNull; }
+  var v = Number(raw);
+  if (range[0] !== null && v < range[0]) { return false; }
+  if (range[1] !== null && v > range[1]) { return false; }
+  return true;
+}
+function inDateRange(raw, range) {
+  if (range[0] === null && range[1] === null) { return true; }
+  if (!raw) { return false; }
+  if (range[0] !== null && raw < range[0]) { return false; }
+  if (range[1] !== null && raw > range[1]) { return false; }
+  return true;
+}
+function passesScoped(d) {
+  var s = F.scoped, ok = true;
+  ["city","industry","cat","size","web","conf","verif","outreach"].forEach(function (k) {
+    if (s[k] && s[k].length) {
+      var v = (k === "cat") ? d.cat : rowAttrByKey(d, k);
+      if (s[k].indexOf(v) === -1) { ok = false; }
+    }
+  });
+  if (s.contact && s.contact.length && !inSetAny(s.contact, d.contact)) { ok = false; }
+  if (s.score && !inRange(d.score, s.score, false)) { ok = false; }
+  if (s.dm && !inRange(d.dm, s.dm, false)) { ok = false; }
+  return ok;
+}
+function rowAttrByKey(d, k) {
+  return { city:d.city, industry:d.industry, size:d.size, web:d.web,
+           conf:d.conf || "NONE", verif:d.verif, outreach:d.outreach }[k];
+}
+function passes(d) {
+  return (F.tabCity     === "ALL" || d.city     === F.tabCity)
+      && (F.tabIndustry === "ALL" || d.industry === F.tabIndustry)
+      && inSet(F.city,     d.city)
+      && inSet(F.industry, d.industry)
+      && inSet(F.size,     d.size)
+      && inRange(d.score,  F.score, F.nullScore)
+      && inSet(F.web,      d.web)
+      && inRange(d.dm,     F.dm, F.nullDm)
+      && inSet(F.conf,     d.conf || "NONE")
+      && inSet(F.verif,    d.verif)
+      && inSetAny(F.contact, d.contact)
+      && inSet(F.outreach, d.outreach)
+      && inDateRange(d.disc, F.disc)
+      && (F.q === "" || d.q.indexOf(F.q) !== -1)
+      && passesScoped(d);
+}
+
+/* =====================================================================
+   The business table (spec sections 9, 10)
+   ===================================================================== */
+var TABLE = document.getElementById("btable");
+var GROUPS = {}, FLAT = null, ROWNODES = [];
+var COLSPAN = 15;
+
+function contactCell(b) {
+  if (b.contact === "NONE") { return na("No contact recorded"); }
+  if (b.contact === "UNVERIFIED") {
+    return '<span class="chip unk" title="' + esc(b.contactNote || "Contacts found but not confirmed") + '">?</span>';
+  }
+  var map = { EMAIL:["E","Business email available"], PHONE:["P","Business phone available"],
+              WHATSAPP:["W","WhatsApp number available"] };
+  return b.contact.split(" ").map(function (k) {
+    return '<span class="chip" title="' + esc(map[k][1]) + '">' + map[k][0] + "</span>";
+  }).join("");
+}
+
+var SHORT_BLOCK = {
+  G_MIN_DAYS:             "Blocked: contacted recently",
+  G_MAX_ATTEMPTS:         "Blocked: max attempts",
+  G_MAX_FOLLOWUPS:        "Blocked: max follow-ups",
+  G_STOP_AFTER_REJECTION: "Blocked: replied not interested"
+};
+function readiness(r) {
+  var b = r.b, base = D.campaign.app_base, id = b.id;
+  if (b.sup) { return ["bad", "DO NOT CONTACT", base + "/business/" + id + "#suppression"]; }
+  if (!r.researched) { return ["mute", "Not researched", null]; }
+  if (b.block === "D_VERIFICATION_REVOKED") { return ["mute", "Out of scope", base + "/business/" + id]; }
+  if (b.block === "D_NOT_VERIFIED") { return ["warn", "Needs verification", base + "/verify/" + id]; }
+  if (b.block === "E_CONTACT_MISSING") { return ["warn", "No contact", base + "/business/" + id + "#contacts"]; }
+  if (b.block === "D_HUMAN_OWNED") { return ["ok", "With you - live lead", base + "/handoffs"]; }
+  if (b.lastMsg === "POLICY_BLOCKED") { return ["bad", "Policy blocked", base + "/outreach/drf_" + r.short]; }
+  if (b.block === "F_IN_FLIGHT") { return ["ok", "Approved - send in Outreach", base + "/outreach/drf_" + r.short]; }
+  if (b.block.indexOf("G_") === 0) {
+    return ["bad", SHORT_BLOCK[b.block] || "Blocked",
+            base + "/business/" + id + "#history", BLOCK_REASON[b.block]];
+  }
+  if (b.nSent > 0) { return ["info", "Follow-up available", base + "/outreach?business=" + id]; }
+  return ["info", "Ready to prepare", base + "/outreach?business=" + id];
+}
+
+function rowHtml(r) {
+  var b = r.b, base = D.campaign.app_base, blkId = "blk-" + r.short;
+  var sc = b.score, band = scoreBand(sc);
+  var rd = readiness(r);
+
+  var acts = [];
+  acts.push('<button type="button" class="nav" data-panel="research" data-id="' + b.id +
+            '" aria-expanded="false" aria-controls="p-' + r.short + '">Research</button>');
+  acts.push('<a class="act" href="' + base + "/business/" + b.id + '" data-deep="1">View</a>');
+  if (b.status === "AI_RESEARCHED" || b.status === "NEEDS_VERIFICATION") {
+    acts.push('<a class="act" href="' + base + "/verify/" + b.id + '?from=export" data-deep="1">Verify</a>');
+  }
+  if (b.sel) {
+    acts.push('<a class="act" href="' + base + "/outreach?business=" + b.id + '" data-deep="1">Prepare</a>');
+  }
+  if (b.lastMsg) {
+    acts.push('<a class="act" href="' + base + "/outreach/drf_" + r.short + '" data-deep="1">Message</a>');
+  }
+  if (b.history.length) {
+    acts.push('<button type="button" class="nav" data-panel="history" data-id="' + b.id +
+              '" aria-expanded="false" aria-controls="h-' + r.short + '">History</button>');
+  }
+  var rdTitle = ' title="' + esc(rd[3] || rd[1]) + '"';
+  acts.push(rd[2]
+    ? '<a class="ready ' + rd[0] + '" href="' + rd[2] + '" data-deep="1"' + rdTitle + ">" + esc(rd[1]) + "</a>"
+    : '<span class="ready ' + rd[0] + '"' + rdTitle + ">" + esc(rd[1]) + "</span>");
+
+  return '<tr class="brow' + (b.sup ? " suppressed" : "") + '"' +
+    ' data-id="' + b.id + '"' +
+    ' data-city="' + b.city + '" data-industry="' + b.industry + '" data-cat="' + b.cat + '"' +
+    ' data-size="' + b.size + '" data-score="' + (sc === null ? "" : sc) + '"' +
+    ' data-web="' + b.web + '" data-dm="' + (b.dm === null ? "" : b.dm) + '"' +
+    ' data-conf="' + (b.conf || "") + '" data-verif="' + r.verif + '"' +
+    ' data-contact="' + b.contact + '" data-outreach="' + r.outAttr + '"' +
+    ' data-disc="' + b.disc + '" data-sel="' + (b.sel ? 1 : 0) + '"' +
+    ' data-block="' + b.block + '" data-name="' + esc(b.name) + '"' +
+    ' data-sol="' + esc(b.sol || "") + '"' +
+    ' data-q="' + esc(r.q) + '">' +
+
+    '<td class="c-sel" data-label="Select">' +
+      '<input type="checkbox" class="rowsel"' + (b.sel ? "" : " disabled") +
+        ' aria-describedby="' + blkId + '"' +
+        ' aria-label="Select ' + esc(b.name) + '"' +
+        (b.sel ? "" : ' title="' + esc(BLOCK_REASON[b.block] || "Not eligible") + '"') + ">" +
+      (b.sel ? "" :
+        '<span class="why" tabindex="0" role="note" title="' +
+        esc(BLOCK_REASON[b.block] || "") + '" aria-hidden="true">i</span>' +
+        '<span id="' + blkId + '" class="sr-only">' + esc(BLOCK_REASON[b.block] || "") + "</span>") +
+    "</td>" +
+
+    '<td class="c-name" data-label="Business">' +
+      '<a class="bname" href="#biz-' + r.short + '" data-panel="research" data-id="' + b.id + '">' +
+        esc(b.name) + "</a>" +
+      (b.domain ? '<a class="ext" href="https://' + esc(b.domain) + '/" target="_blank" ' +
+                  'rel="noopener noreferrer nofollow" title="' + esc(b.domain) + '">&#8599;</a>' : "") +
+      '<div class="sub2" title="discovered ' + esc(fmtDate(b.disc)) + '">' +
+        esc(CATEGORY_ONE[b.cat]) + " &middot; " + esc(CITY_LABEL[b.city]) + "</div>" +
+    "</td>" +
+
+    '<td data-label="City">' + esc(CITY_LABEL[b.city]) + "</td>" +
+    '<td class="c-ind" data-label="Industry">' + esc(INDUSTRY_LABEL[b.industry]) + "</td>" +
+    '<td class="c-cat" data-label="Category">' + esc(CATEGORY_ONE[b.cat]) + "</td>" +
+    '<td data-label="Size"><span class="badge mute">' + esc(b.size) + "</span></td>" +
+
+    '<td class="c-web" data-label="Website">' +
+      (b.web === "PRESENT"
+        ? '<a href="https://' + esc(b.domain) + '/" target="_blank" rel="noopener noreferrer nofollow">Yes</a>'
+        : (b.web === "ABSENT" ? "No" : na("Website not checked"))) + "</td>" +
+
+    '<td class="c-dm num" data-label="Digital maturity">' +
+      (b.dm === null ? na("Not assessed")
+        : '<span class="bar" aria-hidden="true"><i style="--v:' + b.dm + '%"></i></span>' + b.dm) + "</td>" +
+
+    '<td class="c-score" data-label="Opportunity score">' +
+      (sc === null ? na("Not scored yet")
+        : '<span class="badge score ' + scoreClass(sc) + '" title="' + band +
+          (band === "HIGH" ? ": 80-100" : (band === "MEDIUM" ? ": 60-79" : ": below 60")) + '">' +
+          sc + "</span>") + "</td>" +
+
+    '<td class="c-sol" data-label="Potential solution" title="' + esc(b.sol || "") + '">' +
+      (b.sol ? '<span class="trunc">' + esc(b.sol) + "</span>"
+             : na("No current opportunity recorded")) + "</td>" +
+
+    '<td class="c-contact" data-label="Contact available">' + contactCell(b) + "</td>" +
+
+    '<td data-label="Research confidence">' +
+      (b.conf ? '<span class="badge ' + confClass(b.conf) + '" title="confidence ' + b.confPct + '%">' +
+                esc(b.conf) + "</span>" : na("No research run for this business")) + "</td>" +
+
+    '<td data-label="Verification status"><span class="badge ' + r.verifBadge[0] + '">' +
+      esc(r.verifBadge[1]) + "</span></td>" +
+
+    '<td data-label="Outreach status"><span class="badge ' + r.outCls + '">' +
+      esc(r.outLabel) + "</span></td>" +
+
+    '<td class="c-act" data-label="Actions">' + acts.join("") + "</td>" +
+    "</tr>";
+}
+
+(function buildTable() {
+  /* Category order: descending group size, then label; OTHER last (3.4.4). */
+  var counts = {};
+  ROWS.forEach(function (r) { counts[r.b.cat] = (counts[r.b.cat] || 0) + 1; });
+  var cats = Object.keys(counts).sort(function (a, b) {
+    if (a === "OTHER") { return 1; }
+    if (b === "OTHER") { return -1; }
+    if (counts[b] !== counts[a]) { return counts[b] - counts[a]; }
+    return CATEGORY_LABEL[a].localeCompare(CATEGORY_LABEL[b]);
+  });
+
+  cats.forEach(function (cat) {
+    var tb = document.createElement("tbody");
+    tb.dataset.cat = cat;
+    tb.appendChild(el('<tr class="group-head"><th colspan="' + COLSPAN + '" scope="colgroup">' +
+      esc(CATEGORY_LABEL[cat]) + '<span class="gn"></span></th></tr>'));
+    TABLE.appendChild(tb);
+    GROUPS[cat] = tb;
+  });
+  FLAT = document.createElement("tbody");
+  FLAT.dataset.cat = "__flat";
+  FLAT.hidden = true;
+  TABLE.appendChild(FLAT);
+
+  var empty = document.createElement("tbody");
+  empty.id = "emptybody";
+  empty.hidden = true;
+  empty.appendChild(el('<tr class="emptyrow"><td colspan="' + COLSPAN + '">' +
+    "No business matches the current tab and filters.</td></tr>"));
+  TABLE.appendChild(empty);
+
+  ROWS.forEach(function (r) {
+    var tr = el(rowHtml(r));
+    var panel = el('<tr class="panel-row" hidden><td colspan="' + COLSPAN + '"></td></tr>');
+    GROUPS[r.b.cat].appendChild(tr);
+    GROUPS[r.b.cat].appendChild(panel);
+    r.tr = tr; r.panel = panel;
+    ROWNODES.push(r);
+  });
+})();
+
+/* =====================================================================
+   Sorting (3.6.4). Nulls last in both directions.
+   ===================================================================== */
+var COMPARATORS = {
+  num:  function (a, b) { return Number(a) - Number(b); },
+  text: function (a, b) { return String(a).localeCompare(String(b), "en", { sensitivity:"base" }); },
+  ord:  function (a, b) { return (ORD[a] || 0) - (ORD[b] || 0); },
+  conf: function (a, b) { return (CONF_ORD[a] || 0) - (CONF_ORD[b] || 0); },
+  date: function (a, b) { return a < b ? -1 : (a > b ? 1 : 0); }
+};
+var SORT_TYPE = {};
+document.querySelectorAll("th.sortable").forEach(function (th) {
+  SORT_TYPE[th.dataset.sort] = th.dataset.sortType;
+});
+SORT_TYPE.conf = "conf";
+
+function sortValue(r, key) {
+  var b = r.b;
+  switch (key) {
+    case "name": return b.name;
+    case "city": return CITY_LABEL[b.city];
+    case "industry": return INDUSTRY_LABEL[b.industry];
+    case "cat": return CATEGORY_ONE[b.cat];
+    case "size": return b.size;
+    case "web": return b.web === "PRESENT" ? "1 Yes" : (b.web === "ABSENT" ? "2 No" : null);
+    case "dm": return b.dm;
+    case "score": return b.score;
+    case "sol": return b.sol;
+    case "contact": return b.contact === "NONE" ? "UNKNOWN"
+                         : (b.contact === "UNVERIFIED" ? "MICRO"
+                         : ["", "SMALL", "MEDIUM", "LARGE"][b.contact.split(" ").length]);
+    case "conf": return b.conf || null;
+    case "verif": return r.verif;
+    case "outreach": return r.outAttr;
+  }
+  return null;
+}
+function isBlank(v) { return v === null || v === undefined || v === ""; }
+function compareRows(a, b) {
+  for (var i = 0; i < F.sort.length; i++) {
+    var s = F.sort[i], type = SORT_TYPE[s.key] || "text";
+    var av = sortValue(a, s.key), bv = sortValue(b, s.key);
+    var an = isBlank(av), bn = isBlank(bv);
+    if (an && bn) { continue; }
+    if (an) { return 1; }                       /* nulls last, whichever direction */
+    if (bn) { return -1; }
+    var c = COMPARATORS[type](av, bv);
+    if (c) { return s.dir === "desc" ? -c : c; }
+  }
+  return a.b.name.localeCompare(b.b.name) || (a.b.id < b.b.id ? -1 : 1);
+}
+function renderSortHeaders() {
+  document.querySelectorAll("th.sortable").forEach(function (th) {
+    var idx = -1;
+    for (var i = 0; i < F.sort.length; i++) { if (F.sort[i].key === th.dataset.sort) { idx = i; } }
+    var old = th.querySelector(".ind");
+    if (old) { old.remove(); }
+    if (idx === -1) { th.setAttribute("aria-sort", "none"); return; }
+    var s = F.sort[idx];
+    th.setAttribute("aria-sort", s.dir === "asc" ? "ascending" : "descending");
+    th.insertAdjacentHTML("beforeend",
+      '<span class="ind">' + (s.dir === "asc" ? "▲" : "▼") +
+      (F.sort.length > 1 ? (idx + 1) : "") + "</span>");
+  });
+  document.getElementById("sortstate").textContent =
+    "Sorted by " + F.sort.map(function (s) { return s.key + " " + s.dir; }).join(", ") +
+    (F.flat ? " (across all groups)" : " (within category groups)");
+}
+document.querySelectorAll("th.sortable").forEach(function (th) {
+  th.addEventListener("click", function (e) {
+    var key = th.dataset.sort;
+    var existing = null;
+    for (var i = 0; i < F.sort.length; i++) { if (F.sort[i].key === key) { existing = F.sort[i]; } }
+    if (e.shiftKey) {
+      if (existing) { existing.dir = existing.dir === "asc" ? "desc" : "asc"; }
+      else { F.sort.push({ key:key, dir:"asc" }); if (F.sort.length > 3) { F.sort.shift(); } }
+    } else {
+      F.sort = [{ key:key, dir:(existing && existing.dir === "asc") ? "desc" : "asc" }];
+      if (!existing && (key === "score" || key === "dm")) { F.sort[0].dir = "desc"; }
+    }
+    applyView();
+  });
+  th.setAttribute("tabindex", "0");
+  th.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); th.click(); }
+  });
+});
+
+/* =====================================================================
+   Tabs (spec sections 3, 4)
+   ===================================================================== */
+function passesNoTab(d) {
+  var sc = F.tabCity, si = F.tabIndustry;
+  F.tabCity = "ALL"; F.tabIndustry = "ALL";
+  var ok = passes(d);
+  F.tabCity = sc; F.tabIndustry = si;
+  return ok;
+}
+
+function renderTabs() {
+  var cityHost = document.getElementById("tabs-city");
+  var indHost = document.getElementById("tabs-industry");
+  var passing = ROWNODES.filter(function (r) { return passesNoTab(r.tr.dataset); });
+
+  cityHost.innerHTML = "";
+  var cityDefs = [["ALL", "All"]].concat(D.cities.map(function (c) { return [c.city, c.label]; }));
+  cityDefs.forEach(function (cd) {
+    var n = passing.filter(function (r) { return cd[0] === "ALL" || r.b.city === cd[0]; }).length;
+    var b = el('<button role="tab" id="tab-' + cd[0] + '" aria-controls="pane" data-city="' + cd[0] +
+               '" aria-selected="' + (F.tabCity === cd[0]) + '" tabindex="' +
+               (F.tabCity === cd[0] ? "0" : "-1") + '">' + esc(cd[1]) +
+               '<span class="cnt">' + n + "</span></button>");
+    b.addEventListener("click", function () {
+      F.tabCity = cd[0]; F.tabIndustry = "ALL"; renderTabs(); applyView();
+    });
+    cityHost.appendChild(b);
+  });
+
+  var inCity = ROWNODES.filter(function (r) { return F.tabCity === "ALL" || r.b.city === F.tabCity; });
+  var industries = INDUSTRY_ORDER.filter(function (i) {
+    return inCity.some(function (r) { return r.b.industry === i; });
+  });
+  if (industries.indexOf(F.tabIndustry) === -1 && F.tabIndustry !== "ALL") { F.tabIndustry = "ALL"; }
+
+  indHost.innerHTML = "";
+  [["ALL", "All"]].concat(industries.map(function (i) { return [i, INDUSTRY_LABEL[i]]; }))
+    .forEach(function (idf) {
+      var n = passing.filter(function (r) {
+        return (F.tabCity === "ALL" || r.b.city === F.tabCity) &&
+               (idf[0] === "ALL" || r.b.industry === idf[0]);
+      }).length;
+      var b = el('<button role="tab" data-industry="' + idf[0] + '" aria-controls="pane" aria-selected="' +
+                 (F.tabIndustry === idf[0]) + '" tabindex="' + (F.tabIndustry === idf[0] ? "0" : "-1") +
+                 '">' + esc(idf[1]) + '<span class="cnt">' + n + "</span></button>");
+      b.addEventListener("click", function () { F.tabIndustry = idf[0]; renderTabs(); applyView(); });
+      indHost.appendChild(b);
+    });
+
+  document.getElementById("pane").setAttribute("aria-labelledby", "tab-" + F.tabCity);
+  document.getElementById("tcaption").innerHTML =
+    (F.tabCity === "ALL" ? "All cities" : esc(CITY_LABEL[F.tabCity])) + " &middot; " +
+    (F.tabIndustry === "ALL" ? "all industries" : esc(INDUSTRY_LABEL[F.tabIndustry])) +
+    " &middot; 14 columns per spec section 9" +
+    (F.tabCity === "ALL" && F.tabIndustry === "ALL"
+      ? ", plus Industry because the grouping context is gone in this pane" : "");
+  TABLE.classList.toggle("show-ind", F.tabCity === "ALL" && F.tabIndustry === "ALL");
+}
+
+[["tabs-city", "city"], ["tabs-industry", "industry"]].forEach(function (t) {
+  document.getElementById(t[0]).addEventListener("keydown", function (e) {
+    var keys = ["ArrowLeft", "ArrowRight", "Home", "End"];
+    if (keys.indexOf(e.key) === -1) { return; }
+    e.preventDefault();
+    var btns = Array.prototype.slice.call(this.querySelectorAll("[role=tab]"));
+    var i = btns.indexOf(document.activeElement);
+    if (i === -1) { i = 0; }
+    if (e.key === "ArrowLeft") { i = (i - 1 + btns.length) % btns.length; }
+    if (e.key === "ArrowRight") { i = (i + 1) % btns.length; }
+    if (e.key === "Home") { i = 0; }
+    if (e.key === "End") { i = btns.length - 1; }
+    btns[i].focus(); btns[i].click();
+  });
+});
+
+/* =====================================================================
+   applyView: filter, order, group headings, counts, tray, hash
+   ===================================================================== */
+function applyView() {
+  var shown = 0, perCatVisible = {};
+
+  ROWNODES.forEach(function (r) {
+    var ok = passes(r.tr.dataset);
+    r.visible = ok;
+    if (r.tr.hidden !== !ok) { r.tr.hidden = !ok; }
+    if (!ok && !r.panel.hidden) { r.panel.hidden = true; r.openKind = null; syncPanelButtons(r); }
+    if (ok) { shown++; perCatVisible[r.b.cat] = (perCatVisible[r.b.cat] || 0) + 1; }
+  });
+
+  var ordered = ROWNODES.slice().sort(compareRows);
+  if (F.flat) {
+    FLAT.hidden = false;
+    var frag = document.createDocumentFragment();
+    ordered.forEach(function (r) { frag.appendChild(r.tr); frag.appendChild(r.panel); });
+    FLAT.appendChild(frag);
+    Object.keys(GROUPS).forEach(function (cat) { GROUPS[cat].hidden = true; });
+  } else {
+    FLAT.hidden = true;
+    Object.keys(GROUPS).forEach(function (cat) {
+      var tb = GROUPS[cat], f = document.createDocumentFragment();
+      ordered.filter(function (r) { return r.b.cat === cat; })
+             .forEach(function (r) { f.appendChild(r.tr); f.appendChild(r.panel); });
+      tb.appendChild(f);
+      var n = perCatVisible[cat] || 0;
+      tb.hidden = n === 0;
+      var total = ROWNODES.filter(function (r) { return r.b.cat === cat; }).length;
+      tb.querySelector(".gn").textContent = n === total ? "(" + total + ")" : "(" + n + " of " + total + ")";
+    });
+  }
+
+  document.getElementById("emptybody").hidden = shown !== 0;
+
+  var activeFilters = ["city","industry","size","web","conf","verif","contact","outreach"]
+    .filter(function (k) { return F[k].length; }).length +
+    (F.score[0] !== null || F.score[1] !== null ? 1 : 0) +
+    (F.dm[0] !== null || F.dm[1] !== null ? 1 : 0) +
+    (F.disc[0] || F.disc[1] ? 1 : 0) +
+    (!F.nullScore ? 1 : 0) + (!F.nullDm ? 1 : 0);
+
+  document.getElementById("resultline").innerHTML =
+    "<b>Showing " + shown + " of " + ROWNODES.length + " businesses</b>";
+  document.getElementById("activecount").textContent =
+    activeFilters ? (activeFilters + " filter" + (activeFilters === 1 ? "" : "s") + " active") : "no filters active";
+  document.getElementById("clear-filters").classList.toggle("on", activeFilters > 0 || F.q !== "");
+
+  var warn = document.getElementById("tabwarn");
+  if (shown === 0 && F.tabCity !== "ALL" && F.city.length && F.city.indexOf(F.tabCity) === -1) {
+    var n = ROWNODES.filter(function (r) { return r.b.city === F.tabCity; }).length;
+    warn.innerHTML = "The " + esc(CITY_LABEL[F.tabCity]) + " tab has " + n +
+      " rows, but your city filter excludes them. ";
+    var btn = el('<button type="button" class="btn">Clear the city filter</button>');
+    btn.addEventListener("click", function () { F.city = []; syncChips(); applyView(); });
+    warn.appendChild(btn);
+    warn.hidden = false;
+  } else {
+    warn.hidden = true;
+  }
+
+  renderSortHeaders();
+  recount();
+  writeHash();
+}
+
+/* =====================================================================
+   Selection (spec section 18). No send control exists in this document.
+   ===================================================================== */
+var SELECTED = {};
+function selIds() { return Object.keys(SELECTED); }
+
+TABLE.addEventListener("change", function (e) {
+  var cb = e.target;
+  if (!cb.classList || !cb.classList.contains("rowsel")) { return; }
+  var tr = cb.closest("tr");
+  var id = tr.dataset.id;
+  if (cb.checked) { SELECTED[id] = 1; } else { delete SELECTED[id]; }
+  tr.classList.toggle("selected", !!SELECTED[id]);
+  recount();
+});
+
+document.getElementById("selall").addEventListener("change", function () {
+  var on = this.checked;
+  ROWNODES.forEach(function (r) {
+    if (!r.visible || !r.b.sel) { return; }          /* never a hidden row, never a blocked row */
+    var cb = r.tr.querySelector(".rowsel");
+    cb.checked = on;
+    if (on) { SELECTED[r.b.id] = 1; } else { delete SELECTED[r.b.id]; }
+    r.tr.classList.toggle("selected", on);
+  });
+  recount();
+});
+
+function recount() {
+  var perCity = {}, total = 0, hidden = 0;
+  ROWNODES.forEach(function (r) {
+    if (!SELECTED[r.b.id]) { return; }
+    perCity[r.b.city] = (perCity[r.b.city] || 0) + 1;
+    total++;
+    if (!r.visible) { hidden++; }
+  });
+  var tray = document.getElementById("tray");
+  tray.hidden = total === 0;
+  if (total === 0) { document.getElementById("selall").checked = false; return; }
+
+  var parts = [];
+  D.cities.forEach(function (c) {
+    if (perCity[c.city]) {
+      parts.push('<span class="cc">' + esc(c.label) + " " + perCity[c.city] + "</span>");
+    }
+  });
+  document.getElementById("tray-counts").innerHTML = parts.join('<span class="sep">&middot;</span>');
+  document.getElementById("tray-total").textContent = total + " selected";
+  document.getElementById("tray-note").innerHTML =
+    (hidden ? '<span class="warnnote">' + hidden + " of your " + total +
+              " selected businesses are hidden by the current filters.</span> " : "") +
+    "Selection is preview-only in this file. Open the campaign in the app to act on it.";
+
+  var eligibleVisible = ROWNODES.filter(function (r) { return r.visible && r.b.sel; });
+  document.getElementById("selall").checked =
+    eligibleVisible.length > 0 && eligibleVisible.every(function (r) { return !!SELECTED[r.b.id]; });
+}
+
+document.getElementById("tray-clear").addEventListener("click", function () {
+  SELECTED = {};
+  ROWNODES.forEach(function (r) {
+    var cb = r.tr.querySelector(".rowsel");
+    if (cb) { cb.checked = false; }
+    r.tr.classList.remove("selected");
+  });
+  recount();
+});
+document.getElementById("tray-copy").addEventListener("click", function () {
+  var text = selIds().join("\n");
+  function ok() { toast("Copied " + selIds().length + " business ids to the clipboard."); }
+  function fallback() {
+    toast("Select and copy:<br><textarea readonly rows=\"4\" style=\"width:100%;font:11px monospace\">" +
+          esc(text) + "</textarea>");
+    var ta = document.querySelector("#toast textarea");
+    if (ta) { ta.focus(); ta.select(); }
+  }
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(ok, fallback);
+  } else { fallback(); }
+});
+
+/* =====================================================================
+   Panels: research (sections 11-14) and history (section 32)
+   ===================================================================== */
+var KIND_LEGEND = {
+  OBSERVED: "Observed &mdash; supported by sources",
+  INFERRED: "Inferred &mdash; reasonable conclusion, not verified",
+  UNKNOWN:  "Unknown &mdash; could not be verified"
+};
+var KIND_EMPTY = {
+  OBSERVED: "No observed fact was recorded for this business.",
+  INFERRED: "Nothing was inferred for this business.",
+  UNKNOWN:  "Nothing was recorded as unverifiable for this business."
+};
+
+function findingsHtml(r) {
+  return ["OBSERVED", "INFERRED", "UNKNOWN"].map(function (kind) {
+    var list = r.findings[kind];
+    var body;
+    if (!list.length) {
+      body = '<p class="empty">' + KIND_EMPTY[kind] + "</p>";
+    } else {
+      body = "<ul>" + list.map(function (f, i) {
+        var refs = f.refs.length
+          ? f.refs.map(function (n) {
+              return '<a href="#src-' + r.short + "-" + n + '" title="jump to source ' + n + '">[' + n + "]</a>";
+            }).join("")
+          : (kind === "UNKNOWN" ? "" : '<span class="nosrc" title="No finding_sources row: this statement is not citable in a message">NO SOURCE</span>');
+        var conf = f.conf
+          ? '<span class="badge ' + confClass(f.conf) + '" title="confidence ' + (f.pct || "?") + '%">' + f.conf + "</span>"
+          : na("Not assessed");
+        return '<li id="f-' + r.short + "-" + kind + "-" + i + '"><span class="stmt">' +
+               (kind === "INFERRED" ? '<span class="pfx">Inferred:</span> ' : "") +
+               esc(f.stmt) + "</span>" + conf + '<span class="refs">' + refs + "</span></li>";
+      }).join("") + "</ul>";
+    }
+    return '<fieldset class="findings kind-' + kind + '"><legend>' + KIND_LEGEND[kind] + "</legend>" +
+           body + "</fieldset>";
+  }).join("");
+}
+
+function opportunityHtml(r) {
+  var b = r.b, tpl = D.templates[b.cat];
+  if (!b.sol) {
+    return '<p class="absent">No current opportunity row for this business. ' +
+           (r.researched ? "Research completed but produced no named solution."
+                         : "The research job for this row has not completed, so nothing has been scored.") +
+           "</p>";
+  }
+  var band = scoreBand(b.score);
+  var mods = (tpl.modules || []).map(function (m) {
+    return '<span class="mod" title="' + esc(m[1]) + '">' + esc(m[0]) + "</span>";
+  }).join("");
+  var bd = r.breakdown || [];
+  var why = "";
+  if (bd.length) {
+    why = '<div class="why"><h5>Why ' + b.score + "</h5><table class=\"whytable\">" +
+      bd.map(function (c) {
+        var target = null;
+        if (c.why && r.findings[c.why] && r.findings[c.why].length) {
+          target = "f-" + r.short + "-" + c.why + "-0";
+        }
+        return "<tr><td>" + esc(c.c) + '</td><td class="pts num">' + c.p + " / " + c.of +
+               '</td><td class="src">' +
+               (target ? '<a href="#' + target + '">because ' + c.why.toLowerCase() + "</a>"
+                       : na("No finding is cited for this component")) + "</td></tr>";
+      }).join("") +
+      '<tr class="tot"><td>Total</td><td class="pts num">' + b.score +
+      ' / 100</td><td class="src"></td></tr></table></div>';
+  }
+  return '<dl class="idgrid">' +
+    "<div><dt>Potential problem</dt><dd>" + dash(tpl.problem, "Not recorded") + "</dd></div>" +
+    "<div><dt>Potential solution</dt><dd>" + dash(b.sol, "Not recorded") + "</dd></div>" +
+    "<div><dt>Expected benefit</dt><dd>" + dash(tpl.benefit, "Not recorded") + "</dd></div>" +
+    "<div><dt>Opportunity score</dt><dd>" +
+      (b.score === null ? na("Not scored yet")
+        : '<span class="badge score ' + scoreClass(b.score) + '">' + b.score + "</span> " + band) +
+    "</dd></div>" +
+    "<div><dt>Confidence</dt><dd>" +
+      (b.conf ? '<span class="badge ' + confClass(b.conf) + '">' + b.conf + "</span> (" + b.confPct + "%)"
+              : na("No research run")) + "</dd></div>" +
+    "</dl>" +
+    '<div style="margin-top:8px"><h5 style="font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);margin-bottom:5px">Recommended modules</h5>' +
+    (mods ? '<div class="mods">' + mods + "</div>" : na("No modules recorded")) + "</div>" +
+    why;
+}
+
+function sourcesHtml(r) {
+  if (!r.sources.length) { return '<p class="absent">No source was recorded for this business.</p>'; }
+  return '<ol class="sources">' + r.sources.map(function (s) {
+    return '<li id="src-' + r.short + "-" + s.n + '">' +
+      '<div class="srcline"><span class="srcnum">[' + s.n + "]</span>" +
+      (s.url ? '<a href="' + esc(s.url) + '" target="_blank" rel="noopener noreferrer nofollow">' +
+               esc(s.name) + " &#8599;</a>"
+             : esc(s.name) + ' <span class="na" title="URL withheld: not an absolute http(s) URL">&mdash;</span>') +
+      '<span class="stype">' + esc(s.type) + "</span>" +
+      '<span class="when" title="' + esc(s.checked) + 'T00:00:00Z">checked ' + esc(fmtDate(s.checked)) + "</span>" +
+      '<span class="badge ' + confClass(s.conf) + '">' + esc(s.conf) + "</span></div>" +
+      (s.excerpt ? "<blockquote class=\"excerpt\">" + esc(s.excerpt) + "</blockquote>" : "") +
+      "</li>";
+  }).join("") + "</ol>";
+}
+
+function researchPanelHtml(r) {
+  var b = r.b;
+  return '<div class="panel" id="p-' + r.short + '">' +
+    '<div class="panel-head"><h4 id="biz-' + r.short + '">' + esc(b.name) + "</h4>" +
+    '<div class="meta">' +
+      (b.researchedAt ? "Researched " + esc(fmtDateTime(b.researchedAt)) + " &middot; depth " +
+                        esc(D.campaign.depth) + " &middot; gemini-2.5-flash &middot; research-v4"
+                      : "No completed research run for this business.") +
+      ' &middot; <span>' + esc(b.id) + "</span></div></div>" +
+
+    (b.flag ? '<p class="absent" style="color:var(--bad-fg);font-style:normal;font-weight:650">' +
+              esc(b.flag) + "</p>" : "") +
+
+    '<div class="psec"><h5>Identity (spec section 11)</h5><dl class="idgrid">' +
+      "<div><dt>Business name</dt><dd>" + esc(b.name) + "</dd></div>" +
+      "<div><dt>Category</dt><dd>" + esc(CATEGORY_ONE[b.cat]) + " (" + esc(INDUSTRY_LABEL[b.industry]) + ")</dd></div>" +
+      "<div><dt>City</dt><dd>" + esc(CITY_LABEL[b.city]) + "</dd></div>" +
+      "<div><dt>Website</dt><dd>" +
+        (b.domain ? '<a href="https://' + esc(b.domain) + '/" target="_blank" rel="noopener noreferrer nofollow">' +
+                    esc(b.domain) + " &#8599;</a>"
+                  : (b.web === "ABSENT" ? "None found" : na("Website not checked"))) + "</dd></div>" +
+      "<div><dt>Business listing</dt><dd>" +
+        '<a href="https://www.openstreetmap.example/node/' + esc(b.osm) +
+        '" target="_blank" rel="noopener noreferrer nofollow">OpenStreetMap node ' + esc(b.osm) + " &#8599;</a></dd></div>" +
+      "<div><dt>Public business contact</dt><dd>" + dash(b.contactNote, "No contact recorded") +
+        "<br><span style=\"font-size:11px;color:var(--text-3)\">Contact values are never rendered in an export and are never sent to an LLM.</span></dd></div>" +
+      "<div><dt>Business size</dt><dd>" + esc(b.size) + "</dd></div>" +
+      "<div><dt>Digital maturity</dt><dd>" + (b.dm === null ? na("Not assessed") : b.dm + " / 100") + "</dd></div>" +
+      "<div><dt>Operational complexity</dt><dd>" + (b.opcx === null ? na("Not assessed") : b.opcx + " / 100") + "</dd></div>" +
+      "<div><dt>Opportunity score</dt><dd>" +
+        (b.score === null ? na("Not scored yet") : b.score + " / 100 &middot; " + scoreBand(b.score)) + "</dd></div>" +
+      "<div><dt>Research confidence</dt><dd>" +
+        (b.conf ? esc(b.conf) + " (" + b.confPct + "%)" : na("No research run")) + "</dd></div>" +
+      "<div><dt>Lifecycle status</dt><dd>" + esc(b.status) + "</dd></div>" +
+    "</dl></div>" +
+
+    '<div class="psec"><h5>Research findings (spec section 12)</h5>' + findingsHtml(r) + "</div>" +
+    '<div class="psec"><h5>Software opportunity (spec section 13)</h5>' + opportunityHtml(r) + "</div>" +
+    '<div class="psec"><h5>Sources (spec section 14)</h5>' + sourcesHtml(r) + "</div>" +
+    "</div>";
+}
+
+function historyPanelHtml(r) {
+  var rowsHtml = r.b.history.map(function (h) {
+    return "<tr><td>" + esc(fmtDateTime(h.date)) + "</td><td>" + esc(h.channel) + "</td><td>" +
+      esc(h.subject) + '<div style="font-size:11px;color:var(--text-3)">Message body is not embedded in an export. Open it in the app.</div></td><td>' +
+      esc(h.sender) + '</td><td><span class="badge ' +
+      (h.status === "DELIVERED" ? "ok" : (h.status === "SENT" ? "info" : "bad")) + '">' +
+      esc(h.status) + "</span></td><td>" +
+      (h.resp ? '<span class="badge info">' + esc(h.resp) + "</span> " + esc(h.respConf) +
+                '<blockquote class="excerpt">' + esc(h.excerpt) + "</blockquote>"
+              : na("No reply recorded")) +
+      '</td><td class="next ' + h.nextTone + '">' + esc(h.next) + "</td></tr>";
+  }).join("");
+  return '<div class="panel" id="h-' + r.short + '">' +
+    '<div class="panel-head"><h4>' + esc(r.b.name) + " &mdash; outreach history</h4>" +
+    '<div class="meta">spec section 32</div></div>' +
+    '<div style="overflow-x:auto"><table class="histtable"><thead><tr>' +
+    "<th>Date</th><th>Channel</th><th>Message</th><th>Sender</th><th>Delivery</th>" +
+    "<th>Response and classification</th><th>Next action</th></tr></thead><tbody>" +
+    rowsHtml + "</tbody></table></div></div>";
+}
+
+function syncPanelButtons(r) {
+  r.tr.querySelectorAll(".nav[data-panel]").forEach(function (btn) {
+    btn.setAttribute("aria-expanded", r.openKind === btn.dataset.panel ? "true" : "false");
+  });
+  r.tr.classList.toggle("is-open", !!r.openKind);
+}
+
+function togglePanel(id, kind) {
+  var r = null;
+  ROWNODES.forEach(function (x) { if (x.b.id === id) { r = x; } });
+  if (!r) { return; }
+  if (r.openKind === kind) {
+    r.panel.hidden = true; r.openKind = null; syncPanelButtons(r);
+    return;
+  }
+  r.panel.querySelector("td").innerHTML =
+    kind === "history" ? historyPanelHtml(r) : researchPanelHtml(r);
+  r.panel.hidden = false;
+  r.openKind = kind;
+  syncPanelButtons(r);
+}
+
+TABLE.addEventListener("click", function (e) {
+  var t = e.target.closest("[data-panel]");
+  if (t) { e.preventDefault(); togglePanel(t.dataset.id, t.dataset.panel); return; }
+  var deep = e.target.closest("[data-deep]");
+  if (deep) {
+    e.preventDefault();
+    toast("Wireframe: this control would open <b>" + esc(deep.getAttribute("href")) +
+          "</b> in the live app. No state changes from this file.");
+  }
+});
+
+/* =====================================================================
+   Full-text search (3.6.3) with the ten field-scoped prefixes
+   ===================================================================== */
+var SCOPE_VALUES = {
+  city:     D.cities.map(function (c) { return c.city; }),
+  industry: INDUSTRY_ORDER,
+  cat:      Object.keys(CATEGORY_LABEL),
+  size:     ["MICRO","SMALL","MEDIUM","LARGE","UNKNOWN"],
+  conf:     ["HIGH","MEDIUM","LOW","NONE"],
+  verif:    ["AI_RESEARCHED","NEEDS_VERIFICATION","VERIFIED","CONTACT_READY","REJECTED","SKIPPED"],
+  contact:  ["EMAIL","PHONE","WHATSAPP","UNVERIFIED","NONE"],
+  outreach: ["NOT_CONTACTED","QUEUED","SENT","DELIVERED","BOUNCED","FAILED","RESPONDED","INTERESTED","BLOCKED"]
+};
+function parseQuery(raw) {
+  var scoped = {}, free = [];
+  raw.trim().split(/\s+/).forEach(function (tok) {
+    if (!tok) { return; }
+    var m = /^([A-Za-z]+):(.+)$/.exec(tok);
+    if (!m) { free.push(tok); return; }
+    var k = m[1].toLowerCase(), v = m[2];
+    if (k === "score" || k === "dm") {
+      var r = null;
+      if (/^>=?\d+$/.test(v))      { r = [Number(v.replace(/[>=]/g, "")), null]; }
+      else if (/^<=?\d+$/.test(v)) { r = [null, Number(v.replace(/[<=]/g, ""))]; }
+      else if (/^\d+-\d+$/.test(v)){ var p = v.split("-"); r = [Number(p[0]), Number(p[1])]; }
+      else if (/^\d+$/.test(v))    { r = [Number(v), Number(v)]; }
+      if (r) { scoped[k] = r; } else { free.push(tok); }
+      return;
+    }
+    if (!SCOPE_VALUES[k]) { free.push(tok); return; }
+    var want = v.toUpperCase().replace(/[- ]/g, "_");
+    var hit = SCOPE_VALUES[k].filter(function (x) { return x === want || x.indexOf(want) === 0; });
+    if (hit.length) { scoped[k] = (scoped[k] || []).concat(hit); }
+    else { free.push(tok); }          /* unrecognised stays free text, never silently matches nothing */
+  });
+  return { scoped:scoped, q:free.join(" ").toLowerCase() };
+}
+var qTimer = null;
+document.getElementById("q").addEventListener("input", function () {
+  var raw = this.value;
+  clearTimeout(qTimer);
+  qTimer = setTimeout(function () {
+    var parsed = parseQuery(raw);
+    F.q = parsed.q; F.scoped = parsed.scoped;
+    applyView();
+  }, 120);
+});
+
+/* =====================================================================
+   Range inputs, null checkboxes, presets, toggles
+   ===================================================================== */
+function numOrNull(v) { return v === "" ? null : Number(v); }
+[["score-min", "score", 0], ["score-max", "score", 1], ["dm-min", "dm", 0], ["dm-max", "dm", 1]]
+  .forEach(function (cfg) {
+    document.getElementById(cfg[0]).addEventListener("input", function () {
+      F[cfg[1]][cfg[2]] = numOrNull(this.value);
+      syncChips(); applyView();
+    });
+  });
+[["disc-from", 0], ["disc-to", 1]].forEach(function (cfg) {
+  document.getElementById(cfg[0]).addEventListener("input", function () {
+    F.disc[cfg[1]] = this.value || null;
+    syncChips(); applyView();
+  });
+});
+document.getElementById("null-score").addEventListener("change", function () {
+  F.nullScore = this.checked; applyView();
+});
+document.getElementById("null-dm").addEventListener("change", function () {
+  F.nullDm = this.checked; applyView();
+});
+document.querySelectorAll('.chip-f[data-preset="score"]').forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    var p = btn.dataset.v.split("-");
+    var lo = p[0] === "" ? null : Number(p[0]), hi = p[1] === "" ? null : Number(p[1]);
+    if (F.score[0] === lo && F.score[1] === hi) { F.score = [null, null]; }
+    else { F.score = [lo, hi]; F.nullScore = false; }
+    syncChips(); applyView();
+  });
+});
+document.querySelectorAll('.chip-f[data-preset="disc"]').forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    var p = btn.dataset.v.split("..");
+    var from = p[0] || null, to = p[1] || null;
+    if (F.disc[0] === from && F.disc[1] === to) { F.disc = [null, null]; }
+    else { F.disc = [from, to]; }
+    syncChips(); applyView();
+  });
+});
+document.getElementById("clear-filters").addEventListener("click", function () { clearFilters(false); });
+document.getElementById("toggle-filters").addEventListener("click", function () {
+  var body = document.getElementById("fb-body");
+  body.hidden = !body.hidden;
+  this.setAttribute("aria-expanded", body.hidden ? "false" : "true");
+});
+document.getElementById("flat-toggle").addEventListener("click", function () {
+  F.flat = !F.flat;
+  this.setAttribute("aria-pressed", F.flat ? "true" : "false");
+  this.classList.toggle("on", F.flat);
+  applyView();
+});
+
+/* =====================================================================
+   Theme control (3.9.6): Auto / Light / Dark, persisted in localStorage
+   ===================================================================== */
+(function theme() {
+  var saved = null;
+  try { saved = localStorage.getItem("radar:theme"); } catch (e) { saved = null; }
+  var current = (saved === "light" || saved === "dark") ? saved : "auto";
+  function paint() {
+    document.querySelectorAll("[data-theme-set]").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.themeSet === current ? "true" : "false");
+    });
+    if (current === "auto") { delete document.documentElement.dataset.theme; }
+    else { document.documentElement.dataset.theme = current; }
+  }
+  document.querySelectorAll("[data-theme-set]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      current = b.dataset.themeSet;
+      try {
+        if (current === "auto") { localStorage.removeItem("radar:theme"); }
+        else { localStorage.setItem("radar:theme", current); }
+      } catch (e) { /* blocked storage: the choice still applies for this page view */ }
+      paint();
+    });
+  });
+  paint();
+})();
+
+/* =====================================================================
+   View state in the URL hash (3.6.5). replaceState, never pushState.
+   Selection is deliberately NOT in the hash.
+   ===================================================================== */
+var HASH_KEYS = ["city","industry","size","web","conf","verif","contact","outreach"];
+function writeHash() {
+  var parts = [];
+  if (F.tabCity !== "ALL" || F.tabIndustry !== "ALL") {
+    parts.push("tab=" + F.tabCity + "|" + F.tabIndustry);
+  }
+  HASH_KEYS.forEach(function (k) { if (F[k].length) { parts.push(k + "=" + F[k].join(",")); } });
+  function pushRange(name, r, includeNull) {
+    if (r[0] === null && r[1] === null && includeNull) { return; }
+    parts.push(name + "=" + (r[0] === null ? "" : r[0]) + "-" + (r[1] === null ? "" : r[1]) +
+               (includeNull ? "" : "!"));
+  }
+  pushRange("score", F.score, F.nullScore);
+  pushRange("dm", F.dm, F.nullDm);
+  if (F.disc[0] || F.disc[1]) { parts.push("disc=" + (F.disc[0] || "") + ".." + (F.disc[1] || "")); }
+  if (F.q) { parts.push("q=" + encodeURIComponent(F.q)); }
+  if (F.flat) { parts.push("flat=1"); }
+  if (F.sort.length) {
+    parts.push("sort=" + F.sort.map(function (s) { return s.key + ":" + s.dir; }).join(","));
+  }
+  var hash = parts.length ? "#" + parts.join("&") : "";
+  if (hash !== location.hash) {
+    try { history.replaceState(null, "", location.pathname + location.search + hash); }
+    catch (e) { /* file:// in some browsers refuses replaceState; the view still works */ }
+  }
+}
+function parseHash() {
+  var h = location.hash.replace(/^#/, "");
+  if (!h) { return; }
+  h.split("&").forEach(function (part) {
+    var i = part.indexOf("="); if (i === -1) { return; }
+    var k = part.slice(0, i), v = part.slice(i + 1);
+    if (k === "tab") {
+      var t = v.split("|"); F.tabCity = t[0] || "ALL"; F.tabIndustry = t[1] || "ALL";
+    } else if (HASH_KEYS.indexOf(k) !== -1) {
+      F[k] = v.split(",").filter(function (x) { return x; });
+    } else if (k === "score" || k === "dm") {
+      var excl = /!$/.test(v); v = v.replace(/!$/, "");
+      var p = v.split("-");
+      F[k] = [p[0] === "" ? null : Number(p[0]), p[1] === "" ? null : Number(p[1])];
+      if (k === "score") { F.nullScore = !excl; } else { F.nullDm = !excl; }
+    } else if (k === "disc") {
+      var d = v.split(".."); F.disc = [d[0] || null, d[1] || null];
+    } else if (k === "q") {
+      var parsed = parseQuery(decodeURIComponent(v));
+      F.q = parsed.q; F.scoped = parsed.scoped;
+      document.getElementById("q").value = decodeURIComponent(v);
+    } else if (k === "flat") {
+      F.flat = v === "1";
+      document.getElementById("flat-toggle").setAttribute("aria-pressed", F.flat ? "true" : "false");
+      document.getElementById("flat-toggle").classList.toggle("on", F.flat);
+    } else if (k === "sort") {
+      F.sort = v.split(",").map(function (s) {
+        var p = s.split(":"); return { key:p[0], dir:p[1] === "asc" ? "asc" : "desc" };
+      }).filter(function (s) { return !!SORT_TYPE[s.key]; });
+      if (!F.sort.length) { F.sort = [{ key:"score", dir:"desc" }]; }
+    } else if (window.console) {
+      console.warn("report: ignoring unknown hash key " + k);
+    }
+  });
+}
+
+/* =====================================================================
+   Toast - a wireframe affordance, not part of the real report
+   ===================================================================== */
+var toastTimer = null;
+function toast(html) {
+  var t = document.getElementById("toast");
+  t.innerHTML = html;
+  t.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { t.hidden = true; }, 6000);
+}
+document.getElementById("toast").addEventListener("click", function () { this.hidden = true; });
+
+/* =====================================================================
+   Init
+   ===================================================================== */
+parseHash();
+syncChips();
+renderTabs();
+applyView();
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+{# ==========================================================================
+   THE ONLY FILE IN templates/ THAT CONTAINS A SEND CONTROL.
+
+   15-ui-wireframe.md 15.18.1: absent, not disabled, everywhere else. A greyed-out control
+   that becomes live under some condition is a permanent invitation, and the day the
+   condition is met by accident is the day something is sent that nobody decided to send.
+
+   Spec 28 fixes seven items that must be on screen before the button enables, and fixes the
+   wording of the sentence above them. Both are literal. CONFIRMATION_TEXT is rendered from
+   one constant here and written verbatim to outreach_approvals.confirmation_text, so an
+   audit two years from now reads exactly what the operator was shown.
+   ========================================================================== #}
+<dialog id="confirm-dialog" aria-labelledby="confirm-title">
+  <form method="post" action="{{ url_for('approve', draft_id=draft.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="preview_token" value="{{ preview_token }}">
+    <input type="hidden" name="then" value="send">
+
+    <div class="dlg-head">
+      <h2 id="confirm-title">Confirm and send</h2>
+    </div>
+
+    <div class="dlg-body stack">
+      <p class="confirm-sentence">{{ CONFIRMATION_TEXT }}</p>
+
+      <dl class="facts">
+        <dt>1 Business</dt>
+        <dd>{{ draft.business_name }} &middot; {{ draft.city }} &middot;
+          {{ draft.category|pretty }}<br>
+          <span class="small">{{ draft.business_status|replace('_',' ') }} &middot;
+            opportunity {{ draft.opportunity_score|dash }}</span></dd>
+
+        <dt>2 Contact</dt>
+        <dd>{{ draft.contact_display or '—' }}<br>
+          <span class="small">{{ draft.contact_kind|lower }} contact
+            {%- if draft.is_role_address %}, role address{% endif %}
+            {%- if draft.human_verified %}, human-confirmed by
+              {{ draft.contact_verified_by_name or '—' }}
+              {{ draft.human_verified_at|day }}{% endif %} &middot;
+            captured {{ draft.contact_captured_at|day }}</span></dd>
+
+        <dt>3 Channel</dt>
+        {% set cs = channel_status.get(draft.channel) %}
+        <dd>{{ draft.channel }}{% if draft.channel == 'EMAIL' %} &mdash; Gmail SMTP{% endif %}<br>
+          {% if cs and cs.configured %}
+            <span class="small">Transmitted by this machine, now, on your approval.</span>
+          {% else %}
+            <span class="small" style="color:var(--warn-fg)">{{ cs.sentence() }}
+              Approving still writes the permanent approval record and the message is written
+              to data/outbox/ &mdash; but nothing leaves this machine until the channel is
+              configured.</span>
+          {% endif %}</dd>
+
+        <dt>4 Message</dt>
+        <dd>
+          {% if draft.subject %}<strong>Subject:</strong> {{ draft.subject }}{% endif %}
+          <div class="bodybox" style="margin-top:var(--s-2);max-height:34vh">{{ draft.final_body }}</div>
+          <span class="small">The full final text, including the signature and the mailto:
+            unsubscribe footer. Nothing here is elided.</span>
+        </dd>
+
+        <dt>5 Previous contact</dt>
+        <dd>{% if history %}{{ history|length }} previous message(s); the most recent was
+              {{ (history[0].sent_at or history[0].created_at)|stamp }}.
+            {% else %}No previous contact.{% endif %}</dd>
+
+        <dt>6 Opt-out status</dt>
+        <dd>{{ eligibility.gates[0].sentence }}<br>
+          <span class="small">Checked in this request at {{ eligibility.checked_at }}.
+            "No opt-out" is a claim the system makes, so it is made live and stamped.</span></dd>
+
+        <dt>7 Approval</dt>
+        <dd>Approving as {{ me.display_name }} (browser session, password).<br>
+          <span class="small">This writes a permanent approval record naming you, the time,
+            the exact message text and this sentence.</span></dd>
+      </dl>
+
+      <p class="irreversible">This send cannot be recalled.</p>
+
+      <div class="field">
+        <label for="confirm-word">Type SEND to enable the button</label>
+        <input id="confirm-word" name="confirm_word" type="text"
+               autocomplete="off" spellcheck="false" style="max-width:200px">
+        <p class="reason" id="confirm-word-reason">Type SEND above to enable this.</p>
+      </div>
+    </div>
+
+    <div class="dlg-foot">
+      <button class="btn" type="button"
+              onclick="document.getElementById('confirm-dialog').close()">Cancel</button>
+      <button class="btn danger" type="submit" id="confirm-send" disabled>
+        CONFIRM &amp; SEND</button>
+    </div>
+  </form>
+
+  {% if already_approved %}
+  {# A message approved earlier and held because the channel had no credentials. Its control
+     lives here too, because here is the only place a send control may live. #}
+  <form method="post" action="{{ url_for('send', message_id=draft.message_id) }}"
+        class="dlg-foot">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <span class="small">Already approved. The approval record still stands.</span>
+    <button class="btn danger" type="submit">CONFIRM &amp; SEND</button>
+  </form>
+  {% endif %}
+</dialog>

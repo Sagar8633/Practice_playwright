@@ -1,0 +1,77 @@
+{
+  "mobileMenu": {
+    "headerButtons": 0,
+    "clickErr": "TimeoutError: locator.click: Timeout 4000ms exceeded."
+  },
+  "contactLinks": {
+    "tel": [
+      "tel:+919810056691"
+    ],
+    "mailto": [
+      "mailto:lokesh.jain@i2vsys.com",
+      "mailto:sales@i2vsys.com",
+      "mailto:support@i2vsys.com",
+      "mailto:i2v@i2vsys.com"
+    ]
+  },
+  "keyboardFocus": [
+    {
+      "tag": "A",
+      "text": "",
+      "outline": "auto 0px",
+      "boxShadow": false
+    },
+    {
+      "tag": "A",
+      "text": "",
+      "outline": "auto 0px",
+      "boxShadow": false
+    },
+    {
+      "tag": "A",
+      "text": "Home",
+      "outline": "auto 0px",
+      "boxShadow": false
+    },
+    {
+      "tag": "A",
+      "text": "Why i2V?",
+      "outline": "auto 0px",
+      "boxShadow": false
+    },
+    {
+      "tag": "A",
+      "text": "i2V products",
+      "outline": "auto 0px",
+      "boxShadow": false
+    },
+    {
+      "tag": "A",
+      "text": "i2V VMS",
+      "outline": "auto 0px",
+      "boxShadow": false
+    }
+  ],
+  "a11yLandmarks": {
+    "htmlLang": "en-US",
+    "h1Count": 2,
+    "skipLink": false,
+    "nav": 1,
+    "main": 0,
+    "headerEl": 1,
+    "footerEl": 0,
+    "viewportMeta": "width=device-width, initial-scale=1"
+  },
+  "activeNav": [
+    {
+      "text": "i2V products",
+      "cls": "",
+      "ariaCurrent": "page"
+    },
+    {
+      "text": "i2V products",
+      "cls": "",
+      "ariaCurrent": "page"
+    }
+  ]
+}

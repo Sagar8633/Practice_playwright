@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>i2vsys.com — Website Test Report</title>
+<style>
+  :root{
+    --bg:#0f1419; --panel:#1a212b; --panel2:#232c38; --text:#e7edf3; --muted:#9fb0c0;
+    --border:#2d3947; --high:#ef4444; --med:#f59e0b; --low:#eab308; --pass:#22c55e;
+    --accent:#3b82f6;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:32px 20px 80px}
+  header.top{border-bottom:1px solid var(--border);padding-bottom:24px;margin-bottom:8px}
+  .brand{font-weight:800;font-size:30px;letter-spacing:-.5px}
+  .brand span{color:var(--accent)}
+  .sub{color:var(--muted);margin-top:4px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;font-size:13px;color:var(--muted)}
+  .meta b{color:var(--text);font-weight:600}
+  h2{font-size:22px;margin:42px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+  h3{font-size:17px;margin:26px 0 10px}
+  /* score cards */
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+  .card .n{font-size:34px;font-weight:800;line-height:1}
+  .card .l{font-size:12px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.05em}
+  .card.high .n{color:var(--high)} .card.med .n{color:var(--med)} .card.low .n{color:var(--low)} .card.pass .n{color:var(--pass)}
+  /* finding rows */
+  .finding{background:var(--panel);border:1px solid var(--border);border-left-width:5px;border-radius:10px;padding:14px 16px;margin:10px 0}
+  .finding.high{border-left-color:var(--high)} .finding.med{border-left-color:var(--med)} .finding.low{border-left-color:var(--low)} .finding.pass{border-left-color:var(--pass)}
+  .ftitle{font-weight:700;font-size:15px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em}
+  .badge.high{background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.4)}
+  .badge.med{background:rgba(245,158,11,.15);color:#fcd34d;border:1px solid rgba(245,158,11,.4)}
+  .badge.low{background:rgba(234,179,8,.13);color:#fde047;border:1px solid rgba(234,179,8,.35)}
+  .badge.pass{background:rgba(34,197,94,.15);color:#86efac;border:1px solid rgba(34,197,94,.4)}
+  .tag{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--border);padding:2px 8px;border-radius:6px}
+  .fbody{color:var(--muted);margin-top:8px}
+  .fbody code{background:#0b0f14;color:#f0b86c;padding:1px 6px;border-radius:5px;font-size:13px}
+  .fix{margin-top:8px;font-size:13px;color:#cfe1f2}
+  .fix b{color:#8fb8e6}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;background:var(--panel);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border)}
+  th{background:var(--panel2);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+  .bad{color:#fca5a5;font-weight:600} .warn{color:#fcd34d;font-weight:600} .ok{color:#86efac;font-weight:600}
+  .shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:14px 0}
+  .shots figure{margin:0;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:8px}
+  .shots img{width:100%;border-radius:6px;display:block;border:1px solid var(--border)}
+  .shots figcaption{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .note{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;color:var(--muted);font-size:13.5px;margin:16px 0}
+  ul{margin:8px 0 8px 0;padding-left:20px}
+  li{margin:4px 0}
+  .toc{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}
+  .toc a{font-size:13px;color:var(--accent);text-decoration:none;background:var(--panel);border:1px solid var(--border);padding:6px 12px;border-radius:8px}
+  .toc a:hover{background:var(--panel2)}
+  footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:12.5px}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">Website Test Report — <span>i2vsys.com</span></div>
+    <div class="sub">Automated cross-browser, performance, accessibility &amp; mobile audit of https://www.i2vsys.com/</div>
+    <div class="meta">
+      <span><b>Date:</b> 2026-06-02</span>
+      <span><b>Tooling:</b> Playwright 1.57 (Chromium · Firefox · WebKit) + CDP throttling + HTTP/SSL inspection</span>
+      <span><b>Pages:</b> Home, Why i2V, Products, Industries, Contact, VMS (+4 crawled)</span>
+    </div>
+  </header>
+
+  <div class="cards">
+    <div class="card high"><div class="n">3</div><div class="l">🔴 High</div></div>
+    <div class="card med"><div class="n">6</div><div class="l">🟠 Medium</div></div>
+    <div class="card low"><div class="n">6</div><div class="l">🟡 Low</div></div>
+    <div class="card pass"><div class="n">9+</div><div class="l">✅ Passing</div></div>
+  </div>
+
+  <div class="note">
+    <b style="color:var(--text)">Verdict:</b> The site is functional, secure, and visually polished — all pages return HTTP 200, render
+    consistently across three browser engines, and have <b>zero horizontal-scroll issues</b> on every device. The dominant
+    problem is <b style="color:#fca5a5">performance / page weight</b> (one page transfers 12–15 MB; effectively unusable on 3G),
+    alongside a sizeable <b style="color:#fca5a5">accessibility gap</b> and a few broken links. Failures are listed first below.
+  </div>
+
+  <div class="toc">
+    <a href="#fails">⛔ Failures &amp; Issues</a>
+    <a href="#pass">✅ Passing Checks</a>
+    <a href="#perf">⚡ Performance Data</a>
+    <a href="#xbrowser">🌐 Cross-Browser</a>
+    <a href="#mobile">📱 Mobile &amp; Network</a>
+    <a href="#shots">🖼️ Screenshots</a>
+    <a href="#limits">ℹ️ Limitations</a>
+  </div>
+
+  <!-- ===================== FAILURES FIRST ===================== -->
+  <h2 id="fails">⛔ Failures &amp; Issues (most severe first)</h2>
+
+  <!-- HIGH -->
+  <div class="finding high">
+    <div class="ftitle"><span class="badge high">High</span> Excessive page weight &amp; slow load times <span class="tag">Performance §1.1</span></div>
+    <div class="fbody">
+      The <b>Why i2V</b> page transfers <b class="bad">12–15 MB</b>; Industries ~5.7 MB; Home pulls <b>250 resources</b>.
+      Heaviest assets are full-resolution WebP images, e.g. <code>multi-level-permissions.webp</code> (1.31 MB) and
+      <code>system-hardening.webp</code> (1.28 MB). Broadband load events run 4.7–6.7 s.
+    </div>
+    <div class="fix"><b>Fix:</b> resize/recompress oversized images, add responsive <code>srcset</code>, lazy-load below-the-fold images and the YouTube/Maps embeds (load on interaction), and put assets behind a CDN with far-future caching.</div>
+  </div>
+
+  <div class="finding high">
+    <div class="ftitle"><span class="badge high">High</span> Broken "Terms of Use" link sitewide (404) <span class="tag">Links §1.2</span></div>
+    <div class="fbody">
+      The footer "Terms of Use" link uses a <b>relative href without a leading slash</b>, so it resolves under the current path and
+      404s on every sub-page: <code>/products/terms-of-use</code>, <code>/products/video-management-software/terms-of-use</code>.
+      The correct target <code>/terms-of-use/</code> was verified working (200).
+    </div>
+    <div class="fix"><b>Fix:</b> change the href to the absolute <code>/terms-of-use/</code>.</div>
+  </div>
+
+  <div class="finding high">
+    <div class="ftitle"><span class="badge high">High</span> Hundreds of images missing alt text <span class="tag">Accessibility §2.4</span></div>
+    <div class="fbody">
+      Home: <b class="bad">401 of 575 images (~70%)</b> have empty/missing <code>alt</code>; similar ratios on every page.
+      (Some are decorative SVG icons that legitimately use <code>alt=""</code>, so the true gap is smaller — but many meaningful
+      images clearly lack alt text, hurting screen-reader users and SEO.)
+    </div>
+    <div class="fix"><b>Fix:</b> add descriptive <code>alt</code> to meaningful images; explicit <code>alt=""</code> on purely decorative ones.</div>
+  </div>
+
+  <!-- MEDIUM -->
+  <div class="finding med">
+    <div class="ftitle"><span class="badge med">Medium</span> Unusable on real mobile networks <span class="tag">Mobile §4</span></div>
+    <div class="fbody">
+      Home page, throttled: <b>4G = 12.5 s</b> load · <b class="bad">Fast 3G = 57.3 s</b> · <b class="bad">Slow 3G = timeout &gt; 90 s</b>.
+      Same root cause as the page-weight finding — highest real-world impact for phone visitors.
+    </div>
+    <div class="fix"><b>Fix:</b> resolve page weight (above); prioritize critical-path rendering and defer heavy media.</div>
+  </div>
+
+  <div class="finding med">
+    <div class="ftitle"><span class="badge med">Medium</span> Slow server response (TTFB ~1.3–1.9 s) <span class="tag">Performance §1.1</span></div>
+    <div class="fbody">Every page shows ~1.3–1.9 s time-to-first-byte (Apache/WordPress, no edge caching evident), delaying everything downstream.</div>
+    <div class="fix"><b>Fix:</b> add server/page caching, object cache, and a CDN in front of origin.</div>
+  </div>
+
+  <div class="finding med">
+    <div class="ftitle"><span class="badge med">Medium</span> Email link missing <code>mailto:</code> &amp; broken resource link (404) <span class="tag">Links §1.2</span></div>
+    <div class="fbody">
+      An email address is used as a normal link without the prefix → <code>/contact-us/mandeep.panwar@i2vsys.com</code> (404).
+      A resource download is broken → <code>/resources/i2v-vms-pre-installer-1/</code> (404).
+    </div>
+    <div class="fix"><b>Fix:</b> prefix the email with <code>mailto:</code>; repoint or remove the dead resource link.</div>
+  </div>
+
+  <div class="finding med">
+    <div class="ftitle"><span class="badge med">Medium</span> Missing semantic landmarks (<code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>) <span class="tag">Accessibility §2.4</span></div>
+    <div class="fbody">Header &amp; nav exist, but no <code>&lt;main&gt;</code> and no <code>&lt;footer&gt;</code> element were detected — screen-reader landmark navigation suffers.</div>
+    <div class="fix"><b>Fix:</b> wrap primary content in <code>&lt;main&gt;</code> and use a real <code>&lt;footer&gt;</code> element.</div>
+  </div>
+
+  <div class="finding med">
+    <div class="ftitle"><span class="badge med">Medium</span> Weak / suppressed keyboard focus indicator <span class="tag">Accessibility §2.4</span></div>
+    <div class="fbody">Tab order is logical, but computed focus <b>outline width is 0 px</b> with no box-shadow — the visible focus ring appears suppressed (confirm manually).</div>
+    <div class="fix"><b>Fix:</b> add a clear <code>:focus-visible</code> outline/box-shadow for keyboard users.</div>
+  </div>
+
+  <div class="finding med">
+    <div class="ftitle"><span class="badge med">Medium</span> Mobile menu toggle is not a semantic button <span class="tag">Mobile / A11y §4</span></div>
+    <div class="fbody">The hamburger (☰) is visibly present on mobile, but it is <b>not a <code>&lt;button&gt;</code></b> (0 header buttons; automated open failed) and lacks <code>aria-expanded</code> — likely fine for touch/mouse but not keyboard/AT-friendly.</div>
+    <div class="fix"><b>Fix:</b> convert the toggle to a <code>&lt;button&gt;</code> with <code>aria-expanded</code>/<code>aria-controls</code>.</div>
+  </div>
+
+  <!-- LOW -->
+  <div class="finding low">
+    <div class="ftitle"><span class="badge low">Low</span> Inconsistent brand capitalization <span class="tag">Content §1.5</span></div>
+    <div class="fbody"><code>i2V</code>, <code>i2v</code>, and "i2V systems" (lowercase <i>systems</i>) all appear (e.g. header "Why i2V?" vs footer <code>i2v@i2vsys.com</code>). No placeholder/lorem text found.</div>
+    <div class="fix"><b>Fix:</b> standardize on one form (e.g. "i2V Systems").</div>
+  </div>
+
+  <div class="finding low">
+    <div class="ftitle"><span class="badge low">Low</span> Two <code>&lt;h1&gt;</code> elements on Home <span class="tag">SEO/A11y §2.4</span></div>
+    <div class="fbody">Home has 2× <code>&lt;h1&gt;</code>; there should be exactly one primary heading.</div>
+  </div>
+
+  <div class="finding low">
+    <div class="ftitle"><span class="badge low">Low</span> No skip-to-content link <span class="tag">Accessibility §2.4</span></div>
+    <div class="fbody">No skip link present for keyboard users to bypass the nav.</div>
+  </div>
+
+  <div class="finding low">
+    <div class="ftitle"><span class="badge low">Low</span> reCAPTCHA 401 console noise in Safari/WebKit <span class="tag">Cross-browser §3</span></div>
+    <div class="fbody">Every page logs 401s from <code>google.com/recaptcha/api2/pat</code> under WebKit — known reCAPTCHA telemetry behavior; cosmetic, forms still work.</div>
+  </div>
+
+  <div class="finding low">
+    <div class="ftitle"><span class="badge low">Low</span> YouTube cookie SameSite warnings in Firefox <span class="tag">Cross-browser §3</span></div>
+    <div class="fbody">Embedded video on Why i2V triggers benign third-party <code>__Secure-YEC</code> cookie warnings in Firefox.</div>
+  </div>
+
+  <div class="finding low">
+    <div class="ftitle"><span class="badge low">Low</span> Minimal Content-Security-Policy &amp; missing form attributes <span class="tag">Security/Forms §1.4/1.6</span></div>
+    <div class="fbody">CSP is only <code>upgrade-insecure-requests</code>. Contact-form visible fields lack HTML5 <code>required</code>/<code>aria-required</code> and <code>autocomplete</code> hints (enforcement relies on server-side CF7).</div>
+    <div class="fix"><b>Fix:</b> add a fuller CSP; add <code>required</code>/<code>autocomplete</code> to mandatory contact fields for instant feedback.</div>
+  </div>
+
+  <!-- ===================== PASSING ===================== -->
+  <h2 id="pass">✅ Passing Checks</h2>
+  <div class="finding pass">
+    <div class="ftitle"><span class="badge pass">Pass</span> Security &amp; SSL</div>
+    <div class="fbody">Valid GoDaddy cert (CN=i2vsys.com, valid <b>Aug 21 2025 → Aug 27 2026</b>); HTTP→HTTPS <b>301</b>; <code>Strict-Transport-Security</code> (2-yr, preload), <code>X-Frame-Options: SAMEORIGIN</code>, <code>X-Content-Type-Options: nosniff</code>.</div>
+  </div>
+  <div class="finding pass">
+    <div class="ftitle"><span class="badge pass">Pass</span> Links &amp; assets</div>
+    <div class="fbody">103 of 107 crawled links return 200; <b>no broken images</b> in any engine.</div>
+  </div>
+  <div class="finding pass">
+    <div class="ftitle"><span class="badge pass">Pass</span> Navigation &amp; active state</div>
+    <div class="fbody">Header/footer nav all resolve; the current page is marked with <code>aria-current="page"</code> ✓.</div>
+  </div>
+  <div class="finding pass">
+    <div class="ftitle"><span class="badge pass">Pass</span> Form validation</div>
+    <div class="fbody">Email field rejects invalid input ("Please include an '@'…"); <code>type=tel</code>/<code>url</code> fields, <code>&lt;select&gt;</code> dropdowns and reCAPTCHA present across 5 Contact Form 7 instances.</div>
+  </div>
+  <div class="finding pass">
+    <div class="ftitle"><span class="badge pass">Pass</span> Responsive layout</div>
+    <div class="fbody"><b>Zero horizontal scroll</b> across 4 devices × 2 orientations × 3 pages (24 runs); 16 px base font; correct <code>viewport</code> meta; <code>html lang="en-US"</code>.</div>
+  </div>
+  <div class="finding pass">
+    <div class="ftitle"><span class="badge pass">Pass</span> Cross-engine rendering</div>
+    <div class="fbody">Consistent layout &amp; functionality across Chromium, Firefox, and WebKit; all pages HTTP 200.</div>
+  </div>
+  <div class="finding pass">
+    <div class="ftitle"><span class="badge pass">Pass</span> Tel / email links</div>
+    <div class="fbody"><code>tel:+919810056691</code> and 4 valid <code>mailto:</code> addresses on Contact (sales@, support@, i2v@, lokesh.jain@).</div>
+  </div>
+  <div class="finding pass">
+    <div class="ftitle"><span class="badge pass">Pass</span> UX &amp; visuals</div>
+    <div class="fbody">Clear value proposition, logical IA, prominent "Request a demo" CTAs, consistent dark-hero branding, high-contrast headings.</div>
+  </div>
+  <div class="finding pass">
+    <div class="ftitle"><span class="badge pass">Pass</span> Content cleanliness</div>
+    <div class="fbody">No lorem-ipsum/placeholder content; copy is professional aside from brand-capitalization nits.</div>
+  </div>
+
+  <!-- ===================== PERFORMANCE DATA ===================== -->
+  <h2 id="perf">⚡ Performance Data (Chromium, broadband)</h2>
+  <table>
+    <thead><tr><th>Page</th><th class="r">Load event</th><th class="r">FCP</th><th class="r">TTFB</th><th class="r">Transfer</th></tr></thead>
+    <tbody>
+      <tr><td>Home</td><td class="r">4.77 s</td><td class="r">2.59 s</td><td class="r warn">1.75 s</td><td class="r">3.6 MB</td></tr>
+      <tr><td>Why i2V (About)</td><td class="r warn">6.44 s</td><td class="r">1.89 s</td><td class="r">1.34 s</td><td class="r bad">15.2 MB</td></tr>
+      <tr><td>Products</td><td class="r">5.48 s</td><td class="r">2.11 s</td><td class="r warn">1.56 s</td><td class="r">1.7 MB</td></tr>
+      <tr><td>Industries (Solutions)</td><td class="r warn">6.74 s</td><td class="r">2.36 s</td><td class="r warn">1.92 s</td><td class="r warn">5.7 MB</td></tr>
+      <tr><td>Contact Us</td><td class="r warn">6.35 s</td><td class="r">2.18 s</td><td class="r warn">1.84 s</td><td class="r ok">0.37 MB</td></tr>
+      <tr><td>Product‑VMS</td><td class="r">4.70 s</td><td class="r">1.92 s</td><td class="r warn">1.59 s</td><td class="r">1.8 MB</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===================== CROSS BROWSER ===================== -->
+  <h2 id="xbrowser">🌐 Cross-Browser Comparison</h2>
+  <table>
+    <thead><tr><th>Metric</th><th>Chromium</th><th>Firefox</th><th>WebKit (Safari)</th></tr></thead>
+    <tbody>
+      <tr><td>All pages HTTP 200</td><td class="ok">✅</td><td class="ok">✅</td><td class="ok">✅</td></tr>
+      <tr><td>Layout / rendering</td><td class="ok">✅ consistent</td><td class="ok">✅ consistent</td><td class="ok">✅ consistent</td></tr>
+      <tr><td>Avg load event</td><td>~5.7 s</td><td>~5.9 s</td><td class="warn">~8.1 s (slowest)</td></tr>
+      <tr><td>Console errors</td><td class="ok">0</td><td class="warn">2 (Why i2V)</td><td class="warn">4–5 / page (reCAPTCHA 401)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===================== MOBILE ===================== -->
+  <h2 id="mobile">📱 Mobile &amp; Network</h2>
+  <p style="color:var(--muted);margin:0 0 6px">Device emulation: iPhone 15 Pro, Pixel 7, iPad Pro 11, Galaxy Tab S4 — portrait &amp; landscape, Home/Products/Contact (24 runs). <b style="color:var(--text)">No horizontal scroll in any run.</b></p>
+  <table>
+    <thead><tr><th>Network profile (Home page)</th><th class="r">Load event</th><th class="r">FCP</th></tr></thead>
+    <tbody>
+      <tr><td>4G (~9 Mbps, 60 ms)</td><td class="r warn">12.5 s</td><td class="r">3.2 s</td></tr>
+      <tr><td>Fast 3G (~1.6 Mbps, 150 ms)</td><td class="r bad">57.3 s</td><td class="r warn">7.1 s</td></tr>
+      <tr><td>Slow 3G (~400 kbps, 400 ms)</td><td class="r bad">timeout &gt; 90 s</td><td class="r">—</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===================== SCREENSHOTS ===================== -->
+  <h2 id="shots">🖼️ Screenshots</h2>
+  <div class="shots">
+    <figure><img src="out/shots/desktop-Home.png" alt="Desktop home page"><figcaption>Desktop — Home</figcaption></figure>
+    <figure><img src="out/shots/mobile-iPhone-15-Pro.png" alt="Mobile home page"><figcaption>Mobile — iPhone 15 Pro</figcaption></figure>
+    <figure><img src="out/shots/contact-form.png" alt="Contact form"><figcaption>Contact form</figcaption></figure>
+    <figure><img src="out/shots/desktop-Products.png" alt="Products page"><figcaption>Desktop — Products</figcaption></figure>
+  </div>
+
+  <!-- ===================== LIMITATIONS ===================== -->
+  <h2 id="limits">ℹ️ Testing Limitations</h2>
+  <div class="note">
+    <ul>
+      <li>No browser-automation MCP was connected; testing used the project's Playwright driving <b>real browser engines</b>.</li>
+      <li><b>WebKit</b> is the Safari rendering engine but not native macOS/iOS Safari hardware; <b>devices are emulated</b> (viewport/DPR/touch/UA), not physical phones/tablets.</li>
+      <li><b>3G/4G/5G</b> figures use Chromium <b>CDP network emulation</b>, not real cellular radios (5G ≈ the unthrottled broadband numbers).</li>
+      <li><b>Forms</b> were validated client-side and inventoried, but <b>not submitted end-to-end</b> to avoid live leads / tripping reCAPTCHA.</li>
+      <li>Image <code>alt</code> counts include intentionally-decorative images (<code>alt=""</code>), so the true "missing meaningful alt" figure is somewhat lower than 70%.</li>
+    </ul>
+  </div>
+
+  <footer>
+    Generated from automated Playwright audit · raw evidence in <code>i2v/out/</code> (engines, links, responsive, throttle, forms, misc JSON + screenshots) · harness: <code>API_Framework/i2v-audit.mjs</code>.
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+//@version=6
+// SRK Doji Break 1:3 — Dragonfly / Gravestone reversal breakout
+//  Dragonfly (bullish): tiny body, long LOWER wick, minimal upper wick.
+//     -> buy-stop on break ABOVE the doji high; SL below doji low (wick); TP = 3R.
+//  Gravestone (bearish): tiny body, long UPPER wick, minimal lower wick.
+//     -> sell-stop on break BELOW the doji low; SL above doji high (wick); TP = 3R.
+//  Risk = doji high - doji low. Breakout order valid for N bars, else cancelled.
+strategy("SRK Doji Break 1:3", overlay=true, initial_capital=100000,
+     default_qty_type=strategy.percent_of_equity, default_qty_value=10,
+     commission_type=strategy.commission.percent, commission_value=0.03, pyramiding=0)
+
+rr        = input.float(3.0,  "Reward : Risk")
+bodyMax   = input.float(0.10, "Max body / range (doji)")
+wickMin   = input.float(0.60, "Min dominant wick / range")
+oppMax    = input.float(0.15, "Max opposite wick / range")
+validBars = input.int(3,      "Breakout valid for N bars")
+
+rng  = high - low
+body = math.abs(close - open)
+upW  = high - math.max(open, close)
+loW  = math.min(open, close) - low
+
+isDoji     = rng > 0 and body <= bodyMax * rng
+dragonfly  = isDoji and loW >= wickMin * rng and upW <= oppMax * rng
+gravestone = isDoji and upW >= wickMin * rng and loW <= oppMax * rng
+
+var float lEntry = na
+var float lSL    = na
+var float lTP    = na
+var int   lBars  = 0
+var float sEntry = na
+var float sSL    = na
+var float sTP    = na
+var int   sBars  = 0
+
+if dragonfly
+    lEntry := high
+    lSL    := low
+    lTP    := high + rr * (high - low)
+    lBars  := validBars
+if gravestone
+    sEntry := low
+    sSL    := high
+    sTP    := low - rr * (high - low)
+    sBars  := validBars
+
+// Long breakout (buy-stop) valid for N bars while flat
+if lBars > 0 and strategy.position_size == 0
+    strategy.entry("L", strategy.long, stop=lEntry)
+lBars := math.max(lBars - 1, 0)
+if lBars == 0
+    strategy.cancel("L")
+
+// Short breakout (sell-stop)
+if sBars > 0 and strategy.position_size == 0
+    strategy.entry("S", strategy.short, stop=sEntry)
+sBars := math.max(sBars - 1, 0)
+if sBars == 0
+    strategy.cancel("S")
+
+// Fixed SL / 3R target
+if strategy.position_size > 0
+    strategy.exit("L-x", from_entry="L", stop=lSL, limit=lTP)
+if strategy.position_size < 0
+    strategy.exit("S-x", from_entry="S", stop=sSL, limit=sTP)
+
+plotshape(dragonfly,  "Dragonfly",  shape.triangleup,   location.belowbar, color.new(color.green,0), size=size.small)
+plotshape(gravestone, "Gravestone", shape.triangledown, location.abovebar, color.new(color.red,0),   size=size.small)

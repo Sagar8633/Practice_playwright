@@ -1,0 +1,364 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - 'button "Logged in as patilkareena208 Active layout: Unnamed" [ref=e7]'
+    - toolbar [ref=e11]:
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]:
+            - button "XAUUSD" [ref=e4863]
+            - button "Switch data type" [ref=e20]
+          - button "Compare symbols" [ref=e24]
+        - generic [ref=e32]:
+          - radiogroup [ref=e33]:
+            - radio "5 minutes" [ref=e34]:
+              - generic [ref=e35]: 5m
+            - radio "15 minutes" [ref=e37]:
+              - generic [ref=e38]: 15m
+            - radio "45 minutes" [ref=e40]:
+              - generic [ref=e41]: 45m
+            - radio "4 hours" [checked] [ref=e5701]:
+              - generic [ref=e5285]: 4h
+          - button "Chart interval" [ref=e43]
+        - button "Candles" [ref=e53]
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - button "Indicators, metrics, and strategies" [ref=e65]:
+              - generic [ref=e5905]: Indicators
+            - button "Favorite indicators" [ref=e71]
+          - button "Indicator templates" [ref=e78]
+        - generic [ref=e85]:
+          - button "Create alert" [ref=e86]:
+            - generic [ref=e5906]: Alert
+          - button "Bar replay" [ref=e92]:
+            - generic [ref=e5907]: Replay
+        - generic [ref=e100]:
+          - button "Undo change Protection Mode property" [ref=e7561]
+          - button [disabled] [ref=e105]
+        - generic [ref=e110]:
+          - button "Layout setup" [ref=e111]
+          - generic [ref=e114]:
+            - button "Save all charts for all symbols and intervals on your layout" [ref=e6911]:
+              - generic [ref=e117]:
+                - generic [ref=e118]: Unnamed
+                - generic [ref=e586]: Save
+            - button "Manage layouts" [ref=e120]
+        - generic [ref=e128]:
+          - button "Quick search" [ref=e129]
+          - button "Settings" [ref=e134]
+          - button "Fullscreen mode" [ref=e140]
+          - button "Take a snapshot" [ref=e144]
+      - button "Trade" [ref=e153]
+      - button "Share your idea with the trade community" [ref=e161]:
+        - generic [ref=e162]: Publish
+    - toolbar [ref=e165]:
+      - generic [ref=e169]:
+        - generic [ref=e170]:
+          - generic [ref=e173]:
+            - button "Cross" [ref=e175]
+            - button "Cursors" [pressed] [ref=e181]
+          - generic [ref=e187]:
+            - button "Trendline" [ref=e189]
+            - button "Trend tools" [ref=e195]
+          - generic [ref=e201]:
+            - button "Fib retracement" [ref=e203]
+            - button "Gann and Fibonacci tools" [ref=e212]
+          - generic [ref=e218]:
+            - button "XABCD pattern" [ref=e220]
+            - button "Patterns" [ref=e226]
+          - generic [ref=e232]:
+            - button "Long position" [ref=e234]
+            - button "Forecasting and measurement tools" [ref=e238]
+          - generic [ref=e244]:
+            - button "Brush" [ref=e246]
+            - button "Geometric shapes" [ref=e252]
+          - generic [ref=e258]:
+            - button "Text" [ref=e260]
+            - button "Annotation tools" [ref=e264]
+          - generic [ref=e269]:
+            - button "Icon" [ref=e271]
+            - button "Icons" [ref=e275]
+        - generic [ref=e279]:
+          - button "Measure" [ref=e280]
+          - button "Zoom in" [ref=e284]
+        - generic [ref=e291]:
+          - generic [ref=e294]:
+            - button "Magnet mode snaps drawings placed near price bars to the closest OHLC value" [ref=e296]
+            - button "Magnets" [ref=e302]
+          - button "Keep drawing" [ref=e306]
+          - button "Lock all drawings" [ref=e310]
+          - generic [ref=e315]:
+            - button "Hide all drawings" [ref=e317]
+            - button "Hide options" [ref=e321]
+        - generic [ref=e327]:
+          - button "Remove objects" [ref=e329]
+          - button "Remove options" [ref=e333]
+    - generic [ref=e339]:
+      - 'region "Chart #1" [ref=e342]':
+        - generic [ref=e344]:
+          - generic [ref=e346]:
+            - generic:
+              - generic:
+                - toolbar:
+                  - generic:
+                    - generic [ref=e347]:
+                      - generic "Change symbol" [ref=e5704]:
+                        - generic [ref=e349]: X
+                        - button "Change symbol" [ref=e5705]: Gold Spot / U.S. Dollar
+                      - generic "Change interval" [ref=e5706]:
+                        - text: ·
+                        - button "Change interval" [ref=e5707]: 4h
+                      - generic [ref=e5708]:
+                        - text: ·
+                        - generic [ref=e5709]: OANDA
+                    - generic:
+                      - generic:
+                        - button "Flag symbol"
+                        - button "More"
+                    - button "Market closed · One update every 5 seconds" [ref=e5711]
+                  - generic [ref=e364]:
+                    - generic [ref=e365]:
+                      - generic [ref=e366]: O
+                      - generic [ref=e367]: 4,104.520
+                    - generic [ref=e368]:
+                      - generic [ref=e369]: H
+                      - generic [ref=e370]: 4,121.375
+                    - generic [ref=e371]:
+                      - generic [ref=e372]: L
+                      - generic [ref=e373]: 4,097.925
+                    - generic [ref=e374]:
+                      - generic [ref=e375]: C
+                      - generic [ref=e376]: 4,120.670
+                    - generic [ref=e377]: +16.145 (+0.39%)
+                - generic [ref=e381]:
+                  - generic [ref=e383]:
+                    - generic: 4,119.990
+                    - generic: Sell
+                  - generic "Spread" [ref=e385]: "136.0"
+                  - generic [ref=e387]:
+                    - generic: 4,121.350
+                    - generic: Buy
+              - generic:
+                - button "Hide indicator legend" [ref=e388]
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e1094]:
+                        - generic [ref=e7562]: SimpleSMA18 Strategy (MQL5 port)
+                        - generic [ref=e7564]:
+                          - generic "Fast MA Period" [ref=e7565]: "18"
+                          - generic "Trend MA Period" [ref=e7567]: "200"
+                          - generic "Volume MA Period" [ref=e7569]: "20"
+                          - generic "Swing Strength" [ref=e7571]: "2"
+                          - generic "Entry Buffer (ticks)" [ref=e7573]: "10"
+                          - generic "Break-Even Trigger (ticks)" [ref=e7575]: "500"
+                          - generic "Break-Even Offset (ticks)" [ref=e7577]: "10"
+                          - generic "Protection Mode" [ref=e7579]: Trailing
+                          - generic "Protection Start (ticks, 0=immediate)" [ref=e7581]: "0"
+                          - generic "Swing Buffer (ticks)" [ref=e7583]: "50"
+                          - generic "Chandelier Lookback" [ref=e7585]: "22"
+                          - generic "ATR Period" [ref=e7587]: "22"
+                          - generic "ATR Multiplier" [ref=e7589]: "3"
+                          - generic "Trailing Start (ticks)" [ref=e7591]: "800"
+                          - generic "Trailing Distance (ticks)" [ref=e7593]: "500"
+                      - generic [ref=e6205]:
+                        - button "Hide" [ref=e6206]
+                        - button "Settings" [ref=e6212]
+                        - generic "Source code" [ref=e6216]
+                        - button "Remove" [ref=e6220]
+                        - button "More" [ref=e6224]
+                      - button "Active strategy" [ref=e1311]
+                    - generic [ref=e1137]:
+                      - generic "MA 18" [ref=e1139]: 4,098.863
+                      - generic "MA 200" [ref=e1141]: 4,237.428
+            - generic "Chart for OANDA:XAUUSD, 4 hours" [ref=e5718]
+          - generic [ref=e430]: USD
+      - toolbar [ref=e448]:
+        - generic [ref=e450]:
+          - generic [ref=e451]:
+            - button "1 day in 1 minute intervals" [ref=e452]:
+              - generic [ref=e453]: 1D
+            - button "5 days in 5 minutes intervals" [ref=e454]:
+              - generic [ref=e455]: 5D
+            - button "1 month in 30 minutes intervals" [ref=e456]:
+              - generic [ref=e457]: 1M
+            - button "3 months in 1 hour intervals" [ref=e458]:
+              - generic [ref=e459]: 3M
+            - button "6 months in 2 hours intervals" [ref=e460]:
+              - generic [ref=e461]: 6M
+            - button "Year to day in 1 day intervals" [ref=e462]:
+              - generic [ref=e463]: YTD
+            - button "1 year in 1 day intervals" [ref=e464]:
+              - generic [ref=e465]: 1Y
+            - button "5 years in 1 week intervals" [ref=e466]:
+              - generic [ref=e467]: 5Y
+            - button "All data in 1 month intervals" [ref=e468]:
+              - generic [ref=e469]: All
+          - button "Go to" [ref=e471]
+        - button "Timezone" [ref=e478]:
+          - generic [ref=e479]: 16:49:27 UTC+5:30
+    - generic [ref=e489]:
+      - toolbar [ref=e494]:
+        - button "Watchlist, details, and news" [ref=e495]
+        - button "Alerts" [ref=e500]
+        - button "Object tree and data window" [ref=e505]
+        - button "Chats" [ref=e509]
+        - button "Screeners" [ref=e514]
+        - button "Pine" [ref=e520]
+        - button "Calendars" [ref=e525]
+        - button "Community" [ref=e529]
+        - button "Notifications" [ref=e536]
+        - button "Products" [ref=e540]
+        - button "Help Center" [ref=e545]
+      - generic [ref=e549]: "[] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] –"
+    - generic [ref=e1142]:
+      - toolbar [ref=e1144]:
+        - generic [ref=e1147]:
+          - button "Close strategy report" [ref=e1148]:
+            - generic [ref=e1156]: SimpleSMA18 Strategy (MQL5 port)
+          - button "Open context menu" [ref=e1158]
+        - generic [ref=e1163]:
+          - button "Collapse panel" [ref=e1164]
+          - button "Maximize panel" [ref=e1168]
+      - generic [ref=e1179]:
+        - generic [ref=e1181]:
+          - tablist [ref=e1183]:
+            - tab [selected] [ref=e1184]:
+              - generic "Metrics" [ref=e1185]
+            - tab [ref=e1189]:
+              - generic "Trades" [ref=e1190]
+          - button "Jan 3, 2023 — Jul 10, 2026" [ref=e5719]
+          - button "100 USD" [ref=e7323]
+          - button "Default detalization" [ref=e1226]
+          - button "Script execution 1" [ref=e1241]:
+            - generic [ref=e1245]:
+              - generic [ref=e1249]: Script execution
+              - generic [ref=e1250]: "1"
+        - generic [ref=e7327]:
+          - strong [ref=e7328]: This report requires trade data
+          - generic [ref=e7329]: The strategy report appears after the script makes even one trade. Ensure that the selected symbol and time interval are compatible with the strategy.
+    - generic "Trading panel"
+  - generic: Screeners
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+    - dialog "SimpleSMA18 Strategy (MQL5 port)" [ref=e7331]:
+      - generic [ref=e7332]:
+        - generic [ref=e7333]: SimpleSMA18 Strategy (MQL5 port)
+        - button "Close menu" [ref=e7335]
+      - tablist [ref=e7343]:
+        - tab "Inputs" [selected] [ref=e7344]
+        - tab "Properties" [ref=e7345]
+        - tab "Style" [ref=e7346]
+        - tab "Visibility" [ref=e7347]
+      - generic [ref=e7353]:
+        - generic [ref=e7354]: Signal
+        - generic [ref=e7359]: Fast MA Period
+        - textbox [ref=e7365]: "18"
+        - generic [ref=e7368]: Trend MA Period
+        - textbox [ref=e7374]: "200"
+        - generic [ref=e7377]: Volume MA Period
+        - textbox [ref=e7383]: "20"
+        - generic [ref=e7386]: Swing Strength
+        - textbox [ref=e7392]: "2"
+        - generic [ref=e7395]: Entry Buffer (ticks)
+        - textbox [ref=e7401]: "10"
+        - generic [ref=e7405]: Break-Even
+        - generic [ref=e7412]:
+          - checkbox "Enable Break-Even" [ref=e7416]
+          - generic [ref=e7417]: Enable Break-Even
+        - generic [ref=e7419]: Break-Even Trigger (ticks)
+        - textbox [ref=e7425]: "500"
+        - generic [ref=e7428]: Break-Even Offset (ticks)
+        - textbox [ref=e7434]: "10"
+        - generic [ref=e7438]: Protection
+        - generic [ref=e7443]: Protection Mode
+        - combobox [active] [ref=e7449]:
+          - generic [ref=e7450]: Trailing
+        - generic [ref=e7456]: Protection Start (ticks, 0=immediate)
+        - textbox [ref=e7462]: "0"
+        - generic [ref=e7465]: Swing Buffer (ticks)
+        - textbox [ref=e7471]: "50"
+        - generic [ref=e7474]: Chandelier Lookback
+        - textbox [ref=e7480]: "22"
+        - generic [ref=e7483]: ATR Period
+        - textbox [ref=e7489]: "22"
+        - generic [ref=e7492]: ATR Multiplier
+        - textbox [ref=e7498]: "3"
+        - generic [ref=e7501]: Trailing Start (ticks)
+        - textbox [ref=e7507]: "800"
+        - generic [ref=e7510]: Trailing Distance (ticks)
+        - textbox [ref=e7516]: "500"
+      - generic [ref=e7519]:
+        - button "Defaults" [ref=e7520]
+        - generic [ref=e7528]:
+          - button "Cancel" [ref=e7529]
+          - button "Ok" [ref=e7532]
+  - generic [ref=e723]:
+    - alert
+    - alert

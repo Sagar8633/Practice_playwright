@@ -1,0 +1,494 @@
+//@version=6
+// =====================================================================
+//  20 SMA / 200 SMA Crossover + Pullback + Confirmation
+//  Pine port of SmaCrossPullbackEA.mq5
+//
+//  Mandatory sequence, enforced as a state machine:
+//     crossover -> pullback to the 20 SMA -> confirmation candle
+//     -> stop entry beyond that candle -> 1:2 risk/reward
+//
+//  A crossover on its own NEVER produces an entry.
+//
+//  NOTE ON STOP LOSS: the source specification does not define an SL rule
+//  and explicitly says not to invent one. "SL anchor" therefore exposes
+//  the candidates instead of hardcoding a choice.
+// =====================================================================
+strategy("20/200 SMA Crossover Pullback", "SMAX 20/200", overlay = true,
+     initial_capital         = 10000,
+     default_qty_type        = strategy.percent_of_equity,
+     default_qty_value       = 10,
+     pyramiding              = 0,
+     calc_on_every_tick      = false,
+     process_orders_on_close = false)
+
+// ------------------------------------------------------------------ //
+//  INPUTS
+// ------------------------------------------------------------------ //
+gI = "Indicators"
+fastLen = input.int(20,  "Fast SMA", minval = 1, group = gI)
+slowLen = input.int(200, "Slow SMA", minval = 2, group = gI)
+
+gQ = "Sequence rules"
+maxBarsAfterCross = input.int(60, "Setup expires after N bars", minval = 0, group = gQ,
+     tooltip = "How long a crossover stays valid while waiting for the pullback and confirmation. 0 = never expires. The source spec does not define this.")
+requireTouch   = input.bool(true, "Pullback must reach the 20 SMA", group = gQ)
+pullTol        = input.float(0.0, "Pullback tolerance (price)", minval = 0, group = gQ,
+     tooltip = "Used only when 'must reach' is off: how close to the 20 SMA still counts as a pullback.")
+confNeedsClose = input.bool(true, "Confirmation must close beyond the 20 SMA", group = gQ)
+requireExtension = input.bool(true, "Price must move AWAY from the 20 SMA before a pullback counts", group = gQ,
+     tooltip = "Without this, the bar right after a crossover trivially satisfies 'low <= 20 SMA' and the sequence collapses into a crossover entry - which the specification explicitly forbids.")
+extendATR = input.float(0.5, "Extension required (x ATR14)", minval = 0, step = 0.1, group = gQ)
+invalidateOpp  = input.bool(true, "Opposite cross cancels the setup", group = gQ)
+
+gA = "ADX filter"
+useADX       = input.bool(true, "Only take signals when ADX is above the threshold", group = gA)
+adxThreshold = input.float(20.0, "ADX threshold", minval = 0, step = 0.5, group = gA)
+adxLen       = input.int(14, "DI length", minval = 1, group = gA)
+adxSmooth    = input.int(14, "ADX smoothing", minval = 1, group = gA)
+
+gW2 = "Weekend protection"
+blockFridayLate   = input.bool(false, "Block new entries late on Friday", group = gW2,
+     tooltip = "Trade #19 in the Aug-Sep 2026 sample entered Fri 18:30, was held over the weekend and lost 7.86 USD - 23.6% of ALL losses in the run.")
+fridayCutoffHour  = input.int(15, "Friday cutoff hour (chart time)", minval = 0, maxval = 23, group = gW2)
+closeBeforeWeekend = input.bool(false, "Flatten open position at the Friday cutoff", group = gW2)
+
+gE = "Entry"
+entryBuf    = input.float(0.0, "Entry buffer beyond the confirmation candle", minval = 0, group = gE)
+pendingBars = input.int(6, "Cancel an unfilled stop order after N bars", minval = 0, group = gE)
+
+gS = "Stop loss  (NOT defined by the source spec)"
+slMode  = input.string("Confirmation candle", "SL anchor",
+     options = ["Confirmation candle", "Pullback swing", "200 SMA", "Fixed distance"], group = gS)
+slBuf   = input.float(0.0, "SL buffer beyond the anchor", minval = 0, group = gS)
+fixedSL = input.float(3.0, "Fixed SL distance (price)", minval = 0, group = gS)
+
+gT = "Target"
+rr = input.float(2.0, "Risk : Reward", minval = 0.1, step = 0.1, group = gT)
+
+gP = "Position sizing"
+useRiskSizing = input.bool(false, "Size from risk %", group = gP,
+     tooltip = "On: quantity is derived so each trade risks the chosen % of equity. Off: uses the Properties tab order size.")
+riskPct = input.float(0.5, "Risk % per trade", minval = 0.01, step = 0.1, group = gP)
+
+gW = "Backtest window"
+lookbackDays = input.int(0, "Window (days), 0 = all loaded history", minval = 0, group = gW,
+     tooltip = "Free/Basic plans have no Deep Backtesting. This limits the test window inside the script instead.")
+
+gV = "Display"
+showPanel   = input.bool(true, "Show status panel", group = gV)
+showMarkers = input.bool(true, "Show sequence markers", group = gV)
+showLevels  = input.bool(true, "Draw entry / SL / target lines", group = gV)
+
+// ------------------------------------------------------------------ //
+//  INDICATORS
+// ------------------------------------------------------------------ //
+fast = ta.sma(close, fastLen)
+slow = ta.sma(close, slowLen)
+
+atr14 = ta.atr(14)
+
+isFriday      = dayofweek == dayofweek.friday
+fridayBlocked = blockFridayLate and isFriday and hour >= fridayCutoffHour
+
+[diPlus, diMinus, adxVal] = ta.dmi(adxLen, adxSmooth)
+
+bullCross = ta.crossover(fast, slow)
+bearCross = ta.crossunder(fast, slow)
+
+inWindow = lookbackDays == 0 or time >= timenow - lookbackDays * 86400000
+
+// ------------------------------------------------------------------ //
+//  STATE
+//    0 = IDLE      no crossover in play
+//    1 = CROSSED   crossover seen, waiting for the pullback
+//    2 = PULLBACK  pullback done, waiting for confirmation
+//    3 = ARMED     confirmation done, stop order working
+// ------------------------------------------------------------------ //
+var int   st        = 0
+var int   dir       = 0
+var int   barsSince = 0
+var int   armedBars = 0
+var bool  extended  = false
+var float pbExt     = na
+var float eEntry    = na
+var float eSL       = na
+var float eTP       = na
+
+var line lnE = na
+var line lnS = na
+var line lnT = na
+
+pullbackNow = false
+confirmNow  = false
+
+// ------------------------------------------------------------------ //
+//  SEQUENCE
+// ------------------------------------------------------------------ //
+if bullCross or bearCross
+    // A fresh crossover always restarts the sequence from step one.
+    if st == 3
+        strategy.cancel("L")
+        strategy.cancel("S")
+    newDir     = bullCross ? 1 : -1
+    st        := 1
+    dir       := newDir
+    barsSince := 0
+    armedBars := 0
+    pbExt     := newDir == 1 ? low : high
+    extended  := false
+    eEntry    := na
+    eSL       := na
+    eTP       := na
+
+else if st != 0
+    barsSince += 1
+    isLong = dir == 1
+
+    expired    = maxBarsAfterCross > 0 and barsSince > maxBarsAfterCross
+    invalidated = invalidateOpp and ((isLong and fast < slow) or (not isLong and fast > slow))
+
+    if expired or invalidated
+        if st == 3
+            strategy.cancel("L")
+            strategy.cancel("S")
+        st     := 0
+        dir    := 0
+        eEntry := na
+        eSL    := na
+        eTP    := na
+
+    else if st == 1
+        // ---- Step 4/5: pullback toward the 20 SMA
+        pbExt := isLong ? math.min(nz(pbExt, low), low) : math.max(nz(pbExt, high), high)
+
+        // Price must first travel away from the 20 SMA, otherwise the bar
+        // immediately after the crossover satisfies the test for free.
+        movedAway = isLong ? (close - fast >= extendATR * atr14)
+                           : (fast - close >= extendATR * atr14)
+        if movedAway
+            extended := true
+
+        touched = isLong
+             ? (requireTouch ? low  <= fast : low  <= fast + pullTol)
+             : (requireTouch ? high >= fast : high >= fast - pullTol)
+
+        reached = touched and (not requireExtension or extended)
+
+        if reached
+            st          := 2
+            pbExt       := isLong ? low : high
+            pullbackNow := true
+
+    else if st == 2
+        // ---- Step 6: confirmation that price is moving back in trend
+        pbExt := isLong ? math.min(nz(pbExt, low), low) : math.max(nz(pbExt, high), high)
+
+        directional = isLong ? close > open : close < open
+        beyondFast  = confNeedsClose ? (isLong ? close > fast : close < fast) : true
+        adxOK       = not useADX or adxVal > adxThreshold
+
+        if directional and beyondFast and adxOK and not fridayBlocked
+            ePrice = isLong ? high + entryBuf : low - entryBuf
+
+            anchor = slMode == "Confirmation candle" ? (isLong ? low : high) :
+                     slMode == "Pullback swing"      ? pbExt :
+                     slMode == "200 SMA"             ? slow  : float(na)
+
+            slPrice = slMode == "Fixed distance"
+                 ? (isLong ? ePrice - fixedSL : ePrice + fixedSL)
+                 : (isLong ? anchor - slBuf   : anchor + slBuf)
+
+            risk = isLong ? ePrice - slPrice : slPrice - ePrice
+
+            if not na(slPrice) and risk > 0
+                tpPrice = isLong ? ePrice + risk * rr : ePrice - risk * rr
+
+                eEntry     := ePrice
+                eSL        := slPrice
+                eTP        := tpPrice
+                confirmNow := true
+
+                if inWindow
+                    qty = useRiskSizing ? (strategy.equity * riskPct / 100.0) / risk : na
+
+                    if isLong
+                        if na(qty)
+                            strategy.entry("L", strategy.long, stop = ePrice)
+                        else
+                            strategy.entry("L", strategy.long, stop = ePrice, qty = qty)
+                    else
+                        if na(qty)
+                            strategy.entry("S", strategy.short, stop = ePrice)
+                        else
+                            strategy.entry("S", strategy.short, stop = ePrice, qty = qty)
+
+                    st        := 3
+                    armedBars := 0
+
+    else if st == 3
+        // ---- Working stop order: filled, or age it out
+        if strategy.position_size != 0
+            // Keep dir / entry / SL / TP populated: the spec requires those
+            // fields to stay readable for the whole life of the trade.
+            st := 0
+        else
+            armedBars += 1
+            if pendingBars > 0 and armedBars > pendingBars
+                strategy.cancel("L")
+                strategy.cancel("S")
+                // The crossover may still be valid - resume hunting a pullback.
+                st        := 1
+                armedBars := 0
+                pbExt     := isLong ? low : high
+                eEntry    := na
+                eSL       := na
+                eTP       := na
+
+// ------------------------------------------------------------------ //
+//  WEEKEND PROTECTION  -  never carry risk across the weekend gap
+// ------------------------------------------------------------------ //
+if closeBeforeWeekend and isFriday and hour >= fridayCutoffHour
+    if strategy.position_size != 0
+        strategy.close_all(comment = "weekend flat")
+    strategy.cancel("L")
+    strategy.cancel("S")
+
+// ------------------------------------------------------------------ //
+//  EXITS  -  stop and 1:2 target ride with the position
+// ------------------------------------------------------------------ //
+if not na(eSL) and not na(eTP)
+    strategy.exit("LX", from_entry = "L", stop = eSL, limit = eTP)
+    strategy.exit("SX", from_entry = "S", stop = eSL, limit = eTP)
+
+// ------------------------------------------------------------------ //
+//  ENTRY / EXIT MARKERS  -  actual fills, not just signals
+// ------------------------------------------------------------------ //
+inPos   = strategy.position_size != 0
+justIn  = inPos and not inPos[1]
+justOut = not inPos and inPos[1]
+wasLong = nz(strategy.position_size[1]) > 0
+
+// Was the closing fill a target or a stop? Compare the exit price to the entry.
+lastWin = strategy.closedtrades > 0 and
+     strategy.closedtrades.profit(strategy.closedtrades - 1) > 0
+
+// ---- Alert the moment an entry actually fills
+if justIn
+    alert("SMAX 20/200 " + (strategy.position_size > 0 ? "LONG" : "SHORT") + " ENTRY  " +
+          syminfo.ticker + "  " + timeframe.period +
+          "  @ " + str.tostring(strategy.position_avg_price, format.mintick) +
+          "  SL " + str.tostring(eSL, format.mintick) +
+          "  TP " + str.tostring(eTP, format.mintick) +
+          "  ADX " + str.tostring(adxVal, "#.0"),
+          alert.freq_once_per_bar)
+
+plotshape(showMarkers and justIn and strategy.position_size > 0, "Entry Long",
+     shape.labelup, location.belowbar, color.new(color.green, 0),
+     text = "BUY", textcolor = color.white, size = size.small)
+
+plotshape(showMarkers and justIn and strategy.position_size < 0, "Entry Short",
+     shape.labeldown, location.abovebar, color.new(color.red, 0),
+     text = "SELL", textcolor = color.white, size = size.small)
+
+plotshape(showMarkers and justOut and wasLong, "Exit Long",
+     shape.labeldown, location.abovebar,
+     lastWin ? color.new(color.teal, 0) : color.new(color.maroon, 0),
+     text = "EXIT", textcolor = color.white, size = size.tiny)
+
+plotshape(showMarkers and justOut and not wasLong, "Exit Short",
+     shape.labelup, location.belowbar,
+     lastWin ? color.new(color.teal, 0) : color.new(color.maroon, 0),
+     text = "EXIT", textcolor = color.white, size = size.tiny)
+
+// ------------------------------------------------------------------ //
+//  VISUALS
+// ------------------------------------------------------------------ //
+plot(fast, "20 SMA",  color = color.new(color.orange, 0), linewidth = 2)
+plot(slow, "200 SMA", color = color.new(color.blue,   0), linewidth = 2)
+
+plotshape(showMarkers and bullCross, "Bullish cross", shape.triangleup,
+     location.belowbar, color.new(color.green, 0), size = size.tiny)
+plotshape(showMarkers and bearCross, "Bearish cross", shape.triangledown,
+     location.abovebar, color.new(color.red, 0), size = size.tiny)
+plotshape(showMarkers and pullbackNow, "Pullback", shape.circle,
+     location.belowbar, color.new(color.yellow, 0), size = size.tiny)
+plotshape(showMarkers and confirmNow, "Confirmation", shape.diamond,
+     location.belowbar, color.new(color.aqua, 0), size = size.tiny)
+
+if showLevels
+    line.delete(lnE)
+    line.delete(lnS)
+    line.delete(lnT)
+    if st == 3 and not na(eEntry)
+        lnE := line.new(bar_index - 3, eEntry, bar_index + 12, eEntry,
+             color = color.new(color.gray,   0), style = line.style_dashed)
+        lnS := line.new(bar_index - 3, eSL,    bar_index + 12, eSL,
+             color = color.new(color.red,    0), style = line.style_dotted)
+        lnT := line.new(bar_index - 3, eTP,    bar_index + 12, eTP,
+             color = color.new(color.green,  0), style = line.style_dotted)
+
+// ------------------------------------------------------------------ //
+//  FAILURE ANALYSIS
+//  Pairs every closed trade with the conditions that were true when it
+//  was ENTERED, so losers can be attributed rather than guessed at.
+// ------------------------------------------------------------------ //
+var array<float> pendAdx  = array.new_float()
+var array<int>   pendHour = array.new_int()
+
+var int   nWin = 0,  nLoss = 0
+var float adxWinSum = 0.0, adxLossSum = 0.0
+var int   lossLong = 0, lossShort = 0, winLong = 0, winShort = 0
+var array<int> lossByHour = array.new_int(24, 0)
+var array<int> winByHour  = array.new_int(24, 0)
+var int   streak = 0, worstStreak = 0
+var float lossRSum = 0.0
+var int   seenClosed = 0
+
+// stamp the entry conditions when a fill happens
+if justIn
+    array.push(pendAdx,  adxVal)
+    array.push(pendHour, hour)
+
+// harvest every newly closed trade
+if strategy.closedtrades > seenClosed
+    for k = seenClosed to strategy.closedtrades - 1
+        pl     = strategy.closedtrades.profit(k)
+        entryP = strategy.closedtrades.entry_price(k)
+        exitP  = strategy.closedtrades.exit_price(k)
+        isL    = str.contains(strategy.closedtrades.entry_id(k), "L")
+
+        // NOT a ternary: Pine evaluates both branches of ?: so array.shift()
+        // would still run on an empty array and raise a runtime error.
+        float aAtEntry = na
+        int   hAtEntry = na
+        if array.size(pendAdx) > 0
+            aAtEntry := array.shift(pendAdx)
+        if array.size(pendHour) > 0
+            hAtEntry := array.shift(pendHour)
+
+        if pl < 0
+            nLoss += 1
+            streak += 1
+            worstStreak := math.max(worstStreak, streak)
+            adxLossSum := adxLossSum + nz(aAtEntry)
+            if isL
+                lossLong += 1
+            else
+                lossShort += 1
+            if not na(hAtEntry) and hAtEntry >= 0 and hAtEntry < 24
+                array.set(lossByHour, hAtEntry, array.get(lossByHour, hAtEntry) + 1)
+            // realised R, using the trade's own entry-to-exit distance
+            lossRSum := lossRSum + math.abs(entryP - exitP)
+        else
+            nWin += 1
+            streak := 0
+            adxWinSum := adxWinSum + nz(aAtEntry)
+            if isL
+                winLong += 1
+            else
+                winShort += 1
+            if not na(hAtEntry) and hAtEntry >= 0 and hAtEntry < 24
+                array.set(winByHour, hAtEntry, array.get(winByHour, hAtEntry) + 1)
+    seenClosed := strategy.closedtrades
+
+showFailPanel = input.bool(true, "Show failure analysis panel", group = gV)
+
+var table fpanel = table.new(position.bottom_right, 2, 17,
+     border_width = 1, frame_width = 1, frame_color = color.gray)
+
+fp(int r, string k, string v, color bg) =>
+    table.cell(fpanel, 0, r, k, text_color = color.white, text_size = size.tiny,
+         text_halign = text.align_left,  bgcolor = color.new(color.black, 30))
+    table.cell(fpanel, 1, r, v, text_color = color.white, text_size = size.tiny,
+         text_halign = text.align_right, bgcolor = bg)
+
+if showFailPanel and barstate.islast
+    dim = color.new(color.black, 30)
+    tot = nWin + nLoss
+
+    worstH = 0
+    worstN = 0
+    for i = 0 to 23
+        if array.get(lossByHour, i) > worstN
+            worstN := array.get(lossByHour, i)
+            worstH := i
+
+    // ---- performance, read straight off the strategy engine
+    pf  = strategy.grossloss > 0 ? strategy.grossprofit / strategy.grossloss : na
+    wr  = strategy.closedtrades > 0 ? strategy.wintrades * 100.0 / strategy.closedtrades : na
+    fp(0, "PERFORMANCE", "", dim)
+    fp(1, "Net profit", str.tostring(strategy.netprofit, "#.##"),
+         strategy.netprofit >= 0 ? color.new(color.teal, 40) : color.new(color.maroon, 40))
+    fp(2, "Profit factor", na(pf) ? "-" : str.tostring(pf, "#.###"),
+         not na(pf) and pf >= 1 ? color.new(color.teal, 40) : color.new(color.maroon, 40))
+    fp(3, "Win rate", na(wr) ? "-" : str.tostring(wr, "#.0") + "%  " +
+         str.tostring(strategy.wintrades) + "/" + str.tostring(strategy.closedtrades), dim)
+    fp(4, "Max drawdown", str.tostring(strategy.max_drawdown, "#.##"), dim)
+    fp(5, "Friday filter", blockFridayLate ? "ON (cut " + str.tostring(fridayCutoffHour) + ":00)" : "off", dim)
+    fp(6, "SL anchor", slMode, dim)
+
+    fp(7, "FAILURE ANALYSIS", "", dim)
+    fp(8, "Closed trades", str.tostring(tot), dim)
+    fp(9, "Losers", str.tostring(nLoss) + (tot > 0 ? "  (" + str.tostring(nLoss * 100.0 / tot, "#.0") + "%)" : ""),
+         color.new(color.maroon, 40))
+    fp(10, "Avg ADX on losers",  nLoss > 0 ? str.tostring(adxLossSum / nLoss, "#.0") : "-", dim)
+    fp(11, "Avg ADX on winners", nWin  > 0 ? str.tostring(adxWinSum  / nWin,  "#.0") : "-",
+         color.new(color.teal, 40))
+    fp(12, "Losers LONG / SHORT", str.tostring(lossLong) + " / " + str.tostring(lossShort), dim)
+    fp(13, "Winners LONG / SHORT", str.tostring(winLong) + " / " + str.tostring(winShort), dim)
+    fp(14, "Worst hour (losses)", worstN > 0 ? str.tostring(worstH) + ":00  x" + str.tostring(worstN) : "-", dim)
+    fp(15, "Max losing streak", str.tostring(worstStreak), dim)
+    fp(16, "Avg loss distance", nLoss > 0 ? str.tostring(lossRSum / nLoss, format.mintick) : "-", dim)
+
+// ------------------------------------------------------------------ //
+//  STATUS PANEL  -  the Step 9 readout from the specification
+// ------------------------------------------------------------------ //
+var table panel = table.new(position.top_right, 2, 13,
+     border_width = 1, frame_width = 1, frame_color = color.gray)
+
+// Panel row helper. Must live at global scope - Pine forbids declaring a
+// function inside a conditional block.
+f(int r, string k, string v) =>
+    table.cell(panel, 0, r, k, text_color = color.white, text_size = size.small,
+         text_halign = text.align_left,  bgcolor = color.new(color.black, 30))
+    table.cell(panel, 1, r, v, text_color = color.white, text_size = size.small,
+         text_halign = text.align_right, bgcolor = color.new(color.black, 30))
+
+if showPanel and barstate.islast
+    dirTxt = dir ==  1 ? "LONG" : dir == -1 ? "SHORT" : "-"
+    crsTxt = dir ==  1 ? "Bullish" : dir == -1 ? "Bearish" : "None"
+    pbTxt  = (st == 2 or st == 3) ? "YES" : "NO"
+    cfTxt  = st == 3 ? "YES" : "NO"
+
+    stsTxt = strategy.position_size != 0 ? "IN TRADE" :
+             st == 3 ? "ENTER" :
+             (st == 1 or st == 2) ? "WAIT" : "NO TRADE"
+
+    stsCol = stsTxt == "ENTER"    ? color.new(color.green, 0) :
+             stsTxt == "IN TRADE" ? color.new(color.blue,  0) :
+             stsTxt == "WAIT"     ? color.new(color.orange,0) : color.new(color.gray, 0)
+
+    f(0,  "Direction",    dirTxt)
+    f(1,  "Timeframe",    timeframe.period)
+    f(2,  str.tostring(fastLen) + " SMA",  str.tostring(fast, format.mintick))
+    f(3,  str.tostring(slowLen) + " SMA",  str.tostring(slow, format.mintick))
+    f(4,  "Crossover",    crsTxt)
+    f(5,  "Pullback",     pbTxt)
+    f(6,  "Confirmation", cfTxt)
+    f(7,  "Entry",        na(eEntry) ? "-" : str.tostring(eEntry, format.mintick))
+    f(8,  "Stop Loss",    na(eSL)    ? "-" : str.tostring(eSL,    format.mintick))
+    f(9,  "Target",       na(eTP)    ? "-" : str.tostring(eTP,    format.mintick))
+    f(10, "Risk:Reward",  "1:" + str.tostring(rr, "#.#"))
+
+    adxTxt = str.tostring(adxVal, "#.0") + (useADX ? (adxVal > adxThreshold ? "  OK" : "  LOW") : "")
+    table.cell(panel, 0, 11, "ADX(" + str.tostring(adxLen) + ")", text_color = color.white,
+         text_size = size.small, text_halign = text.align_left, bgcolor = color.new(color.black, 30))
+    table.cell(panel, 1, 11, adxTxt, text_color = color.white, text_size = size.small,
+         text_halign = text.align_right,
+         bgcolor = not useADX ? color.new(color.black, 30)
+              : adxVal > adxThreshold ? color.new(color.green, 40) : color.new(color.red, 40))
+
+    table.cell(panel, 0, 12, "Trade Status", text_color = color.white, text_size = size.small,
+         text_halign = text.align_left, bgcolor = color.new(color.black, 30))
+    table.cell(panel, 1, 12, stsTxt, text_color = color.white, text_size = size.small,
+         text_halign = text.align_right, bgcolor = stsCol)

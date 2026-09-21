@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% from "_macros.html" import status_badge, score_badge, confidence_badge, findings_groups,
+                              source_link, history_table %}
+{% block title %}{{ business.name }} - business_radar{% endblock %}
+{% block content %}
+
+<div class="panel">
+  <div class="spread">
+    <div>
+      <p class="small">{{ business.city }} / {{ business.industry|pretty }}</p>
+      <div class="row">
+        <h1>{{ business.name }}</h1>
+        {{ status_badge(business.status, business.skip_reason or '') }}
+        {{ score_badge(business.opportunity_score, business.opportunity_band) }}
+      </div>
+      <p class="small">{{ business.category|pretty }} &middot; {{ business.size_band }}
+        &middot; discovered {{ business.first_discovered_at|day }}</p>
+      <p class="mono">{{ business.id }}</p>
+    </div>
+    <div class="row">
+      {% if suppressions %}
+        <span class="badge bad">DO NOT CONTACT</span>
+      {% elif business.status in ('AI_RESEARCHED','NEEDS_VERIFICATION') %}
+        <a class="btn primary" href="{{ url_for('verify', business_id=business.id) }}">
+          Verify this business</a>
+      {% elif business.status == 'VERIFIED' %}
+        <a class="btn" href="{{ url_for('verify', business_id=business.id) }}">Re-verify</a>
+      {% elif business.status == 'CONTACT_READY' %}
+        <a class="btn primary" href="{{ url_for('outreach') }}">Prepare outreach</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% if suppressions %}
+<div class="flash bad" role="alert">
+  Do not contact: an opt-out or suppression is recorded
+  ({{ suppressions[0].reason }}, {{ suppressions[0].created_at|day }}).
+  This is permanent and the application has no code that clears it.
+</div>
+{% endif %}
+
+<div class="cols">
+  <section class="panel">
+    <header><span class="panel-title">Identity</span></header>
+    <dl class="facts">
+      <dt>Website</dt>
+      <dd>{% if business.website %}{{ source_link(business.website, business.website) }}
+            <span class="badge {{ 'ok' if business.website_status == 'PRESENT' else 'mute' }}">{{ business.website_status }}</span>
+          {% else %}<span class="na">&mdash;</span>{% endif %}</dd>
+      <dt>Listing</dt>
+      <dd>{% if business.listing_url %}{{ source_link(business.listing_url, business.listing_url) }}
+          {% else %}<span class="na">&mdash;</span>{% endif %}</dd>
+      <dt>Address</dt><dd>{{ business.address|dash }}{% if business.pincode %} {{ business.pincode }}{% endif %}</dd>
+      <dt>Size</dt><dd>{{ business.size_band }}</dd>
+      <dt>Digital maturity</dt><dd class="num">{{ business.digital_maturity|dash }}</dd>
+      <dt>Operational complexity</dt><dd class="num">{{ business.operational_complexity|dash }}</dd>
+      <dt>Research</dt><dd>{{ business.research_status }}
+        {% if business.last_researched_at %}, {{ business.last_researched_at|stamp }}{% endif %}</dd>
+    </dl>
+  </section>
+
+  <section class="panel">
+    <header><span class="panel-title">Public business contact</span></header>
+    {% if contacts %}
+      {% for c in contacts %}
+        <div style="padding:var(--s-2) 0;border-bottom:1px solid var(--grid)">
+          <div class="row">
+            <strong>{{ c.value_display }}</strong>
+            <span class="badge mute">{{ c.kind }}</span>
+            {% if c.is_role_address %}<span class="badge mute">role address</span>{% endif %}
+            {% if c.human_verified %}
+              <span class="badge ok">human-confirmed</span>
+            {% else %}
+              <span class="badge warn">not confirmed</span>
+            {% endif %}
+          </div>
+          <div class="finding-meta">
+            {% if c.source_url %}<span>{{ source_link(c.source_url, 'source') }}</span>{% endif %}
+            <span>captured {{ c.captured_at|day }}</span>
+            {% if c.human_verified %}
+              <span>by {{ c.verified_by_name or '—' }} {{ c.human_verified_at|day }}</span>
+            {% endif %}
+            <span class="mono">{{ c.id }}</span>
+          </div>
+          {% if not c.human_verified %}
+            <form method="post" style="margin-top:var(--s-2)"
+                  action="{{ url_for('confirm_contact', business_id=business.id, contact_id=c.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              <button class="btn" type="submit">Confirm this contact</button>
+              <p class="reason">Gate E reads this and nothing else. Research can capture an
+                address; only a person can confirm one.</p>
+            </form>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="empty">No active contact stored. Verified, but nothing to write to.</p>
+    {% endif %}
+  </section>
+</div>
+
+<div class="panel">
+  <header>
+    <span class="panel-title">Research findings</span>
+    <span class="small">
+      {% if run %}run {{ run.id }} {{ run.status }} &middot;
+        {{ run.model_id or '—' }} / {{ run.prompt_version or '—' }} &middot;
+        {{ run.finished_at|stamp }}
+      {% else %}no research run yet{% endif %}
+    </span>
+  </header>
+  {{ findings_groups(findings) }}
+</div>
+
+<div class="cols">
+  <section class="panel">
+    <header><span class="panel-title">Software opportunity</span></header>
+    {% if opportunity %}
+      <div class="row" style="margin-bottom:var(--s-3)">
+        {{ score_badge(opportunity.score, opportunity.band) }}
+        {{ confidence_badge(opportunity.confidence, opportunity.confidence_pct) }}
+      </div>
+      <dl class="facts">
+        <dt>Potential problem</dt><dd>{{ opportunity.potential_problem }}</dd>
+        <dt>Potential solution</dt><dd>{{ opportunity.potential_solution }}</dd>
+        <dt>Modules</dt>
+        <dd>{% if modules %}{{ modules|map(attribute='module')|map('pretty')|join(' · ') }}
+            {% else %}<span class="na">&mdash;</span>{% endif %}</dd>
+        <dt>Expected benefit</dt><dd>{{ opportunity.expected_benefit }}</dd>
+        <dt>Estimated value</dt>
+        <dd class="num">{% if opportunity.est_value_inr %}INR {{ opportunity.est_value_inr }}
+            {% else %}<span class="na">&mdash;</span>{% endif %}</dd>
+      </dl>
+      <p class="mono" style="margin-top:var(--s-3)">{{ opportunity.id }} &middot;
+        {{ opportunity.model_id or '—' }} / {{ opportunity.prompt_version or '—' }}</p>
+    {% else %}
+      <p class="empty">Not scored yet.</p>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <header><span class="panel-title">Sources</span></header>
+    {% if sources %}
+      <div class="tablewrap">
+        <table class="btable">
+          <thead><tr><th scope="col">Name</th><th scope="col">Type</th>
+            <th scope="col">Checked</th><th scope="col">Obtained</th></tr></thead>
+          <tbody>
+            {% for s in sources %}
+              <tr>
+                <th scope="row" data-label="Name">{{ source_link(s.url, s.name) }}</th>
+                <td data-label="Type">{{ s.source_type }}</td>
+                <td data-label="Checked">{{ s.checked_at|day }}</td>
+                <td data-label="Obtained">{{ s.information_obtained }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="empty">No sources stored for this business.</p>
+    {% endif %}
+  </section>
+</div>
+
+<div class="panel" id="history">
+  <header><span class="panel-title">Outreach history</span></header>
+  {{ history_table(history) }}
+</div>
+
+<div class="panel">
+  <header><span class="panel-title">Suppression</span></header>
+  <form method="post" action="{{ url_for('suppress', business_id=business.id) }}" class="stack">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <p class="irreversible">This cannot be removed from the app afterwards.</p>
+    <div class="field">
+      <label for="note">Why</label>
+      <input id="note" name="note" type="text" placeholder="one line, for the audit record">
+    </div>
+    <div class="field">
+      <label for="confirm_word">Type SUPPRESS to enable the button</label>
+      <input id="confirm_word" name="confirm_word" type="text" autocomplete="off"
+             spellcheck="false">
+    </div>
+    <button class="btn danger" type="submit">Add suppression</button>
+  </form>
+</div>
+{% endblock %}

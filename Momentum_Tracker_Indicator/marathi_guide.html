@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="mr"><head><meta charset="UTF-8"><style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1920px; height:1080px; overflow:hidden; }
+  body{ font-family:'Nirmala UI','Mangal','Noto Sans Devanagari',sans-serif;
+    background:radial-gradient(circle at 20% 0%,#1b2435 0%,#0b0e16 60%,#05070b 100%);
+    color:#e8edf5; padding:34px 40px; display:flex; flex-direction:column; gap:18px; }
+  .head{ display:flex; align-items:center; justify-content:space-between; border-bottom:3px solid #2962ff; padding-bottom:14px;}
+  .head h1{ font-size:46px; letter-spacing:.5px;} .head h1 .br{ color:#7e57c2;}
+  .head .sub{ font-size:22px; color:#9aa7bd; text-align:right; line-height:1.35;}
+  .grid{ flex:1; display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:1fr 1fr; gap:18px;}
+  .card{ background:linear-gradient(160deg,#141a26,#0d121c); border:1px solid #232c3d; border-radius:16px; padding:20px 22px; box-shadow:0 6px 22px rgba(0,0,0,.35);}
+  .card h2{ font-size:26px; margin-bottom:12px; display:flex; align-items:center; gap:10px; padding-bottom:8px; border-bottom:2px solid #232c3d;}
+  .card li{ list-style:none; font-size:20px; line-height:1.5; margin:7px 0; padding-left:24px; position:relative; color:#d7deea;}
+  .card li::before{ content:"•"; position:absolute; left:4px; color:#5b6b86; font-size:22px;}
+  .g{color:#26a69a; font-weight:700;} .r{color:#ef5350; font-weight:700;} .p{color:#b07cf0; font-weight:700;} .y{color:#ffb74d; font-weight:700;} .b{color:#5b9dff; font-weight:700;}
+  .tag{display:inline-block; padding:1px 9px; border-radius:6px; font-size:17px; font-weight:700; margin:0 2px;}
+  .tg{background:#1e3a34; color:#34d8a8;} .tr{background:#3a1e22; color:#ff6b6b;}
+  .ttl-g h2{color:#34d8a8;} .ttl-r h2{color:#ff6b6b;} .ttl-p h2{color:#b07cf0;} .ttl-b h2{color:#5b9dff;} .ttl-y h2{color:#ffb74d;}
+  .foot{ text-align:center; font-size:18px; color:#7e8aa0; border-top:1px solid #232c3d; padding-top:12px;} .foot b{color:#ffb74d;}
+</style></head><body>
+  <div class="head"><h1>📊 <span class="br">trade_with_kareena</span> — इंडिकेटर वापरण्याचे नियम</h1>
+    <div class="sub">Tracker (भावावर) + Flow (खालचा पॅनल)<br>मराठी मार्गदर्शक · संपूर्ण कॉम्बो</div></div>
+  <div class="grid">
+    <div class="card ttl-b"><h2>🧩 इंडिकेटरचे भाग</h2><ul>
+      <li><b class="b">MTF व्हॉल्यूम टेबल:</b> प्रत्येक टाइमफ्रेमवर खरेदी vs विक्री. <span class="g">हिरवी रो = तेजी</span>, <span class="r">लाल रो = मंदी</span>.</li>
+      <li><b class="p">Smart Trail (जांभळी रेषा):</b> ट्रेंड + ट्रेलिंग स्टॉपलॉस.</li>
+      <li><b class="b">बबल्स:</b> मोठ्या (इन्स्टिट्यूशनल) व्हॉल्यूमचे ठिकाण — हिरवे/लाल वर्तुळ.</li>
+      <li><b class="p">जांभळे ठिपके:</b> स्विंग हाय/लो = सपोर्ट/रेझिस्टन्स.</li>
+      <li><b class="b">Flow पॅनल + ADX:</b> मोमेंटम व ट्रेंडची ताकद.</li></ul></div>
+    <div class="card ttl-g"><h2>🟢 LONG (खरेदी) कधी?</h2><ul>
+      <li>Smart Trail भावाच्या <b class="g">खाली</b> पलटते → <span class="tag tg">LONG</span> सिग्नल.</li>
+      <li>R-Factor <b class="g">हिरवा</b> (० पेक्षा जास्त).</li>
+      <li>टेबलमधील जास्तीत जास्त रो <b class="g">हिरव्या</b>.</li>
+      <li>Flow हिस्टोग्राम <b class="g">हिरवा</b> + शून्याच्या वर.</li>
+      <li><b class="b">ADX &gt; 25</b> = मजबूत ट्रेंड (कन्फर्मेशन).</li></ul></div>
+    <div class="card ttl-r"><h2>🔴 SHORT (विक्री) कधी?</h2><ul>
+      <li>Smart Trail भावाच्या <b class="r">वर</b> पलटते → <span class="tag tr">SHORT</span> सिग्नल.</li>
+      <li>R-Factor <b class="r">लाल</b> (० पेक्षा कमी).</li>
+      <li>टेबलमधील जास्तीत जास्त रो <b class="r">लाल</b>.</li>
+      <li>Flow हिस्टोग्राम <b class="r">लाल</b> + शून्याच्या खाली.</li>
+      <li><b class="b">ADX &gt; 25</b> = मजबूत मंदीचा ट्रेंड.</li></ul></div>
+    <div class="card ttl-y"><h2>⭐ R-Factor नियम</h2><ul>
+      <li><span class="g">+33 पेक्षा जास्त</span> = STRONG BUY → मोठी पोझिशन.</li>
+      <li><span class="g">0 ते +33</span> = BUY → छोटी पोझिशन.</li>
+      <li><span class="r">0 ते −33</span> = SELL.</li>
+      <li><span class="r">−33 पेक्षा कमी</span> = STRONG SELL.</li>
+      <li><b class="y">लक्षात ठेवा:</b> R-Factor फक्त <u>कन्फर्मेशन</u> आहे — एकटा सिग्नल नाही.</li></ul></div>
+    <div class="card ttl-p"><h2>🎯 स्टॉपलॉस व टार्गेट</h2><ul>
+      <li><b class="p">स्टॉपलॉस =</b> जांभळी Smart Trail रेषा (ट्रेल करत राहा).</li>
+      <li><b class="p">टार्गेट =</b> पुढील जांभळा ठिपका / बबल.</li>
+      <li><b class="y">डायव्हर्जन्स:</b> भाव नवीन हाय पण R-Factor खाली → <span class="r">रिव्हर्सलचा धोका</span>.</li>
+      <li>नफा झाल्यावर स्टॉपलॉस ब्रेकइव्हनला सरकवा.</li></ul></div>
+    <div class="card ttl-r"><h2>⚠️ महत्त्वाचे नियम</h2><ul>
+      <li>ट्रेंडच्या <b class="r">विरुद्ध</b> ट्रेड करू नका.</li>
+      <li>एकाच सिग्नलवर अवलंबून राहू नका — <b class="g">संगम (confluence)</b> बघा.</li>
+      <li>नेहमी <b class="y">रिस्क मॅनेजमेंट</b> (1–2% प्रति ट्रेड).</li>
+      <li>साइडवेज मार्केटमध्ये (ADX &lt; 20) ट्रेड टाळा.</li>
+      <li>आधी पेपर-ट्रेड करून मगच खऱ्या पैशाने वापरा.</li></ul></div>
+  </div>
+  <div class="foot">📌 हे केवळ <b>शैक्षणिक</b> उद्देशासाठी आहे · ट्रेडिंगमध्ये जोखीम असते · स्वतःच्या जबाबदारीवर ट्रेड करा &nbsp;|&nbsp; trade_with_kareena Tracker + Flow</div>
+</body></html>

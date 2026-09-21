@@ -1,0 +1,809 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e6]:
+      - 'button "Logged in as patilkareena208 Active layout: Unnamed" [ref=e7]'
+      - generic [ref=e8]: "11"
+    - toolbar [ref=e12]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - button "XAUUSD" [ref=e19]
+            - button "Switch data type" [ref=e21]
+          - button "Compare symbols" [ref=e25]
+        - generic [ref=e33]:
+          - radiogroup [ref=e34]:
+            - radio "5 minutes" [ref=e35]:
+              - generic [ref=e36]: 5m
+            - radio "15 minutes" [checked] [ref=e38]:
+              - generic [ref=e39]: 15m
+            - radio "45 minutes" [ref=e41]:
+              - generic [ref=e42]: 45m
+          - button "Chart interval" [ref=e44]
+        - button "Candles" [ref=e54]
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - button "Indicators, metrics, and strategies" [ref=e66]
+            - button "Favorite indicators" [ref=e71]
+          - button "Indicator templates" [ref=e78]
+        - generic [ref=e85]:
+          - button "Create alert" [ref=e86]
+          - button "Bar replay" [ref=e91]
+        - generic [ref=e98]:
+          - button "Undo update SMA18 v11 script" [ref=e2743]
+          - button [disabled] [ref=e103]
+        - generic [ref=e108]:
+          - button "Layout setup" [ref=e109]
+          - generic [ref=e112]:
+            - button "All changes saved" [disabled] [ref=e2744]:
+              - generic [ref=e115]:
+                - generic [ref=e116]: Unnamed
+                - generic: Save
+            - button "Manage layouts" [ref=e118]
+        - generic [ref=e126]:
+          - button "Quick search" [ref=e127]
+          - button "Settings" [ref=e132]
+          - button "Fullscreen mode" [ref=e138]
+          - button "Take a snapshot" [ref=e142]
+      - button "Trade" [ref=e151]
+      - button "Share your idea with the trade community" [ref=e159]:
+        - generic [ref=e160]: Publish
+    - toolbar [ref=e163]:
+      - generic [ref=e167]:
+        - generic [ref=e168]:
+          - generic [ref=e171]:
+            - button "Cross" [ref=e173]
+            - button "Cursors" [pressed] [ref=e179]
+          - generic [ref=e185]:
+            - button "Trendline" [ref=e187]
+            - button "Trend tools" [ref=e193]
+          - generic [ref=e199]:
+            - button "Fib retracement" [ref=e201]
+            - button "Gann and Fibonacci tools" [ref=e210]
+          - generic [ref=e216]:
+            - button "XABCD pattern" [ref=e218]
+            - button "Patterns" [ref=e224]
+          - generic [ref=e230]:
+            - button "Long position" [ref=e232]
+            - button "Forecasting and measurement tools" [ref=e236]
+          - generic [ref=e242]:
+            - button "Brush" [ref=e244]
+            - button "Geometric shapes" [ref=e250]
+          - generic [ref=e256]:
+            - button "Text" [ref=e258]
+            - button "Annotation tools" [ref=e262]
+          - generic [ref=e267]:
+            - button "Icon" [ref=e269]
+            - button "Icons" [ref=e273]
+        - generic [ref=e277]:
+          - button "Measure" [ref=e278]
+          - button "Zoom in" [ref=e282]
+        - generic [ref=e289]:
+          - generic [ref=e292]:
+            - button "Magnet mode snaps drawings placed near price bars to the closest OHLC value" [ref=e294]
+            - button "Magnets" [ref=e300]
+          - button "Keep drawing" [ref=e304]
+          - generic [ref=e309]:
+            - button "Lock drawings and indicators" [ref=e311]
+            - button "Lock options" [ref=e315]
+          - generic [ref=e320]:
+            - button "Hide all drawings" [ref=e322]
+            - button "Hide options" [ref=e326]
+        - generic [ref=e332]:
+          - button "Remove objects" [ref=e334]
+          - button "Remove options" [ref=e338]
+    - generic [ref=e344]:
+      - 'region "Chart #1" [ref=e347]':
+        - generic [ref=e349]:
+          - generic [ref=e351]:
+            - generic:
+              - generic:
+                - toolbar:
+                  - generic:
+                    - generic [ref=e352]:
+                      - generic "Change symbol" [ref=e2926]:
+                        - generic [ref=e354]: X
+                        - button "Change symbol" [ref=e2927]: Gold Spot / U.S. Dollar
+                      - generic "Change interval" [ref=e2928]:
+                        - text: ·
+                        - button "Change interval" [ref=e2929]: "15"
+                      - generic [ref=e2930]:
+                        - text: ·
+                        - generic [ref=e2931]: OANDA
+                    - generic:
+                      - generic:
+                        - button "Flag symbol"
+                        - button "More"
+                    - button "Market closed · One update every 5 seconds" [ref=e364]
+                  - generic [ref=e372]:
+                    - generic [ref=e373]:
+                      - generic [ref=e374]: O
+                      - generic [ref=e375]: 4,457.185
+                    - generic [ref=e376]:
+                      - generic [ref=e377]: H
+                      - generic [ref=e378]: 4,460.120
+                    - generic [ref=e379]:
+                      - generic [ref=e380]: L
+                      - generic [ref=e381]: 4,453.135
+                    - generic [ref=e382]:
+                      - generic [ref=e383]: C
+                      - generic [ref=e384]: 4,454.990
+                    - generic [ref=e385]: −2.205 (−0.05%)
+                - generic [ref=e389]:
+                  - generic [ref=e391]:
+                    - generic: 4,454.600
+                    - generic: Sell
+                  - generic "Spread" [ref=e393]: "78.0"
+                  - generic [ref=e395]:
+                    - generic: 4,455.380
+                    - generic: Buy
+              - button "Show indicators legend" [ref=e396]:
+                - generic [ref=e400]: "3"
+            - generic "Chart for OANDA:XAUUSD, 15 minutes" [ref=e537]
+          - generic [ref=e403]: USD
+      - toolbar [ref=e421]:
+        - generic [ref=e423]:
+          - generic [ref=e424]:
+            - button "1 day in 1 minute intervals" [ref=e425]:
+              - generic [ref=e426]: 1D
+            - button "5 days in 5 minutes intervals" [ref=e427]:
+              - generic [ref=e428]: 5D
+            - button "1 month in 30 minutes intervals" [ref=e429]:
+              - generic [ref=e430]: 1M
+            - button "3 months in 1 hour intervals" [ref=e431]:
+              - generic [ref=e432]: 3M
+            - button "6 months in 2 hours intervals" [ref=e433]:
+              - generic [ref=e434]: 6M
+            - button "Year to day in 1 day intervals" [ref=e435]:
+              - generic [ref=e436]: YTD
+            - button "1 year in 1 day intervals" [ref=e437]:
+              - generic [ref=e438]: 1Y
+            - button "5 years in 1 week intervals" [ref=e439]:
+              - generic [ref=e440]: 5Y
+            - button "All data in 1 month intervals" [ref=e441]:
+              - generic [ref=e442]: All
+          - button "Go to" [ref=e444]
+        - button "Timezone" [ref=e451]:
+          - generic [ref=e452]: 19:20:22 UTC+5:30
+    - generic [ref=e454]:
+      - toolbar [ref=e459]:
+        - button "Watchlist, details, and news" [ref=e460]
+        - button "Alerts" [ref=e465]
+        - button "Object tree and data window" [ref=e470]
+        - button "Chats" [ref=e474]
+        - button "Screeners" [ref=e479]
+        - button "Pine" [ref=e485]
+        - button "Calendars" [ref=e490]
+        - button "Community" [ref=e494]
+        - button "Notifications" [ref=e501]
+        - button "Products" [ref=e505]
+        - button "Help Center" [ref=e510]
+      - generic [ref=e514]: "[] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] –"
+    - generic [ref=e810]:
+      - toolbar [ref=e812]:
+        - generic [ref=e815]:
+          - button "Close strategy report" [ref=e816]:
+            - generic [ref=e821]: SMA18 v11
+          - button "Open context menu" [ref=e823]
+        - generic [ref=e828]:
+          - button "Collapse panel" [ref=e829]
+          - button "Maximize panel" [ref=e833]
+      - generic [ref=e844]:
+        - generic [ref=e846]:
+          - tablist [ref=e848]:
+            - tab [selected] [ref=e849]:
+              - generic "Metrics" [ref=e850]
+            - tab [ref=e854]:
+              - generic "Trades" [ref=e855]
+          - generic [ref=e859]:
+            - button "Jun 1, 2026 — Aug 29, 2026" [ref=e863]
+            - button "10 K" [ref=e2747]:
+              - generic [ref=e2748]: 10 K USD
+            - button "Default detalization" [ref=e895]
+            - button "Script execution" [ref=e2762]:
+              - generic [ref=e2766]:
+                - generic [ref=e2770]: Script execution
+                - generic [ref=e2771]: "1"
+            - button "Add alert" [ref=e930]
+        - generic [ref=e1490]:
+          - paragraph [ref=e1491]: Key stats
+          - generic [ref=e1492]:
+            - generic [ref=e1495]:
+              - generic [ref=e1497]:
+                - generic [ref=e1498]: Total PnL
+                - generic [ref=e1500]: +465.69USD+4.66%
+              - generic [ref=e1501]:
+                - generic [ref=e1502]: Max drawdown
+                - generic [ref=e1504]: 103.22USD1.00%
+              - generic [ref=e1505]:
+                - generic [ref=e1506]: Profitable trades
+                - generic [ref=e1508]: 68.34%177/259
+              - generic [ref=e1509]:
+                - generic [ref=e1510]: Profit factor
+                - generic [ref=e1512]: "1.399"
+            - generic [ref=e1514]:
+              - generic [ref=e1515]:
+                - generic [ref=e1516]:
+                  - generic [ref=e1517]: Performance
+                  - link "Show description" [ref=e1518] [cursor=pointer]:
+                    - /url: /support/solutions/43000681735
+                - generic [ref=e1519]:
+                  - button "Scale" [ref=e1520]
+                  - button "Take a snapshot" [ref=e1526]
+                  - button "Expand chart" [ref=e1531]
+              - generic [ref=e1537]:
+                - generic:
+                  - generic:
+                    - generic: Cumulative PnL
+                    - generic [ref=e1542]:
+                      - generic [ref=e1543]: Buy and hold
+                      - button "Show" [ref=e1544]
+                    - generic: Trades excursions
+                    - generic: Run-ups and drawdowns
+                    - button "Hide metrics legend" [ref=e1557]
+                - table [ref=e1562]:
+                  - row [ref=e1563]:
+                    - cell
+                    - cell [ref=e1564]
+                    - cell [ref=e1568]
+                  - row [ref=e1572]:
+                    - cell
+                    - cell [ref=e1573]
+                    - cell [ref=e1577]
+          - generic [ref=e1580]:
+            - generic [ref=e1581]:
+              - paragraph [ref=e1582]: Performance analysis
+              - tablist [ref=e1585]:
+                - tab "Breakdown" [selected] [ref=e1586]
+                - tab "Periodical" [ref=e1588]
+                - tab "Benchmarking" [ref=e1590]
+                - tab "Margin usage" [ref=e1592]
+                - tab "Growth and decline" [ref=e1594]
+                - button:
+                  - generic: More
+              - generic [ref=e1598]:
+                - generic [ref=e1600]:
+                  - generic [ref=e1601]: Gross profit
+                  - generic [ref=e1603]: 1,632.83USD16.33%
+                - generic [ref=e1604]:
+                  - generic [ref=e1605]: Gross loss
+                  - generic [ref=e1607]: 1,167.14USD11.67%
+                - generic [ref=e1608]:
+                  - generic [ref=e1609]: Profit factor
+                  - generic [ref=e1611]: "1.399"
+                - generic [ref=e1612]:
+                  - generic [ref=e1613]: Commission load
+                  - button "Upgrade to get full access to Strategy report data" [ref=e1615]
+              - generic [ref=e1621]:
+                - generic [ref=e1622]:
+                  - generic [ref=e1623]: Profits and losses
+                  - radiogroup [ref=e1626]:
+                    - radio "By signals" [checked] [ref=e1627]
+                    - radio "By side" [ref=e1630]
+                - generic [ref=e1634]:
+                  - generic [ref=e1635]:
+                    - generic "All signals" [ref=e1637]
+                    - generic [ref=e1646]:
+                      - generic [ref=e1647]: "+465.69"
+                      - generic [ref=e1648]: USD
+                  - separator [ref=e1650]
+                  - separator [ref=e1652]
+                  - separator [ref=e1654]
+                  - generic [ref=e1669]:
+                    - generic "SMA18 Entry" [ref=e1671]
+                    - generic [ref=e1680]:
+                      - generic [ref=e1681]: "+244.64"
+                      - generic [ref=e1682]: USD
+                  - generic [ref=e1655]:
+                    - generic "SMA18 Sell" [ref=e1657]
+                    - generic [ref=e1666]:
+                      - generic [ref=e1667]: "+221.05"
+                      - generic [ref=e1668]: USD
+            - generic [ref=e1683]:
+              - paragraph [ref=e1684]: Trades analysis
+              - tablist [ref=e1687]:
+                - tab "Distribution" [ref=e1688]
+                - tab "Streaks" [ref=e1690]
+                - tab "Time patterns" [ref=e1692]
+                - tab "Trades analysis details" [selected] [ref=e1694]
+                - button:
+                  - generic: More
+              - table [ref=e1809]:
+                - rowgroup [ref=e1810]:
+                  - row [ref=e1811]:
+                    - columnheader "Metric" [ref=e1812]
+                    - columnheader "All" [ref=e1816]
+                    - columnheader "Long" [ref=e1820]
+                    - columnheader "Short" [ref=e1824]
+                    - columnheader [ref=e1828]
+                - rowgroup [ref=e1829]:
+                  - row [ref=e2935]:
+                    - cell "Total trades Show description" [ref=e1831]:
+                      - generic [ref=e1832]:
+                        - generic [ref=e1833]: Total trades
+                        - link "Show description" [ref=e1834]:
+                          - /url: /support/solutions/43000681704
+                    - cell "259" [ref=e2936]
+                    - cell "152" [ref=e2937]
+                    - cell "107" [ref=e2938]
+                    - cell [ref=e1847]
+                  - row [ref=e1848]:
+                    - cell "Total open trades Show description" [ref=e1849]:
+                      - generic [ref=e1850]:
+                        - generic [ref=e1851]: Total open trades
+                        - link "Show description" [ref=e1852]:
+                          - /url: /support/solutions/43000681711
+                    - cell "0" [ref=e1853]
+                    - cell "0" [ref=e1857]
+                    - cell "0" [ref=e1861]
+                    - cell [ref=e1865]
+                  - row [ref=e2939]:
+                    - cell "Total winners Show description" [ref=e1867]:
+                      - generic [ref=e1868]:
+                        - generic [ref=e1869]: Total winners
+                        - link "Show description" [ref=e1870]:
+                          - /url: /support/solutions/43000681712
+                    - cell "177" [ref=e2940]
+                    - cell [ref=e1875]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e1877]
+                    - cell [ref=e1881]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e1883]
+                    - cell [ref=e1887]
+                  - row [ref=e2941]:
+                    - cell "Total losers Show description" [ref=e1889]:
+                      - generic [ref=e1890]:
+                        - generic [ref=e1891]: Total losers
+                        - link "Show description" [ref=e1892]:
+                          - /url: /support/solutions/43000681713
+                    - cell "82" [ref=e2942]
+                    - cell [ref=e1897]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e1899]
+                    - cell [ref=e1903]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e1905]
+                    - cell [ref=e1909]
+                  - row [ref=e2943]:
+                    - cell "Percent profitable Show description" [ref=e1911]:
+                      - generic [ref=e1912]:
+                        - generic [ref=e1913]: Percent profitable
+                        - link "Show description" [ref=e1914]:
+                          - /url: /support/solutions/43000681714
+                    - cell "68.34%" [ref=e2944]
+                    - cell [ref=e1919]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e1921]
+                    - cell [ref=e1925]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e1927]
+                    - cell [ref=e1931]
+                  - row [ref=e2945]:
+                    - cell "Average PnL Show description" [ref=e1933]:
+                      - generic [ref=e1934]:
+                        - generic [ref=e1935]: Average PnL
+                        - link "Show description" [ref=e1936]:
+                          - /url: /support/solutions/43000681715
+                    - cell "1.80 USD 0.04%" [ref=e2946]:
+                      - generic [ref=e1938]:
+                        - generic [ref=e1939]:
+                          - generic [ref=e1940]: "1.80"
+                          - generic [ref=e1941]: USD
+                        - generic [ref=e1942]: 0.04%
+                    - cell [ref=e1943]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e1945]
+                    - cell [ref=e1949]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e1951]
+                    - cell [ref=e1955]
+                  - row [ref=e2947]:
+                    - cell "Average profit Show description" [ref=e1957]:
+                      - generic [ref=e1958]:
+                        - generic [ref=e1959]: Average profit
+                        - link "Show description" [ref=e1960]:
+                          - /url: /support/solutions/43000681717
+                    - cell "9.23 USD 0.22%" [ref=e2948]:
+                      - generic [ref=e1962]:
+                        - generic [ref=e1963]:
+                          - generic [ref=e1964]: "9.23"
+                          - generic [ref=e1965]: USD
+                        - generic [ref=e1966]: 0.22%
+                    - cell [ref=e1967]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e1969]
+                    - cell [ref=e1973]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e1975]
+                    - cell [ref=e1979]
+                  - row [ref=e2949]:
+                    - cell "Average loss Show description" [ref=e1981]:
+                      - generic [ref=e1982]:
+                        - generic [ref=e1983]: Average loss
+                        - link "Show description" [ref=e1984]:
+                          - /url: /support/solutions/43000681718
+                    - cell "14.23 USD 0.34%" [ref=e2950]:
+                      - generic [ref=e1986]:
+                        - generic [ref=e1987]:
+                          - generic [ref=e1988]: "14.23"
+                          - generic [ref=e1989]: USD
+                        - generic [ref=e1990]: 0.34%
+                    - cell [ref=e1991]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e1993]
+                    - cell [ref=e1997]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e1999]
+                    - cell [ref=e2003]
+                  - row [ref=e2004]:
+                    - cell "Average profit / average loss Show description" [ref=e2005]:
+                      - generic [ref=e2006]:
+                        - generic [ref=e2007]: Average profit / average loss
+                        - link "Show description" [ref=e2008]:
+                          - /url: /support/solutions/43000681719
+                    - cell [ref=e2009]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2011]
+                    - cell [ref=e2015]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2017]
+                    - cell [ref=e2021]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2023]
+                    - cell [ref=e2027]
+                  - row [ref=e2028]:
+                    - cell "Largest profit Show description" [ref=e2029]:
+                      - generic [ref=e2030]:
+                        - generic [ref=e2031]: Largest profit
+                        - link "Show description" [ref=e2032]:
+                          - /url: /support/solutions/43000681720
+                    - cell [ref=e2033]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2035]
+                    - cell [ref=e2039]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2041]
+                    - cell [ref=e2045]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2047]
+                    - cell [ref=e2051]
+                  - row [ref=e2052]:
+                    - cell "Largest profit % Show description" [ref=e2053]:
+                      - generic [ref=e2054]:
+                        - generic [ref=e2055]: Largest profit %
+                        - link "Show description" [ref=e2056]:
+                          - /url: /support/solutions/43000681720
+                    - cell [ref=e2057]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2059]
+                    - cell [ref=e2063]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2065]
+                    - cell [ref=e2069]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2071]
+                    - cell [ref=e2075]
+                  - row [ref=e2076]:
+                    - cell "Largest profit as % of gross profit Show description" [ref=e2077]:
+                      - generic [ref=e2078]:
+                        - generic [ref=e2079]: Largest profit as % of gross profit
+                        - link "Show description" [ref=e2080]:
+                          - /url: /support/solutions/43000772909
+                    - cell [ref=e2081]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2083]
+                    - cell [ref=e2087]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2089]
+                    - cell [ref=e2093]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2095]
+                    - cell [ref=e2099]
+                  - row [ref=e2100]:
+                    - cell "Largest loss Show description" [ref=e2101]:
+                      - generic [ref=e2102]:
+                        - generic [ref=e2103]: Largest loss
+                        - link "Show description" [ref=e2104]:
+                          - /url: /support/solutions/43000681722
+                    - cell [ref=e2105]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2107]
+                    - cell [ref=e2111]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2113]
+                    - cell [ref=e2117]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2119]
+                    - cell [ref=e2123]
+                  - row [ref=e2124]:
+                    - cell "Largest loss % Show description" [ref=e2125]:
+                      - generic [ref=e2126]:
+                        - generic [ref=e2127]: Largest loss %
+                        - link "Show description" [ref=e2128]:
+                          - /url: /support/solutions/43000681722
+                    - cell [ref=e2129]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2131]
+                    - cell [ref=e2135]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2137]
+                    - cell [ref=e2141]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2143]
+                    - cell [ref=e2147]
+                  - row [ref=e2148]:
+                    - cell "Largest loss as % of gross loss Show description" [ref=e2149]:
+                      - generic [ref=e2150]:
+                        - generic [ref=e2151]: Largest loss as % of gross loss
+                        - link "Show description" [ref=e2152]:
+                          - /url: /support/solutions/43000772910
+                    - cell [ref=e2153]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2155]
+                    - cell [ref=e2159]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2161]
+                    - cell [ref=e2165]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2167]
+                    - cell [ref=e2171]
+                  - row [ref=e2951]:
+                    - cell "Outliers" [ref=e2173]
+                    - cell "13" [ref=e2952]
+                    - cell "7" [ref=e2953]
+                    - cell "6" [ref=e2954]
+                    - cell [ref=e2188]
+                  - row [ref=e2955]:
+                    - cell "Outliers P&L" [ref=e2190]
+                    - cell "−114.52 USD −1.15%" [ref=e2956]:
+                      - generic [ref=e2194]:
+                        - generic [ref=e2195]:
+                          - generic [ref=e2196]: −114.52
+                          - generic [ref=e2197]: USD
+                        - generic [ref=e2198]: −1.15%
+                    - cell "−61.65 USD −0.62%" [ref=e2957]:
+                      - generic [ref=e2200]:
+                        - generic [ref=e2201]:
+                          - generic [ref=e2202]: −61.65
+                          - generic [ref=e2203]: USD
+                        - generic [ref=e2204]: −0.62%
+                    - cell "−52.87 USD −0.53%" [ref=e2958]:
+                      - generic [ref=e2206]:
+                        - generic [ref=e2207]:
+                          - generic [ref=e2208]: −52.87
+                          - generic [ref=e2209]: USD
+                        - generic [ref=e2210]: −0.53%
+                    - cell [ref=e2211]
+                  - row [ref=e2212]:
+                    - cell "Average bars in trades Show description" [ref=e2213]:
+                      - generic [ref=e2214]:
+                        - generic [ref=e2215]: Average bars in trades
+                        - link "Show description" [ref=e2216]:
+                          - /url: /support/solutions/43000681723
+                    - cell [ref=e2217]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2219]
+                    - cell [ref=e2223]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2225]
+                    - cell [ref=e2229]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2231]
+                    - cell [ref=e2235]
+                  - row [ref=e2236]:
+                    - cell "Average bars in winners Show description" [ref=e2237]:
+                      - generic [ref=e2238]:
+                        - generic [ref=e2239]: Average bars in winners
+                        - link "Show description" [ref=e2240]:
+                          - /url: /support/solutions/43000681725
+                    - cell [ref=e2241]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2243]
+                    - cell [ref=e2247]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2249]
+                    - cell [ref=e2253]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2255]
+                    - cell [ref=e2259]
+                  - row [ref=e2260]:
+                    - cell "Average bars in losers Show description" [ref=e2261]:
+                      - generic [ref=e2262]:
+                        - generic [ref=e2263]: Average bars in losers
+                        - link "Show description" [ref=e2264]:
+                          - /url: /support/solutions/43000681726
+                    - cell [ref=e2265]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2267]
+                    - cell [ref=e2271]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2273]
+                    - cell [ref=e2277]:
+                      - button "Upgrade to get full access to Strategy report data" [ref=e2279]
+                    - cell [ref=e2283]
+    - generic "Trading panel"
+  - generic: More
+  - generic:
+    - generic [ref=e568]:
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - generic:
+        - log:
+          - list
+      - log [ref=e570]:
+        - list [ref=e571]:
+          - listitem:
+            - generic [ref=e2476]:
+              - button "Close ad" [ref=e2478]
+              - iframe [ref=e2486]:
+                - generic [ref=f8e3]:
+                  - link [ref=f8e5] [cursor=pointer]:
+                    - /url: https://adclick.g.doubleclick.net/pcs/click?xai=AKAOjsv0oe45L3bbwwR0FpYPjnSnjZQvIwgxTQcSpgWOAkZLhxF2YshhnzQEbvolj3hkPLfeMR_yJ5UUT4Tg0UDGsBjwYj-fJfLXY2JLTA-da_Cak_msWIB2JboPvo3n8_yDuLtvPRJYBw-AkDDBCHzzzb7NMjDq4fu1RK3CsOyPVizbXiEFsGUX-bu4YXiNm03_I1s-NnGJa5nZEWfa2UsQViNr-S3oeu0yFlDdnvroef7t09_nCm86mBAqH2uZMTDF3c2qZSlSBkp9AIS8nzyyf2HeyEqmA6Tk6lHHGci491mgHzQrKte4YZyAJhxdN3B2iFgR9Ja7oGX_2EMP-MVqggqDg81lP3_QDTIO75hC17m6ZKSZzh6419rJqxqdiKsuym68Y6xOvSlayofuxRFvyxiSG1HfPA&sai=AMfl-YRoRALzf7oZ9wLFApJ-2DbZIeJhkODZNVNeuiMwCLqm7nVRm9BVFcvILKexIXCAvtggz4Z6sTlt2FXyRYIsAX0JlXob6MYDkd9ShknZUdR716b8JHnHjiPKOzCZ0VU_Y2F0BJgmCVoaO6B0dVXS5KoX_Ie_5ByO7FI8bfHBEzlShCaFvGAwJuLeAvZadhzDad6Wyq7FNP4uKh5pDGFkxowsqRemcMh6Ykbhvcgq87KTUoMT9VSW4aO8weV-SZcpbTvAXuZ5f1_pKDlhAmpM4I14I9OFOez141CyPKv4gEy5owvRcmLa2q8O0VA8G_zANBuWCXWeIGczGYfhUT0aX54SWzpcPkUg10YobREAf0SG63GRsHH9iDC63oI8VX2ojYz01gDituHZJnkXTjy41dE&sig=Cg0ArKJSzPQqPg7OaCBQEAE&fbs_aeid=%5Bgw_fbsaeid%5D&urlfix=1&adurl=https://deltaexchange.onelink.me/DIpL%3Faf_web_dp%3Dhttps%253A%252F%252Fwww.delta.exchange%252F%253Fcode%253Dgcin%2526utm_campaign%253DTV2026%2526utm_medium%253Dbanner26%2526utm_source%253DTV2026%26af_xp%3Dcustom%26pid%3DTradingview%26c%3Dmoremarkets%26af_click_lookback%3D23h%26deep_link_value%3Dnavigate%26deep_link_sub1%3Dsignup
+                  - link "More Markets. More Opportunities." [ref=f8e8] [cursor=pointer]:
+                    - /url: https://adclick.g.doubleclick.net/pcs/click?xai=AKAOjsv0oe45L3bbwwR0FpYPjnSnjZQvIwgxTQcSpgWOAkZLhxF2YshhnzQEbvolj3hkPLfeMR_yJ5UUT4Tg0UDGsBjwYj-fJfLXY2JLTA-da_Cak_msWIB2JboPvo3n8_yDuLtvPRJYBw-AkDDBCHzzzb7NMjDq4fu1RK3CsOyPVizbXiEFsGUX-bu4YXiNm03_I1s-NnGJa5nZEWfa2UsQViNr-S3oeu0yFlDdnvroef7t09_nCm86mBAqH2uZMTDF3c2qZSlSBkp9AIS8nzyyf2HeyEqmA6Tk6lHHGci491mgHzQrKte4YZyAJhxdN3B2iFgR9Ja7oGX_2EMP-MVqggqDg81lP3_QDTIO75hC17m6ZKSZzh6419rJqxqdiKsuym68Y6xOvSlayofuxRFvyxiSG1HfPA&sai=AMfl-YRoRALzf7oZ9wLFApJ-2DbZIeJhkODZNVNeuiMwCLqm7nVRm9BVFcvILKexIXCAvtggz4Z6sTlt2FXyRYIsAX0JlXob6MYDkd9ShknZUdR716b8JHnHjiPKOzCZ0VU_Y2F0BJgmCVoaO6B0dVXS5KoX_Ie_5ByO7FI8bfHBEzlShCaFvGAwJuLeAvZadhzDad6Wyq7FNP4uKh5pDGFkxowsqRemcMh6Ykbhvcgq87KTUoMT9VSW4aO8weV-SZcpbTvAXuZ5f1_pKDlhAmpM4I14I9OFOez141CyPKv4gEy5owvRcmLa2q8O0VA8G_zANBuWCXWeIGczGYfhUT0aX54SWzpcPkUg10YobREAf0SG63GRsHH9iDC63oI8VX2ojYz01gDituHZJnkXTjy41dE&sig=Cg0ArKJSzPQqPg7OaCBQEAE&fbs_aeid=%5Bgw_fbsaeid%5D&urlfix=1&adurl=https://deltaexchange.onelink.me/DIpL%3Faf_web_dp%3Dhttps%253A%252F%252Fwww.delta.exchange%252F%253Fcode%253Dgcin%2526utm_campaign%253DTV2026%2526utm_medium%253Dbanner26%2526utm_source%253DTV2026%26af_xp%3Dcustom%26pid%3DTradingview%26c%3Dmoremarkets%26af_click_lookback%3D23h%26deep_link_value%3Dnavigate%26deep_link_sub1%3Dsignup
+                  - link "Trade Crypto Futures, Options, Gold, Silver and US Stock Token Futures—all in one place on Delta Exchange" [ref=f8e10] [cursor=pointer]:
+                    - /url: https://adclick.g.doubleclick.net/pcs/click?xai=AKAOjsv0oe45L3bbwwR0FpYPjnSnjZQvIwgxTQcSpgWOAkZLhxF2YshhnzQEbvolj3hkPLfeMR_yJ5UUT4Tg0UDGsBjwYj-fJfLXY2JLTA-da_Cak_msWIB2JboPvo3n8_yDuLtvPRJYBw-AkDDBCHzzzb7NMjDq4fu1RK3CsOyPVizbXiEFsGUX-bu4YXiNm03_I1s-NnGJa5nZEWfa2UsQViNr-S3oeu0yFlDdnvroef7t09_nCm86mBAqH2uZMTDF3c2qZSlSBkp9AIS8nzyyf2HeyEqmA6Tk6lHHGci491mgHzQrKte4YZyAJhxdN3B2iFgR9Ja7oGX_2EMP-MVqggqDg81lP3_QDTIO75hC17m6ZKSZzh6419rJqxqdiKsuym68Y6xOvSlayofuxRFvyxiSG1HfPA&sai=AMfl-YRoRALzf7oZ9wLFApJ-2DbZIeJhkODZNVNeuiMwCLqm7nVRm9BVFcvILKexIXCAvtggz4Z6sTlt2FXyRYIsAX0JlXob6MYDkd9ShknZUdR716b8JHnHjiPKOzCZ0VU_Y2F0BJgmCVoaO6B0dVXS5KoX_Ie_5ByO7FI8bfHBEzlShCaFvGAwJuLeAvZadhzDad6Wyq7FNP4uKh5pDGFkxowsqRemcMh6Ykbhvcgq87KTUoMT9VSW4aO8weV-SZcpbTvAXuZ5f1_pKDlhAmpM4I14I9OFOez141CyPKv4gEy5owvRcmLa2q8O0VA8G_zANBuWCXWeIGczGYfhUT0aX54SWzpcPkUg10YobREAf0SG63GRsHH9iDC63oI8VX2ojYz01gDituHZJnkXTjy41dE&sig=Cg0ArKJSzPQqPg7OaCBQEAE&fbs_aeid=%5Bgw_fbsaeid%5D&urlfix=1&adurl=https://deltaexchange.onelink.me/DIpL%3Faf_web_dp%3Dhttps%253A%252F%252Fwww.delta.exchange%252F%253Fcode%253Dgcin%2526utm_campaign%253DTV2026%2526utm_medium%253Dbanner26%2526utm_source%253DTV2026%26af_xp%3Dcustom%26pid%3DTradingview%26c%3Dmoremarkets%26af_click_lookback%3D23h%26deep_link_value%3Dnavigate%26deep_link_sub1%3Dsignup
+                  - generic [ref=f8e11]: Ad
+                  - link "Open an Account" [ref=f8e13] [cursor=pointer]:
+                    - /url: https://adclick.g.doubleclick.net/pcs/click?xai=AKAOjsv0oe45L3bbwwR0FpYPjnSnjZQvIwgxTQcSpgWOAkZLhxF2YshhnzQEbvolj3hkPLfeMR_yJ5UUT4Tg0UDGsBjwYj-fJfLXY2JLTA-da_Cak_msWIB2JboPvo3n8_yDuLtvPRJYBw-AkDDBCHzzzb7NMjDq4fu1RK3CsOyPVizbXiEFsGUX-bu4YXiNm03_I1s-NnGJa5nZEWfa2UsQViNr-S3oeu0yFlDdnvroef7t09_nCm86mBAqH2uZMTDF3c2qZSlSBkp9AIS8nzyyf2HeyEqmA6Tk6lHHGci491mgHzQrKte4YZyAJhxdN3B2iFgR9Ja7oGX_2EMP-MVqggqDg81lP3_QDTIO75hC17m6ZKSZzh6419rJqxqdiKsuym68Y6xOvSlayofuxRFvyxiSG1HfPA&sai=AMfl-YRoRALzf7oZ9wLFApJ-2DbZIeJhkODZNVNeuiMwCLqm7nVRm9BVFcvILKexIXCAvtggz4Z6sTlt2FXyRYIsAX0JlXob6MYDkd9ShknZUdR716b8JHnHjiPKOzCZ0VU_Y2F0BJgmCVoaO6B0dVXS5KoX_Ie_5ByO7FI8bfHBEzlShCaFvGAwJuLeAvZadhzDad6Wyq7FNP4uKh5pDGFkxowsqRemcMh6Ykbhvcgq87KTUoMT9VSW4aO8weV-SZcpbTvAXuZ5f1_pKDlhAmpM4I14I9OFOez141CyPKv4gEy5owvRcmLa2q8O0VA8G_zANBuWCXWeIGczGYfhUT0aX54SWzpcPkUg10YobREAf0SG63GRsHH9iDC63oI8VX2ojYz01gDituHZJnkXTjy41dE&sig=Cg0ArKJSzPQqPg7OaCBQEAE&fbs_aeid=%5Bgw_fbsaeid%5D&urlfix=1&adurl=https://deltaexchange.onelink.me/DIpL%3Faf_web_dp%3Dhttps%253A%252F%252Fwww.delta.exchange%252F%253Fcode%253Dgcin%2526utm_campaign%253DTV2026%2526utm_medium%253Dbanner26%2526utm_source%253DTV2026%26af_xp%3Dcustom%26pid%3DTradingview%26c%3Dmoremarkets%26af_click_lookback%3D23h%26deep_link_value%3Dnavigate%26deep_link_sub1%3Dsignup
+                  - link "Crypto products and NFTs are unregulated and can be highly risky. There may be no regulatory recourse for any loss from such transactions." [ref=f8e15] [cursor=pointer]:
+                    - /url: https://adclick.g.doubleclick.net/pcs/click?xai=AKAOjsv0oe45L3bbwwR0FpYPjnSnjZQvIwgxTQcSpgWOAkZLhxF2YshhnzQEbvolj3hkPLfeMR_yJ5UUT4Tg0UDGsBjwYj-fJfLXY2JLTA-da_Cak_msWIB2JboPvo3n8_yDuLtvPRJYBw-AkDDBCHzzzb7NMjDq4fu1RK3CsOyPVizbXiEFsGUX-bu4YXiNm03_I1s-NnGJa5nZEWfa2UsQViNr-S3oeu0yFlDdnvroef7t09_nCm86mBAqH2uZMTDF3c2qZSlSBkp9AIS8nzyyf2HeyEqmA6Tk6lHHGci491mgHzQrKte4YZyAJhxdN3B2iFgR9Ja7oGX_2EMP-MVqggqDg81lP3_QDTIO75hC17m6ZKSZzh6419rJqxqdiKsuym68Y6xOvSlayofuxRFvyxiSG1HfPA&sai=AMfl-YRoRALzf7oZ9wLFApJ-2DbZIeJhkODZNVNeuiMwCLqm7nVRm9BVFcvILKexIXCAvtggz4Z6sTlt2FXyRYIsAX0JlXob6MYDkd9ShknZUdR716b8JHnHjiPKOzCZ0VU_Y2F0BJgmCVoaO6B0dVXS5KoX_Ie_5ByO7FI8bfHBEzlShCaFvGAwJuLeAvZadhzDad6Wyq7FNP4uKh5pDGFkxowsqRemcMh6Ykbhvcgq87KTUoMT9VSW4aO8weV-SZcpbTvAXuZ5f1_pKDlhAmpM4I14I9OFOez141CyPKv4gEy5owvRcmLa2q8O0VA8G_zANBuWCXWeIGczGYfhUT0aX54SWzpcPkUg10YobREAf0SG63GRsHH9iDC63oI8VX2ojYz01gDituHZJnkXTjy41dE&sig=Cg0ArKJSzPQqPg7OaCBQEAE&fbs_aeid=%5Bgw_fbsaeid%5D&urlfix=1&adurl=https://deltaexchange.onelink.me/DIpL%3Faf_web_dp%3Dhttps%253A%252F%252Fwww.delta.exchange%252F%253Fcode%253Dgcin%2526utm_campaign%253DTV2026%2526utm_medium%253Dbanner26%2526utm_source%253DTV2026%26af_xp%3Dcustom%26pid%3DTradingview%26c%3Dmoremarkets%26af_click_lookback%3D23h%26deep_link_value%3Dnavigate%26deep_link_sub1%3Dsignup
+      - generic:
+        - log:
+          - list
+    - generic [ref=e2492]:
+      - generic [ref=e2493]:
+        - generic [ref=e2494]:
+          - button "Move overlay to split-view" [ref=e2495]
+          - generic [ref=e2500]: Pine Editor
+        - generic [ref=e2501]:
+          - button "Collapse panel" [ref=e2502]
+          - button "Close" [ref=e2507]
+      - generic [ref=e2515]:
+        - generic [ref=e2517]:
+          - generic [ref=e2518]:
+            - button [expanded] [ref=e2519]:
+              - heading "SRK SMA18 Bot v11 (MT5 port)" [level=2] [ref=e2523]
+            - button "Update on chart" [disabled] [ref=e2527]
+          - generic [ref=e2532]:
+            - button "Publish script" [ref=e2533]
+            - button [ref=e2959]
+        - code [ref=e2549]:
+          - generic [ref=e2550]:
+            - generic [ref=e2552]:
+              - generic [ref=e2579]: "363"
+              - generic [ref=e2793]: "364"
+              - generic [ref=e2584]: "365"
+              - generic [ref=e2795]:
+                - generic [ref=e2796] [cursor=pointer]: 
+                - generic [ref=e2797]: "366"
+              - generic [ref=e2588]: "367"
+              - generic [ref=e2590]: "368"
+              - generic [ref=e2592]: "369"
+              - generic [ref=e2594]: "370"
+              - generic [ref=e2798]: "371"
+              - generic [ref=e2800]: "372"
+              - generic [ref=e2802]: "373"
+              - generic [ref=e2804]: "374"
+              - generic [ref=e2806]: "375"
+              - generic [ref=e2808]:
+                - generic [ref=e2809] [cursor=pointer]: 
+                - generic [ref=e2810]: "376"
+              - generic [ref=e2811]: "377"
+              - generic [ref=e2813]: "378"
+              - generic [ref=e2815]: "379"
+              - generic [ref=e2817]: "380"
+              - generic [ref=e2819]: "381"
+              - generic [ref=e2821]: "382"
+              - generic [ref=e2823]: "383"
+            - generic [ref=e2642]:
+              - generic [ref=e2872]: "// ---- verification table: TradingView vs the MT5 run ------------------------"
+              - generic [ref=e2874]: var table t = table.new(position.top_right, 3, 7, border_width = 1)
+              - generic [ref=e2876]: if showTable and barstate.islast
+              - generic [ref=e2878]: "pf = strategy.grossloss > 0 ? strategy.grossprofit / strategy.grossloss : 0.0"
+              - generic [ref=e2880]: "wr = strategy.closedtrades > 0 ? 100.0 * strategy.wintrades / strategy.closedtrades : 0.0"
+              - generic [ref=e2882]: "av = strategy.closedtrades > 0 ? strategy.netprofit / strategy.closedtrades : 0.0"
+              - generic [ref=e2885]:
+                - text: table.cell(t, 0, 0, "metric", bgcolor =
+                - generic [ref=e2886] [cursor=pointer]
+                - text: "#263238, text_color ="
+                - generic [ref=e2887] [cursor=pointer]
+                - text: color.white, text_size = size.small)
+              - generic [ref=e2889]:
+                - text: table.cell(t, 1, 0, "TradingView", bgcolor =
+                - generic [ref=e2890] [cursor=pointer]
+                - text: "#263238, text_color ="
+                - generic [ref=e2891] [cursor=pointer]
+                - text: color.white, text_size = size.small)
+              - generic [ref=e2893]:
+                - text: table.cell(t, 2, 0, mLabel, bgcolor =
+                - generic [ref=e2894] [cursor=pointer]
+                - text: "#263238, text_color ="
+                - generic [ref=e2895] [cursor=pointer]
+                - text: color.white, text_size = size.small)
+              - generic [ref=e2896]: rows = array.from("trades", "net profit", "profit factor", "win %", "max DD", "avg trade")
+              - generic [ref=e2898]: tv = array.from(str.tostring(strategy.closedtrades), str.tostring(strategy.netprofit, "#.##"), str.tostring(pf, "#.###"), str.tostring(wr, "#.##"), str.tostring(strategy.max_drawdown, "#.##"), str.tostring(av, "#.####"))
+              - generic [ref=e2900]: mt = array.from(mTrades, mNet, mPF, mWin, mDD, mAvg)
+              - generic [ref=e2902]: for i = 0 to 5
+              - generic [ref=e2905]:
+                - text: table.cell(t, 0, i + 1, array.get(rows, i), bgcolor =
+                - generic [ref=e2906] [cursor=pointer]
+                - text: "#37474F, text_color ="
+                - generic [ref=e2907] [cursor=pointer]
+                - text: color.white, text_size = size.small)
+              - generic [ref=e2909]:
+                - text: table.cell(t, 1, i + 1, array.get(tv, i), bgcolor =
+                - generic [ref=e2910] [cursor=pointer]
+                - text: "#455A64, text_color ="
+                - generic [ref=e2911] [cursor=pointer]
+                - text: color.white, text_size = size.small)
+              - generic [ref=e2913]:
+                - text: table.cell(t, 2, i + 1, array.get(mt, i), bgcolor =
+                - generic [ref=e2914] [cursor=pointer]
+                - text: "#455A64, text_color ="
+                - generic [ref=e2915] [cursor=pointer]
+                - text: "#B0BEC5, text_size = size.small)"
+              - generic [ref=e2917]: // ---- alerts ----------------------------------------------------------------
+              - generic [ref=e2919]: alertcondition(setupL, "SMA18 long setup", "SMA18 long setup - buy stop armed")
+              - generic [ref=e2921]: alertcondition(setupS, "SMA18 short setup", "SMA18 short setup - sell stop armed")
+            - textbox "Editor content;Press Alt+F1 for Accessibility Options." [ref=e2701]: // ---- alerts ---------------------------------------------------------------- alertcondition(setupL, "SMA18 long setup", "SMA18 long setup - buy stop armed") alertcondition(setupS, "SMA18 short setup", "SMA18 short setup - sell stop armed")
+        - generic [ref=e2708]:
+          - button [ref=e2711]
+          - generic [ref=e2719]:
+            - button "2 ∙ Today, 19:06" [ref=e2924]
+            - button "Line 383, Col 83" [ref=e2925]
+            - link "Pine Script® v6" [ref=e2722]:
+              - /url: https://www.tradingview.com/pine-script-reference/v6
+    - menu "SRK SMA18 Bot v11 (MT5 port)" [ref=e3073]:
+      - generic [ref=e3078]:
+        - menuitem "Save script" [disabled] [ref=e3080]:
+          - generic [ref=e3081]:
+            - generic [ref=e3087]: Save script
+            - generic [ref=e3089]: Ctrl + S
+        - menuitem "Make a copy…" [ref=e3093]
+        - menuitem "Rename…" [ref=e3103]
+        - menuitem "Version history…" [ref=e3113]
+        - menuitem "Move script to bottom" [ref=e3124]
+        - separator [ref=e3133]
+        - menuitem "Create new" [expanded] [active] [ref=e3136]
+        - separator [ref=e3151]
+        - generic [ref=e3153]:
+          - generic "Recently used" [ref=e3154]
+          - menu "Recently used"
+        - group "Recently used" [ref=e3159]:
+          - menuitemcheckbox "SRK SMA18 Bot v11 (MT5 port)" [checked] [ref=e3161]
+          - menuitemcheckbox "trade_with_kareena Tracker" [ref=e3166]
+          - menuitemcheckbox "SimpleSMA18 Strategy (MQL5 port)" [ref=e3171]
+          - menuitemcheckbox "trade_with_kareena Flow" [ref=e3176]
+        - separator [ref=e3180]
+        - menuitem "Open script…" [ref=e3183]:
+          - generic [ref=e3184]:
+            - generic [ref=e3190]: Open script…
+            - generic [ref=e3192]: Ctrl + O
+    - menu "Create new" [ref=e3195]:
+      - generic [ref=e3201]:
+        - menuitem "Indicator" [ref=e3203]:
+          - generic [ref=e3204]:
+            - generic [ref=e3210]: Indicator
+            - generic [ref=e3212]: Ctrl + K, Ctrl + I
+        - menuitem "Strategy" [ref=e3216]:
+          - generic [ref=e3217]:
+            - generic [ref=e3223]: Strategy
+            - generic [ref=e3225]: Ctrl + K, Ctrl + S
+        - menuitem "Library" [ref=e3229]
+        - separator [ref=e3239]
+        - menuitem "Built-in…" [ref=e3242]
+  - generic [ref=e808]:
+    - alert
+    - alert

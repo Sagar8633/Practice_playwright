@@ -17,3 +17,16 @@ __pycache__/
 .DS_Store
 Thumbs.db
 .idea
+# Secrets - never commit. Added 2026-08-27 after an API key was pasted in chat.
+.env
+*.env
+config/.env
+
+# business_radar: the database IS a contact database, and .eml files are
+# unsent messages containing real business contact details.
+business_radar/data/
+business_radar/**/*.db
+business_radar/**/*.db-wal
+business_radar/**/*.db-shm
+business_radar/outbox/
+*.eml

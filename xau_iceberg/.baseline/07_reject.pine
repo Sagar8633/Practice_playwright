@@ -1,0 +1,163 @@
+// ============================================================================
+//  SECTION 7 : REJECTION / FAILURE-TO-CONTINUE
+//
+//  WHY THIS MODULE EXISTS AT ALL: the state machine (SECTION 14) needs the
+//  absorbing -> rejected edge and the score rubric (SECTION 12) reserves 10 of
+//  its 100 points for "Rejection", but NO design component ever defined the
+//  measurement. Left as designed, rejSigL/rejSigS were undeclared identifiers -
+//  a hard compile error - and the rubric's true maximum was 90, not 100.
+//  This section is the missing definition.
+//
+//  WHAT IT MEASURES: absorption says size was worked at a level. REJECTION is
+//  the confirmation that the other side could not continue THROUGH it - the bar
+//  that probed the edge and was pushed back off it before the close. Three
+//  independent facts have to line up on ONE confirmed bar:
+//     1. the bar PROBED the reference edge          (it went and looked)
+//     2. it CLOSED BACK THROUGH that edge           (the probe failed)
+//     3. its own shape agrees - a long rejection wick, a close near the friendly
+//        extreme, and a Delta Proxy that leans the trade's way
+//
+//  The reference edge is, in priority order:
+//     (a) the live iceberg zone edge from SECTION 6 - the defensive boundary of
+//         the absorption itself, and the higher-quality structure; or
+//     (b) the swept level from SECTION 5 - a reclaim of the level whose resting
+//         liquidity was just taken, the classic failure-to-continue.
+//  When neither exists the edge is na and this module is silent. It never
+//  invents an edge out of the bar's own range: a bar is always "at" its own low,
+//  so a self-referential edge would make every hammer a rejection.
+//
+//  SYMMETRY: the whole measurement lives in ONE pure function parameterised by
+//  dir and expressed through f_wickFrac(dir) / f_closeLoc(dir) / dir * ratio.
+//  There is no bull block and no bear block that can drift apart.
+// ============================================================================
+
+G7 = "7 - Rejection"
+
+i_rejMinWick     = input.float(0.45, "Min rejection wick (fraction of bar range)",
+     minval = 0.0, maxval = 1.0, step = 0.01, group = G7,
+     tooltip = "HARD GATE on f_wickFrac(dir): for a long, (min(open,close) - low) / range. " +
+               "At 0 the wick requirement is removed entirely and a plain directional close " +
+               "at the edge qualifies - far more signals, all of them weaker. At 1 only a " +
+               "pure pin bar with no body whatsoever can pass, i.e. nothing ever does.",
+     display = display.none)
+i_rejMinCloseLoc = input.float(0.55, "Min close location (0 = hostile extreme, 1 = friendly extreme)",
+     minval = 0.0, maxval = 1.0, step = 0.01, group = G7,
+     tooltip = "HARD GATE on f_closeLoc(dir). 0.50 is exactly the bar midpoint, so any value " +
+               "below 0.50 admits bars that closed on the WRONG half of their own range and " +
+               "the gate stops meaning anything. At 1.00 the close must be the bar's exact " +
+               "high (long) or exact low (short), which is effectively off.",
+     display = display.none)
+i_rejUseDelta    = input.bool(true, "Require a Delta Proxy lean",
+     group = G7,
+     tooltip = "Adds the Delta Proxy sign as a hard gate AND gives it 0.15 of the sub-score " +
+               "weight. Switched off, the remaining four weights are renormalised to 1.00, so " +
+               "turning it off never silently deflates the rejection score. This is a PROXY " +
+               "built from tick volume and close location - it is not real order flow.",
+     display = display.none)
+i_rejDeltaMin    = input.float(0.10, "Min Delta Proxy lean (0..1, in the trade direction)",
+     minval = 0.0, maxval = 1.0, step = 0.05, group = G7,
+     tooltip = "Applied to dir * ratio, where ratio is the [-1,+1] Delta Proxy from SECTION 0. " +
+               "At 0 the gate only demands the proxy is not actively against the trade; at 1 " +
+               "it demands a perfectly one-sided bar, which does not print.",
+     display = display.none)
+i_rejEdgeTol     = input.float(0.35, "Edge probe tolerance (x ATR, floored at spread)",
+     minval = 0.0, maxval = 2.0, step = 0.05, group = G7,
+     tooltip = "How close the bar's hostile extreme must come to the edge to count as a PROBE, " +
+               "measured with f_tol(). At 0 it collapses to one spread, so price must trade " +
+               "essentially exactly to the edge; at large values a bar that never went near " +
+               "the edge can still claim it rejected one.",
+     display = display.none)
+i_rejMemBars     = input.int(20, "Rejection evidence memory (bars)",
+     minval = 1, maxval = 200, group = G7,
+     tooltip = "qReject is frozen on the rejection bar and stays on the books this long, " +
+               "because the BOS and the retest that follow are several bars later and the " +
+               "score is read THEN. Too long and a stale rejection keeps inflating the setup " +
+               "score after the market has moved on; too short and the rubric row reads 0 at " +
+               "exactly the moment the signal fires.",
+     display = display.none)
+
+// ------------------------------------------------------- 7.1 REFERENCE EDGE
+// Priority, stated once: the live zone edge beats the swept level. The zone IS
+// the absorption; the swept level is only what the absorption was defending.
+// A LONG defends the zone BOTTOM, a SHORT the zone TOP - the single place dir
+// enters the selection, and an exact mirror.
+rejEdgeL = zoneAliveL and not na(zoneBotL) ? zoneBotL : sweepLvlL
+rejEdgeS = zoneAliveS and not na(zoneTopS) ? zoneTopS : sweepLvlS
+
+// ------------------------------------------------------ 7.2 THE MEASUREMENT
+// Pure function: no state, no drawings, no ta.* - so it is safe to call from
+// anywhere and it is identical for both directions BY CONSTRUCTION rather than
+// by inspection. Sub-scores are anchored to FIXED scales, never to the gate
+// values: a sub-score anchored at its own gate makes a bar that passes every
+// gate exactly score 0.000, and moving a gate then silently rescales the rubric.
+f_rejEval(int dir, float edge) =>
+    float ext   = dir > 0 ? low : high                 // the hostile extreme
+    float wf    = f_wickFrac(dir)
+    float cl    = f_closeLoc(dir)
+    float lean  = dir * ratio                          // ratio is never na - tick-rule fallback
+    float tolPx = f_tol(i_rejEdgeTol)
+
+    // The two structural facts, kept deliberately separate: a bar that closed
+    // beyond the edge without ever probing it is just a directional bar, and a
+    // bar that probed and closed the wrong side of it is a break, not a rejection.
+    bool probe   = dir > 0 ? (low   <= edge + tolPx) : (high  >= edge - tolPx)
+    bool reclaim = dir > 0 ? (close >  edge)         : (close <  edge)
+
+    bool gates = not na(edge) and probe and reclaim
+             and wf >= i_rejMinWick
+             and cl >= i_rejMinCloseLoc
+             and (not i_rejUseDelta or lean >= i_rejDeltaMin)
+
+    // Graded evidence: every term is an f_ramp over a fixed window, so the score
+    // degrades smoothly instead of flipping at a threshold.
+    float sWick  = f_ramp(wf, 0.20, 0.70)                            // shape: rejection tail
+    float sLoc   = f_ramp(cl, 0.40, 0.90)                            // shape: where it settled
+    float sRecl  = f_ramp(dir * (close - edge) / aRef, 0.05, 0.60)   // how far back through it got
+    float sProbe = f_ramp(dir * (edge - ext)  / aRef, 0.02, 0.60)    // how deep the failed probe was
+    float sDelta = f_ramp(lean, 0.00, 0.60)                          // Delta Proxy lean
+
+    // Renormalisation, not deletion: with the delta term off the remaining four
+    // still sum to 1.00, so the rubric row keeps its full 0..1 range either way.
+    float wDelta = i_rejUseDelta ? 0.15 : 0.0
+    float den    = 0.30 + 0.25 + 0.20 + 0.10 + wDelta
+    float sc     = (0.30   * nz(sWick,  0.0) +
+                     0.25   * nz(sLoc,   0.0) +
+                     0.20   * nz(sRecl,  0.0) +
+                     0.10   * nz(sProbe, 0.0) +
+                     wDelta * nz(sDelta, 0.0)) / den
+    [gates, f_clamp01(sc)]
+
+[rejOkL, rejScL] = f_rejEval( 1, rejEdgeL)
+[rejOkS, rejScS] = f_rejEval(-1, rejEdgeS)
+
+// --------------------------------------------------------- 7.3 THE SIGNALS
+// NON-REPAINTING by construction: a pure series that can only be true on a bar
+// which has already closed. No var holds a stale true into the forming bar.
+rejSigL = rejOkL and confirmed and warmupOk
+rejSigS = rejOkS and confirmed and warmupOk
+
+// ------------------------------------------------- 7.4 EVIDENCE  (qReject)
+// SECTION 12 reads this on the SIGNAL bar, which is several bars after the
+// rejection printed, so the value has to be held. It is frozen on the rejection
+// bar and expires on a fixed bar horizon - never silently decayed, never carried
+// forever, and never recomputed from a bar that is no longer the rejection bar.
+var float qRejectL = 0.0
+var float qRejectS = 0.0
+var int   rejBarL  = na
+var int   rejBarS  = na
+
+if confirmed and warmupOk
+    if rejSigL
+        qRejectL := rejScL
+        rejBarL  := bar_index
+    else if not na(rejBarL) and bar_index - rejBarL > i_rejMemBars
+        qRejectL := 0.0
+        rejBarL  := na
+
+    if rejSigS
+        qRejectS := rejScS
+        rejBarS  := bar_index
+    else if not na(rejBarS) and bar_index - rejBarS > i_rejMemBars
+        qRejectS := 0.0
+        rejBarS  := na
+// ========================= END SECTION 7 ====================================

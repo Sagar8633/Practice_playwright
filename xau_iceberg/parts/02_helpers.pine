@@ -1,0 +1,124 @@
+// ============================================================================
+//  SECTION 2 : METHODS + PURE HELPERS ON TYPES
+//  Pure functions only - no state, no drawings, no side effects - so every
+//  section below may call these in any order.
+// ============================================================================
+
+// str.tostring() on an enum value returns that member's TITLE, which is why the
+// enum carries human-readable titles: one vocabulary, rendered one way.
+f_reason(NoTradeReason r) => str.tostring(r)
+f_dirName(int dir)  => dir > 0 ? "LONG" : dir < 0 ? "SHORT" : "FLAT"
+f_dirWord(int dir)  => dir > 0 ? "Bullish" : dir < 0 ? "Bearish" : "Neutral"
+f_mark(bool b)      => b ? "✓" : "✗"
+f_dirCol(int dir, color up, color dn) => dir > 0 ? up : dn
+
+// --------------------------------------------------------- LEVEL METHODS
+// Eligibility is ALWAYS lvl.side == -dir. A LONG needs a level born from a LOW.
+method isFor(LiquidityLevel this, int dir) =>
+    this.active and this.side == -dir and not na(this.price)
+
+method distUsd(LiquidityLevel this, float px) =>
+    na(this.price) ? na : math.abs(px - this.price)
+
+// Level quality 0..1. Touch count dominates: an equal-highs cluster tested three
+// times is a materially better place to find resting liquidity than one swing.
+method quality(LiquidityLevel this) =>
+    float kindW = switch this.kind
+        LevelKind.pdh     => 0.90
+        LevelKind.pdl     => 0.90
+        LevelKind.pwh     => 1.00
+        LevelKind.pwl     => 1.00
+        LevelKind.psh     => 0.75
+        LevelKind.psl     => 0.75
+        LevelKind.csh     => 0.60
+        LevelKind.csl     => 0.60
+        LevelKind.eqh     => 0.95
+        LevelKind.eql     => 0.95
+        LevelKind.poc     => 0.70
+        LevelKind.dayOpenK=> 0.50
+        => 0.55                                   // bare swing high / low
+    float touchW = f_clamp01(0.55 + 0.15 * math.min(this.touches, 3))
+    f_clamp01(kindW * touchW)
+
+// ---------------------------------------------------------- ZONE METHODS
+method mid(IcebergZone this)    => (this.top + this.bottom) / 2.0
+method height(IcebergZone this) => this.top - this.bottom
+method isLive(IcebergZone this) => this.state == ZoneState.zLive or
+                                   this.state == ZoneState.zPending
+
+// A wick THROUGH the zone IS the absorption and must never kill it. Only
+// consecutive CONFIRMED CLOSES beyond the frozen buffer count as a break.
+method breachPx(IcebergZone this) =>
+    float buf = math.max(0.15 * nz(this.atrRef, aRef), i_spreadUsd)
+    this.dir > 0 ? this.bottom - buf : this.top + buf
+
+method closedBeyond(IcebergZone this) =>
+    this.dir > 0 ? close < this.breachPx() : close > this.breachPx()
+
+// Price is "in" the zone if it trades anywhere inside it on this bar.
+method touched(IcebergZone this) =>
+    not na(this.top) and not na(this.bottom) and high >= this.bottom and low <= this.top
+
+// ----------------------------------------------------- RISK PLAN METHODS
+method rrText(RiskPlan this) =>
+    na(this.rr2) ? "n/a" : "1:" + str.tostring(this.rr2, "#.0#")
+
+method stopDist(RiskPlan this) =>
+    na(this.entry) or na(this.stop) ? na : math.abs(this.entry - this.stop)
+
+// The one-line trade block shown on the chart and repeated in the alert payload.
+method blockText(RiskPlan this, float score) =>
+    f_dirName(this.dir) + "\n" +
+      "Entry: "  + f_px(this.entry) + "\n" +
+      "SL: "     + f_px(this.stop)  + "\n" +
+      "TP1: "    + f_px(this.tp1)   + "\n" +
+      "TP2: "    + f_px(this.tp2)   + "\n" +
+      "TP3: "    + f_px(this.tp3)   + "\n" +
+      "RR: "     + this.rrText()    + "\n" +
+      "Confidence: " + (na(score) ? "n/a" : str.tostring(score, "#") + "/100")
+
+// --------------------------------------------------------- SWING METHODS
+method isAbove(Swing this, float px) => not na(this.price) and this.price > px
+method isBelow(Swing this, float px) => not na(this.price) and this.price < px
+
+// ------------------------------------------------------- SETUP METHODS
+method ageBars(Setup this) => bar_index - this.bornBar
+method rank(Setup this) =>
+    switch this.st
+        SetupState.idle      => 0
+        SetupState.absorbing => 1
+        SetupState.rejected  => 2
+        SetupState.displaced => 3
+        SetupState.bos       => 4
+        SetupState.retest    => 5
+        SetupState.armed     => 6
+        SetupState.active    => 7
+        => 8                                       // dead - absorbing
+
+// Every drawing handle a Setup owns is released here, and only here.
+method wipe(Setup this) =>
+    if not na(this.bx)
+        box.delete(this.bx)
+        this.bx := na
+    if not na(this.lb)
+        label.delete(this.lb)
+        this.lb := na
+    if not na(this.lnE)
+        line.delete(this.lnE)
+        this.lnE := na
+    if not na(this.lnS)
+        line.delete(this.lnS)
+        this.lnS := na
+    if not na(this.ln1)
+        line.delete(this.ln1)
+        this.ln1 := na
+    if not na(this.ln2)
+        line.delete(this.ln2)
+        this.ln2 := na
+    if not na(this.ln3)
+        line.delete(this.ln3)
+        this.ln3 := na
+
+// ------------------------------------------------------ VTRADE METHODS
+method rText(VTrade this) => na(this.rMult) ? "open" : str.tostring(this.rMult, "#.00") + "R"
+// ========================= END SECTION 2 ====================================

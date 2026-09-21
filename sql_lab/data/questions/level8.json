@@ -1,0 +1,206 @@
+[
+{
+  "id": "L8-Q01", "level": 8, "difficulty": "hard",
+  "title": "Three ways to write an anti-join",
+  "scenario": "You are reviewing a colleague's orphan-detection code and want to establish which of the three common forms are actually equivalent on this data.",
+  "task": "Return one row with three counts of orphaned events (non-NULL VideoSourceId with no matching camera): via_not_exists, via_left_join and via_except. The EXCEPT variant should count distinct orphaned camera ids, not events.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["NOT EXISTS", "LEFT JOIN", "EXCEPT", "anti-join"],
+  "expected": "The two event counts agree at 220; the EXCEPT count is 3 because it counts distinct ids.",
+  "checkColumnNames": true,
+  "hints": [
+    "Three independent scalar subqueries.",
+    "The LEFT JOIN version needs both v.\"Id\" IS NULL and e.\"VideoSourceId\" IS NOT NULL.",
+    "EXCEPT removes duplicates as well as subtracting, so it works on distinct id sets.",
+    "Wrap the EXCEPT in a subquery and count its rows: SELECT count(*) FROM (SELECT ... EXCEPT SELECT ...) t."
+  ],
+  "solution": "SELECT\n  (SELECT count(*) FROM \"Events\" e\n    WHERE e.\"VideoSourceId\" IS NOT NULL\n      AND NOT EXISTS (SELECT 1 FROM \"VideoSources\" v WHERE v.\"Id\" = e.\"VideoSourceId\")) AS via_not_exists,\n  (SELECT count(*) FROM \"Events\" e\n     LEFT JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\n    WHERE v.\"Id\" IS NULL AND e.\"VideoSourceId\" IS NOT NULL)                            AS via_left_join,\n  (SELECT count(*) FROM (\n     SELECT \"VideoSourceId\" FROM \"Events\" WHERE \"VideoSourceId\" IS NOT NULL\n     EXCEPT\n     SELECT \"Id\" FROM \"VideoSources\") t)                                               AS via_except;",
+  "explanation": {
+    "breakdown": "NOT EXISTS and LEFT JOIN ... IS NULL both operate row by row and give identical event counts. EXCEPT is a set operation: it de-duplicates, so it answers 'which ids are orphaned', not 'how many events are orphaned'.",
+    "why": "The three forms are not interchangeable. Choosing between them is choosing what question you are asking.",
+    "commonMistake": "Treating EXCEPT as a drop-in replacement for NOT EXISTS and reporting 3 orphans when there are 220 orphaned rows.",
+    "alternative": "EXCEPT ALL preserves duplicates and would bring the third number in line with the others.",
+    "performance": "PostgreSQL plans NOT EXISTS and LEFT JOIN ... IS NULL almost identically. EXCEPT requires sorting or hashing both inputs to de-duplicate.",
+    "qaRelevance": "In a defect report, 'three cameras affected' and '220 events affected' are both true and both needed. Knowing which query gives which prevents understating severity."
+  }
+},
+{
+  "id": "L8-Q02", "level": 8, "difficulty": "hard",
+  "title": "Find the duplicate event bursts",
+  "scenario": "QA reports duplicate face recognition events. You need to characterise the duplication precisely enough for a bug report.",
+  "task": "Find TrackId values with more than one event where all those events share the same Time. Return TrackId, the event count as copies, the distinct Time count as distinct_times, and the camera Name as camera. Sort by copies descending then TrackId.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["GROUP BY", "HAVING", "COUNT DISTINCT", "duplicate detection"],
+  "expected": "Eight TrackIds, five copies each, all on FACE-Entry-03, each with exactly one distinct Time.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Group by TrackId, and by camera so it can be selected.",
+    "Two conditions in HAVING: more than one row, and exactly one distinct Time.",
+    "count(DISTINCT \"Time\") = 1 proves the copies are simultaneous, not a genuine repeated detection.",
+    "HAVING count(*) > 1 AND count(DISTINCT e.\"Time\") = 1."
+  ],
+  "solution": "SELECT e.\"TrackId\",\n       count(*)                  AS copies,\n       count(DISTINCT e.\"Time\")  AS distinct_times,\n       v.\"Name\"                  AS camera\nFROM \"Events\" e\nJOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nGROUP BY e.\"TrackId\", v.\"Name\"\nHAVING count(*) > 1\n   AND count(DISTINCT e.\"Time\") = 1\nORDER BY copies DESC, e.\"TrackId\";",
+  "explanation": {
+    "breakdown": "Grouping by TrackId finds repeats; the distinct-Time condition distinguishes true duplicates from legitimate re-detections of the same track at different moments.",
+    "why": "A track producing several events over time is normal and expected. A track producing several events at the identical millisecond is a delivery or retry bug.",
+    "commonMistake": "Reporting every repeated TrackId as a duplicate. Most are legitimate, and the noise buries the real defect.",
+    "alternative": "Grouping by (TrackId, Time, EventName) directly finds exact duplicate tuples; adding the SnapshotPath would confirm whether the payloads are identical too.",
+    "performance": "count(DISTINCT ...) inside a grouped query is relatively expensive but unavoidable for this test.",
+    "qaRelevance": "This is the query that turns 'we see duplicates sometimes' into a precise, reproducible defect: one camera, eight tracks, five copies each, identical timestamps."
+  }
+},
+{
+  "id": "L8-Q03", "level": 8, "difficulty": "hard",
+  "title": "Full referential integrity report",
+  "scenario": "Before a release you want a single result set naming every unenforced-relationship violation in the database.",
+  "task": "Return check_name and violation_count for these four checks, in this order by check_name: 'events_orphan_camera', 'server_orphan_manager', 'camera_dangling_active_config', 'camera_missing_stream_url'. Sort by check_name.",
+  "tables": ["Events", "VideoSources", "AnalyticServers", "AnalyticManagers", "VideoSourceConfigs", "VideoSourceStreamMappings"],
+  "skills": ["UNION ALL", "NOT EXISTS", "multi-check reporting"],
+  "expected": "Four rows, all with non-zero counts.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Each check is its own SELECT returning a literal name and a count.",
+    "UNION ALL stacks them into one result.",
+    "Each count is a NOT EXISTS anti-join against the relevant parent table.",
+    "Remember the orphan-events check must exclude NULL VideoSourceId, and the server check must exclude NULL AnalyticManagerId."
+  ],
+  "solution": "SELECT 'events_orphan_camera' AS check_name, count(*) AS violation_count\nFROM \"Events\" e\nWHERE e.\"VideoSourceId\" IS NOT NULL\n  AND NOT EXISTS (SELECT 1 FROM \"VideoSources\" v WHERE v.\"Id\" = e.\"VideoSourceId\")\nUNION ALL\nSELECT 'server_orphan_manager', count(*)\nFROM \"AnalyticServers\" s\nWHERE s.\"AnalyticManagerId\" IS NOT NULL\n  AND NOT EXISTS (SELECT 1 FROM \"AnalyticManagers\" m WHERE m.\"Id\" = s.\"AnalyticManagerId\")\nUNION ALL\nSELECT 'camera_dangling_active_config', count(*)\nFROM \"VideoSources\" v\nWHERE NOT EXISTS (SELECT 1 FROM \"VideoSourceConfigs\" c WHERE c.\"Id\" = v.\"activeConfigId\")\nUNION ALL\nSELECT 'camera_missing_stream_url', count(*)\nFROM \"VideoSources\" v\nWHERE NOT EXISTS (SELECT 1 FROM \"VideoSourceStreamMappings\" s\n                   WHERE s.\"VideoSourceId\" = v.\"Id\"\n                     AND s.\"StreamType\" = v.\"UseStreamType\")\nORDER BY check_name;",
+  "explanation": {
+    "breakdown": "Each branch is an independent integrity check reduced to a single labelled number. UNION ALL assembles them into one report.",
+    "why": "One query, one result set, trivially assertable: every count should be zero in a healthy database. Here none of them are.",
+    "commonMistake": "Omitting the NULL guards, which conflates 'points at something that does not exist' with 'points at nothing' — two different defects with different fixes.",
+    "alternative": "A VALUES list joined to LATERAL subqueries scales better when the number of checks grows large.",
+    "performance": "Each branch is an indexed anti-join. The whole report runs in milliseconds at this scale.",
+    "qaRelevance": "This is the deliverable: a single automated check covering every relationship the database does not enforce for you. Run it in CI and fail the build when any count is non-zero."
+  }
+},
+{
+  "id": "L8-Q04", "level": 8, "difficulty": "hard",
+  "title": "Cameras seen by pipelines but not by users",
+  "scenario": "Access control and pipeline assignment are managed separately. A camera running analytics that no user can view is a monitoring blind spot.",
+  "task": "Return the Name of every camera that is assigned to at least one pipeline but appears in no UserVideoSources row. Sort by Name.",
+  "tables": ["VideoSources", "PipeLineVideoSources", "UserVideoSources"],
+  "skills": ["EXISTS", "NOT EXISTS", "set logic"],
+  "expected": "Four cameras that are processed but invisible to every user.",
+  "orderMatters": true,
+  "hints": [
+    "Two conditions on the same camera: one presence, one absence.",
+    "EXISTS for the pipeline assignment, NOT EXISTS for the user access.",
+    "Both subqueries correlate on the camera's Id.",
+    "WHERE EXISTS (...pipeline...) AND NOT EXISTS (...user access...)."
+  ],
+  "solution": "SELECT v.\"Name\"\nFROM \"VideoSources\" v\nWHERE EXISTS (\n        SELECT 1 FROM \"PipeLineVideoSources\" pv\n         WHERE pv.\"VideoSourceId\" = v.\"Id\")\n  AND NOT EXISTS (\n        SELECT 1 FROM \"UserVideoSources\" uv\n         WHERE uv.\"VideoSourceId\" = v.\"Id\")\nORDER BY v.\"Name\";",
+  "explanation": {
+    "breakdown": "EXISTS and NOT EXISTS combine freely because neither duplicates the outer row — they are semi-join and anti-join respectively.",
+    "why": "Expressing this with joins would need a DISTINCT to undo fan-out from the pipeline side, and a LEFT JOIN plus IS NULL for the user side. The EXISTS form states the intent directly.",
+    "commonMistake": "Joining both tables and then deduplicating. It works but obscures the logic and performs worse.",
+    "alternative": "INTERSECT and EXCEPT on camera-id sets express the same set arithmetic.",
+    "performance": "Both subqueries short-circuit on the first matching row.",
+    "qaRelevance": "A camera doing work that nobody can see is a genuine operational gap: alerts fire into the void. Access-control and processing configuration drifting apart is exactly the kind of cross-subsystem bug that only SQL finds."
+  }
+},
+{
+  "id": "L8-Q05", "level": 8, "difficulty": "hard",
+  "title": "Compare event mix between two cameras",
+  "scenario": "Two ANPR cameras of the same model should produce a similar mix of event types. You want a side-by-side comparison including types that appear on only one of them.",
+  "task": "For cameras 'ANPR-Gate-01' and 'ANPR-Gate-22', return event_name, the count on the first as gate_01, and the count on the second as gate_22. Include event names present on either camera. Sort by event_name.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["conditional aggregation", "FILTER", "full coverage"],
+  "expected": "One row per event type seen on either camera, with zeros where a type is absent.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Filter to the two cameras, then group by event name.",
+    "Two filtered counts, one per camera, give the side-by-side columns.",
+    "Grouping over the union of both cameras' rows automatically covers event names present on either.",
+    "count(*) FILTER (WHERE v.\"Name\" = 'ANPR-Gate-01') AS gate_01."
+  ],
+  "solution": "SELECT e.\"EventName\" AS event_name,\n       count(*) FILTER (WHERE v.\"Name\" = 'ANPR-Gate-01') AS gate_01,\n       count(*) FILTER (WHERE v.\"Name\" = 'ANPR-Gate-22') AS gate_22\nFROM \"Events\" e\nJOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nWHERE v.\"Name\" IN ('ANPR-Gate-01', 'ANPR-Gate-22')\nGROUP BY e.\"EventName\"\nORDER BY event_name;",
+  "explanation": {
+    "breakdown": "Filtering to both cameras before grouping means the group set is the union of their event types, so a type present on only one camera still produces a row with a zero on the other side.",
+    "why": "This pivots rows into columns without a FULL OUTER JOIN. Two separate aggregates joined together would drop event types missing from one side unless carefully outer-joined.",
+    "commonMistake": "Running two queries and joining them with an inner join, which silently hides exactly the differences you were looking for.",
+    "alternative": "PostgreSQL's crosstab() from the tablefunc extension does general pivoting; FILTER is simpler when the columns are known.",
+    "qaRelevance": "Comparing two supposedly identical devices is one of the most effective debugging techniques available. The event type present on one and absent on the other is usually the whole answer."
+  }
+},
+{
+  "id": "L8-Q06", "level": 8, "difficulty": "hard",
+  "title": "Confidence percentiles per face camera",
+  "scenario": "Averages hide the shape of a distribution. You want median and p10 confidence per face camera to see which one is genuinely struggling.",
+  "task": "For cameras with Face_Recognition events, return Name as camera, event count as n, the 10th percentile as p10, and the median as p50, both rounded to 3 decimals. Sort by p50 ascending then camera.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["percentile_cont", "ordered-set aggregate", "jsonb"],
+  "expected": "Face cameras ranked by median confidence, worst first.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Percentiles use an ordered-set aggregate with special syntax.",
+    "percentile_cont(0.5) WITHIN GROUP (ORDER BY expression) computes a median.",
+    "The expression is the confidence extracted from jsonb and cast to numeric.",
+    "Round the result, and use 0.1 for the tenth percentile."
+  ],
+  "solution": "SELECT v.\"Name\" AS camera,\n       count(*) AS n,\n       round(percentile_cont(0.1) WITHIN GROUP (\n               ORDER BY (e.\"_EventProperties\" ->> 'confidence')::numeric)::numeric, 3) AS p10,\n       round(percentile_cont(0.5) WITHIN GROUP (\n               ORDER BY (e.\"_EventProperties\" ->> 'confidence')::numeric)::numeric, 3) AS p50\nFROM \"Events\" e\nJOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nWHERE e.\"EventName\" = 'Face_Recognition'\nGROUP BY v.\"Name\"\nORDER BY p50 ASC, camera;",
+  "explanation": {
+    "breakdown": "percentile_cont is an ordered-set aggregate: the ORDER BY belongs inside WITHIN GROUP, not in the query's own ORDER BY. It interpolates between values.",
+    "why": "The median is robust to outliers in a way the mean is not. A camera with a bimodal distribution can have an acceptable mean and a terrible median.",
+    "commonMistake": "Putting the ORDER BY outside WITHIN GROUP, which is a syntax error, or confusing percentile_cont with percentile_disc — the latter returns an actual observed value rather than interpolating.",
+    "alternative": "percentile_cont(ARRAY[0.1, 0.5, 0.9]) returns several percentiles at once as an array.",
+    "performance": "Ordered-set aggregates must sort each group. Noticeably more expensive than avg().",
+    "qaRelevance": "Percentiles are the honest way to report quality. A model release that improves the mean while degrading p10 has made the worst cases worse, and only the percentile view reveals it."
+  }
+},
+{
+  "id": "L8-Q07", "level": 8, "difficulty": "hard",
+  "title": "Reconcile the two mapping tables with set operators",
+  "scenario": "You want the drift between intended assignment and actual placement expressed as pure set arithmetic, as a cross-check on the earlier join-based version.",
+  "task": "Return one row with three counts: cameras in both tables as in_both, only in PipeLineVideoSources as only_assigned, and only in AnalyticServerDeviceMapping as only_placed.",
+  "tables": ["PipeLineVideoSources", "AnalyticServerDeviceMapping"],
+  "skills": ["INTERSECT", "EXCEPT", "set operators", "scalar subquery"],
+  "expected": "in_both 38, only_assigned 2, only_placed 1.",
+  "checkColumnNames": true,
+  "hints": [
+    "Three scalar subqueries, each wrapping a set operation.",
+    "INTERSECT gives rows present in both inputs; EXCEPT gives rows in the first but not the second.",
+    "All three set operations de-duplicate, which is what you want when counting distinct cameras.",
+    "SELECT count(*) FROM (SELECT \"VideoSourceId\" FROM a INTERSECT SELECT \"VideoSourceId\" FROM b) t."
+  ],
+  "solution": "SELECT\n  (SELECT count(*) FROM (\n     SELECT \"VideoSourceId\" FROM \"PipeLineVideoSources\"\n     INTERSECT\n     SELECT \"VideoSourceId\" FROM \"AnalyticServerDeviceMapping\") t)  AS in_both,\n  (SELECT count(*) FROM (\n     SELECT \"VideoSourceId\" FROM \"PipeLineVideoSources\"\n     EXCEPT\n     SELECT \"VideoSourceId\" FROM \"AnalyticServerDeviceMapping\") t)  AS only_assigned,\n  (SELECT count(*) FROM (\n     SELECT \"VideoSourceId\" FROM \"AnalyticServerDeviceMapping\"\n     EXCEPT\n     SELECT \"VideoSourceId\" FROM \"PipeLineVideoSources\") t)         AS only_placed;",
+  "explanation": {
+    "breakdown": "INTERSECT and EXCEPT operate on whole rows and remove duplicates. Because each input is a single column of camera ids, they behave as set intersection and difference.",
+    "why": "EXCEPT is directional: A EXCEPT B is not B EXCEPT A. Both directions are needed to describe drift completely.",
+    "commonMistake": "Computing only one direction and concluding the tables agree.",
+    "alternative": "A FULL OUTER JOIN with counting CASE expressions produces all three numbers in a single pass instead of three.",
+    "performance": "Each set operation sorts or hashes both inputs. The FULL OUTER JOIN alternative reads each table once.",
+    "qaRelevance": "Set operators express reconciliation intent so plainly that the query almost documents itself — valuable when a defect report has to be understood by someone who does not write SQL."
+  }
+},
+{
+  "id": "L8-Q08", "level": 8, "difficulty": "hard",
+  "title": "Anomaly scoreboard",
+  "scenario": "You want one query that ranks cameras by how many distinct kinds of problem they exhibit, as a triage list.",
+  "task": "For each camera with events, return Name as camera and a problem_score counting how many of these four are true: any negative latency, any future-dated event, more than 5 percent of events missing a snapshot, and average confidence below 0.5. Include only cameras with a score above zero. Sort by problem_score descending then camera.",
+  "tables": ["Events", "VideoSources"],
+  "skills": ["conditional aggregation", "CASE", "boolean to int", "CTE"],
+  "expected": "A short triage list with the worst cameras at the top.",
+  "orderMatters": true,
+  "checkColumnNames": true,
+  "hints": [
+    "Compute the four per-camera metrics in a CTE using filtered aggregates.",
+    "Convert each boolean condition to 0 or 1 with CASE WHEN cond THEN 1 ELSE 0 END, then add them.",
+    "A boolean can also be cast directly: (cond)::int gives 1 or 0.",
+    "Filter the outer query on the computed score being greater than zero."
+  ],
+  "solution": "WITH metrics AS (\n  SELECT v.\"Name\" AS camera,\n         count(*) AS total,\n         count(*) FILTER (WHERE e.\"ReceivedTime\" - e.\"Time\" < 0)               AS neg_latency,\n         count(*) FILTER (WHERE e.\"Time\" > extract(epoch FROM now()) * 1000)   AS future_dated,\n         count(*) FILTER (WHERE e.\"SnapshotPath\" IS NULL)                      AS no_snapshot,\n         avg((e.\"_EventProperties\" ->> 'confidence')::numeric)                 AS avg_conf\n  FROM \"Events\" e\n  JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\n  GROUP BY v.\"Name\"\n)\nSELECT camera,\n         (neg_latency  > 0)::int\n       + (future_dated > 0)::int\n       + ((100.0 * no_snapshot / total) > 5)::int\n       + (COALESCE(avg_conf, 1) < 0.5)::int AS problem_score\nFROM metrics\nWHERE   (neg_latency  > 0)::int\n      + (future_dated > 0)::int\n      + ((100.0 * no_snapshot / total) > 5)::int\n      + (COALESCE(avg_conf, 1) < 0.5)::int > 0\nORDER BY problem_score DESC, camera;",
+  "explanation": {
+    "breakdown": "The CTE computes four independent metrics per camera in one pass. The outer query converts each threshold test to an integer and sums them into a score.",
+    "why": "Casting a boolean to int is the concise way to count how many conditions hold. COALESCE guards the average, which is NULL for cameras whose events carry no confidence key.",
+    "commonMistake": "Omitting the COALESCE. NULL < 0.5 is UNKNOWN, casting UNKNOWN to int yields NULL, and NULL propagates through the addition to make the entire score NULL — the camera then vanishes from the report.",
+    "alternative": "Return the four boolean columns instead of a score, so the reader sees which problems each camera has rather than just how many.",
+    "performance": "One pass over Events with five aggregates. The outer expression is repeated in WHERE; a further CTE layer would avoid that duplication.",
+    "qaRelevance": "A composite score turns a wall of metrics into a ranked work queue. Combined with the Level 5 scorecard, this is the shape of a genuinely useful nightly data-quality job."
+  }
+}
+]

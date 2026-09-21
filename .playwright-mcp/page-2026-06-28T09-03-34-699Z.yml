@@ -1,0 +1,358 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e6]:
+      - 'button "Logged in as sagar96jadhav12 Active layout: Unnamed" [ref=e7]'
+      - generic [ref=e8]: "11"
+    - toolbar [ref=e12]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - button "BTCUSD" [ref=e19]:
+              - generic [ref=e20]: BTCUSD
+            - button "Switch data type" [ref=e21]:
+              - img [ref=e22]:
+                - img [ref=e23]
+          - button "Compare symbols" [ref=e25]:
+            - img [ref=e26]:
+              - img [ref=e27]
+        - button "3 minutes" [ref=e34]:
+          - generic [ref=e36]: 3m
+        - button "Candles" [ref=e41]:
+          - img [ref=e43]:
+            - img [ref=e44]
+        - generic [ref=e51]:
+          - generic [ref=e52]:
+            - button "Indicators, metrics, and strategies" [ref=e53]:
+              - img [ref=e54]:
+                - img [ref=e55]
+              - generic [ref=e58]: Indicators
+            - button "Favorite indicators" [ref=e59]:
+              - img [ref=e62]:
+                - img [ref=e63]
+          - button "Indicator templates" [ref=e66]:
+            - img [ref=e68]:
+              - img [ref=e69]
+        - generic [ref=e73]:
+          - button "Create alert" [ref=e74]:
+            - img [ref=e75]:
+              - img [ref=e76]
+            - generic [ref=e79]: Alert
+          - button "Bar replay" [ref=e80]:
+            - img [ref=e81]:
+              - img [ref=e82]
+            - generic [ref=e84]: Replay
+        - generic [ref=e88]:
+          - button [disabled] [ref=e89]:
+            - img [ref=e90]:
+              - img [ref=e91]
+          - button [disabled] [ref=e93]:
+            - img [ref=e94]:
+              - img [ref=e95]
+        - generic [ref=e98]:
+          - button "Layout setup" [ref=e99]:
+            - img [ref=e100]:
+              - img
+          - generic [ref=e102]:
+            - button "All changes saved" [disabled] [ref=e103]:
+              - generic [ref=e105]:
+                - generic [ref=e106]: Unnamed
+                - generic: Save
+            - button "Manage layouts" [ref=e108]:
+              - img [ref=e111]:
+                - img [ref=e112]
+        - generic [ref=e116]:
+          - button "Quick search" [ref=e117]:
+            - img [ref=e118]:
+              - img [ref=e119]
+          - button "Settings" [ref=e122]:
+            - img [ref=e123]:
+              - img [ref=e124]
+          - button "Fullscreen mode" [ref=e128]:
+            - img [ref=e129]:
+              - img [ref=e130]
+          - button "Take a snapshot" [ref=e132]:
+            - img [ref=e134]:
+              - img [ref=e135]
+      - button "Trade" [ref=e141]:
+        - generic [ref=e147]: Trade
+      - button "Share your idea with the trade community" [ref=e149]:
+        - generic [ref=e151]: Publish
+    - toolbar [ref=e153]:
+      - generic [ref=e157]:
+        - generic [ref=e158]:
+          - generic [ref=e161]:
+            - button "Cross" [ref=e163]:
+              - img [ref=e164]:
+                - img [ref=e165]
+            - button "Cursors" [pressed] [ref=e169]:
+              - img [ref=e170]:
+                - img [ref=e171]
+          - generic [ref=e175]:
+            - button "Trendline" [ref=e177]:
+              - img [ref=e178]:
+                - img [ref=e179]
+            - button "Trend tools" [ref=e183]:
+              - img [ref=e184]:
+                - img [ref=e185]
+          - generic [ref=e189]:
+            - button "Fib retracement" [ref=e191]:
+              - img [ref=e192]:
+                - img [ref=e193]
+            - button "Gann and Fibonacci tools" [ref=e200]:
+              - img [ref=e201]:
+                - img [ref=e202]
+          - generic [ref=e206]:
+            - button "XABCD pattern" [ref=e208]:
+              - img [ref=e209]:
+                - img [ref=e210]
+            - button "Patterns" [ref=e214]:
+              - img [ref=e215]:
+                - img [ref=e216]
+          - generic [ref=e220]:
+            - button "Long position" [ref=e222]:
+              - img [ref=e223]:
+                - img [ref=e224]
+            - button "Forecasting and measurement tools" [ref=e226]:
+              - img [ref=e227]:
+                - img [ref=e228]
+          - generic [ref=e232]:
+            - button "Brush" [ref=e234]:
+              - img [ref=e235]:
+                - img [ref=e236]
+            - button "Geometric shapes" [ref=e240]:
+              - img [ref=e241]:
+                - img [ref=e242]
+          - generic [ref=e246]:
+            - button "Text" [ref=e248]:
+              - img [ref=e249]:
+                - img [ref=e250]
+            - button "Annotation tools" [ref=e252]:
+              - img [ref=e253]:
+                - img [ref=e254]
+          - generic [ref=e257]:
+            - button "Icon" [ref=e259]:
+              - img [ref=e260]:
+                - img [ref=e261]
+            - button "Icons" [ref=e263]:
+              - img [ref=e264]:
+                - img [ref=e265]
+        - generic [ref=e267]:
+          - button "Measure" [ref=e268]:
+            - img [ref=e269]:
+              - img [ref=e270]
+          - button "Zoom in" [ref=e272]:
+            - img [ref=e273]:
+              - img [ref=e274]
+        - generic [ref=e279]:
+          - generic [ref=e282]:
+            - button "Magnet mode snaps drawings placed near price bars to the closest OHLC value" [ref=e284]:
+              - img [ref=e285]:
+                - img [ref=e286]
+            - button "Magnets" [ref=e290]:
+              - img [ref=e291]:
+                - img [ref=e292]
+          - button "Keep drawing" [ref=e294]:
+            - img [ref=e295]:
+              - img [ref=e296]
+          - button "Lock all drawings" [ref=e298]:
+            - img [ref=e299]:
+              - img [ref=e300]
+          - generic [ref=e303]:
+            - button "Hide all drawings" [ref=e305]:
+              - img [ref=e306]:
+                - img [ref=e307]
+            - button "Hide options" [ref=e309]:
+              - img [ref=e310]:
+                - img [ref=e311]
+        - generic [ref=e315]:
+          - button "Remove objects" [ref=e317]:
+            - img [ref=e318]:
+              - img [ref=e319]
+          - button "Remove options" [ref=e321]:
+            - img [ref=e322]:
+              - img [ref=e323]
+    - generic [ref=e327]:
+      - 'region "Chart #1" [ref=e330]':
+        - generic [ref=e334]:
+          - generic:
+            - generic:
+              - toolbar:
+                - generic:
+                  - generic [ref=e335]:
+                    - generic "Change symbol" [ref=e336]:
+                      - generic [ref=e337]:
+                        - img [ref=e339]
+                        - generic [ref=e340]: B
+                      - button "Change symbol" [ref=e341]: Bitcoin / U.S. Dollar
+                    - generic "Change interval" [ref=e342]:
+                      - text: ·
+                      - button "Change interval" [ref=e343]: "3"
+                    - generic [ref=e344]:
+                      - text: ·
+                      - generic [ref=e345]: Bitstamp
+                  - generic:
+                    - generic:
+                      - button "Flag symbol":
+                        - generic:
+                          - generic:
+                            - generic:
+                              - img
+                      - button "More":
+                        - generic:
+                          - img
+                  - button "Market open" [ref=e347]:
+                    - img [ref=e348]:
+                      - img [ref=e349]
+                - generic [ref=e352]:
+                  - generic [ref=e353]:
+                    - generic [ref=e354]: O
+                    - generic [ref=e355]: 60,275
+                  - generic [ref=e356]:
+                    - generic [ref=e357]: H
+                    - generic [ref=e358]: 60,275
+                  - generic [ref=e359]:
+                    - generic [ref=e360]: L
+                    - generic [ref=e361]: 60,275
+                  - generic [ref=e362]:
+                    - generic [ref=e363]: C
+                    - generic [ref=e364]: 60,275
+                  - generic [ref=e366]: 0 (−0.00%)
+              - generic [ref=e374]:
+                - generic [ref=e376]:
+                  - generic: 60,253
+                  - generic: Sell
+                - generic "Spread" [ref=e378]: "5"
+                - generic [ref=e380]:
+                  - generic: 60,258
+                  - generic: Buy
+          - generic "Chart for BITSTAMP:BTCUSD, 3 minutes" [ref=e382]
+      - toolbar [ref=e396]:
+        - generic [ref=e398]:
+          - generic [ref=e399]:
+            - button "1 day in 1 minute intervals" [ref=e400]:
+              - generic [ref=e401]: 1D
+            - button "5 days in 5 minutes intervals" [ref=e402]:
+              - generic [ref=e403]: 5D
+            - button "1 month in 30 minutes intervals" [ref=e404]:
+              - generic [ref=e405]: 1M
+            - button "3 months in 1 hour intervals" [ref=e406]:
+              - generic [ref=e407]: 3M
+            - button "6 months in 2 hours intervals" [ref=e408]:
+              - generic [ref=e409]: 6M
+            - button "Year to day in 1 day intervals" [ref=e410]:
+              - generic [ref=e411]: YTD
+            - button "1 year in 1 day intervals" [ref=e412]:
+              - generic [ref=e413]: 1Y
+            - button "5 years in 1 week intervals" [ref=e414]:
+              - generic [ref=e415]: 5Y
+            - button "All data in 1 month intervals" [ref=e416]:
+              - generic [ref=e417]: All
+          - button "Go to" [ref=e419]:
+            - img [ref=e420]:
+              - img [ref=e421]
+        - button "Timezone" [ref=e426]:
+          - generic [ref=e427]: 09:03:34 UTC
+    - toolbar [ref=e434]:
+      - button "Watchlist, details, and news" [ref=e435]:
+        - img [ref=e436]:
+          - img [ref=e437]
+      - button "Alerts" [ref=e440]:
+        - img [ref=e441]:
+          - img [ref=e442]
+      - button "Object tree and data window" [ref=e445]:
+        - img [ref=e446]:
+          - img [ref=e447]
+      - button "Chats" [ref=e449]:
+        - img [ref=e450]:
+          - img [ref=e451]
+      - button "Screeners" [ref=e454]:
+        - img [ref=e455]:
+          - img [ref=e456]
+      - button "Pine" [ref=e460]:
+        - img [ref=e461]:
+          - img [ref=e462]
+      - button "Calendars" [ref=e465]:
+        - img [ref=e466]:
+          - img [ref=e467]
+      - button "Community" [ref=e469]:
+        - img [ref=e470]:
+          - img [ref=e471]
+      - button "Notifications" [ref=e476]:
+        - img [ref=e477]:
+          - img [ref=e478]
+      - button "Products" [ref=e480]:
+        - img [ref=e481]:
+          - img [ref=e482]
+      - button "Help Center" [ref=e485]:
+        - img [ref=e486]:
+          - img [ref=e487]
+    - generic "Trading panel"
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list

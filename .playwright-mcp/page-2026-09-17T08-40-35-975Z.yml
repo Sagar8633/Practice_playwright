@@ -1,0 +1,39 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - generic [ref=e6]: Setup required
+    - heading "QA Platform isn’t connected yet" [level=1] [ref=e7]
+    - paragraph [ref=e8]: The app needs a Supabase project before it can show anything. This takes about 15 minutes, most of it waiting for the project to provision.
+  - list [ref=e9]:
+    - listitem [ref=e10]:
+      - generic [ref=e11]: "1"
+      - generic [ref=e12]:
+        - paragraph [ref=e13]: Create a Supabase project
+        - paragraph [ref=e15]: At supabase.com/dashboard → New project. Save the database password somewhere — it is shown once.
+    - listitem [ref=e16]:
+      - generic [ref=e17]: "2"
+      - generic [ref=e18]:
+        - paragraph [ref=e19]: Install the schema
+        - paragraph [ref=e21]:
+          - text: Open SQL Editor → New query, paste the whole of
+          - code [ref=e22]: supabase/setup.sql
+          - text: and run it. It creates 45 tables, 4 roles and every access rule.
+    - listitem [ref=e23]:
+      - generic [ref=e24]: "3"
+      - generic [ref=e25]:
+        - paragraph [ref=e26]: Fill in .env
+        - generic [ref=e27]:
+          - paragraph [ref=e28]: "From Project Settings → API, into the project root:"
+          - generic [ref=e29]: VITE_SUPABASE_URL=https://xxxx.supabase.co VITE_SUPABASE_ANON_KEY=sb_publishable_...
+          - paragraph [ref=e30]: Use the publishable (anon) key, never the service key. Then restart the dev server — Vite reads .env only at startup.
+    - listitem [ref=e31]:
+      - generic [ref=e32]: "4"
+      - generic [ref=e33]:
+        - paragraph [ref=e34]: Sign up, then make yourself an admin
+        - generic [ref=e35]:
+          - paragraph [ref=e36]: "New accounts get the Tester role, so the first person in an empty system has no permissions and there is no admin to grant them. Break the deadlock once, in the SQL editor:"
+          - generic [ref=e37]: update profiles set role_id = (select id from roles where key = 'admin') where email = 'you@example.com';
+          - paragraph [ref=e38]: Sign out and back in.
+  - paragraph [ref=e39]:
+    - text: Full instructions, including the auth redirect URLs you need before deploying, are in
+    - code [ref=e40]: supabase/SETUP.md
+    - text: .

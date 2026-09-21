@@ -1,0 +1,154 @@
+{# Shared render fragments. Nothing in this file draws a control that transmits anything:
+   the send control lives in templates/outreach/confirm_dialog.html and nowhere else. #}
+
+{% macro score_badge(score, band) %}
+  {% if score is none %}
+    <span class="badge mute score" title="not scored yet">—</span>
+  {% else %}
+    <span class="badge {{ score|score_tone }} score"
+          title="{{ band or '' }} opportunity score">{{ score }}</span>
+  {% endif %}
+{% endmacro %}
+
+{% macro status_badge(status, title='') %}
+  <span class="badge {{ status|status_tone }}"
+        {% if title %}title="{{ title }}"{% endif %}>{{ status|replace('_',' ') }}</span>
+{% endmacro %}
+
+{% macro confidence_badge(level, pct) %}
+  {% if not level %}
+    <span class="badge mute">—</span>
+  {% else %}
+    <span class="badge {{ {'HIGH':'ok','MEDIUM':'warn','LOW':'mute'}[level] }}"
+          {% if pct %}title="confidence {{ pct }}%"{% endif %}>{{ level }}</span>
+  {% endif %}
+{% endmacro %}
+
+{% macro source_link(url, label) %}
+  {% set href = url|safe_url %}
+  {% if href %}
+    <a href="{{ href }}" target="_blank" rel="noopener noreferrer nofollow">{{ label }}</a>
+  {% else %}
+    <span title="URL withheld: not an absolute http(s) URL">{{ label }}</span>
+  {% endif %}
+{% endmacro %}
+
+{# The three groups, always all three, even when a group is empty. A missing OBSERVED
+   fieldset would read as "we did not look", which is a different claim from "we found
+   nothing". Legends carry the meaning because the reader is about to decide whether a
+   message may say these things. #}
+{% macro findings_groups(findings) %}
+<fieldset class="findings observed">
+  <legend>Observed &mdash; supported directly by a source
+    ({{ findings['OBSERVED']|length }})</legend>
+  {% if findings['OBSERVED'] %}
+    <ul>
+      {% for f in findings['OBSERVED'] %}
+        <li>
+          <div>{{ f.statement }}</div>
+          <div class="finding-meta">
+            {{ confidence_badge(f.confidence, f.confidence_pct) }}
+            <span>{{ f.dimension|pretty }}</span>
+            {% if f.sources %}
+              {% for s in f.sources %}
+                <span>{{ source_link(s.url, s.name) }} {{ s.checked_at|day }}</span>
+              {% endfor %}
+            {% else %}
+              <span class="badge mute" title="Not citable: no stored source backs this">no source</span>
+            {% endif %}
+            <span class="mono">{{ f.id }}</span>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="empty">No observed findings.</p>
+  {% endif %}
+</fieldset>
+
+<fieldset class="findings inferred">
+  <legend>Inferred &mdash; reasonable conclusions, not facts
+    ({{ findings['INFERRED']|length }})</legend>
+  {% if findings['INFERRED'] %}
+    <ul>
+      {% for f in findings['INFERRED'] %}
+        <li>
+          <div>{{ f.statement }}</div>
+          <div class="finding-meta">
+            {{ confidence_badge(f.confidence, f.confidence_pct) }}
+            {% if f.antecedents %}
+              <span>drawn from: {{ f.antecedents|join(', ') }}</span>
+            {% endif %}
+            <span class="mono">{{ f.id }}</span>
+          </div>
+          {% if f.inference_note %}
+            <div class="small">why: {{ f.inference_note }}</div>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="empty">No inferred findings.</p>
+  {% endif %}
+</fieldset>
+
+<fieldset class="findings unknown">
+  <legend>Unknown &mdash; could not be verified. Do not assert these.
+    ({{ findings['UNKNOWN']|length }})</legend>
+  {% if findings['UNKNOWN'] %}
+    <ul>
+      {% for f in findings['UNKNOWN'] %}
+        <li>
+          <div>{{ f.label }}</div>
+          <div class="finding-meta"><span>{{ f.unknown_reason|pretty }}</span>
+            <span class="mono">{{ f.id }}</span></div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="empty">Nothing was left unverified.</p>
+  {% endif %}
+</fieldset>
+{% endmacro %}
+
+{% macro gate_list(gates) %}
+<ul class="gates">
+  {% for gate in gates %}
+    <li>
+      <span class="verdict {{ gate.tone }}">{{ gate.verdict }}</span>
+      <span class="letter">{{ gate.letter }}</span>
+      <span>{{ gate.sentence }}
+        {% if gate.evidence %}<span class="mono">{{ gate.evidence|join(' ') }}</span>{% endif %}
+      </span>
+    </li>
+  {% endfor %}
+</ul>
+{% endmacro %}
+
+{% macro history_table(history) %}
+  {% if history %}
+    <div class="tablewrap">
+      <table class="btable">
+        <thead><tr>
+          <th scope="col">When</th><th scope="col">Channel</th><th scope="col">Status</th>
+          <th scope="col">Subject</th><th scope="col">Approved by</th>
+          <th scope="col">Reply</th>
+        </tr></thead>
+        <tbody>
+          {% for m in history %}
+            <tr>
+              <td data-label="When">{{ (m.sent_at or m.created_at)|stamp }}</td>
+              <td data-label="Channel">{{ m.channel }}</td>
+              <td data-label="Status">{{ status_badge(m.status, m.failure_code or '') }}</td>
+              <td data-label="Subject">{{ m.subject_final or '—' }}</td>
+              <td data-label="Approved by">{{ m.approved_by_name or '—' }}</td>
+              <td data-label="Reply">{{ m.last_classification or '—' }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="empty">No previous contact.</p>
+  {% endif %}
+{% endmacro %}

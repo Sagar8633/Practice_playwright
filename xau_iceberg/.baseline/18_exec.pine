@@ -1,0 +1,562 @@
+// ============================================================================
+//  ############################################################################
+//  ##                                                                        ##
+//  ##   S E C T I O N   1 8   :   E X E C U T I O N   S W A P   B L O C K    ##
+//  ##                                                                        ##
+//  ##   THIS IS THE ONLY SECTION THAT DIFFERS BETWEEN THE TWO SHIPPED FILES. ##
+//  ##   EVERYTHING ABOVE (SECTIONS 0-17) AND BELOW (SECTION 19) IS           ##
+//  ##   BYTE-IDENTICAL IN THE INDICATOR AND THE STRATEGY.                    ##
+//  ##                                                                        ##
+//  ############################################################################
+//
+//  SWAP PROCEDURE - exactly three edits, nothing else in the file moves:
+//    1. SECTION 0  : comment out  indicator(...)   /  uncomment  strategy(...)
+//    2. HERE       : comment out  BLOCK 18-I       /  uncomment  BLOCK 18-S
+//    3. Save under the other file name.
+//  Block 18-A below is SHARED and stays live in BOTH builds - that is what makes
+//  the walk-forward window identical in the two scripts, so the markers you see
+//  on the indicator are exactly the bars the strategy traded.
+//
+//  WHY A SWAP BLOCK AND NOT A RUNTIME FLAG: with strategy() declared, plotshape
+//  and alert() are still legal, but with indicator() declared EVERY strategy.*
+//  call is a COMPILE error. No runtime switch in Pine can span that, so the
+//  difference has to be textual - and it is confined to this one section.
+// ============================================================================
+
+// -------------------------------------------------------------- 18 GROUPS
+GEXEC = "18 - Execution & Walk-Forward"
+
+// ============================================================================
+//  BLOCK 18-A : SHARED - LIVE IN BOTH BUILDS
+//  The walk-forward window, its counters, and the window-gated signal pair.
+// ============================================================================
+
+// --- WHY AN IN-SCRIPT WINDOW AT ALL --------------------------------------
+// The Strategy Tester's date-range control is part of DEEP BACKTESTING, which
+// is a PAID TradingView feature. This account does not have it, so the tester's
+// own window is unavailable and a walk-forward fold cannot be expressed there.
+// The fold is therefore expressed IN THE SCRIPT, exactly as the user's existing
+// srk_sma18_v11_*.pine files already do, and it gates ORDER PLACEMENT only -
+// every indicator, array and counter keeps warming up on the bars before the
+// window, so fold 2 never starts from a cold ATR.
+i_useFixedWin  = input.bool(false, "Use fixed date window", group = GEXEC,
+     tooltip = "ON = reproducible walk-forward folds with hard UTC dates. This is " +
+               "the CORRECT way to run a fold, but it only works if the chart has " +
+               "actually loaded bars that far back - see the rolling window below. " +
+               "OFF = rolling lookback only.",
+     display = display.none)
+i_winFrom      = input.time(timestamp("2025-01-01T00:00:00+0000"), "  Window FROM (UTC)",
+     group = GEXEC,
+     tooltip = "Inclusive start of the fold. Ignored unless the box above is " +
+               "ticked. Set EARLIER than the chart holds and the fold silently " +
+               "starts at the first loaded bar instead - compare the bars-in-" +
+               "window count in the panel against the total to see whether that " +
+               "happened.",
+     display = display.none)
+i_winTo        = input.time(timestamp("2026-01-01T00:00:00+0000"), "  Window TO (UTC)",
+     group = GEXEC,
+     tooltip = "Inclusive end of the fold. Set it in the FUTURE to run an " +
+               "open-ended fold; set it to the start of the next fold to keep " +
+               "in-sample and out-of-sample strictly disjoint, which is the whole " +
+               "point of the exercise.",
+     display = display.none)
+i_lookbackDays = input.int(0, "Rolling window (days back, 0 = all data)", minval = 0,
+     maxval = 3650, group = GEXEC,
+     tooltip = "THE ACCOUNT-SPECIFIC FALLBACK. 0 = trade every loaded bar. Any " +
+               "other value trades only the last N days. At the extremes: a value " +
+               "LARGER than the chart actually holds is a silent no-op (a free " +
+               "plan loads ~5000 bars = ~3.6 days at 1M, ~17 days at 5M, ~52 days " +
+               "at 15M), and 1-2 days at 15M leaves too few trades to mean " +
+               "anything. NOTE this window SLIDES: it is measured from `timenow`, " +
+               "so the same fold re-run tomorrow is NOT the same fold. Use the " +
+               "fixed dates above whenever you need reproducibility.",
+     display = display.none)
+
+// Both arms must hold. The rolling arm is written exactly as the user's existing
+// v11 files write it, so the two systems agree on what "in window" means.
+inWindow = (not i_useFixedWin or (time >= i_winFrom and time <= i_winTo)) and
+           (i_lookbackDays == 0 or time >= timenow - i_lookbackDays * 86400000)
+
+// --- window telemetry -----------------------------------------------------
+// Counted, never silent: a fold that produced no trades because the window was
+// misconfigured must not look like a fold that produced no trades because the
+// system found nothing.
+var int barsInWindow = 0
+var int wfBlockedL   = 0
+var int wfBlockedS   = 0
+var NoTradeReason execReason = NoTradeReason.ok
+
+if confirmed and warmupOk
+    if inWindow
+        barsInWindow += 1
+    execReason := NoTradeReason.ok
+    if not inWindow
+        if longSignal
+            wfBlockedL += 1
+            execReason := NoTradeReason.outOfWindow
+        if shortSignal
+            wfBlockedS += 1
+            execReason := NoTradeReason.outOfWindow
+
+// THE pair every execution path below consumes. longSignal / shortSignal are
+// already confirmed-bar-only (SECTION 14), so this is a pure conjunction that
+// mutates nothing and needs no `if confirmed` wrapper of its own.
+execLongSig  = longSignal  and inWindow
+execShortSig = shortSignal and inWindow
+
+// ============================================================================
+//  BLOCK 18-I : INDICATOR BUILD          <<<<<<  ACTIVE  >>>>>>
+//  Markers only. SECTION 17 already owns every alert() call and fires them in
+//  BOTH builds - they are NOT repeated here, because a duplicated alert() is a
+//  duplicated webhook order.
+// ============================================================================
+
+plotshape(execLongSig, "BUY", shape.labelup, location.belowbar,
+     color.new(#26A69A, 0), text = "BUY", textcolor = color.white, size = size.tiny)
+plotshape(execShortSig, "SELL", shape.labeldown, location.abovebar,
+     color.new(#EF5350, 0), text = "SELL", textcolor = color.white, size = size.tiny)
+
+// Suppression tell. plotchar costs ONE of the 64 plot slots and ZERO drawing
+// objects, so it is free against SECTION 16's 500/500/500 budget. Without it a
+// misconfigured window looks exactly like a quiet market.
+plotchar(i_mode == "Debug" and (longSignal or shortSignal) and not inWindow,
+     "WF window blocked", "x", location.bottom, color.new(color.gray, 20),
+     size = size.tiny)
+
+// ============================================================================
+//  BLOCK 18-S : STRATEGY BUILD           <<<<<<  COMMENTED OUT  >>>>>>
+//  Uncomment EVERY line from here to the "END 18-S" banner, and comment out
+//  BLOCK 18-I above. Do not uncomment a subset: the ordering below is
+//  load-bearing, and a half-enabled block will compile and lie.
+//
+//  FILE ORDER INSIDE THIS BLOCK IS A CORRECTNESS REQUIREMENT, not a style
+//  choice. Pine executes strictly top to bottom, so the closed-trade drain MUST
+//  run before anything can overwrite pRisk - otherwise every R statistic is
+//  divided by the NEXT trade's risk, on exactly the bars where trades chain:
+//     inputs -> pure helpers -> state -> DRAIN -> window flatten ->
+//     fill re-anchor -> exit management -> ENTRY -> report
+// ============================================================================
+//
+// // --------------------------------------------------------- 18-S.1 INPUTS
+// GSIZE = "18 - Strategy Sizing"
+// GEXIT = "18 - Strategy Exits"
+//
+// i_compound   = input.bool(true, "Compound (size off live equity)", group = GSIZE,
+//      tooltip = "ON sizes off strategy.equity, so a drawdown shrinks the next " +
+//                "position. OFF sizes off initial_capital, which makes every " +
+//                "trade the same size and makes the R-multiple series directly " +
+//                "comparable across the run - use OFF when reading the report.")
+// i_qtyStep    = input.float(1.0, "Broker quantity step", minval = 0.0001, step = 0.01,
+//      group = GSIZE,
+//      tooltip = "Lot granularity in the SAME unit strategy.entry uses. Spot gold " +
+//                "CFD: qty is OUNCES, so 1.0 = 1 oz = 0.01 lot. COMEX GC: 1.0 = 1 " +
+//                "contract. Quantity is ALWAYS rounded DOWN to this step - " +
+//                "rounding up would silently exceed the stated risk.")
+// i_maxLev     = input.float(20.0, "Max leverage (notional / equity)", minval = 1.0,
+//      maxval = 100.0, step = 1.0, group = GSIZE,
+//      tooltip = "MUST equal 100 / margin_long in the SECTION 0 strategy() call " +
+//                "(margin 5.0 -> 20). Pine cannot read margin_long back, so the " +
+//                "guard below mirrors the literal by hand - edit both together.")
+// i_marginUtil = input.float(0.50, "Margin utilisation cap", minval = 0.05, maxval = 1.0,
+//      step = 0.05, group = GSIZE,
+//      tooltip = "Fraction of the leverage ceiling the sizer may use. AT 1.00 the " +
+//                "position consumes 100% of available margin, so the FIRST adverse " +
+//                "tick leaves funds insufficient and the emulator force-liquidates " +
+//                "4x the loss - margin calls are GUARANTEED, and no exit bucket " +
+//                "counts them. 0.50 is the default for that reason. This cap is " +
+//                "normally INERT: it binds only above i_riskPct ~= 100 * util * L " +
+//                "* minStop / price (~1.1% at 1M), far above every shipped preset. " +
+//                "The report row says which arm actually won.")
+// i_beAfterTp1 = input.bool(true, "Move to break-even after TP1", group = GEXIT)
+// i_trailLen   = input.int(20, "Chandelier lookback (bars)", minval = 2, maxval = 200,
+//      group = GEXIT)
+// i_trailAtrMult = input.float(2.5, "Trail distance (x ATR)", minval = 0.0, maxval = 10.0,
+//      step = 0.1, group = GEXIT,
+//      tooltip = "0 disables the trail. An ATR-only trail is 1.5-2.6x the " +
+//                "STRUCTURAL stop at every preset, so it can essentially never " +
+//                "beat a break-even stop and the runner leg ends up decorative. " +
+//                "The R-scaled cap below fixes that: the trail takes the TIGHTER " +
+//                "of the two, which puts it on the same axis as the stop it must " +
+//                "beat. Check the TRAIL exit count before trusting the feature.")
+// i_trailRmult = input.float(1.5, "Trail distance cap (x initial risk)", minval = 0.2,
+//      maxval = 5.0, step = 0.1, group = GEXIT)
+// i_maxBarsInTrade = input.int(24, "Time stop (bars in trade, 0 = off)", minval = 0,
+//      maxval = 500, group = GEXIT,
+//      tooltip = "VERIFIED AGAINST THE ASSEMBLED FILE: nothing above declares " +
+//                "this name, so uncommenting the line is safe. The clash is a " +
+//                "SEMANTIC one instead - SECTION 14 owns i_barsInTrade (default " +
+//                "60) and SECTION 15's virtual ledger times out on THAT, so " +
+//                "leaving this at 24 makes the real trade expire 36 bars before " +
+//                "its virtual twin and the two ledgers stop describing the same " +
+//                "system. Set this equal to i_barsInTrade unless you are " +
+//                "deliberately measuring the difference.")
+//
+// // ------------------------------------------------- 18-S.2 PURE HELPERS
+// // These are the ONLY functions in this block, and they touch no global state.
+// // Pine forbids a function body from reassigning a global; the original draft
+// // of this component failed to compile for exactly that reason.
+//
+// // +1e-9 before the floor: q * 40 / 100 with q = 10 can land on
+// // 3.9999999999999996, and a naive floor then silently moves a whole lot step
+// // from TP1 to the runner.
+// f_floorToStep(float _q, float _step) =>
+//     _step <= 0.0 ? _q : math.floor(_q / _step + 1e-9) * _step
+//
+// // THE sizer. syminfo.pointvalue carries the contract size, so there is no
+// // hardcoded 100 oz and no hardcoded 0.01 anywhere in it: correct for a spot
+// // CFD (pointvalue 1, qty in ounces) AND for GC futures (pointvalue 100, qty in
+// // contracts) with no edit.
+// f_positionSize(float _entryPx, float _stopPx) =>
+//     float pv   = na(syminfo.pointvalue) or syminfo.pointvalue <= 0.0 ? 1.0 : syminfo.pointvalue
+//     float eq   = i_compound ? strategy.equity : strategy.initial_capital
+//     float dist = na(_entryPx) or na(_stopPx) ? na : math.abs(_entryPx - _stopPx)
+//     float qty  = 0.0
+//     // GUARD: a zero, negative or na stop distance would divide to infinity and
+//     // hand the emulator an unbounded order. This returns 0 and the caller
+//     // counts the veto - it NEVER falls back to a default size.
+//     if not na(dist) and dist > 0.0 and eq > 0.0 and not na(_entryPx) and _entryPx > 0.0
+//         // Cost is charged INSIDE the risk budget: the stop fills at
+//         // stop - slip and the round turn is paid regardless, so a sizer that
+//         // ignores costRt over-sizes by cost/stopDist (~20% at the 1M preset).
+//         float riskPerUnit = (dist + costRt) * pv
+//         float riskCash    = eq * i_riskPct / 100.0
+//         float rawQty      = riskPerUnit > 0.0 ? riskCash / riskPerUnit : 0.0
+//         float capQty      = i_marginUtil * (eq * i_maxLev) / (_entryPx * pv)
+//         qty := f_floorToStep(math.min(rawQty, capQty), i_qtyStep)
+//     qty < i_qtyStep ? 0.0 : qty
+//
+// // Same arithmetic, returning WHICH arm bound, so the report can never claim
+// // an effect the numbers do not have.
+// f_sizeBoundBy(float _entryPx, float _stopPx) =>
+//     float pv   = na(syminfo.pointvalue) or syminfo.pointvalue <= 0.0 ? 1.0 : syminfo.pointvalue
+//     float eq   = i_compound ? strategy.equity : strategy.initial_capital
+//     float dist = na(_entryPx) or na(_stopPx) ? na : math.abs(_entryPx - _stopPx)
+//     string outS = "n/a"
+//     if not na(dist) and dist > 0.0 and eq > 0.0 and _entryPx > 0.0
+//         float rawQty = (eq * i_riskPct / 100.0) / ((dist + costRt) * pv)
+//         float capQty = i_marginUtil * (eq * i_maxLev) / (_entryPx * pv)
+//         outS := rawQty <= capQty ? "risk" : "leverage"
+//     outS
+//
+// // ----------------------------------------------- 18-S.3 FROZEN TRADE STATE
+// var string pId    = ""
+// var int    pDir   = 0
+// var float  pEntry = na
+// var float  pStop  = na
+// var float  pTp1   = na
+// var float  pTp2   = na
+// var float  pTp3   = na
+// var float  pQty   = 0.0
+// var float  pQ1    = 0.0
+// var float  pQ2    = 0.0
+// var float  pQ3    = 0.0
+// var float  pRisk  = na          // risk per UNIT, in account currency
+// var bool   tp1Hit = false
+// var bool   tp2Hit = false
+// var bool   reAnchored  = false
+// var float  lastStop    = na     // the stop level currently sitting on the book
+// var int    fillBar     = na
+// var string sizeBoundBy = "n/a"
+// // counters - every one of these is a report row, so none of them is silent
+// var int   vetoMinLot  = 0
+// var int   riskAborts  = 0
+// var int   cTP1        = 0
+// var int   cTP2        = 0
+// var int   cTP3        = 0
+// var int   cBE         = 0
+// var int   cTRAIL      = 0
+// var int   cSL         = 0
+// var int   cOTHER      = 0
+// var int   ambigBars   = 0
+// var int   barsInTrade = 0
+// // per-POSITION aggregation. A 40/35/25 ladder closes THREE legs per trade;
+// // counting legs triples n and inflates the win rate purely from the ladder.
+// var int   seenClosed  = 0
+// var int   curPosBar   = na
+// var float curPosR     = 0.0
+// var int   posN        = 0
+// var int   posWins     = 0
+// var float posSumR     = 0.0
+//
+// // hoisted ta.* - a ta.* call inside an if/and/or skips bars and silently
+// // corrupts its own history, so both trail extremes live at global scope.
+// hiN = ta.highest(high, i_trailLen)
+// loN = ta.lowest(low,   i_trailLen)
+//
+// // ------------------------------------------ 18-S.4 CLOSED-TRADE DRAIN
+// // FIRST, before anything can touch pRisk. Legs are folded into POSITIONS by
+// // shared entry bar index, and the POSITION numbers are the headline ones.
+// if strategy.closedtrades > seenClosed
+//     int startAt = math.max(seenClosed, strategy.closedtrades.first_index)
+//     for i = startAt to strategy.closedtrades - 1
+//         float sz   = math.abs(strategy.closedtrades.size(i))
+//         float rUsd = nz(pRisk, 0.0) * sz
+//         float rMul = rUsd > 0.0 ? strategy.closedtrades.profit(i) / rUsd : 0.0
+//         string cm  = strategy.closedtrades.exit_comment(i)
+//         // comment_loss is keyed to the ORDER TYPE, not to P&L, so the tag is
+//         // made stateful at issue time (18-S.7) and read back here. Without
+//         // that, BE and TRAIL exits both arrive as "SL" and the ladder cannot
+//         // be evaluated at all.
+//         if cm == "TP1"
+//             cTP1 += 1
+//         else if cm == "TP2"
+//             cTP2 += 1
+//         else if cm == "TP3"
+//             cTP3 += 1
+//         else if cm == "BE"
+//             cBE += 1
+//         else if cm == "TRAIL"
+//             cTRAIL += 1
+//         else if cm == "SL"
+//             cSL += 1
+//         else
+//             cOTHER += 1
+//         int eb = strategy.closedtrades.entry_bar_index(i)
+//         if na(curPosBar) or eb != curPosBar
+//             if not na(curPosBar)
+//                 posN    += 1
+//                 posSumR += curPosR
+//                 posWins += curPosR > 0.0 ? 1 : 0
+//             curPosBar := eb
+//             curPosR   := 0.0
+//         curPosR += rMul
+//     seenClosed := strategy.closedtrades
+//
+// // --------------------------------------------- 18-S.5 WINDOW FLATTEN
+// // No position may leak across a fold boundary, or fold n+1 inherits fold n's
+// // open risk and the two folds stop being independent samples.
+// if not inWindow and strategy.position_size != 0
+//     strategy.close_all(comment = "WINDOW")
+//
+// // ------------------------- 18-S.6 FILL RE-ANCHOR + RISK RE-VALIDATION
+// // The order fills at the NEXT bar's open, not at the close the sizer used.
+// // The stop stays STRUCTURAL - entry slippage raising realised risk is the
+// // honest outcome, not something to hide - but if it raises it past the budget
+// // the position is no longer the trade that was authorised.
+// // entry_bar_index is used rather than `position_size[1] == 0` because the
+// // latter misses a trade that opens and closes inside one bar, which is exactly
+// // the trade where entry slippage matters most.
+// bool justOpened = strategy.opentrades > 0 and
+//      strategy.opentrades.entry_bar_index(strategy.opentrades - 1) == bar_index
+// if justOpened and not reAnchored
+//     float pv = na(syminfo.pointvalue) or syminfo.pointvalue <= 0.0 ? 1.0 : syminfo.pointvalue
+//     pEntry := strategy.opentrades.entry_price(strategy.opentrades - 1)
+//     pRisk  := math.abs(pEntry - pStop) * pv
+//     fillBar    := bar_index
+//     reAnchored := true
+//     float budget = (i_compound ? strategy.equity : strategy.initial_capital) * i_riskPct / 100.0
+//     // 20% is THE tolerance, stated once. Beyond it the position is FLATTENED,
+//     // not resized: resizing would leave a partial position whose three exit
+//     // legs were computed for a different quantity.
+//     if pRisk * pQty > 1.20 * budget
+//         strategy.close_all(comment = "RISK OVERRUN")
+//         riskAborts += 1
+//
+// // ------------------------------------------- 18-S.7 EXIT MANAGEMENT
+// if strategy.position_size != 0 and pDir != 0
+//     bool  isLong = pDir > 0
+//     float absPos = math.abs(strategy.position_size)
+//     barsInTrade += 1
+//     // Partial fills are read from the SIMULATED POSITION SIZE, never from
+//     // price: price touching TP1 does not mean the limit filled.
+//     // `pQ1 > 0.0 and` is not decoration. With a zero-sized leg the test reads
+//     // `absPos <= pQty + step/2`, true the instant the position exists, which
+//     // puts a break-even stop THROUGH the market on the entry bar and scratches
+//     // every trade. pQ1 rounds to zero on small accounts at DEFAULT settings,
+//     // so this is the normal case, not an input-boundary curiosity.
+//     tp1Hit := tp1Hit or (pQ1 > 0.0 and absPos <= pQty - pQ1 + i_qtyStep * 0.5)
+//     tp2Hit := tp2Hit or (pQ2 > 0.0 and absPos <= pQty - pQ1 - pQ2 + i_qtyStep * 0.5)
+//     // When a leg does not exist, arm its STAGE from price instead, so the
+//     // ladder still advances rather than freezing at stage 1.
+//     bool beArm = pQ1 > 0.0 ? tp1Hit : (isLong ? high >= pTp1 : low <= pTp1)
+//     bool trArm = pQ2 > 0.0 ? tp2Hit : (isLong ? high >= pTp2 : low <= pTp2)
+//
+//     float curStop = pStop
+//     if beArm and i_beAfterTp1
+//         // pEntry is ALREADY the slipped fill, so the entry-side slip must not
+//         // be charged twice: to be flat you need exit_fill >= entry + 2*spread,
+//         // and exit_fill = stopLevel - exit_slip. Hence spread + slip + 1 tick,
+//         // NOT the full round turn.
+//         float beOff = i_spreadUsd + i_slipUsd + tick
+//         float bePx  = pEntry + (isLong ? beOff : -beOff)
+//         curStop := isLong ? math.max(curStop, bePx) : math.min(curStop, bePx)
+//     if trArm and i_trailAtrMult > 0.0
+//         // TIGHTER of ATR-scaled and R-scaled. The ATR arm alone sits 1.5-2.6x
+//         // the structural stop away and can never out-rank the break-even stop,
+//         // which makes the runner leg decorative.
+//         float trailDist = math.min(i_trailAtrMult * aRef,
+//              i_trailRmult * math.abs(pEntry - pStop))
+//         float chRaw = isLong ? hiN - trailDist : loN + trailDist
+//         curStop := isLong ? math.max(curStop, chRaw) : math.min(curStop, chRaw)
+//     // A stop must NEVER be placed through the market. The emulator would fill
+//     // it at the next OPEN as a market order, at a price that is not the level
+//     // drawn on the chart, and the report would then quote a level that never
+//     // existed.
+//     curStop := isLong ? math.min(curStop, close - tick) : math.max(curStop, close + tick)
+//
+//     string slTag = (trArm and i_trailAtrMult > 0.0) ? "TRAIL" :
+//                    (beArm and i_beAfterTp1)         ? "BE"    : "SL"
+//
+//     // THE LADDER IS ISSUED ONCE PER TRADE (in 18-S.8, on the entry bar) and
+//     // AMENDED here only when the stop actually moves or a leg fills. Calling
+//     // strategy.exit with an existing id MODIFIES that order; re-issuing all
+//     // three every bar for no reason churns the book and re-arms nothing.
+//     bool legChanged = (tp1Hit != tp1Hit[1]) or (tp2Hit != tp2Hit[1])
+//     if legChanged or na(lastStop) or math.abs(curStop - lastStop) >= f_tol(0.02)
+//         if pQ1 > 0.0 and not tp1Hit
+//             strategy.exit("X1", from_entry = pId, qty = pQ1, stop = curStop,
+//                  limit = pTp1, comment_profit = "TP1", comment_loss = slTag)
+//         if pQ2 > 0.0 and not tp2Hit
+//             strategy.exit("X2", from_entry = pId, qty = pQ2, stop = curStop,
+//                  limit = pTp2, comment_profit = "TP2", comment_loss = slTag)
+//         if pQ3 > 0.0
+//             strategy.exit("X3", from_entry = pId, qty = pQ3, stop = curStop,
+//                  limit = pTp3, comment_profit = "TP3", comment_loss = slTag)
+//         lastStop := curStop
+//
+//     // Ambiguity diagnostic, measured against the levels that were ACTUALLY
+//     // LIVE during this bar - orders issued at this bar's close are only active
+//     // from the next one - and reported as a SHARE, because a raw count is
+//     // uninterpretable without its denominator.
+//     float liveStop = lastStop[1]
+//     float liveTp   = not tp1Hit ? pTp1 : not tp2Hit ? pTp2 : pTp3
+//     if not na(liveStop) and not na(liveTp) and
+//        low <= math.min(liveStop, liveTp) and high >= math.max(liveStop, liveTp)
+//         ambigBars += 1
+//
+//     if i_maxBarsInTrade > 0 and not na(fillBar) and bar_index - fillBar >= i_maxBarsInTrade
+//         strategy.close_all(comment = "TIME")
+//
+// // ------------------------------------------------------ 18-S.8 ENTRY
+// // LAST, so the drain above has already consumed every closed leg against the
+// // OLD pRisk before this line overwrites it.
+// if confirmed and warmupOk and inWindow and strategy.position_size == 0
+//     int      dNew = execLongSig ? 1 : execShortSig ? -1 : 0
+//     RiskPlan pl   = dNew > 0 ? sigPlanL : dNew < 0 ? sigPlanS : na
+//     if dNew != 0 and not na(pl) and pl.ok
+//         float q = f_positionSize(pl.entry, pl.stop)
+//         if q <= 0.0
+//             // The ONE veto the strategy adds over the indicator: the minimum
+//             // lot cannot express this risk budget. Counted, never silent.
+//             vetoMinLot += 1
+//         else
+//             pId    := dNew > 0 ? "ICE-L" : "ICE-S"
+//             pDir   := dNew
+//             pEntry := pl.entry
+//             pStop  := pl.stop
+//             pTp1   := pl.tp1
+//             pTp2   := pl.tp2
+//             pTp3   := pl.tp3
+//             pQty   := q
+//             pQ1    := f_floorToStep(q * 0.40, i_qtyStep)
+//             pQ2    := f_floorToStep(q * 0.35, i_qtyStep)
+//             // pQ3 IS THE REMAINDER, COMPUTED EXPLICITLY. Omitting qty on the
+//             // last leg does NOT mean "whatever is left" - Pine reads it as
+//             // 100% of the position, the three legs then over-request, and the
+//             // engine silently shrinks one of them with no documented rule for
+//             // which. With pQ3 explicit, pQ1 + pQ2 + pQ3 == pQty exactly, at
+//             // all times, and no reduction can ever fire.
+//             pQ3    := math.max(0.0, q - pQ1 - pQ2)
+//             pRisk  := math.abs(pl.entry - pl.stop) *
+//                  (na(syminfo.pointvalue) or syminfo.pointvalue <= 0.0 ? 1.0 : syminfo.pointvalue)
+//             tp1Hit := false
+//             tp2Hit := false
+//             reAnchored  := false
+//             lastStop    := pStop
+//             fillBar     := na
+//             sizeBoundBy := f_sizeBoundBy(pl.entry, pl.stop)
+//             string msg = f_dirName(dNew) + " XAU-ICE @ " + f_px(pl.entry) +
+//                  " | SL " + f_px(pl.stop) + " | TP " + f_px(pl.tp1) + "/" +
+//                  f_px(pl.tp2) + "/" + f_px(pl.tp3) + " | qty " +
+//                  str.tostring(q, "#.##") + " | setup score " +
+//                  str.tostring(dNew > 0 ? sigScoreL : sigScoreS, "#") + "/100"
+//             strategy.entry(pId, dNew > 0 ? strategy.long : strategy.short,
+//                  qty = q, comment = f_dirName(dNew), alert_message = msg)
+//             // PROTECTIVE LEGS ON THE SAME BAR AS THE ENTRY. Gating them on
+//             // `position_size != 0` instead would leave the position NAKED for
+//             // the whole fill bar - and that bar is the one most likely to run
+//             // against a fresh absorption entry, so the backtest would be
+//             // OPTIMISTIC exactly where it must not be. The emulator explicitly
+//             // supports strategy.exit against a not-yet-filled from_entry.
+//             if pQ1 > 0.0
+//                 strategy.exit("X1", from_entry = pId, qty = pQ1, stop = pStop,
+//                      limit = pTp1, comment_profit = "TP1", comment_loss = "SL")
+//             if pQ2 > 0.0
+//                 strategy.exit("X2", from_entry = pId, qty = pQ2, stop = pStop,
+//                      limit = pTp2, comment_profit = "TP2", comment_loss = "SL")
+//             if pQ3 > 0.0
+//                 strategy.exit("X3", from_entry = pId, qty = pQ3, stop = pStop,
+//                      limit = pTp3, comment_profit = "TP3", comment_loss = "SL")
+//
+// // ------------------------------------------------ 18-S.9 REPORT TABLE
+// // Declared at GLOBAL SCOPE: Pine forbids a function definition inside an if
+// // block, and table.new inside one would rebuild the table on every bar.
+// // ANCHOR: middle_right. SECTION 16 runs in BOTH builds and already owns
+// // top_right (vxMain), bottom_right (vxChk) and bottom_left (vxStat), and
+// // SECTION 19 owns middle_left - top_right would have stacked this report on
+// // top of vxMain the moment this block was uncommented.
+// var table exTbl = table.new(position.middle_right, 2, 12, border_width = 1)
+// f_exRow(table _t, int _r, string _k, string _v) =>
+//     table.cell(_t, 0, _r, _k, text_color = color.new(color.silver, 0),
+//          text_size = size.tiny, text_halign = text.align_left)
+//     table.cell(_t, 1, _r, _v, text_color = color.new(color.white, 0),
+//          text_size = size.tiny, text_halign = text.align_right)
+//
+// if barstate.islast and i_showStats
+//     float posWr  = posN > 0 ? 100.0 * posWins / posN : na
+//     float avgR   = posN > 0 ? posSumR / posN : na
+//     float ambPct = barsInTrade > 0 ? 100.0 * ambigBars / barsInTrade : na
+//     f_exRow(exTbl, 0,  "XAU-ICE STRATEGY",    inWindow ? "IN WINDOW" : "OUT OF WINDOW")
+//     f_exRow(exTbl, 1,  "Bars in window",      str.tostring(barsInWindow) + " / " + str.tostring(bar_index + 1))
+//     f_exRow(exTbl, 2,  "Positions (not legs)", str.tostring(posN))
+//     f_exRow(exTbl, 3,  "Position win rate",   na(posWr) ? "n/a" : str.tostring(posWr, "#.0") + "%")
+//     f_exRow(exTbl, 4,  "Avg position R",      na(avgR) ? "n/a" : str.tostring(avgR, "#.00") + "R")
+//     f_exRow(exTbl, 5,  "Exit legs TP1/2/3",   str.tostring(cTP1) + "/" + str.tostring(cTP2) + "/" + str.tostring(cTP3))
+//     f_exRow(exTbl, 6,  "Exit legs SL/BE/TR",  str.tostring(cSL) + "/" + str.tostring(cBE) + "/" + str.tostring(cTRAIL))
+//     f_exRow(exTbl, 7,  "Sizing bound by",     sizeBoundBy)
+//     f_exRow(exTbl, 8,  "Min-lot vetoes",      str.tostring(vetoMinLot))
+//     f_exRow(exTbl, 9,  "Risk-overrun flats",  str.tostring(riskAborts))
+//     f_exRow(exTbl, 10, "WF blocked L/S",      str.tostring(wfBlockedL) + "/" + str.tostring(wfBlockedS))
+//     f_exRow(exTbl, 11, "Ambiguous bars",      na(ambPct) ? "n/a" : str.tostring(ambPct, "#.0") + "% of bars in trade")
+//
+// ============================== END 18-S =====================================
+
+// ============================================================================
+//  INTRABAR FILL AMBIGUITY - STATED HONESTLY, ONCE
+//
+//  On any bar whose range contains BOTH the live stop and the live target, the
+//  order in which they were touched is NOT in the OHLC data. TradingView's
+//  broker emulator does not know it either: it GUESSES from the bar's open, on
+//  the assumption that price travelled open -> nearest extreme -> other
+//  extreme. That guess is systematically FLATTERING here, because a
+//  mean-reversion entry usually opens nearer its target than its stop, so the
+//  emulator tends to resolve the ambiguous bar as a win.
+//
+//  SECTION 15's virtual ledger assumes the OPPOSITE - STOP FIRST - on every
+//  such bar. The two will therefore disagree on exactly the bars that matter
+//  most, and the size of that disagreement is the honest measure of how much of
+//  the result is path assumption rather than edge. The report row "Ambiguous
+//  bars: n% of bars in trade" makes it visible: at 1% the question is moot, at
+//  15% the equity curve is mostly a coin flip.
+//
+//  MITIGATIONS, and what each actually costs:
+//    * BAR MAGNIFIER - resolves the path from real lower-timeframe data. It is
+//      the only true fix. It is a PAID feature (Premium and above) and this
+//      account does not have it, so it is unavailable here.
+//    * fill_orders_on_standard_ohlc = true in the strategy() call - forces fills
+//      to be computed from standard OHLC even on a non-standard chart. It does
+//      NOT resolve intrabar order; it only stops Heikin-Ashi / Renko prices from
+//      manufacturing fills at prices that never traded. Worth setting anyway.
+//    * calc_on_every_tick = true - changes nothing on historical bars, which is
+//      where the entire backtest lives. It is NOT a mitigation, despite being
+//      widely cited as one.
+//    * Widening TP1 so it and the stop cannot share a bar - shrinks the
+//      ambiguity by shrinking the strategy. That is a real cost, not a free fix.
+//
+//  RECOMMENDED HONEST DEFAULT: leave the emulator's behaviour as-is, keep
+//  fill_orders_on_standard_ohlc = true, read the ambiguous-bar share on every
+//  run, and treat SECTION 15's stop-first ledger as the LOWER bound and the
+//  Strategy Tester as the UPPER bound. Quote the pair. Never quote the upper
+//  bound alone.
+// ============================================================================
+// ========================= END SECTION 18 ===================================

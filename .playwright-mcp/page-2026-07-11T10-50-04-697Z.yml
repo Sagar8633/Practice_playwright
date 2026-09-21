@@ -1,0 +1,1166 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - 'button "Logged in as patilkareena208 Active layout: Unnamed" [ref=e7]'
+    - toolbar [ref=e11]:
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]:
+            - button "D" [ref=e1367]
+            - button "Switch data type" [ref=e20]
+          - button "Compare symbols" [ref=e24]
+        - generic [ref=e32]:
+          - radiogroup [ref=e33]:
+            - radio "5 minutes" [ref=e34]:
+              - generic [ref=e35]: 5m
+            - radio "15 minutes" [checked] [ref=e37]:
+              - generic [ref=e38]: 15m
+            - radio "45 minutes" [ref=e40]:
+              - generic [ref=e41]: 45m
+          - button "Chart interval" [ref=e43]
+        - button "Candles" [ref=e53]
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - button "Indicators, metrics, and strategies" [ref=e65]:
+              - generic [ref=e70]: Indicators
+            - button "Favorite indicators" [ref=e71]
+          - button "Indicator templates" [ref=e78]
+        - generic [ref=e85]:
+          - button "Create alert" [ref=e86]:
+            - generic [ref=e91]: Alert
+          - button "Bar replay" [ref=e92]:
+            - generic [ref=e96]: Replay
+        - generic [ref=e100]:
+          - button "Undo change symbol" [ref=e1368]
+          - button [disabled] [ref=e105]
+        - generic [ref=e110]:
+          - button "Layout setup" [ref=e111]
+          - generic [ref=e114]:
+            - button "All changes saved" [disabled] [ref=e1857]:
+              - generic [ref=e117]:
+                - generic [ref=e118]: Unnamed
+                - generic: Save
+            - button "Manage layouts" [ref=e120]
+        - generic [ref=e128]:
+          - button "Quick search" [ref=e129]
+          - button "Settings" [ref=e134]
+          - button "Fullscreen mode" [ref=e140]
+          - button "Take a snapshot" [ref=e144]
+      - button "Trade" [ref=e153]
+      - button "Share your idea with the trade community" [ref=e161]:
+        - generic [ref=e162]: Publish
+    - toolbar [ref=e165]:
+      - generic [ref=e169]:
+        - generic [ref=e170]:
+          - generic [ref=e173]:
+            - button "Cross" [ref=e175]
+            - button "Cursors" [pressed] [ref=e181]
+          - generic [ref=e187]:
+            - button "Trendline" [ref=e189]
+            - button "Trend tools" [ref=e195]
+          - generic [ref=e201]:
+            - button "Fib retracement" [ref=e203]
+            - button "Gann and Fibonacci tools" [ref=e212]
+          - generic [ref=e218]:
+            - button "XABCD pattern" [ref=e220]
+            - button "Patterns" [ref=e226]
+          - generic [ref=e232]:
+            - button "Long position" [ref=e234]
+            - button "Forecasting and measurement tools" [ref=e238]
+          - generic [ref=e244]:
+            - button "Brush" [ref=e246]
+            - button "Geometric shapes" [ref=e252]
+          - generic [ref=e258]:
+            - button "Text" [ref=e260]
+            - button "Annotation tools" [ref=e264]
+          - generic [ref=e269]:
+            - button "Icon" [ref=e271]
+            - button "Icons" [ref=e275]
+        - generic [ref=e279]:
+          - button "Measure" [ref=e280]
+          - button "Zoom in" [ref=e284]
+        - generic [ref=e291]:
+          - generic [ref=e294]:
+            - button "Magnet mode snaps drawings placed near price bars to the closest OHLC value" [ref=e296]
+            - button "Magnets" [ref=e302]
+          - button "Keep drawing" [ref=e306]
+          - button "Lock all drawings" [ref=e310]
+          - generic [ref=e315]:
+            - button "Hide all drawings" [ref=e317]
+            - button "Hide options" [ref=e321]
+        - generic [ref=e327]:
+          - button "Remove objects" [ref=e329]
+          - button "Remove options" [ref=e333]
+    - generic [ref=e339]:
+      - 'region "Chart #1" [ref=e342]':
+        - generic [ref=e344]:
+          - generic [ref=e346]:
+            - generic:
+              - generic:
+                - toolbar:
+                  - generic:
+                    - generic [ref=e347]:
+                      - generic "Change symbol" [ref=e1369]:
+                        - generic [ref=e349]: D
+                        - button "Change symbol" [ref=e1371]: Dominion Energy, Inc.
+                      - generic "Change interval" [ref=e1372]:
+                        - text: ·
+                        - button "Change interval" [ref=e1373]: "15"
+                      - generic [ref=e1374]:
+                        - text: ·
+                        - generic [ref=e1375]: NYSE
+                    - generic:
+                      - generic:
+                        - button "Flag symbol"
+                        - button "More"
+                    - button "Market closed · One update every 5 seconds · NYSE by Cboe One" [ref=e1377]
+                  - generic [ref=e364]:
+                    - generic [ref=e365]:
+                      - generic [ref=e366]: O
+                      - generic [ref=e367]: "70.12"
+                    - generic [ref=e368]:
+                      - generic [ref=e369]: H
+                      - generic [ref=e370]: "70.26"
+                    - generic [ref=e371]:
+                      - generic [ref=e372]: L
+                      - generic [ref=e373]: "70.06"
+                    - generic [ref=e374]:
+                      - generic [ref=e375]: C
+                      - generic [ref=e376]: "70.08"
+                    - generic [ref=e377]: −0.04 (−0.06%)
+                - generic [ref=e381]:
+                  - generic [ref=e383]:
+                    - generic: "70.08"
+                    - generic: Sell
+                  - generic "Spread" [ref=e385]: "0.00"
+                  - generic [ref=e387]:
+                    - generic: "70.08"
+                    - generic: Buy
+              - generic:
+                - button "Hide indicator legend" [ref=e388]
+                - generic:
+                  - toolbar:
+                    - generic:
+                      - generic [ref=e1094]:
+                        - generic [ref=e1095]: SimpleSMA18 Strategy (MQL5 port)
+                        - generic [ref=e1097]:
+                          - generic "Fast MA Period" [ref=e1098]: "18"
+                          - generic "Trend MA Period" [ref=e1100]: "200"
+                          - generic "Volume MA Period" [ref=e1102]: "20"
+                          - generic "Swing Strength" [ref=e1104]: "2"
+                          - generic "Entry Buffer (ticks)" [ref=e1106]: "10"
+                          - generic "Break-Even Trigger (ticks)" [ref=e1108]: "500"
+                          - generic "Break-Even Offset (ticks)" [ref=e1110]: "10"
+                          - generic "Protection Mode" [ref=e1112]: Swing
+                          - generic "Protection Start (ticks, 0=immediate)" [ref=e1114]: "500"
+                          - generic "Swing Buffer (ticks)" [ref=e1116]: "50"
+                          - generic "Chandelier Lookback" [ref=e1118]: "22"
+                          - generic "ATR Period" [ref=e1120]: "22"
+                          - generic "ATR Multiplier" [ref=e1122]: "3"
+                          - generic "Trailing Start (ticks)" [ref=e1124]: "800"
+                          - generic "Trailing Distance (ticks)" [ref=e1126]: "500"
+                      - generic:
+                        - generic:
+                          - button "Hide"
+                          - button "Settings"
+                          - generic "Source code"
+                          - button "Remove"
+                          - button "More"
+                      - button "Active strategy" [ref=e1311]
+                    - generic [ref=e1137]:
+                      - generic "MA 18" [ref=e1139]: "69.99"
+                      - generic "MA 200" [ref=e1141]: "69.36"
+            - generic "Chart for BATS:D, 15 minutes" [ref=e1384]
+          - generic [ref=e430]: USD
+      - toolbar [ref=e448]:
+        - generic [ref=e450]:
+          - generic [ref=e451]:
+            - button "1 day in 1 minute intervals" [ref=e452]:
+              - generic [ref=e453]: 1D
+            - button "5 days in 5 minutes intervals" [ref=e454]:
+              - generic [ref=e455]: 5D
+            - button "1 month in 30 minutes intervals" [ref=e456]:
+              - generic [ref=e457]: 1M
+            - button "3 months in 1 hour intervals" [ref=e458]:
+              - generic [ref=e459]: 3M
+            - button "6 months in 2 hours intervals" [ref=e460]:
+              - generic [ref=e461]: 6M
+            - button "Year to day in 1 day intervals" [ref=e462]:
+              - generic [ref=e463]: YTD
+            - button "1 year in 1 day intervals" [ref=e464]:
+              - generic [ref=e465]: 1Y
+            - button "5 years in 1 week intervals" [ref=e466]:
+              - generic [ref=e467]: 5Y
+            - button "All data in 1 month intervals" [ref=e468]:
+              - generic [ref=e469]: All
+          - button "Go to" [ref=e471]
+        - generic [ref=e475]:
+          - button "Timezone" [ref=e478]:
+            - generic [ref=e479]: 16:20:03 UTC+5:30
+          - button "Regular" [ref=e482]: RTH
+          - button "Adjust data for dividends" [ref=e486]:
+            - generic [ref=e487]: ADJ
+    - generic [ref=e489]:
+      - toolbar [ref=e494]:
+        - button "Watchlist, details, and news" [ref=e495]
+        - button "Alerts" [ref=e500]
+        - button "Object tree and data window" [ref=e505]
+        - button "Chats" [ref=e509]
+        - button "Screeners" [ref=e514]
+        - button "Pine" [ref=e520]
+        - button "Calendars" [ref=e525]
+        - button "Community" [ref=e529]
+        - button "Notifications" [ref=e536]
+        - button "Products" [ref=e540]
+        - button "Help Center" [ref=e545]
+      - generic [ref=e549]: "[] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] –"
+    - generic [ref=e1142]:
+      - toolbar [ref=e1144]:
+        - generic [ref=e1147]:
+          - button "Close strategy report" [ref=e1148]:
+            - generic [ref=e1156]: SimpleSMA18 Strategy (MQL5 port)
+          - button "Open context menu" [ref=e1158]
+        - generic [ref=e1163]:
+          - button "Collapse panel" [ref=e1164]
+          - button "Maximize panel" [ref=e1168]
+      - generic [ref=e1179]:
+        - generic [ref=e1181]:
+          - tablist [ref=e1183]:
+            - tab [selected] [ref=e1184]:
+              - generic "Metrics" [ref=e1185]
+            - tab [ref=e1189]:
+              - generic "Trades" [ref=e1190]
+          - button "Oct 1, 2025 — Jul 11, 2026" [ref=e1385]
+          - button "10 K USD" [ref=e1386]
+          - button "Default detalization" [ref=e1226]
+          - button "Script execution 1" [ref=e1241]:
+            - generic [ref=e1245]:
+              - generic [ref=e1249]: Script execution
+              - generic [ref=e1250]: "1"
+        - generic [ref=e1388]:
+          - paragraph [ref=e1389]: Key stats
+          - generic [ref=e1390]:
+            - generic [ref=e1392]:
+              - generic [ref=e1394]:
+                - generic [ref=e1395]: Total PnL
+                - generic [ref=e1397]:
+                  - generic [ref=e1398]: −230.38
+                  - generic [ref=e1399]: USD
+                  - generic [ref=e1400]: −2.30%
+              - generic [ref=e1401]:
+                - generic [ref=e1402]: Max drawdown
+                - generic [ref=e1404]:
+                  - generic [ref=e1405]: "238.06"
+                  - generic [ref=e1406]: USD
+                  - generic [ref=e1407]: 2.38%
+              - generic [ref=e1408]:
+                - generic [ref=e1409]: Profitable trades
+                - generic [ref=e1411]:
+                  - generic [ref=e1412]: 33.62%
+                  - generic [ref=e1413]: 39/116
+              - generic [ref=e1414]:
+                - generic [ref=e1415]: Profit factor
+                - generic [ref=e1417]: "0.495"
+            - generic [ref=e1420]:
+              - generic [ref=e1421]:
+                - generic [ref=e1422]:
+                  - generic [ref=e1423]: Performance
+                  - link "Show description" [ref=e1424] [cursor=pointer]:
+                    - /url: /support/solutions/43000681735
+                - generic [ref=e1425]:
+                  - button "Scale" [ref=e1426]
+                  - button "Take a snapshot" [ref=e1432]
+                  - button "Expand chart" [ref=e1437]
+              - generic [ref=e1443]:
+                - generic:
+                  - generic:
+                    - generic: Cumulative PnL
+                    - generic [ref=e1448]:
+                      - generic [ref=e1449]: Buy and hold
+                      - button "Show" [ref=e1450]
+                    - generic: Trades excursions
+                    - generic: Run-ups and drawdowns
+                    - button "Hide metrics legend" [ref=e1463]
+                - table [ref=e1468]:
+                  - row [ref=e1469]:
+                    - cell
+                    - cell [ref=e1470]
+                    - cell [ref=e1474]
+                  - row [ref=e1478]:
+                    - cell
+                    - cell [ref=e1479]
+                    - cell [ref=e1483]
+          - generic [ref=e1486]:
+            - generic [ref=e1487]:
+              - paragraph [ref=e1488]: Return details
+              - tablist [ref=e1490]:
+                - tab "Overview" [selected] [ref=e1491]
+                - tab "Returns" [ref=e1493]
+                - tab "Benchmarking" [ref=e1495]
+                - tab "Risk-adjusted performance" [ref=e1497]
+                - button:
+                  - generic: More
+              - generic [ref=e1501]:
+                - generic [ref=e1503]:
+                  - generic [ref=e1504]: Open PnL
+                  - generic [ref=e1506]:
+                    - generic [ref=e1507]: "+0.91"
+                    - generic [ref=e1508]: USD
+                    - generic [ref=e1509]: +0.01%
+                - generic [ref=e1510]:
+                  - generic [ref=e1511]: Expected payoff
+                  - generic [ref=e1513]:
+                    - generic [ref=e1514]: −1.99
+                    - generic [ref=e1515]: USD
+                - generic [ref=e1516]:
+                  - generic [ref=e1517]: Strategy outperformance
+                  - generic [ref=e1519]:
+                    - generic [ref=e1520]: −1,622.87
+                    - generic [ref=e1521]: USD
+                    - generic [ref=e1522]: −16.23%
+                - generic [ref=e1523]:
+                  - generic [ref=e1524]: Sharpe ratio
+                  - generic [ref=e1526]: −1.377
+              - generic [ref=e1530]:
+                - generic [ref=e1531]:
+                  - generic [ref=e1532]: Profit structure
+                  - generic [ref=e1533]:
+                    - generic [ref=e1551]:
+                      - generic [ref=e1552]: ‪−240.00‬
+                      - generic [ref=e1553]: ‪−120.00‬
+                      - generic [ref=e1554]: ‪0.00‬
+                      - generic [ref=e1555]: ‪120.00‬
+                      - generic [ref=e1556]: ‪240.00‬
+                    - generic [ref=e1557]:
+                      - generic [ref=e1558]: Total profit
+                      - generic [ref=e1561]: Open PnL
+                      - generic [ref=e1564]: Total loss
+                      - generic [ref=e1567]: Commission
+                      - generic [ref=e1570]: Total PnL
+                - generic [ref=e1573]:
+                  - generic [ref=e1574]: Benchmarking
+                  - generic [ref=e1576]:
+                    - table [ref=e1579]:
+                      - row [ref=e1580]:
+                        - cell
+                        - cell [ref=e1581]
+                        - cell [ref=e1585]
+                    - generic [ref=e1589]:
+                      - generic [ref=e1590]: Buy and hold PnL
+                      - generic [ref=e1593]: Strategy PnL
+            - generic [ref=e1596]:
+              - paragraph [ref=e1597]: Trades analysis
+              - tablist [ref=e1599]:
+                - tab "Overview" [selected] [ref=e1600]
+                - tab "Trades analysis details" [ref=e1602]
+                - button:
+                  - generic: More
+              - generic [ref=e1606]:
+                - generic [ref=e1608]:
+                  - generic [ref=e1609]: Average PnL
+                  - generic [ref=e1611]:
+                    - generic [ref=e1612]: −1.99
+                    - generic [ref=e1613]: USD
+                    - generic [ref=e1614]: −0.21%
+                - generic [ref=e1615]:
+                  - generic [ref=e1616]: Average bars in trades
+                  - generic [ref=e1618]: "14"
+                - generic [ref=e1620]:
+                  - generic [ref=e1621]: Largest profit
+                  - button "Upgrade to get full access to Strategy report data" [ref=e1623]
+                - generic [ref=e1627]:
+                  - generic [ref=e1628]: Largest loss
+                  - button "Upgrade to get full access to Strategy report data" [ref=e1630]
+              - generic [ref=e1636]:
+                - generic [ref=e1637]:
+                  - generic [ref=e1638]: Returns distribution
+                  - generic [ref=e1640]:
+                    - table [ref=e1643]:
+                      - row [ref=e1644]:
+                        - cell
+                        - cell [ref=e1645]
+                        - cell [ref=e1649]
+                      - row [ref=e1653]:
+                        - cell
+                        - cell [ref=e1654]
+                        - cell [ref=e1658]
+                    - generic [ref=e1661]:
+                      - generic [ref=e1662]:
+                        - generic [ref=e1663]: Losers
+                        - generic [ref=e1666]: Winners
+                      - generic [ref=e1669]:
+                        - generic [ref=e1670]:
+                          - generic [ref=e1673]: Average loss
+                          - generic [ref=e1674]: −0.50%
+                        - generic [ref=e1675]:
+                          - generic [ref=e1678]: Average profit
+                          - generic [ref=e1679]: 0.56%
+                - generic [ref=e1680]:
+                  - generic [ref=e1681]: Trades distribution
+                  - generic [ref=e1683]:
+                    - generic [ref=e1688]:
+                      - generic [ref=e1689]: "116"
+                      - generic [ref=e1690]: Total trades
+                    - generic [ref=e1696]:
+                      - generic [ref=e1697]:
+                        - generic [ref=e1699]: Winners
+                        - generic [ref=e1700]:
+                          - generic [ref=e1701]: 39 trades
+                          - generic [ref=e1702]: 33.62%
+                      - generic [ref=e1703]:
+                        - generic [ref=e1705]: Losers
+                        - generic [ref=e1706]:
+                          - generic [ref=e1707]: 77 trades
+                          - generic [ref=e1708]: 66.38%
+                      - generic [ref=e1709]:
+                        - generic [ref=e1711]: Breakevens
+                        - generic [ref=e1712]:
+                          - generic [ref=e1713]: 0 trades
+                          - generic [ref=e1714]: 0.00%
+            - generic [ref=e1715]:
+              - paragraph [ref=e1716]: Equity run-ups and drawdowns
+              - tablist [ref=e1718]:
+                - tab "Overview" [selected] [ref=e1719]
+                - tab "Run-ups" [ref=e1721]
+                - tab "Drawdowns" [ref=e1723]
+                - button:
+                  - generic: More
+              - generic [ref=e1727]:
+                - generic [ref=e1729]:
+                  - generic [ref=e1730]: Average run-up duration
+                  - generic [ref=e1732]: 2 days
+                - generic [ref=e1734]:
+                  - generic [ref=e1735]: Average drawdown duration
+                  - generic [ref=e1737]: 263 days
+                - generic [ref=e1739]:
+                  - generic [ref=e1740]: Max drawdown as % of initial capital
+                  - button "Upgrade to get full access to Strategy report data" [ref=e1742]
+                - generic [ref=e1746]:
+                  - generic [ref=e1747]: Return of max drawdown
+                  - button "Upgrade to get full access to Strategy report data" [ref=e1749]
+              - generic [ref=e1755]:
+                - generic [ref=e1756]:
+                  - generic [ref=e1757]: Alternating growth and decline
+                  - generic [ref=e1759]:
+                    - generic [ref=e1760]: Not enough data to show
+                    - table [ref=e1766]:
+                      - row [ref=e1767]:
+                        - cell
+                        - cell [ref=e1768]
+                        - cell [ref=e1772]
+                - generic [ref=e1776]:
+                  - generic [ref=e1777]: Comparison of growth and decline periods
+                  - generic [ref=e1779]:
+                    - generic [ref=e1780]: Not enough data to show
+                    - generic [ref=e1783]:
+                      - generic [ref=e1784]: Run-up
+                      - generic [ref=e1785]:
+                        - generic [ref=e1786]:
+                          - generic [ref=e1787]: Maximum
+                          - generic [ref=e1789]: 0.03%
+                        - generic [ref=e1790]:
+                          - generic [ref=e1791]: Average
+                          - generic [ref=e1793]: 0.03%
+                    - generic [ref=e1794]:
+                      - generic [ref=e1795]: Drawdown
+                      - generic [ref=e1796]:
+                        - generic [ref=e1797]:
+                          - generic [ref=e1798]: Maximum
+                          - generic [ref=e1800]: 2.35%
+                        - generic [ref=e1801]:
+                          - generic [ref=e1802]: Average
+                          - generic [ref=e1804]: 2.35%
+                        - generic [ref=e1805]:
+                          - generic [ref=e1806]: Current
+                          - generic [ref=e1808]: 2.35%
+            - generic [ref=e1809]:
+              - paragraph [ref=e1810]: Capital efficiency
+              - tablist [ref=e1812]:
+                - tab "Overview" [selected] [ref=e1813]
+                - tab "Capital usage" [ref=e1815]
+                - tab "Margin usage" [ref=e1817]
+                - button:
+                  - generic: More
+              - generic [ref=e1821]:
+                - generic [ref=e1823]:
+                  - generic [ref=e1824]: CAGR
+                  - generic [ref=e1826]: −2.98%
+                - generic [ref=e1828]:
+                  - generic [ref=e1829]: Account size required
+                  - generic [ref=e1831]:
+                    - generic [ref=e1832]: "238.06"
+                    - generic [ref=e1833]: USD
+                - generic [ref=e1834]:
+                  - generic [ref=e1835]: Return on initial capital
+                  - generic [ref=e1837]: −2.31%
+                - generic [ref=e1839]:
+                  - generic [ref=e1840]: Margin calls
+                  - button "Upgrade to get full access to Strategy report data" [ref=e1842]
+              - generic [ref=e1848]:
+                - generic [ref=e1849]: Margin usage
+                - generic [ref=e1851]: Not enough data to show
+    - generic "Trading panel"
+  - generic: Symbol search
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+    - dialog "Symbol search" [ref=e1860]:
+      - generic [ref=e1861]:
+        - generic [ref=e1862]: Symbol search
+        - button "Close menu" [ref=e1864]
+      - generic [ref=e1871]:
+        - searchbox "Symbol, ISIN, or CUSIP" [active] [ref=e1875]: D
+        - generic [ref=e1876]:
+          - button "Clear" [ref=e1877]
+          - separator [ref=e1881]
+          - button "Show spread operators" [ref=e1882]
+      - tablist [ref=e1888]:
+        - tab "All" [selected] [ref=e1889]
+        - tab "Stocks" [ref=e1891]
+        - tab "Funds" [ref=e1893]
+        - tab "Futures" [ref=e1895]
+        - tab "Forex" [ref=e1897]
+        - tab "Crypto" [ref=e1899]
+        - tab "Indices" [ref=e1901]
+        - tab "Bonds" [ref=e1903]
+        - tab "Economy" [ref=e1905]
+        - tab "Options" [ref=e1907]
+        - button:
+          - generic: More
+      - generic [ref=e1912]:
+        - generic [ref=e1913]:
+          - generic [ref=e1914]:
+            - generic [ref=e1915]: D
+            - emphasis [ref=e1926]: D
+          - generic [ref=e1927]: Dominion Energy, Inc.
+          - generic [ref=e1929]:
+            - generic [ref=e1930]:
+              - generic [ref=e1931]: stock
+              - generic "NYSE — New York Stock Exchange" [ref=e1933]: NYSE
+            - generic [ref=e1934]: "+14"
+            - button "Expand" [ref=e1948]
+        - generic [ref=e1952]:
+          - generic [ref=e1953]:
+            - generic [ref=e1954]: D
+            - emphasis [ref=e1965]: D
+          - generic [ref=e1966]: Directa SIM S.p.A.
+          - generic [ref=e1968]:
+            - generic [ref=e1969]:
+              - generic [ref=e1970]: stock
+              - generic "MIL — Milan Stock Exchange" [ref=e1972]: MIL
+            - button "Expand" [ref=e1980]
+        - generic [ref=e1984]:
+          - generic [ref=e1985]:
+            - generic [ref=e1986]: D
+            - emphasis [ref=e1997]: D
+          - generic [ref=e1998]: Dental Corporation Public Company Ltd
+          - generic [ref=e2001]:
+            - generic [ref=e2002]: stock
+            - generic [ref=e2003]:
+              - img "Primary exchange" [ref=e2004]
+              - generic "SET — Stock Exchange of Thailand" [ref=e2007]: SET
+        - generic [ref=e2012]:
+          - generic [ref=e2013]:
+            - generic [ref=e2014]: D
+            - emphasis [ref=e2024]: D
+          - generic [ref=e2025]: DOMINION ENERGY INC / US DOLLAR
+          - generic [ref=e2028]:
+            - generic [ref=e2029]: stock crypto oracle
+            - generic "Pyth" [ref=e2031]
+        - generic [ref=e2036]:
+          - generic [ref=e2037]:
+            - generic [ref=e2038]: D
+            - generic [ref=e2048]:
+              - emphasis [ref=e2049]: D
+              - text: KRW
+          - generic [ref=e2050]: D / South Korean Won
+          - generic [ref=e2053]:
+            - generic [ref=e2054]: spot crypto
+            - generic "Bithumb" [ref=e2056]
+        - generic [ref=e2061]:
+          - generic [ref=e2062]:
+            - generic [ref=e2063]: D
+            - generic [ref=e2073]:
+              - emphasis [ref=e2074]: D
+              - text: USDT
+          - generic [ref=e2075]: Dar Open Network / Tether USD
+          - generic [ref=e2078]:
+            - generic [ref=e2079]: spot crypto defi
+            - generic "Poloniex" [ref=e2081]
+        - generic [ref=e2086]:
+          - generic [ref=e2087]:
+            - generic [ref=e2088]: D
+            - generic [ref=e2098]:
+              - emphasis [ref=e2099]: D
+              - text: USDT
+          - generic [ref=e2100]: DAR Open Network / Tether
+          - generic [ref=e2103]:
+            - generic [ref=e2104]: spot crypto defi
+            - generic "KuCoin" [ref=e2106]
+        - generic [ref=e2111]:
+          - generic [ref=e2112]:
+            - generic [ref=e2113]: D
+            - generic [ref=e2123]:
+              - emphasis [ref=e2124]: D
+              - text: USDT
+          - generic [ref=e2125]: DAR Open Network/USD Tether Spot
+          - generic [ref=e2128]:
+            - generic [ref=e2129]: spot crypto defi
+            - generic "BingX" [ref=e2131]
+        - generic [ref=e2136]:
+          - generic [ref=e2137]:
+            - generic [ref=e2138]: D
+            - generic [ref=e2147]:
+              - emphasis [ref=e2148]: D
+              - text: WETH_E1ECAD
+          - generic [ref=e2149]: D / Wrapped Ether on Ethereum (0xE1eCaDb5FEC254c2c893C230b935Db30b8FfF0db)
+          - generic [ref=e2152]:
+            - generic [ref=e2153]: spot crypto
+            - generic "Uniswap v2 (Ethereum)" [ref=e2155]: Uniswap v2 Ethereum
+        - generic [ref=e2160]:
+          - generic [ref=e2161]:
+            - generic [ref=e2162]: D
+            - generic [ref=e2171]:
+              - emphasis [ref=e2172]: D
+              - text: WETH_E1ECAD.USD
+          - generic [ref=e2173]: D / Wrapped Ether on Ethereum (0xE1eCaDb5FEC254c2c893C230b935Db30b8FfF0db) in USD
+          - generic [ref=e2176]:
+            - generic [ref=e2177]: spot crypto
+            - generic "Uniswap v2 (Ethereum)" [ref=e2179]: Uniswap v2 Ethereum
+        - generic [ref=e2184]:
+          - generic [ref=e2185]:
+            - generic [ref=e2186]: D
+            - generic [ref=e2196]:
+              - emphasis [ref=e2197]: D
+              - text: USDT
+          - generic [ref=e2198]: D / TetherUS
+          - generic [ref=e2201]:
+            - generic [ref=e2202]: spot crypto defi
+            - generic "Binance.US" [ref=e2204]
+        - generic [ref=e2209]:
+          - generic [ref=e2210]:
+            - generic [ref=e2211]: D
+            - generic [ref=e2221]:
+              - emphasis [ref=e2222]: D
+              - text: USDT
+          - generic [ref=e2223]: Dar Open Network/Tether
+          - generic [ref=e2226]:
+            - generic [ref=e2227]: spot crypto defi
+            - generic "Gate" [ref=e2229]
+        - generic [ref=e2234]:
+          - generic [ref=e2235]:
+            - generic [ref=e2236]: D
+            - generic [ref=e2246]:
+              - emphasis [ref=e2247]: D
+              - text: USDT
+          - generic [ref=e2248]: DAR Open Network / USDT
+          - generic [ref=e2251]:
+            - generic [ref=e2252]: spot crypto defi
+            - generic "MEXC" [ref=e2254]
+        - generic [ref=e2259]:
+          - generic [ref=e2260]:
+            - generic [ref=e2261]: D
+            - generic [ref=e2271]:
+              - emphasis [ref=e2272]: D
+              - text: USDT
+          - generic [ref=e2273]: Dar Open Network/Tether USD
+          - generic [ref=e2276]:
+            - generic [ref=e2277]: spot crypto
+            - generic "BitMart" [ref=e2279]
+        - generic [ref=e2284]:
+          - generic [ref=e2285]:
+            - generic [ref=e2286]: D
+            - generic [ref=e2296]:
+              - emphasis [ref=e2297]: D
+              - text: XY
+          - generic [ref=e2298]: U.S. Dollar Currency Index
+          - generic [ref=e2301]:
+            - generic [ref=e2302]: index cfd
+            - generic [ref=e2303]: TVC
+        - generic [ref=e2309]:
+          - generic [ref=e2310]:
+            - generic [ref=e2311]: D
+            - generic [ref=e2321]:
+              - emphasis [ref=e2322]: D
+              - text: XY
+          - generic [ref=e2323]: US Dollar Index
+          - generic [ref=e2326]:
+            - generic [ref=e2327]: index cfd
+            - generic "Capital.com" [ref=e2329]
+        - generic [ref=e2334]:
+          - generic [ref=e2335]:
+            - generic [ref=e2336]: D
+            - generic [ref=e2346]:
+              - emphasis [ref=e2347]: D
+              - text: JI
+          - generic [ref=e2348]: Dow Jones Industrial Average Index
+          - generic [ref=e2351]:
+            - generic [ref=e2352]: index cfd
+            - generic [ref=e2353]: TVC
+        - generic [ref=e2359]:
+          - generic [ref=e2360]:
+            - generic [ref=e2361]: D
+            - generic [ref=e2371]:
+              - emphasis [ref=e2372]: D
+              - text: IA
+          - generic [ref=e2373]: State Street SPDR Dow Jones Industrial Average ETF Trust
+          - generic [ref=e2375]:
+            - generic [ref=e2376]:
+              - generic [ref=e2377]: fund etf
+              - generic "Arca — NYSE Arca" [ref=e2379]: NYSE Arca
+            - generic [ref=e2380]: "+8"
+            - button "Expand" [ref=e2394]
+        - generic [ref=e2398]:
+          - generic [ref=e2399]:
+            - generic [ref=e2400]: D
+            - generic [ref=e2410]:
+              - emphasis [ref=e2411]: D
+              - text: ELL
+          - generic [ref=e2412]: Dell Technologies Inc.
+          - generic [ref=e2414]:
+            - generic [ref=e2415]:
+              - generic [ref=e2416]: stock
+              - generic "NYSE — New York Stock Exchange" [ref=e2418]: NYSE
+            - generic [ref=e2419]: "+18"
+            - button "Expand" [ref=e2433]
+        - generic [ref=e2437]:
+          - generic [ref=e2438]:
+            - generic [ref=e2439]: D
+            - generic [ref=e2449]:
+              - emphasis [ref=e2450]: D
+              - text: RAM
+          - generic [ref=e2451]: Roundhill Memory ETF
+          - generic [ref=e2453]:
+            - generic [ref=e2454]:
+              - generic [ref=e2455]: fund etf
+              - generic "CBOE — Chicago Board Options Exchange" [ref=e2457]: CBOE
+            - button "Expand" [ref=e2467]
+        - generic [ref=e2471]:
+          - generic [ref=e2472]:
+            - generic [ref=e2473]: D
+            - generic [ref=e2483]:
+              - emphasis [ref=e2484]: D
+              - text: IS
+          - generic [ref=e2485]: Walt Disney Company (The)
+          - generic [ref=e2487]:
+            - generic [ref=e2488]:
+              - generic [ref=e2489]: stock
+              - generic "NYSE — New York Stock Exchange" [ref=e2491]: NYSE
+            - generic [ref=e2492]: "+24"
+            - button "Expand" [ref=e2506]
+        - generic [ref=e2510]:
+          - generic [ref=e2511]:
+            - generic [ref=e2512]: D
+            - generic [ref=e2522]:
+              - emphasis [ref=e2523]: D
+              - text: LF
+          - generic [ref=e2524]: DLF Limited
+          - generic [ref=e2526]:
+            - generic [ref=e2527]:
+              - generic [ref=e2528]: stock
+              - generic "NSE — National Stock Exchange of India" [ref=e2530]: NSE
+            - button "Expand" [ref=e2538]
+        - generic [ref=e2542]:
+          - generic [ref=e2543]:
+            - generic [ref=e2544]: D
+            - generic [ref=e2554]:
+              - emphasis [ref=e2555]: D
+              - text: AL
+          - generic [ref=e2556]: Delta Air Lines, Inc.
+          - generic [ref=e2558]:
+            - generic [ref=e2559]:
+              - generic [ref=e2560]: stock
+              - generic "NYSE — New York Stock Exchange" [ref=e2562]: NYSE
+            - generic [ref=e2563]: "+15"
+            - button "Expand" [ref=e2577]
+        - generic [ref=e2581]:
+          - generic [ref=e2582]:
+            - generic [ref=e2583]: D
+            - generic [ref=e2593]:
+              - emphasis [ref=e2594]: D
+              - text: JI
+          - generic [ref=e2595]: Dow Jones Industrial Average Index
+          - generic [ref=e2598]:
+            - generic [ref=e2599]: index cfd
+            - generic [ref=e2600]: DJCFD
+        - generic [ref=e2606]:
+          - generic [ref=e2607]:
+            - generic [ref=e2608]: D
+            - generic [ref=e2618]:
+              - emphasis [ref=e2619]: D
+              - text: E
+          - generic [ref=e2620]: Deere & Company
+          - generic [ref=e2622]:
+            - generic [ref=e2623]:
+              - generic [ref=e2624]: stock
+              - generic "NYSE — New York Stock Exchange" [ref=e2626]: NYSE
+            - generic [ref=e2627]: "+19"
+            - button "Expand" [ref=e2641]
+        - generic [ref=e2645]:
+          - generic [ref=e2646]:
+            - generic [ref=e2647]: D
+            - generic [ref=e2657]:
+              - emphasis [ref=e2658]: D
+              - text: AX
+          - generic [ref=e2659]: DAX Index
+          - generic [ref=e2662]:
+            - generic [ref=e2663]: index
+            - generic "XETR — Xetra" [ref=e2665]: XETR
+        - generic [ref=e2670]:
+          - generic [ref=e2671]:
+            - generic [ref=e2672]: D
+            - generic [ref=e2682]:
+              - emphasis [ref=e2683]: D
+              - text: AX
+          - generic [ref=e2684]: Germany 40 Cash
+          - generic [ref=e2687]:
+            - generic [ref=e2688]: index cfd
+            - generic "IG" [ref=e2690]
+        - generic [ref=e2695]:
+          - generic [ref=e2696]:
+            - generic [ref=e2697]: D
+            - generic [ref=e2707]:
+              - emphasis [ref=e2708]: D
+              - text: DOG
+          - generic [ref=e2709]: Datadog, Inc.
+          - generic [ref=e2711]:
+            - generic [ref=e2712]:
+              - generic [ref=e2713]: stock
+              - generic "NASDAQ — NASDAQ Stock Market" [ref=e2715]: NASDAQ
+            - generic [ref=e2716]: "+16"
+            - button "Expand" [ref=e2730]
+        - generic [ref=e2734]:
+          - generic [ref=e2735]:
+            - generic [ref=e2736]: D
+            - generic [ref=e2746]:
+              - emphasis [ref=e2747]: D
+              - text: G
+          - generic [ref=e2748]: Dollar General Corporation
+          - generic [ref=e2750]:
+            - generic [ref=e2751]:
+              - generic [ref=e2752]: stock
+              - generic "NYSE — New York Stock Exchange" [ref=e2754]: NYSE
+            - generic [ref=e2755]: "+15"
+            - button "Expand" [ref=e2769]
+        - generic [ref=e2773]:
+          - generic [ref=e2774]:
+            - generic [ref=e2775]: D
+            - generic [ref=e2785]:
+              - emphasis [ref=e2786]: D
+              - text: T
+          - generic [ref=e2787]: Dynatrace, Inc.
+          - generic [ref=e2789]:
+            - generic [ref=e2790]:
+              - generic [ref=e2791]: stock
+              - generic "NYSE — New York Stock Exchange" [ref=e2793]: NYSE
+            - generic [ref=e2794]: "+10"
+            - button "Expand" [ref=e2808]
+        - generic [ref=e2812]:
+          - generic [ref=e2813]:
+            - generic [ref=e2814]: D
+            - generic [ref=e2824]:
+              - emphasis [ref=e2825]: D
+              - text: JI
+          - generic [ref=e2826]: Dow Jones Industrial Average
+          - generic [ref=e2829]:
+            - generic [ref=e2830]: index
+            - generic "DJ — Dow Jones Indices" [ref=e2832]: DJ
+        - generic [ref=e2837]:
+          - generic [ref=e2838]:
+            - generic [ref=e2839]: D
+            - generic [ref=e2849]:
+              - emphasis [ref=e2850]: D
+              - text: XY
+          - generic [ref=e2851]: U.S. Dollar Currency Index
+          - generic [ref=e2854]:
+            - generic [ref=e2855]: index
+            - generic "ICEUS — ICE Futures U.S." [ref=e2857]: ICEUS
+        - generic [ref=e2862]:
+          - generic [ref=e2863]:
+            - generic [ref=e2864]: D
+            - generic [ref=e2874]:
+              - emphasis [ref=e2875]: D
+              - text: "05"
+          - generic [ref=e2876]: DBS Group Holdings Ltd
+          - generic [ref=e2878]:
+            - generic [ref=e2879]:
+              - generic [ref=e2880]: stock
+              - generic "SGX — Singapore Stock Exchange" [ref=e2882]: SGX
+            - generic [ref=e2883]: "+7"
+            - button "Expand" [ref=e2897]
+        - generic [ref=e2901]:
+          - generic [ref=e2902]:
+            - generic [ref=e2903]: D
+            - generic [ref=e2913]:
+              - emphasis [ref=e2914]: D
+              - text: OW
+          - generic [ref=e2915]: Dow Inc.
+          - generic [ref=e2917]:
+            - generic [ref=e2918]:
+              - generic [ref=e2919]: stock
+              - generic "NYSE — New York Stock Exchange" [ref=e2921]: NYSE
+            - generic [ref=e2922]: "+18"
+            - button "Expand" [ref=e2936]
+        - generic [ref=e2940]:
+          - generic [ref=e2941]:
+            - generic [ref=e2942]: D
+            - generic [ref=e2952]:
+              - emphasis [ref=e2953]: D
+              - text: J30
+          - generic [ref=e2954]: Dow Jones Index Cash CFD (USD)
+          - generic [ref=e2957]:
+            - generic [ref=e2958]: index cfd
+            - generic "Vantage" [ref=e2960]
+        - generic [ref=e2965]:
+          - generic [ref=e2966]:
+            - generic [ref=e2967]: D
+            - generic [ref=e2977]:
+              - emphasis [ref=e2978]: D
+              - text: JT
+          - generic [ref=e2979]: Trump Media & Technology Group Corp.
+          - generic [ref=e2981]:
+            - generic [ref=e2982]:
+              - generic [ref=e2983]: stock
+              - generic "NASDAQ — NASDAQ Stock Market" [ref=e2985]: NASDAQ
+            - button "Expand" [ref=e2999]
+        - generic [ref=e3003]:
+          - generic [ref=e3004]:
+            - generic [ref=e3005]: D
+            - generic [ref=e3015]:
+              - emphasis [ref=e3016]: D
+              - text: OCN
+          - generic [ref=e3017]: DigitalOcean Holdings, Inc.
+          - generic [ref=e3019]:
+            - generic [ref=e3020]:
+              - generic [ref=e3021]: stock
+              - generic "NYSE — New York Stock Exchange" [ref=e3023]: NYSE
+            - generic [ref=e3024]: "+11"
+            - button "Expand" [ref=e3038]
+        - generic [ref=e3042]:
+          - generic [ref=e3043]:
+            - generic [ref=e3044]: D
+            - generic [ref=e3054]:
+              - emphasis [ref=e3055]: D
+              - text: VN
+          - generic [ref=e3056]: Devon Energy Corporation
+          - generic [ref=e3058]:
+            - generic [ref=e3059]:
+              - generic [ref=e3060]: stock
+              - generic "NYSE — New York Stock Exchange" [ref=e3062]: NYSE
+            - generic [ref=e3063]: "+20"
+            - button "Expand" [ref=e3077]
+        - generic [ref=e3081]:
+          - generic [ref=e3082]:
+            - generic [ref=e3083]: D
+            - generic [ref=e3093]:
+              - emphasis [ref=e3094]: D
+              - text: UOL
+          - generic [ref=e3095]: Duolingo, Inc.
+          - generic [ref=e3097]:
+            - generic [ref=e3098]:
+              - generic [ref=e3099]: stock
+              - generic "NASDAQ — NASDAQ Stock Market" [ref=e3101]: NASDAQ
+            - generic [ref=e3102]: "+1"
+            - button "Expand" [ref=e3116]
+        - generic [ref=e3120]:
+          - generic [ref=e3121]:
+            - generic [ref=e3122]: D
+            - generic [ref=e3132]:
+              - emphasis [ref=e3133]: D
+              - text: KNG
+          - generic [ref=e3134]: DraftKings Inc.
+          - generic [ref=e3136]:
+            - generic [ref=e3137]:
+              - generic [ref=e3138]: stock
+              - generic "NASDAQ — NASDAQ Stock Market" [ref=e3140]: NASDAQ
+            - generic [ref=e3141]: "+12"
+            - button "Expand" [ref=e3155]
+        - generic [ref=e3159]:
+          - generic [ref=e3160]:
+            - generic [ref=e3161]: D
+            - generic [ref=e3171]:
+              - emphasis [ref=e3172]: D
+              - text: OW
+          - generic [ref=e3173]: Wall Street Cash
+          - generic [ref=e3176]:
+            - generic [ref=e3177]: index cfd
+            - generic "IG" [ref=e3179]
+        - generic [ref=e3184]:
+          - generic [ref=e3185]:
+            - generic [ref=e3186]: D
+            - generic [ref=e3196]:
+              - emphasis [ref=e3197]: D
+              - text: HR
+          - generic [ref=e3198]: Danaher Corporation
+          - generic [ref=e3200]:
+            - generic [ref=e3201]:
+              - generic [ref=e3202]: stock
+              - generic "NYSE — New York Stock Exchange" [ref=e3204]: NYSE
+            - generic [ref=e3205]: "+19"
+            - button "Expand" [ref=e3219]
+        - generic [ref=e3223]:
+          - generic [ref=e3224]:
+            - generic [ref=e3225]: D
+            - generic [ref=e3235]:
+              - emphasis [ref=e3236]: D
+              - text: IXON
+          - generic [ref=e3237]: Dixon Technologies (India) Ltd.
+          - generic [ref=e3239]:
+            - generic [ref=e3240]:
+              - generic [ref=e3241]: stock
+              - generic "NSE — National Stock Exchange of India" [ref=e3243]: NSE
+            - button "Expand" [ref=e3251]
+        - generic [ref=e3255]:
+          - generic [ref=e3256]:
+            - generic [ref=e3257]: D
+            - generic [ref=e3267]:
+              - emphasis [ref=e3268]: D
+              - text: LO
+          - generic [ref=e3269]: DLocal Limited
+          - generic [ref=e3271]:
+            - generic [ref=e3272]:
+              - generic [ref=e3273]: stock
+              - generic "NASDAQ — NASDAQ Stock Market" [ref=e3275]: NASDAQ
+            - generic [ref=e3276]: "+6"
+            - button "Expand" [ref=e3290]
+        - generic [ref=e3294]:
+          - generic [ref=e3295]:
+            - generic [ref=e3296]: D
+            - generic [ref=e3305]:
+              - generic [ref=e3306]:
+                - emphasis [ref=e3307]: D
+                - text: XY
+              - text: E
+          - generic [ref=e3308]: US DOLLAR CURRENCY INDEX
+          - generic [ref=e3311]:
+            - generic [ref=e3312]: index
+            - generic [ref=e3313]: INDEX
+        - generic [ref=e3319]:
+          - generic [ref=e3320]:
+            - generic [ref=e3321]: D
+            - generic [ref=e3331]:
+              - emphasis [ref=e3332]: D
+              - text: ASH
+          - generic [ref=e3333]: DoorDash, Inc.
+          - generic [ref=e3335]:
+            - generic [ref=e3336]:
+              - generic [ref=e3337]: stock
+              - generic "NASDAQ — NASDAQ Stock Market" [ref=e3339]: NASDAQ
+            - generic [ref=e3340]: "+12"
+            - button "Expand" [ref=e3354]
+        - generic [ref=e3358]:
+          - generic [ref=e3359]:
+            - generic [ref=e3360]: D
+            - generic [ref=e3370]:
+              - emphasis [ref=e3371]: D
+              - text: XY
+          - generic [ref=e3372]: Dollar Index
+          - generic [ref=e3375]:
+            - generic [ref=e3376]: index cfd
+            - generic "Tickmill" [ref=e3378]
+        - generic [ref=e3383]:
+          - generic [ref=e3384]:
+            - generic [ref=e3385]: D
+            - generic [ref=e3395]:
+              - emphasis [ref=e3396]: D
+              - text: HI
+          - generic [ref=e3397]: D.R. Horton, Inc.
+          - generic [ref=e3399]:
+            - generic [ref=e3400]:
+              - generic [ref=e3401]: stock
+              - generic "NYSE — New York Stock Exchange" [ref=e3403]: NYSE
+            - generic [ref=e3404]: "+13"
+            - button "Expand" [ref=e3418]
+        - generic [ref=e3422]:
+          - generic [ref=e3423]:
+            - generic [ref=e3424]: D
+            - generic [ref=e3434]:
+              - emphasis [ref=e3435]: D
+              - text: FTX
+          - generic [ref=e3436]: Definium Therapeutics, Inc.
+          - generic [ref=e3438]:
+            - generic [ref=e3439]:
+              - generic [ref=e3440]: stock
+              - generic "NASDAQ — NASDAQ Stock Market" [ref=e3442]: NASDAQ
+            - generic [ref=e3443]: "+6"
+            - button "Expand" [ref=e3457]
+        - generic [ref=e3461]:
+          - generic [ref=e3462]:
+            - generic [ref=e3463]: D
+            - generic [ref=e3473]:
+              - emphasis [ref=e3474]: D
+              - text: E40
+          - generic [ref=e3475]: Germany DAX 40 Index
+          - generic [ref=e3478]:
+            - generic [ref=e3479]: index cfd
+            - generic "IC Markets" [ref=e3481]
+        - progressbar [ref=e3487]
+      - generic [ref=e3488]: Search using ISIN and CUSIP codes
+  - generic [ref=e723]:
+    - alert
+    - alert

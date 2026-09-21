@@ -1,0 +1,588 @@
+[
+{
+  "id": "C1",
+  "title": "Event volume dropped overnight",
+  "brief": "Operations reports that event volume fell noticeably yesterday and has not recovered today. Nobody has changed anything, allegedly. Work from the fleet total down to the responsible device, then determine whether the cause is the camera or its configuration.",
+  "steps": [
+    {
+      "id": "C1-S1", "level": 9, "difficulty": "senior", "challenge": "C1", "step": 1,
+      "title": "Confirm the drop is real",
+      "scenario": "Before blaming anything, confirm the totals actually moved. Reports are frequently wrong about this.",
+      "task": "Return the day and event count as n for the last 4 complete days (excluding today). Sort by day.",
+      "tables": ["Events"],
+      "skills": ["date_trunc", "GROUP BY", "date boundaries"],
+      "expected": "Four rows. The most recent day should be visibly lower than the preceding ones.",
+      "orderMatters": true, "checkColumnNames": true,
+      "hints": [
+        "Exclude today, or you will compare a partial day against complete ones.",
+        "The window is CURRENT_DATE - 4 up to but not including CURRENT_DATE.",
+        "Filter on the raw bigint Time using epoch boundaries so the index stays usable.",
+        "GROUP BY date_trunc('day', to_timestamp(\"Time\"/1000))::date."
+      ],
+      "solution": "SELECT date_trunc('day', to_timestamp(\"Time\"/1000))::date AS day,\n       count(*) AS n\nFROM \"Events\"\nWHERE \"Time\" >= extract(epoch FROM CURRENT_DATE - 4) * 1000\n  AND \"Time\" <  extract(epoch FROM CURRENT_DATE)     * 1000\nGROUP BY 1\nORDER BY day;",
+      "explanation": {
+        "breakdown": "A half-open range excludes today entirely, so every day in the result is complete and directly comparable.",
+        "why": "Comparing a partial day to a full one is the most common false alarm in volume monitoring.",
+        "qaRelevance": "Always establish that the aggregate change is real before spending time on attribution."
+      }
+    },
+    {
+      "id": "C1-S2", "level": 9, "difficulty": "senior", "challenge": "C1", "step": 2,
+      "title": "Attribute the drop to a camera",
+      "scenario": "The total moved. Now find which device accounts for it.",
+      "task": "For each camera return Name as camera, the count two days ago as before_n, yesterday's count as after_n, and the percentage change rounded to 1 decimal as pct_change. Show only cameras whose count fell. Sort by pct_change ascending then camera.",
+      "tables": ["Events", "VideoSources"],
+      "skills": ["conditional aggregation", "percentage change", "HAVING"],
+      "expected": "The worst offender falls by roughly 70 percent, far beyond normal daily variation.",
+      "orderMatters": true, "checkColumnNames": true,
+      "hints": [
+        "Two filtered counts per camera, one per day.",
+        "Percentage change is 100.0 * (after - before) / before.",
+        "Guard against a zero denominator with NULLIF(before, 0).",
+        "Filter to falling cameras in HAVING, since the comparison involves aggregates."
+      ],
+      "solution": "SELECT v.\"Name\" AS camera,\n       count(*) FILTER (WHERE to_timestamp(e.\"Time\"/1000)::date = CURRENT_DATE - 2) AS before_n,\n       count(*) FILTER (WHERE to_timestamp(e.\"Time\"/1000)::date = CURRENT_DATE - 1) AS after_n,\n       round(100.0 * (count(*) FILTER (WHERE to_timestamp(e.\"Time\"/1000)::date = CURRENT_DATE - 1)\n                    - count(*) FILTER (WHERE to_timestamp(e.\"Time\"/1000)::date = CURRENT_DATE - 2))\n             / NULLIF(count(*) FILTER (WHERE to_timestamp(e.\"Time\"/1000)::date = CURRENT_DATE - 2), 0), 1)\n         AS pct_change\nFROM \"Events\" e\nJOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nWHERE e.\"Time\" >= extract(epoch FROM CURRENT_DATE - 2) * 1000\n  AND e.\"Time\" <  extract(epoch FROM CURRENT_DATE)     * 1000\nGROUP BY v.\"Name\"\nHAVING count(*) FILTER (WHERE to_timestamp(e.\"Time\"/1000)::date = CURRENT_DATE - 1)\n     < count(*) FILTER (WHERE to_timestamp(e.\"Time\"/1000)::date = CURRENT_DATE - 2)\nORDER BY pct_change ASC, camera;",
+      "explanation": {
+        "breakdown": "Percentage change normalises for camera size, so a small busy camera does not drown out a large proportional failure.",
+        "why": "NULLIF turns a zero denominator into NULL rather than a division-by-zero error, and NULL sorts predictably.",
+        "commonMistake": "Ranking by absolute delta, which favours high-volume cameras and hides proportionally worse failures on quiet ones.",
+        "qaRelevance": "Proportional change is the correct severity metric when devices have very different baseline volumes."
+      }
+    },
+    {
+      "id": "C1-S3", "level": 9, "difficulty": "senior", "challenge": "C1", "step": 3,
+      "title": "Is the camera dead or just quiet?",
+      "scenario": "You have a suspect. Establish whether it stopped completely or is still reporting at a reduced rate — the two point at very different causes.",
+      "task": "For camera 'ANPR-Gate-01', return the hour as hour_slot and count as n for the last 3 days, including hours with no events. Sort by hour_slot.",
+      "tables": ["Events", "VideoSources"],
+      "skills": ["generate_series", "LEFT JOIN", "COALESCE", "gap detection"],
+      "expected": "A continuous hourly series showing reduced but non-zero activity, not a clean stop.",
+      "orderMatters": true, "checkColumnNames": true,
+      "hints": [
+        "A GROUP BY alone cannot show hours that produced nothing.",
+        "generate_series over the hour range manufactures the missing rows.",
+        "LEFT JOIN the aggregated counts onto the generated slots.",
+        "COALESCE the count to 0 for unmatched slots."
+      ],
+      "solution": "WITH slots AS (\n  SELECT generate_series(date_trunc('hour', now()) - interval '3 days',\n                         date_trunc('hour', now()),\n                         interval '1 hour') AS hour_slot\n),\nhits AS (\n  SELECT date_trunc('hour', to_timestamp(e.\"Time\"/1000)) AS hour_slot, count(*) AS n\n  FROM \"Events\" e\n  JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\n  WHERE v.\"Name\" = 'ANPR-Gate-01'\n    AND e.\"Time\" >= extract(epoch FROM now() - interval '3 days') * 1000\n  GROUP BY 1\n)\nSELECT s.hour_slot, COALESCE(h.n, 0) AS n\nFROM slots s\nLEFT JOIN hits h ON h.hour_slot = s.hour_slot\nORDER BY s.hour_slot;",
+      "explanation": {
+        "breakdown": "The generated calendar guarantees a row per hour; the LEFT JOIN attaches real counts where they exist.",
+        "why": "Reduced-but-continuous output points at a configuration or scene change. A clean stop points at connectivity or process failure. The shape of the series distinguishes them.",
+        "qaRelevance": "This distinction usually determines which team owns the incident, so it is worth establishing early."
+      }
+    },
+    {
+      "id": "C1-S4", "level": 9, "difficulty": "senior", "challenge": "C1", "step": 4,
+      "title": "Rule out a configuration cause",
+      "scenario": "The camera is still alive but quieter. Check whether its configuration and placement are still intact, which would rule configuration in or out.",
+      "task": "For 'ANPR-Gate-01' return Name as camera, whether its active config exists as active_config_ok, its assigned pipeline name as pipeline, whether that pipeline is enabled as pipeline_enabled, and whether it is placed in AnalyticServerDeviceMapping as is_placed.",
+      "tables": ["VideoSources", "VideoSourceConfigs", "PipeLineVideoSources", "PipeLines", "AnalyticServerDeviceMapping"],
+      "skills": ["EXISTS", "LEFT JOIN", "multi-table diagnosis"],
+      "expected": "One row. Everything checks out — which is itself the finding: the cause is not configuration.",
+      "checkColumnNames": true,
+      "hints": [
+        "Combine an EXISTS check for the active config with joins to the pipeline tables.",
+        "LEFT JOIN through PipeLineVideoSources to PipeLines so a missing assignment shows as NULL rather than dropping the row.",
+        "EXISTS against AnalyticServerDeviceMapping gives the placement boolean.",
+        "Filter to the one camera by name."
+      ],
+      "solution": "SELECT v.\"Name\" AS camera,\n       EXISTS (SELECT 1 FROM \"VideoSourceConfigs\" c\n                WHERE c.\"Id\" = v.\"activeConfigId\")            AS active_config_ok,\n       p.\"Name\"                                               AS pipeline,\n       p.\"Enabled\"                                            AS pipeline_enabled,\n       EXISTS (SELECT 1 FROM \"AnalyticServerDeviceMapping\" m\n                WHERE m.\"VideoSourceId\" = v.\"Id\")             AS is_placed\nFROM \"VideoSources\" v\nLEFT JOIN \"PipeLineVideoSources\" pv ON pv.\"VideoSourceId\" = v.\"Id\"\nLEFT JOIN \"PipeLines\"            p  ON p.\"Id\" = pv.\"PipeLineId\"\nWHERE v.\"Name\" = 'ANPR-Gate-01';",
+      "explanation": {
+        "breakdown": "EXISTS used directly in the select list yields a boolean column — a compact way to express several yes/no diagnostics at once.",
+        "why": "Every check passing is a real result. It eliminates the entire configuration surface and directs attention to the scene or the source stream.",
+        "commonMistake": "Stopping the investigation when nothing looks broken. Ruling out causes is progress, and it must be written down.",
+        "qaRelevance": "A good incident write-up records what you excluded and how. Here the conclusion is that volume fell with configuration intact, so the change is external to the database — traffic, lighting, or the stream itself."
+      }
+    }
+  ]
+},
+{
+  "id": "C2",
+  "title": "Duplicate recognition events",
+  "brief": "Support has escalated that the same person appears several times within a fraction of a second. Prove the duplication exists, characterise it precisely, identify the mechanism, and quantify the blast radius.",
+  "steps": [
+    {
+      "id": "C2-S1", "level": 9, "difficulty": "senior", "challenge": "C2", "step": 1,
+      "title": "Establish that duplication exists",
+      "scenario": "Start with the cheapest possible signal: do events outnumber tracks by more than they should?",
+      "task": "Return total events as total_events, distinct TrackId as distinct_tracks, and the difference as excess.",
+      "tables": ["Events"],
+      "skills": ["COUNT", "COUNT DISTINCT"],
+      "expected": "A single row with a non-zero excess.",
+      "checkColumnNames": true,
+      "hints": [
+        "Two aggregates with no GROUP BY produce one summary row.",
+        "count(*) versus count(DISTINCT \"TrackId\").",
+        "The difference is simply one subtracted from the other.",
+        "Give all three columns explicit aliases."
+      ],
+      "solution": "SELECT count(*)                                  AS total_events,\n       count(DISTINCT \"TrackId\")                 AS distinct_tracks,\n       count(*) - count(DISTINCT \"TrackId\")      AS excess\nFROM \"Events\";",
+      "explanation": {
+        "breakdown": "The gap between rows and distinct tracks bounds how much duplication could exist.",
+        "why": "Some excess is legitimate — one track can produce several events over time. This number is a screening signal, not proof.",
+        "qaRelevance": "Cheap screening queries belong at the top of any investigation; they tell you whether to keep digging."
+      }
+    },
+    {
+      "id": "C2-S2", "level": 9, "difficulty": "senior", "challenge": "C2", "step": 2,
+      "title": "Separate true duplicates from legitimate repeats",
+      "scenario": "A track legitimately emits several events over time. A track emitting several events at the same instant does not.",
+      "task": "Return TrackId, the number of events as copies, and the number of distinct Time values as distinct_times, for tracks with more than one event. Sort by copies descending then TrackId, limit 10.",
+      "tables": ["Events"],
+      "skills": ["GROUP BY", "HAVING", "COUNT DISTINCT"],
+      "expected": "Tracks with several copies but only one distinct timestamp — simultaneous, therefore duplicates.",
+      "orderMatters": true, "checkColumnNames": true,
+      "hints": [
+        "Group by TrackId and count both rows and distinct times.",
+        "HAVING count(*) > 1 keeps only repeated tracks.",
+        "distinct_times of 1 with copies above 1 means all copies share a timestamp.",
+        "Order by copies descending and add TrackId as a tie-breaker."
+      ],
+      "solution": "SELECT \"TrackId\",\n       count(*)                 AS copies,\n       count(DISTINCT \"Time\")   AS distinct_times\nFROM \"Events\"\nGROUP BY \"TrackId\"\nHAVING count(*) > 1\nORDER BY copies DESC, \"TrackId\"\nLIMIT 10;",
+      "explanation": {
+        "breakdown": "Comparing row count to distinct timestamp count within a track separates retransmission from genuine repeated detection.",
+        "why": "Without this distinction the report is noise. With it, the pattern is unambiguous.",
+        "qaRelevance": "Characterising a defect precisely is what makes it reproducible, and reproducible is what makes it fixable."
+      }
+    },
+    {
+      "id": "C2-S3", "level": 9, "difficulty": "senior", "challenge": "C2", "step": 3,
+      "title": "Locate and fingerprint the burst",
+      "scenario": "Find which camera and which window the duplicates came from, and look for a marker distinguishing the copies.",
+      "task": "For tracks with more than one event sharing a single Time, return camera Name as camera, the count of such events as dup_events, the distinct tracks affected as tracks, and how many of those events have Update set true as update_flagged. Sort by dup_events descending.",
+      "tables": ["Events", "VideoSources"],
+      "skills": ["CTE", "IN subquery", "conditional aggregation"],
+      "expected": "One camera, 40 duplicate events across 8 tracks, of which 32 carry the Update flag.",
+      "orderMatters": true, "checkColumnNames": true,
+      "hints": [
+        "First identify the offending TrackIds in a CTE.",
+        "Then select the events belonging to those tracks and aggregate by camera.",
+        "The Update column is a reserved word and must be quoted as \"Update\".",
+        "count(*) FILTER (WHERE e.\"Update\") counts the flagged copies."
+      ],
+      "solution": "WITH dup_tracks AS (\n  SELECT \"TrackId\"\n  FROM \"Events\"\n  GROUP BY \"TrackId\"\n  HAVING count(*) > 1 AND count(DISTINCT \"Time\") = 1\n)\nSELECT v.\"Name\"                             AS camera,\n       count(*)                             AS dup_events,\n       count(DISTINCT e.\"TrackId\")          AS tracks,\n       count(*) FILTER (WHERE e.\"Update\")   AS update_flagged\nFROM \"Events\" e\nJOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nWHERE e.\"TrackId\" IN (SELECT \"TrackId\" FROM dup_tracks)\nGROUP BY v.\"Name\"\nORDER BY dup_events DESC;",
+      "explanation": {
+        "breakdown": "The CTE isolates the affected tracks; the main query then profiles all their events by camera.",
+        "why": "The Update flag being set on all but the first copy of each track is the fingerprint of a retransmission or at-least-once delivery path, not of the detector firing repeatedly.",
+        "commonMistake": "Forgetting to quote \"Update\". It is a reserved word and an unquoted reference is a syntax error.",
+        "qaRelevance": "Finding a marker that distinguishes the copies converts a vague duplicate report into a specific hypothesis about the delivery layer."
+      }
+    },
+    {
+      "id": "C2-S4", "level": 9, "difficulty": "senior", "challenge": "C2", "step": 4,
+      "title": "Quantify the reporting impact",
+      "scenario": "Management wants to know how wrong yesterday's recognition numbers were. Compare the raw count against a de-duplicated count.",
+      "task": "For Face_Recognition events on camera 'FACE-Entry-03', return the raw event count as raw_count, the count of distinct (TrackId, Time) pairs as deduped_count, and the inflation percentage rounded to 2 decimals as inflation_pct.",
+      "tables": ["Events", "VideoSources"],
+      "skills": ["COUNT DISTINCT", "row constructor", "arithmetic"],
+      "expected": "The raw count exceeds the de-duplicated count by a small but real percentage.",
+      "checkColumnNames": true,
+      "hints": [
+        "Counting distinct combinations needs a row constructor: count(DISTINCT (a, b)).",
+        "The inflation is 100.0 * (raw - deduped) / deduped.",
+        "Filter to the one camera and to Face_Recognition.",
+        "Round to 2 decimal places."
+      ],
+      "solution": "SELECT count(*)                                        AS raw_count,\n       count(DISTINCT (e.\"TrackId\", e.\"Time\"))          AS deduped_count,\n       round(100.0 * (count(*) - count(DISTINCT (e.\"TrackId\", e.\"Time\")))\n             / count(DISTINCT (e.\"TrackId\", e.\"Time\")), 2) AS inflation_pct\nFROM \"Events\" e\nJOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nWHERE v.\"Name\" = 'FACE-Entry-03'\n  AND e.\"EventName\" = 'Face_Recognition';",
+      "explanation": {
+        "breakdown": "The row constructor (a, b) makes count(DISTINCT ...) operate on the pair rather than a single column.",
+        "why": "Quantifying impact is what turns an engineering finding into a business decision about whether to reprocess historical reports.",
+        "commonMistake": "Writing count(DISTINCT a, b), which is not valid PostgreSQL — the parentheses forming the row are required.",
+        "qaRelevance": "Always close an investigation with impact. 'Duplicates exist' prompts a shrug; 'yesterday's recognition count was overstated by this much' prompts action."
+      }
+    }
+  ]
+},
+{
+  "id": "C3",
+  "title": "One camera fails recognition constantly",
+  "brief": "The face pipeline looks healthy overall, but a site manager insists one entrance never recognises anyone. Find it, quantify it, and determine whether the cause is the threshold, the camera, or the model.",
+  "steps": [
+    {
+      "id": "C3-S1", "level": 9, "difficulty": "senior", "challenge": "C3", "step": 1,
+      "title": "Fleet-level recognition rate",
+      "scenario": "Establish the baseline before looking for an outlier.",
+      "task": "For all Face_Recognition events return total as total, matched as matched, and the success rate percentage rounded to 2 decimals as success_pct.",
+      "tables": ["Events"],
+      "skills": ["FILTER", "jsonb", "arithmetic"],
+      "expected": "A healthy-looking fleet-wide rate that conceals the problem.",
+      "checkColumnNames": true,
+      "hints": [
+        "Filter to Face_Recognition events.",
+        "The matched flag is jsonb text; cast it to boolean.",
+        "count(*) FILTER (WHERE ...) gives the matched subset.",
+        "Multiply by 100.0 to force numeric division."
+      ],
+      "solution": "SELECT count(*) AS total,\n       count(*) FILTER (WHERE (\"_EventProperties\" ->> 'matched')::boolean) AS matched,\n       round(100.0 * count(*) FILTER (WHERE (\"_EventProperties\" ->> 'matched')::boolean)\n             / count(*), 2) AS success_pct\nFROM \"Events\"\nWHERE \"EventName\" = 'Face_Recognition';",
+      "explanation": {
+        "breakdown": "One pass, two counts, one ratio.",
+        "why": "The fleet average is deliberately unremarkable. That is the lesson: aggregate health metrics hide single-device failures.",
+        "qaRelevance": "Never accept a fleet average as evidence that every device is fine."
+      }
+    },
+    {
+      "id": "C3-S2", "level": 9, "difficulty": "senior", "challenge": "C3", "step": 2,
+      "title": "Break the rate down per camera",
+      "scenario": "Split the same metric by device to expose the outlier.",
+      "task": "Return camera Name as camera, total as total, and success rate percentage rounded to 2 decimals as success_pct, for cameras with Face_Recognition events. Sort by success_pct ascending then camera.",
+      "tables": ["Events", "VideoSources"],
+      "skills": ["FILTER", "GROUP BY", "JOIN"],
+      "expected": "One camera dramatically below the rest.",
+      "orderMatters": true, "checkColumnNames": true,
+      "hints": [
+        "Same computation as the previous step, grouped by camera.",
+        "Join to VideoSources for the name.",
+        "Sort ascending so the worst appears first.",
+        "Add the camera name as a tie-breaker for determinism."
+      ],
+      "solution": "SELECT v.\"Name\" AS camera,\n       count(*) AS total,\n       round(100.0 * count(*) FILTER (WHERE (e.\"_EventProperties\" ->> 'matched')::boolean)\n             / count(*), 2) AS success_pct\nFROM \"Events\" e\nJOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nWHERE e.\"EventName\" = 'Face_Recognition'\nGROUP BY v.\"Name\"\nORDER BY success_pct ASC, camera;",
+      "explanation": {
+        "breakdown": "Adding a GROUP BY to the previous query turns a single reassuring number into a ranked list with an obvious outlier.",
+        "why": "The outlier is far outside the spread of its peers, which rules out normal variation.",
+        "qaRelevance": "Per-device breakdown is the second step of nearly every fleet investigation and often the last one needed."
+      }
+    },
+    {
+      "id": "C3-S3", "level": 9, "difficulty": "senior", "challenge": "C3", "step": 3,
+      "title": "Threshold problem or signal problem?",
+      "scenario": "Low match rate has two very different causes: confidence scores just under the threshold, or genuinely poor scores. The distribution tells you which.",
+      "task": "For camera 'FACE-Lobby-18', band its Face_Recognition confidences into 'below_0.3', '0.3_to_0.5', '0.5_to_0.8' and 'above_0.8', returning the band as conf_band and count as n. Sort by conf_band.",
+      "tables": ["Events", "VideoSources"],
+      "skills": ["CASE WHEN", "GROUP BY", "jsonb", "distribution"],
+      "expected": "The mass sits well below the threshold, not just under it.",
+      "orderMatters": true, "checkColumnNames": true,
+      "hints": [
+        "A CASE expression with four branches, ordered from lowest bound upward.",
+        "Extract and cast the confidence once per branch.",
+        "GROUP BY 1 groups by the CASE result.",
+        "Filter to the single camera and to Face_Recognition."
+      ],
+      "solution": "SELECT CASE\n         WHEN (e.\"_EventProperties\" ->> 'confidence')::numeric < 0.3 THEN 'below_0.3'\n         WHEN (e.\"_EventProperties\" ->> 'confidence')::numeric < 0.5 THEN '0.3_to_0.5'\n         WHEN (e.\"_EventProperties\" ->> 'confidence')::numeric < 0.8 THEN '0.5_to_0.8'\n         ELSE 'above_0.8'\n       END      AS conf_band,\n       count(*) AS n\nFROM \"Events\" e\nJOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nWHERE v.\"Name\" = 'FACE-Lobby-18'\n  AND e.\"EventName\" = 'Face_Recognition'\nGROUP BY 1\nORDER BY conf_band;",
+      "explanation": {
+        "breakdown": "Banding turns a continuous score into a shape you can reason about.",
+        "why": "If the scores clustered just under 0.5, lowering the threshold would fix it. They do not — they sit far below, so the signal itself is poor. That points at the camera: lens, focus, lighting, angle or resolution.",
+        "commonMistake": "Recommending a threshold change based on the mean alone. The distribution shows the threshold is not the problem.",
+        "qaRelevance": "Distinguishing a tuning problem from a hardware problem prevents a fix that would degrade every other camera."
+      }
+    },
+    {
+      "id": "C3-S4", "level": 9, "difficulty": "senior", "challenge": "C3", "step": 4,
+      "title": "Compare the suspect against its peers",
+      "scenario": "Confirm the camera is the odd one out on measurable attributes, so the defect report can point somewhere specific.",
+      "task": "For all cameras whose Name starts with 'FACE', return Name as camera, ProcessingWidth as width, ProcessingHeight as height, UseStreamType as stream_type, and the average Face_Recognition confidence rounded to 3 decimals as avg_conf. Include cameras with no events. Sort by avg_conf ascending NULLS LAST then camera.",
+      "tables": ["VideoSources", "Events"],
+      "skills": ["LEFT JOIN", "filtered aggregate", "NULLS LAST", "LIKE"],
+      "expected": "The suspect camera alongside its peers, with its configuration visible for comparison.",
+      "orderMatters": true, "checkColumnNames": true,
+      "hints": [
+        "LEFT JOIN Events so a camera with none still appears.",
+        "The join must be restricted to Face_Recognition, and that restriction belongs in the ON clause, not WHERE.",
+        "Putting it in WHERE would discard cameras with no matching events, undoing the LEFT JOIN.",
+        "ORDER BY avg_conf ASC NULLS LAST controls where the NULLs land."
+      ],
+      "solution": "SELECT v.\"Name\"            AS camera,\n       v.\"ProcessingWidth\"  AS width,\n       v.\"ProcessingHeight\" AS height,\n       v.\"UseStreamType\"    AS stream_type,\n       round(avg((e.\"_EventProperties\" ->> 'confidence')::numeric), 3) AS avg_conf\nFROM \"VideoSources\" v\nLEFT JOIN \"Events\" e\n       ON e.\"VideoSourceId\" = v.\"Id\"\n      AND e.\"EventName\" = 'Face_Recognition'\nWHERE v.\"Name\" LIKE 'FACE%'\nGROUP BY v.\"Name\", v.\"ProcessingWidth\", v.\"ProcessingHeight\", v.\"UseStreamType\"\nORDER BY avg_conf ASC NULLS LAST, camera;",
+      "explanation": {
+        "breakdown": "The Face_Recognition restriction sits in the ON clause so it filters the joined rows rather than the preserved ones.",
+        "why": "This is the defining LEFT JOIN rule: a condition on the right-hand table in WHERE converts the outer join into an inner one and silently drops the rows you were trying to keep.",
+        "commonMistake": "Moving the EventName filter to WHERE. Cameras with no face events vanish, which are precisely the ones worth investigating.",
+        "qaRelevance": "Peer comparison against measurable attributes is what makes a defect report actionable — it names a difference an engineer can go and check."
+      }
+    }
+  ]
+},
+{
+  "id": "C4",
+  "title": "Events exist but the camera does not",
+  "brief": "A report crashed on a NULL camera name. The underlying cause is the missing foreign key on Events.VideoSourceId. Establish the scope, prove why the usual check missed it, measure the reporting impact, and produce a standing regression query.",
+  "steps": [
+    {
+      "id": "C4-S1", "level": 9, "difficulty": "senior", "challenge": "C4", "step": 1,
+      "title": "Scope the orphans",
+      "scenario": "Quantify how many events reference cameras that do not exist, and how many distinct dead cameras are involved.",
+      "task": "Return the orphan event count as orphan_events and the distinct dead camera count as dead_cameras.",
+      "tables": ["Events", "VideoSources"],
+      "skills": ["NOT EXISTS", "COUNT DISTINCT"],
+      "expected": "220 events across 3 dead cameras.",
+      "checkColumnNames": true,
+      "hints": [
+        "One pass over Events, filtered to orphans, with two aggregates.",
+        "NOT EXISTS against VideoSources identifies orphans.",
+        "Exclude NULL VideoSourceId — that is a different defect.",
+        "count(DISTINCT \"VideoSourceId\") gives the dead camera count."
+      ],
+      "solution": "SELECT count(*)                          AS orphan_events,\n       count(DISTINCT e.\"VideoSourceId\") AS dead_cameras\nFROM \"Events\" e\nWHERE e.\"VideoSourceId\" IS NOT NULL\n  AND NOT EXISTS (SELECT 1 FROM \"VideoSources\" v WHERE v.\"Id\" = e.\"VideoSourceId\");",
+      "explanation": {
+        "breakdown": "Both numbers come from the same filtered scan.",
+        "why": "Two numbers are needed: events measures reporting impact, cameras measures how many deletions caused it.",
+        "qaRelevance": "Severity assessment needs both the blast radius and the number of root events."
+      }
+    },
+    {
+      "id": "C4-S2", "level": 9, "difficulty": "senior", "challenge": "C4", "step": 2,
+      "title": "Why the existing check passed",
+      "scenario": "There is already a data-quality check using NOT IN, and it has been green for months. Demonstrate why.",
+      "task": "Return the NOT IN based orphan count as via_not_in, the NOT EXISTS based count as via_not_exists, and the number of events with a NULL VideoSourceId as null_camera_events.",
+      "tables": ["Events", "VideoSources"],
+      "skills": ["NOT IN", "NOT EXISTS", "NULL semantics"],
+      "expected": "via_not_in is 0 while via_not_exists is 220. The check was never working.",
+      "checkColumnNames": true,
+      "hints": [
+        "Three scalar subqueries.",
+        "Write the NOT IN version naively, without filtering NULLs from either side.",
+        "The NOT EXISTS version must exclude NULL VideoSourceId.",
+        "The third count is simply the NULL rows."
+      ],
+      "solution": "SELECT\n  (SELECT count(*) FROM \"Events\" e\n    WHERE e.\"VideoSourceId\" NOT IN (SELECT \"Id\" FROM \"VideoSources\"))              AS via_not_in,\n  (SELECT count(*) FROM \"Events\" e\n    WHERE e.\"VideoSourceId\" IS NOT NULL\n      AND NOT EXISTS (SELECT 1 FROM \"VideoSources\" v\n                       WHERE v.\"Id\" = e.\"VideoSourceId\"))                          AS via_not_exists,\n  (SELECT count(*) FROM \"Events\" WHERE \"VideoSourceId\" IS NULL)                    AS null_camera_events;",
+      "explanation": {
+        "breakdown": "NOT IN expands to a chain of <> tests. Any NULL involved makes the result UNKNOWN, and UNKNOWN rows are not returned.",
+        "why": "Because 70 events carry a NULL VideoSourceId, the NOT IN predicate cannot ever be TRUE, so it returns nothing regardless of how many orphans exist.",
+        "commonMistake": "Trusting a green data-quality check. A check that cannot fail is worse than no check, because it creates false confidence.",
+        "qaRelevance": "Every data-quality assertion needs a negative test proving it can actually detect the condition it claims to detect."
+      }
+    },
+    {
+      "id": "C4-S3", "level": 9, "difficulty": "senior", "challenge": "C4", "step": 3,
+      "title": "Measure the reporting impact",
+      "scenario": "Show how much a standard camera-joined report understates the true totals.",
+      "task": "Return the raw event total as raw_total, the total visible after an inner join to VideoSources as joined_total, and the difference as hidden_by_join.",
+      "tables": ["Events", "VideoSources"],
+      "skills": ["scalar subquery", "INNER JOIN", "impact analysis"],
+      "expected": "The inner join hides 290 rows: 220 orphans plus 70 NULL-camera events.",
+      "checkColumnNames": true,
+      "hints": [
+        "Two counts: one from Events alone, one from Events joined to VideoSources.",
+        "Both as scalar subqueries so they land on one row.",
+        "The third column is the arithmetic difference of the first two.",
+        "Repeat the subqueries in the subtraction, since aliases are not visible within the same select list."
+      ],
+      "solution": "SELECT\n  (SELECT count(*) FROM \"Events\")                                       AS raw_total,\n  (SELECT count(*) FROM \"Events\" e\n     JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\")               AS joined_total,\n  (SELECT count(*) FROM \"Events\")\n  - (SELECT count(*) FROM \"Events\" e\n       JOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\")             AS hidden_by_join;",
+      "explanation": {
+        "breakdown": "The inner join silently discards both orphan events and NULL-camera events.",
+        "why": "Every dashboard built on a camera join under-reports by this amount, and nothing anywhere signals that rows were dropped.",
+        "commonMistake": "Assuming a joined report and a raw count should agree, then hunting for a bug in the aggregation when the join is the cause.",
+        "qaRelevance": "This number is the argument for fixing the data: it converts an abstract integrity issue into a concrete reporting error."
+      }
+    },
+    {
+      "id": "C4-S4", "level": 9, "difficulty": "senior", "challenge": "C4", "step": 4,
+      "title": "Write the standing regression check",
+      "scenario": "Produce a query suitable for CI that fails when any unenforced relationship is violated.",
+      "task": "Return check_name and violation_count for 'orphan_events' and 'null_camera_events', sorted by check_name.",
+      "tables": ["Events", "VideoSources"],
+      "skills": ["UNION ALL", "NOT EXISTS", "regression testing"],
+      "expected": "Two labelled counts, both currently non-zero.",
+      "orderMatters": true, "checkColumnNames": true,
+      "hints": [
+        "Each check is a SELECT returning a literal label and a count.",
+        "UNION ALL combines them.",
+        "Use NOT EXISTS, never NOT IN, for the orphan check.",
+        "Sort by check_name so the output order is stable in CI."
+      ],
+      "solution": "SELECT 'null_camera_events' AS check_name, count(*) AS violation_count\nFROM \"Events\"\nWHERE \"VideoSourceId\" IS NULL\nUNION ALL\nSELECT 'orphan_events', count(*)\nFROM \"Events\" e\nWHERE e.\"VideoSourceId\" IS NOT NULL\n  AND NOT EXISTS (SELECT 1 FROM \"VideoSources\" v WHERE v.\"Id\" = e.\"VideoSourceId\")\nORDER BY check_name;",
+      "explanation": {
+        "breakdown": "A labelled, ordered, two-row result that a test harness can assert on directly.",
+        "why": "Stable ordering and explicit labels make the assertion readable and the failure message self-explanatory.",
+        "commonMistake": "Writing a check that returns rows only on failure. Always returning both counts lets you see the check ran and distinguish zero from not-executed.",
+        "qaRelevance": "This is the deliverable of the whole investigation: a permanent guard against the defect returning."
+      }
+    }
+  ]
+},
+{
+  "id": "C5",
+  "title": "Yesterday's report does not match today's dashboard",
+  "brief": "Finance says yesterday's event total was one number; the dashboard now shows another for the same day. Nobody deleted anything. Find the mechanism.",
+  "steps": [
+    {
+      "id": "C5-S1", "level": 9, "difficulty": "senior", "challenge": "C5", "step": 1,
+      "title": "Count yesterday two ways",
+      "scenario": "The two systems differ in which timestamp they group by. Compute both.",
+      "task": "Return the count of events whose Time falls on yesterday as by_event_time, and the count whose ReceivedTime falls on yesterday as by_received_time.",
+      "tables": ["Events"],
+      "skills": ["conditional aggregation", "two timestamp columns"],
+      "expected": "Two different numbers for the same day.",
+      "checkColumnNames": true,
+      "hints": [
+        "Two filtered counts over the whole table.",
+        "Each converts a different column to a date.",
+        "to_timestamp(col/1000)::date = CURRENT_DATE - 1 for each.",
+        "count(*) FILTER (WHERE ...) for both."
+      ],
+      "solution": "SELECT\n  count(*) FILTER (WHERE to_timestamp(\"Time\"/1000)::date         = CURRENT_DATE - 1) AS by_event_time,\n  count(*) FILTER (WHERE to_timestamp(\"ReceivedTime\"/1000)::date = CURRENT_DATE - 1) AS by_received_time\nFROM \"Events\";",
+      "explanation": {
+        "breakdown": "The same rows bucketed by two different timestamps produce two different totals.",
+        "why": "Neither number is wrong. They answer different questions: when it happened versus when we learned of it.",
+        "qaRelevance": "Most 'the numbers disagree' tickets end here, once both definitions are made explicit."
+      }
+    },
+    {
+      "id": "C5-S2", "level": 9, "difficulty": "senior", "challenge": "C5", "step": 2,
+      "title": "Find the boundary crossers",
+      "scenario": "Identify the specific rows that fall on different days depending on which timestamp you use.",
+      "task": "Return the count of events where the date of Time differs from the date of ReceivedTime, as boundary_crossers.",
+      "tables": ["Events"],
+      "skills": ["date comparison", "IS DISTINCT FROM"],
+      "expected": "A non-zero count of rows whose two dates disagree.",
+      "checkColumnNames": true,
+      "hints": [
+        "Convert both columns to dates and compare them.",
+        "They differ when the event crossed a midnight boundary between occurring and arriving.",
+        "A plain <> is fine here since neither column is nullable.",
+        "WHERE to_timestamp(\"Time\"/1000)::date <> to_timestamp(\"ReceivedTime\"/1000)::date."
+      ],
+      "solution": "SELECT count(*) AS boundary_crossers\nFROM \"Events\"\nWHERE to_timestamp(\"Time\"/1000)::date\n   <> to_timestamp(\"ReceivedTime\"/1000)::date;",
+      "explanation": {
+        "breakdown": "Comparing the two derived dates isolates rows attributed to different days by the two definitions.",
+        "why": "These are the rows responsible for the discrepancy. Both high latency and clock skew push events across the boundary, in opposite directions.",
+        "qaRelevance": "Naming the exact rows involved converts an argument about numbers into a review of a specific, small set of records."
+      }
+    },
+    {
+      "id": "C5-S3", "level": 9, "difficulty": "senior", "challenge": "C5", "step": 3,
+      "title": "Which cameras cause the crossing",
+      "scenario": "Boundary crossing is not random. Find the devices responsible and their latency profile.",
+      "task": "For cameras with at least one boundary-crossing event, return Name as camera, the crossing count as crossers, and the average latency in milliseconds rounded to 0 decimals as avg_latency_ms. Sort by crossers descending then camera.",
+      "tables": ["Events", "VideoSources"],
+      "skills": ["JOIN", "GROUP BY", "HAVING", "date comparison"],
+      "expected": "The high-latency camera and the clock-skewed camera dominate.",
+      "orderMatters": true, "checkColumnNames": true,
+      "hints": [
+        "Join to VideoSources and group by camera.",
+        "Count only the crossing rows — filter them in WHERE, then count(*) per group.",
+        "Average latency over those same rows explains why they cross.",
+        "Sort descending by count with the camera name as tie-breaker."
+      ],
+      "solution": "SELECT v.\"Name\" AS camera,\n       count(*) AS crossers,\n       round(avg(e.\"ReceivedTime\" - e.\"Time\")) AS avg_latency_ms\nFROM \"Events\" e\nJOIN \"VideoSources\" v ON v.\"Id\" = e.\"VideoSourceId\"\nWHERE to_timestamp(e.\"Time\"/1000)::date\n   <> to_timestamp(e.\"ReceivedTime\"/1000)::date\nGROUP BY v.\"Name\"\nORDER BY crossers DESC, camera;",
+      "explanation": {
+        "breakdown": "Filtering to crossers first, then grouping, attributes the discrepancy to devices and shows the latency that causes it.",
+        "why": "A large positive average latency means slow ingestion. A negative average means the camera clock is ahead of the server, so events appear to arrive before they happened.",
+        "commonMistake": "Treating all crossers as a latency problem. Negative latency is a clock problem and needs NTP, not more bandwidth.",
+        "qaRelevance": "Two distinct root causes produce the same symptom. The sign of the latency separates them immediately."
+      }
+    },
+    {
+      "id": "C5-S4", "level": 9, "difficulty": "senior", "challenge": "C5", "step": 4,
+      "title": "Recommend a stable definition",
+      "scenario": "Produce the reconciliation table that shows the two definitions side by side per day, so the team can choose one and document it.",
+      "task": "For the last 5 complete days return day, the count by event time as by_event_time, the count by received time as by_received_time, and the difference as diff. Sort by day.",
+      "tables": ["Events"],
+      "skills": ["generate_series", "conditional aggregation", "reconciliation"],
+      "expected": "Five rows showing where the two definitions diverge.",
+      "orderMatters": true, "checkColumnNames": true,
+      "hints": [
+        "Generate the five days, then count against each definition per day.",
+        "Each count is a correlated scalar subquery, or a LEFT JOIN to a pre-aggregated set.",
+        "generate_series over dates gives the day skeleton.",
+        "The diff is one count minus the other."
+      ],
+      "solution": "WITH days AS (\n  SELECT generate_series(CURRENT_DATE - 5, CURRENT_DATE - 1, interval '1 day')::date AS day\n)\nSELECT d.day,\n       (SELECT count(*) FROM \"Events\" e\n         WHERE to_timestamp(e.\"Time\"/1000)::date = d.day)          AS by_event_time,\n       (SELECT count(*) FROM \"Events\" e\n         WHERE to_timestamp(e.\"ReceivedTime\"/1000)::date = d.day)  AS by_received_time,\n       (SELECT count(*) FROM \"Events\" e\n         WHERE to_timestamp(e.\"Time\"/1000)::date = d.day)\n     - (SELECT count(*) FROM \"Events\" e\n         WHERE to_timestamp(e.\"ReceivedTime\"/1000)::date = d.day)  AS diff\nFROM days d\nORDER BY d.day;",
+      "explanation": {
+        "breakdown": "A generated day skeleton with two correlated counts per day, so every day appears even if one definition yields zero.",
+        "why": "Seeing the divergence per day makes the choice concrete and documents the size of the effect for whoever signs off.",
+        "commonMistake": "Picking a definition without measuring the difference. If the divergence is material, historical reports may need restating.",
+        "performance": "Correlated subqueries per day are fine for five days; a single grouped pass would scale better for a long range.",
+        "qaRelevance": "The deliverable is a documented definition plus evidence of its impact — the thing that actually stops the ticket recurring."
+      }
+    }
+  ]
+},
+{
+  "id": "C6",
+  "title": "Pre-release fleet audit",
+  "brief": "You have one hour before a release sign-off. Produce the evidence that the camera fleet is correctly configured, or the list of what is not.",
+  "steps": [
+    {
+      "id": "C6-S1", "level": 9, "difficulty": "senior", "challenge": "C6", "step": 1,
+      "title": "Cameras not attached to any pipeline",
+      "scenario": "A camera with no pipeline runs no analytics, however healthy it otherwise looks.",
+      "task": "Return the Name of every camera with no row in PipeLineVideoSources, sorted by Name.",
+      "tables": ["VideoSources", "PipeLineVideoSources"],
+      "skills": ["NOT EXISTS", "anti-join"],
+      "expected": "Two cameras.",
+      "orderMatters": true,
+      "hints": [
+        "An anti-join from cameras to the assignment table.",
+        "NOT EXISTS correlated on the camera Id.",
+        "No NULL guard is needed since the join column is NOT NULL in the child table.",
+        "WHERE NOT EXISTS (SELECT 1 FROM \"PipeLineVideoSources\" pv WHERE pv.\"VideoSourceId\" = v.\"Id\")."
+      ],
+      "solution": "SELECT v.\"Name\"\nFROM \"VideoSources\" v\nWHERE NOT EXISTS (\n  SELECT 1 FROM \"PipeLineVideoSources\" pv\n   WHERE pv.\"VideoSourceId\" = v.\"Id\")\nORDER BY v.\"Name\";",
+      "explanation": {
+        "breakdown": "The standard anti-join.",
+        "why": "An unassigned camera is silently inert. It appears in the camera list, streams fine, and produces nothing.",
+        "qaRelevance": "First item on any pre-release fleet audit."
+      }
+    },
+    {
+      "id": "C6-S2", "level": 9, "difficulty": "senior", "challenge": "C6", "step": 2,
+      "title": "Cameras attached to a disabled pipeline",
+      "scenario": "Assignment is not enough — the pipeline must actually be enabled.",
+      "task": "Return camera Name as camera and pipeline Name as pipeline for cameras assigned only to disabled pipelines. Sort by camera.",
+      "tables": ["VideoSources", "PipeLineVideoSources", "PipeLines"],
+      "skills": ["JOIN", "NOT EXISTS", "boolean filter"],
+      "expected": "The cameras whose every pipeline is switched off.",
+      "orderMatters": true, "checkColumnNames": true,
+      "hints": [
+        "Join camera to pipeline through the junction table and filter to disabled pipelines.",
+        "That alone finds cameras with at least one disabled pipeline, which is not the same thing.",
+        "Add a NOT EXISTS to exclude cameras that also have an enabled pipeline.",
+        "The inner NOT EXISTS needs its own join from the junction table to PipeLines."
+      ],
+      "solution": "SELECT v.\"Name\" AS camera,\n       p.\"Name\" AS pipeline\nFROM \"VideoSources\" v\nJOIN \"PipeLineVideoSources\" pv ON pv.\"VideoSourceId\" = v.\"Id\"\nJOIN \"PipeLines\"            p  ON p.\"Id\" = pv.\"PipeLineId\"\nWHERE p.\"Enabled\" = false\n  AND NOT EXISTS (\n    SELECT 1\n    FROM \"PipeLineVideoSources\" pv2\n    JOIN \"PipeLines\" p2 ON p2.\"Id\" = pv2.\"PipeLineId\"\n    WHERE pv2.\"VideoSourceId\" = v.\"Id\"\n      AND p2.\"Enabled\" = true)\nORDER BY camera;",
+      "explanation": {
+        "breakdown": "The outer join finds a disabled assignment; the NOT EXISTS confirms there is no compensating enabled one.",
+        "why": "A camera on both an enabled and a disabled pipeline is fine. Only a camera with no enabled pipeline at all is broken.",
+        "commonMistake": "Reporting every camera touching a disabled pipeline, which floods the report with false positives.",
+        "qaRelevance": "Precision matters in a pre-release audit. A noisy report gets ignored, and the real defect goes out with the release."
+      }
+    },
+    {
+      "id": "C6-S3", "level": 9, "difficulty": "senior", "challenge": "C6", "step": 3,
+      "title": "Configuration and stream integrity",
+      "scenario": "Check the two unenforced pointers that leave a camera unable to start.",
+      "task": "Return Name as camera and a problem label as problem: 'DANGLING_ACTIVE_CONFIG' where activeConfigId matches no configuration, or 'NO_STREAM_FOR_TYPE' where no stream mapping matches UseStreamType. A camera may appear twice. Sort by camera then problem.",
+      "tables": ["VideoSources", "VideoSourceConfigs", "VideoSourceStreamMappings"],
+      "skills": ["UNION ALL", "NOT EXISTS", "multi-check"],
+      "expected": "Both classes of defect in one list.",
+      "orderMatters": true, "checkColumnNames": true,
+      "hints": [
+        "Two independent checks, so two branches combined with UNION ALL.",
+        "Each branch supplies its own literal label.",
+        "The stream check must match on both VideoSourceId and StreamType.",
+        "Sort the combined result at the end."
+      ],
+      "solution": "SELECT v.\"Name\" AS camera, 'DANGLING_ACTIVE_CONFIG' AS problem\nFROM \"VideoSources\" v\nWHERE NOT EXISTS (SELECT 1 FROM \"VideoSourceConfigs\" c\n                   WHERE c.\"Id\" = v.\"activeConfigId\")\nUNION ALL\nSELECT v.\"Name\", 'NO_STREAM_FOR_TYPE'\nFROM \"VideoSources\" v\nWHERE NOT EXISTS (SELECT 1 FROM \"VideoSourceStreamMappings\" s\n                   WHERE s.\"VideoSourceId\" = v.\"Id\"\n                     AND s.\"StreamType\" = v.\"UseStreamType\")\nORDER BY camera, problem;",
+      "explanation": {
+        "breakdown": "UNION ALL keeps a camera that fails both checks as two rows, which is what an audit list should do.",
+        "why": "Unlike the Level 5 scorecard, which reports one verdict per camera, an audit wants every defect listed so each can be ticketed and closed independently.",
+        "commonMistake": "Using UNION instead of UNION ALL. It would de-duplicate identical rows and cost an unnecessary sort, though here the labels differ so the result happens to match.",
+        "qaRelevance": "One row per defect, not one per device, is the right shape when each finding needs its own owner."
+      }
+    },
+    {
+      "id": "C6-S4", "level": 9, "difficulty": "senior", "challenge": "C6", "step": 4,
+      "title": "The sign-off summary",
+      "scenario": "Reduce the whole audit to one row a release manager can read.",
+      "task": "Return one row with: total_cameras, unassigned (no pipeline), dangling_config, no_stream, and silent_48h (no event in the last 48 hours, including cameras with no events at all).",
+      "tables": ["VideoSources", "PipeLineVideoSources", "VideoSourceConfigs", "VideoSourceStreamMappings", "Events"],
+      "skills": ["conditional aggregation", "EXISTS in aggregate", "audit summary"],
+      "expected": "A single row of headline numbers for the release record.",
+      "checkColumnNames": true,
+      "hints": [
+        "One pass over VideoSources with several filtered counts.",
+        "count(*) FILTER (WHERE NOT EXISTS (...)) works — EXISTS is just a boolean expression.",
+        "For silence, the condition is that no event exists within the last 48 hours for that camera.",
+        "Use an epoch millisecond boundary inside the correlated subquery."
+      ],
+      "solution": "SELECT\n  count(*) AS total_cameras,\n  count(*) FILTER (WHERE NOT EXISTS (\n    SELECT 1 FROM \"PipeLineVideoSources\" pv WHERE pv.\"VideoSourceId\" = v.\"Id\"))      AS unassigned,\n  count(*) FILTER (WHERE NOT EXISTS (\n    SELECT 1 FROM \"VideoSourceConfigs\" c WHERE c.\"Id\" = v.\"activeConfigId\"))         AS dangling_config,\n  count(*) FILTER (WHERE NOT EXISTS (\n    SELECT 1 FROM \"VideoSourceStreamMappings\" s\n     WHERE s.\"VideoSourceId\" = v.\"Id\" AND s.\"StreamType\" = v.\"UseStreamType\"))       AS no_stream,\n  count(*) FILTER (WHERE NOT EXISTS (\n    SELECT 1 FROM \"Events\" e\n     WHERE e.\"VideoSourceId\" = v.\"Id\"\n       AND e.\"Time\" >= extract(epoch FROM now() - interval '48 hours') * 1000))      AS silent_48h\nFROM \"VideoSources\" v;",
+      "explanation": {
+        "breakdown": "EXISTS returns a boolean, so it can be used directly inside a FILTER clause. Five independent checks are evaluated in one pass over the camera table.",
+        "why": "A single row with named columns is the most assertable possible output. A CI job can compare each number against an expected value.",
+        "commonMistake": "Running five separate queries and transcribing the results by hand — slow, and open to transcription error under release pressure.",
+        "performance": "Correlated subqueries per camera, but only 42 cameras. At fleet scale, pre-aggregating into CTEs and joining once would be the right shape.",
+        "qaRelevance": "This is the artefact you attach to a release sign-off: five numbers, reproducible, with a query anyone can re-run and verify."
+      }
+    }
+  ]
+}
+]

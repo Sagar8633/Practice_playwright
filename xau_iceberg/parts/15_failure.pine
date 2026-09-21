@@ -1,0 +1,430 @@
+// ============================================================================
+//  SECTION 15 : FAILURE ANALYSIS + THE ONE VIRTUAL TRADE LEDGER
+//
+//  Two jobs, one vocabulary.
+//
+//  (A) THE FAILURE HISTOGRAM. Every setup death that SECTION 14 stamped on this
+//      bar, and every bar on which the evidence chain completed but SECTION 13
+//      vetoed it, is counted against the SAME NoTradeReason enum the gate, the
+//      panel and the alert payload speak. One taxonomy, one histogram, no
+//      second enum and no free-text reasons.
+//
+//  (B) THE VIRTUAL LEDGER. A multi-slot var array<VTrade> that replays every
+//      emitted signal on confirmed bar highs and lows and books it as an
+//      R-multiple. It is what lets the INDICATOR report win rate, expectancy,
+//      MFE and MAE without a single strategy.* builtin - and, far more
+//      importantly, it is what the cooldown and loss-streak gates in SECTION 13
+//      read. THE STRATEGY BUILD READS THIS LEDGER TOO, not strategy.closedtrades,
+//      which is the only reason the sentence "the strategy reuses the indicator
+//      logic unmodified" is true rather than aspirational. If the two scripts
+//      derived their cooldowns from different books they would take different
+//      trades and every comparison between them would be meaningless.
+//
+//  WHY MULTI-SLOT. The draft carried ONE virtual slot, overwritten by the next
+//  signal. Every trade that outlived the cooldown was silently discarded, so
+//  the loss streak - a gate that can halt the system - was computed from a
+//  biased subsample containing only fast-resolving trades. Slow winners were
+//  invisible; fast losers were all of it.
+//
+//  CLASSIFY BY THE CONDITION, NOT THE STAGE. The draft asked "which stage was
+//  the setup in when it died" and answered with that stage's name, so a setup
+//  that lost its swept level while waiting for a retest was booked as "failed
+//  retest". SECTION 14's f_smInvalid() returns the reason that ACTUALLY fired
+//  and this section records that, unchanged. The histogram is the diagnostic
+//  that tells you which link of the chain is broken; a histogram that answers a
+//  different question than the one asked is worse than no histogram.
+//
+//  AGGREGATE PER POSITION, NOT PER EXIT LEG. One VTrade is one POSITION. The
+//  40/35/25 ladder contributes three weighted terms to that position's single
+//  R-multiple; it does not create three trades. Counting legs is how a scaled
+//  strategy reports a win rate three times too flattering and feeds a tripled
+//  n into a confidence interval that then looks far tighter than it is. The
+//  tp1/tp2/tp3/sl/be counters below ARE per leg and are labelled as such - they
+//  are event counts and they are deliberately NOT mutually exclusive.
+//
+//  INTRABAR PATH POLICY. Stated once in SECTION 14 and obeyed here without
+//  restatement: when a bar contains both the stop and a target, THE STOP FILLED
+//  FIRST. f_pathStop() and f_pathTgt() are the only definitions of "touched" in
+//  the file. This is pessimistic on purpose. TradingView's broker emulator
+//  guesses the intrabar path from the bar's open and will therefore report
+//  better numbers than this ledger on exactly the bars where the path is
+//  ambiguous - which are the volatile ones. When the Strategy Tester looks
+//  better than this panel, that difference IS the ambiguity, not an edge.
+//
+//  WHAT IS NOT CLAIMED. R-multiples here are modelled fills on confirmed bar
+//  extremes with a round-turn cost charged once per position. They are not
+//  broker fills, there is no partial-fill model, and no number on this panel is
+//  a probability.
+// ============================================================================
+
+// ---------------------------------------------------------------- S15 GROUPS
+G15 = "15 - Failure Analysis & Virtual Ledger"
+
+// ---------------------------------------------------------------- S15 INPUTS
+// NOTE: the time stop is i_barsInTrade from SECTION 14 and is NOT re-declared
+// here. One time stop, one input: the setup and its trade record must expire on
+// the same bar or the ledger and the chart disagree about when a trade ended.
+i_vtW1Pct = input.float(40.0, "Partial at TP1 (% of position)", minval = 0.0,
+     maxval = 100.0, step = 5.0, group = G15,
+     tooltip = "The canonical ladder for this system is 40 / 35 / 25. The " +
+               "remainder after TP1 and TP2 runs to TP3. Set this to 100 to " +
+               "model a single all-out exit at TP1, which raises the hit rate " +
+               "and lowers expectancy - the classic trade-off, made visible " +
+               "rather than assumed. These weights must match whatever ladder " +
+               "the strategy build in SECTION 18 actually places, or this " +
+               "ledger and the Strategy Tester will report different R.",
+     display = display.none)
+i_vtW2Pct = input.float(35.0, "Partial at TP2 (% of position)", minval = 0.0,
+     maxval = 100.0, step = 5.0, group = G15,
+     tooltip = "TP3 takes whatever is left: 100 - TP1% - TP2%, floored at 0. " +
+               "If the two percentages sum above 100 the TP3 leg simply has no " +
+               "size and nothing is double-counted.",
+     display = display.none)
+
+i_beAfterTp1 = input.bool(true, "Move the stop to break-even after TP1",
+     group = G15,
+     tooltip = "BE is entry plus one round-turn cost (never less than 0.05 " +
+               "ATR), so a 'break-even' stop really is break-even after costs " +
+               "rather than a small loss wearing the name. Be honest about the " +
+               "cost of this on 1M gold: noise there is 0.3-0.8 USD against a " +
+               "0.25 USD spread, so this converts a large share of eventual " +
+               "winners into BE exits. It is a strategy choice, and turning it " +
+               "off is a legitimate answer.",
+     display = display.none)
+
+i_vtKeep = input.int(200, "Virtual trades retained", minval = 20, maxval = 1000,
+     group = G15,
+     tooltip = "How many CLOSED virtual trades stay in memory for the panel. " +
+               "The running totals in DirStats are never trimmed, so win rate, " +
+               "expectancy and profit factor always cover the whole chart; " +
+               "only the per-trade detail list (and therefore the average MFE " +
+               "and MAE shown alongside it) rolls. Open trades are never " +
+               "trimmed at any setting.",
+     display = display.none)
+
+// ----------------------------------------------------------------------------
+//  15.1  THE HISTOGRAM TABLE
+//  failHist is indexed by position in the NoTradeReason enum and s15FailName
+//  holds the matching titles, seeded from the enum members themselves via
+//  f_reason() so the two can never drift apart and no row name is ever typed
+//  twice. One seeding pass on the first bar; both arrays are var.
+// ----------------------------------------------------------------------------
+var array<string> s15FailName = array.new<string>()
+var array<int>    failHist    = array.new<int>()
+
+f_faSeed(NoTradeReason r) =>
+    array.push(s15FailName, f_reason(r))
+    array.push(failHist, 0)
+    true
+
+if array.size(failHist) == 0
+    f_faSeed(NoTradeReason.ok)
+    f_faSeed(NoTradeReason.warmup)
+    f_faSeed(NoTradeReason.outsideSess)
+    f_faSeed(NoTradeReason.sessEdge)
+    f_faSeed(NoTradeReason.lowAtr)
+    f_faSeed(NoTradeReason.newsSpike)
+    f_faSeed(NoTradeReason.choppy)
+    f_faSeed(NoTradeReason.lowVolume)
+    f_faSeed(NoTradeReason.noLiquidity)
+    f_faSeed(NoTradeReason.midRange)
+    f_faSeed(NoTradeReason.extended)
+    f_faSeed(NoTradeReason.vwapFar)
+    f_faSeed(NoTradeReason.noSweep)
+    f_faSeed(NoTradeReason.noAbsorption)
+    f_faSeed(NoTradeReason.zoneDead)
+    f_faSeed(NoTradeReason.noRejection)
+    f_faSeed(NoTradeReason.noDisplace)
+    f_faSeed(NoTradeReason.noBos)
+    f_faSeed(NoTradeReason.noRetest)
+    f_faSeed(NoTradeReason.lowScore)
+    f_faSeed(NoTradeReason.poorRr)
+    f_faSeed(NoTradeReason.wideStop)
+    f_faSeed(NoTradeReason.conflict)
+    f_faSeed(NoTradeReason.htfBlock)
+    f_faSeed(NoTradeReason.cooldown)
+    f_faSeed(NoTradeReason.lossCooldown)
+    f_faSeed(NoTradeReason.lossStreak)
+    f_faSeed(NoTradeReason.duplicate)
+    f_faSeed(NoTradeReason.maxSetups)
+    f_faSeed(NoTradeReason.tradeOpen)
+    f_faSeed(NoTradeReason.outOfWindow)
+    f_faSeed(NoTradeReason.dTimeout)
+    f_faSeed(NoTradeReason.dZoneBroken)
+    f_faSeed(NoTradeReason.dFalseSweep)
+    f_faSeed(NoTradeReason.dDispFail)
+    f_faSeed(NoTradeReason.dBosFail)
+    f_faSeed(NoTradeReason.dRetestFail)
+    f_faSeed(NoTradeReason.dEvicted)
+    f_faSeed(NoTradeReason.dConflict)
+    f_faSeed(NoTradeReason.dSessionEnd)
+    f_faSeed(NoTradeReason.dStopped)
+    f_faSeed(NoTradeReason.dTarget)
+    f_faSeed(NoTradeReason.dTimeStop)
+
+f_faBump(NoTradeReason r) =>
+    int i = array.indexof(s15FailName, f_reason(r))
+    if i >= 0
+        array.set(failHist, i, array.get(failHist, i) + 1)
+    i
+
+// ----------------------------------------------------------------------------
+//  15.2  THE LEDGER + THE PER-DIRECTION AGGREGATES
+// ----------------------------------------------------------------------------
+var array<VTrade> vtrades = array.new<VTrade>()
+var DirStats      statsL  = DirStats.new()
+var DirStats      statsS  = DirStats.new()
+
+// Rolling MFE / MAE sums over CLOSED positions, in R. Kept as plain globals
+// rather than DirStats fields because the frozen type has no slot for them, and
+// updated at top level because a Pine function may not reassign a global.
+var float s15MfeSumL = 0.0
+var float s15MaeSumL = 0.0
+var float s15MfeSumS = 0.0
+var float s15MaeSumS = 0.0
+
+// The ladder, normalised once. There is deliberately no third weight variable:
+// the TP3 leg is whatever f_faRemW() says is still on, floored at 0. Deriving
+// it rather than declaring it is what makes a misconfigured pair of percentages
+// (say 70 and 60) starve the TP3 leg instead of pushing the weights past 1 and
+// double-counting size.
+// Two percentages that sum past 100 are RESCALED, not clipped. Clipping them
+// would let the TP1 and TP2 legs book 1.3 of a position that only ever had 1.0
+// of size, which inflates every R in the ledger; rescaling preserves their
+// ratio, keeps the total at exactly 1 and simply leaves TP3 with nothing.
+s15W1raw = f_clamp01(i_vtW1Pct / 100.0)
+s15W2raw = f_clamp01(i_vtW2Pct / 100.0)
+s15WSum  = s15W1raw + s15W2raw
+s15W1    = s15WSum > 1.0 ? s15W1raw / s15WSum : s15W1raw
+s15W2    = s15WSum > 1.0 ? s15W2raw / s15WSum : s15W2raw
+
+// ----------------------------------------------------------------------------
+//  15.3  R ARITHMETIC
+//  R of ONE UNIT of size exiting at px, with the full round-turn cost charged.
+//  The caller multiplies by that leg's weight, and the weights sum to 1, so the
+//  cost is charged exactly ONCE per position no matter how many legs it exits
+//  in. Because t.risk is the NET risk from f_riskPlan() (the stop distance plus
+//  the same round turn), a full stop-out returns exactly -1.000, which is the
+//  property that makes every R figure below comparable.
+// ----------------------------------------------------------------------------
+f_faLegR(VTrade t, float px) =>
+    na(px) or na(t.entry) or na(t.risk) or t.risk <= 0 ? 0.0 :
+         (t.dir * (px - t.entry) - costRt) / t.risk
+
+// Size still on: whatever the booked partials have not taken.
+f_faRemW(VTrade t) =>
+    math.max(0.0, 1.0 - (t.tp1Hit ? s15W1 : 0.0) - (t.tp2Hit ? s15W2 : 0.0))
+
+// ----------------------------------------------------------------------------
+//  15.4  OPEN / CLOSE
+// ----------------------------------------------------------------------------
+f_faOpen(int dir, RiskPlan pl) =>
+    bool ok = false
+    if not na(pl)
+        bool full = not na(pl.entry) and not na(pl.stop) and
+                     not na(pl.tp1) and not na(pl.tp2) and not na(pl.tp3)
+        if full
+            float gross = math.abs(pl.entry - pl.stop)
+            // na does NOT get replaced by a bound here: an incomplete plan is
+            // refused outright rather than opened on a fabricated risk, because
+            // one na risk poisons sumR, the profit factor and every average on
+            // the panel for the rest of the chart with no visible cause.
+            float rNet = not na(pl.risk) and pl.risk > 0 ? pl.risk :
+                         math.max(gross + costRt, i_spreadUsd)
+            // BE is entry plus one round turn, never less than 0.05 ATR, so a
+            // "break-even" stop really is break-even AFTER costs rather than a
+            // small loss wearing the name.
+            float bePx = pl.entry + dir * math.max(costRt, 0.05 * aRef)
+            if gross > 0 and rNet > 0
+                array.push(vtrades, VTrade.new(dir = dir, openBar = bar_index,
+                     entry = pl.entry, stop = pl.stop, be = bePx,
+                     tp1 = pl.tp1, tp2 = pl.tp2, tp3 = pl.tp3,
+                     risk = rNet, rMult = 0.0, isOpen = true))
+                ok := true
+    ok
+
+f_faClose(VTrade t, DirStats st, NoTradeReason why, float exitPx, float remW) =>
+    t.rMult    := nz(t.rMult, 0.0) + math.max(remW, 0.0) * f_faLegR(t, exitPx)
+    t.isOpen   := false
+    t.closeBar := bar_index
+    t.outcome  := why
+    float rr = nz(t.rMult, 0.0)
+    int   sl = f_slot(t.dir)
+    // PER POSITION. One increment of wins or losses, one term in sumR.
+    st.sumR := st.sumR + rr
+    if rr > 0
+        st.wins   := st.wins + 1
+        st.grossW := st.grossW + rr
+        array.set(lossStreak, sl, 0)
+    else if rr < 0
+        st.losses := st.losses + 1
+        st.grossL := st.grossL + math.abs(rr)
+        array.set(lossStreak, sl, nz(array.get(lossStreak, sl), 0) + 1)
+        array.set(lastLossBar, sl, bar_index)
+    // rr == 0 is a true scratch: it is neither a win nor a loss, it does not
+    // touch the streak, and pretending it is a loss is how a BE-heavy ladder
+    // trips the loss-streak halt on trades that cost nothing.
+    true
+
+// ----------------------------------------------------------------------------
+//  15.5  ONE BAR OF ONE OPEN POSITION
+//  Never runs on the position's own open bar: the signal was decided at that
+//  bar's CLOSE and the strategy twin fills at the NEXT bar's open, so managing
+//  the open bar's range would book fills from price action that preceded the
+//  decision - and the indicator and the strategy would disagree by construction
+//  on exactly the impulse candles this system exists to trade.
+// ----------------------------------------------------------------------------
+f_faStep(VTrade t, DirStats st) =>
+    bool closed = false
+    if t.isOpen and bar_index > t.openBar and t.risk > 0
+        // Excursions first. These are facts about the bar, not decisions, and
+        // they are recorded whatever the bar then does. Both are POSITIVE
+        // magnitudes in R: mfe = best favourable, mae = worst adverse.
+        float favPx = t.dir > 0 ? high : low
+        float advPx = t.dir > 0 ? low  : high
+        t.mfe := math.max(t.mfe, t.dir * (favPx - t.entry) / t.risk)
+        t.mae := math.max(t.mae, t.dir * (t.entry - advPx) / t.risk)
+
+        float stp  = t.tp1Hit and i_beAfterTp1 and not na(t.be) ? t.be : t.stop
+        bool  isBe = t.tp1Hit and i_beAfterTp1 and not na(t.be)
+
+        if f_pathStop(t.dir, stp)
+            // INTRABAR PATH POLICY: the stop fills first, always.
+            if isBe
+                st.be := st.be + 1
+            else
+                st.sl := st.sl + 1
+            f_faClose(t, st, NoTradeReason.dStopped, stp, f_faRemW(t))
+            closed := true
+        else
+            if not t.tp1Hit and f_pathTgt(t.dir, t.tp1)
+                t.tp1Hit := true
+                t.rMult  := nz(t.rMult, 0.0) + s15W1 * f_faLegR(t, t.tp1)
+                st.tp1   := st.tp1 + 1
+            if not t.tp2Hit and f_pathTgt(t.dir, t.tp2)
+                t.tp2Hit := true
+                t.rMult  := nz(t.rMult, 0.0) + s15W2 * f_faLegR(t, t.tp2)
+                st.tp2   := st.tp2 + 1
+            if f_pathTgt(t.dir, t.tp3)
+                st.tp3 := st.tp3 + 1
+                f_faClose(t, st, NoTradeReason.dTarget, t.tp3, f_faRemW(t))
+                closed := true
+        // The time stop uses i_barsInTrade, the SAME input SECTION 14 kills the
+        // setup on, so the position and its setup can never expire apart.
+        if not closed and bar_index - t.openBar >= i_barsInTrade
+            f_faClose(t, st, NoTradeReason.dTimeStop, close, f_faRemW(t))
+            closed := true
+    closed
+
+f_faFlush(NoTradeReason why) =>
+    int n = array.size(vtrades)
+    if n > 0
+        for i = 0 to n - 1
+            VTrade t = array.get(vtrades, i)
+            if t.isOpen
+                f_faClose(t, t.dir > 0 ? statsL : statsS, why, close, f_faRemW(t))
+    true
+
+// ============================================================================
+//  PER-BAR ORDER FOR THIS SECTION. It sits at steps 15-15c of SECTION 14's
+//  canonical list, i.e. after every state mutation for the bar is committed and
+//  before any drawing. Everything below mutates state and therefore all of it
+//  lives inside `if confirmed and warmupOk`.
+//
+//   a. RECORD DEATHS   every setup SECTION 14 killed on THIS bar. It is still
+//                      in the array because the GC only reclaims deaths from
+//                      previous bars - that one-bar grace is exactly what makes
+//                      this readable without a callback.
+//   b. RECORD VETOES   the chain completed and SECTION 13 said no. The only
+//                      gate reasons worth counting: recording them on every bar
+//                      would bury the histogram under OUTSIDE SESSION.
+//   c. STEP LEDGER     advance every open position by one bar.
+//   d. SESSION FLUSH   the rollover closes open positions at the close, on the
+//                      same input and the same bar as SECTION 14's flush.
+//   d2 ROLL UP         bank the MFE / MAE of whatever closed on this bar.
+//   e. OPEN            this bar's emitted signals become positions, and
+//                      lastSigBar is stamped for SECTION 13's cooldown.
+//   f. TRIM            drop the oldest CLOSED positions past the retention cap.
+// ============================================================================
+if confirmed and warmupOk
+    // ---- a. RECORD DEATHS ---------------------------------------------------
+    int nSet = setups.size()
+    if nSet > 0
+        for ia = 0 to nSet - 1
+            Setup sd = setups.get(ia)
+            if sd.st == SetupState.dead and sd.stBar == bar_index and
+               sd.death != NoTradeReason.ok
+                f_faBump(sd.death)
+
+    // ---- b. RECORD VETOES ---------------------------------------------------
+    // entryRawL/S is "SECTION 10 says this is a tradeable moment". If the gate
+    // then refused it, THAT is the informative no-trade event, and it is the
+    // one the user can act on: a histogram dominated by LOW CONFIDENCE means
+    // the score threshold is doing the work, one dominated by DUPLICATE SIGNAL
+    // means the dedupe window is too wide.
+    if entryRawL and gateL != NoTradeReason.ok
+        f_faBump(gateL)
+    if entryRawS and gateS != NoTradeReason.ok
+        f_faBump(gateS)
+
+    // Trigger count vs emitted count. fireRate = signals / armed is then an
+    // honest funnel number: how often a completed chain survived the gate.
+    if entryRawL
+        statsL.armed := statsL.armed + 1
+    if entryRawS
+        statsS.armed := statsS.armed + 1
+
+    // ---- c. STEP LEDGER -----------------------------------------------------
+    int nVt = array.size(vtrades)      // frozen: nothing is added or removed here
+    if nVt > 0
+        for ib = 0 to nVt - 1
+            VTrade t = array.get(vtrades, ib)
+            f_faStep(t, t.dir > 0 ? statsL : statsS)
+
+    // ---- d. SESSION FLUSH ---------------------------------------------------
+    // Same input and same bar as SECTION 14's flush, so a position and the setup
+    // that opened it are never carried across the rollover gap by one script and
+    // closed by the other.
+    if i_killOnSessionEnd and newDay
+        f_faFlush(NoTradeReason.dSessionEnd)
+
+    // ---- d2. ROLL UP THE EXCURSIONS OF ANYTHING THAT CLOSED THIS BAR --------
+    // Runs AFTER the flush so a rollover-closed position is counted too, and at
+    // top level rather than inside f_faClose because a Pine function may not
+    // reassign a global. Uses the pre-open bound: a position opened on THIS bar
+    // cannot have closed on it.
+    if nVt > 0
+        for ic = 0 to nVt - 1
+            VTrade tc = array.get(vtrades, ic)
+            if not tc.isOpen and tc.closeBar == bar_index
+                if tc.dir > 0
+                    s15MfeSumL := s15MfeSumL + nz(tc.mfe, 0.0)
+                    s15MaeSumL := s15MaeSumL + nz(tc.mae, 0.0)
+                else
+                    s15MfeSumS := s15MfeSumS + nz(tc.mfe, 0.0)
+                    s15MaeSumS := s15MaeSumS + nz(tc.mae, 0.0)
+
+    // ---- e. OPEN ------------------------------------------------------------
+    // lastSigBar is written HERE and nowhere else (SECTION 2B ownership). It is
+    // per direction on purpose: a global cooldown would let a stopped-out long
+    // suppress shorts, which deletes the failed-absorption reversal - the
+    // single highest-value setup this model has.
+    if longSignal
+        statsL.signals := statsL.signals + 1
+        array.set(lastSigBar, f_slot(1), bar_index)
+        f_faOpen(1, sigPlanL)
+    if shortSignal
+        statsS.signals := statsS.signals + 1
+        array.set(lastSigBar, f_slot(-1), bar_index)
+        f_faOpen(-1, sigPlanS)
+
+    // ---- f. TRIM ------------------------------------------------------------
+    // Only CLOSED positions are dropped, oldest first, and only the detail list
+    // shrinks: every aggregate above is a running total that is never revised.
+    int over = array.size(vtrades) - i_vtKeep
+    if over > 0
+        for k = 1 to over
+            if array.size(vtrades) > 0
+                if not array.get(vtrades, 0).isOpen
+                    array.remove(vtrades, 0)
+// ========================= END SECTION 15 ===================================

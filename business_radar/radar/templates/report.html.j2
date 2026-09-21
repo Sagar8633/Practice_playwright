@@ -1,0 +1,2130 @@
+{% import "_macros.j2" as m with context %}
+{#
+  The campaign research report.
+
+  One file. No CDN, no external stylesheet, no web font, no image request, no data island that
+  needs a network. Sagar opens it from file:// on a laptop that may be on a train, and every
+  filter, sort, tab, panel and selection in it works there exactly as it works in the live app.
+
+  Autoescape is ON for this whole tree, and that is load-bearing rather than tidy: business
+  names come off the public web via Overpass and scraped pages, and a business whose OSM name
+  field contains markup must render as text in a document that gets forwarded by email.
+
+  There is no <form>, no method attribute, and no SEND control anywhere below. Not disabled -
+  absent. See docs/03-html-report.md section 3.1.2.
+#}<!doctype html>
+<html lang="en" data-mode="{{ mode }}"{% if app_base %} data-app-base="{{ app_base }}" data-app="unknown"{% else %} data-app="absent"{% endif %}>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+{# form-action 'none' makes the file structurally unable to submit anything, whatever a later
+   edit to this template might accidentally introduce. #}
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; font-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; connect-src {{ app_base if app_base else "'none'" }}">
+<title>{{ d.campaign_name }} - business research report</title>
+<script>
+/* Theme, before first paint, so a dark-theme reader gets no white flash (3.9.6). */
+try {
+  var t = localStorage.getItem("radar:theme");
+  if (t === "light" || t === "dark") { document.documentElement.dataset.theme = t; }
+} catch (e) { /* private window, blocked storage: Auto is a fine default */ }
+</script>
+<style>
+{% raw %}
+/* ------------------------------------------------------------------ *
+ * Tokens. Copied verbatim from 03-html-report.md 3.9.2.
+ * Complete light palette on bare :root; dark overrides guarded so an
+ * explicit light choice wins; a third block for the explicit dark choice.
+ * ------------------------------------------------------------------ */
+:root{
+  color-scheme: light;
+
+  --page:#f4f4f2; --surface-1:#ffffff; --surface-2:#f7f7f5; --surface-3:#efefec;
+  --rule:#dcdcd7;  --grid:#e6e6e2;
+
+  --text-1:#0b0b0b; --text-2:#52514e; --text-3:#6f6d68;
+
+  --ok-fg:#0f6b3f;   --ok-bg:#e6f4ea;   --ok-ln:#1f8a55;
+  --warn-fg:#7a5200; --warn-bg:#fdf2d6; --warn-ln:#b07d0a;
+  --bad-fg:#9f1f24;  --bad-bg:#fbe7e7;  --bad-ln:#c0393e;
+  --info-fg:#14508a; --info-bg:#e5eff9; --info-ln:#2e6fae;
+  --muted-fg:#4a4a46;--muted-bg:#eeeeea;--muted-ln:#9b9a94;
+
+  --accent:#14508a;  --focus:#14508a;
+  --r:8px;
+
+  --banner-h:0px;
+}
+
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --page:#0e0f11; --surface-1:#16171a; --surface-2:#1c1e22; --surface-3:#212429;
+    --rule:#2f3339; --grid:#26292e;
+    --text-1:#f2f3f5; --text-2:#a9adb6; --text-3:#8a8e97;
+    --ok-fg:#5cd08a;   --ok-bg:#10281c;   --ok-ln:#2f7d52;
+    --warn-fg:#e8b53d; --warn-bg:#2a2210; --warn-ln:#8a6c1c;
+    --bad-fg:#f08a8a;  --bad-bg:#2c1517;  --bad-ln:#8e3a3d;
+    --info-fg:#7ab4ec; --info-bg:#0f2237; --info-ln:#3a6c9e;
+    --muted-fg:#a9adb6;--muted-bg:#212429;--muted-ln:#5b5f66;
+    --accent:#7ab4ec;  --focus:#7ab4ec;
+  }
+}
+
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --page:#0e0f11; --surface-1:#16171a; --surface-2:#1c1e22; --surface-3:#212429;
+  --rule:#2f3339; --grid:#26292e;
+  --text-1:#f2f3f5; --text-2:#a9adb6; --text-3:#8a8e97;
+  --ok-fg:#5cd08a;   --ok-bg:#10281c;   --ok-ln:#2f7d52;
+  --warn-fg:#e8b53d; --warn-bg:#2a2210; --warn-ln:#8a6c1c;
+  --bad-fg:#f08a8a;  --bad-bg:#2c1517;  --bad-ln:#8e3a3d;
+  --info-fg:#7ab4ec; --info-bg:#0f2237; --info-ln:#3a6c9e;
+  --muted-fg:#a9adb6;--muted-bg:#212429;--muted-ln:#5b5f66;
+  --accent:#7ab4ec;  --focus:#7ab4ec;
+}
+
+/* ------------------------------------------------------------------ *
+ * Base
+ * ------------------------------------------------------------------ */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; overflow-x:hidden; }
+/* Several rules below set an explicit display, which would otherwise beat the
+   UA stylesheet's [hidden] rule. Filtering, panels and the tray all rely on
+   the hidden attribute, so it wins here unconditionally. */
+[hidden]{ display:none !important; }
+/* 3.14 puts overflow-x:hidden on body. It has to live on html instead: an
+   overflow value other than visible on body makes body a scroll container, and
+   the sticky SAMPLE banner and selection tray - both children of body - then
+   stick to a scrollport that never scrolls, which is to say not at all. */
+body{ margin:0; background:var(--page); color:var(--text-1);
+      font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+.num{ font-variant-numeric: tabular-nums; }
+a{ color:var(--accent); }
+h1,h2,h3,h4{ margin:0; font-weight:650; letter-spacing:-.01em; }
+:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+.sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+          overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+.wrap{ max-width:1680px; margin:0 auto; padding:0 clamp(10px,1.6vw,20px); }
+.na{ color:var(--muted-fg); cursor:help; }
+/* Ids, ISO timestamps and hostnames are single unbreakable tokens; on a phone
+   they are what pushes the page sideways. */
+.sub, .facts dd, .idgrid dd, footer.prov dd, .ro{ overflow-wrap:anywhere; }
+
+@media (max-width:719px){
+  :root{ --banner-h:0px; }
+  }
+
+/* ------------------------------------------------------------------ *
+ * Header block (section 6)
+ * ------------------------------------------------------------------ */
+.rpt-header{ background:var(--surface-1); border-bottom:1px solid var(--rule); padding:18px 0 16px; }
+.hdr-top{ display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap; }
+.hdr-top > .grow{ flex:1 1 320px; min-width:0; }
+.wordmark{ font-size:11px; font-weight:800; letter-spacing:.16em; color:var(--text-3); }
+.rpt-header h1{ font-size:clamp(18px,2.4vw,25px); margin:4px 0 8px; }
+.sub{ display:flex; flex-wrap:wrap; gap:6px 0; color:var(--text-2); font-size:12.5px; }
+.sub > span{ padding:0 12px; border-right:1px solid var(--rule); }
+.sub > span:first-child{ padding-left:0; }
+.sub > span:last-child{ border-right:0; }
+.sub b{ color:var(--text-1); font-weight:600; }
+
+.facts{ display:grid; gap:1px; margin:16px 0 0;
+        grid-template-columns:repeat(6,minmax(0,1fr));
+        background:var(--rule); border:1px solid var(--rule); border-radius:var(--r); overflow:hidden; }
+.facts > div{ background:var(--surface-1); padding:9px 12px; }
+.facts dt{ font-size:11px; color:var(--text-2); text-transform:uppercase; letter-spacing:.05em;
+           white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.facts dd{ margin:2px 0 0; font-size:21px; font-weight:650; }
+@media (max-width:1023px){ .facts{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (max-width:539px){ .facts{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
+.theme{ display:inline-flex; border:1px solid var(--rule); border-radius:999px; overflow:hidden;
+        background:var(--surface-2); flex:0 0 auto; }
+.theme button{ border:0; background:transparent; color:var(--text-2); font:inherit; font-size:11.5px;
+               padding:5px 11px; cursor:pointer; }
+.theme button[aria-pressed="true"]{ background:var(--surface-1); color:var(--text-1); font-weight:650;
+               box-shadow:inset 0 0 0 1px var(--rule); }
+
+.ro{ background:var(--info-bg); color:var(--info-fg); border:1px solid var(--info-ln);
+     border-radius:var(--r); padding:9px 12px; font-size:12.5px; margin:14px 0 0; }
+.ro b{ font-weight:700; }
+
+/* ------------------------------------------------------------------ *
+ * Section shell
+ * ------------------------------------------------------------------ */
+section.block{ margin:22px 0; }
+.blockhead{ display:flex; align-items:baseline; gap:10px; margin:0 0 9px; flex-wrap:wrap; }
+.blockhead h2{ font-size:12px; letter-spacing:.11em; text-transform:uppercase; color:var(--text-2); }
+.blockhead .note{ font-size:12px; color:var(--text-3); }
+
+/* ------------------------------------------------------------------ *
+ * KPI cards (section 7) - twelve
+ * ------------------------------------------------------------------ */
+.kpis{ display:grid; gap:8px; grid-template-columns:repeat(6,minmax(0,1fr)); }
+@media (max-width:1279px){ .kpis{ grid-template-columns:repeat(4,minmax(0,1fr)); } }
+@media (max-width:1023px){ .kpis{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (max-width:559px){  .kpis{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+.kpi{ background:var(--surface-1); border:1px solid var(--rule); border-radius:var(--r);
+      padding:10px 11px; text-align:left; font:inherit; color:inherit; cursor:pointer;
+      border-left:3px solid var(--muted-ln); min-width:0; }
+.kpi:hover{ background:var(--surface-2); }
+.kpi.tone-green{  border-left-color:var(--ok-ln); }
+.kpi.tone-yellow{ border-left-color:var(--warn-ln); }
+.kpi.tone-blue{   border-left-color:var(--info-ln); }
+.kpi.is-primary{ box-shadow:inset 0 0 0 1px var(--ok-ln); }
+.kpi-label{ font-size:11px; color:var(--text-2); text-transform:uppercase; letter-spacing:.045em;
+            line-height:1.25; min-height:2.5em; }
+.kpi-value{ font-size:26px; font-weight:650; line-height:1.1; margin-top:3px; }
+.kpi-sub{ font-size:11px; color:var(--text-3); margin-top:2px; }
+.kpi-foot{ font-size:11.5px; color:var(--text-3); margin-top:7px; }
+
+/* ------------------------------------------------------------------ *
+ * City summary cards (section 8)
+ * ------------------------------------------------------------------ */
+.city-cards{ display:grid; gap:8px; grid-template-columns:repeat(4,minmax(0,1fr)); }
+@media (max-width:1279px){ .city-cards{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (max-width:899px){  .city-cards{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:519px){  .city-cards{ grid-template-columns:1fr; } }
+.city-card{ background:var(--surface-1); border:1px solid var(--rule); border-radius:var(--r); padding:11px 12px; }
+.city-card.empty{ opacity:.72; }
+.city-card h3{ font-size:14.5px; display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+.city-card h3 .of{ font-size:11px; font-weight:500; color:var(--text-3); letter-spacing:.04em; }
+.city-card dl{ margin:9px 0 0; display:grid; gap:3px 10px; }
+.city-card dl > div{ display:flex; justify-content:space-between; align-items:baseline; gap:8px;
+                     font-size:12.5px; border-bottom:1px dotted var(--grid); padding-bottom:3px; }
+.city-card dt{ color:var(--text-2); }
+.city-card dd{ margin:0; font-weight:650; }
+.card-link{ display:inline-block; margin-top:9px; font-size:12px; background:none; border:0;
+            color:var(--accent); cursor:pointer; font-family:inherit; padding:0; text-decoration:underline; }
+.city-card .zero{ font-size:12px; color:var(--text-3); margin:8px 0 0; }
+
+/* ------------------------------------------------------------------ *
+ * Filter bar (section 39)
+ * ------------------------------------------------------------------ */
+.filterbar{ background:var(--surface-1); border:1px solid var(--rule); border-radius:var(--r); }
+.fb-top{ display:flex; gap:8px; align-items:center; padding:9px 11px; flex-wrap:wrap; }
+.fb-top .search{ flex:1 1 260px; min-width:0; display:flex; align-items:center; gap:7px;
+                 border:1px solid var(--rule); border-radius:999px; padding:5px 12px; background:var(--surface-2); }
+.fb-top .search input{ flex:1; border:0; background:transparent; color:inherit; font:inherit; font-size:13px; min-width:0; }
+.fb-top .search input:focus{ outline:none; }
+.fb-top .search .hint{ font-size:11px; color:var(--text-3); white-space:nowrap; }
+.btn{ border:1px solid var(--rule); background:var(--surface-2); color:var(--text-1);
+      font:inherit; font-size:12px; padding:5px 11px; border-radius:999px; cursor:pointer; white-space:nowrap; }
+.btn:hover{ background:var(--surface-3); }
+.btn.on{ background:var(--info-bg); color:var(--info-fg); border-color:var(--info-ln); font-weight:650; }
+.fb-body{ border-top:1px solid var(--rule); padding:10px 11px 12px; display:grid; gap:11px;
+          grid-template-columns:repeat(auto-fit,minmax(232px,1fr)); }
+.fb-body[hidden]{ display:none; }
+.fgroup > .flabel{ font-size:10.5px; text-transform:uppercase; letter-spacing:.07em;
+                   color:var(--text-2); margin-bottom:5px; display:flex; gap:6px; align-items:baseline; }
+.fgroup > .flabel .n{ color:var(--text-3); text-transform:none; letter-spacing:0; }
+.chips{ display:flex; flex-wrap:wrap; gap:4px; }
+.chip-f{ border:1px solid var(--rule); background:var(--surface-2); color:var(--text-2);
+         font-size:11.5px; padding:3px 9px; border-radius:999px; cursor:pointer; font-family:inherit; }
+.chip-f:hover{ background:var(--surface-3); color:var(--text-1); }
+.chip-f[aria-pressed="true"]{ background:var(--info-bg); border-color:var(--info-ln);
+                              color:var(--info-fg); font-weight:650; }
+.range{ display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+.range input[type=number], .range input[type=date]{
+  width:74px; border:1px solid var(--rule); border-radius:6px; background:var(--surface-2);
+  color:inherit; font:inherit; font-size:12px; padding:3px 6px; }
+.range input[type=date]{ width:138px; }
+.nullbox{ display:flex; align-items:center; gap:5px; font-size:11.5px; color:var(--text-2); margin-top:6px; }
+.resultline{ display:flex; gap:14px; align-items:center; flex-wrap:wrap;
+             padding:8px 11px; border-top:1px solid var(--rule); font-size:12.5px; color:var(--text-2); }
+.resultline b{ color:var(--text-1); }
+
+/* ------------------------------------------------------------------ *
+ * Tabs (sections 3, 4)
+ * ------------------------------------------------------------------ */
+.tabs{ display:flex; gap:3px; overflow-x:auto; border-bottom:1px solid var(--rule); scrollbar-width:thin; }
+.tabs button{ border:1px solid transparent; border-bottom:0; background:transparent; color:var(--text-2);
+              font:inherit; font-size:13px; padding:7px 13px; cursor:pointer; white-space:nowrap;
+              border-radius:var(--r) var(--r) 0 0; margin-bottom:-1px; }
+.tabs button:hover{ color:var(--text-1); background:var(--surface-2); }
+.tabs button[aria-selected="true"]{ background:var(--surface-1); border-color:var(--rule);
+              color:var(--text-1); font-weight:650; }
+.tabs .cnt{ display:inline-block; margin-left:6px; font-size:11px; color:var(--text-3);
+            font-variant-numeric:tabular-nums; }
+.tabs button[aria-selected="true"] .cnt{ color:var(--text-2); }
+.tabs.sub{ border-bottom:1px solid var(--rule); background:var(--surface-1); padding:5px 5px 0; }
+.tabs.sub button{ font-size:12px; padding:5px 10px; }
+.tabwarn{ background:var(--warn-bg); color:var(--warn-fg); border:1px solid var(--warn-ln);
+          border-radius:var(--r); padding:8px 11px; margin:10px 0; font-size:12.5px;
+          display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.tabwarn .btn{ background:var(--surface-1); border-color:var(--warn-ln); color:var(--warn-fg); }
+
+/* ------------------------------------------------------------------ *
+ * Badges and chips (3.9.4)
+ * ------------------------------------------------------------------ */
+.badge{
+  display:inline-flex; align-items:center; gap:5px;
+  padding:2px 7px; border-radius:999px;
+  font-size:10.5px; font-weight:600; letter-spacing:.02em; white-space:nowrap;
+  border:1px solid var(--rule);
+  color:var(--f); background:var(--b); border-color:color-mix(in srgb, var(--f) 28%, transparent);
+}
+.badge.ok   { --f:var(--ok-fg);    --b:var(--ok-bg);    }
+.badge.warn { --f:var(--warn-fg);  --b:var(--warn-bg);  }
+.badge.bad  { --f:var(--bad-fg);   --b:var(--bad-bg);   }
+.badge.info { --f:var(--info-fg);  --b:var(--info-bg);  }
+.badge.mute { --f:var(--muted-fg); --b:var(--muted-bg); }
+.badge.score{ min-width:34px; justify-content:center; font-variant-numeric:tabular-nums; }
+.chip{ display:inline-flex; align-items:center; justify-content:center; min-width:19px; height:19px;
+       border-radius:5px; font-size:10.5px; font-weight:700; margin-right:2px; padding:0 3px;
+       color:var(--info-fg); background:var(--info-bg);
+       border:1px solid color-mix(in srgb, var(--info-fg) 26%, transparent); }
+.chip.unk{ color:var(--muted-fg); background:var(--muted-bg);
+           border-color:color-mix(in srgb, var(--muted-fg) 26%, transparent); }
+.stype{ display:inline-block; font-size:9.5px; font-weight:700; letter-spacing:.09em;
+        color:var(--info-fg); background:var(--info-bg); border-radius:4px; padding:1px 5px;
+        border:1px solid color-mix(in srgb, var(--info-fg) 24%, transparent); }
+
+/* ------------------------------------------------------------------ *
+ * Business table (sections 9, 10)
+ * ------------------------------------------------------------------ */
+.tablewrap{ overflow-x:auto; background:var(--surface-1);
+            border:1px solid var(--rule); border-top:0;
+            border-radius:0 0 var(--r) var(--r); }
+.btable{ width:100%; border-collapse:collapse; font-size:12px; }
+.btable caption{ text-align:left; padding:8px 10px; font-size:11.5px; color:var(--text-2);
+                 border-bottom:1px solid var(--rule); }
+.btable thead th{ position:sticky; top:var(--banner-h); z-index:20;
+                  background:var(--surface-3); color:var(--text-2);
+                  font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; font-weight:700;
+                  text-align:left; padding:7px 7px; white-space:normal; line-height:1.2;
+                  border-bottom:1px solid var(--rule); vertical-align:bottom; }
+/* Long headers wrap to two lines rather than forcing a 200px column. */
+.btable thead th[data-sort]{ max-width:96px; }
+.btable thead th[data-sort="name"]{ max-width:none; }
+.btable thead th.sortable{ cursor:pointer; user-select:none; }
+.btable thead th{ padding:7px 6px; }
+.btable thead th.sortable:hover{ color:var(--text-1); background:var(--grid); }
+.btable thead th .ind{ font-size:9px; margin-left:3px; color:var(--accent); }
+.btable tbody td{ padding:5px 6px; border-bottom:1px solid var(--grid); vertical-align:top; }
+.btable tbody tr.brow:hover > td{ background:var(--surface-2); }
+.btable tbody tr.brow.is-open > td{ background:var(--surface-2); }
+.btable tbody tr.brow.suppressed > td{ background:var(--bad-bg); }
+.btable tbody tr.brow.selected > td{ box-shadow:inset 3px 0 0 0 var(--ok-ln); }
+tr.group-head th{ background:var(--surface-2); color:var(--text-2); text-align:left;
+                  font-size:10.5px; letter-spacing:.075em; text-transform:uppercase; font-weight:700;
+                  padding:6px 8px; border-bottom:1px solid var(--rule); border-top:1px solid var(--rule); }
+tr.group-head .gn{ color:var(--text-3); font-weight:500; letter-spacing:0; text-transform:none; margin-left:6px; }
+
+.c-sel{ width:34px; white-space:nowrap; }
+.c-sel input{ width:15px; height:15px; accent-color:var(--ok-ln); margin:1px 0 0; }
+.c-sel .why{ display:inline-block; width:14px; height:14px; line-height:13px; text-align:center;
+             border:1px solid var(--rule); border-radius:50%; font-size:9px; color:var(--text-3);
+             background:var(--surface-2); cursor:help; margin-left:2px; vertical-align:top; }
+.c-name{ min-width:150px; max-width:200px; }
+.c-name .bname{ font-weight:650; color:var(--text-1); text-decoration:none; font-size:13px; }
+.c-name .bname:hover{ text-decoration:underline; }
+.c-name .sub2{ color:var(--text-3); font-size:11px; margin-top:1px; }
+.ext{ text-decoration:none; font-size:11px; color:var(--text-3); margin-left:3px; }
+.ext:hover{ color:var(--accent); }
+.c-sol{ color:var(--text-2); }
+/* max-width on a <td> is advisory; a block child honours it, so the solution
+   truncates with an ellipsis and keeps its full text in the title (section 9 col 9). */
+.c-sol > .trunc{ display:block; max-width:152px; overflow:hidden;
+                 text-overflow:ellipsis; white-space:nowrap; }
+@media (max-width:719px){ .c-sol > .trunc{ max-width:none; white-space:normal; } }
+.c-dm{ white-space:nowrap; }
+.bar{ display:inline-block; width:34px; height:6px; background:var(--grid);
+      border-radius:3px; overflow:hidden; margin-right:6px; vertical-align:middle; }
+.bar > i{ display:block; height:100%; width:var(--v); background:var(--info-ln); }
+.c-act{ white-space:normal; min-width:148px; max-width:184px; }
+.act, .nav{ display:inline-block; font-size:10.5px; padding:2px 6px; margin:0 3px 2px 0;
+            border-radius:5px; border:1px solid var(--rule); background:var(--surface-2);
+            color:var(--text-2); text-decoration:none; cursor:pointer; font-family:inherit; }
+.act:hover, .nav:hover{ background:var(--surface-3); color:var(--text-1); }
+.nav[aria-expanded="true"]{ background:var(--info-bg); border-color:var(--info-ln); color:var(--info-fg); }
+.ready{ display:inline-block; font-size:10.5px; padding:1px 7px; border-radius:5px; margin-top:2px;
+        border:1px solid var(--rule); text-decoration:none; }
+.ready.ok  { color:var(--ok-fg);    background:var(--ok-bg);    border-color:color-mix(in srgb, var(--ok-fg) 26%, transparent); }
+.ready.warn{ color:var(--warn-fg);  background:var(--warn-bg);  border-color:color-mix(in srgb, var(--warn-fg) 26%, transparent); }
+.ready.bad { color:var(--bad-fg);   background:var(--bad-bg);   border-color:color-mix(in srgb, var(--bad-fg) 26%, transparent); }
+.ready.info{ color:var(--info-fg);  background:var(--info-bg);  border-color:color-mix(in srgb, var(--info-fg) 26%, transparent); }
+.ready.mute{ color:var(--muted-fg); background:var(--muted-bg); border-color:color-mix(in srgb, var(--muted-fg) 26%, transparent); }
+.emptyrow td{ padding:26px 10px; text-align:center; color:var(--text-3); font-size:13px; }
+
+/* ------------------------------------------------------------------ *
+ * Research / history panel (sections 11-14, 32)
+ * ------------------------------------------------------------------ */
+tr.panel-row > td{ padding:0 !important; background:var(--surface-2); border-bottom:2px solid var(--rule); }
+/* The panel cell is as wide as the (horizontally scrolling) table. Sticking it to
+   the left edge and capping its width keeps the panel readable at any scroll
+   position instead of stretching the identity grid across 1900px. */
+.panel{ padding:14px 16px 16px; position:sticky; left:0;
+        width:min(1180px, calc(100vw - 40px)); }
+.panel-head{ display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+             flex-wrap:wrap; border-bottom:1px solid var(--rule); padding-bottom:8px; margin-bottom:12px; }
+.panel-head h4{ font-size:15px; }
+.panel-head .meta{ font-size:11.5px; color:var(--text-3); }
+.psec{ margin:0 0 16px; }
+.psec > h5{ font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-2);
+            margin:0 0 7px; font-weight:700; }
+.idgrid{ display:grid; gap:2px 22px; grid-template-columns:repeat(auto-fit,minmax(238px,1fr)); }
+.idgrid > div{ display:flex; gap:10px; font-size:12.5px; border-bottom:1px dotted var(--grid); padding:3px 0; }
+.idgrid dt{ color:var(--text-2); flex:0 0 132px; }
+.idgrid dd{ margin:0; flex:1; min-width:0; word-break:break-word; }
+
+fieldset.findings{ border:1px solid var(--rule); border-left:3px solid var(--muted-ln);
+                   border-radius:0 var(--r) var(--r) 0; margin:0 0 9px; padding:8px 12px 10px;
+                   background:var(--surface-1); }
+fieldset.findings > legend{ font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+                            padding:1px 8px; border-radius:999px; }
+fieldset.kind-OBSERVED{ border-left-color:var(--ok-ln); }
+fieldset.kind-OBSERVED > legend{ color:var(--ok-fg); background:var(--ok-bg); }
+fieldset.kind-INFERRED{ border-left-color:var(--info-ln); }
+fieldset.kind-INFERRED > legend{ color:var(--info-fg); background:var(--info-bg); }
+fieldset.kind-UNKNOWN{ border-left-color:var(--muted-ln); }
+fieldset.kind-UNKNOWN > legend{ color:var(--muted-fg); background:var(--muted-bg); }
+fieldset.findings ul{ list-style:none; margin:0; padding:0; }
+fieldset.findings li{ display:flex; gap:10px; align-items:baseline; padding:4px 0;
+                      border-bottom:1px dotted var(--grid); font-size:12.5px; }
+fieldset.findings li:last-child{ border-bottom:0; }
+fieldset.findings li .stmt{ flex:1; min-width:0; }
+fieldset.kind-UNKNOWN li .stmt{ color:var(--text-2); }
+fieldset.kind-INFERRED li .stmt .pfx{ color:var(--info-fg); font-weight:650; }
+fieldset.findings .refs{ white-space:nowrap; }
+fieldset.findings .refs a{ font-size:11px; text-decoration:none; padding:0 1px; }
+fieldset.findings p.empty{ margin:4px 0 0; font-size:12.5px; color:var(--text-3); font-style:italic; }
+.nosrc{ font-size:9.5px; font-weight:700; letter-spacing:.06em; color:var(--bad-fg);
+        background:var(--bad-bg); border-radius:4px; padding:1px 5px;
+        border:1px solid color-mix(in srgb, var(--bad-fg) 24%, transparent); }
+
+.why{ margin-top:8px; }
+.whytable{ border-collapse:collapse; font-size:12px; width:100%; max-width:520px; }
+.whytable td{ padding:2px 8px 2px 0; border-bottom:1px dotted var(--grid); }
+.whytable td.pts{ text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; width:70px; }
+.whytable td.src{ width:110px; text-align:right; }
+.whytable tr.tot td{ font-weight:700; border-top:1px solid var(--rule); border-bottom:0; padding-top:4px; }
+.mods{ display:flex; flex-wrap:wrap; gap:4px; }
+.mod{ font-size:11px; padding:2px 8px; border-radius:5px; background:var(--surface-3);
+      border:1px solid var(--rule); color:var(--text-2); cursor:help; }
+
+ol.sources{ list-style:none; margin:0; padding:0; counter-reset:src; }
+ol.sources > li{ padding:7px 0 8px; border-bottom:1px dotted var(--grid); font-size:12.5px; }
+ol.sources > li:last-child{ border-bottom:0; }
+.srcline{ display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; }
+.srcnum{ color:var(--text-3); font-weight:700; font-size:11px; }
+.srcline .when{ font-size:11px; color:var(--text-3); }
+blockquote.excerpt{ margin:5px 0 0 22px; padding:4px 0 4px 10px; border-left:2px solid var(--grid);
+                    color:var(--text-2); font-size:12px; }
+.histtable{ width:100%; border-collapse:collapse; font-size:12px; }
+.histtable th{ text-align:left; font-size:10px; letter-spacing:.06em; text-transform:uppercase;
+               color:var(--text-2); padding:4px 8px 4px 0; border-bottom:1px solid var(--rule); }
+.histtable td{ padding:5px 8px 5px 0; border-bottom:1px dotted var(--grid); vertical-align:top; }
+.next{ font-weight:650; }
+.next.bad{ color:var(--bad-fg); } .next.ok{ color:var(--ok-fg); }
+.next.warn{ color:var(--warn-fg); } .next.mute{ color:var(--text-2); }
+.panel .absent{ font-size:12px; color:var(--text-3); font-style:italic; }
+
+/* ------------------------------------------------------------------ *
+ * Selection tray (section 18). No send control lives here or anywhere.
+ * ------------------------------------------------------------------ */
+#tray{ position:sticky; bottom:0; z-index:70; margin-top:14px;
+       background:var(--surface-1); border-top:2px solid var(--ok-ln);
+       box-shadow:0 -4px 14px rgba(0,0,0,.10); }
+#tray[hidden]{ display:none; }
+.tray-in{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; padding:9px 0; }
+.tray-counts{ display:flex; gap:6px; align-items:center; flex-wrap:wrap; font-size:12.5px; }
+.tray-counts .cc{ background:var(--ok-bg); color:var(--ok-fg); border-radius:999px; padding:2px 10px;
+                  font-weight:650; border:1px solid color-mix(in srgb, var(--ok-fg) 26%, transparent); }
+.tray-counts .sep{ color:var(--text-3); }
+.tray-total{ font-size:14px; font-weight:700; }
+.tray-note{ font-size:11.5px; color:var(--text-2); flex:1 1 260px; min-width:0; }
+.tray-note .warnnote{ color:var(--warn-fg); }
+.tray-actions{ display:flex; gap:6px; flex-wrap:wrap; }
+
+/* ------------------------------------------------------------------ *
+ * Footer
+ * ------------------------------------------------------------------ */
+footer.prov{ border-top:1px solid var(--rule); margin-top:26px; padding:16px 0 40px;
+             font-size:12px; color:var(--text-2); background:var(--surface-1); }
+footer.prov h2{ font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:var(--text-2); margin-bottom:8px; }
+footer.prov dl{ display:grid; gap:2px 20px; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); margin:0 0 12px; }
+footer.prov dl > div{ display:flex; gap:10px; padding:2px 0; border-bottom:1px dotted var(--grid); }
+footer.prov dt{ flex:0 0 190px; color:var(--text-3); }
+footer.prov dd{ margin:0; }
+footer.prov .warnings{ background:var(--warn-bg); color:var(--warn-fg); border:1px solid var(--warn-ln);
+                       border-radius:var(--r); padding:8px 11px; margin:10px 0; }
+
+/* toast for wireframe deep links */
+#toast{ position:fixed; left:50%; bottom:78px; transform:translateX(-50%);
+        background:var(--surface-1); color:var(--text-1); border:1px solid var(--rule);
+        border-left:3px solid var(--info-ln); border-radius:var(--r); padding:9px 13px;
+        font-size:12.5px; box-shadow:0 6px 20px rgba(0,0,0,.18); z-index:120; max-width:min(560px,92vw); }
+#toast[hidden]{ display:none; }
+
+/* ------------------------------------------------------------------ *
+ * Responsive: under 720px the table becomes cards (3.14).
+ * Same markup, same data attributes, so every filter and sort still works.
+ * ------------------------------------------------------------------ */
+@media (max-width:719px){
+  .btable thead{ display:none; }
+  .btable caption{ padding:8px 2px; }
+  .tablewrap{ border:0; background:transparent; overflow-x:visible; }
+  .btable, .btable tbody, .btable tr, .btable td, .btable th{ display:block; }
+  tr.group-head th{ border-radius:var(--r) var(--r) 0 0; margin-top:10px; }
+  .btable tbody tr.brow{ background:var(--surface-1); border:1px solid var(--rule);
+                         border-radius:var(--r); margin:8px 0; padding:4px 2px; }
+  .btable tbody tr.brow.selected{ border-color:var(--ok-ln); box-shadow:inset 3px 0 0 0 var(--ok-ln); }
+  .btable tbody td{ display:flex; justify-content:space-between; gap:14px; border:0;
+                    border-bottom:1px dotted var(--grid); padding:5px 10px; }
+  .btable tbody td:last-child{ border-bottom:0; }
+  .btable tbody td::before{ content:attr(data-label); color:var(--text-2); font-size:10.5px;
+                            text-transform:uppercase; letter-spacing:.05em; flex:0 0 44%; }
+  .btable tbody td.c-name{ flex-direction:column; align-items:flex-start; gap:2px; }
+  .btable tbody td.c-name::before{ display:none; }
+  .btable tbody td.c-act{ flex-wrap:wrap; justify-content:flex-start; gap:0; }
+  .btable tbody td.c-act::before{ flex:0 0 100%; margin-bottom:4px; }
+  .btable tbody td.c-act .act, .btable tbody td.c-act .nav, .btable tbody td.c-act .ready{ margin:0 4px 0 0; }
+  footer.prov dl > div{ flex-direction:column; gap:0; }
+  footer.prov dt{ flex:none; }
+  .btable tbody tr.brow:hover > td, .btable tbody tr.brow.is-open > td{ background:transparent; }
+  tr.panel-row > td{ border-bottom:0; }
+  tr.panel-row > td::before{ display:none; }
+  .panel{ padding:12px 10px 14px; position:static; width:auto; }
+  .idgrid dt{ flex:0 0 112px; }
+  .sub > span{ padding:0 9px; }
+  .tray-in{ gap:8px; }
+}
+/* 3.14 collapses Category into the Business cell's sub-line on narrow screens.
+   The threshold is 1500 rather than 1024 because the 15th column (Actions)
+   otherwise falls off a 1440 laptop, and the category is already named by the
+   group heading the row sits under. */
+@media (max-width:1499px) and (min-width:720px){
+  .btable .c-cat{ display:none; }
+}
+
+@media (prefers-reduced-motion: no-preference){
+  .kpi, .btn, .chip-f, .tabs button{ transition:background-color .12s ease, color .12s ease; }
+}
+
+@media print{
+  :root{ --page:#ffffff; --surface-1:#ffffff; --surface-2:#ffffff; --surface-3:#ffffff; }
+  .btable thead th{ position:static; }
+  #tray, .filterbar, .theme, #toast, .c-act{ display:none !important; }
+  .ok-bg,.warn-bg,.bad-bg,.info-bg,.muted-bg{ background:#ffffff; }
+  .badge{ background:#ffffff !important; }
+  tr.panel-row{ display:table-row !important; }
+  a[href]::after{ content:" (" attr(href) ")"; font-size:9px; color:#555; }
+  .brow{ break-inside:avoid; }
+}
+
+/* ------------------------------------------------------------------ *
+ * Additions beyond the mockup: shared helpers the generated document
+ * uses outside the contexts the wireframe styled them in.
+ * ------------------------------------------------------------------ */
+.sub2{ color:var(--text-3); font-size:11px; margin-top:1px; }
+.absent{ font-size:12px; color:var(--text-3); font-style:italic; }
+.kpi{ display:block; }
+.kpi-label, .kpi-value, .kpi-sub{ display:block; }
+.warnings ul{ margin:6px 0 0; padding-left:18px; }
+.warnings li{ margin:2px 0; }
+fieldset.findings li .conf{ flex:0 0 auto; }
+.whytable caption{ text-align:left; }
+tr.group-head th.num{ text-align:right; font-variant-numeric:tabular-nums; }
+.act[aria-disabled="true"]{ opacity:.5; cursor:not-allowed; }
+{% endraw %}
+</style>
+</head>
+<body>
+
+<header class="rpt-header">
+  <div class="wrap">
+    <div class="hdr-top">
+      <div class="grow">
+        <div class="wordmark">AI BUSINESS OPPORTUNITY RESEARCH</div>
+        <h1>{{ d.campaign_name }}</h1>
+        <div class="sub">
+          <span>Search date <b>{{ d.created_at|fmt_ist }}</b></span>
+          <span>Cities <b>{{ d.cities_display }}</b></span>
+          <span>Depth <b>{{ d.research_depth }}</b></span>
+          <span>Min score <b>{{ d.min_opportunity_score }}</b></span>
+          <span>Size filter <b>{{ d.size_filter }}</b></span>
+          <span>Campaign <b>{{ d.campaign_id }}</b></span>
+        </div>
+      </div>
+      <div class="theme" role="group" aria-label="Theme">
+        <button type="button" data-theme-set="auto"  aria-pressed="true">Auto</button>
+        <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
+        <button type="button" data-theme-set="dark"  aria-pressed="false">Dark</button>
+      </div>
+    </div>
+
+    <dl class="facts">
+      <div><dt>Businesses found</dt>       <dd class="num">{{ d.header.found|dash }}</dd></div>
+      <div><dt>Researched</dt>             <dd class="num">{{ d.header.researched|dash }}</dd></div>
+      <div><dt>Qualified</dt>              <dd class="num">{{ d.header.qualified|dash }}</dd></div>
+      <div><dt>Skipped</dt>                <dd class="num" title="{{ d.header.skipped_title }}">{{ d.header.skipped|dash }}</dd></div>
+      <div><dt>Requiring verification</dt> <dd class="num">{{ d.header.needs_verification|dash }}</dd></div>
+      <div><dt>Ready for outreach</dt>     <dd class="num">{{ d.header.ready|dash }}</dd></div>
+    </dl>
+
+    <div class="ro">
+      <b>Read-only export.</b> Generated {{ d.generated_at_ist }}; the figures are the data as of
+      that moment.
+      {% if app_base %}
+      VERIFY and PREPARE OUTREACH open the live app at <code>{{ app_base }}</code>.
+      {% else %}
+      No live app URL was recorded at export time, so this file carries no action links at all.
+      {% endif %}
+      Selection here is preview-only &mdash; nothing in this file writes to the database, and
+      there is no send control in this document by design.
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  {# ============================ KPI CARDS (section 7): twelve ============================ #}
+  <section class="block" aria-labelledby="h-kpi">
+    <div class="blockhead">
+      <h2 id="h-kpi">Campaign KPIs</h2>
+      <span class="note">Every card is a SQL aggregate over the {{ d.row_count }} row(s) below. Click a card to filter the table.</span>
+    </div>
+    <div class="kpis">
+      {{ m.kpi("Total businesses", d.kpis.total_or_none,
+               denom="discovered in this campaign",
+               why="This campaign has not discovered anything yet") }}
+      {{ m.kpi("Qualified", d.kpis.qualified_or_none,
+               sub="score >= " ~ d.min_opportunity_score,
+               denom=d.kpis.qualified ~ " of " ~ d.kpis.researched ~ " researched",
+               why="Nothing has been researched yet") }}
+      {{ m.kpi("High opportunity", d.kpis.high_or_none, sub="score 80-100", tone="green",
+               denom=d.kpis.high ~ " of " ~ d.kpis.scored ~ " scored",
+               filter_key="score", filter_val="80-", why="Nothing has been scored yet") }}
+      {{ m.kpi("Medium opportunity", d.kpis.medium_or_none, sub="score 60-79", tone="yellow",
+               denom=d.kpis.medium ~ " of " ~ d.kpis.scored ~ " scored",
+               filter_key="score", filter_val="60-79", why="Nothing has been scored yet") }}
+      {{ m.kpi("Low opportunity", d.kpis.low_or_none, sub="score below 60",
+               denom=d.kpis.low ~ " of " ~ d.kpis.scored ~ " scored",
+               filter_key="score", filter_val="-59", why="Nothing has been scored yet") }}
+      {{ m.kpi("Website available", d.kpis.web_yes, tone="blue",
+               sub=(d.kpis.web_unknown ~ " not checked") if d.kpis.web_unknown else None,
+               filter_key="web", filter_val="PRESENT") }}
+      {{ m.kpi("No website", d.kpis.web_no, tone="blue",
+               sub="a real finding, not a gap",
+               filter_key="web", filter_val="ABSENT") }}
+      {{ m.kpi("Potential software opportunity", d.kpis.software_opp_or_none,
+               sub="has a named solution and modules",
+               why="Nothing has been researched yet") }}
+      {{ m.kpi("Need verification", d.kpis.need_verif, tone="yellow",
+               filter_key="verif", filter_val="AI_RESEARCHED,NEEDS_VERIFICATION") }}
+      {{ m.kpi("Verified", d.kpis.verified, tone="green",
+               filter_key="verif", filter_val="VERIFIED,CONTACT_READY") }}
+      {{ m.kpi("Already contacted", d.kpis.contacted,
+               filter_key="outreach", filter_val="SENT,DELIVERED,BOUNCED,FAILED,RESPONDED,INTERESTED") }}
+      {{ m.kpi("Interested", d.kpis.interested, tone="green", primary=true,
+               filter_key="outreach", filter_val="INTERESTED") }}
+    </div>
+    <div class="kpi-foot">
+      {% if d.kpis.unscored %}The three score bands exclude {{ d.kpis.unscored }} business(es) that are not scored yet, so they do not sum to the total. {% endif %}
+      {% if d.kpis.web_unknown %}Website presence was never checked for {{ d.kpis.web_unknown }} business(es); they are in neither website card. {% endif %}
+      An em dash means not measured. A zero means we looked and the answer was none.
+    </div>
+  </section>
+
+  {# ========================= CITY SUMMARY CARDS (section 8) ============================= #}
+  <section class="block" aria-labelledby="h-city">
+    <div class="blockhead">
+      <h2 id="h-city">City summary</h2>
+      <span class="note">Five figures per city, in the order you typed the cities.</span>
+    </div>
+    <div class="city-cards" aria-label="City summary">
+      {% for c in d.city_cards %}
+      <article class="city-card{{ ' empty' if not c.found else '' }}" data-city="{{ c.city_slug }}">
+        <h3>{{ c.city }} <span class="of">{{ c.found }} found</span></h3>
+        <dl>
+          <div><dt>Found</dt>              <dd class="num">{{ c.found|dash }}</dd></div>
+          <div><dt>Qualified</dt>          <dd class="num" title="of {{ c.researched }} researched">{{ c.qualified|dash(why="Nothing researched in this city yet") }}</dd></div>
+          <div><dt>High opportunity</dt>   <dd class="num" title="of {{ c.scored }} scored">{{ c.high|dash(why="Nothing scored in this city yet") }}</dd></div>
+          <div><dt>Verified</dt>           <dd class="num">{{ c.verified|dash }}</dd></div>
+          <div><dt>Ready for outreach</dt> <dd class="num">{{ c.ready|dash }}</dd></div>
+        </dl>
+        {% if not c.found %}
+        <p class="zero">Discovery returned no businesses for this city.</p>
+        {% else %}
+        <button type="button" class="card-link" data-city-tab="{{ c.city_slug }}">Open {{ c.city }}</button>
+        {% endif %}
+      </article>
+      {% else %}
+      <p class="absent">This campaign has no cities recorded.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  {# ============================ FILTERS (section 39): eleven =========================== #}
+  <section class="block" aria-labelledby="h-filters">
+    <div class="blockhead">
+      <h2 id="h-filters">Filters, search and sort</h2>
+      <span class="note">A tab is a view; a filter is a predicate. A row shows when it is in the active pane and passes every filter.</span>
+    </div>
+    <div class="filterbar">
+      <div class="fb-top">
+        <label class="search">
+          <span aria-hidden="true">&#9906;</span>
+          <span class="sr-only">Search businesses</span>
+          <input type="search" id="q" placeholder="Search name, city, category, solution, id..." autocomplete="off">
+          <span class="hint">try <code>city:nashik score:&gt;80</code></span>
+        </label>
+        <button type="button" class="btn" id="toggle-filters" aria-expanded="true" aria-controls="fb-body">Filters</button>
+        <button type="button" class="btn" id="clear-filters">Clear all filters</button>
+        <button type="button" class="btn" id="flat-toggle" aria-pressed="false" title="Ignore category grouping and rank the whole pane">Sort across all groups</button>
+      </div>
+
+      <div class="fb-body" id="fb-body">
+        <div class="fgroup">
+          <div class="flabel">1 &middot; City</div>
+          <div class="chips">
+            {% for slug, label, count in d.city_tabs %}{% if slug != "ALL" %}
+            <button type="button" class="chip-f" data-f="city" data-v="{{ slug }}" aria-pressed="false">{{ label }}</button>
+            {% endif %}{% endfor %}
+          </div>
+        </div>
+        <div class="fgroup">
+          <div class="flabel">2 &middot; Industry</div>
+          <div class="chips">
+            {% for key, label, count in d.industry_tabs %}{% if key != "ALL" %}
+            <button type="button" class="chip-f" data-f="industry" data-v="{{ key }}" aria-pressed="false">{{ label }}</button>
+            {% endif %}{% endfor %}
+          </div>
+        </div>
+        <div class="fgroup">
+          <div class="flabel">3 &middot; Business size</div>
+          <div class="chips">
+            {% for size in ["MICRO", "SMALL", "MEDIUM", "LARGE", "UNKNOWN"] %}
+            <button type="button" class="chip-f" data-f="size" data-v="{{ size }}" aria-pressed="false">{{ size }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="fgroup">
+          <div class="flabel">4 &middot; Opportunity score</div>
+          <div class="chips" style="margin-bottom:6px">
+            <button type="button" class="chip-f" data-preset="score" data-v="80-" aria-pressed="false">80+</button>
+            <button type="button" class="chip-f" data-preset="score" data-v="60-79" aria-pressed="false">60-79</button>
+            <button type="button" class="chip-f" data-preset="score" data-v="-59" aria-pressed="false">below 60</button>
+          </div>
+          <div class="range">
+            <input type="number" id="score-min" min="0" max="100" placeholder="min" aria-label="Minimum opportunity score">
+            <span aria-hidden="true">&ndash;</span>
+            <input type="number" id="score-max" min="0" max="100" placeholder="max" aria-label="Maximum opportunity score">
+          </div>
+          <label class="nullbox"><input type="checkbox" id="null-score" checked> include unscored</label>
+        </div>
+
+        <div class="fgroup">
+          <div class="flabel">5 &middot; Website status</div>
+          <div class="chips">
+            <button type="button" class="chip-f" data-f="web" data-v="PRESENT" aria-pressed="false">Has website</button>
+            <button type="button" class="chip-f" data-f="web" data-v="ABSENT" aria-pressed="false">No website</button>
+            <button type="button" class="chip-f" data-f="web" data-v="UNKNOWN" aria-pressed="false">Not checked</button>
+          </div>
+        </div>
+
+        <div class="fgroup">
+          <div class="flabel">6 &middot; Digital maturity</div>
+          <div class="range">
+            <input type="number" id="dm-min" min="0" max="100" placeholder="min" aria-label="Minimum digital maturity">
+            <span aria-hidden="true">&ndash;</span>
+            <input type="number" id="dm-max" min="0" max="100" placeholder="max" aria-label="Maximum digital maturity">
+          </div>
+          <label class="nullbox"><input type="checkbox" id="null-dm" checked> include unassessed</label>
+        </div>
+
+        <div class="fgroup">
+          <div class="flabel">7 &middot; Research confidence</div>
+          <div class="chips">
+            {% for value, label in [("HIGH", "HIGH"), ("MEDIUM", "MEDIUM"), ("LOW", "LOW"), ("NONE", "No research")] %}
+            <button type="button" class="chip-f" data-f="conf" data-v="{{ value }}" aria-pressed="false">{{ label }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="fgroup">
+          <div class="flabel">8 &middot; Verification status</div>
+          <div class="chips">
+            {% for value, label in [("AI_RESEARCHED", "AI researched"), ("NEEDS_VERIFICATION", "Needs verification"), ("VERIFIED", "Verified"), ("CONTACT_READY", "Contact ready"), ("REJECTED", "Rejected"), ("SKIPPED", "Skipped")] %}
+            <button type="button" class="chip-f" data-f="verif" data-v="{{ value }}" aria-pressed="false">{{ label }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="fgroup">
+          <div class="flabel">9 &middot; Contact status <span class="n">(any of)</span></div>
+          <div class="chips">
+            {% for value, label in [("EMAIL", "Email"), ("PHONE", "Phone"), ("WHATSAPP", "WhatsApp"), ("UNVERIFIED", "Unconfirmed"), ("NONE", "None")] %}
+            <button type="button" class="chip-f" data-f="contact" data-v="{{ value }}" aria-pressed="false">{{ label }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="fgroup">
+          <div class="flabel">10 &middot; Outreach status</div>
+          <div class="chips">
+            {% for value, label in [("NOT_CONTACTED", "Not contacted"), ("QUEUED", "Queued"), ("SENT", "Sent"), ("DELIVERED", "Delivered"), ("BOUNCED", "Bounced"), ("FAILED", "Failed"), ("RESPONDED", "Responded"), ("INTERESTED", "Interested"), ("BLOCKED", "Do not contact")] %}
+            <button type="button" class="chip-f" data-f="outreach" data-v="{{ value }}" aria-pressed="false">{{ label }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="fgroup">
+          <div class="flabel">11 &middot; Date discovered</div>
+          <div class="chips" style="margin-bottom:6px">
+            <button type="button" class="chip-f" data-preset="disc" data-v="today" aria-pressed="false">Today</button>
+            <button type="button" class="chip-f" data-preset="disc" data-v="7" aria-pressed="false">Last 7 days</button>
+          </div>
+          <div class="range">
+            <input type="date" id="disc-from" aria-label="Discovered from">
+            <span aria-hidden="true">&ndash;</span>
+            <input type="date" id="disc-to" aria-label="Discovered to">
+          </div>
+        </div>
+      </div>
+
+      <div class="resultline">
+        <div role="status" aria-live="polite" id="resultline"><b>Showing {{ d.row_count }} of {{ d.row_count }} businesses</b></div>
+        <span id="activecount"></span>
+        <span id="sortstate"></span>
+      </div>
+    </div>
+  </section>
+
+  {# ==================== CITY TABS -> INDUSTRY TABS -> TABLE (3, 4, 9, 10) ============== #}
+  <section class="block" aria-labelledby="h-table">
+    <div class="blockhead">
+      <h2 id="h-table">Businesses</h2>
+      <span class="note">City tab, then industry tab; category groups inside the pane.</span>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="City" id="tabs-city">
+      {% for slug, label, count in d.city_tabs %}
+      <button type="button" role="tab" data-city="{{ slug }}" aria-selected="{{ 'true' if loop.first else 'false' }}">{{ label }} <span class="cnt">{{ count }}</span></button>
+      {% endfor %}
+    </div>
+    <div class="tabs sub" role="tablist" aria-label="Industry" id="tabs-industry">
+      {% for key, label, count in d.industry_tabs %}
+      <button type="button" role="tab" data-industry="{{ key }}" aria-selected="{{ 'true' if loop.first else 'false' }}">{{ label }} <span class="cnt">{{ count }}</span></button>
+      {% endfor %}
+    </div>
+
+    <div id="tabwarn" class="tabwarn" hidden></div>
+
+    <div class="tablewrap" role="tabpanel" aria-labelledby="h-table">
+      <table class="btable" id="btable">
+        <caption id="tcaption">All cities &middot; all industries</caption>
+        <thead>
+          <tr>
+            <th scope="col" class="c-sel"><input type="checkbox" id="selall" aria-label="Select all eligible visible rows"></th>
+            <th scope="col" class="sortable" data-sort="name"     data-key="name"        data-type="text" aria-sort="none">Business</th>
+            <th scope="col" class="sortable" data-sort="city"     data-key="cityname"    data-type="text" aria-sort="none">City</th>
+            <th scope="col" class="sortable c-ind" data-sort="industry" data-key="indname" data-type="text" aria-sort="none">Industry</th>
+            <th scope="col" class="sortable c-cat" data-sort="cat" data-key="catname"    data-type="text" aria-sort="none">Category</th>
+            <th scope="col" class="sortable" data-sort="size"     data-key="sizeord"     data-type="num"  aria-sort="none">Size</th>
+            <th scope="col" class="sortable" data-sort="web"      data-key="web"         data-type="text" aria-sort="none">Website</th>
+            <th scope="col" class="sortable" data-sort="dm"       data-key="dm"          data-type="num"  aria-sort="none">Digital maturity</th>
+            <th scope="col" class="sortable" data-sort="score"    data-key="score"       data-type="num"  aria-sort="descending">Opportunity score</th>
+            <th scope="col" class="sortable" data-sort="sol"      data-key="sol"         data-type="text" aria-sort="none">Potential solution</th>
+            <th scope="col" class="sortable" data-sort="contact"  data-key="contactrank" data-type="num"  aria-sort="none">Contact available</th>
+            <th scope="col" class="sortable" data-sort="conf"     data-key="conford"     data-type="num"  aria-sort="none">Research confidence</th>
+            <th scope="col" class="sortable" data-sort="verif"    data-key="veriford"    data-type="num"  aria-sort="none">Verification status</th>
+            <th scope="col" class="sortable" data-sort="outreach" data-key="outord"      data-type="num"  aria-sort="none">Outreach status</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+
+        {% for group in d.groups %}
+        <tbody data-cat="{{ group.category }}">
+          <tr class="group-head">
+            <th colspan="15" scope="colgroup">{{ CATEGORY_LABEL.get(group.category, group.category) }}<span class="gn">({{ group.rows|length }})</span></th>
+          </tr>
+          {% for row in group.rows %}
+          {% set opp = d.opportunities.get(row.business_id) %}
+          {% set findings = d.findings.get(row.business_id, []) %}
+          {% set history = d.history.get(row.business_id, []) %}
+          <tr class="brow{{ ' suppressed' if row.is_suppressed else '' }}"
+              id="biz-{{ row.short }}"
+              data-id="{{ row.business_id }}"
+              data-city="{{ row.city_slug }}" data-cityname="{{ row.city }}"
+              data-industry="{{ row.industry }}" data-indname="{{ INDUSTRY_LABEL.get(row.industry, row.industry) }}"
+              data-cat="{{ row.category }}" data-catname="{{ CATEGORY_ONE.get(row.category, row.category) }}"
+              data-size="{{ row.size_band }}" data-sizeord="{{ row.size_ord }}"
+              data-score="{{ row.opportunity_score if row.opportunity_score is not none else '' }}"
+              data-web="{{ row.website_status }}"
+              data-dm="{{ row.digital_maturity if row.digital_maturity is not none else '' }}"
+              data-conf="{{ row.research_confidence or '' }}" data-conford="{{ row.conf_ord }}"
+              data-verif="{{ row.verif_state }}" data-veriford="{{ row.verif_ord }}"
+              data-contact="{{ row.contact_attr }}" data-contactrank="{{ row.contact_rank }}"
+              data-outreach="{{ row.outreach_attr }}" data-outord="{{ row.outreach_ord }}"
+              data-disc="{{ row.discovered_on or '' }}"
+              data-sel="{{ 1 if row.selectable else 0 }}" data-block="{{ row.blocking_gate or '' }}"
+              data-name="{{ row.name }}" data-sol="{{ row.potential_solution or '' }}"
+              data-q="{{ row.search_blob }}">
+
+            <td class="c-sel" data-label="Select">
+              <input type="checkbox" class="rowsel"{{ '' if row.selectable else ' disabled' }}
+                     aria-label="Select {{ row.name }}"
+                     {% if not row.selectable %}aria-describedby="blk-{{ row.short }}" title="{{ row.block_reason }}"{% endif %}>
+              {% if not row.selectable %}
+              <span class="why" tabindex="0" role="note" title="{{ row.block_reason }}" aria-hidden="true">i</span>
+              <span id="blk-{{ row.short }}" class="sr-only">{{ row.block_reason }}</span>
+              {% endif %}
+            </td>
+
+            <td class="c-name" data-label="Business">
+              <a class="bname" href="#biz-{{ row.short }}" data-panel="research" data-target="p-{{ row.short }}">{{ row.name }}</a>
+              {{ m.ext(row.website, row.website_domain) }}
+              <div class="sub2" title="discovered {{ row.discovered_on or 'date unknown' }}">{{ CATEGORY_ONE.get(row.category, row.category) }} &middot; {{ row.city }}</div>
+            </td>
+
+            <td data-label="City">{{ row.city }}</td>
+            <td class="c-ind" data-label="Industry">{{ INDUSTRY_LABEL.get(row.industry, row.industry) }}</td>
+            <td class="c-cat" data-label="Category">{{ CATEGORY_ONE.get(row.category, row.category) }}</td>
+            <td data-label="Size">{{ m.badge("mute", row.size_band) }}</td>
+
+            <td class="c-web" data-label="Website">
+              {% if row.website_status == "PRESENT" and row.website|safe_url %}
+              <a href="{{ row.website|safe_url }}" target="_blank" rel="noopener noreferrer nofollow">Yes</a>
+              {% elif row.website_status == "PRESENT" %}
+              Yes
+              {% elif row.website_status == "ABSENT" %}
+              No
+              {% else %}
+              {{ m.na("Website not checked") }}
+              {% endif %}
+            </td>
+
+            <td class="c-dm num" data-label="Digital maturity">
+              {% if row.digital_maturity is not none %}
+              <span class="bar" aria-hidden="true"><i style="--v:{{ row.digital_maturity }}%"></i></span>{{ row.digital_maturity }}
+              {% else %}
+              {{ m.na("Not assessed") }}
+              {% endif %}
+            </td>
+
+            <td class="c-score" data-label="Opportunity score">{{ m.score_badge(row.opportunity_score) }}</td>
+
+            <td class="c-sol" data-label="Potential solution" title="{{ row.potential_solution or '' }}">
+              {% if row.potential_solution %}<span class="trunc">{{ row.potential_solution }}</span>{% else %}{{ m.na("No current opportunity recorded") }}{% endif %}
+            </td>
+
+            <td class="c-contact" data-label="Contact available">{{ m.contact_cell(row) }}</td>
+            <td data-label="Research confidence">{{ m.conf_badge(row.research_confidence, row.research_confidence_pct) }}</td>
+            <td data-label="Verification status">{{ m.badge(row.verification_badge[0], row.verification_badge[1]) }}</td>
+            <td data-label="Outreach status">{{ m.badge(row.outreach_badge[0], row.outreach_badge[1]) }}</td>
+
+            <td class="c-act" data-label="Actions">
+              <button type="button" class="nav" data-panel="research" data-target="p-{{ row.short }}" aria-expanded="false" aria-controls="p-{{ row.short }}">Research</button>
+              {{ m.act_link(app_base, "/business/" ~ row.business_id, "View") }}
+              {% if row.verif_state in ("AI_RESEARCHED", "NEEDS_VERIFICATION") %}
+              {{ m.act_link(app_base, "/verify/" ~ row.business_id ~ "?from=export&campaign=" ~ d.campaign_id, "Verify") }}
+              {% endif %}
+              {% if row.selectable %}
+              {{ m.act_link(app_base, "/outreach?campaign=" ~ d.campaign_id ~ "&business=" ~ row.business_id, "Prepare") }}
+              {% endif %}
+              {% if row.draft_id %}
+              {{ m.act_link(app_base, "/outreach/" ~ row.draft_id, "Message") }}
+              {% endif %}
+              {% if history %}
+              <button type="button" class="nav" data-panel="history" data-target="h-{{ row.short }}" aria-expanded="false" aria-controls="h-{{ row.short }}">History</button>
+              {% endif %}
+              {{ m.ready_chip(row, app_base) }}
+            </td>
+          </tr>
+
+          {# ---------------- research panel (11, 12, 13, 14) ---------------- #}
+          <tr class="panel-row" id="p-{{ row.short }}" data-owner="{{ row.business_id }}" hidden>
+            <td colspan="15">
+              <div class="panel">
+                <div class="panel-head">
+                  <h4>{{ row.name }}</h4>
+                  <div class="meta">
+                    {% if row.researched_at %}Researched {{ row.researched_at|fmt_ist }} &middot; depth {{ row.research_depth or 'STANDARD' }}{% else %}Not researched{% endif %}
+                    {% if opp and opp.model_id %} &middot; {{ opp.model_id }}{% endif %}
+                    {% if opp and opp.prompt_version %} &middot; {{ opp.prompt_version }}{% endif %}
+                  </div>
+                  <button type="button" class="btn" data-panel-close="p-{{ row.short }}">Close</button>
+                </div>
+
+                <div class="psec">
+                  <h5>Identity</h5>
+                  <dl class="idgrid">
+                    <div><dt>Name</dt><dd>{{ row.name }}</dd></div>
+                    <div><dt>Size</dt><dd>{{ row.size_band }}</dd></div>
+                    <div><dt>Category</dt><dd>{{ CATEGORY_ONE.get(row.category, row.category) }} ({{ INDUSTRY_LABEL.get(row.industry, row.industry) }})</dd></div>
+                    <div><dt>Digital maturity</dt><dd>{{ row.digital_maturity|dash(unit=" / 100", why="Not assessed") }}</dd></div>
+                    <div><dt>City</dt><dd>{{ row.city }}</dd></div>
+                    <div><dt>Operational complexity</dt><dd>{{ row.operational_complexity|dash(unit=" / 100", why="Not assessed") }}</dd></div>
+                    <div><dt>Website</dt><dd>
+                      {% if row.website_status == "PRESENT" and row.website|safe_url %}<a href="{{ row.website|safe_url }}" target="_blank" rel="noopener noreferrer nofollow">{{ row.website_domain or row.website }}</a>
+                      {% elif row.website_status == "ABSENT" %}No website found
+                      {% else %}{{ m.na("Website not checked") }}{% endif %}
+                    </dd></div>
+                    <div><dt>Opportunity</dt><dd>{{ m.score_badge(row.opportunity_score) }} {{ row.opportunity_band or '' }}</dd></div>
+                    <div><dt>Listing</dt><dd>
+                      {% if row.listing_url|safe_url %}<a href="{{ row.listing_url|safe_url }}" target="_blank" rel="noopener noreferrer nofollow">Public listing</a>{% else %}{{ m.na("No listing recorded") }}{% endif %}
+                    </dd></div>
+                    <div><dt>Research confidence</dt><dd>{{ m.conf_badge(row.research_confidence, row.research_confidence_pct) }}</dd></div>
+                    <div><dt>Contact</dt><dd>
+                      {% set contact_rows = d.contacts.get(row.business_id, []) %}
+                      {% if contact_rows %}
+                      {% for c in contact_rows %}{{ c.kind|lower }}: {{ c.n_confirmed }} confirmed, {{ c.n_total - c.n_confirmed }} unconfirmed{% if not loop.last %} &middot; {% endif %}{% endfor %}
+                      {% else %}{{ m.na("No contact recorded") }}{% endif %}
+                    </dd></div>
+                    <div><dt>Discovered</dt><dd>{{ row.discovered_on|dash(why="No discovery date recorded") }}</dd></div>
+                  </dl>
+                  <p class="absent">Contact addresses are not in this file. They live behind a session in the live app.</p>
+                </div>
+
+                <div class="psec">
+                  <h5>Research findings</h5>
+                  {% set observed = findings|selectattr("kind", "equalto", "OBSERVED")|list %}
+                  {% set inferred = findings|selectattr("kind", "equalto", "INFERRED")|list %}
+                  {% set unknown  = findings|selectattr("kind", "equalto", "UNKNOWN")|list %}
+                  {{ m.findings_block("OBSERVED", "Observed - supported by sources",
+                       "Nothing was recorded as directly observed for this business.", observed) }}
+                  {{ m.findings_block("INFERRED", "Inferred - reasonable conclusion, not verified",
+                       "Nothing was inferred for this business.", inferred) }}
+                  {{ m.findings_block("UNKNOWN", "Unknown - could not be verified",
+                       "Nothing was recorded as unverifiable for this business.", unknown) }}
+                </div>
+
+                <div class="psec">
+                  <h5>Software opportunity</h5>
+                  {% if opp %}
+                  <dl class="idgrid">
+                    <div><dt>Potential problem</dt><dd>{{ opp.potential_problem|dash(why="Not recorded") }}</dd></div>
+                    <div><dt>Potential solution</dt><dd>{{ opp.potential_solution|dash(why="Not recorded") }}</dd></div>
+                    <div><dt>Expected benefit</dt><dd>{{ opp.expected_benefit|dash(why="Not recorded") }}</dd></div>
+                    <div><dt>Estimated value</dt><dd>{% if opp.est_value_inr is not none %}{{ opp.est_value_inr|inr }}{% else %}{{ m.na("This opportunity is not priced") }}{% endif %}</dd></div>
+                    <div><dt>Score</dt><dd>{{ m.score_badge(opp.score) }} {{ opp.band or '' }}</dd></div>
+                    <div><dt>Confidence</dt><dd>{{ m.conf_badge(opp.confidence, opp.confidence_pct) }}</dd></div>
+                  </dl>
+                  <div class="mods" style="margin-top:8px">
+                    {% for mod in d.modules.get(row.business_id, []) %}
+                    <span class="mod" title="{{ mod.rationale or 'No rationale recorded' }}">{{ mod.label }}</span>
+                    {% else %}
+                    <span class="absent">No modules were recommended.</span>
+                    {% endfor %}
+                  </div>
+                  {% if opp.breakdown %}
+                  <div class="why">
+                    <table class="whytable">
+                      <caption class="sr-only">Why this score</caption>
+                      <tbody>
+                      {% for comp in opp.breakdown %}
+                        <tr>
+                          <td>{{ comp.component }}</td>
+                          <td class="pts">{% if comp.points is not none %}{{ comp.points }}{% if comp.of is not none %}/{{ comp.of }}{% endif %}{% else %}&mdash;{% endif %}</td>
+                          <td class="src">{% if comp.because_finding_id %}<a href="#f-{{ comp.because_finding_id[-10:] }}">because</a>{% endif %}</td>
+                        </tr>
+                      {% endfor %}
+                        <tr class="tot"><td>Total</td><td class="pts">{{ opp.score }}/100</td><td class="src"></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  {% endif %}
+                  {% else %}
+                  <p class="absent">No current opportunity has been computed for this business.</p>
+                  {% endif %}
+                </div>
+
+                <div class="psec">
+                  <h5>Sources</h5>
+                  {{ m.source_list(d.sources.get(row.business_id, [])) }}
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          {# ---------------- history panel (32) ---------------- #}
+          {% if history %}
+          <tr class="panel-row" id="h-{{ row.short }}" data-owner="{{ row.business_id }}" hidden>
+            <td colspan="15">
+              <div class="panel">
+                <div class="panel-head">
+                  <h4>{{ row.name }} &mdash; outreach history</h4>
+                  <div class="meta">{{ history|length }} message(s). Bodies are not in this file; open the message in the live app.</div>
+                  <button type="button" class="btn" data-panel-close="h-{{ row.short }}">Close</button>
+                </div>
+                <table class="histtable">
+                  <thead>
+                    <tr><th>Date</th><th>Channel</th><th>Subject</th><th>Sender</th><th>Delivery</th><th>Response</th><th>Classification</th><th>Next action</th></tr>
+                  </thead>
+                  <tbody>
+                    {% for h in history %}
+                    <tr>
+                      <td>{{ h.sent_at|fmt_date }}</td>
+                      <td>{{ h.channel }}</td>
+                      <td>{{ h.subject_final|dash(why="No subject recorded") }}</td>
+                      <td>{{ h.sender|dash(why="No approver recorded") }}</td>
+                      <td>{{ h.delivery_status }}</td>
+                      <td>{% if h.response_at %}{{ h.response_at|fmt_date }}{% else %}{{ m.na("No response") }}{% endif %}</td>
+                      <td>{{ h.response_classification|dash(why="Not classified") }}</td>
+                      <td class="next {{ h.next_action[0] }}">{{ h.next_action[1] }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+        {% else %}
+        <tbody>
+          <tr class="emptyrow"><td colspan="15">This campaign has no businesses yet.</td></tr>
+        </tbody>
+        {% endfor %}
+
+        <tbody id="flatbody" data-cat="__flat" hidden></tbody>
+        <tbody id="emptybody" hidden>
+          <tr class="emptyrow"><td colspan="15">No business matches the current tab and filters.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  {# ======================== TOP 20 OPPORTUNITIES (section 44) ========================== #}
+  <section class="block" aria-labelledby="h-top">
+    <div class="blockhead">
+      <h2 id="h-top">Top opportunities</h2>
+      <span class="note">Top {{ d.top20|length }} of {{ d.header.researched }} researched businesses ({{ d.kpis.scored }} scored). Unscored businesses never appear here.</span>
+    </div>
+    <div class="tablewrap" style="border-top:1px solid var(--rule); border-radius:var(--r)">
+      <table class="btable">
+        <thead>
+          <tr>
+            <th scope="col">Rank</th><th scope="col">Business</th><th scope="col">City</th>
+            <th scope="col">Industry</th><th scope="col">Score</th><th scope="col">Potential system</th>
+            <th scope="col">Reason</th><th scope="col">Confidence</th><th scope="col">Verification</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in d.top20 %}
+          <tr>
+            <td class="num" data-label="Rank">{{ t.rank }}</td>
+            <td data-label="Business"><a class="bname" href="#biz-{{ t.short }}">{{ t.name }}</a></td>
+            <td data-label="City">{{ t.city }}</td>
+            <td data-label="Industry">{{ INDUSTRY_LABEL.get(t.industry, t.industry) }}</td>
+            <td data-label="Score">{{ m.score_badge(t.opportunity_score) }}</td>
+            <td data-label="Potential system">{{ t.potential_system|dash(why="No solution named") }}</td>
+            <td data-label="Reason">{{ t.reason|dash(why="No traceable reason is recorded") }}</td>
+            <td data-label="Confidence">{{ m.conf_badge(t.research_confidence, t.research_confidence_pct) }}</td>
+            <td data-label="Verification">{{ m.badge(t.verification_badge[0], t.verification_badge[1]) }}</td>
+          </tr>
+          {% else %}
+          <tr class="emptyrow"><td colspan="9">No business in this campaign has an opportunity score yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  {# =========================== CITY COMPARISON (section 37) =========================== #}
+  {% set t_contacted = d.cmp_city|sum(attribute='n_contacted') %}
+  {% set t_interested = d.cmp_city|map(attribute='n_interested')|reject('none')|sum %}
+  {% set t_priced = d.cmp_city|sum(attribute='n_priced') %}
+  {% set t_inr = d.cmp_city|map(attribute='potential_inr')|reject('none')|sum %}
+  <section class="block" aria-labelledby="h-cmpcity">
+    <div class="blockhead">
+      <h2 id="h-cmpcity">City comparison</h2>
+      <span class="note">Conversion is interested / contacted. Nothing contacted means no rate, not a rate of zero.</span>
+    </div>
+    <div class="tablewrap" style="border-top:1px solid var(--rule); border-radius:var(--r)">
+      <table class="btable">
+        <thead>
+          <tr>
+            <th scope="col">City</th><th scope="col">Businesses</th><th scope="col">Qualified</th>
+            <th scope="col">High opportunity</th><th scope="col">Verified</th><th scope="col">Contacted</th>
+            <th scope="col">Responses</th><th scope="col">Interested</th><th scope="col">Conversion</th>
+            <th scope="col">Potential revenue</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in d.cmp_city %}
+          <tr>
+            <td data-label="City">{{ c.city }}</td>
+            <td class="num" data-label="Businesses">{{ c.n_businesses|dash }}</td>
+            <td class="num" data-label="Qualified" title="of {{ c.n_researched }} researched">{{ c.n_qualified|dash(why="Nothing researched in this city") }}</td>
+            <td class="num" data-label="High opportunity" title="of {{ c.n_scored }} scored">{{ c.n_high|dash(why="Nothing scored in this city") }}</td>
+            <td class="num" data-label="Verified">{{ c.n_verified|dash }}</td>
+            <td class="num" data-label="Contacted">{{ c.n_contacted|dash }}</td>
+            <td class="num" data-label="Responses">{{ c.n_responded|dash(why="Nothing contacted in this city") }}</td>
+            <td class="num" data-label="Interested">{{ c.n_interested|dash(why="Nothing contacted in this city") }}</td>
+            <td class="num" data-label="Conversion" title="{{ c.n_interested if c.n_interested is not none else 0 }} interested of {{ c.n_contacted }} contacted">{{ c.conversion_pct|dash(unit="%", why="Nothing contacted, so there is no rate") }}</td>
+            <td class="num" data-label="Potential revenue">
+              {% if c.potential_inr is not none %}{{ c.potential_inr|inr }}<div class="sub2">{{ c.n_priced }} of {{ c.n_qualified if c.n_qualified is not none else 0 }} qualified priced</div>
+              {% else %}{{ m.na("No business in this group is priced") }}{% endif %}
+            </td>
+          </tr>
+          {% else %}
+          <tr class="emptyrow"><td colspan="10">This campaign has no cities recorded.</td></tr>
+          {% endfor %}
+          {% if d.cmp_city %}
+          <tr class="group-head">
+            <th scope="row">TOTAL</th>
+            <th class="num">{{ d.cmp_city|sum(attribute='n_businesses') }}</th>
+            <th class="num">{{ d.cmp_city|map(attribute='n_qualified')|reject('none')|sum }}</th>
+            <th class="num">{{ d.cmp_city|map(attribute='n_high')|reject('none')|sum }}</th>
+            <th class="num">{{ d.cmp_city|sum(attribute='n_verified') }}</th>
+            <th class="num">{{ t_contacted }}</th>
+            <th class="num">{{ d.cmp_city|map(attribute='n_responded')|reject('none')|sum }}</th>
+            <th class="num">{{ t_interested }}</th>
+            <th class="num">{% if t_contacted %}{{ ((100.0 * t_interested / t_contacted)|round(1)) }}%{% else %}{{ m.na("Nothing contacted, so there is no rate") }}{% endif %}</th>
+            <th class="num">{% if t_priced %}{{ t_inr|inr }} <span class="gn">({{ t_priced }} priced)</span>{% else %}{{ m.na("Nothing is priced") }}{% endif %}</th>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  {# ========================= INDUSTRY COMPARISON (section 38) ========================= #}
+  <section class="block" aria-labelledby="h-cmpind">
+    <div class="blockhead">
+      <h2 id="h-cmpind">Industry comparison</h2>
+      <span class="note">Average opportunity is over scored rows only; the count underneath says how many those are.</span>
+    </div>
+    <div class="tablewrap" style="border-top:1px solid var(--rule); border-radius:var(--r)">
+      <table class="btable">
+        <thead>
+          <tr>
+            <th scope="col">Industry</th><th scope="col">Businesses</th><th scope="col">Avg opportunity</th>
+            <th scope="col">Verified</th><th scope="col">Contacted</th><th scope="col">Responses</th>
+            <th scope="col">Interested</th><th scope="col">Demos</th><th scope="col">Won</th>
+            <th scope="col">Revenue</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in d.cmp_industry %}
+          <tr>
+            <td data-label="Industry">{{ INDUSTRY_LABEL.get(i.industry, i.industry) }}{% if i.small_sample %} <span class="badge mute" title="Fewer than ten contacted: a high conversion here is not a trend.">SMALL SAMPLE</span>{% endif %}</td>
+            <td class="num" data-label="Businesses">{{ i.n_businesses|dash }}</td>
+            <td class="num" data-label="Avg opportunity">{{ i.avg_score|dash(why="Nothing in this industry is scored") }}<div class="sub2">{{ i.n_scored }} of {{ i.n_businesses }} scored</div></td>
+            <td class="num" data-label="Verified">{{ i.n_verified|dash }}</td>
+            <td class="num" data-label="Contacted">{{ i.n_contacted|dash }}</td>
+            <td class="num" data-label="Responses">{{ i.n_responded|dash(why="Nothing contacted in this industry") }}</td>
+            <td class="num" data-label="Interested">{{ i.n_interested|dash(why="Nothing contacted in this industry") }}</td>
+            <td class="num" data-label="Demos">{{ i.n_demos|dash(why="Nothing contacted in this industry") }}</td>
+            <td class="num" data-label="Won">{{ i.n_won|dash(why="Nothing contacted in this industry") }}</td>
+            <td class="num" data-label="Revenue">{% if i.revenue_inr is not none %}{{ i.revenue_inr|inr }}{% else %}{{ m.na("No won deal in this industry carries a value") }}{% endif %}</td>
+          </tr>
+          {% else %}
+          <tr class="emptyrow"><td colspan="10">No businesses to compare.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+{# =============== SELECTION TRAY (section 18). No send control lives here. ============== #}
+<div id="tray" hidden aria-label="Selection">
+  <div class="wrap">
+    <div class="tray-in">
+      <div class="tray-counts" id="tray-counts"></div>
+      <div class="tray-total" id="tray-total">0 selected</div>
+      <div class="tray-note" id="tray-note">Selection in this file is preview-only. Copy the ids and paste them into the live app, where every gate is re-checked before anything is prepared.</div>
+      <div class="tray-actions">
+        <button type="button" class="btn" id="tray-copy">Copy ids</button>
+        <button type="button" class="btn" id="tray-clear">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" hidden role="status"></div>
+
+<footer class="prov">
+  <div class="wrap">
+    <h2>What the numbers mean</h2>
+    <dl>
+      <div><dt>Businesses found</dt><dd>every campaign_businesses row for this campaign, whatever the business's status and whatever the membership state</dd></div>
+      <div><dt>Researched</dt><dd>at least one research_runs row with status = COMPLETE</dd></div>
+      <div><dt>Qualified</dt><dd>research complete, a current opportunity score, score &gt;= {{ d.min_opportunity_score }}, status not SKIPPED or REJECTED</dd></div>
+      <div><dt>Skipped</dt><dd>status IN (SKIPPED, REJECTED): {{ d.header.skipped_pipeline }} skipped by the pipeline, {{ d.header.rejected }} rejected by you</dd></div>
+      <div><dt>Requiring verification</dt><dd>status IN (AI_RESEARCHED, NEEDS_VERIFICATION)</dd></div>
+      <div><dt>Ready for outreach</dt><dd>status = CONTACT_READY: verified, and a human-confirmed contact exists</dd></div>
+      <div><dt>Em dash</dt><dd>not measured. A zero means we looked and the answer was none. They are never rendered the same way.</dd></div>
+    </dl>
+
+    {% if d.warnings %}
+    <div class="warnings">
+      <b>Notes on this build</b>
+      <ul>{% for w in d.warnings %}<li>{{ w }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+
+    <h2>Provenance</h2>
+    <dl>
+      <div><dt>Report generated</dt><dd>{{ d.generated_at }} ({{ d.generated_at_ist }}) by radar/report.py {{ generator_version }}</dd></div>
+      <div><dt>Campaign</dt><dd>{{ d.campaign_id }} &middot; status {{ d.campaign_status }}{% if d.created_by_name %} &middot; created by {{ d.created_by_name }}{% endif %}</dd></div>
+      <div><dt>Research model</dt><dd>{{ d.research_model_id|dash(why="No model pinned on this campaign") }}{% if d.research_prompt_version %}, prompt {{ d.research_prompt_version }}{% endif %}</dd></div>
+      <div><dt>Scoring</dt><dd>scores are read from opportunities.score and never recomputed at render time</dd></div>
+      <div><dt>Discovery sources</dt><dd>OpenStreetMap Overpass and Nominatim, business websites, free public registries. No paid data vendor.</dd></div>
+      <div><dt>Rows rendered</dt><dd>{{ d.row_count }}</dd></div>
+      <div><dt>Contact data in this file</dt><dd>none. Channel availability is shown; no address, number or named individual is written into this document.</dd></div>
+      <div><dt>Contact data sent to an LLM</dt><dd>none, ever. business_contacts values are substituted locally after generation.</dd></div>
+      <div><dt>Send capability</dt><dd>none. This document has no form, no token and no send control, in either rendering.</dd></div>
+    </dl>
+  </div>
+</footer>
+
+<script>
+{% raw %}
+/* =====================================================================
+   report.js - the whole client side of the report, vanilla ES5+, no
+   framework, no build step, no network except one optional health probe.
+
+   It runs identically in the live app and in the exported file, because a
+   filter that behaves differently in the file Sagar emailed than in the app
+   he reviewed is a bug he will not notice until it matters.
+   ===================================================================== */
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+  var TABLE = document.getElementById("btable");
+  if (!TABLE) { return; }
+
+  function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+  function $$(sel, ctx) {
+    return Array.prototype.slice.call((ctx || document).querySelectorAll(sel));
+  }
+
+  /* ---------------------------------------------------------------- theme */
+  var themeBtns = $$("[data-theme-set]");
+  function paintTheme() {
+    var current = root.dataset.theme || "auto";
+    themeBtns.forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.themeSet === current ? "true" : "false");
+    });
+  }
+  themeBtns.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var choice = b.dataset.themeSet;
+      if (choice === "auto") { delete root.dataset.theme; } else { root.dataset.theme = choice; }
+      try {
+        if (choice === "auto") { localStorage.removeItem("radar:theme"); }
+        else { localStorage.setItem("radar:theme", choice); }
+      } catch (e) { /* blocked storage is not a reason to refuse the click */ }
+      paintTheme();
+    });
+  });
+  paintTheme();
+
+  /* ------------------------------------------------------------ row index */
+  /* A unit is one business: its row plus the panel rows that follow it. They
+     move together when the table is sorted or flattened, or a research panel
+     ends up under a different business. */
+  var UNITS = [], BY_ID = Object.create(null);
+  $$("tbody[data-cat]", TABLE).forEach(function (tb) {
+    if (tb.dataset.cat === "__flat") { return; }
+    var kids = Array.prototype.slice.call(tb.children), unit = null;
+    kids.forEach(function (tr) {
+      if (tr.classList.contains("brow")) {
+        unit = { tr: tr, panels: [], home: tb, d: tr.dataset };
+        UNITS.push(unit);
+        BY_ID[tr.dataset.id] = unit;
+      } else if (tr.classList.contains("panel-row") && unit) {
+        unit.panels.push(tr);
+      }
+    });
+  });
+
+  var FLAT = document.getElementById("flatbody");
+  var EMPTY = document.getElementById("emptybody");
+  var CAPTION = document.getElementById("tcaption");
+  var CITY_LABEL = Object.create(null), IND_LABEL = Object.create(null);
+  UNITS.forEach(function (u) {
+    CITY_LABEL[u.d.city] = u.d.cityname;
+    IND_LABEL[u.d.industry] = u.d.indname;
+  });
+
+  /* ------------------------------------------------------------ the state */
+  var F = {
+    city: [], industry: [], cat: [], size: [], web: [], conf: [], verif: [],
+    contact: [], outreach: [],
+    score: [null, null], dm: [null, null], disc: [null, null],
+    q: "", nullScore: true, nullDm: true,
+    tabCity: "ALL", tabIndustry: "ALL",
+    sort: [{ key: "score", type: "num", dir: "desc" }],
+    flat: false
+  };
+
+  function inSet(list, value) { return list.length === 0 || list.indexOf(value) !== -1; }
+
+  function inSetAny(list, spaceSeparated) {
+    if (list.length === 0) { return true; }
+    var have = spaceSeparated ? spaceSeparated.split(" ") : [];
+    for (var i = 0; i < list.length; i++) {
+      if (have.indexOf(list[i]) !== -1) { return true; }
+    }
+    return false;
+  }
+
+  function inRange(raw, range, includeNull) {
+    if (raw === "" || raw === null || raw === undefined) { return includeNull; }
+    var v = Number(raw);
+    if (range[0] !== null && v < range[0]) { return false; }
+    if (range[1] !== null && v > range[1]) { return false; }
+    return true;
+  }
+
+  function inDateRange(raw, range) {          /* ISO dates compare as strings */
+    if (range[0] === null && range[1] === null) { return true; }
+    if (!raw) { return false; }
+    if (range[0] !== null && raw < range[0]) { return false; }
+    if (range[1] !== null && raw > range[1]) { return false; }
+    return true;
+  }
+
+  /* The eleven filters plus search. The active tab is a separate predicate so
+     tab counts can be computed without it. */
+  function passesFilters(d) {
+    return inSet(F.city, d.city)
+        && inSet(F.industry, d.industry)
+        && inSet(F.cat, d.cat)
+        && inSet(F.size, d.size)
+        && inRange(d.score, F.score, F.nullScore)
+        && inSet(F.web, d.web)
+        && inRange(d.dm, F.dm, F.nullDm)
+        && inSet(F.conf, d.conf || "NONE")
+        && inSet(F.verif, d.verif)
+        && inSetAny(F.contact, d.contact)
+        && inSet(F.outreach, d.outreach)
+        && inDateRange(d.disc, F.disc)
+        && (F.q === "" || d.q.indexOf(F.q) !== -1);
+  }
+
+  function inTab(d) {
+    return (F.tabCity === "ALL" || d.city === F.tabCity)
+        && (F.tabIndustry === "ALL" || d.industry === F.tabIndustry);
+  }
+
+  function activeFilterCount() {
+    var n = 0;
+    ["city", "industry", "cat", "size", "web", "conf", "verif", "contact", "outreach"]
+      .forEach(function (k) { if (F[k].length) { n++; } });
+    if (F.score[0] !== null || F.score[1] !== null || !F.nullScore) { n++; }
+    if (F.dm[0] !== null || F.dm[1] !== null || !F.nullDm) { n++; }
+    if (F.disc[0] !== null || F.disc[1] !== null) { n++; }
+    if (F.q) { n++; }
+    return n;
+  }
+
+  /* --------------------------------------------------------------- filter */
+  function applyFilters() {
+    var shown = 0, inPane = 0;
+    var cityCounts = Object.create(null), indCounts = Object.create(null);
+
+    UNITS.forEach(function (u) {
+      var passes = passesFilters(u.d);
+      var tab = inTab(u.d);
+      var ok = passes && tab;
+      if (u.tr.hidden !== !ok) { u.tr.hidden = !ok; }
+      if (!ok) {
+        u.panels.forEach(function (p) { if (!p.hidden) { setPanel(p, false); } });
+      }
+      if (ok) { shown++; }
+      if (tab) { inPane++; }
+      if (passes) {
+        if (F.tabIndustry === "ALL" || u.d.industry === F.tabIndustry) {
+          cityCounts[u.d.city] = (cityCounts[u.d.city] || 0) + 1;
+        }
+        if (F.tabCity === "ALL" || u.d.city === F.tabCity) {
+          indCounts[u.d.industry] = (indCounts[u.d.industry] || 0) + 1;
+        }
+      }
+    });
+
+    updateGroupHeadings();
+    updateTabCounts(cityCounts, indCounts, shown);
+    EMPTY.hidden = shown !== 0;
+
+    $("#resultline").innerHTML = "<b>Showing " + shown + " of " + UNITS.length +
+      " businesses</b>";
+    var n = activeFilterCount();
+    $("#activecount").textContent = n ? (n + " filter" + (n === 1 ? "" : "s") + " active") : "";
+
+    var warn = $("#tabwarn");
+    if (shown === 0 && inPane > 0) {
+      warn.innerHTML = "";
+      var msg = document.createElement("span");
+      msg.textContent = "This pane holds " + inPane +
+        " row(s), but your filters exclude all of them.";
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn";
+      btn.textContent = "Clear all filters";
+      btn.addEventListener("click", clearFilters);
+      warn.appendChild(msg);
+      warn.appendChild(btn);
+      warn.hidden = false;
+    } else {
+      warn.hidden = true;
+    }
+
+    recount();
+    writeHash();
+  }
+
+  function updateGroupHeadings() {
+    $$("tbody[data-cat]", TABLE).forEach(function (tb) {
+      if (tb.dataset.cat === "__flat") { return; }
+      var head = tb.querySelector("tr.group-head");
+      var visible = 0;
+      $$("tr.brow", tb).forEach(function (tr) { if (!tr.hidden) { visible++; } });
+      if (head) {
+        head.hidden = visible === 0 || F.flat;
+        var gn = head.querySelector(".gn");
+        if (gn) { gn.textContent = "(" + visible + ")"; }
+      }
+    });
+    if (FLAT) {
+      var flatHead = FLAT.querySelector("tr.group-head");
+      if (flatHead) { flatHead.hidden = true; }
+    }
+  }
+
+  function updateTabCounts(cityCounts, indCounts, shown) {
+    $$("#tabs-city [data-city]").forEach(function (b) {
+      var key = b.dataset.city;
+      var cnt = b.querySelector(".cnt");
+      if (cnt) {
+        cnt.textContent = key === "ALL"
+          ? sumValues(cityCounts)
+          : (cityCounts[key] || 0);
+      }
+    });
+    $$("#tabs-industry [data-industry]").forEach(function (b) {
+      var key = b.dataset.industry;
+      var cnt = b.querySelector(".cnt");
+      if (cnt) {
+        cnt.textContent = key === "ALL"
+          ? sumValues(indCounts)
+          : (indCounts[key] || 0);
+      }
+    });
+    if (CAPTION) {
+      CAPTION.textContent =
+        (F.tabCity === "ALL" ? "All cities" : (CITY_LABEL[F.tabCity] || F.tabCity)) +
+        " · " +
+        (F.tabIndustry === "ALL" ? "all industries" : (IND_LABEL[F.tabIndustry] || F.tabIndustry)) +
+        " · " + shown + " row(s)";
+    }
+  }
+
+  function sumValues(obj) {
+    var total = 0;
+    for (var k in obj) { if (Object.prototype.hasOwnProperty.call(obj, k)) { total += obj[k]; } }
+    return total;
+  }
+
+  /* ---------------------------------------------------------------- chips */
+  function syncChips() {
+    $$(".chip-f[data-f]").forEach(function (b) {
+      var on = F[b.dataset.f].indexOf(b.dataset.v) !== -1;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    $$(".chip-f[data-preset='score']").forEach(function (b) {
+      var want = parseRange(b.dataset.v);
+      var on = F.score[0] === want[0] && F.score[1] === want[1];
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    $("#score-min").value = F.score[0] === null ? "" : F.score[0];
+    $("#score-max").value = F.score[1] === null ? "" : F.score[1];
+    $("#dm-min").value = F.dm[0] === null ? "" : F.dm[0];
+    $("#dm-max").value = F.dm[1] === null ? "" : F.dm[1];
+    $("#disc-from").value = F.disc[0] || "";
+    $("#disc-to").value = F.disc[1] || "";
+    $("#null-score").checked = F.nullScore;
+    $("#null-dm").checked = F.nullDm;
+    if (document.activeElement !== $("#q")) { $("#q").value = F.q; }
+    $$("#tabs-city [data-city]").forEach(function (b) {
+      b.setAttribute("aria-selected", b.dataset.city === F.tabCity ? "true" : "false");
+    });
+    $$("#tabs-industry [data-industry]").forEach(function (b) {
+      b.setAttribute("aria-selected", b.dataset.industry === F.tabIndustry ? "true" : "false");
+    });
+    $("#flat-toggle").setAttribute("aria-pressed", F.flat ? "true" : "false");
+    paintSortIndicators();
+  }
+
+  function parseRange(text) {
+    var parts = String(text).split("-");
+    var lo = parts[0] === "" ? null : Number(parts[0]);
+    var hi = parts.length > 1 && parts[1] !== "" ? Number(parts[1]) : null;
+    return [isNaN(lo) ? null : lo, isNaN(hi) ? null : hi];
+  }
+
+  $$(".chip-f[data-f]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var list = F[b.dataset.f], i = list.indexOf(b.dataset.v);
+      if (i === -1) { list.push(b.dataset.v); } else { list.splice(i, 1); }
+      syncChips();
+      applyFilters();
+    });
+  });
+
+  $$(".chip-f[data-preset='score']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var want = parseRange(b.dataset.v);
+      var on = F.score[0] === want[0] && F.score[1] === want[1];
+      /* A named band excludes the unscored, and says so by unticking the box: "80+"
+         must not quietly include businesses nobody has scored. Clearing the preset
+         puts the default back. */
+      F.score = on ? [null, null] : want;
+      F.nullScore = on;
+      syncChips();
+      applyFilters();
+    });
+  });
+
+  $$(".chip-f[data-preset='disc']").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var today = new Date();
+      var iso = function (dt) { return dt.toISOString().slice(0, 10); };
+      var from = b.dataset.v === "today"
+        ? iso(today)
+        : iso(new Date(today.getTime() - (Number(b.dataset.v) - 1) * 86400000));
+      var already = F.disc[0] === from && F.disc[1] === null;
+      F.disc = already ? [null, null] : [from, null];
+      syncChips();
+      applyFilters();
+    });
+  });
+
+  function numberOrNull(input) {
+    var v = input.value.trim();
+    if (v === "") { return null; }
+    var n = Number(v);
+    return isNaN(n) ? null : n;
+  }
+
+  $("#score-min").addEventListener("input", function () {
+    F.score[0] = numberOrNull(this); syncChips(); applyFilters();
+  });
+  $("#score-max").addEventListener("input", function () {
+    F.score[1] = numberOrNull(this); syncChips(); applyFilters();
+  });
+  $("#dm-min").addEventListener("input", function () {
+    F.dm[0] = numberOrNull(this); applyFilters();
+  });
+  $("#dm-max").addEventListener("input", function () {
+    F.dm[1] = numberOrNull(this); applyFilters();
+  });
+  $("#disc-from").addEventListener("change", function () {
+    F.disc[0] = this.value || null; applyFilters();
+  });
+  $("#disc-to").addEventListener("change", function () {
+    F.disc[1] = this.value || null; applyFilters();
+  });
+  $("#null-score").addEventListener("change", function () {
+    F.nullScore = this.checked; applyFilters();
+  });
+  $("#null-dm").addEventListener("change", function () {
+    F.nullDm = this.checked; applyFilters();
+  });
+
+  /* --------------------------------------------------------------- search */
+  /* One piece of syntax, because it earns its keep: field-scoped terms are
+     parsed out and folded into F, and the remainder is a plain substring. */
+  var FIELD = {
+    city: "city", industry: "industry", cat: "cat", size: "size",
+    conf: "conf", verif: "verif", contact: "contact", outreach: "outreach"
+  };
+  /* data-city holds the city slug, lowercase; every other enum attribute is upper. */
+  var FIELD_LOWER = { city: true };
+  /* Which lists the last search populated. Only those are cleared by the next one, so
+     typing in the box never silently drops a chip the operator pressed by hand. */
+  var SEARCH_SET = [];
+
+  function applySearch(text) {
+    SEARCH_SET.forEach(function (k) { F[k] = []; });
+    var touched = [], free = [];
+    text.split(/\s+/).forEach(function (term) {
+      if (!term) { return; }
+      var at = term.indexOf(":");
+      if (at > 0) {
+        var key = term.slice(0, at).toLowerCase(), value = term.slice(at + 1);
+        if (key === "score" || key === "dm") {
+          var range = [null, null];
+          if (value.charAt(0) === ">") { range[0] = Number(value.slice(1)); }
+          else if (value.charAt(0) === "<") { range[1] = Number(value.slice(1)); }
+          else { range = parseRange(value); }
+          F[key] = range;
+          if (key === "score") { F.nullScore = false; } else { F.nullDm = false; }
+          return;
+        }
+        if (FIELD[key]) {
+          var field = FIELD[key];
+          if (touched.indexOf(field) === -1) { touched.push(field); F[field] = []; }
+          F[field].push(FIELD_LOWER[field] ? value.toLowerCase() : value.toUpperCase());
+          return;
+        }
+      }
+      free.push(term);
+    });
+    SEARCH_SET = touched;
+    F.q = free.join(" ").toLowerCase();
+  }
+
+  var searchTimer = null;
+  $("#q").addEventListener("input", function () {
+    var value = this.value;
+    if (searchTimer) { clearTimeout(searchTimer); }
+    searchTimer = setTimeout(function () {
+      applySearch(value);
+      syncChips();
+      applyFilters();
+    }, 120);
+  });
+
+  function clearFilters() {
+    F.city = []; F.industry = []; F.cat = []; F.size = []; F.web = []; F.conf = [];
+    F.verif = []; F.contact = []; F.outreach = [];
+    SEARCH_SET = [];
+    F.score = [null, null]; F.dm = [null, null]; F.disc = [null, null];
+    F.q = ""; F.nullScore = true; F.nullDm = true;
+    syncChips();
+    applyFilters();
+  }
+  $("#clear-filters").addEventListener("click", clearFilters);
+
+  $("#toggle-filters").addEventListener("click", function () {
+    var body = $("#fb-body");
+    body.hidden = !body.hidden;
+    this.setAttribute("aria-expanded", body.hidden ? "false" : "true");
+  });
+
+  /* ----------------------------------------------------------------- tabs */
+  function bindTabs(container, key, stateKey) {
+    var buttons = $$("[data-" + key + "]", container);
+    buttons.forEach(function (b, index) {
+      b.addEventListener("click", function () {
+        F[stateKey] = b.dataset[key];
+        syncChips();
+        applyFilters();
+      });
+      b.addEventListener("keydown", function (event) {
+        var next = null;
+        if (event.key === "ArrowRight") { next = buttons[(index + 1) % buttons.length]; }
+        else if (event.key === "ArrowLeft") {
+          next = buttons[(index - 1 + buttons.length) % buttons.length];
+        } else if (event.key === "Home") { next = buttons[0]; }
+        else if (event.key === "End") { next = buttons[buttons.length - 1]; }
+        if (next) { event.preventDefault(); next.focus(); next.click(); }
+      });
+    });
+  }
+  bindTabs($("#tabs-city"), "city", "tabCity");
+  bindTabs($("#tabs-industry"), "industry", "tabIndustry");
+
+  $$("[data-city-tab]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      F.tabCity = b.dataset.cityTab;
+      syncChips();
+      applyFilters();
+      TABLE.scrollIntoView({ block: "start" });
+    });
+  });
+
+  /* -------------------------------------------------------------- KPI clicks */
+  $$("[data-kpi-filter]").forEach(function (card) {
+    card.addEventListener("click", function () {
+      var key = card.dataset.kpiFilter, value = card.dataset.kpiValue;
+      if (key === "score") { F.score = parseRange(value); F.nullScore = false; }
+      else { F[key] = value.split(","); }
+      syncChips();
+      applyFilters();
+      TABLE.scrollIntoView({ block: "start" });
+    });
+  });
+
+  /* -------------------------------------------------------------- sorting */
+  /* Nulls sort last in both directions. Ascending by score should not open
+     with forty unscored businesses; the point of sorting by score is scores. */
+  var COMPARATORS = {
+    num: function (a, b) {
+      var x = (a === "" || a === undefined) ? null : Number(a);
+      var y = (b === "" || b === undefined) ? null : Number(b);
+      if (x === null && y === null) { return 0; }
+      if (x === null) { return 1; }
+      if (y === null) { return -1; }
+      return x - y;
+    },
+    text: function (a, b) {
+      a = a || ""; b = b || "";
+      if (a === "" && b === "") { return 0; }
+      if (a === "") { return 1; }
+      if (b === "") { return -1; }
+      return a.localeCompare(b, "en", { sensitivity: "base" });
+    }
+  };
+
+  function compareUnits(u, v) {
+    for (var i = 0; i < F.sort.length; i++) {
+      var spec = F.sort[i];
+      var cmp = COMPARATORS[spec.type](u.d[spec.key], v.d[spec.key]);
+      if (cmp !== 0) { return spec.dir === "desc" ? -cmp : cmp; }
+    }
+    return (u.d.name || "").localeCompare(v.d.name || "") ||
+           (u.d.id < v.d.id ? -1 : u.d.id > v.d.id ? 1 : 0);
+  }
+
+  function applySort() {
+    var buckets = Object.create(null);
+    UNITS.forEach(function (u) {
+      var key = F.flat ? "__flat" : u.home.dataset.cat;
+      (buckets[key] = buckets[key] || []).push(u);
+    });
+    Object.keys(buckets).forEach(function (key) {
+      var target = F.flat ? FLAT : buckets[key][0].home;
+      var list = buckets[key].slice().sort(compareUnits);
+      var frag = document.createDocumentFragment();
+      list.forEach(function (u) {
+        frag.appendChild(u.tr);
+        u.panels.forEach(function (p) { frag.appendChild(p); });
+      });
+      target.appendChild(frag);
+    });
+    if (FLAT) { FLAT.hidden = !F.flat; }
+    $$("tbody[data-cat]", TABLE).forEach(function (tb) {
+      if (tb.dataset.cat === "__flat") { return; }
+      tb.hidden = F.flat;
+    });
+    paintSortIndicators();
+  }
+
+  function paintSortIndicators() {
+    $$("th.sortable", TABLE).forEach(function (th) {
+      var found = -1;
+      for (var i = 0; i < F.sort.length; i++) {
+        if (F.sort[i].key === th.dataset.key) { found = i; break; }
+      }
+      var old = th.querySelector(".ind");
+      if (old) { old.parentNode.removeChild(old); }
+      if (found === -1) {
+        th.setAttribute("aria-sort", "none");
+        return;
+      }
+      var spec = F.sort[found];
+      th.setAttribute("aria-sort", spec.dir === "desc" ? "descending" : "ascending");
+      var ind = document.createElement("span");
+      ind.className = "ind";
+      ind.textContent = (spec.dir === "desc" ? "▼" : "▲") +
+        (F.sort.length > 1 ? String(found + 1) : "");
+      th.appendChild(ind);
+    });
+    var state = $("#sortstate");
+    if (state) {
+      state.textContent = "Sorted by " + F.sort.map(function (s) {
+        return s.key + " " + s.dir;
+      }).join(", ");
+    }
+  }
+
+  $$("th.sortable", TABLE).forEach(function (th) {
+    th.addEventListener("click", function (event) {
+      var spec = { key: th.dataset.key, type: th.dataset.type, dir: "asc" };
+      var existing = null;
+      for (var i = 0; i < F.sort.length; i++) {
+        if (F.sort[i].key === spec.key) { existing = F.sort[i]; break; }
+      }
+      if (event.shiftKey) {
+        if (existing) { existing.dir = existing.dir === "asc" ? "desc" : "asc"; }
+        else { F.sort.push(spec); F.sort = F.sort.slice(0, 3); }
+      } else if (existing && F.sort.length === 1) {
+        existing.dir = existing.dir === "asc" ? "desc" : "asc";
+      } else {
+        spec.dir = (spec.type === "num") ? "desc" : "asc";
+        F.sort = [spec];
+      }
+      applySort();
+      applyFilters();
+    });
+  });
+
+  $("#flat-toggle").addEventListener("click", function () {
+    F.flat = !F.flat;
+    this.setAttribute("aria-pressed", F.flat ? "true" : "false");
+    applySort();
+    applyFilters();
+  });
+
+  /* --------------------------------------------------------------- panels */
+  function setPanel(panel, open) {
+    panel.hidden = !open;
+    $$("[data-target='" + panel.id + "']").forEach(function (b) {
+      if (b.tagName === "BUTTON") { b.setAttribute("aria-expanded", open ? "true" : "false"); }
+    });
+    var owner = BY_ID[panel.dataset.owner];
+    if (owner) {
+      var anyOpen = owner.panels.some(function (p) { return !p.hidden; });
+      owner.tr.classList.toggle("is-open", anyOpen);
+    }
+  }
+
+  document.addEventListener("click", function (event) {
+    var trigger = event.target.closest ? event.target.closest("[data-panel]") : null;
+    if (trigger) {
+      var panel = document.getElementById(trigger.dataset.target);
+      if (panel) {
+        event.preventDefault();
+        setPanel(panel, panel.hidden);
+        return;
+      }
+    }
+    var closer = event.target.closest ? event.target.closest("[data-panel-close]") : null;
+    if (closer) {
+      var target = document.getElementById(closer.dataset.panelClose);
+      if (target) { setPanel(target, false); }
+    }
+  });
+
+  /* ------------------------------------------------------------ selection */
+  /* SELECTED is a Set of ids, not a query over checked DOM nodes: filtering a
+     row out of view must never silently deselect it. A count that quietly
+     dropped would be the worst possible bug in a screen whose whole job is
+     deciding who gets contacted. */
+  var SELECTED = [];
+
+  function isSelected(id) { return SELECTED.indexOf(id) !== -1; }
+
+  function recount() {
+    var perCity = Object.create(null), hidden = 0;
+    SELECTED.forEach(function (id) {
+      var unit = BY_ID[id];
+      if (!unit) { return; }
+      var key = unit.d.cityname || unit.d.city;
+      perCity[key] = (perCity[key] || 0) + 1;
+      if (unit.tr.hidden) { hidden++; }
+    });
+    var tray = document.getElementById("tray");
+    var counts = document.getElementById("tray-counts");
+    counts.innerHTML = "";
+    Object.keys(perCity).forEach(function (city, index) {
+      if (index) {
+        var sep = document.createElement("span");
+        sep.className = "sep";
+        sep.textContent = "·";
+        counts.appendChild(sep);
+      }
+      var chip = document.createElement("span");
+      chip.className = "cc";
+      chip.textContent = city + " " + perCity[city];
+      counts.appendChild(chip);
+    });
+    document.getElementById("tray-total").textContent = SELECTED.length + " selected";
+    var note = document.getElementById("tray-note");
+    note.innerHTML = "";
+    var base = document.createElement("span");
+    base.textContent = "Selection in this file is preview-only. Copy the ids and paste them " +
+      "into the live app, where every gate is re-checked before anything is prepared.";
+    note.appendChild(base);
+    if (hidden) {
+      var warn = document.createElement("span");
+      warn.className = "warnnote";
+      warn.textContent = " " + hidden + " of your " + SELECTED.length +
+        " selected businesses are hidden by the current filters.";
+      note.appendChild(warn);
+    }
+    tray.hidden = SELECTED.length === 0;
+    UNITS.forEach(function (u) {
+      u.tr.classList.toggle("selected", isSelected(u.d.id));
+    });
+  }
+
+  UNITS.forEach(function (u) {
+    var box = u.tr.querySelector("input.rowsel");
+    if (!box || box.disabled) { return; }
+    box.addEventListener("change", function () {
+      var index = SELECTED.indexOf(u.d.id);
+      if (box.checked && index === -1) { SELECTED.push(u.d.id); }
+      else if (!box.checked && index !== -1) { SELECTED.splice(index, 1); }
+      recount();
+    });
+  });
+
+  var selAll = document.getElementById("selall");
+  if (selAll) {
+    selAll.addEventListener("change", function () {
+      var on = selAll.checked;
+      UNITS.forEach(function (u) {
+        if (u.tr.hidden) { return; }
+        var box = u.tr.querySelector("input.rowsel");
+        if (!box || box.disabled) { return; }
+        box.checked = on;
+        var index = SELECTED.indexOf(u.d.id);
+        if (on && index === -1) { SELECTED.push(u.d.id); }
+        if (!on && index !== -1) { SELECTED.splice(index, 1); }
+      });
+      recount();
+    });
+  }
+
+  document.getElementById("tray-clear").addEventListener("click", function () {
+    SELECTED.length = 0;
+    UNITS.forEach(function (u) {
+      var box = u.tr.querySelector("input.rowsel");
+      if (box && !box.disabled) { box.checked = false; }
+    });
+    if (selAll) { selAll.checked = false; }
+    recount();
+  });
+
+  document.getElementById("tray-copy").addEventListener("click", function () {
+    copyText(SELECTED.join("\n"));
+  });
+
+  function toast(text) {
+    var el = document.getElementById("toast");
+    el.textContent = text;
+    el.hidden = false;
+    setTimeout(function () { el.hidden = true; }, 2600);
+  }
+
+  function copyText(text) {
+    function fallback() {
+      var area = document.createElement("textarea");
+      area.value = text;
+      area.style.position = "fixed";
+      area.style.left = "-2000px";
+      document.body.appendChild(area);
+      area.select();
+      try { document.execCommand("copy"); } catch (e) { /* nothing else to try */ }
+      document.body.removeChild(area);
+      toast("Copied " + SELECTED.length + " id(s).");
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () {
+        toast("Copied " + SELECTED.length + " id(s).");
+      }, fallback);
+    } else { fallback(); }
+  }
+
+  /* ------------------------------------------------------------ URL hash */
+  function pushRange(parts, key, range, includeNull) {
+    if (range[0] === null && range[1] === null && includeNull) { return; }
+    parts.push(key + "=" + (range[0] === null ? "" : range[0]) + "-" +
+      (range[1] === null ? "" : range[1]) + (includeNull ? "" : "!"));
+  }
+
+  var writingHash = false;
+
+  function writeHash() {
+    var parts = [];
+    if (F.tabCity !== "ALL" || F.tabIndustry !== "ALL") {
+      parts.push("tab=" + F.tabCity + "|" + F.tabIndustry);
+    }
+    ["city", "industry", "cat", "size", "web", "conf", "verif", "contact", "outreach"]
+      .forEach(function (k) { if (F[k].length) { parts.push(k + "=" + F[k].join(",")); } });
+    pushRange(parts, "score", F.score, F.nullScore);
+    pushRange(parts, "dm", F.dm, F.nullDm);
+    if (F.disc[0] || F.disc[1]) {
+      parts.push("disc=" + (F.disc[0] || "") + ".." + (F.disc[1] || ""));
+    }
+    if (F.q) { parts.push("q=" + encodeURIComponent(F.q)); }
+    if (F.sort.length) {
+      parts.push("sort=" + F.sort.map(function (s) {
+        return s.key + ":" + s.dir;
+      }).join(","));
+    }
+    var hash = parts.length ? "#" + parts.join("&") : "";
+    if (hash.length > 2000) { hash = hash.slice(0, 2000); }
+    if (hash !== location.hash) {
+      writingHash = true;
+      history.replaceState(null, "", location.pathname + location.search + hash);
+      writingHash = false;
+    }
+  }
+
+  var SORT_TYPE = Object.create(null);
+  $$("th.sortable", TABLE).forEach(function (th) { SORT_TYPE[th.dataset.key] = th.dataset.type; });
+
+  function parseHash() {
+    var hash = location.hash.replace(/^#/, "");
+    if (!hash) { return; }
+    hash.split("&").forEach(function (chunk) {
+      var at = chunk.indexOf("=");
+      if (at < 1) { return; }
+      var key = chunk.slice(0, at), value = chunk.slice(at + 1);
+      if (key === "tab") {
+        var pair = value.split("|");
+        F.tabCity = pair[0] || "ALL";
+        F.tabIndustry = pair[1] || "ALL";
+      } else if (["city", "industry", "cat", "size", "web", "conf", "verif", "contact",
+                  "outreach"].indexOf(key) !== -1) {
+        F[key] = value.split(",").filter(Boolean);
+      } else if (key === "score" || key === "dm") {
+        var includeNull = value.slice(-1) !== "!";
+        F[key] = parseRange(includeNull ? value : value.slice(0, -1));
+        if (key === "score") { F.nullScore = includeNull; } else { F.nullDm = includeNull; }
+      } else if (key === "disc") {
+        var ends = value.split("..");
+        F.disc = [ends[0] || null, ends[1] || null];
+      } else if (key === "q") {
+        F.q = decodeURIComponent(value);
+      } else if (key === "sort") {
+        var specs = [];
+        value.split(",").forEach(function (item) {
+          var bits = item.split(":");
+          if (SORT_TYPE[bits[0]]) {
+            specs.push({ key: bits[0], type: SORT_TYPE[bits[0]],
+                         dir: bits[1] === "asc" ? "asc" : "desc" });
+          }
+        });
+        if (specs.length) { F.sort = specs.slice(0, 3); }
+      } else if (window.console) {
+        console.warn("report: ignoring unknown view key " + key);
+      }
+    });
+  }
+
+  window.addEventListener("hashchange", function () {
+    if (writingHash) { return; }
+    parseHash();
+    syncChips();
+    applySort();
+    applyFilters();
+  });
+
+  /* -------------------------------------------------- live-app health probe */
+  /* The ONLY network call in an exported report, and it is optional: on no
+     answer the deep links stay exactly as rendered and everything else in the
+     document keeps working offline. */
+  (function probeApp() {
+    var base = root.dataset.appBase || "";
+    if (!base) { return; }
+    if (!window.fetch || !window.AbortController) { return; }
+    var ctl = new AbortController();
+    var timer = setTimeout(function () { ctl.abort(); }, 1500);
+    fetch(base + "/api/v1/health", {
+      method: "GET", mode: "cors", credentials: "omit",
+      cache: "no-store", signal: ctl.signal
+    }).then(function (response) {
+      clearTimeout(timer);
+      root.dataset.app = response.ok ? "up" : "down";
+    }).catch(function () {
+      clearTimeout(timer);
+      root.dataset.app = "down";
+    });
+  })();
+
+  /* ----------------------------------------------------------------- boot */
+  parseHash();
+  syncChips();
+  applySort();
+  applyFilters();
+})();
+{% endraw %}
+</script>
+</body>
+</html>

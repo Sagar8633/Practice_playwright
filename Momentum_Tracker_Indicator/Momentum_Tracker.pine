@@ -1,0 +1,120 @@
+//@version=6
+// =============================================================================
+//  Realtime Momentum Tracker  +  Momentum Flow   (saved as "trade_with_kareena")
+//  Original implementation (inspired by the visible behaviour of a multi-TF
+//  buying/selling volume momentum table). High-speed, recalculates live.
+//
+//  What it shows:
+//   1. A multi-timeframe table: for each TF it splits volume into BUYING vs
+//      SELLING pressure and prints a Positive (BUY) / Negative (SELL) result.
+//   2. A "Momentum Flow" line + histogram (own pane) that reacts in realtime.
+// =============================================================================
+indicator("trade_with_kareena", shorttitle="trade_with_kareena", overlay=false, max_labels_count=500)
+
+// ----------------------------------------------------------------------------
+// Inputs
+// ----------------------------------------------------------------------------
+grpT   = "Multi-Timeframe Table"
+showTbl   = input.bool(true,  "Show momentum table",          group=grpT)
+tblPos    = input.string("top_right", "Table position", options=["top_right","top_left","bottom_right","bottom_left","middle_right"], group=grpT)
+useVolStr = input.bool(true,  "Use volume strength (vs avg)", group=grpT, tooltip="Weights each TF result by how far volume is above its average.")
+
+grpF   = "Momentum Flow"
+showFlow  = input.bool(true,  "Show momentum flow on chart",  group=grpF)
+flowLen   = input.int(20, "Flow smoothing length", minval=1,  group=grpF)
+flowMult  = input.float(1.0,"Flow visual scale",   minval=0.1,group=grpF)
+
+grpC   = "Colors"
+colBuy    = input.color(color.new(#26a69a, 0), "Buy / Positive",  group=grpC)
+colSell   = input.color(color.new(#ef5350, 0), "Sell / Negative", group=grpC)
+colNeu    = input.color(color.new(color.gray, 0), "Neutral",      group=grpC)
+
+// ----------------------------------------------------------------------------
+// Core: split a bar's volume into buying vs selling pressure (close-in-range).
+// ----------------------------------------------------------------------------
+buyingVolume() =>
+    rng = math.max(high - low, syminfo.mintick)
+    buyFrac = (close - low) / rng
+    volume * buyFrac
+
+sellingVolume() =>
+    rng = math.max(high - low, syminfo.mintick)
+    sellFrac = (high - close) / rng
+    volume * sellFrac
+
+f_tf(tf) =>
+    bv = request.security(syminfo.tickerid, tf, buyingVolume(),  barmerge.gaps_off, barmerge.lookahead_off)
+    sv = request.security(syminfo.tickerid, tf, sellingVolume(), barmerge.gaps_off, barmerge.lookahead_off)
+    v  = request.security(syminfo.tickerid, tf, volume,          barmerge.gaps_off, barmerge.lookahead_off)
+    va = request.security(syminfo.tickerid, tf, ta.sma(volume, 20), barmerge.gaps_off, barmerge.lookahead_off)
+    base  = (bv - sv) / math.max(bv + sv, 1)
+    strength = useVolStr ? math.max(v / math.max(va, 1), 0.0) : 1.0
+    score = base * strength
+    [bv, sv, score]
+
+[bv1,  sv1,  sc1]  = f_tf("1")
+[bv3,  sv3,  sc3]  = f_tf("3")
+[bv5,  sv5,  sc5]  = f_tf("5")
+[bv15, sv15, sc15] = f_tf("15")
+[bv30, sv30, sc30] = f_tf("30")
+[bv60, sv60, sc60] = f_tf("60")
+[bv240,sv240,sc240]= f_tf("240")
+[bvD,  svD,  scD]  = f_tf("1D")
+
+// ----------------------------------------------------------------------------
+// Formatting helpers (all global)
+// ----------------------------------------------------------------------------
+f_fmt(x) =>
+    a = math.abs(x)
+    a >= 1e9 ? str.tostring(x / 1e9, "#.##") + "B" : a >= 1e6 ? str.tostring(x / 1e6, "#.##") + "M" : a >= 1e3 ? str.tostring(x / 1e3, "#.##") + "K" : str.tostring(x, "#.##")
+
+f_resTxt(sc) => sc > 0 ? "Positive (BUY)" : sc < 0 ? "Negative (SELL)" : "Neutral"
+f_resCol(sc) => sc > 0 ? colBuy : sc < 0 ? colSell : colNeu
+
+// Table row writer — MUST be global (Pine forbids defining functions inside if)
+f_row(tbl, row, label, bv, sv, sc) =>
+    table.cell(tbl, 0, row, label,        text_color=color.white, bgcolor=color.new(color.gray, 70), text_size=size.small)
+    table.cell(tbl, 1, row, f_fmt(bv),    text_color=colBuy,      bgcolor=color.new(color.black, 60), text_size=size.small)
+    table.cell(tbl, 2, row, f_fmt(sv),    text_color=colSell,     bgcolor=color.new(color.black, 60), text_size=size.small)
+    table.cell(tbl, 3, row, f_resTxt(sc), text_color=color.white, bgcolor=f_resCol(sc),               text_size=size.small)
+
+// ----------------------------------------------------------------------------
+// Momentum Table
+// ----------------------------------------------------------------------------
+var table mt = na
+if showTbl
+    pos = tblPos == "top_left" ? position.top_left : tblPos == "bottom_right" ? position.bottom_right : tblPos == "bottom_left" ? position.bottom_left : tblPos == "middle_right" ? position.middle_right : position.top_right
+    if na(mt)
+        mt := table.new(pos, 4, 9, border_width=1)
+    table.cell(mt, 0, 0, "Periods",        text_color=color.white, bgcolor=color.new(color.blue, 30), text_size=size.small)
+    table.cell(mt, 1, 0, "Buying Volume",  text_color=color.white, bgcolor=color.new(color.blue, 30), text_size=size.small)
+    table.cell(mt, 2, 0, "Selling Volume", text_color=color.white, bgcolor=color.new(color.blue, 30), text_size=size.small)
+    table.cell(mt, 3, 0, "Result",         text_color=color.white, bgcolor=color.new(color.blue, 30), text_size=size.small)
+    f_row(mt, 1, "1m",  bv1,  sv1,  sc1)
+    f_row(mt, 2, "3m",  bv3,  sv3,  sc3)
+    f_row(mt, 3, "5m",  bv5,  sv5,  sc5)
+    f_row(mt, 4, "15m", bv15, sv15, sc15)
+    f_row(mt, 5, "30m", bv30, sv30, sc30)
+    f_row(mt, 6, "1h",  bv60, sv60, sc60)
+    f_row(mt, 7, "4h",  bv240,sv240,sc240)
+    f_row(mt, 8, "1D",  bvD,  svD,  scD)
+
+// ----------------------------------------------------------------------------
+// Momentum Flow (own pane, realtime)
+// ----------------------------------------------------------------------------
+aggScore = (sc1 + sc3 + sc5 + sc15 + sc30 + sc60 + sc240 + scD) / 8.0
+flow = ta.ema(aggScore, flowLen) * flowMult
+flowCol = flow > 0 ? colBuy : flow < 0 ? colSell : colNeu
+histCol = flow >= 0 ? (flow >= nz(flow[1]) ? colBuy : color.new(colBuy, 55)) : (flow <= nz(flow[1]) ? colSell : color.new(colSell, 55))
+
+plot(showFlow ? flow : na, "Momentum Flow Hist", color=histCol, style=plot.style_columns)
+plot(showFlow ? flow : na, "Momentum Flow Line", color=flowCol, linewidth=2)
+hline(0, "Zero", color=color.new(color.gray, 60), linestyle=hline.style_dotted)
+
+flipUp   = ta.crossover(flow, 0)
+flipDown = ta.crossunder(flow, 0)
+plotshape(showFlow and flipUp,   title="Flow Up",   style=shape.triangleup,   location=location.bottom, color=colBuy,  size=size.tiny)
+plotshape(showFlow and flipDown, title="Flow Down", style=shape.triangledown, location=location.top,    color=colSell, size=size.tiny)
+
+alertcondition(flipUp,   "Momentum Flow turned BULLISH", "Momentum Flow crossed above zero")
+alertcondition(flipDown, "Momentum Flow turned BEARISH", "Momentum Flow crossed below zero")

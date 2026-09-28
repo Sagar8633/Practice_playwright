@@ -1,0 +1,12 @@
+{
+ "nifty50": {
+  "official_rows": 1919,
+  "first": "2019-01-01",
+  "last": "2026-09-25"
+ },
+ "banknifty": {
+  "official_rows": 1919,
+  "first": "2019-01-01",
+  "last": "2026-09-25"
+ }
+}

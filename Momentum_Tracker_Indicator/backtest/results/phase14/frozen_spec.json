@@ -1,0 +1,35 @@
+{
+ "frozen_at": "2026-09-26 before any tick data was downloaded or inspected",
+ "hypothesis": "The scheduled US 08:30 New York release window (15:30 XM server time, EET) produces a range expansion that a two-sided stop straddle can monetise after real bid/ask costs.",
+ "event": {
+  "definition": "The M5 bar that opens at 15:25 server time and closes at 15:30 (the Phase 13 event H21 NY open, bar index at minute 25 of hour 15).",
+  "reference_price": "The bid close of that M5 bar = the last bid quote at or before 15:30:00.000 server time (Phase 13 code: c[i]).",
+  "atr": "ATR(14), Wilder RMA of true range, on M5 bars built from the same feed, evaluated on the 15:25 bar (Phase 13 code: atr[i]). For the tick study M5 bars are built from ticks (bid mid-quotes) so the study is self-contained.",
+  "primary_days": "Thursday and Friday (server date). Secondary: Monday to Wednesday, reported separately. Calendar identity: unavailable, marked as such; weekday is not converted into an event name.",
+  "development": "2025-01-01 to 2025-12-31",
+  "out_of_sample": "2026-01-01 to 2026-09-25, read-only until the final table",
+  "validation": "none separate (per the brief); the trigger, target and holding-period plateaus are read on 2025 only"
+ },
+ "orders": {
+  "placed_at": "15:30:00.000 server time (first tick at or after), both orders simultaneously",
+  "buy_stop": "reference + 0.25 x ATR; triggers on the first tick with ASK >= level; fill = that ask (Scenario A)",
+  "sell_stop": "reference - 0.25 x ATR; triggers on the first tick with BID <= level; fill = that bid (Scenario A)",
+  "oco": "the untriggered order is cancelled with latency L after the first fill; L = 0 ms (ideal), 250 ms (realistic), 1000 ms (adverse). If the other side triggers before cancellation, both executions are modelled (Case D), never ignored.",
+  "target": "0.75 x ATR from the fill price; exit on the first tick with BID >= target (long) or ASK <= target (short); fill at that quote",
+  "stop": "the opposite trigger level; exit on the first tick with BID <= sell level (long) or ASK >= buy level (short); fill at that quote",
+  "horizon": "250 minutes from 15:30 (the Phase 13 straddle used H=250 M1 bars); an untriggered straddle at the horizon = NO TRADE; an open position at the horizon = TIMEOUT, closed at the quote",
+  "note_vs_phase13_bars": "The bar code filled the buy leg at trigger + spread and charged the short leg's stop an extra spread; both were more conservative than the definitions above, which follow the brief's section 2."
+ },
+ "costs": {
+  "scenario_A": "observed executable quote at the triggering tick",
+  "scenario_B": "fill at the worse of the triggering tick and the next tick after 250 ms (a realistic acceptance delay)",
+  "scenario_C": "fill at the worst quote within 1000 ms after the trigger",
+  "xm_overlay": "Scenario B plus (XM median spread 51 pts minus the Dukascopy spread at that moment) per round trip, because the user trades an XM Standard account",
+  "commission": "0 (XM Standard)",
+  "slippage_beyond_quotes": "not observable; Scenarios B and C are the only slippage model, stated as such"
+ },
+ "classification": ["WIN", "LOSS", "NO_TRADE", "BOTH_SIDES_TRIGGERED", "TARGET_HIT", "STOP_HIT", "TIMEOUT", "DATA_INSUFFICIENT", "AMBIGUOUS_EXECUTION (both triggers on ticks with identical timestamps)"],
+ "analyses_frozen": ["per weekday (Thu, Fri, Mon-Wed, all)", "first-touch side and conditional outcome", "time-to-trigger buckets", "first-minute toxicity types 1-5", "DEV-only plateaus: trigger 0.15-0.40, target 0.50-1.50, horizon 30-300 min", "controls: random same-day timestamps, all weekdays, Thu/Fri random timestamps", "gross vs net and cost share"],
+ "acceptance": "positive net expectancy under Scenario B, PF > 1, adequate count, no single event / day / week / outlier responsible, positive across the trigger and target plateaus and holding periods on 2025, positive untouched 2026, then a four-week XM demo for fills",
+ "outputs": ["A executable edge", "B real phenomenon not executable", "C historical artifact", "D insufficient data", "E needs live execution test"]
+}

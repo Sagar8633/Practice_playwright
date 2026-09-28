@@ -1,0 +1,61 @@
+# Copy to changes.yaml, then run:
+#   python main.py --apply          (dry run - prints what it would do)
+#   python main.py --apply --yes    (actually saves)
+#
+# Only include the fields you want changed. Omitted fields are left alone.
+# The dry run is the review step: it prints every value as it will be written,
+# including where Naukri will truncate your summary.
+
+# 250 characters max on Naukri. Front-load the keywords recruiters search for.
+# Check them against real postings rather than guessing - jobs_scan output is
+# full of the exact spellings recruiters type.
+resume_headline: >-
+  Replace me
+
+# ~1000 characters, but Naukri hides everything past roughly 285 behind a
+# "Read More", and that prefix is the whole of what a recruiter sees in a search
+# result. Put your role, your stack and one number inside it. Internal product
+# names and domain acronyms belong after the cut, where they cost you nothing.
+profile_summary: >-
+  Replace me
+
+# Ordered - the first entries carry the most weight in search matching, and a
+# free account caps out at 22 skills, so `remove` something before adding a 23rd
+# or the addition silently does nothing.
+#
+# Naukri only accepts wording its own suggester offers. A rejected skill is
+# reported with the alternatives it suggested, so if "REST API" is refused the
+# log will tell you it wanted "Rest API Testing".
+key_skills:
+  remove:
+    - A skill no longer worth a slot
+  add:
+    - Replace me
+
+# Recruiters filter this section BY YEARS, which makes it the quietest way to be
+# excluded: a row claiming 2 years of Python drops you out of every
+# "Python 4+ years" search however many times the headline says four.
+#
+# `last_used` is a year. `years` and `months` must be whole numbers. A skill
+# already listed is updated in place through its own row; anything else is added.
+it_skills:
+  - {skill: Python, version: "3.12", last_used: 2026, years: 4, months: 0}
+  - {skill: Selenium, last_used: 2026, years: 4, months: 0}
+
+# The current job title - a search filter, and the first line a recruiter reads.
+#
+# `expect` is a safety interlock, not decoration. Naukri's Employment card and
+# its "Add employment" form are near-identical, and saving the blank one creates
+# a duplicate job entry, so the edit refuses to run unless the dialog already
+# holds exactly this string.
+#
+# Keep it honest: add what describes the work ("(SDET)", "QA Automation") rather
+# than a seniority your employment record does not back.
+designation:
+  expect: The title on your profile right now
+  value: The title you want it to read
+
+# One row per run. `never_expires: true` ticks the "does not expire" box.
+certifications:
+  - {name: ISTQB Foundation Level - Software Testing,
+     from_month: 3, from_year: 2023, never_expires: true}

@@ -1,0 +1,335 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e3]:
+    - generic [ref=f1e6]:
+      - 'button "Logged in as sagar96jadhav12 Active layout: Unnamed" [ref=f1e7]'
+      - generic [ref=f1e8]: "11"
+    - toolbar [ref=f1e12]:
+      - generic [ref=f1e16]:
+        - generic [ref=f1e17]:
+          - generic [ref=f1e18]:
+            - button "XAUUSD" [ref=f1e19]
+            - button "Switch data type" [ref=f1e21]
+          - button "Compare symbols" [ref=f1e25]
+        - button "15 minutes" [ref=f1e34]:
+          - generic [ref=f1e35]: 15m
+        - button "Candles" [ref=f1e41]
+        - generic [ref=f1e51]:
+          - generic [ref=f1e52]:
+            - button "Indicators, metrics, and strategies" [ref=f1e53]:
+              - generic [ref=f1e58]: Indicators
+            - button "Favorite indicators" [ref=f1e59]
+          - button "Indicator templates" [ref=f1e66]
+        - generic [ref=f1e73]:
+          - button "Create alert" [ref=f1e74]:
+            - generic [ref=f1e79]: Alert
+          - button "Bar replay" [ref=f1e80]:
+            - generic [ref=f1e84]: Replay
+        - generic [ref=f1e88]:
+          - button [disabled] [ref=f1e89]
+          - button [disabled] [ref=f1e93]
+        - generic [ref=f1e98]:
+          - button "Layout setup" [ref=f1e99]
+          - generic [ref=f1e101]:
+            - button "All changes saved" [disabled] [ref=f1e102]:
+              - generic [ref=f1e104]:
+                - generic [ref=f1e105]: Unnamed
+                - generic: Save
+            - button "Manage layouts" [ref=f1e107]
+        - generic [ref=f1e115]:
+          - button "Quick search" [ref=f1e116]
+          - button "Settings" [ref=f1e121]
+          - button "Fullscreen mode" [ref=f1e127]
+          - button "Take a snapshot" [ref=f1e131]
+      - button "Trade" [ref=f1e140]
+      - button "Share your idea with the trade community" [ref=f1e148]:
+        - generic [ref=f1e149]: Publish
+    - toolbar [ref=f1e152]:
+      - generic [ref=f1e156]:
+        - generic [ref=f1e157]:
+          - generic [ref=f1e160]:
+            - button "Cross" [ref=f1e162]
+            - button "Cursors" [pressed] [ref=f1e168]
+          - generic [ref=f1e174]:
+            - button "Trendline" [ref=f1e176]
+            - button "Trend tools" [ref=f1e182]
+          - generic [ref=f1e188]:
+            - button "Fib retracement" [ref=f1e190]
+            - button "Gann and Fibonacci tools" [ref=f1e199]
+          - generic [ref=f1e205]:
+            - button "XABCD pattern" [ref=f1e207]
+            - button "Patterns" [ref=f1e213]
+          - generic [ref=f1e219]:
+            - button "Long position" [ref=f1e221]
+            - button "Forecasting and measurement tools" [ref=f1e225]
+          - generic [ref=f1e231]:
+            - button "Brush" [ref=f1e233]
+            - button "Geometric shapes" [ref=f1e239]
+          - generic [ref=f1e245]:
+            - button "Text" [ref=f1e247]
+            - button "Annotation tools" [ref=f1e251]
+          - generic [ref=f1e256]:
+            - button "Icon" [ref=f1e258]
+            - button "Icons" [ref=f1e262]
+        - generic [ref=f1e266]:
+          - button "Measure" [ref=f1e267]
+          - button "Zoom in" [ref=f1e271]
+        - generic [ref=f1e278]:
+          - generic [ref=f1e281]:
+            - button "Magnet mode snaps drawings placed near price bars to the closest OHLC value" [ref=f1e283]
+            - button "Magnets" [ref=f1e289]
+          - button "Keep drawing" [ref=f1e293]
+          - generic [ref=f1e298]:
+            - button "Lock drawings and indicators" [ref=f1e300]
+            - button "Lock options" [ref=f1e304]
+          - generic [ref=f1e309]:
+            - button "Hide all drawings" [ref=f1e311]
+            - button "Hide options" [ref=f1e315]
+        - generic [ref=f1e321]:
+          - button "Remove objects" [ref=f1e323]
+          - button "Remove options" [ref=f1e327]
+    - generic [ref=f1e333]:
+      - 'region "Chart #1" [ref=f1e336]':
+        - generic [ref=f1e340]:
+          - generic:
+            - generic:
+              - toolbar:
+                - generic:
+                  - generic [ref=f1e341]:
+                    - generic "Change symbol" [ref=f1e342]:
+                      - generic [ref=f1e343]: X
+                      - button "Change symbol" [ref=f1e347]: Gold Spot / U.S. Dollar
+                    - generic "Change interval" [ref=f1e348]:
+                      - text: ·
+                      - button "Change interval" [ref=f1e349]: "15"
+                    - generic [ref=f1e350]:
+                      - text: ·
+                      - generic [ref=f1e351]: OANDA
+                  - generic:
+                    - generic:
+                      - button "Flag symbol"
+                      - button "More"
+                  - button "Market closed · One update every 5 seconds" [ref=f1e353]
+                - generic [ref=f1e361]:
+                  - generic [ref=f1e362]:
+                    - generic [ref=f1e363]: O
+                    - generic [ref=f1e364]: 4,284.835
+                  - generic [ref=f1e365]:
+                    - generic [ref=f1e366]: H
+                    - generic [ref=f1e367]: 4,287.275
+                  - generic [ref=f1e368]:
+                    - generic [ref=f1e369]: L
+                    - generic [ref=f1e370]: 4,284.350
+                  - generic [ref=f1e371]:
+                    - generic [ref=f1e372]: C
+                    - generic [ref=f1e373]: 4,284.970
+                  - generic [ref=f1e374]: +0.120 (+0.00%)
+              - generic [ref=f1e378]:
+                - generic [ref=f1e380]:
+                  - generic: 4,283.640
+                  - generic: Sell
+                - generic "Spread" [ref=f1e382]: "266.0"
+                - generic [ref=f1e384]:
+                  - generic: 4,286.300
+                  - generic: Buy
+          - generic "Chart for OANDA:XAUUSD, 15 minutes" [ref=f1e386]
+      - toolbar [ref=f1e411]:
+        - generic [ref=f1e413]:
+          - generic [ref=f1e414]:
+            - button "1 day in 1 minute intervals" [ref=f1e415]:
+              - generic [ref=f1e416]: 1D
+            - button "5 days in 5 minutes intervals" [ref=f1e417]:
+              - generic [ref=f1e418]: 5D
+            - button "1 month in 30 minutes intervals" [ref=f1e419]:
+              - generic [ref=f1e420]: 1M
+            - button "3 months in 1 hour intervals" [ref=f1e421]:
+              - generic [ref=f1e422]: 3M
+            - button "6 months in 2 hours intervals" [ref=f1e423]:
+              - generic [ref=f1e424]: 6M
+            - button "Year to day in 1 day intervals" [ref=f1e425]:
+              - generic [ref=f1e426]: YTD
+            - button "1 year in 1 day intervals" [ref=f1e427]:
+              - generic [ref=f1e428]: 1Y
+            - button "5 years in 1 week intervals" [ref=f1e429]:
+              - generic [ref=f1e430]: 5Y
+            - button "All data in 1 month intervals" [ref=f1e431]:
+              - generic [ref=f1e432]: All
+          - button "Go to" [ref=f1e434]
+        - button "Timezone" [ref=f1e441]:
+          - generic [ref=f1e442]: 20:45:36 UTC+5:30
+    - generic [ref=f1e444]:
+      - toolbar [ref=f1e449]:
+        - button "Watchlist, details, and news" [pressed] [ref=f1e450]
+        - button "Alerts" [ref=f1e454]
+        - button "Object tree and data window" [ref=f1e459]
+        - button "Chats" [ref=f1e463]
+        - button "Screeners" [ref=f1e468]
+        - button "Pine" [ref=f1e474]
+        - button "Calendars" [ref=f1e479]
+        - button "Community" [ref=f1e483]
+        - button "Notifications" [ref=f1e490]
+        - button "Products" [ref=f1e494]
+        - button "Help Center" [ref=f1e499]
+      - generic [ref=f1e504]:
+        - generic [ref=f1e505]:
+          - generic [ref=f1e506]:
+            - generic [ref=f1e509]:
+              - button "Watchlist" [ref=f1e511]
+              - generic [ref=f1e521]:
+                - button "Add symbol" [ref=f1e522]
+                - button "Advanced view" [ref=f1e526]
+                - button "Settings" [disabled] [ref=f1e530]
+            - generic [ref=f1e537]:
+              - generic [ref=f1e539]:
+                - button "Symbol" [ref=f1e541]
+                - button "Last" [ref=f1e543]
+                - button "Chg" [ref=f1e545]
+                - button "Chg%" [ref=f1e547]
+              - progressbar [ref=f1e550]
+          - generic [ref=f1e551]:
+            - generic [ref=f1e553]:
+              - generic [ref=f1e554]: X
+              - generic [ref=f1e559]: XAUUSD
+              - generic [ref=f1e560]:
+                - button "Metrics" [ref=f1e561]
+                - generic "Add note" [ref=f1e565]
+                - generic "Settings" [ref=f1e570]
+            - generic [ref=f1e576]:
+              - generic [ref=f1e577]:
+                - generic [ref=f1e579]:
+                  - link "Gold Spot / U.S. Dollar" [ref=f1e580] [cursor=pointer]:
+                    - /url: https://www.tradingview.com/symbols/XAUUSD/?exchange=OANDA
+                  - text: OANDA
+                - generic [ref=f1e586]: CommodityCfd
+              - generic [ref=f1e590]:
+                - generic [ref=f1e591]:
+                  - generic [ref=f1e592]:
+                    - text: 4,284.97
+                    - superscript [ref=f1e593]: "0"
+                  - generic [ref=f1e594]: USD
+                - generic [ref=f1e596]:
+                  - generic [ref=f1e597]: "+11.170"
+                  - generic [ref=f1e598]: +0.26%
+              - generic [ref=f1e600]:
+                - generic [ref=f1e601]: Market closed
+                - generic [ref=f1e606]: Last update at 02:29 GMT+5:30
+              - generic [ref=f1e608]:
+                - generic [ref=f1e609]:
+                  - text: News
+                  - generic "Sep 26, 2026, 01:03 GMT+5:30" [ref=f1e612]
+                - generic [ref=f1e613]: "CFTC Commitments: Comex Gold Futures/Options - Sep 25"
+                - generic [ref=f1e614]: More events
+              - generic [ref=f1e619]:
+                - generic [ref=f1e620]: Performance
+                - generic [ref=f1e622]:
+                  - generic [ref=f1e623]:
+                    - generic [ref=f1e624]: −1.34%
+                    - generic [ref=f1e625]: 1W
+                  - generic [ref=f1e626]:
+                    - generic [ref=f1e627]: −6.92%
+                    - generic [ref=f1e628]: 1M
+                  - generic [ref=f1e629]:
+                    - generic [ref=f1e630]: 6.32%
+                    - generic [ref=f1e631]: 3M
+                  - generic [ref=f1e632]:
+                    - generic [ref=f1e633]: −5.04%
+                    - generic [ref=f1e634]: 6M
+                  - generic [ref=f1e635]:
+                    - generic [ref=f1e636]: −0.96%
+                    - generic [ref=f1e637]: YTD
+                  - generic [ref=f1e638]:
+                    - generic [ref=f1e639]: 14.35%
+                    - generic [ref=f1e640]: 1Y
+              - generic [ref=f1e641]:
+                - generic [ref=f1e642]: Seasonals
+                - table [ref=f1e646]:
+                  - row [ref=f1e647]:
+                    - cell
+                    - cell [ref=f1e648]
+                    - cell
+                  - row [ref=f1e652]:
+                    - cell
+                    - cell [ref=f1e653]
+                    - cell
+              - button "More seasonals" [ref=f1e658]
+              - generic [ref=f1e659]:
+                - generic [ref=f1e660]: Technicals
+                - generic [ref=f1e661]: Sell
+              - button "More technicals" [ref=f1e674]
+              - generic [ref=f1e676]:
+                - text: Browse community
+                - generic [ref=f1e680]: posts
+        - text: "[] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] – [] –"
+      - generic "Hide Tab" [ref=f1e687]
+    - generic "Trading panel"
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list
+              - generic:
+                - log:
+                  - list

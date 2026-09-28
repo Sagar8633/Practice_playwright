@@ -1,0 +1,762 @@
+{
+ "variants": {
+  "6y 2020-09..2026-09": {
+   "A fixed 0.01 lot": {
+    "positions": 306,
+    "closing_deals": 306,
+    "partials": 0,
+    "end_balance": 2729.9,
+    "growth_x": 13.65,
+    "net": 2529.9,
+    "max_dd_usd": 304.26,
+    "max_dd_pct": 80.7,
+    "max_lot": 0.01,
+    "worst_deal": -172.66,
+    "best_deal": 452.98,
+    "ruin": false,
+    "stop_out": 0,
+    "win_rate_positions": 40.2,
+    "partial_pnl": 0.0,
+    "max_consec_losing_positions": 10,
+    "peak_balance": 2962.83,
+    "balance_by_year_end": {
+     "2020": 169.81,
+     "2021": 165.38,
+     "2022": 243.61,
+     "2023": 470.44,
+     "2024": 552.65,
+     "2025": 1231.4,
+     "2026": 2729.9
+    },
+    "first_use_of_lot": {
+     "0.01": "2020-10-20"
+    }
+   },
+   "B tiered lots, no partial": {
+    "positions": 306,
+    "closing_deals": 306,
+    "partials": 0,
+    "end_balance": 30218.12,
+    "growth_x": 151.09,
+    "net": 30018.12,
+    "max_dd_usd": 57104.7,
+    "max_dd_pct": 80.7,
+    "max_lot": 2.56,
+    "worst_deal": -19074.56,
+    "best_deal": 24915.67,
+    "ruin": false,
+    "stop_out": 0,
+    "win_rate_positions": 40.2,
+    "partial_pnl": 0.0,
+    "max_consec_losing_positions": 10,
+    "peak_balance": 85018.57,
+    "balance_by_year_end": {
+     "2020": 169.81,
+     "2021": 165.38,
+     "2022": 243.61,
+     "2023": 484.2,
+     "2024": 517.49,
+     "2025": 917.85,
+     "2026": 30218.12
+    },
+    "first_use_of_lot": {
+     "0.01": "2020-10-20",
+     "0.02": "2023-12-13",
+     "0.04": "2025-04-14",
+     "0.08": "2025-04-21",
+     "0.16": "2026-02-11",
+     "0.32": "2026-02-27",
+     "0.64": "2026-03-19",
+     "1.28": "2026-03-26",
+     "2.56": "2026-06-24"
+    }
+   },
+   "C tiered + partial 50% at $100 (skip at 0.01 lot)": {
+    "positions": 306,
+    "closing_deals": 359,
+    "partials": 53,
+    "end_balance": 8122.73,
+    "growth_x": 40.61,
+    "net": 7922.73,
+    "max_dd_usd": 12750.73,
+    "max_dd_pct": 81.7,
+    "max_lot": 0.64,
+    "worst_deal": -4768.64,
+    "best_deal": 3114.46,
+    "ruin": false,
+    "stop_out": 0,
+    "win_rate_positions": 40.2,
+    "partial_pnl": 18622.0,
+    "max_consec_losing_positions": 10,
+    "peak_balance": 19859.18,
+    "balance_by_year_end": {
+     "2020": 169.81,
+     "2021": 165.38,
+     "2022": 243.61,
+     "2023": 484.2,
+     "2024": 510.27,
+     "2025": 767.9,
+     "2026": 8122.73
+    },
+    "first_use_of_lot": {
+     "0.01": "2020-10-20",
+     "0.02": "2023-12-13",
+     "0.04": "2024-04-12",
+     "0.08": "2025-10-17",
+     "0.16": "2026-02-11",
+     "0.32": "2026-04-06",
+     "0.64": "2026-07-09"
+    }
+   },
+   "D tiered + partial 50% at $100 (close all at 0.01 lot)": {
+    "positions": 304,
+    "closing_deals": 360,
+    "partials": 56,
+    "end_balance": 9315.62,
+    "growth_x": 46.58,
+    "net": 9115.62,
+    "max_dd_usd": 17519.37,
+    "max_dd_pct": 81.9,
+    "max_lot": 1.28,
+    "worst_deal": -9537.28,
+    "best_deal": 6228.92,
+    "ruin": false,
+    "stop_out": 0,
+    "win_rate_positions": 39.8,
+    "partial_pnl": 21026.7,
+    "max_consec_losing_positions": 10,
+    "peak_balance": 25820.71,
+    "balance_by_year_end": {
+     "2020": 169.81,
+     "2021": 165.38,
+     "2022": 223.37,
+     "2023": 463.96,
+     "2024": 506.0,
+     "2025": 929.58,
+     "2026": 9315.62
+    },
+    "first_use_of_lot": {
+     "0.01": "2020-10-20",
+     "0.02": "2023-12-13",
+     "0.04": "2024-04-12",
+     "0.08": "2025-10-17",
+     "0.16": "2026-02-11",
+     "0.32": "2026-04-06",
+     "0.64": "2026-05-04",
+     "1.28": "2026-07-09"
+    }
+   },
+   "E tiered + partial, lot capped at 0.20": {
+    "positions": 306,
+    "closing_deals": 352,
+    "partials": 46,
+    "end_balance": 8146.65,
+    "growth_x": 40.73,
+    "net": 7946.65,
+    "max_dd_usd": 6418.96,
+    "max_dd_pct": 81.7,
+    "max_lot": 0.2,
+    "worst_deal": -2100.2,
+    "best_deal": 2419.26,
+    "ruin": false,
+    "stop_out": 0,
+    "win_rate_positions": 40.2,
+    "partial_pnl": 9843.2,
+    "max_consec_losing_positions": 10,
+    "peak_balance": 14356.38,
+    "balance_by_year_end": {
+     "2020": 169.81,
+     "2021": 165.38,
+     "2022": 243.61,
+     "2023": 484.2,
+     "2024": 510.27,
+     "2025": 767.9,
+     "2026": 8146.65
+    },
+    "first_use_of_lot": {
+     "0.01": "2020-10-20",
+     "0.02": "2023-12-13",
+     "0.04": "2024-04-12",
+     "0.08": "2025-10-17",
+     "0.1": "2026-02-11",
+     "0.16": "2026-02-11",
+     "0.2": "2026-03-26"
+    }
+   }
+  },
+  "2023-01..2026-09": {
+   "A fixed 0.01 lot": {
+    "positions": 193,
+    "closing_deals": 193,
+    "partials": 0,
+    "end_balance": 2622.15,
+    "growth_x": 13.11,
+    "net": 2422.15,
+    "max_dd_usd": 304.26,
+    "max_dd_pct": 49.0,
+    "max_lot": 0.01,
+    "worst_deal": -172.66,
+    "best_deal": 452.98,
+    "ruin": false,
+    "stop_out": 0,
+    "win_rate_positions": 43.0,
+    "partial_pnl": 0.0,
+    "max_consec_losing_positions": 8,
+    "peak_balance": 2855.08,
+    "balance_by_year_end": {
+     "2023": 362.69,
+     "2024": 444.9,
+     "2025": 1123.65,
+     "2026": 2622.15
+    },
+    "first_use_of_lot": {
+     "0.01": "2023-01-03"
+    }
+   },
+   "B tiered lots, no partial": {
+    "positions": 150,
+    "closing_deals": 150,
+    "partials": 0,
+    "end_balance": -0.42,
+    "growth_x": -0.0,
+    "net": -200.42,
+    "max_dd_usd": 826.68,
+    "max_dd_pct": 100.1,
+    "max_lot": 0.04,
+    "worst_deal": -690.64,
+    "best_deal": 315.59,
+    "ruin": true,
+    "stop_out": 1,
+    "win_rate_positions": 39.3,
+    "partial_pnl": 0.0,
+    "max_consec_losing_positions": 8,
+    "peak_balance": 826.26,
+    "balance_by_year_end": {
+     "2023": 362.69,
+     "2024": 345.17,
+     "2025": -0.42
+    },
+    "first_use_of_lot": {
+     "0.01": "2023-01-03",
+     "0.02": "2024-03-28",
+     "0.04": "2025-04-21"
+    }
+   },
+   "C tiered + partial 50% at $100 (skip at 0.01 lot)": {
+    "positions": 193,
+    "closing_deals": 240,
+    "partials": 47,
+    "end_balance": 9361.73,
+    "growth_x": 46.81,
+    "net": 9161.73,
+    "max_dd_usd": 17519.37,
+    "max_dd_pct": 68.0,
+    "max_lot": 1.28,
+    "worst_deal": -9537.28,
+    "best_deal": 6228.92,
+    "ruin": false,
+    "stop_out": 0,
+    "win_rate_positions": 43.0,
+    "partial_pnl": 20178.2,
+    "max_consec_losing_positions": 8,
+    "peak_balance": 25866.82,
+    "balance_by_year_end": {
+     "2023": 362.69,
+     "2024": 354.07,
+     "2025": 975.68,
+     "2026": 9361.73
+    },
+    "first_use_of_lot": {
+     "0.01": "2023-01-03",
+     "0.02": "2024-04-02",
+     "0.04": "2025-05-15",
+     "0.08": "2026-02-11",
+     "0.16": "2026-02-11",
+     "0.32": "2026-04-06",
+     "0.64": "2026-05-04",
+     "1.28": "2026-07-09"
+    }
+   },
+   "D tiered + partial 50% at $100 (close all at 0.01 lot)": {
+    "positions": 192,
+    "closing_deals": 240,
+    "partials": 48,
+    "end_balance": 9496.26,
+    "growth_x": 47.48,
+    "net": 9296.26,
+    "max_dd_usd": 20879.69,
+    "max_dd_pct": 71.1,
+    "max_lot": 1.28,
+    "worst_deal": -9537.28,
+    "best_deal": 6228.92,
+    "ruin": false,
+    "stop_out": 0,
+    "win_rate_positions": 42.7,
+    "partial_pnl": 24369.9,
+    "max_consec_losing_positions": 8,
+    "peak_balance": 29361.67,
+    "balance_by_year_end": {
+     "2023": 362.69,
+     "2024": 349.36,
+     "2025": 1232.1,
+     "2026": 9496.26
+    },
+    "first_use_of_lot": {
+     "0.01": "2023-01-03",
+     "0.02": "2024-04-02",
+     "0.04": "2025-05-15",
+     "0.08": "2026-02-11",
+     "0.16": "2026-02-11",
+     "0.32": "2026-03-26",
+     "0.64": "2026-04-06",
+     "1.28": "2026-07-09"
+    }
+   },
+   "E tiered + partial, lot capped at 0.20": {
+    "positions": 193,
+    "closing_deals": 233,
+    "partials": 40,
+    "end_balance": 11666.31,
+    "growth_x": 58.33,
+    "net": 11466.31,
+    "max_dd_usd": 6418.96,
+    "max_dd_pct": 68.0,
+    "max_lot": 0.2,
+    "worst_deal": -2100.2,
+    "best_deal": 3024.08,
+    "ruin": false,
+    "stop_out": 0,
+    "win_rate_positions": 43.0,
+    "partial_pnl": 11802.0,
+    "max_consec_losing_positions": 8,
+    "peak_balance": 17876.04,
+    "balance_by_year_end": {
+     "2023": 362.69,
+     "2024": 354.07,
+     "2025": 975.68,
+     "2026": 11666.31
+    },
+    "first_use_of_lot": {
+     "0.01": "2023-01-03",
+     "0.02": "2024-04-02",
+     "0.04": "2025-05-15",
+     "0.08": "2026-02-11",
+     "0.1": "2026-02-11",
+     "0.16": "2026-02-11",
+     "0.2": "2026-03-26"
+    }
+   }
+  },
+  "last 12 months": {
+   "A fixed 0.01 lot": {
+    "positions": 51,
+    "closing_deals": 51,
+    "partials": 0,
+    "end_balance": 1958.58,
+    "growth_x": 9.79,
+    "net": 1758.58,
+    "max_dd_usd": 304.26,
+    "max_dd_pct": 59.4,
+    "max_lot": 0.01,
+    "worst_deal": -172.66,
+    "best_deal": 452.98,
+    "ruin": false,
+    "stop_out": 0,
+    "win_rate_positions": 51.0,
+    "partial_pnl": 0.0,
+    "max_consec_losing_positions": 3,
+    "peak_balance": 2191.5,
+    "balance_by_year_end": {
+     "2025": 460.07,
+     "2026": 1958.58
+    },
+    "first_use_of_lot": {
+     "0.01": "2025-09-29"
+    }
+   },
+   "B tiered lots, no partial": {
+    "positions": 6,
+    "closing_deals": 6,
+    "partials": 0,
+    "end_balance": -0.96,
+    "growth_x": -0.0,
+    "net": -200.96,
+    "max_dd_usd": 457.65,
+    "max_dd_pct": 100.2,
+    "max_lot": 0.02,
+    "worst_deal": -345.32,
+    "best_deal": 157.8,
+    "ruin": true,
+    "stop_out": 1,
+    "win_rate_positions": 33.3,
+    "partial_pnl": 0.0,
+    "max_consec_losing_positions": 2,
+    "peak_balance": 456.69,
+    "balance_by_year_end": {
+     "2025": -0.96
+    },
+    "first_use_of_lot": {
+     "0.01": "2025-09-29",
+     "0.02": "2025-10-17"
+    }
+   },
+   "C tiered + partial 50% at $100 (skip at 0.01 lot)": {
+    "positions": 6,
+    "closing_deals": 6,
+    "partials": 0,
+    "end_balance": -0.96,
+    "growth_x": -0.0,
+    "net": -200.96,
+    "max_dd_usd": 457.65,
+    "max_dd_pct": 100.2,
+    "max_lot": 0.02,
+    "worst_deal": -345.32,
+    "best_deal": 157.8,
+    "ruin": true,
+    "stop_out": 1,
+    "win_rate_positions": 33.3,
+    "partial_pnl": 0.0,
+    "max_consec_losing_positions": 2,
+    "peak_balance": 456.69,
+    "balance_by_year_end": {
+     "2025": -0.96
+    },
+    "first_use_of_lot": {
+     "0.01": "2025-09-29",
+     "0.02": "2025-10-17"
+    }
+   },
+   "D tiered + partial 50% at $100 (close all at 0.01 lot)": {
+    "positions": 6,
+    "closing_deals": 9,
+    "partials": 3,
+    "end_balance": 0.29,
+    "growth_x": 0.0,
+    "net": -199.71,
+    "max_dd_usd": 468.77,
+    "max_dd_pct": 99.9,
+    "max_lot": 0.02,
+    "worst_deal": -345.32,
+    "best_deal": 99.9,
+    "ruin": true,
+    "stop_out": 1,
+    "win_rate_positions": 0.0,
+    "partial_pnl": 299.7,
+    "max_consec_losing_positions": 6,
+    "peak_balance": 469.07,
+    "balance_by_year_end": {
+     "2025": 0.29
+    },
+    "first_use_of_lot": {
+     "0.01": "2025-09-29",
+     "0.02": "2025-10-17"
+    }
+   },
+   "E tiered + partial, lot capped at 0.20": {
+    "positions": 6,
+    "closing_deals": 6,
+    "partials": 0,
+    "end_balance": -0.96,
+    "growth_x": -0.0,
+    "net": -200.96,
+    "max_dd_usd": 457.65,
+    "max_dd_pct": 100.2,
+    "max_lot": 0.02,
+    "worst_deal": -345.32,
+    "best_deal": 157.8,
+    "ruin": true,
+    "stop_out": 1,
+    "win_rate_positions": 33.3,
+    "partial_pnl": 0.0,
+    "max_consec_losing_positions": 2,
+    "peak_balance": 456.69,
+    "balance_by_year_end": {
+     "2025": -0.96
+    },
+    "first_use_of_lot": {
+     "0.01": "2025-09-29",
+     "0.02": "2025-10-17"
+    }
+   }
+  }
+ },
+ "start_years": {
+  "A fixed 0.01 lot": {
+   "2021": {
+    "end_balance": 2744.2,
+    "growth_x": 13.72,
+    "max_dd_usd": 304.26,
+    "max_dd_pct": 76.7,
+    "max_lot": 0.01,
+    "ruin": false,
+    "positions": 296,
+    "partials": 0
+   },
+   "2022": {
+    "end_balance": 2785.96,
+    "growth_x": 13.93,
+    "max_dd_usd": 304.26,
+    "max_dd_pct": 45.8,
+    "max_lot": 0.01,
+    "ruin": false,
+    "positions": 246,
+    "partials": 0
+   },
+   "2023": {
+    "end_balance": 2622.15,
+    "growth_x": 13.11,
+    "max_dd_usd": 304.26,
+    "max_dd_pct": 49.0,
+    "max_lot": 0.01,
+    "ruin": false,
+    "positions": 193,
+    "partials": 0
+   },
+   "2024": {
+    "end_balance": 2459.46,
+    "growth_x": 12.3,
+    "max_dd_usd": 304.26,
+    "max_dd_pct": 71.5,
+    "max_lot": 0.01,
+    "ruin": false,
+    "positions": 145,
+    "partials": 0
+   },
+   "2025": {
+    "end_balance": 2377.26,
+    "growth_x": 11.89,
+    "max_dd_usd": 304.26,
+    "max_dd_pct": 36.4,
+    "max_lot": 0.01,
+    "ruin": false,
+    "positions": 91,
+    "partials": 0
+   },
+   "2026": {
+    "end_balance": 1698.5,
+    "growth_x": 8.49,
+    "max_dd_usd": 304.26,
+    "max_dd_pct": 15.8,
+    "max_lot": 0.01,
+    "ruin": false,
+    "positions": 39,
+    "partials": 0
+   }
+  },
+  "C tiered + partial 50% at $100 (skip at 0.01 lot)": {
+   "2021": {
+    "end_balance": 8126.71,
+    "growth_x": 40.63,
+    "max_dd_usd": 12750.73,
+    "max_dd_pct": 81.6,
+    "max_lot": 0.64,
+    "ruin": false,
+    "positions": 296,
+    "partials": 54
+   },
+   "2022": {
+    "end_balance": 8124.85,
+    "growth_x": 40.62,
+    "max_dd_usd": 12750.73,
+    "max_dd_pct": 81.6,
+    "max_lot": 0.64,
+    "ruin": false,
+    "positions": 246,
+    "partials": 54
+   },
+   "2023": {
+    "end_balance": 9361.73,
+    "growth_x": 46.81,
+    "max_dd_usd": 17519.37,
+    "max_dd_pct": 68.0,
+    "max_lot": 1.28,
+    "ruin": false,
+    "positions": 193,
+    "partials": 47
+   },
+   "2024": {
+    "end_balance": -3.85,
+    "growth_x": -0.02,
+    "max_dd_usd": 811.25,
+    "max_dd_pct": 100.5,
+    "max_lot": 0.04,
+    "ruin": true,
+    "positions": 101,
+    "partials": 6
+   },
+   "2025": {
+    "end_balance": 4704.69,
+    "growth_x": 23.52,
+    "max_dd_usd": 8759.68,
+    "max_dd_pct": 80.6,
+    "max_lot": 0.64,
+    "ruin": false,
+    "positions": 91,
+    "partials": 35
+   },
+   "2026": {
+    "end_balance": 2373.58,
+    "growth_x": 11.87,
+    "max_dd_usd": 4379.84,
+    "max_dd_pct": 67.4,
+    "max_lot": 0.32,
+    "ruin": false,
+    "positions": 39,
+    "partials": 21
+   }
+  },
+  "D tiered + partial 50% at $100 (close all at 0.01 lot)": {
+   "2021": {
+    "end_balance": 9323.23,
+    "growth_x": 46.62,
+    "max_dd_usd": 17519.37,
+    "max_dd_pct": 81.6,
+    "max_lot": 1.28,
+    "ruin": false,
+    "positions": 294,
+    "partials": 56
+   },
+   "2022": {
+    "end_balance": 9317.56,
+    "growth_x": 46.59,
+    "max_dd_usd": 17519.37,
+    "max_dd_pct": 81.8,
+    "max_lot": 1.28,
+    "ruin": false,
+    "positions": 244,
+    "partials": 57
+   },
+   "2023": {
+    "end_balance": 9496.26,
+    "growth_x": 47.48,
+    "max_dd_usd": 20879.69,
+    "max_dd_pct": 71.1,
+    "max_lot": 1.28,
+    "ruin": false,
+    "positions": 192,
+    "partials": 48
+   },
+   "2024": {
+    "end_balance": 4747.54,
+    "growth_x": 23.74,
+    "max_dd_usd": 8759.68,
+    "max_dd_pct": 78.0,
+    "max_lot": 0.64,
+    "ruin": false,
+    "positions": 140,
+    "partials": 40
+   },
+   "2025": {
+    "end_balance": 4697.3,
+    "growth_x": 23.49,
+    "max_dd_usd": 8759.68,
+    "max_dd_pct": 79.8,
+    "max_lot": 0.64,
+    "ruin": false,
+    "positions": 89,
+    "partials": 41
+   },
+   "2026": {
+    "end_balance": 3976.21,
+    "growth_x": 19.88,
+    "max_dd_usd": 6375.36,
+    "max_dd_pct": 64.8,
+    "max_lot": 0.32,
+    "ruin": false,
+    "positions": 38,
+    "partials": 25
+   }
+  },
+  "B tiered lots, no partial": {
+   "2021": {
+    "end_balance": 34744.23,
+    "growth_x": 173.72,
+    "max_dd_usd": 109863.92,
+    "max_dd_pct": 76.7,
+    "max_lot": 5.0,
+    "ruin": false,
+    "positions": 296,
+    "partials": 0
+   },
+   "2022": {
+    "end_balance": 34743.53,
+    "growth_x": 173.72,
+    "max_dd_usd": 109863.92,
+    "max_dd_pct": 76.7,
+    "max_lot": 5.0,
+    "ruin": false,
+    "positions": 246,
+    "partials": 0
+   },
+   "2023": {
+    "end_balance": -0.42,
+    "growth_x": -0.0,
+    "max_dd_usd": 826.68,
+    "max_dd_pct": 100.1,
+    "max_lot": 0.04,
+    "ruin": true,
+    "positions": 150,
+    "partials": 0
+   },
+   "2024": {
+    "end_balance": 17017.96,
+    "growth_x": 85.09,
+    "max_dd_usd": 55537.01,
+    "max_dd_pct": 77.3,
+    "max_lot": 2.56,
+    "ruin": false,
+    "positions": 145,
+    "partials": 0
+   },
+   "2025": {
+    "end_balance": 17020.28,
+    "growth_x": 85.1,
+    "max_dd_usd": 55537.01,
+    "max_dd_pct": 77.3,
+    "max_lot": 2.56,
+    "ruin": false,
+    "positions": 91,
+    "partials": 0
+   },
+   "2026": {
+    "end_balance": 7525.07,
+    "growth_x": 37.63,
+    "max_dd_usd": 14276.18,
+    "max_dd_pct": 67.3,
+    "max_lot": 0.64,
+    "ruin": false,
+    "positions": 39,
+    "partials": 0
+   }
+  }
+ },
+ "mc": {
+  "shuffle": {
+   "p_ruin": 0.2202,
+   "end_p05": -27.2,
+   "end_median": 13978.63,
+   "end_p95": 46703.1,
+   "end_below_200": 0.2202,
+   "dd_median_pct": 87.8,
+   "dd_p95_pct": 98.6,
+   "max_lot_median": 1.28
+  },
+  "bootstrap": {
+   "p_ruin": 0.2722,
+   "end_p05": -36.48,
+   "end_median": 9947.9,
+   "end_p95": 785420.5,
+   "end_below_200": 0.2766,
+   "dd_median_pct": 86.8,
+   "dd_p95_pct": 99.1,
+   "max_lot_median": 0.64
+  },
+  "shuffle_cap_0.20": {
+   "p_ruin": 0.2178,
+   "end_p05": -27.77,
+   "end_median": 20169.6,
+   "end_p95": 31114.9,
+   "dd_p95_pct": 98.4
+  }
+ }
+}

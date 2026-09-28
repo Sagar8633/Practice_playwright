@@ -1,0 +1,1343 @@
+# Manufacturing Quality - Customer Quality and Supplier Quality.
+#
+# Written for a customer-quality / supplier-quality engineer in Indian
+# manufacturing: complaints and 8D at the customer end, PPAP and supplier
+# audits at the vendor end, gauges and capability studies in between.
+# See docs/ROLES.md for the format.
+#
+# ---------------------------------------------------------------------------
+# WHY `extends: none`, which no other shipped pack sets
+# ---------------------------------------------------------------------------
+# roles/_common.yaml is a SOFTWARE lexicon end to end - Docker, Kubernetes,
+# Kafka, REST APIs, microservices, Terraform, ELK. Inheriting it would not just
+# add harmless unused rows. The skill matrix counts every lexicon row across the
+# ten highest-scoring job descriptions and those counts decide what you are told
+# to study first, so a manufacturing scan would come back measuring this person
+# against Kubernetes, reporting it as a Gap, and pushing PPAP, 8D and Cpk down
+# the study page to make room for it. docs/ROLES.md states the rule outright -
+# a generic lexicon is worse than a narrow one - and naukri/interview/skills.py
+# makes the same point at line 10, where the module explains that a generic
+# extractor "pulls 'communication' and 'stakeholder management' out of every JD
+# and buries the three tools that actually decide the interview".
+#
+# Checked in the code before relying on it: naukri/roles.py line 123 reads
+#
+#     common = _read(COMMON) if role.get("extends", COMMON) == COMMON ... else {}
+#
+# so any `extends:` value other than `_common` resolves `common` to `{}`, and
+# every merge below that line - must_have_any, exclude_title_keywords,
+# tight_terms, synonyms, lexicon - is left with this file's contents alone.
+# `none` is read by PyYAML as the plain string "none" (YAML null is `null` or
+# `~`), which is exactly what that comparison needs.
+#
+# The cost is that nothing arrives for free, so this file carries its own
+# complete exclude_title_keywords - intern / fresher / trainee included, which
+# every other pack inherits - and its own tight_terms. The handful of _common
+# rows that genuinely do turn up in manufacturing adverts (root cause analysis,
+# documentation and SOPs, stakeholder communication, SAP/ERP, Excel data work)
+# are re-declared in the lexicon below in manufacturing words. Nothing from the
+# software infrastructure half is brought across.
+extends: none
+
+label: Manufacturing Quality (Customer & Supplier)
+primary_role: Customer & Supplier Quality Engineer
+
+# Seeds for the search terms jobs.yaml falls back to when it lists none.
+seed_keywords:
+  - Supplier Quality Engineer
+  - Customer Quality Engineer
+  - Quality Engineer
+  - Supplier Quality Assurance Engineer
+  - Vendor Development Engineer
+  - Quality Control Engineer
+  - Field Quality Engineer
+  - Quality Assurance Engineer
+
+# Ready-made searches. Copy these into jobs.yaml and set your own locations.
+# Every location here is null (all of India) on purpose: a remote search for a
+# shop-floor quality role returns software and BPO QA, and it compounds,
+# because _location_score() awards "remote" full marks and floats exactly those
+# adverts to the top of the daily report.
+searches:
+  - {keyword: Supplier Quality Engineer, location: null}
+  - {keyword: Customer Quality Engineer, location: null}
+  - {keyword: Quality Engineer Manufacturing, location: null}
+  - {keyword: Supplier Quality Assurance, location: null}
+  - {keyword: Vendor Development Engineer, location: null}
+  - {keyword: Quality Control Engineer, location: null}
+
+# The "is this even my field" gate: an advert mentioning none of these is
+# dropped before scoring ever runs.
+#
+# Shaped above all to keep software QA out, which is the trap this whole pack
+# exists to avoid. "QA", "quality assurance", "quality engineering" and "test
+# engineer" are deliberately NOT gate terms - an SDET advert says all four, and
+# a real shop-floor advert always says something more specific. What is left is
+# either anchored to a party (supplier quality, customer quality, vendor
+# quality) or is AIAG/IATF vocabulary no software advert carries: ppap, apqp,
+# pfmea, spc, cpk, 8d, iatf, 16949.
+#
+# Three absences that look like oversights and are not:
+#   * "control plan" - the gate is a plain substring test after normalisation,
+#     and "control plan" sits inside "control plane", so it would pass every
+#     Kubernetes advert ever posted. It is safe as a lexicon alias, where
+#     \bcontrol plan\b cannot reach "control plane", and it is listed there.
+#   * "gauge" - passes on the metaphor, "ability to gauge stakeholder
+#     sentiment". Recall is untouched: inspection, calibration, metrology and
+#     coordinate measuring machine are all still gate terms, and any metrology
+#     advert carries at least one.
+#   * "qms" - not a false positive, just a duplicate needle. _skill_key()
+#     applies the qms synonym below, so "qms" and "quality management system"
+#     normalise to the same string.
+must_have_any:
+  - supplier quality
+  - customer quality
+  - vendor quality
+  - quality control
+  - quality management system
+  - ppap
+  - apqp
+  - pfmea
+  - fmea
+  - spc
+  - cpk
+  - 8d
+  - iatf
+  - "16949"
+  - iso 9001
+  - iso9001
+  - corrective action
+  - corrective and preventive action
+  - non conformance
+  - nonconformance
+  - customer complaint
+  - inspection
+  - inspector
+  - pdi
+  - calibration
+  - metrology
+  - coordinate measuring machine
+  - "gd&t"
+  - measurement system analysis
+  - supplier development
+  - vendor development
+  - supplier audit
+  - poka yoke
+  - iqc
+  - oqc
+
+# Dropped on the title alone. Nothing is inherited, so the first three - which
+# every other pack gets from _common.yaml - are spelled out here.
+#
+# The software block is the point of the pack. The BPO block matters nearly as
+# much: "Quality Analyst" is a call-centre title in India, and a BPO advert
+# discusses calibration, audits, CAPA, defects and customer complaints in words
+# that read like manufacturing all the way down. Bare "analyst" is deliberately
+# absent - the match is on a title substring, and it would kill "Supplier
+# Quality Analyst" and "Quality Data Analyst", which MNC component makers do
+# use. The last block drops adjacent fields that share the quality vocabulary
+# and none of the work.
+exclude_title_keywords:
+  - intern
+  - fresher
+  - trainee
+  - software
+  - sdet
+  - test automation
+  - automation testing
+  - qa automation
+  - selenium
+  - appium
+  - manual testing
+  - api testing
+  - performance testing
+  - quality analyst
+  - bpo
+  - call center
+  - call centre
+  - voice process
+  - process associate
+  - customer support
+  - telecaller
+  - tele caller
+  - sales
+  - business development
+  - marketing
+  - recruiter
+  - data entry
+  - civil
+  - food
+  - haccp
+  - agri
+  - dairy
+  - microbiologist
+  - safety officer
+  - apprentice
+  - campus
+  - faculty
+  - trainer
+
+# Terms whose bare form is too common to trust a loose match on.
+#
+# Read this as documentation rather than as protection. skills.py line 45
+# assigns the list to _TIGHT and nothing in the repo reads _TIGHT again, so
+# listing a term here does nothing to the matcher - safety has to come from the
+# alias spelling itself, which is why several obvious acronyms appear below only
+# in lengthened forms. The list is kept because it is the shortlist of bare
+# forms that must never be shipped as an alias: 'car' is the vehicle in every
+# automotive advert, 'cp' is the control plan, 'ncr' is Delhi NCR, 'ppm' is
+# preventive maintenance, 'pcb' is the State Pollution Control Board, 'sqa' is
+# software quality assurance. 'qc' is here because _common.yaml used to supply
+# it and, with extends: none, no longer does.
+tight_terms: [cmm, vmm, spc, msa, cpk, cp, ppm, ncr, car, pdi, fai, isir, iqc,
+              oqc, fqc, ipqc, ndt, mpi, dpt, mrb, ev, oem, smt, pcb, ems, spm,
+              dft, hrc, mtc, qms, sqa, tpm, 8d, qc]
+
+# Folded together before scoring compares anything - applied to the needle as
+# well as to the advert, which is why a gate term can be written 'gd&t' and
+# still match an advert that spells the whole thing out.
+#
+# Two synonyms that are NOT here and must not be added back:
+#   * ncr -> non conformance report. It reads harmless and it disables the
+#     gate: _norm() rewrites NCR everywhere, so "Location: Noida, Delhi NCR"
+#     becomes "...delhi non conformance report...", the gate term "non
+#     conformance" then matches, and a Java advert in Delhi clears a
+#     manufacturing quality gate. NCR is carried as a lexicon alias instead,
+#     where word boundaries apply.
+#   * sqa -> supplier quality assurance. However tempting, software adverts use
+#     SQA for software quality assurance, and the expansion would walk every
+#     one of them straight past "supplier quality".
+# Two known leaks are left in deliberately, both far rarer than the Delhi one:
+# "under the client MSA" (Master Service Agreement) and legacy "SEI CMM Level
+# 5" both clear the gate. Both synonyms earn their place by folding acronym and
+# expansion together everywhere else.
+synonyms:
+  cmm: coordinate measuring machine
+  vmm: vision measuring machine
+  ppap: production part approval process
+  apqp: advanced product quality planning
+  pfmea: process failure mode and effects analysis
+  dfmea: design failure mode and effects analysis
+  fmea: failure mode and effects analysis
+  msa: measurement system analysis
+  spc: statistical process control
+  cpk: process capability index
+  cp/cpk: process capability index
+  capa: corrective and preventive action
+  8d: eight disciplines problem solving
+  pdi: pre dispatch inspection
+  fai: first article inspection
+  isir: initial sample inspection report
+  iqc: incoming quality control
+  ipqc: in process quality control
+  oqc: outgoing quality control
+  fqc: final quality control
+  qms: quality management system
+  ndt: non destructive testing
+  mrb: material review board
+  pdca: plan do check act
+  "gd&t": geometric dimensioning and tolerancing
+  gdt: geometric dimensioning and tolerancing
+  gage: gauge
+  guage: gauge
+  calliper: caliper
+  molding: moulding
+  mold: mould
+  oem: original equipment manufacturer
+  ev: electric vehicle
+  smt: surface mount technology
+  tpm: total productive maintenance
+
+interview_focus: >-
+  Weight questions toward one complaint and one supplier walked end to end: how
+  a customer complaint was received and contained the same day, what the
+  interim and permanent corrective actions were, how deep the 5-why actually
+  went, and what evidence closed it - dimensional data, capability study,
+  updated control plan and PFMEA, not a promise. For the supplier side, ask
+  about the decision rather than the procedure: why this supplier was put on
+  containment and that one developed, what the incoming rejection and PPM trend
+  looked like before and after, and what an audit finding cost to fix. Advanced
+  questions should be drawing-and-gauge specific - read this GD&T callout, tell
+  me which gauge you would trust and why - and scenario-based escalations,
+  never recitation of ISO or IATF clause numbers.
+
+# ===========================================================================
+# The skill vocabulary.
+#
+# Ordering matters twice over. Categories run most-important first, because
+# customer quality and supplier quality are what this person actually does and
+# the study page reads top down. Within a row, aliases run specific-first:
+# find() breaks on the FIRST alias that matches in list order and the matched
+# alias is what gets printed, so a bare carrier listed ahead of its compounds
+# would make the page say "supplier performance" on an advert that said
+# "quarterly supplier business review".
+#
+# Two rules applied throughout, both learned the hard way:
+#   * every alias has to be safe on its own spelling. tight_terms is inert (see
+#     above), so a risky bare acronym is omitted or lengthened, never
+#     "protected". Bare 'ppm', 'warranty', 'concession', 'resident engineer',
+#     'vda', 'fai', 'pcb', 'flash' and 'harness' are all absent for that reason,
+#     each with its compounds kept instead.
+#   * where the four audited areas produced the same skill twice, the rows are
+#     merged rather than both shipped - two rows that fire on one advert double
+#     the count of one skill and shuffle the study order. Where the two audits
+#     disagreed about an alias, a verified false positive beats a keep: that is
+#     why bare 'fai', 'ppm level(s)', 'cs-1'/'cs-2', bare 'vda', bare 'tier 2'
+#     and bare 'resident engineer' lost.
+# ===========================================================================
+lexicon:
+  # --- Customer quality: the function itself, and the complaint that starts
+  # --- every conversation in it. Bare "complaint" is excluded (it carries a
+  # --- BPO advert on its own); "complaint handling" and "complaint resolution"
+  # --- are the two loosest survivors here and the first to cut.
+  Customer Complaint Handling:
+    category: Customer Quality
+    aliases: [customer complaint, customer complaints, customer complain, customer complains,
+              complaint handling, complaint resolution, complaint closure, complaint investigation]
+  Customer Quality Function:
+    category: Customer Quality
+    aliases: [customer end quality, customer quality, cqe]
+
+  # --- Supplier quality: the job title half of the profile. 'purchase quality'
+  # --- does fire on prose ("purchase quality raw material from vendors"), and
+  # --- it stays only because Purchase Quality is a real Indian OEM department
+  # --- and this row's count is already saturated by 'supplier quality' - the
+  # --- same alias on a narrow row would not be acceptable.
+  Supplier Quality Engineering:
+    category: Supplier Quality
+    aliases: [supplier quality engineer, supplier quality engineers, supplier quality engineering,
+              supplier quality assurance, supplier quality management, supplier quality executive,
+              supplier quality specialist, supplier quality head, supplier quality, sqe,
+              vendor quality assurance, vendor quality engineer, vendor quality,
+              purchase quality, procurement quality]
+  # Bare 'resident engineer' is gone from both resident rows: it fires on
+  # "Resident Engineer for the highway project", a high-volume Indian civil
+  # title, and both of these rows are narrow enough for one such title to set
+  # the whole count. The vendor- and customer-anchored phrasings replace it.
+  Resident Engineer at Supplier:
+    category: Supplier Quality
+    aliases: [supplier resident engineer, vendor resident engineer, resident engineer at supplier,
+              resident engineer at vendor, resident quality engineer, resident inspector,
+              deputation at supplier site, stationed at supplier]
+
+  # --- The customer-facing surface: audits, scorecards, portals, escalations.
+  # --- Most of these are anchored on "customer" or "oem" on purpose, because
+  # --- the unanchored versions ("escalation matrix", "customer satisfaction")
+  # --- are service-desk and sales filler that would fire on half the pool.
+  Customer Audits & Visits:
+    category: Customer Interface
+    aliases: [customer quality audit, customer plant visit, customer inspection visit,
+              customer audit, customer audits, customer visit, customer visits,
+              oem audit, oem audits]
+  Customer Scorecards & Ratings:
+    category: Customer Interface
+    aliases: [customer quality rating, customer performance rating, customer quality index,
+              customer scorecard, customer scorecards, customer score card, customer score-card,
+              quality scorecard, quality score card, customer rating, customer ratings]
+  # Merged: the customer-quality area and the systems area both produced this
+  # row. Bare 'csr' stays out (corporate social responsibility) and so does
+  # "customer requirements", which is boilerplate in every customer-facing
+  # advert and - verified - cannot even reach "customer specific requirements".
+  Customer Specific Requirements (CSR):
+    category: Customer Interface
+    aliases: [customer specific requirements, customer-specific requirements,
+              customer specific requirement, customer specific standards,
+              oem specific requirements, oem requirements, customer csr, csr requirements,
+              customer specification, customer specifications, customer standards,
+              customer specific, customer-specific]
+  Customer Portals & Reporting:
+    category: Customer Interface
+    aliases: [customer quality portal, customer complaint portal, customer web portal,
+              oem portal, customer portal, customer portals, customer quality reporting,
+              quality reporting to customer, customer reporting, customer mis, quality mis]
+  Customer Escalation Management:
+    category: Customer Interface
+    aliases: [customer escalation, customer escalations, escalation to customer, oem escalation]
+  # Bare "customer satisfaction" is excluded: "ensure customer satisfaction at
+  # all times" is filler across sales, service and operations, and this row
+  # would have scored Critical on no evidence while real skills slid down the
+  # page. The index and survey forms are what is left carrying it.
+  Customer Satisfaction & Voice of Customer:
+    category: Customer Interface
+    aliases: [customer satisfaction index, customer satisfaction survey, voice of customer,
+              voice of the customer, customer perception, customer feedback, csi rating]
+  Resident Engineer at Customer Site:
+    category: Customer Interface
+    aliases: [resident engineer at customer, resident engineer at customer end,
+              deputation at customer, customer end support, customer site support,
+              customer plant support, customer end inspection, customer end sorting,
+              onsite at customer, on-site at customer]
+
+  # --- Supplier development and qualification: the "grow a vendor" half of the
+  # --- job, as distinct from auditing one. Every alias is supplier- or
+  # --- vendor-qualified, so nothing here can be carried by a generic advert.
+  Supplier Development:
+    category: Supplier Development
+    aliases: [supplier development engineer, supplier development, vendor development engineer,
+              vendor development, supplier upgradation, vendor upgradation,
+              supplier capability development, supplier capability building,
+              supplier improvement, vendor improvement, supplier handholding,
+              supplier process improvement, supplier technical assistance]
+  Supplier Qualification & Onboarding:
+    category: Supplier Development
+    aliases: [supplier qualification process, supplier qualification, vendor qualification,
+              supplier onboarding, vendor onboarding, supplier selection, vendor selection,
+              potential supplier assessment, initial supplier assessment, supplier assessment,
+              vendor assessment, supplier evaluation, new supplier approval, new vendor approval,
+              supplier approval, vendor approval, supplier registration]
+
+  # --- Second-party auditing. Bare "process audit", "system audit" and
+  # --- "product audit" are deliberately NOT here - in-plant audits are a duty
+  # --- in most manufacturing quality adverts, so they would drive this row to
+  # --- Critical off internal-audit demand and send the study plan to
+  # --- second-party auditing for adverts with no supplier scope at all. They
+  # --- live on the internal-audit row further down, which is where they belong.
+  Supplier Audit:
+    category: Supplier Audits
+    aliases: [supplier process audit, supplier system audit, supplier product audit,
+              supplier qms audit, supplier quality audit, supplier site audit,
+              on site supplier audit, on-site supplier audit, supplier audit, supplier audits,
+              vendor audit, vendor audits, second party audit, 2nd party audit]
+  # Merged from the supplier-audit and systems areas. Bare 'vda' is excluded
+  # here AND on the VDA standards row: in Indian adverts VDA is Variable
+  # Dearness Allowance and it fires on the salary line "Basic + DA / VDA + HRA",
+  # which is boilerplate on factory and contract postings. Every spelling below
+  # is 6.3-bearing, and the hyphen and space forms are genuinely different
+  # regexes - "vda 6.3" does not match "VDA-6.3".
+  VDA 6.3 Process Audit:
+    category: Supplier Audits
+    aliases: [vda 6.3 process audit, vda 6.3 audit, certified vda 6.3 auditor, vda 6.3 auditor,
+              vda6.3 auditor, vda 6.3 certified, process audit vda 6.3,
+              vda 6.3, vda6.3, vda-6.3, vda 63, vda 6 3]
+
+  # --- Supplier metrics. Note what the supplier PPM row does NOT carry: the
+  # --- generic ppm compounds (reduction, target, monitoring, parts per million)
+  # --- all live on the defect-PPM row under Quality Metrics, because when both
+  # --- rows held them one "PPM reduction" mention counted twice.
+  Supplier Scorecard & Vendor Rating:
+    category: Supplier Metrics
+    aliases: [supplier scorecard, supplier scorecards, supplier score card, vendor scorecard,
+              vendor scorecards, vendor score card, supplier rating system, vendor rating system,
+              supplier performance rating, vendor performance rating, supplier rating,
+              vendor rating, supplier ranking, supplier grading, supplier evaluation matrix]
+  Supplier PPM:
+    category: Supplier Metrics
+    aliases: [supplier rejection ppm, supplier ppm, vendor ppm, incoming ppm]
+  Supplier Performance Review:
+    category: Supplier Metrics
+    aliases: [supplier performance review, supplier performance reviews,
+              supplier performance monitoring, supplier performance management,
+              supplier review meeting, supplier business review, monthly supplier review,
+              quarterly supplier review, supplier performance, vendor performance review,
+              vendor review meeting, vendor performance]
+
+  # --- Problem solving: the largest group, and rightly so - it is what both
+  # --- halves of the job actually consist of. Three separate 8D rows came out
+  # --- of the audits and all three carried bare '8d', so they are merged here:
+  # --- distinct canonical names would have survived the load (yaml keeps the
+  # --- last duplicate key, and _merge_lexicon replaces on collision) but would
+  # --- all have fired on the same mention.
+  8D Problem Solving:
+    category: Problem Solving
+    aliases: [supplier 8d, global 8d, g8d, 8d problem solving, 8d methodology, 8d analysis,
+              8d report, 8d reports, 8d closure, 8d format, 8 d report, eight disciplines,
+              8 disciplines, 8ds, 8-d, 8d]
+  # Bare 'car' is excluded - it is the vehicle in every automotive advert. The
+  # long "corrective and preventive action" spellings are gone because
+  # \bpreventive action\b already matches inside all four of them.
+  "CAPA / Corrective & Preventive Action":
+    category: Problem Solving
+    aliases: [capa, corrective action, corrective actions, preventive action, preventive actions,
+              preventative action, preventative actions]
+  Quick Response Quality Control (QRQC):
+    category: Problem Solving
+    aliases: [quick response quality control, quick response quality check, qrqc]
+  # 'ica' is excluded: it fires on "independent component analysis (ICA)", the
+  # same collision that got 'pca' excluded, and an acronym gets no protection
+  # from tight_terms. The spelled-out containment and corrective forms carry it.
+  Interim & Permanent Countermeasures:
+    category: Problem Solving
+    aliases: [interim corrective action, permanent corrective action, interim containment action,
+              interim action, countermeasure, countermeasures, counter measure, counter measures,
+              counter-measure, counter-measures]
+  SCAR (Supplier Corrective Action Request):
+    category: Problem Solving
+    aliases: [supplier corrective action request, supplier corrective action report,
+              supplier corrective action, corrective action request, supplier capa,
+              scar closure, scar, scars]
+  # Re-declared from _common.yaml in manufacturing words, and narrowed: the
+  # common row owns "five whys", which would have double-fired with the 5-Why
+  # row below on every advert that spells it out. With nothing inherited, the
+  # 5-Why tool and general RCA stay one study item each.
+  Root Cause Analysis:
+    category: Problem Solving
+    aliases: [root cause analysis, root cause identification, root cause & corrective action,
+              rca report, rca, root cause]
+  5-Why:
+    category: Problem Solving
+    aliases: [5 why, 5-why, 5why, 5 whys, 5-whys, 5whys, five why, five whys, 5 why analysis,
+              5-why analysis, why why analysis, why-why analysis, whywhy analysis, 5w1h, 5w2h]
+  # "4m change" moved to the engineering-change row, where it is the same
+  # activity; bare '4m' and '6m' stay out.
+  "Fishbone / Ishikawa":
+    category: Problem Solving
+    aliases: [fishbone diagram, fishbone, fish bone, fish-bone, ishikawa diagram, ishikawa,
+              cause and effect diagram, "cause & effect diagram", cause-effect diagram,
+              cause and effect analysis, "cause & effect analysis", 4m analysis, 4m1e, 4m 1e,
+              6m analysis, man machine material method]
+  Pareto:
+    category: Problem Solving
+    aliases: [pareto analysis, pareto chart, pareto diagram, pareto, 80/20 rule, 80/20,
+              80 20 rule, vital few]
+  7QC Tools:
+    category: Problem Solving
+    aliases: [7 quality control tools, 7 basic quality tools, seven quality tools,
+              seven basic tools, basic quality tools, 7qc tools, 7 qc tools, seven qc tools,
+              qc tools, 7qc, 7 qc]
+  PDCA:
+    category: Problem Solving
+    aliases: [pdca cycle, pdca, plan do check act, plan-do-check-act, plan do check action,
+              deming cycle, deming wheel, pdsa, plan do study act]
+  DMAIC:
+    category: Problem Solving
+    aliases: [dmaic methodology, dmaic approach, dmaic, define measure analyse improve control,
+              define measure analyze improve control, dmadv]
+  # Bare 'a3' is excluded - it is a paper size. Every alias here is suffixed.
+  A3 Problem Solving:
+    category: Problem Solving
+    aliases: [a3 problem solving, a3 problem-solving, a3 report, a3 reports, a3 thinking,
+              a3 methodology, a3 analysis]
+  # "is not analysis" is excluded: it matches "the role is not analysis-heavy",
+  # and nobody writes the Kepner-Tregoe step without the leading "is/". The row
+  # no longer claims "comparative analysis" either - that phrase is supplier
+  # quotations and competitor decks, not this technique.
+  "Is / Is-Not Analysis":
+    category: Problem Solving
+    aliases: ["is/is-not analysis", "is/is not analysis", is is not analysis,
+              is-is not analysis, "is/isnot analysis", kepner tregoe, kepner-tregoe,
+              ok ng comparison, "ok/ng comparison", good part bad part comparison,
+              good vs bad part analysis]
+  Six Sigma:
+    category: Problem Solving
+    aliases: [six sigma green belt, six sigma black belt, master black belt, certified six sigma,
+              lean six sigma, six sigma, six-sigma, 6 sigma, 6sigma, green belt, black belt,
+              yellow belt, ssgb, ssbb, lssgb, lssbb, mbb]
+
+  # --- Launch and containment. Four rows out of two audited areas, de-overlapped
+  # --- so that one advert lights one of them: containment-the-activity here,
+  # --- controlled shipping with its level codes, GP12 as the Ford-named
+  # --- programme, and launch quality. Bare "containment" is kept knowingly - it
+  # --- is the core word and it also fires on "spill containment" in a combined
+  # --- QHSE advert, in which case swap it for the anchored forms listed above it.
+  Containment & Sorting:
+    category: Launch & Containment
+    aliases: [supplier containment, containment at supplier, containment action,
+              containment actions, containment plan, containment activity, supplier sorting,
+              sorting at supplier, sorting activity, sorting of parts, sorting and rework,
+              sorting inspection, stock sorting, hold and sort, re-sorting, segregation of parts,
+              quarantine, quarantining, blocked stock, 100% inspection, 100 % inspection,
+              100 percent inspection, firewall inspection, quality firewall,
+              containment, containement]
+  # 'cs-1' and 'cs-2' are dropped: not the Ford spelling, and they fire on the
+  # CS-1/CS-2 carbon-steel piping classes used in fabrication and plant QA
+  # adverts - an in-domain collision, the dangerous kind. 'cs2' is kept with one
+  # known collision, Photoshop CS2, which cannot clear the manufacturing gate.
+  Controlled Shipping (CS1 / CS2):
+    category: Launch & Containment
+    aliases: [controlled shipping level 1, controlled shipping level 2, controlled shipping,
+              controlled shipment, csl1, csl2, cs1, cs2, containment level 1,
+              containment level 2, level 1 containment, level 2 containment]
+  "GP12 / Early Production Containment":
+    category: Launch & Containment
+    aliases: [gp12 inspection, gp 12 inspection, early production containment plan,
+              early production containment, gp12, gp-12, gp 12]
+  Launch Quality & Safe Launch:
+    category: Launch & Containment
+    aliases: [safe launch plan, safe launch activity, safe launch monitoring, safe launch,
+              launch phase quality, launch quality, launch readiness, pre launch control,
+              pre-launch control]
+
+  # --- The numbers the job is judged on. Bare 'ppm' is excluded and this is the
+  # --- most consequential exclusion in the pack: it fires on "preventive
+  # --- maintenance (PPM) schedule", and planned maintenance is named as a duty
+  # --- inside plenty of genuine quality adverts - a false positive INSIDE the
+  # --- target pool, which is the kind that actually corrupts the counts. 'ppm
+  # --- level' and 'ppm levels' are out too: in plating, paint-shop and ETP
+  # --- adverts PPM is a concentration unit ("maintain ppm levels of the
+  # --- phosphating bath"), which is in-domain and so survives the gate.
+  Defective Parts Per Million (PPM):
+    category: Quality Metrics
+    aliases: [customer ppm, ppm reduction, ppm improvement, ppm target, ppm monitoring,
+              dppm, parts per million, part per million]
+  Rejection Analysis & Reduction:
+    category: Quality Metrics
+    aliases: [rejection analysis, rejection reduction, rejection control, rejection monitoring,
+              rejection ppm, rejection percentage, rejection data, rejection trend,
+              top rejection, in house rejection, in-house rejection, internal rejection,
+              customer rejection, customer rejections]
+  # "line reject" genuinely cannot match inside "line rejection", which is why
+  # both are listed. 'line stoppage' and 'line stop' are the first aliases to
+  # cut if this row starts collecting maintenance adverts.
+  Line Rejection & Line Stoppage:
+    category: Quality Metrics
+    aliases: [line rejection, line rejections, line reject, line stoppage, line stoppages,
+              line stop]
+  Cost of Poor Quality (CoPQ):
+    category: Quality Metrics
+    aliases: [cost of poor quality, cost of non quality, cost of nonconformance,
+              cost of quality, quality cost, quality costs, copq, coq]
+
+  # --- Field and warranty: the evidence that this person has seen parts fail in
+  # --- the customer's hands. Bare "warranty" is excluded - it matches "products
+  # --- under warranty" and every dealership after-sales advert - so all fifteen
+  # --- compounds below are load-bearing rather than decorative. The two
+  # --- misspellings are safe precisely because legal boilerplate spells the word
+  # --- correctly.
+  Warranty Analysis & Returns:
+    category: Field & Warranty
+    aliases: [warranty analysis, warranty return, warranty returns, warranty claim,
+              warranty claims, warranty failure, warranty failures, warranty data,
+              warranty cost, warranty reduction, warranty parts, warranty part analysis,
+              warranty ppm, warranty issues, warrenty, warrantee]
+  Field Failure Analysis:
+    category: Field & Warranty
+    aliases: [field failure, field failures, field return, field returns, field complaint,
+              field complaints, field quality, field performance, market complaint,
+              market complaints, field issue, field issues]
+  "0 km / In-Plant Failures":
+    category: Field & Warranty
+    aliases: [0km, 0 km, 0-km, zero km, zero kilometer, zero kilometre, in plant failure,
+              in-plant failure, inplant failure, in plant rejection, in-plant rejection,
+              inplant rejection]
+
+  # --- Nonconformance control: what happens to material that is already wrong.
+  # --- Bare 'ncr' is the worst trap in the whole vocabulary - it matches "Delhi
+  # --- NCR" and "NCR region" - and bare "deviation" is nearly as bad, because it
+  # --- matches inside "standard deviation". Both are absent; the anchored forms
+  # --- carry the rows.
+  Material Review Board (MRB):
+    category: Nonconformance Control
+    aliases: [material review board, material review committee, mrb]
+  # Merged: the customer-quality and supplier-quality areas produced
+  # near-identical deviation rows. Bare "concession" is out (it fires on "price
+  # concession offered" and on fee and tax boilerplate). Flagged: the bare
+  # deviation-request forms are also pharma internal deviation-management
+  # vocabulary, where the practice is regulatory rather than supplier-facing.
+  Deviation & Concession Requests:
+    category: Nonconformance Control
+    aliases: [supplier deviation, customer deviation, engineering deviation,
+              temporary deviation, deviation and concession, deviation request,
+              deviation approval, deviation note, deviation permit, material concession,
+              special concession, concession request, concession note, consession]
+  # Merged from the customer-quality and systems areas.
+  Nonconformance & NCR Closure:
+    category: Nonconformance Control
+    aliases: [audit non conformance, non conformance report, non-conformance report,
+              nonconforming material, non conforming material, non-conforming material,
+              nonconforming product, ncr closure, ncr closing, ncr response, ncr report,
+              ncmr, nc closure, nc closing, audit findings closure, corrective action closure,
+              non conformance, non-conformance, nonconformance, non conformity,
+              non-conformity, nonconformity]
+  # Bare 'eol' is excluded: it fires on "end of life (EOL)". Both bare spellings
+  # of "end of line" are kept, though they can describe a production station
+  # rather than a quality duty - worth a glance when this row scores high.
+  End-of-Line Quality Issues:
+    category: Nonconformance Control
+    aliases: [eol inspection, eol testing, eol rejection, eol failure, end of line, end-of-line]
+
+  # --- Change management. 'ecr' (efficient consumer response, electronic cash
+  # --- register) and bare "change note" (software release notes) are kept
+  # --- because both collisions are out-of-domain enough to be stopped by the
+  # --- gate; bare "change management" and 'eco' are not.
+  SREA (Supplier Request for Engineering Approval):
+    category: Change Management
+    aliases: [supplier request for engineering approval, engineering approval request,
+              supplier engineering approval, srea approval, srea submission, srea]
+  "Engineering Change Management (ECN / ECR)":
+    category: Change Management
+    aliases: [engineering change management, engineering change note, engineering change notice,
+              engineering change request, engineering change order, engineering change,
+              engineering changes, ecn implementation, change note, change point control,
+              4m change control, 4m change management, 4m change, design change management,
+              drawing revision control, ecn, ecr]
+
+  # --- Sourcing and risk. Bare "tier 2" and its spellings are excluded from
+  # --- every row in this pack: they fire on "willing to travel to tier 2
+  # --- cities", which is common Indian advert copy. Honest asymmetry - "tier 1
+  # --- cities" carries exactly the same risk and bare 'tier 1' survives on the
+  # --- OEM domain row below, so that is the first thing to cut if that row
+  # --- over-fires.
+  "Sub-supplier / Tier-2 Management":
+    category: Sourcing & Risk
+    aliases: [sub supplier, sub suppliers, sub-supplier, sub-suppliers, sub tier supplier,
+              sub tier, sub-tier, sub vendor, sub vendors, sub-vendor, sub-vendors,
+              tier 2 supplier, tier 2 suppliers, tier-2 supplier, tier-2 suppliers,
+              tier ii supplier, tier-2 vendor, tier 2 vendors, second tier supplier,
+              2nd tier supplier, tier 2 management]
+  # Both -s- and -z- spellings are needed, and 'localisation' also means
+  # software-UI localisation - tolerable only because the manufacturing gate
+  # runs first. This is the alias that breaks if that gate is ever loosened.
+  Localisation & New Part Development:
+    category: Sourcing & Risk
+    aliases: [localisation of parts, localization project, localisation, localization,
+              import substitution, indigenisation, indigenization, indigenous development,
+              local sourcing, new part development, new parts development,
+              new part introduction, npd, new product development, new model development,
+              part development]
+  # 'asl' is kept and 'avl' is not, on one principle: a three-letter acronym
+  # goes only when its collision lives inside manufacturing. American Sign
+  # Language cannot clear the gate; AVL is a major automotive engineering brand
+  # and would sail through it.
+  Approved Supplier List (ASL):
+    category: Sourcing & Risk
+    aliases: [approved supplier list, approved vendor list, approved source list,
+              asl updation, approved supplier, approved suppliers, supplier panel,
+              vendor panel, vendor base, supplier base management, asl]
+  Supplier Risk Assessment:
+    category: Sourcing & Risk
+    aliases: [supplier risk assessment, supplier risk management, supplier risk mitigation,
+              supply risk assessment, vendor risk assessment, supplier risk, vendor risk,
+              dual sourcing, dual source, second source development, alternate source development,
+              alternate vendor development, supplier business continuity]
+
+  # --- APQP and PPAP: the document set a supplier-quality engineer lives in.
+  # --- An advert writing "PPAP Level 3" fires both the PPAP row and the level
+  # --- row, which is intended - the submission level is its own interview topic
+  # --- - but it does mean the level row can never be read as demand independent
+  # --- of PPAP itself.
+  PPAP:
+    category: APQP / PPAP
+    aliases: [production part approval process, production part approval, ppap documentation,
+              ppap documents, ppap submission, ppap preparation, ppap approval, ppap file,
+              ppap package, ppap 18 elements, 18 elements of ppap, ppap sign off,
+              ppap sign-off, ppap, ppaps]
+  PPAP Submission Level:
+    category: APQP / PPAP
+    aliases: [ppap level 1, ppap level 2, ppap level 3, ppap level 4, ppap level 5,
+              ppap level-3, ppap level iii, ppap level 3 submission, level 3 ppap,
+              level 2 ppap, ppap submission level, submission level 3]
+  # Merged from the supplier-quality and systems areas. The "advance" (no d)
+  # misspelling is correct for an Indian scan.
+  APQP:
+    category: APQP / PPAP
+    aliases: [apqp timeline, apqp phases, apqp process, apqp documentation, 5 phases of apqp,
+              advanced product quality planning, advance product quality planning,
+              product quality planning, apqp]
+  Part Submission Warrant (PSW):
+    category: APQP / PPAP
+    aliases: [part submission warrant, parts submission warrant, psw approval, psw sign off,
+              psw sign-off, psw signoff, psw submission, psw]
+  # A narrow row, so the bare capacity aliases had to go: "capacity analysis",
+  # "capacity assessment" and "capacity study" all fire on industrial-
+  # engineering capacity planning, which is ubiquitous here, and on a narrow row
+  # one loose alias sets the count. Replaced with the actual AIAG deliverable
+  # names. Gage 'r&r' stays off this row.
+  Run at Rate & Capacity Verification:
+    category: APQP / PPAP
+    aliases: [run at rate study, run at rate audit, run at rate, run-at-rate, run @ rate,
+              run@rate, r@r, capacity verification, production capacity verification,
+              demonstrated capacity, capacity analysis report, supplier capacity assessment,
+              capacity audit]
+  # 'layout audit' and the dimensional-layout forms live here rather than on the
+  # supplier-audit or dimensional-inspection rows: a layout audit is a
+  # dimensional re-check on a frequency, not a second-party audit. Flagged:
+  # "annual validation" and "annual revalidation" are also pharma
+  # internal-validation vocabulary.
+  Layout Inspection & Annual Validation:
+    category: APQP / PPAP
+    aliases: [annual layout inspection, full layout inspection, periodic layout inspection,
+              layout inspection report, layout inspection, layout inspections, layout audit,
+              annual layout, annual validation, annual revalidation, annual re-validation,
+              annual requalification, annual re-qualification, product requalification,
+              dimensional layout, layout dimension report]
+
+  # --- The AIAG core tools. FMEA, DFMEA and PFMEA are three rows because
+  # --- \bfmea\b genuinely cannot reach "DFMEA" or "PFMEA", so an advert naming
+  # --- only the process FMEA should not be credited with the general topic.
+  Core Tools:
+    category: Core Tools
+    aliases: [quality core tools, automotive core tools, aiag core tools, 5 core tools,
+              five core tools, core tools training, core tools knowledge, core tools, core tool]
+  FMEA:
+    category: Core Tools
+    aliases: [failure mode and effects analysis, failure mode effects analysis,
+              failure mode and effect analysis, failure mode effect analysis, aiag vda fmea,
+              aiag-vda fmea, fmea handbook, fmea, fmeas]
+  DFMEA:
+    category: Core Tools
+    aliases: [design failure mode and effects analysis, design fmea preparation, design fmea,
+              dfmea preparation, dfmea, d-fmea]
+  PFMEA:
+    category: Core Tools
+    aliases: [process failure mode and effects analysis, process failure mode effect analysis,
+              process fmea, pfmea preparation, pfmea update, pfmea revision, pfmea, p-fmea]
+  Measurement System Analysis (MSA):
+    category: Core Tools
+    aliases: [measurement system analysis, measurement systems analysis, measurement system study,
+              msa study, msa studies, linearity and bias, bias and linearity, msa]
+  # Bare "process flow" is excluded - it matches "improve the process flow on
+  # the shop floor" and every business-process advert, and it subsumed the four
+  # legitimate diagram spellings while contributing nothing but prose hits.
+  Control Plan & Process Flow Diagram:
+    category: Core Tools
+    aliases: [process control plan, quality control plan, control plan preparation, control plan,
+              control plans, process flow diagram, process flow diagrams, process flow chart,
+              process flowchart, pfd]
+
+  # --- Statistics. These rows are where a quality engineer is actually tested,
+  # --- and the punctuation spellings are not padding: "cp, cpk" does not match
+  # --- "cp,cpk", and \bgage r&r\b matches neither "gauge r&r" nor "gage r & r".
+  # --- Bare 'r&r' is excluded because it matches "Roles & Responsibilities
+  # --- (R&R)", which is Indian advert boilerplate.
+  SPC & Control Charts:
+    category: Statistics
+    aliases: [statistical process control charts, statistical process control, spc chart,
+              spc charts, spc implementation, spc, control chart, control charts,
+              x bar r chart, xbar r chart, x bar r, x-bar r, i-mr chart, imr chart, i-mr,
+              individual moving range, p chart, np chart, c chart, u chart, attribute chart,
+              variable chart, run chart, trend chart]
+  "Process Capability (Cp / Cpk / Pp / Ppk)":
+    category: Statistics
+    aliases: [process capability study, process capability studies, process capability index,
+              process capability, capability study, capability studies, capability index,
+              capability analysis, process performance index, "cp/cpk/pp/ppk", cp cpk pp ppk,
+              "cp/cpk", cp cpk, cp-cpk, "cp & cpk", cp and cpk, "cp, cpk", "cp,cpk",
+              "pp/ppk", pp ppk, "pp & ppk", cpk, ppk, cmk]
+  "Gage R&R":
+    category: Statistics
+    aliases: ["gage r&r study", "gauge r&r study", "gage r&r", "gauge r&r", "gage r & r",
+              "gauge r & r", gage rr, gauge rr, gage r and r, gauge r and r,
+              gage repeatability and reproducibility, gauge repeatability and reproducibility,
+              repeatability and reproducibility, "repeatability & reproducibility",
+              "r&r study", "r & r study", grr]
+  Design of Experiments (DOE):
+    category: Statistics
+    aliases: [design of experiments, design of experiment, doe study, doe studies, doe trials,
+              doe analysis, taguchi method, taguchi, full factorial, fractional factorial,
+              factorial design, orthogonal array, response surface, anova]
+  # 'c=0' compiles as a normal word-boundary pattern because it starts and ends
+  # on a word character; it matches "C=0 sampling plan" and not "abc=0".
+  "Sampling Plans, AQL & C=0":
+    category: Statistics
+    aliases: [acceptance quality limit, acceptable quality level, aql level, aql,
+              single sampling plan, double sampling plan, sampling plan, sampling plans,
+              acceptance sampling, sampling inspection, lot acceptance, skip lot, skip-lot,
+              iso 2859-1, iso 2859, "ansi/asq z1.4", ansi z1.4, asq z1.4, mil-std-105,
+              mil std 105, mil-std-1916, "c=0 sampling plan", "c=0 sampling", "c=0",
+              zero acceptance number sampling, squeglia]
+
+  # --- Inspection. The supplier-quality and metrology areas both produced
+  # --- incoming-inspection and first-article rows, so each is merged here and
+  # --- the two overlapping category labels ("Incoming Quality" and
+  # --- "Inspection") are folded into this one - a category is a label on a
+  # --- study page, and two labels for one idea only split the reader's
+  # --- attention. 'goods inward' (stores duties) and 'gate inspection'
+  # --- (security gate, and the casting gate) are the loosest aliases here and
+  # --- the first two to cut.
+  Incoming Inspection (IQC):
+    category: Inspection
+    aliases: [incoming material inspection, incoming inspection report, incoming quality control,
+              incoming quality, incoming inspection, incoming inspections, receiving inspection,
+              inward inspection, goods inward inspection, goods inward quality, goods inward,
+              goods inwards, gate inspection, raw material inspection, bought out part inspection,
+              bought out parts inspection, bought out inspection, incoming rejection, iqc]
+  # The pre-dispatch spellings live on the final-inspection row below, so this
+  # row is what it says: inspection performed at the supplier's plant.
+  Source Inspection:
+    category: Inspection
+    aliases: [source inspection, source inspections, source inspector, at source inspection,
+              inspection at source, supplier end inspection, inspection at supplier end,
+              third party inspection, third-party inspection]
+  # Merged, and the merge cost bare 'fai'. One audit judged it safe against
+  # "fail" and "failure"; the other tested the case that actually occurs -
+  # markup-stripped Naukri text splits bolded and line-broken words, and \bfai\b
+  # hits "process fai lure". FAI is also Fixed Asset Investment. The lengthened
+  # forms keep every genuine advert, "first article" still catches "First
+  # Article Inspection (FAI)", and the fai synonym above keeps the gate working.
+  First Article Inspection (FAI):
+    category: Inspection
+    aliases: [first article inspection report, first article inspection, first article,
+              fai report, fai approval, fai submission, first piece inspection,
+              first piece approval, first off inspection, first-off inspection,
+              first sample inspection, first sample approval, initial sample inspection report,
+              initial sample inspection, isir, setup approval]
+  # Expect this row to co-fire with the FAI row: "inspection report" matches
+  # inside "initial sample inspection report". That second hit is true rather
+  # than false - an ISIR is a dimensional report.
+  Dimensional Inspection & Reports:
+    category: Inspection
+    aliases: [dimensional inspection, dimension inspection, dimensional report, dimension report,
+              dimensional measurement, dimensional check, dimensional validation,
+              inspection report, measurement report]
+  In-Process & Patrol Inspection:
+    category: Inspection
+    aliases: [in process inspection, in-process inspection, inprocess inspection,
+              in process quality, process inspection, ipqc, patrol inspection,
+              patrolling inspection, roving inspection, line patrol, shop floor inspection,
+              stage inspection]
+  Final & Pre-Dispatch Inspection (PDI):
+    category: Inspection
+    aliases: [final inspection, final quality check, final quality control, fqc,
+              outgoing inspection, outgoing quality control, oqc, pre dispatch inspection,
+              pre-dispatch inspection, predispatch inspection, pre despatch inspection,
+              pre-despatch inspection, pre delivery inspection, dispatch clearance,
+              dispatch inspection, pdi]
+  # Boundary and limit samples are the answer to "who decides whether this
+  # scratch is a reject", which is customer-quality work more than inspection.
+  Visual Inspection & Workmanship Standards:
+    category: Inspection
+    aliases: [visual inspection, visual quality, visual check, workmanship standard, workmanship,
+              boundary sample, limit sample, master sample, golden sample, appearance standard,
+              cosmetic defect]
+  # 'mrb' and 'material review board' are deliberately not repeated here - the
+  # MRB row above owns them, and both rows firing on one mention would have
+  # doubled that skill's count. Flagged: 'hold area' and 'bonded store' both
+  # have plain-warehouse readings, and 'bonded warehouse' is left out for its
+  # customs sense.
+  Bonded Store & Quarantine:
+    category: Inspection
+    aliases: [bonded store, bonded stores, bonded area, bond store, quarantine area,
+              quarantine store, quarantine material, hold area, red bin, red tag area,
+              reject area, rejection area, segregation area, non conforming material area,
+              non-conforming material area]
+
+  # --- Metrology. Every risky short form in this group is either omitted or
+  # --- lengthened rather than trusted: bare 'ra' (risk assessment), bare 'dft'
+  # --- (design for testability in any EMS advert), bare '17025' and every other
+  # --- bare five-digit standard number, which match requisition ids and plot
+  # --- numbers.
+  CMM (Coordinate Measuring Machine):
+    category: Metrology
+    aliases: [cmm machine, cmm programming, cmm programmer, cmm operator, cmm inspection,
+              coordinate measuring machine, coordinate measurement machine, pc-dmis, pc dmis,
+              pcdmis, calypso, zeiss cmm, mitutoyo cmm, dcc cmm, cmm]
+  # \bcmm\b does not match "CMMI", and the gate needle is safe too, because
+  # _skill_key() expands 'cmm' to "coordinate measuring machine" before the
+  # substring test. Residual, accepted: legacy "SEI CMM Level 5" does expand and
+  # clears the gate - rare, and the software title excludes catch most of those.
+  Vision Measuring Machine & Profile Projector:
+    category: Metrology
+    aliases: [vision measuring machine, vision measuring system, video measuring machine,
+              optical measuring machine, optical measurement, profile projector,
+              optical comparator, shadowgraph, toolmakers microscope, tool makers microscope, vmm]
+  # Bare 'vmm' is kept because Indian adverts write only the acronym, but it is
+  # a genuine two-meaning token (virtual machine manager) and tight_terms does
+  # nothing for it. If a virtualisation advert ever reaches the Top 10, read the
+  # matched alias before believing this row.
+  Surface Roughness & Contour Testing:
+    category: Metrology
+    aliases: [surface roughness tester, surface roughness, roughness tester, roughness testing,
+              profilometer, contour tester, contour measuring machine, contour measurement,
+              form tester, ra value, rz value, surface finish]
+  # Merged into one row because adverts list these as a set, not as separate
+  # skills. 'gage' is safe here only because every use is two words. The Indian
+  # misspelling 'guage' is not listed; it would be safe as a two-word alias
+  # (\bguage\b does not match "language") but must NEVER go in must_have_any,
+  # where the substring test would match "language".
+  Hand Measuring Instruments:
+    category: Metrology
+    aliases: [vernier caliper, vernier calliper, digital vernier, vernier, micrometer,
+              micrometre, outside micrometer, depth micrometer, vernier height gauge,
+              height gauge, height gage, bore gauge, bore gage, dial bore gauge, dial gauge,
+              dial indicator, dial test indicator, slip gauge, gauge block, air gauge,
+              measuring instruments]
+  "Plug, Snap & Go/No-Go Gauges":
+    category: Metrology
+    aliases: [taper plug gauge, plug gauge, plug gage, snap gauge, ring gauge, thread gauge,
+              "go/no-go", "go/no go", go no go, go-no-go, limit gauge, attribute gauge,
+              receiving gauge]
+  # A different claim from operating a CMM: can you specify and validate a gauge
+  # before a part runs. Worth its own row in supplier-quality adverts.
+  Checking Fixtures & Inspection Aids:
+    category: Metrology
+    aliases: [checking fixture, checking fixtures, checking aid, checking aids,
+              inspection fixture, holding fixture, gauge design, fixture design,
+              gauge development, poka yoke fixture]
+  # Bare "calibration" is also BPO vocabulary (calibration sessions on call
+  # scoring) and ML vocabulary (model calibration). It stays because it is too
+  # valuable to metrology recall to drop; the BPO side is handled by the
+  # "quality analyst" / "bpo" / "call centre" / "voice process" title excludes.
+  Calibration Management:
+    category: Metrology
+    aliases: [calibration schedule, calibration plan, calibration record, calibration frequency,
+              instrument calibration, gauge calibration, master calibration, recalibration,
+              calibration status, calibration due, calibration]
+  # A purely Indian credential, and a strong signal that the advert is a real
+  # manufacturing lab rather than a software posting.
+  NABL Accredited Lab:
+    category: Metrology
+    aliases: [nabl accredited, nabl accreditation, nabl lab, nabl approved, nabl, iso 17025,
+              "iso/iec 17025", accredited laboratory]
+  # Two meanings live in this one word: metrological traceability (gauge to
+  # national standard) and part or lot traceability (a recall-and-warranty
+  # skill, which is customer-quality gold). A third, software requirements
+  # traceability, is why you read the matched alias before claiming either.
+  Traceability:
+    category: Metrology
+    aliases: [measurement traceability, traceable to national standards, lot traceability,
+              batch traceability, part traceability, traceability, master gauge,
+              reference standard]
+
+  # --- Drawing and GD&T: the two rows that decide whether an interviewer
+  # --- believes the shop-floor experience. Bare "blueprint" is excluded - it is
+  # --- company boilerplate ("a blueprint for growth"); only the reading forms
+  # --- are listed.
+  Drawing Reading & Interpretation:
+    category: Drawing & Standards
+    aliases: [drawing reading, drawing interpretation, reading drawings, drawing study,
+              engineering drawing, part drawing, component drawing, technical drawing,
+              2d drawing, blueprint reading, blue print reading, drawing to part]
+  # Internal '&' is fine: 'gd&t' compiles to \bgd&t\b and matches "GD&T". All
+  # three tolerance-stack spellings are listed because the hyphenated one is the
+  # commonest and neither of the others can reach it.
+  "GD&T":
+    category: Drawing & Standards
+    aliases: ["gd&t", gdt, gd and t, geometric dimensioning and tolerancing,
+              geometric dimensioning, geometrical dimensioning, geometrical tolerance,
+              geometric tolerance, datum, true position, tolerance stack-up,
+              tolerance stack up, tolerance stackup, flatness, perpendicularity, runout]
+
+  # --- Lab and material testing. This group is the best evidence of which
+  # --- industry someone actually worked in - forging and casting adverts name
+  # --- hardness and microstructure, assembly-only adverts do not. 'etching' is
+  # --- excluded because laser etching is part marking and PCB etching is a
+  # --- different world entirely; bare 'ut' and 'pt' are excluded as ordinary
+  # --- two-letter tokens.
+  Material Testing:
+    category: Testing & Labs
+    aliases: [material test certificate, material testing, material test, tensile testing,
+              tensile test, tensile strength, elongation test, mtc, chemical composition,
+              spectro analysis, spectrometer, spectro, mechanical properties, impact test]
+  Hardness Testing:
+    category: Testing & Labs
+    aliases: [hardness testing, hardness test, hardness tester, hardness value, rockwell,
+              vickers, brinell, micro hardness, microhardness, micro vickers, hrc, hrb]
+  # 'dft' is deliberately not an alias - in an electronics advert it is design
+  # for testability, and tight_terms would not have saved it. "dry film
+  # thickness" is the expansion that carries the real adverts.
+  Salt Spray & Corrosion Testing:
+    category: Testing & Labs
+    aliases: [salt spray testing, salt spray test, salt spray, corrosion testing, corrosion test,
+              corrosion resistance, astm b117, humidity test, coating thickness,
+              plating thickness, dry film thickness, elcometer, adhesion test]
+  Metallurgical & Microstructure Testing:
+    category: Testing & Labs
+    aliases: [metallurgical testing, metallurgical, metallurgy, microstructure analysis,
+              microstructure, micro structure, metallography, case depth, grain size,
+              decarburization, decarburisation, inclusion rating]
+  NDT (Non-Destructive Testing):
+    category: Testing & Labs
+    aliases: [non destructive testing, non-destructive testing, ndt, dye penetrant,
+              penetrant testing, dpt, lpt, magnetic particle, mpi, ultrasonic testing,
+              radiography, eddy current, crack detection]
+
+  # --- Standards. Year-suffixed spellings are strictly redundant for matching
+  # --- (a colon or space after the number is a boundary) but are kept because
+  # --- they are plausible verbatim entries in a resume skills list, which is
+  # --- what _profile_status() looks up in skill_years.
+  IATF 16949:
+    category: Standards
+    aliases: ["iatf 16949:2016", iatf 16949 2016, iatf 16949, iatf16949, iatf-16949, iatf,
+              "iso/ts 16949", iso ts 16949, "iso/ts16949", ts 16949, ts16949, ts-16949, "16949"]
+  # Bare "16949" is kept because it is the only alias that catches "ISO 16949"
+  # and "IATF: 16949". It is the same five-digit-token risk that got 13485 and
+  # 17025 dropped above, so it is the first alias to cut if requisition-id noise
+  # ever shows up in this row.
+  ISO 9001:
+    category: Standards
+    aliases: ["iso 9001:2015", iso 9001-2015, iso 9001 2015, "iso 9001:2008", iso 9001 qms,
+              iso 9001, iso9001, iso-9001, "iso:9001"]
+  "ISO 14001 / ISO 45001":
+    category: Standards
+    aliases: ["iso 14001:2015", iso 14001, iso14001, iso-14001, "iso 45001:2018", iso 45001,
+              iso45001, iso-45001, ohsas 18001, ohsas18001, ohsas,
+              environmental management system, environment management system,
+              occupational health and safety management system, integrated management system]
+  # Bare 'ims' is excluded: it is a telecom term. "en 9100" is listed as well as
+  # "en9100" for the same reason "as 9100" is listed as well as "as9100" - a
+  # space is not nothing under a word-boundary match.
+  AS9100:
+    category: Standards
+    aliases: [as9100 rev d, as9100 revision d, as9100d, as 9100d, as9100, as 9100, as-9100,
+              en9100, en 9100, aerospace quality management system, nadcap]
+  ISO 13485:
+    category: Standards
+    aliases: ["iso 13485:2016", iso 13485, iso13485, iso-13485, 21 cfr 820, 21cfr820, mdsap,
+              medical device quality management system]
+  # Bare 'vda' is absent here for the salary-line reason given on the VDA 6.3
+  # row. Every alias below is number- or word-bearing. If 6.5 hits start
+  # appearing on the study page, split them into their own product-audit row
+  # rather than renaming this one.
+  VDA Standards:
+    category: Standards
+    aliases: [vda standards, vda standard, vda guidelines, vda qmc, vda 6.5 product audit,
+              vda 6.5, vda6.5, vda-6.5, vda 6 5, vda 6.1, vda6.1, vda 2, vda 5, vda mla,
+              vda maturity level assurance]
+
+  # --- The QMS paperwork. The plural "quality management systems" is genuinely
+  # --- needed: the trailing s removes the boundary the singular pattern needs.
+  QMS:
+    category: QMS
+    aliases: [quality management systems, quality management system, quality assurance system,
+              qms implementation, qms documentation, quality manual, quality system,
+              quality systems, qms]
+  Management Review:
+    category: QMS
+    aliases: [management review meeting, management review meetings, management review inputs,
+              management review, mrm presentation, mrm]
+  # This is _common.yaml's "Documentation" entry re-declared in manufacturing
+  # words: SOPs and work instructions rather than runbooks and knowledge bases.
+  # Bare "documentation" is left out - it is filler in every advert in every
+  # field, which is exactly the generic-lexicon failure this pack avoids.
+  Document Control & SOPs:
+    category: QMS
+    aliases: [document control, documentation control, "document & data control",
+              document and data control, document revision control, controlled documents,
+              standard operating procedure, standard operating procedures, sop preparation,
+              sop adherence, sop, sops, record retention, records retention,
+              retention of records, quality documentation, iso documentation,
+              work instruction, work instructions]
+  TQM:
+    category: QMS
+    aliases: [total quality management, total quality, tqm, company wide quality control, cwqc]
+
+  # --- Internal auditing, which is where the bare audit forms the supplier
+  # --- audit row could not keep belong. An advert saying "monthly process
+  # --- audits of the shop floor" should light this row and not second-party
+  # --- auditing.
+  "Internal / Lead Auditor":
+    category: Audit
+    aliases: [certified internal auditor, iatf internal auditor, internal quality audit,
+              internal auditor, internal audit, internal audits, certified lead auditor,
+              lead auditor certified, lead auditor certification, lead auditor, lead assessor,
+              qms auditor, trained auditor]
+  Process & Layered Process Audit:
+    category: Audit
+    aliases: [layered process audit, layered process audits, layered audit, lpa audit, lpa,
+              process audit, process audits, product audit, product audits, dock audit,
+              dock audits, line audit, system audit]
+
+  # --- Lean and continuous improvement. Bare "lean" is excluded (company blurb
+  # --- English); "lean management" survives as the weakest alias on its row and
+  # --- 'muri' does not survive at all - Muri is a real Indian manufacturing
+  # --- town and plant adverts name their site.
+  Kaizen & Continuous Improvement:
+    category: Lean & CI
+    aliases: [kaizen event, kaizen events, kaizen activities, kaizen projects, kaizen,
+              continuous improvement projects, continuous improvement, continual improvement,
+              improvement projects, quality circle, quality circles, qc circle, qc circles,
+              qcc, small group activity, small group activities, suggestion scheme]
+  TPM:
+    category: Lean & CI
+    aliases: [total productive maintenance, total productive management, tpm pillar,
+              tpm pillars, tpm, autonomous maintenance, jishu hozen]
+  Lean Manufacturing:
+    category: Lean & CI
+    aliases: [lean manufacturing, lean production, lean tools, lean principles, lean concepts,
+              lean implementation, lean management, lean six sigma, toyota production system,
+              muda, mura, waste elimination, 7 wastes, seven wastes, 8 wastes, takt time,
+              heijunka, smed, quick changeover, gemba walk, gemba]
+  Value Stream Mapping:
+    category: Lean & CI
+    aliases: [value stream mapping, value stream map, value stream analysis, vsm exercise, vsm]
+  5S:
+    category: Lean & CI
+    aliases: [5s audit, 5s audits, 5s implementation, 5s activities, 5s methodology,
+              5s housekeeping, 5s, 5-s, five s, seiri seiton seiso]
+  # "5 s" with a space is deliberately absent: it matches "3-5 S". \bandon\b was
+  # checked and does not match "abandon".
+  "Poka-Yoke / Error Proofing":
+    category: Lean & CI
+    aliases: [poka yoke verification, poka yoke validation, poka yoke, poka-yoke, pokayoke,
+              poke yoke, poka yoka, mistake proofing, mistake-proofing, error proofing verification,
+              error proofing, error-proofing, errorproofing, fool proofing, foolproofing,
+              red rabbit test, red rabbit check, red rabbit, red-rabbit, jidoka, autonomation,
+              andon, built in quality, built-in quality]
+  # Read-across is the row that separates someone who closed a complaint from
+  # someone who stopped it happening on the next part number.
+  "Lessons Learned / Read-Across":
+    category: Lean & CI
+    aliases: [lessons learned, lessons learnt, lesson learned, lesson learnt, read across,
+              read-across, readacross, horizontal deployment, yokoten]
+
+  # --- Communication and documentation, kept deliberately thin. This is where a
+  # --- generic lexicon does its damage: "communication" and "stakeholder
+  # --- management" come out of every advert ever written and would outrank PPAP
+  # --- on the study page. What survives is either a manufacturing artefact (a
+  # --- quality alert is a physical document on a line) or an anchored phrase.
+  Quality Alerts:
+    category: Communication & Documentation
+    aliases: [quality alert, quality alerts, alert sheet, alert card, quality bulletin,
+              quality notification]
+  # _common.yaml's "Stakeholder communication" re-declared: the manufacturing
+  # version of this skill is standing between production, purchase and the
+  # customer's plant. Bare "stakeholder" is not listed; "cross functional" is,
+  # and it is the loosest alias in the pack - treat a lone hit on it as no
+  # evidence at all.
+  Cross-Functional & Stakeholder Communication:
+    category: Communication & Documentation
+    aliases: [cross functional team, cross-functional team, cross functional coordination,
+              cross functional, cross-functional, interdepartmental coordination,
+              inter departmental coordination, stakeholder management, stakeholder communication,
+              customer facing, coordination with production]
+
+  # --- Statistical and ERP tooling. Minitab and Q-DAS stay separate rows
+  # --- because an advert naming qs-STAT is telling you it runs German OEM
+  # --- capability reporting, which Minitab does not imply.
+  Minitab:
+    category: Tooling
+    aliases: [minitab software, minitab, mini tab]
+  "Q-DAS / qs-STAT":
+    category: Tooling
+    aliases: [qdas software, q-das, qdas, q das, qs-stat, qs stat, qsstat]
+  # _common.yaml's ERP/CRM row re-declared as the modules a quality engineer
+  # actually touches. The software half of that row - Salesforce, ServiceNow,
+  # Workday - is not brought across.
+  "SAP / ERP":
+    category: Systems & Data
+    aliases: [sap qm, sap mm, sap pp, quality module in sap, sap, oracle erp, erp system,
+              erp, qad]
+  # Bare "excel" is excluded: "candidates who excel in a fast-paced
+  # environment" is real advert copy. The named forms cost nothing and carry the
+  # actual requirement, which is trend and rejection data rather than
+  # spreadsheets for their own sake.
+  Excel & Quality Data Analysis:
+    category: Systems & Data
+    aliases: [advanced excel, ms excel, microsoft excel, excel skills, excel knowledge,
+              pivot table, pivot tables, vlookup, v lookup, power bi, quality data analysis,
+              trend analysis]
+
+  # --- Industry domain. These rows answer "does this person know the industry",
+  # --- which is a different question from "can they do the work", so they are
+  # --- expected to co-fire with the skill rows above - a plating advert that
+  # --- measures thickness genuinely holds both. None of them belongs in
+  # --- must_have_any: "automotive" is AUTOSAR and embedded vocabulary too, and
+  # --- putting it in the gate would reopen the software flood the gate exists
+  # --- to stop.
+  Automotive & Auto Components:
+    category: Industry Domain
+    aliases: [automotive, auto component, auto components, automobile, auto ancillary,
+              autoparts, auto parts, vehicle manufacturer, two wheeler, two-wheeler, 2 wheeler,
+              2-wheeler, four wheeler, four-wheeler, passenger vehicle, commercial vehicle,
+              powertrain, chassis]
+  # Bare 'tier 2' and its spellings are gone - "willing to travel to tier 2
+  # cities" - and the sub-supplier forms live on the sourcing row above rather
+  # than being repeated here.
+  OEM & Tier Supply Chain:
+    category: Industry Domain
+    aliases: [original equipment manufacturer, oem customer, oem, oems, tier 1 supplier,
+              tier 1, tier1, tier-1, tier i]
+  # Bare 'ev' is safe on word boundaries; its only real collision is finance
+  # "EV/EBITDA", which will not reach this scan. EV is the growth domain in
+  # Indian auto-component hiring, so a Gap here is a study item, not noise.
+  "EV / Electric Vehicle":
+    category: Industry Domain
+    aliases: [electric vehicle, electric vehicles, ev components, e-mobility, e mobility,
+              emobility, battery pack, battery assembly, traction motor, ev]
+  Aerospace:
+    category: Industry Domain
+    aliases: [aerospace, aero engine, aeronautical, as9100, as 9100, nadcap, aviation,
+              aircraft components, defence manufacturing]
+  # Bare 'mdr' is not listed - in an IT advert it is managed detection and
+  # response - and bare standard numbers are not listed either.
+  Medical Devices:
+    category: Industry Domain
+    aliases: [medical device, medical devices, medical device regulation, eu mdr, iso 13485,
+              medical equipment, surgical instruments, implant, class ii device]
+  # Bare "appliances" is left out: in IT prose it means firewall, virtual and
+  # hardware appliances. 'fmcd' is a genuinely Indian acronym and stays.
+  White Goods & Consumer Durables:
+    category: Industry Domain
+    aliases: [white goods, consumer durable, consumer durables, home appliance, home appliances,
+              kitchen appliances, fmcd]
+  # Bare 'pcb' and bare 'ems' are NOT aliases, and this is the most
+  # consequential pair of exclusions in the domain group: in Indian
+  # manufacturing prose PCB is the State Pollution Control Board ("liaison with
+  # State PCB for consent to operate", which appears in combined Quality/EHS
+  # adverts constantly) and EMS is the Environmental Management System of
+  # "QMS / EMS / OHSAS 18001". 'smt' is kept with one known collision: the
+  # Indian honorific "Smt." matches it, so a PSU advert naming a contact person
+  # can light this row.
+  "Electronics, PCB & SMT":
+    category: Industry Domain
+    aliases: [printed circuit board, pcb assembly, pcb inspection, pcba, surface mount, smt,
+              electronics manufacturing, electronic manufacturing services, reflow,
+              wave soldering, soldering, ipc-a-610, ipc a 610, conformal coating,
+              electronic components]
+  # Bare "harness" is the verb in advert boilerplate ("harness the power of
+  # automation"), so only the qualified forms are listed. 'connector' was left
+  # out on purpose - too generic across industries.
+  Wiring Harness:
+    category: Industry Domain
+    aliases: [wiring harness, wire harness, harness assembly, cable assembly, crimping,
+              crimp quality, terminal crimping, continuity test]
+  Capital Equipment & Machine Building:
+    category: Industry Domain
+    aliases: [capital equipment, capital goods, machine building, special purpose machine, spm,
+              machine tool, machine tools, heavy engineering, heavy fabrication, project quality]
+
+  # --- Process domain: which shop this person stood in. Every bare word here
+  # --- was tested against ordinary advert English, and five of them failed and
+  # --- are gone: 'pressing' ("a pressing need"), 'boring' ("not a boring desk
+  # --- job"), 'upsetting' ("without upsetting the delivery schedule"),
+  # --- 'shrinkage' (a BPO workforce metric, from exactly the adverts the title
+  # --- excludes exist to stop) and 'flash' (flash memory, and it also matched
+  # --- inside the forging row's own "flash line", so every forging advert was
+  # --- lighting up the plastics row).
+  Sheet Metal & Stamping (Press Shop):
+    category: Process Domain
+    aliases: [sheet metal, sheetmetal, stamping, press shop, press parts, press tool,
+              progressive die, blanking, piercing, deep drawing, tool and die, burr, spring back]
+  # 'turning' is kept although "turning ideas into reality" exists, because it
+  # is part of the "turning, milling, grinding" list that identifies a machining
+  # advert and the recall loss would be large. The asymmetry with 'boring' is
+  # deliberate, not an oversight.
+  Machining & CNC:
+    category: Process Domain
+    aliases: [cnc machining, cnc turning, cnc, machining, machined components, vmc, hmc,
+              turning, milling, grinding, honing, lathe, machine shop, tool wear]
+  Casting & Foundry:
+    category: Process Domain
+    aliases: [die casting, sand casting, investment casting, gravity die casting,
+              pressure die casting, aluminium casting, casting defect, casting, castings,
+              foundry, melt shop, melting shop, porosity]
+  Forging:
+    category: Process Domain
+    aliases: [hot forging, cold forging, warm forging, die forging, forging shop, forging,
+              forgings, forged components, flash line]
+  # \bmold\b does not match "molding", so all four spellings of the same word
+  # are needed; mold -> mould and molding -> moulding are folded by synonym for
+  # scoring.
+  Plastics & Rubber Moulding:
+    category: Process Domain
+    aliases: [injection moulding, injection molding, plastic injection, blow moulding,
+              blow molding, moulding, molding, mould, mold, plastic parts, plastics,
+              thermoplastic, rubber moulding, rubber molding, rubber, elastomer, epdm,
+              vulcanization, vulcanisation, o-ring, short shot]
+  # 'wps' and 'peel test' are what separate a genuine weld-quality advert from
+  # one that merely lists welding as a process on site.
+  Welding & Weld Quality:
+    category: Process Domain
+    aliases: [weld quality, weld inspection, spot welding, projection welding, mig welding,
+              tig welding, arc welding, co2 welding, welding, wps, welder qualification,
+              weld defect, weld strength, peel test]
+  Painting, Plating & Surface Treatment:
+    category: Process Domain
+    aliases: [paint shop, paint quality, painting, powder coating, surface treatment, e-coat,
+              ed coating, ced coating, phosphating, electroplating, zinc plating, nickel plating,
+              chrome plating, plating, galvanizing, galvanising, anodizing, anodising,
+              passivation, film thickness]
+  # CQI-9 is the AIAG heat-treat assessment and a strong supplier-audit signal.
+  Heat Treatment:
+    category: Process Domain
+    aliases: [heat treatment, heat treat, case hardening, induction hardening, hardening,
+              carburizing, carburising, tempering, annealing, normalizing, normalising,
+              quenching, cqi-9, cqi 9]
+  # "line rejection" and "end of line testing" are what make this row mean
+  # assembly QUALITY rather than assembly production. 'poka yoke' and 'takt
+  # time' are not repeated here - the lean rows above own them.
+  Assembly Line Quality:
+    category: Process Domain
+    aliases: [assembly line, assembly shop, final assembly, sub assembly, sub-assembly,
+              line quality, line rejection, torque tightening, leak testing, leak test,
+              end of line testing]

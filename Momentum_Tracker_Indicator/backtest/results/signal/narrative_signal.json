@@ -1,0 +1,77 @@
+{
+ "decision": "C. No measurable edge in the available data",
+ "decision_text": [
+  "The raw Supertrend flip on M3 gold reaches +X before -X between 43.5% and 50.0% of the time before costs, for every X from 0.25 to 2 ATR. Its best and worst excursions are equal at every horizon from 1 to 50 bars. That is the signature of a signal with no directional information. Everything downstream (stops, trailing, filters) is arithmetic on a coin flip minus a spread that is a quarter of the M3 ATR.",
+  "No regime, location, timing, strength bucket or higher-timeframe context produces a subset with positive net expectancy in the development period, let alone in validation and out of sample. The same test on M1, M5 and M15 flips gives the same answer. The stop condition in your brief applies: the tested indicator does not demonstrate an edge for automated trading under the available data."
+ ],
+ "q1": "NO",
+ "q1_text": [
+  "The cleanest test is the first table: with stop = target = X, a signal with directional information hits the target more than half the time gross. This one hits 49.3% at 1 ATR, 50.0% at 2 ATR, 43.5% at 0.25 ATR (mean reversion right after the flip, which is the re-flip loss from phase 1). Gross expectancy is between -0.13R and 0.00R. After XM's spread the hit rate falls to 35% at 1 ATR and the expectancy to -0.31R, because the spread is 0.25 ATR on the median M3 signal.",
+  "The excursion table says the same thing without any stop or target: the median best move and the median worst move after a signal are identical at 1, 3, 5, 10, 20, 30 and 50 bars, and MFE exceeds MAE in 48% to 50% of signals. The classification table shows the consequence: with a 1 ATR stop, 35% of signals are winners of some size and 54% are losers of some size, and that ratio is set by the spread offset, not by the signal.",
+  "Year by year the net expectancy improves from -0.47R (2023) to -0.13R (2026) while the gross stays at zero: the improvement is entirely the spread shrinking from 0.42 to 0.13 ATR as gold's volatility rose. The signal did not get better; the cost got smaller. The cross-timeframe table shows M1 slightly below a coin flip gross (48.5%), M5 and M15 at 50%."
+ ],
+ "q2": "It works nowhere. The tables below are the honest version of 'what conditions': every group is negative net in every period, and gross is within a few hundredths of an R of zero in every group. The groups that lose least are the ones where the spread is smallest relative to the move (high ATR, the London/New York overlap, low cost-to-reward). Those are cost gradients, not edges: their gross expectancy is as flat as everyone else's.",
+ "ev_contrev": "Continuation and reversal are indistinguishable (net -0.31R versus -0.29R, gross -0.02R versus -0.01R). The indicator does not work better for one of them; the phase-1 result that alignment helped in 2025 to 2026 was regime, and here even that is gone once management is removed.",
+ "ev_location": "Signals after a large candle are the worst (-0.35R net, -0.05R gross), which is the overextension effect and the only location result that replicates. Breakouts, swing pivots, EMA proximity and range middles are all within noise of each other. 'Range fade' has seven signals in five years.",
+ "ev_regime": "Low-volatility regimes lose most (-0.46R to -0.50R) and high-volatility regimes least (-0.18R to -0.20R), with gross flat across all nine cells. Read it as: the spread is 40% of a low-vol ATR and 15% of a high-vol ATR. Trend strength (ADX) makes no difference at all.",
+ "q3": [
+  "<strong>Immediately after the flip.</strong> The 0.25 ATR test hits 43.5% gross: the first quarter-ATR after a flip is more likely to go against the signal than with it. This is the mechanical source of the re-flip losses.",
+  "<strong>Low volatility.</strong> ATR below 0.8x its 30-day median: -0.48R net, hit rate 25% to 27%, because the fixed spread is a large fraction of the move.",
+  "<strong>After a large candle</strong> (range above 2 ATR): -0.35R net and the only group with a clearly negative gross (-0.054R).",
+  "<strong>Late session and Asia</strong> (00:00 to 10:00 server): -0.35R to -0.43R, the thinnest, most expensive hours.",
+  "<strong>After a losing signal.</strong> -0.33R versus -0.26R after a winning one; a small, consistent difference, and both negative.",
+  "<strong>With the EA's own filters.</strong> Signals that pass the volume-ratio, box and ADX filters: -0.306R. Signals that fail them: -0.308R. The filters carry no information about the outcome."
+ ],
+ "q4": "Nothing distinguishes good signals in a way that can be known at entry. 22 of 37 features keep the same best-versus-worst ordering across DEV, VAL and OOS, which sounds like evidence until you read the values: the best bucket of every one of them is negative in every period. The three strongest separations (cost-to-reward, ATR ratio, session) are three views of the same fact, the spread as a share of the move. The only rows with a positive best bucket are the outcome class itself (a check that the machinery finds real structure when it exists) and a one-signal category.",
+ "q5": [
+  "No entry timing rescues the signal. Waiting for a confirmation bar (taken 48% of the time) gives -0.308R, the same as entering immediately. Delaying one to five bars moves the number from -0.308R to between -0.285R and -0.301R, inside noise and consistent with the first quarter-ATR being adverse. Entering on a 0.5 ATR pullback is worse (-0.334R), because 59% of signals pull back that far and then fail; only 16% pull back and continue. Entering on the break of the signal bar's high or low is -0.306R.",
+  "There is therefore no entry model to write. The deterministic rule the data supports is the null one: do not enter on this signal."
+ ],
+ "q6": "With the entry fixed, every stop/target pair in the grid is negative net, from -0.15R (2 ATR stop, 2 ATR target) to -0.80R (0.25 ATR stop). Wider stops lose less per R only because the spread is a smaller share of a bigger R; in dollars they lose about the same. The gross grid is flat within 0.06R of zero, with the lottery shape (0.25 ATR stop, 2 ATR target) at +0.055R gross and -0.74R net. The phase-1 conclusion stands: the exit is not where the money is lost, and it cannot be where it is found.",
+ "q7": [
+  "The cost model used throughout is XM's median spread by year (32 to 51 points), zero commission on the Standard account, and no slippage; slippage would only make every number worse. Expressed in the unit that matters, the spread is 0.25 ATR on the median M3 signal: 0.49 ATR in 2021, 0.13 ATR in 2026.",
+  "Break-even arithmetic for the 1 ATR / 1 ATR shape: the hit rate needed is (1 + 0.25) / 2 = 62.5%; the signal delivers 49.3% gross. For 1 ATR / 2 ATR: 41.7% needed, 33.4% delivered. To reach +0.25R of expectancy the signal would need 75% and 50% respectively. The best move within 20 bars exceeds five spreads for 62% of signals and twenty spreads for 19%, so the market moves enough; the signal simply does not know which way."
+ ],
+ "q8": [
+  "No manual trade log was available, so the claim that the strategy works manually remains unmeasured. What the bot cannot see is, by elimination, not in the price context measured here: not the trend, not the volatility state, not the location, not the timing, not the indicator's own internal readings (penetration of the line, bar body, close location, previous leg length and extent all rank as noise).",
+  "If the manual edge is real, it lives in something outside this dataset: which signals you skip, what you read on other instruments or the news, or exits you take by eye. The questionnaire below is written to extract exactly that. Its answers become testable rules only with a trade log: timestamp, side, entry, stop, exit, and the reason, for at least 100 manual trades."
+ ],
+ "questionnaire": [
+  "<strong>Context 1.</strong> Before you look at the Tracker, what is the first thing you check on the chart, and on which timeframe? (Name the object: a level, a moving average, the day's range, the previous day's high/low, DXY, news.)",
+  "<strong>Context 2.</strong> How do you decide the market is trending right now? Is it a slope you see, a sequence of highs and lows, or the purple line's shape? Over how many bars?",
+  "<strong>Context 3.</strong> Which higher timeframe do you look at, and do you trade with it or against it? The data says both worked in different years; which one do you actually do, and when do you switch?",
+  "<strong>Context 4.</strong> What is the specific thing that makes you close the platform and not trade for the next hour?",
+  "<strong>Entry 5.</strong> When the line flips, do you click immediately, on that bar's close, or on the next bar? If you wait, what has to be true on the next bar?",
+  "<strong>Entry 6.</strong> Do you wait for price to come back toward the line before entering? How far, and for how long, before you give up on the signal?",
+  "<strong>Entry 7.</strong> What confirmation do you need beyond the flip: a candle colour, a break of the flip bar's high, the M1 table turning green, volume?",
+  "<strong>Entry 8.</strong> Write down the last twenty flips you did NOT take and the reason for each. Those reasons are the only filter list that matters.",
+  "<strong>Location 9.</strong> Do you draw support and resistance? From which timeframe, and how close to a level does a flip have to be for you to take it or refuse it?",
+  "<strong>Location 10.</strong> Do you avoid flips that come after a very large candle? How large is 'very large' to you?",
+  "<strong>Location 11.</strong> Do you avoid buying near the recent high or selling near the recent low? What is 'near' and what is 'recent'?",
+  "<strong>Risk 12.</strong> Where exactly do you put the stop by hand: the purple line, the last swing, a round number, a fixed dollar amount? Does it differ between a fresh trend and a re-flip?",
+  "<strong>Risk 13.</strong> Do you ever skip a signal because the stop would be too far? At what distance?",
+  "<strong>Risk 14.</strong> How do you choose the lot size? Fixed, or from the stop distance and the account?",
+  "<strong>Exit 15.</strong> When do you take profit by hand: a fixed R, a level, the table turning, a candle pattern, a time of day?",
+  "<strong>Exit 16.</strong> When do you move the stop, and to what?",
+  "<strong>Exit 17.</strong> When the line flips against an open trade, do you close, hold, or add? Always, or only under some condition?",
+  "<strong>Exit 18.</strong> What makes you decide the trade idea is wrong before the stop is hit?",
+  "<strong>Discretion 19.</strong> Describe the chart picture in which you feel most confident taking a flip, in terms of what is drawn on the chart (not 'strong momentum').",
+  "<strong>Discretion 20.</strong> Describe the picture that keeps you out even though the Tracker says LONG or SHORT.",
+  "<strong>Discretion 21.</strong> Between two flips that look the same on the Tracker, one good and one bad in your eyes, what is the difference?",
+  "<strong>Discretion 22.</strong> Do you keep a record? If not, start today: timestamp, side, entry, stop, exit, one-line reason for the entry and for the exit, and a screenshot. One hundred of these make the manual edge measurable."
+ ],
+ "q9": [
+  "The GOOD_SIGNAL search was restricted, in advance, to feature buckets whose net 1x1 expectancy is positive in DEV and in VAL with adequate sample sizes. Only the outcome-class labels pass, which is the check that the procedure detects real structure: it does, and there is none in anything observable at entry. Their conjunction is empty. The seven definitions stated in advance from phase 1 and the manual-trading hypotheses are negative in every period and in every one of the six years.",
+  "There is no out-of-sample result to report for a discovered edge because no edge was discovered in-sample. That is the correct outcome of a study designed not to overfit."
+ ],
+ "q10": [
+  "C. The signal's gross directional accuracy is a coin flip on every timeframe, every regime, every location and every timing; the spread is 13% to 49% of the traded move; no subset with stable positive expectancy exists after costs. Continuing development of this indicator as an automated system is not supported by the data.",
+  "What would change the decision: a manual trade log showing positive expectancy on trades that the raw signal dataset classifies as coin flips, which would locate the edge in something not yet measured; or a different signal. Not another filter on this one."
+ ],
+ "method": [
+  "Signals: every Supertrend(1.5, 10) flip on M3 from Sep 2021 to Sep 2026 (26,963), Dukascopy one-minute bars shifted to XM server time, 39 of 61 months present.",
+  "Entry: the next one-minute open after the signal close, plus the spread for buys. Path: the following 600 one-minute bars (10 hours), bid highs/lows for buys, ask for sells. First-passage times to each level in ATR(10) of the signal timeframe; a level hit in the same bar as the opposite level counts as the stop. Signals whose path ends in neither are valued at the 10-hour close.",
+  "Periods: DEV Sep 2021 to Dec 2023, VAL 2024, OOS Jan 2025 to Sep 2026. Feature buckets are quintiles of each feature's own distribution, not chosen thresholds. Stability = the best-versus-worst bucket order holding in all three periods, and the number of positive calendar years.",
+  "Limits: no economic calendar; no manual trade log; per-year median spread rather than per-tick; one-minute rather than tick paths, which flatters every result slightly; the 'strength' variables are the indicator's own internals (penetration of the line, bar body and close location, previous leg length and extent, ATR and ADX slopes), which is all a Supertrend has."
+ ]
+}

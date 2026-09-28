@@ -1,0 +1,9103 @@
+{
+ "characteristics": [
+  {
+   "instrument": "NIFTY 50",
+   "median daily range %": 0.86,
+   "median ATR14 %": 1.04,
+   "median |gap| %": 0.265,
+   "days |gap| > 0.5%": 23.2,
+   "days |gap| > 1%": 6.1,
+   "first 15 min share of day range %": 40.9,
+   "daily return autocorr lag1": -0.028,
+   "weekly return autocorr": 0.791,
+   "variance ratio 5d": 0.98,
+   "days breaking prev high %": 52.9,
+   "of which close above (follow-through) %": 57.3,
+   "days breaking prev low %": 47.4,
+   "of which close below %": 56.1,
+   "trend regime days: bull/side/bear": "601/245/328",
+   "vol regime days: low/normal/high/extreme": "363/566/192/53"
+  },
+  {
+   "instrument": "NIFTY BANK",
+   "median daily range %": 1.1,
+   "median ATR14 %": 1.31,
+   "median |gap| %": 0.298,
+   "days |gap| > 0.5%": 28.6,
+   "days |gap| > 1%": 9.1,
+   "first 15 min share of day range %": 43.7,
+   "daily return autocorr lag1": -0.042,
+   "weekly return autocorr": 0.789,
+   "variance ratio 5d": 0.99,
+   "days breaking prev high %": 53.6,
+   "of which close above (follow-through) %": 56.1,
+   "days breaking prev low %": 47.8,
+   "of which close below %": 51.5,
+   "trend regime days: bull/side/bear": "625/236/313",
+   "vol regime days: low/normal/high/extreme": "441/562/138/33"
+  }
+ ],
+ "nifty50|ASIS|5m": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 635,
+    "net_pts": -3569.54,
+    "exp_pts": -5.62,
+    "win_pct": 22.05,
+    "pf": 0.72,
+    "exp_r": -0.15
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 1205,
+    "net_pts": -6150.19,
+    "exp_pts": -5.1,
+    "win_pct": 23.82,
+    "pf": 0.71,
+    "exp_r": -0.19
+   },
+   {
+    "trend": "sideways",
+    "trades": 757,
+    "net_pts": -4041.29,
+    "exp_pts": -5.34,
+    "win_pct": 23.51,
+    "pf": 0.72,
+    "exp_r": -0.16
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 855,
+    "net_pts": -2903.83,
+    "exp_pts": -3.4,
+    "win_pct": 24.91,
+    "pf": 0.84,
+    "exp_r": -0.07
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 234,
+    "net_pts": -828.49,
+    "exp_pts": -3.54,
+    "win_pct": 20.09,
+    "pf": 0.86,
+    "exp_r": -0.1
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 1146,
+    "net_pts": -5191.29,
+    "exp_pts": -4.53,
+    "win_pct": 23.82,
+    "pf": 0.74,
+    "exp_r": -0.14
+   },
+   {
+    "vol": "normal",
+    "trades": 1734,
+    "net_pts": -10323.0,
+    "exp_pts": -5.95,
+    "win_pct": 24.11,
+    "pf": 0.7,
+    "exp_r": -0.18
+   },
+   {
+    "vol": "high",
+    "trades": 610,
+    "net_pts": -717.9,
+    "exp_pts": -1.18,
+    "win_pct": 22.46,
+    "pf": 0.94,
+    "exp_r": -0.05
+   },
+   {
+    "vol": "extreme",
+    "trades": 196,
+    "net_pts": -1261.16,
+    "exp_pts": -6.43,
+    "win_pct": 18.88,
+    "pf": 0.74,
+    "exp_r": -0.14
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 382,
+    "net_pts": -2492.23,
+    "exp_pts": -6.52,
+    "win_pct": 29.06,
+    "pf": 0.71,
+    "exp_r": -0.1
+   },
+   {
+    "session": "morning",
+    "trades": 920,
+    "net_pts": -3992.77,
+    "exp_pts": -4.34,
+    "win_pct": 26.52,
+    "pf": 0.75,
+    "exp_r": -0.1
+   },
+   {
+    "session": "midday",
+    "trades": 1130,
+    "net_pts": -8551.86,
+    "exp_pts": -7.57,
+    "win_pct": 20.97,
+    "pf": 0.54,
+    "exp_r": -0.25
+   },
+   {
+    "session": "afternoon",
+    "trades": 940,
+    "net_pts": -1401.03,
+    "exp_pts": -1.49,
+    "win_pct": 18.62,
+    "pf": 0.92,
+    "exp_r": -0.11
+   },
+   {
+    "session": "closing",
+    "trades": 314,
+    "net_pts": -1055.46,
+    "exp_pts": -3.36,
+    "win_pct": 31.21,
+    "pf": 0.9,
+    "exp_r": -0.0
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 200,
+    "net_pts": -619.41,
+    "exp_pts": -3.1,
+    "win_pct": 24.5,
+    "pf": 0.88,
+    "exp_r": -0.04
+   },
+   {
+    "gap": "large up",
+    "trades": 180,
+    "net_pts": 519.79,
+    "exp_pts": 2.89,
+    "win_pct": 27.22,
+    "pf": 1.13,
+    "exp_r": 0.14
+   },
+   {
+    "gap": "medium down",
+    "trades": 501,
+    "net_pts": -1782.44,
+    "exp_pts": -3.56,
+    "win_pct": 22.75,
+    "pf": 0.82,
+    "exp_r": -0.14
+   },
+   {
+    "gap": "medium up",
+    "trades": 981,
+    "net_pts": -5491.06,
+    "exp_pts": -5.6,
+    "win_pct": 22.73,
+    "pf": 0.71,
+    "exp_r": -0.16
+   },
+   {
+    "gap": "small down",
+    "trades": 746,
+    "net_pts": -4819.01,
+    "exp_pts": -6.46,
+    "win_pct": 23.59,
+    "pf": 0.67,
+    "exp_r": -0.18
+   },
+   {
+    "gap": "small up",
+    "trades": 1078,
+    "net_pts": -5301.21,
+    "exp_pts": -4.92,
+    "win_pct": 23.56,
+    "pf": 0.74,
+    "exp_r": -0.17
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 697,
+    "net_pts": -6656.74,
+    "exp_pts": -9.55,
+    "win_pct": 23.1,
+    "pf": 0.53,
+    "exp_r": -0.2
+   },
+   {
+    "weekday": "Tue",
+    "trades": 775,
+    "net_pts": -4691.67,
+    "exp_pts": -6.05,
+    "win_pct": 20.77,
+    "pf": 0.69,
+    "exp_r": -0.21
+   },
+   {
+    "weekday": "Wed",
+    "trades": 719,
+    "net_pts": -3326.56,
+    "exp_pts": -4.63,
+    "win_pct": 23.92,
+    "pf": 0.75,
+    "exp_r": -0.11
+   },
+   {
+    "weekday": "Thu",
+    "trades": 732,
+    "net_pts": -4420.41,
+    "exp_pts": -6.04,
+    "win_pct": 23.22,
+    "pf": 0.71,
+    "exp_r": -0.2
+   },
+   {
+    "weekday": "Fri",
+    "trades": 749,
+    "net_pts": 1913.83,
+    "exp_pts": 2.56,
+    "win_pct": 26.57,
+    "pf": 1.14,
+    "exp_r": 0.01
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 1660,
+    "net_pts": -8573.91,
+    "exp_pts": -5.17,
+    "win_pct": 23.43,
+    "pf": 0.73,
+    "exp_r": -0.15
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 1080,
+    "net_pts": -5731.87,
+    "exp_pts": -5.31,
+    "win_pct": 22.69,
+    "pf": 0.72,
+    "exp_r": -0.17
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 946,
+    "net_pts": -3187.56,
+    "exp_pts": -3.37,
+    "win_pct": 24.42,
+    "pf": 0.84,
+    "exp_r": -0.1
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 2014,
+    "net_pts": -3783.58,
+    "exp_pts": -1.88,
+    "win_pct": 26.17,
+    "pf": 0.89,
+    "exp_r": -0.1
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 1672,
+    "net_pts": -13709.77,
+    "exp_pts": -8.2,
+    "win_pct": 20.22,
+    "pf": 0.62,
+    "exp_r": -0.19
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 1436,
+    "net_pts": -51106.17,
+    "exp_pts": -35.59,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.74
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 1385,
+    "net_pts": -21396.05,
+    "exp_pts": -15.45,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.51
+   },
+   {
+    "outcome": "small win",
+    "trades": 517,
+    "net_pts": 12723.32,
+    "exp_pts": 24.61,
+    "win_pct": 100.0,
+    "pf": 12723320741539.86,
+    "exp_r": 0.36
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 348,
+    "net_pts": 42285.56,
+    "exp_pts": 121.51,
+    "win_pct": 100.0,
+    "pf": 42285561523278.19,
+    "exp_r": 3.03
+   }
+  ]
+ },
+ "nifty50|ASIS|15m": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 248,
+    "net_pts": -1669.66,
+    "exp_pts": -6.73,
+    "win_pct": 19.76,
+    "pf": 0.73,
+    "exp_r": -0.1
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 436,
+    "net_pts": -1779.4,
+    "exp_pts": -4.08,
+    "win_pct": 20.87,
+    "pf": 0.83,
+    "exp_r": -0.05
+   },
+   {
+    "trend": "sideways",
+    "trades": 262,
+    "net_pts": 794.86,
+    "exp_pts": 3.03,
+    "win_pct": 21.76,
+    "pf": 1.12,
+    "exp_r": -0.03
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 304,
+    "net_pts": 2931.43,
+    "exp_pts": 9.64,
+    "win_pct": 22.04,
+    "pf": 1.37,
+    "exp_r": 0.13
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 80,
+    "net_pts": 1365.32,
+    "exp_pts": 17.07,
+    "win_pct": 22.5,
+    "pf": 1.77,
+    "exp_r": 0.26
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 406,
+    "net_pts": 1520.99,
+    "exp_pts": 3.75,
+    "win_pct": 22.41,
+    "pf": 1.18,
+    "exp_r": 0.09
+   },
+   {
+    "vol": "normal",
+    "trades": 630,
+    "net_pts": -1800.72,
+    "exp_pts": -2.86,
+    "win_pct": 20.79,
+    "pf": 0.89,
+    "exp_r": -0.04
+   },
+   {
+    "vol": "high",
+    "trades": 227,
+    "net_pts": 257.3,
+    "exp_pts": 1.13,
+    "win_pct": 18.94,
+    "pf": 1.04,
+    "exp_r": -0.06
+   },
+   {
+    "vol": "extreme",
+    "trades": 67,
+    "net_pts": 1664.99,
+    "exp_pts": 24.85,
+    "win_pct": 25.37,
+    "pf": 2.25,
+    "exp_r": 0.09
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 114,
+    "net_pts": 621.75,
+    "exp_pts": 5.45,
+    "win_pct": 26.32,
+    "pf": 1.26,
+    "exp_r": 0.0
+   },
+   {
+    "session": "morning",
+    "trades": 408,
+    "net_pts": 584.12,
+    "exp_pts": 1.43,
+    "win_pct": 23.04,
+    "pf": 1.06,
+    "exp_r": 0.02
+   },
+   {
+    "session": "midday",
+    "trades": 369,
+    "net_pts": -1279.65,
+    "exp_pts": -3.47,
+    "win_pct": 18.43,
+    "pf": 0.84,
+    "exp_r": -0.09
+   },
+   {
+    "session": "afternoon",
+    "trades": 322,
+    "net_pts": -251.38,
+    "exp_pts": -0.78,
+    "win_pct": 15.53,
+    "pf": 0.97,
+    "exp_r": -0.04
+   },
+   {
+    "session": "closing",
+    "trades": 117,
+    "net_pts": 1967.71,
+    "exp_pts": 16.82,
+    "win_pct": 34.19,
+    "pf": 1.53,
+    "exp_r": 0.35
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 73,
+    "net_pts": 1023.93,
+    "exp_pts": 14.03,
+    "win_pct": 23.29,
+    "pf": 1.51,
+    "exp_r": 0.22
+   },
+   {
+    "gap": "large up",
+    "trades": 66,
+    "net_pts": 1901.22,
+    "exp_pts": 28.81,
+    "win_pct": 27.27,
+    "pf": 2.94,
+    "exp_r": 0.19
+   },
+   {
+    "gap": "medium down",
+    "trades": 186,
+    "net_pts": -1097.33,
+    "exp_pts": -5.9,
+    "win_pct": 16.67,
+    "pf": 0.79,
+    "exp_r": -0.1
+   },
+   {
+    "gap": "medium up",
+    "trades": 323,
+    "net_pts": -651.3,
+    "exp_pts": -2.02,
+    "win_pct": 21.98,
+    "pf": 0.93,
+    "exp_r": 0.03
+   },
+   {
+    "gap": "small down",
+    "trades": 276,
+    "net_pts": 1770.25,
+    "exp_pts": 6.41,
+    "win_pct": 20.65,
+    "pf": 1.27,
+    "exp_r": 0.1
+   },
+   {
+    "gap": "small up",
+    "trades": 406,
+    "net_pts": -1304.22,
+    "exp_pts": -3.21,
+    "win_pct": 21.67,
+    "pf": 0.86,
+    "exp_r": -0.1
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 256,
+    "net_pts": -881.16,
+    "exp_pts": -3.44,
+    "win_pct": 17.97,
+    "pf": 0.87,
+    "exp_r": -0.01
+   },
+   {
+    "weekday": "Tue",
+    "trades": 277,
+    "net_pts": -460.09,
+    "exp_pts": -1.66,
+    "win_pct": 19.49,
+    "pf": 0.93,
+    "exp_r": -0.09
+   },
+   {
+    "weekday": "Wed",
+    "trades": 274,
+    "net_pts": -785.81,
+    "exp_pts": -2.87,
+    "win_pct": 21.53,
+    "pf": 0.89,
+    "exp_r": 0.03
+   },
+   {
+    "weekday": "Thu",
+    "trades": 263,
+    "net_pts": 1470.71,
+    "exp_pts": 5.59,
+    "win_pct": 22.05,
+    "pf": 1.23,
+    "exp_r": 0.02
+   },
+   {
+    "weekday": "Fri",
+    "trades": 257,
+    "net_pts": 2303.77,
+    "exp_pts": 8.96,
+    "win_pct": 24.9,
+    "pf": 1.39,
+    "exp_r": 0.09
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 694,
+    "net_pts": -259.56,
+    "exp_pts": -0.37,
+    "win_pct": 19.6,
+    "pf": 0.99,
+    "exp_r": 0.0
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 330,
+    "net_pts": 1645.68,
+    "exp_pts": 4.99,
+    "win_pct": 24.24,
+    "pf": 1.22,
+    "exp_r": 0.03
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 306,
+    "net_pts": 256.44,
+    "exp_pts": 0.84,
+    "win_pct": 21.57,
+    "pf": 1.03,
+    "exp_r": -0.03
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 726,
+    "net_pts": 4087.35,
+    "exp_pts": 5.63,
+    "win_pct": 23.55,
+    "pf": 1.25,
+    "exp_r": 0.08
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 604,
+    "net_pts": -2444.8,
+    "exp_pts": -4.05,
+    "win_pct": 18.38,
+    "pf": 0.85,
+    "exp_r": -0.09
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 587,
+    "net_pts": -25358.78,
+    "exp_pts": -43.2,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.52
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 461,
+    "net_pts": -7685.32,
+    "exp_pts": -16.67,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.31
+   },
+   {
+    "outcome": "small win",
+    "trades": 158,
+    "net_pts": 8658.42,
+    "exp_pts": 54.8,
+    "win_pct": 100.0,
+    "pf": 8658422490625.44,
+    "exp_r": 0.39
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 124,
+    "net_pts": 26028.23,
+    "exp_pts": 209.91,
+    "win_pct": 100.0,
+    "pf": 26028227090240.89,
+    "exp_r": 3.16
+   }
+  ]
+ },
+ "nifty50|ASIS|30m": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 122,
+    "net_pts": -1501.1,
+    "exp_pts": -12.3,
+    "win_pct": 17.21,
+    "pf": 0.66,
+    "exp_r": -0.11
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 251,
+    "net_pts": 11.45,
+    "exp_pts": 0.05,
+    "win_pct": 19.52,
+    "pf": 1.0,
+    "exp_r": 0.03
+   },
+   {
+    "trend": "sideways",
+    "trades": 146,
+    "net_pts": 1029.03,
+    "exp_pts": 7.05,
+    "win_pct": 16.44,
+    "pf": 1.23,
+    "exp_r": 0.01
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 177,
+    "net_pts": 3641.29,
+    "exp_pts": 20.57,
+    "win_pct": 19.21,
+    "pf": 1.76,
+    "exp_r": 0.18
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 43,
+    "net_pts": -552.62,
+    "exp_pts": -12.85,
+    "win_pct": 13.95,
+    "pf": 0.73,
+    "exp_r": -0.04
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 224,
+    "net_pts": 2407.09,
+    "exp_pts": 10.75,
+    "win_pct": 22.32,
+    "pf": 1.42,
+    "exp_r": 0.1
+   },
+   {
+    "vol": "normal",
+    "trades": 338,
+    "net_pts": -307.07,
+    "exp_pts": -0.91,
+    "win_pct": 15.38,
+    "pf": 0.97,
+    "exp_r": 0.01
+   },
+   {
+    "vol": "high",
+    "trades": 137,
+    "net_pts": 577.5,
+    "exp_pts": 4.22,
+    "win_pct": 18.98,
+    "pf": 1.14,
+    "exp_r": 0.01
+   },
+   {
+    "vol": "extreme",
+    "trades": 40,
+    "net_pts": -49.47,
+    "exp_pts": -1.24,
+    "win_pct": 15.0,
+    "pf": 0.97,
+    "exp_r": -0.04
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 70,
+    "net_pts": -1930.38,
+    "exp_pts": -27.58,
+    "win_pct": 14.29,
+    "pf": 0.35,
+    "exp_r": -0.17
+   },
+   {
+    "session": "morning",
+    "trades": 225,
+    "net_pts": 616.54,
+    "exp_pts": 2.74,
+    "win_pct": 14.67,
+    "pf": 1.1,
+    "exp_r": -0.02
+   },
+   {
+    "session": "midday",
+    "trades": 208,
+    "net_pts": 2829.06,
+    "exp_pts": 13.6,
+    "win_pct": 18.75,
+    "pf": 1.68,
+    "exp_r": 0.07
+   },
+   {
+    "session": "afternoon",
+    "trades": 157,
+    "net_pts": -797.21,
+    "exp_pts": -5.08,
+    "win_pct": 19.11,
+    "pf": 0.88,
+    "exp_r": -0.04
+   },
+   {
+    "session": "closing",
+    "trades": 79,
+    "net_pts": 1910.03,
+    "exp_pts": 24.18,
+    "win_pct": 27.85,
+    "pf": 1.65,
+    "exp_r": 0.44
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 44,
+    "net_pts": -1014.88,
+    "exp_pts": -23.07,
+    "win_pct": 13.64,
+    "pf": 0.63,
+    "exp_r": 0.0
+   },
+   {
+    "gap": "large up",
+    "trades": 32,
+    "net_pts": 838.77,
+    "exp_pts": 26.21,
+    "win_pct": 25.0,
+    "pf": 2.64,
+    "exp_r": 0.23
+   },
+   {
+    "gap": "medium down",
+    "trades": 88,
+    "net_pts": 837.79,
+    "exp_pts": 9.52,
+    "win_pct": 17.05,
+    "pf": 1.33,
+    "exp_r": 0.03
+   },
+   {
+    "gap": "medium up",
+    "trades": 174,
+    "net_pts": -889.51,
+    "exp_pts": -5.11,
+    "win_pct": 17.24,
+    "pf": 0.84,
+    "exp_r": -0.01
+   },
+   {
+    "gap": "small down",
+    "trades": 166,
+    "net_pts": 1940.3,
+    "exp_pts": 11.69,
+    "win_pct": 19.88,
+    "pf": 1.36,
+    "exp_r": 0.09
+   },
+   {
+    "gap": "small up",
+    "trades": 235,
+    "net_pts": 915.58,
+    "exp_pts": 3.9,
+    "win_pct": 17.87,
+    "pf": 1.15,
+    "exp_r": 0.02
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 126,
+    "net_pts": -254.57,
+    "exp_pts": -2.02,
+    "win_pct": 19.84,
+    "pf": 0.94,
+    "exp_r": 0.08
+   },
+   {
+    "weekday": "Tue",
+    "trades": 145,
+    "net_pts": -2762.68,
+    "exp_pts": -19.05,
+    "win_pct": 10.34,
+    "pf": 0.46,
+    "exp_r": -0.18
+   },
+   {
+    "weekday": "Wed",
+    "trades": 148,
+    "net_pts": 889.59,
+    "exp_pts": 6.01,
+    "win_pct": 18.24,
+    "pf": 1.2,
+    "exp_r": 0.05
+   },
+   {
+    "weekday": "Thu",
+    "trades": 169,
+    "net_pts": 795.04,
+    "exp_pts": 4.7,
+    "win_pct": 21.3,
+    "pf": 1.14,
+    "exp_r": 0.12
+   },
+   {
+    "weekday": "Fri",
+    "trades": 147,
+    "net_pts": 3990.01,
+    "exp_pts": 27.14,
+    "win_pct": 21.09,
+    "pf": 2.27,
+    "exp_r": 0.1
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 358,
+    "net_pts": 1606.59,
+    "exp_pts": 4.49,
+    "win_pct": 16.76,
+    "pf": 1.15,
+    "exp_r": 0.01
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 201,
+    "net_pts": -326.33,
+    "exp_pts": -1.62,
+    "win_pct": 19.4,
+    "pf": 0.95,
+    "exp_r": 0.05
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 180,
+    "net_pts": 1347.78,
+    "exp_pts": 7.49,
+    "win_pct": 19.44,
+    "pf": 1.23,
+    "exp_r": 0.09
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 410,
+    "net_pts": 5717.66,
+    "exp_pts": 13.95,
+    "win_pct": 21.22,
+    "pf": 1.56,
+    "exp_r": 0.13
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 329,
+    "net_pts": -3089.62,
+    "exp_pts": -9.39,
+    "win_pct": 14.29,
+    "pf": 0.76,
+    "exp_r": -0.07
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 374,
+    "net_pts": -17875.96,
+    "exp_pts": -47.8,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.36
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 231,
+    "net_pts": -5057.06,
+    "exp_pts": -21.89,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.27
+   },
+   {
+    "outcome": "small win",
+    "trades": 74,
+    "net_pts": 5592.78,
+    "exp_pts": 75.58,
+    "win_pct": 100.0,
+    "pf": 5592780720922.66,
+    "exp_r": 0.44
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 60,
+    "net_pts": 19968.28,
+    "exp_pts": 332.8,
+    "win_pct": 100.0,
+    "pf": 19968275150343.32,
+    "exp_r": 3.18
+   }
+  ]
+ },
+ "nifty50|ASIS|1h": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 70,
+    "net_pts": 419.64,
+    "exp_pts": 5.99,
+    "win_pct": 15.71,
+    "pf": 1.17,
+    "exp_r": 0.01
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 150,
+    "net_pts": 790.13,
+    "exp_pts": 5.27,
+    "win_pct": 18.67,
+    "pf": 1.16,
+    "exp_r": 0.11
+   },
+   {
+    "trend": "sideways",
+    "trades": 78,
+    "net_pts": 1626.27,
+    "exp_pts": 20.85,
+    "win_pct": 16.67,
+    "pf": 1.75,
+    "exp_r": 0.16
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 103,
+    "net_pts": 864.75,
+    "exp_pts": 8.4,
+    "win_pct": 12.62,
+    "pf": 1.23,
+    "exp_r": 0.09
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 17,
+    "net_pts": -368.67,
+    "exp_pts": -21.69,
+    "win_pct": 11.76,
+    "pf": 0.6,
+    "exp_r": -0.15
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 135,
+    "net_pts": 2886.13,
+    "exp_pts": 21.38,
+    "win_pct": 23.7,
+    "pf": 1.72,
+    "exp_r": 0.21
+   },
+   {
+    "vol": "normal",
+    "trades": 191,
+    "net_pts": 295.83,
+    "exp_pts": 1.55,
+    "win_pct": 13.61,
+    "pf": 1.05,
+    "exp_r": 0.02
+   },
+   {
+    "vol": "high",
+    "trades": 71,
+    "net_pts": -619.29,
+    "exp_pts": -8.72,
+    "win_pct": 7.04,
+    "pf": 0.78,
+    "exp_r": 0.0
+   },
+   {
+    "vol": "extreme",
+    "trades": 21,
+    "net_pts": 769.45,
+    "exp_pts": 36.64,
+    "win_pct": 19.05,
+    "pf": 1.85,
+    "exp_r": 0.24
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 74,
+    "net_pts": 846.1,
+    "exp_pts": 11.43,
+    "win_pct": 16.22,
+    "pf": 1.38,
+    "exp_r": 0.05
+   },
+   {
+    "session": "morning",
+    "trades": 98,
+    "net_pts": 1490.57,
+    "exp_pts": 15.21,
+    "win_pct": 18.37,
+    "pf": 1.45,
+    "exp_r": 0.06
+   },
+   {
+    "session": "midday",
+    "trades": 126,
+    "net_pts": 1902.66,
+    "exp_pts": 15.1,
+    "win_pct": 14.29,
+    "pf": 1.52,
+    "exp_r": 0.17
+   },
+   {
+    "session": "afternoon",
+    "trades": 81,
+    "net_pts": -1623.27,
+    "exp_pts": -20.04,
+    "win_pct": 11.11,
+    "pf": 0.49,
+    "exp_r": -0.06
+   },
+   {
+    "session": "closing",
+    "trades": 39,
+    "net_pts": 716.05,
+    "exp_pts": 18.36,
+    "win_pct": 25.64,
+    "pf": 1.37,
+    "exp_r": 0.26
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 31,
+    "net_pts": -1363.52,
+    "exp_pts": -43.98,
+    "win_pct": 6.45,
+    "pf": 0.22,
+    "exp_r": -0.09
+   },
+   {
+    "gap": "large up",
+    "trades": 19,
+    "net_pts": 80.34,
+    "exp_pts": 4.23,
+    "win_pct": 15.79,
+    "pf": 1.22,
+    "exp_r": -0.14
+   },
+   {
+    "gap": "medium down",
+    "trades": 34,
+    "net_pts": -1379.9,
+    "exp_pts": -40.59,
+    "win_pct": 2.94,
+    "pf": 0.14,
+    "exp_r": -0.21
+   },
+   {
+    "gap": "medium up",
+    "trades": 111,
+    "net_pts": 2035.92,
+    "exp_pts": 18.34,
+    "win_pct": 20.72,
+    "pf": 1.5,
+    "exp_r": 0.31
+   },
+   {
+    "gap": "small down",
+    "trades": 100,
+    "net_pts": 3526.25,
+    "exp_pts": 35.26,
+    "win_pct": 19.0,
+    "pf": 2.24,
+    "exp_r": 0.18
+   },
+   {
+    "gap": "small up",
+    "trades": 123,
+    "net_pts": 433.01,
+    "exp_pts": 3.52,
+    "win_pct": 15.45,
+    "pf": 1.12,
+    "exp_r": -0.03
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 81,
+    "net_pts": -380.37,
+    "exp_pts": -4.7,
+    "win_pct": 12.35,
+    "pf": 0.85,
+    "exp_r": -0.0
+   },
+   {
+    "weekday": "Tue",
+    "trades": 67,
+    "net_pts": 1404.23,
+    "exp_pts": 20.96,
+    "win_pct": 20.9,
+    "pf": 1.48,
+    "exp_r": 0.38
+   },
+   {
+    "weekday": "Wed",
+    "trades": 88,
+    "net_pts": 690.83,
+    "exp_pts": 7.85,
+    "win_pct": 14.77,
+    "pf": 1.27,
+    "exp_r": 0.01
+   },
+   {
+    "weekday": "Thu",
+    "trades": 96,
+    "net_pts": 118.91,
+    "exp_pts": 1.24,
+    "win_pct": 15.62,
+    "pf": 1.03,
+    "exp_r": 0.07
+   },
+   {
+    "weekday": "Fri",
+    "trades": 86,
+    "net_pts": 1498.52,
+    "exp_pts": 17.42,
+    "win_pct": 17.44,
+    "pf": 1.69,
+    "exp_r": 0.03
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 141,
+    "net_pts": 2685.69,
+    "exp_pts": 19.05,
+    "win_pct": 16.31,
+    "pf": 1.63,
+    "exp_r": 0.16
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 152,
+    "net_pts": 1423.3,
+    "exp_pts": 9.36,
+    "win_pct": 19.74,
+    "pf": 1.29,
+    "exp_r": 0.1
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 125,
+    "net_pts": -776.87,
+    "exp_pts": -6.21,
+    "win_pct": 11.2,
+    "pf": 0.85,
+    "exp_r": -0.01
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 245,
+    "net_pts": 4333.78,
+    "exp_pts": 17.69,
+    "win_pct": 18.37,
+    "pf": 1.59,
+    "exp_r": 0.18
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 173,
+    "net_pts": -1001.66,
+    "exp_pts": -5.79,
+    "win_pct": 12.72,
+    "pf": 0.86,
+    "exp_r": -0.05
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 232,
+    "net_pts": -12292.65,
+    "exp_pts": -52.99,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.27
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 119,
+    "net_pts": -1994.26,
+    "exp_pts": -16.76,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.16
+   },
+   {
+    "outcome": "small win",
+    "trades": 33,
+    "net_pts": 3470.87,
+    "exp_pts": 105.18,
+    "win_pct": 100.0,
+    "pf": 3470874756197.61,
+    "exp_r": 0.45
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 34,
+    "net_pts": 14148.15,
+    "exp_pts": 416.12,
+    "win_pct": 100.0,
+    "pf": 14148148622247.58,
+    "exp_r": 3.05
+   }
+  ]
+ },
+ "nifty50|ASIS|2h": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 43,
+    "net_pts": 15.1,
+    "exp_pts": 0.35,
+    "win_pct": 16.28,
+    "pf": 1.01,
+    "exp_r": -0.07
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 96,
+    "net_pts": 915.41,
+    "exp_pts": 9.54,
+    "win_pct": 17.71,
+    "pf": 1.31,
+    "exp_r": 0.12
+   },
+   {
+    "trend": "sideways",
+    "trades": 63,
+    "net_pts": 1536.3,
+    "exp_pts": 24.39,
+    "win_pct": 20.63,
+    "pf": 2.03,
+    "exp_r": 0.11
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 50,
+    "net_pts": 994.5,
+    "exp_pts": 19.89,
+    "win_pct": 16.0,
+    "pf": 1.33,
+    "exp_r": 0.26
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 10,
+    "net_pts": -369.29,
+    "exp_pts": -36.93,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.14
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 93,
+    "net_pts": 2354.39,
+    "exp_pts": 25.32,
+    "win_pct": 21.51,
+    "pf": 2.01,
+    "exp_r": 0.16
+   },
+   {
+    "vol": "normal",
+    "trades": 124,
+    "net_pts": -2324.82,
+    "exp_pts": -18.75,
+    "win_pct": 12.9,
+    "pf": 0.62,
+    "exp_r": -0.02
+   },
+   {
+    "vol": "high",
+    "trades": 39,
+    "net_pts": 2062.27,
+    "exp_pts": 52.88,
+    "win_pct": 15.38,
+    "pf": 3.59,
+    "exp_r": 0.29
+   },
+   {
+    "vol": "extreme",
+    "trades": 6,
+    "net_pts": 1000.19,
+    "exp_pts": 166.7,
+    "win_pct": 50.0,
+    "pf": 50.97,
+    "exp_r": 0.45
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 84,
+    "net_pts": 737.04,
+    "exp_pts": 8.77,
+    "win_pct": 15.48,
+    "pf": 1.21,
+    "exp_r": 0.06
+   },
+   {
+    "session": "morning",
+    "trades": 35,
+    "net_pts": -335.64,
+    "exp_pts": -9.59,
+    "win_pct": 22.86,
+    "pf": 0.83,
+    "exp_r": 0.12
+   },
+   {
+    "session": "midday",
+    "trades": 58,
+    "net_pts": 1875.58,
+    "exp_pts": 32.34,
+    "win_pct": 18.97,
+    "pf": 2.8,
+    "exp_r": 0.12
+   },
+   {
+    "session": "afternoon",
+    "trades": 54,
+    "net_pts": 860.54,
+    "exp_pts": 15.94,
+    "win_pct": 11.11,
+    "pf": 1.57,
+    "exp_r": 0.18
+   },
+   {
+    "session": "closing",
+    "trades": 31,
+    "net_pts": -45.5,
+    "exp_pts": -1.47,
+    "win_pct": 22.58,
+    "pf": 0.96,
+    "exp_r": 0.04
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 16,
+    "net_pts": -468.73,
+    "exp_pts": -29.3,
+    "win_pct": 6.25,
+    "pf": 0.02,
+    "exp_r": -0.14
+   },
+   {
+    "gap": "large up",
+    "trades": 19,
+    "net_pts": -211.82,
+    "exp_pts": -11.15,
+    "win_pct": 15.79,
+    "pf": 0.54,
+    "exp_r": 0.01
+   },
+   {
+    "gap": "medium down",
+    "trades": 21,
+    "net_pts": -339.51,
+    "exp_pts": -16.17,
+    "win_pct": 4.76,
+    "pf": 0.34,
+    "exp_r": -0.08
+   },
+   {
+    "gap": "medium up",
+    "trades": 75,
+    "net_pts": 2986.86,
+    "exp_pts": 39.82,
+    "win_pct": 21.33,
+    "pf": 2.32,
+    "exp_r": 0.28
+   },
+   {
+    "gap": "small down",
+    "trades": 56,
+    "net_pts": 547.2,
+    "exp_pts": 9.77,
+    "win_pct": 14.29,
+    "pf": 1.15,
+    "exp_r": 0.18
+   },
+   {
+    "gap": "small up",
+    "trades": 75,
+    "net_pts": 578.02,
+    "exp_pts": 7.71,
+    "win_pct": 21.33,
+    "pf": 1.29,
+    "exp_r": -0.01
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 55,
+    "net_pts": -1746.46,
+    "exp_pts": -31.75,
+    "win_pct": 18.18,
+    "pf": 0.49,
+    "exp_r": -0.02
+   },
+   {
+    "weekday": "Tue",
+    "trades": 46,
+    "net_pts": 2644.51,
+    "exp_pts": 57.49,
+    "win_pct": 26.09,
+    "pf": 3.36,
+    "exp_r": 0.34
+   },
+   {
+    "weekday": "Wed",
+    "trades": 46,
+    "net_pts": -373.41,
+    "exp_pts": -8.12,
+    "win_pct": 13.04,
+    "pf": 0.8,
+    "exp_r": -0.04
+   },
+   {
+    "weekday": "Thu",
+    "trades": 57,
+    "net_pts": 449.23,
+    "exp_pts": 7.88,
+    "win_pct": 15.79,
+    "pf": 1.28,
+    "exp_r": 0.03
+   },
+   {
+    "weekday": "Fri",
+    "trades": 57,
+    "net_pts": 2125.33,
+    "exp_pts": 37.29,
+    "win_pct": 14.04,
+    "pf": 2.62,
+    "exp_r": 0.21
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 53,
+    "net_pts": -1429.78,
+    "exp_pts": -26.98,
+    "win_pct": 16.98,
+    "pf": 0.49,
+    "exp_r": -0.02
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 138,
+    "net_pts": 2711.8,
+    "exp_pts": 19.65,
+    "win_pct": 18.12,
+    "pf": 1.65,
+    "exp_r": 0.12
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 71,
+    "net_pts": 1810.02,
+    "exp_pts": 25.49,
+    "win_pct": 15.49,
+    "pf": 1.79,
+    "exp_r": 0.15
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 163,
+    "net_pts": 3820.61,
+    "exp_pts": 23.44,
+    "win_pct": 21.47,
+    "pf": 1.86,
+    "exp_r": 0.13
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 99,
+    "net_pts": -728.58,
+    "exp_pts": -7.36,
+    "win_pct": 10.1,
+    "pf": 0.85,
+    "exp_r": 0.05
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 161,
+    "net_pts": -8332.99,
+    "exp_pts": -51.76,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.18
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 56,
+    "net_pts": -945.82,
+    "exp_pts": -16.89,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.1
+   },
+   {
+    "outcome": "small win",
+    "trades": 29,
+    "net_pts": 3731.74,
+    "exp_pts": 128.68,
+    "win_pct": 100.0,
+    "pf": 3731744264812.82,
+    "exp_r": 0.41
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 16,
+    "net_pts": 8639.1,
+    "exp_pts": 539.94,
+    "win_pct": 100.0,
+    "pf": 8639097283019.16,
+    "exp_r": 3.06
+   }
+  ]
+ },
+ "nifty50|ASIS|4h": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 35,
+    "net_pts": -788.73,
+    "exp_pts": -22.54,
+    "win_pct": 17.14,
+    "pf": 0.68,
+    "exp_r": -0.07
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 55,
+    "net_pts": 1711.56,
+    "exp_pts": 31.12,
+    "win_pct": 16.36,
+    "pf": 1.84,
+    "exp_r": 0.25
+   },
+   {
+    "trend": "sideways",
+    "trades": 21,
+    "net_pts": 846.24,
+    "exp_pts": 40.3,
+    "win_pct": 19.05,
+    "pf": 2.58,
+    "exp_r": 0.03
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 24,
+    "net_pts": 2290.26,
+    "exp_pts": 95.43,
+    "win_pct": 16.67,
+    "pf": 3.43,
+    "exp_r": 0.24
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 4,
+    "net_pts": -24.68,
+    "exp_pts": -6.17,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.01
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 51,
+    "net_pts": 840.77,
+    "exp_pts": 16.49,
+    "win_pct": 15.69,
+    "pf": 1.46,
+    "exp_r": 0.22
+   },
+   {
+    "vol": "normal",
+    "trades": 69,
+    "net_pts": -1238.91,
+    "exp_pts": -17.96,
+    "win_pct": 13.04,
+    "pf": 0.69,
+    "exp_r": -0.05
+   },
+   {
+    "vol": "high",
+    "trades": 14,
+    "net_pts": 3512.58,
+    "exp_pts": 250.9,
+    "win_pct": 28.57,
+    "pf": 52.21,
+    "exp_r": 0.61
+   },
+   {
+    "vol": "extreme",
+    "trades": 5,
+    "net_pts": 920.22,
+    "exp_pts": 184.04,
+    "win_pct": 40.0,
+    "pf": 46.57,
+    "exp_r": 0.25
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 53,
+    "net_pts": -309.97,
+    "exp_pts": -5.85,
+    "win_pct": 7.55,
+    "pf": 0.89,
+    "exp_r": -0.09
+   },
+   {
+    "session": "morning",
+    "trades": 21,
+    "net_pts": -402.86,
+    "exp_pts": -19.18,
+    "win_pct": 14.29,
+    "pf": 0.68,
+    "exp_r": -0.03
+   },
+   {
+    "session": "midday",
+    "trades": 22,
+    "net_pts": 1356.29,
+    "exp_pts": 61.65,
+    "win_pct": 27.27,
+    "pf": 3.73,
+    "exp_r": 0.17
+   },
+   {
+    "session": "afternoon",
+    "trades": 30,
+    "net_pts": 678.7,
+    "exp_pts": 22.62,
+    "win_pct": 16.67,
+    "pf": 1.54,
+    "exp_r": 0.27
+   },
+   {
+    "session": "closing",
+    "trades": 13,
+    "net_pts": 2712.49,
+    "exp_pts": 208.65,
+    "win_pct": 38.46,
+    "pf": 12.83,
+    "exp_r": 0.87
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 6,
+    "net_pts": -296.13,
+    "exp_pts": -49.35,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.1
+   },
+   {
+    "gap": "large up",
+    "trades": 2,
+    "net_pts": 440.4,
+    "exp_pts": 220.2,
+    "win_pct": 50.0,
+    "pf": 61.69,
+    "exp_r": 0.31
+   },
+   {
+    "gap": "medium down",
+    "trades": 13,
+    "net_pts": 518.82,
+    "exp_pts": 39.91,
+    "win_pct": 7.69,
+    "pf": 7.35,
+    "exp_r": 0.07
+   },
+   {
+    "gap": "medium up",
+    "trades": 47,
+    "net_pts": 241.25,
+    "exp_pts": 5.13,
+    "win_pct": 14.89,
+    "pf": 1.11,
+    "exp_r": 0.1
+   },
+   {
+    "gap": "small down",
+    "trades": 21,
+    "net_pts": 2683.63,
+    "exp_pts": 127.79,
+    "win_pct": 23.81,
+    "pf": 5.2,
+    "exp_r": 0.34
+   },
+   {
+    "gap": "small up",
+    "trades": 50,
+    "net_pts": 446.68,
+    "exp_pts": 8.93,
+    "win_pct": 18.0,
+    "pf": 1.17,
+    "exp_r": 0.09
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 32,
+    "net_pts": -260.44,
+    "exp_pts": -8.14,
+    "win_pct": 6.25,
+    "pf": 0.77,
+    "exp_r": -0.06
+   },
+   {
+    "weekday": "Tue",
+    "trades": 28,
+    "net_pts": 2739.15,
+    "exp_pts": 97.83,
+    "win_pct": 25.0,
+    "pf": 5.49,
+    "exp_r": 0.45
+   },
+   {
+    "weekday": "Wed",
+    "trades": 22,
+    "net_pts": -792.03,
+    "exp_pts": -36.0,
+    "win_pct": 18.18,
+    "pf": 0.66,
+    "exp_r": 0.15
+   },
+   {
+    "weekday": "Thu",
+    "trades": 30,
+    "net_pts": -40.3,
+    "exp_pts": -1.34,
+    "win_pct": 13.33,
+    "pf": 0.97,
+    "exp_r": -0.01
+   },
+   {
+    "weekday": "Fri",
+    "trades": 27,
+    "net_pts": 2388.27,
+    "exp_pts": 88.45,
+    "win_pct": 22.22,
+    "pf": 4.3,
+    "exp_r": 0.16
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 23,
+    "net_pts": 1476.71,
+    "exp_pts": 64.2,
+    "win_pct": 26.09,
+    "pf": 3.71,
+    "exp_r": 0.26
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 82,
+    "net_pts": -547.11,
+    "exp_pts": -6.67,
+    "win_pct": 13.41,
+    "pf": 0.88,
+    "exp_r": 0.06
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 34,
+    "net_pts": 3105.05,
+    "exp_pts": 91.32,
+    "win_pct": 17.65,
+    "pf": 4.04,
+    "exp_r": 0.21
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 84,
+    "net_pts": 2037.17,
+    "exp_pts": 24.25,
+    "win_pct": 17.86,
+    "pf": 1.56,
+    "exp_r": 0.17
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 55,
+    "net_pts": 1997.48,
+    "exp_pts": 36.32,
+    "win_pct": 14.55,
+    "pf": 1.86,
+    "exp_r": 0.06
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 95,
+    "net_pts": -5808.87,
+    "exp_pts": -61.15,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.18
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 21,
+    "net_pts": -167.12,
+    "exp_pts": -7.96,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.03
+   },
+   {
+    "outcome": "small win",
+    "trades": 15,
+    "net_pts": 3893.66,
+    "exp_pts": 259.58,
+    "win_pct": 100.0,
+    "pf": 3893662274648.1,
+    "exp_r": 0.59
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 8,
+    "net_pts": 6116.97,
+    "exp_pts": 764.62,
+    "win_pct": 100.0,
+    "pf": 6116974344197.14,
+    "exp_r": 3.31
+   }
+  ]
+ },
+ "nifty50|ASIS|D1": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 18,
+    "net_pts": -1056.26,
+    "exp_pts": -58.68,
+    "win_pct": 11.11,
+    "pf": 0.31,
+    "exp_r": -0.14
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 37,
+    "net_pts": -1046.29,
+    "exp_pts": -28.28,
+    "win_pct": 5.41,
+    "pf": 0.44,
+    "exp_r": -0.05
+   },
+   {
+    "trend": "sideways",
+    "trades": 11,
+    "net_pts": 283.86,
+    "exp_pts": 25.81,
+    "win_pct": 9.09,
+    "pf": 1.17,
+    "exp_r": 0.09
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 9,
+    "net_pts": -904.83,
+    "exp_pts": -100.54,
+    "win_pct": 11.11,
+    "pf": 0.06,
+    "exp_r": -0.1
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 5,
+    "net_pts": -33.21,
+    "exp_pts": -6.64,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.0
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 33,
+    "net_pts": -721.67,
+    "exp_pts": -21.87,
+    "win_pct": 6.06,
+    "pf": 0.53,
+    "exp_r": -0.05
+   },
+   {
+    "vol": "normal",
+    "trades": 35,
+    "net_pts": -2166.01,
+    "exp_pts": -61.89,
+    "win_pct": 5.71,
+    "pf": 0.49,
+    "exp_r": -0.08
+   },
+   {
+    "vol": "high",
+    "trades": 6,
+    "net_pts": -239.07,
+    "exp_pts": -39.85,
+    "win_pct": 16.67,
+    "pf": 0.25,
+    "exp_r": -0.07
+   },
+   {
+    "vol": "extreme",
+    "trades": 6,
+    "net_pts": 370.01,
+    "exp_pts": 61.67,
+    "win_pct": 16.67,
+    "pf": 11.97,
+    "exp_r": 0.02
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 37,
+    "net_pts": -1089.57,
+    "exp_pts": -29.45,
+    "win_pct": 5.41,
+    "pf": 0.7,
+    "exp_r": -0.04
+   },
+   {
+    "session": "morning",
+    "trades": 17,
+    "net_pts": -1235.75,
+    "exp_pts": -72.69,
+    "win_pct": 11.76,
+    "pf": 0.28,
+    "exp_r": -0.16
+   },
+   {
+    "session": "midday",
+    "trades": 6,
+    "net_pts": 122.29,
+    "exp_pts": 20.38,
+    "win_pct": 16.67,
+    "pf": 2.26,
+    "exp_r": 0.13
+   },
+   {
+    "session": "afternoon",
+    "trades": 12,
+    "net_pts": -22.27,
+    "exp_pts": -1.86,
+    "win_pct": 8.33,
+    "pf": 0.71,
+    "exp_r": -0.01
+   },
+   {
+    "session": "closing",
+    "trades": 8,
+    "net_pts": -531.44,
+    "exp_pts": -66.43,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.14
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 4,
+    "net_pts": -931.72,
+    "exp_pts": -232.93,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.23
+   },
+   {
+    "gap": "large up",
+    "trades": 3,
+    "net_pts": -1303.82,
+    "exp_pts": -434.61,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.34
+   },
+   {
+    "gap": "medium down",
+    "trades": 4,
+    "net_pts": -25.73,
+    "exp_pts": -6.43,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.01
+   },
+   {
+    "gap": "medium up",
+    "trades": 26,
+    "net_pts": -1977.8,
+    "exp_pts": -76.07,
+    "win_pct": 3.85,
+    "pf": 0.1,
+    "exp_r": -0.15
+   },
+   {
+    "gap": "small down",
+    "trades": 21,
+    "net_pts": 2254.76,
+    "exp_pts": 107.37,
+    "win_pct": 19.05,
+    "pf": 5.76,
+    "exp_r": 0.16
+   },
+   {
+    "gap": "small up",
+    "trades": 22,
+    "net_pts": -772.42,
+    "exp_pts": -35.11,
+    "win_pct": 4.55,
+    "pf": 0.34,
+    "exp_r": -0.08
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 20,
+    "net_pts": -942.83,
+    "exp_pts": -47.14,
+    "win_pct": 5.0,
+    "pf": 0.68,
+    "exp_r": -0.01
+   },
+   {
+    "weekday": "Tue",
+    "trades": 10,
+    "net_pts": 225.68,
+    "exp_pts": 22.57,
+    "win_pct": 10.0,
+    "pf": 1.62,
+    "exp_r": -0.0
+   },
+   {
+    "weekday": "Wed",
+    "trades": 19,
+    "net_pts": -1119.63,
+    "exp_pts": -58.93,
+    "win_pct": 10.53,
+    "pf": 0.3,
+    "exp_r": -0.13
+   },
+   {
+    "weekday": "Thu",
+    "trades": 13,
+    "net_pts": -161.73,
+    "exp_pts": -12.44,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.02
+   },
+   {
+    "weekday": "Fri",
+    "trades": 18,
+    "net_pts": -758.24,
+    "exp_pts": -42.12,
+    "win_pct": 11.11,
+    "pf": 0.27,
+    "exp_r": -0.08
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 1,
+    "net_pts": 2003.8,
+    "exp_pts": 2003.8,
+    "win_pct": 100.0,
+    "pf": 2003796426054.87,
+    "exp_r": 3.09
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 63,
+    "net_pts": -4404.78,
+    "exp_pts": -69.92,
+    "win_pct": 4.76,
+    "pf": 0.14,
+    "exp_r": -0.12
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 16,
+    "net_pts": -355.75,
+    "exp_pts": -22.23,
+    "win_pct": 12.5,
+    "pf": 0.64,
+    "exp_r": -0.0
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 48,
+    "net_pts": -798.3,
+    "exp_pts": -16.63,
+    "win_pct": 10.42,
+    "pf": 0.79,
+    "exp_r": -0.01
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 32,
+    "net_pts": -1958.44,
+    "exp_pts": -61.2,
+    "win_pct": 3.12,
+    "pf": 0.17,
+    "exp_r": -0.12
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 65,
+    "net_pts": -5598.53,
+    "exp_pts": -86.13,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.13
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 9,
+    "net_pts": -509.38,
+    "exp_pts": -56.6,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.15
+   },
+   {
+    "outcome": "small win",
+    "trades": 5,
+    "net_pts": 1347.38,
+    "exp_pts": 269.48,
+    "win_pct": 100.0,
+    "pf": 1347378831749.34,
+    "exp_r": 0.44
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 1,
+    "net_pts": 2003.8,
+    "exp_pts": 2003.8,
+    "win_pct": 100.0,
+    "pf": 2003796426054.87,
+    "exp_r": 3.09
+   }
+  ]
+ },
+ "nifty50|FINAL_H4|5m": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 669,
+    "net_pts": -3374.23,
+    "exp_pts": -5.04,
+    "win_pct": 23.77,
+    "pf": 0.76,
+    "exp_r": -0.12
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 1212,
+    "net_pts": -5152.49,
+    "exp_pts": -4.25,
+    "win_pct": 26.98,
+    "pf": 0.79,
+    "exp_r": -0.14
+   },
+   {
+    "trend": "sideways",
+    "trades": 752,
+    "net_pts": -3025.84,
+    "exp_pts": -4.02,
+    "win_pct": 28.32,
+    "pf": 0.81,
+    "exp_r": -0.14
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 825,
+    "net_pts": -1378.75,
+    "exp_pts": -1.67,
+    "win_pct": 30.06,
+    "pf": 0.93,
+    "exp_r": -0.04
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 211,
+    "net_pts": -418.49,
+    "exp_pts": -1.98,
+    "win_pct": 26.07,
+    "pf": 0.94,
+    "exp_r": -0.0
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 1188,
+    "net_pts": -5527.11,
+    "exp_pts": -4.65,
+    "win_pct": 26.35,
+    "pf": 0.75,
+    "exp_r": -0.12
+   },
+   {
+    "vol": "normal",
+    "trades": 1738,
+    "net_pts": -8281.15,
+    "exp_pts": -4.76,
+    "win_pct": 27.56,
+    "pf": 0.79,
+    "exp_r": -0.13
+   },
+   {
+    "vol": "high",
+    "trades": 573,
+    "net_pts": 984.37,
+    "exp_pts": 1.72,
+    "win_pct": 28.8,
+    "pf": 1.07,
+    "exp_r": -0.0
+   },
+   {
+    "vol": "extreme",
+    "trades": 170,
+    "net_pts": -525.92,
+    "exp_pts": -3.09,
+    "win_pct": 26.47,
+    "pf": 0.89,
+    "exp_r": -0.06
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 439,
+    "net_pts": -3248.2,
+    "exp_pts": -7.4,
+    "win_pct": 35.76,
+    "pf": 0.71,
+    "exp_r": -0.1
+   },
+   {
+    "session": "morning",
+    "trades": 844,
+    "net_pts": -2948.88,
+    "exp_pts": -3.49,
+    "win_pct": 31.16,
+    "pf": 0.82,
+    "exp_r": -0.05
+   },
+   {
+    "session": "midday",
+    "trades": 1093,
+    "net_pts": -4865.2,
+    "exp_pts": -4.45,
+    "win_pct": 24.79,
+    "pf": 0.75,
+    "exp_r": -0.18
+   },
+   {
+    "session": "afternoon",
+    "trades": 954,
+    "net_pts": -83.78,
+    "exp_pts": -0.09,
+    "win_pct": 20.55,
+    "pf": 1.0,
+    "exp_r": -0.08
+   },
+   {
+    "session": "closing",
+    "trades": 339,
+    "net_pts": -2203.76,
+    "exp_pts": -6.5,
+    "win_pct": 33.92,
+    "pf": 0.84,
+    "exp_r": -0.08
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 201,
+    "net_pts": -325.54,
+    "exp_pts": -1.62,
+    "win_pct": 26.37,
+    "pf": 0.95,
+    "exp_r": 0.03
+   },
+   {
+    "gap": "large up",
+    "trades": 182,
+    "net_pts": 1052.73,
+    "exp_pts": 5.78,
+    "win_pct": 31.87,
+    "pf": 1.25,
+    "exp_r": 0.12
+   },
+   {
+    "gap": "medium down",
+    "trades": 487,
+    "net_pts": -163.4,
+    "exp_pts": -0.34,
+    "win_pct": 28.34,
+    "pf": 0.99,
+    "exp_r": -0.08
+   },
+   {
+    "gap": "medium up",
+    "trades": 1002,
+    "net_pts": -4374.79,
+    "exp_pts": -4.37,
+    "win_pct": 27.15,
+    "pf": 0.8,
+    "exp_r": -0.1
+   },
+   {
+    "gap": "small down",
+    "trades": 736,
+    "net_pts": -5222.34,
+    "exp_pts": -7.1,
+    "win_pct": 25.41,
+    "pf": 0.67,
+    "exp_r": -0.19
+   },
+   {
+    "gap": "small up",
+    "trades": 1061,
+    "net_pts": -4316.45,
+    "exp_pts": -4.07,
+    "win_pct": 27.71,
+    "pf": 0.8,
+    "exp_r": -0.13
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 696,
+    "net_pts": -4937.21,
+    "exp_pts": -7.09,
+    "win_pct": 28.02,
+    "pf": 0.7,
+    "exp_r": -0.14
+   },
+   {
+    "weekday": "Tue",
+    "trades": 755,
+    "net_pts": -3717.38,
+    "exp_pts": -4.92,
+    "win_pct": 25.7,
+    "pf": 0.78,
+    "exp_r": -0.16
+   },
+   {
+    "weekday": "Wed",
+    "trades": 702,
+    "net_pts": -2421.42,
+    "exp_pts": -3.45,
+    "win_pct": 28.21,
+    "pf": 0.83,
+    "exp_r": -0.06
+   },
+   {
+    "weekday": "Thu",
+    "trades": 755,
+    "net_pts": -3374.11,
+    "exp_pts": -4.47,
+    "win_pct": 26.23,
+    "pf": 0.81,
+    "exp_r": -0.15
+   },
+   {
+    "weekday": "Fri",
+    "trades": 748,
+    "net_pts": 1309.64,
+    "exp_pts": 1.75,
+    "win_pct": 28.74,
+    "pf": 1.08,
+    "exp_r": -0.0
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 1567,
+    "net_pts": -7647.68,
+    "exp_pts": -4.88,
+    "win_pct": 25.78,
+    "pf": 0.77,
+    "exp_r": -0.14
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 1135,
+    "net_pts": -2977.53,
+    "exp_pts": -2.62,
+    "win_pct": 28.11,
+    "pf": 0.87,
+    "exp_r": -0.1
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 967,
+    "net_pts": -2724.6,
+    "exp_pts": -2.82,
+    "win_pct": 28.85,
+    "pf": 0.89,
+    "exp_r": -0.06
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 2079,
+    "net_pts": -1654.17,
+    "exp_pts": -0.8,
+    "win_pct": 29.1,
+    "pf": 0.96,
+    "exp_r": -0.07
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 1590,
+    "net_pts": -11695.64,
+    "exp_pts": -7.36,
+    "win_pct": 24.97,
+    "pf": 0.71,
+    "exp_r": -0.16
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 1431,
+    "net_pts": -55849.39,
+    "exp_pts": -39.03,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.74
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 1236,
+    "net_pts": -26041.72,
+    "exp_pts": -21.07,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.57
+   },
+   {
+    "outcome": "small win",
+    "trades": 541,
+    "net_pts": 17232.89,
+    "exp_pts": 31.85,
+    "win_pct": 100.0,
+    "pf": 17232894509543.56,
+    "exp_r": 0.37
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 461,
+    "net_pts": 51308.41,
+    "exp_pts": 111.3,
+    "win_pct": 100.0,
+    "pf": 51308409248349.17,
+    "exp_r": 2.54
+   }
+  ]
+ },
+ "nifty50|FINAL_H4|15m": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 215,
+    "net_pts": -1624.12,
+    "exp_pts": -7.55,
+    "win_pct": 26.98,
+    "pf": 0.8,
+    "exp_r": -0.07
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 382,
+    "net_pts": -560.51,
+    "exp_pts": -1.47,
+    "win_pct": 31.15,
+    "pf": 0.95,
+    "exp_r": 0.01
+   },
+   {
+    "trend": "sideways",
+    "trades": 232,
+    "net_pts": 301.39,
+    "exp_pts": 1.3,
+    "win_pct": 28.02,
+    "pf": 1.03,
+    "exp_r": -0.01
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 262,
+    "net_pts": 3852.44,
+    "exp_pts": 14.7,
+    "win_pct": 32.82,
+    "pf": 1.36,
+    "exp_r": 0.08
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 67,
+    "net_pts": 2315.89,
+    "exp_pts": 34.57,
+    "win_pct": 32.84,
+    "pf": 1.89,
+    "exp_r": 0.47
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 381,
+    "net_pts": 1692.78,
+    "exp_pts": 4.44,
+    "win_pct": 32.02,
+    "pf": 1.15,
+    "exp_r": 0.07
+   },
+   {
+    "vol": "normal",
+    "trades": 534,
+    "net_pts": 101.55,
+    "exp_pts": 0.19,
+    "win_pct": 29.4,
+    "pf": 1.0,
+    "exp_r": -0.0
+   },
+   {
+    "vol": "high",
+    "trades": 187,
+    "net_pts": 517.65,
+    "exp_pts": 2.77,
+    "win_pct": 27.27,
+    "pf": 1.06,
+    "exp_r": -0.05
+   },
+   {
+    "vol": "extreme",
+    "trades": 56,
+    "net_pts": 1973.1,
+    "exp_pts": 35.23,
+    "win_pct": 35.71,
+    "pf": 2.17,
+    "exp_r": 0.36
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 117,
+    "net_pts": -728.61,
+    "exp_pts": -6.23,
+    "win_pct": 30.77,
+    "pf": 0.84,
+    "exp_r": -0.06
+   },
+   {
+    "session": "morning",
+    "trades": 386,
+    "net_pts": 2001.17,
+    "exp_pts": 5.18,
+    "win_pct": 32.9,
+    "pf": 1.15,
+    "exp_r": 0.02
+   },
+   {
+    "session": "midday",
+    "trades": 307,
+    "net_pts": -891.6,
+    "exp_pts": -2.9,
+    "win_pct": 24.1,
+    "pf": 0.92,
+    "exp_r": -0.04
+   },
+   {
+    "session": "afternoon",
+    "trades": 247,
+    "net_pts": 1058.54,
+    "exp_pts": 4.29,
+    "win_pct": 26.72,
+    "pf": 1.1,
+    "exp_r": 0.03
+   },
+   {
+    "session": "closing",
+    "trades": 101,
+    "net_pts": 2845.57,
+    "exp_pts": 28.17,
+    "win_pct": 46.53,
+    "pf": 1.77,
+    "exp_r": 0.45
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 65,
+    "net_pts": 367.65,
+    "exp_pts": 5.66,
+    "win_pct": 30.77,
+    "pf": 1.1,
+    "exp_r": 0.13
+   },
+   {
+    "gap": "large up",
+    "trades": 57,
+    "net_pts": 2490.97,
+    "exp_pts": 43.7,
+    "win_pct": 45.61,
+    "pf": 2.67,
+    "exp_r": 0.47
+   },
+   {
+    "gap": "medium down",
+    "trades": 160,
+    "net_pts": 530.92,
+    "exp_pts": 3.32,
+    "win_pct": 26.25,
+    "pf": 1.07,
+    "exp_r": -0.07
+   },
+   {
+    "gap": "medium up",
+    "trades": 290,
+    "net_pts": 441.46,
+    "exp_pts": 1.52,
+    "win_pct": 30.69,
+    "pf": 1.04,
+    "exp_r": 0.13
+   },
+   {
+    "gap": "small down",
+    "trades": 236,
+    "net_pts": 811.59,
+    "exp_pts": 3.44,
+    "win_pct": 30.93,
+    "pf": 1.1,
+    "exp_r": 0.0
+   },
+   {
+    "gap": "small up",
+    "trades": 350,
+    "net_pts": -357.51,
+    "exp_pts": -1.02,
+    "win_pct": 28.57,
+    "pf": 0.97,
+    "exp_r": -0.07
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 223,
+    "net_pts": -1867.42,
+    "exp_pts": -8.37,
+    "win_pct": 27.35,
+    "pf": 0.79,
+    "exp_r": -0.07
+   },
+   {
+    "weekday": "Tue",
+    "trades": 245,
+    "net_pts": -2224.33,
+    "exp_pts": -9.08,
+    "win_pct": 23.67,
+    "pf": 0.77,
+    "exp_r": -0.12
+   },
+   {
+    "weekday": "Wed",
+    "trades": 237,
+    "net_pts": 1187.14,
+    "exp_pts": 5.01,
+    "win_pct": 34.6,
+    "pf": 1.15,
+    "exp_r": 0.09
+   },
+   {
+    "weekday": "Thu",
+    "trades": 236,
+    "net_pts": 1878.91,
+    "exp_pts": 7.96,
+    "win_pct": 32.2,
+    "pf": 1.22,
+    "exp_r": 0.1
+   },
+   {
+    "weekday": "Fri",
+    "trades": 214,
+    "net_pts": 5487.0,
+    "exp_pts": 25.64,
+    "win_pct": 33.64,
+    "pf": 1.74,
+    "exp_r": 0.18
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 592,
+    "net_pts": 2680.83,
+    "exp_pts": 4.53,
+    "win_pct": 28.72,
+    "pf": 1.13,
+    "exp_r": 0.01
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 306,
+    "net_pts": 385.09,
+    "exp_pts": 1.26,
+    "win_pct": 31.05,
+    "pf": 1.04,
+    "exp_r": 0.06
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 260,
+    "net_pts": 1219.16,
+    "exp_pts": 4.69,
+    "win_pct": 32.69,
+    "pf": 1.1,
+    "exp_r": 0.05
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 663,
+    "net_pts": 2882.2,
+    "exp_pts": 4.35,
+    "win_pct": 31.83,
+    "pf": 1.13,
+    "exp_r": 0.05
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 495,
+    "net_pts": 1402.88,
+    "exp_pts": 2.83,
+    "win_pct": 28.08,
+    "pf": 1.07,
+    "exp_r": 0.01
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 439,
+    "net_pts": -28592.84,
+    "exp_pts": -65.13,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.61
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 369,
+    "net_pts": -13735.84,
+    "exp_pts": -37.22,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.52
+   },
+   {
+    "outcome": "small win",
+    "trades": 175,
+    "net_pts": 11188.16,
+    "exp_pts": 63.93,
+    "win_pct": 100.0,
+    "pf": 11188157245025.88,
+    "exp_r": 0.4
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 175,
+    "net_pts": 35425.59,
+    "exp_pts": 202.43,
+    "win_pct": 100.0,
+    "pf": 35425591994879.48,
+    "exp_r": 2.45
+   }
+  ]
+ },
+ "nifty50|FINAL_H4|30m": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 102,
+    "net_pts": -2421.36,
+    "exp_pts": -23.74,
+    "win_pct": 29.41,
+    "pf": 0.58,
+    "exp_r": -0.16
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 203,
+    "net_pts": 464.71,
+    "exp_pts": 2.29,
+    "win_pct": 31.03,
+    "pf": 1.06,
+    "exp_r": 0.01
+   },
+   {
+    "trend": "sideways",
+    "trades": 118,
+    "net_pts": 2389.78,
+    "exp_pts": 20.25,
+    "win_pct": 33.9,
+    "pf": 1.47,
+    "exp_r": 0.03
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 146,
+    "net_pts": 4529.62,
+    "exp_pts": 31.02,
+    "win_pct": 34.25,
+    "pf": 1.56,
+    "exp_r": 0.23
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 30,
+    "net_pts": 155.24,
+    "exp_pts": 5.17,
+    "win_pct": 26.67,
+    "pf": 1.07,
+    "exp_r": 0.04
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 191,
+    "net_pts": 3015.22,
+    "exp_pts": 15.79,
+    "win_pct": 34.55,
+    "pf": 1.43,
+    "exp_r": 0.07
+   },
+   {
+    "vol": "normal",
+    "trades": 283,
+    "net_pts": 1150.98,
+    "exp_pts": 4.07,
+    "win_pct": 28.98,
+    "pf": 1.08,
+    "exp_r": -0.01
+   },
+   {
+    "vol": "high",
+    "trades": 97,
+    "net_pts": 296.48,
+    "exp_pts": 3.06,
+    "win_pct": 34.02,
+    "pf": 1.05,
+    "exp_r": 0.06
+   },
+   {
+    "vol": "extreme",
+    "trades": 28,
+    "net_pts": 655.31,
+    "exp_pts": 23.4,
+    "win_pct": 35.71,
+    "pf": 1.36,
+    "exp_r": 0.29
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 44,
+    "net_pts": -5.36,
+    "exp_pts": -0.12,
+    "win_pct": 29.55,
+    "pf": 1.0,
+    "exp_r": -0.04
+   },
+   {
+    "session": "morning",
+    "trades": 200,
+    "net_pts": 621.48,
+    "exp_pts": 3.11,
+    "win_pct": 32.0,
+    "pf": 1.06,
+    "exp_r": 0.03
+   },
+   {
+    "session": "midday",
+    "trades": 181,
+    "net_pts": 3881.07,
+    "exp_pts": 21.44,
+    "win_pct": 33.7,
+    "pf": 1.54,
+    "exp_r": 0.15
+   },
+   {
+    "session": "afternoon",
+    "trades": 119,
+    "net_pts": 184.07,
+    "exp_pts": 1.55,
+    "win_pct": 29.41,
+    "pf": 1.03,
+    "exp_r": -0.08
+   },
+   {
+    "session": "closing",
+    "trades": 55,
+    "net_pts": 436.73,
+    "exp_pts": 7.94,
+    "win_pct": 32.73,
+    "pf": 1.16,
+    "exp_r": 0.02
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 39,
+    "net_pts": -3219.05,
+    "exp_pts": -82.54,
+    "win_pct": 17.95,
+    "pf": 0.32,
+    "exp_r": -0.2
+   },
+   {
+    "gap": "large up",
+    "trades": 28,
+    "net_pts": 2186.28,
+    "exp_pts": 78.08,
+    "win_pct": 50.0,
+    "pf": 3.16,
+    "exp_r": 0.53
+   },
+   {
+    "gap": "medium down",
+    "trades": 75,
+    "net_pts": 1840.7,
+    "exp_pts": 24.54,
+    "win_pct": 29.33,
+    "pf": 1.47,
+    "exp_r": 0.03
+   },
+   {
+    "gap": "medium up",
+    "trades": 147,
+    "net_pts": -564.31,
+    "exp_pts": -3.84,
+    "win_pct": 31.29,
+    "pf": 0.92,
+    "exp_r": -0.03
+   },
+   {
+    "gap": "small down",
+    "trades": 131,
+    "net_pts": 2911.35,
+    "exp_pts": 22.22,
+    "win_pct": 37.4,
+    "pf": 1.52,
+    "exp_r": 0.06
+   },
+   {
+    "gap": "small up",
+    "trades": 179,
+    "net_pts": 1963.01,
+    "exp_pts": 10.97,
+    "win_pct": 29.61,
+    "pf": 1.28,
+    "exp_r": 0.06
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 101,
+    "net_pts": -846.81,
+    "exp_pts": -8.38,
+    "win_pct": 34.65,
+    "pf": 0.85,
+    "exp_r": 0.04
+   },
+   {
+    "weekday": "Tue",
+    "trades": 117,
+    "net_pts": -3247.1,
+    "exp_pts": -27.75,
+    "win_pct": 25.64,
+    "pf": 0.49,
+    "exp_r": -0.24
+   },
+   {
+    "weekday": "Wed",
+    "trades": 126,
+    "net_pts": 687.57,
+    "exp_pts": 5.46,
+    "win_pct": 27.78,
+    "pf": 1.12,
+    "exp_r": 0.01
+   },
+   {
+    "weekday": "Thu",
+    "trades": 137,
+    "net_pts": 1089.24,
+    "exp_pts": 7.95,
+    "win_pct": 32.12,
+    "pf": 1.15,
+    "exp_r": 0.03
+   },
+   {
+    "weekday": "Fri",
+    "trades": 115,
+    "net_pts": 7034.68,
+    "exp_pts": 61.17,
+    "win_pct": 40.0,
+    "pf": 2.53,
+    "exp_r": 0.37
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 308,
+    "net_pts": 1036.36,
+    "exp_pts": 3.36,
+    "win_pct": 27.6,
+    "pf": 1.07,
+    "exp_r": -0.03
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 152,
+    "net_pts": 2943.02,
+    "exp_pts": 19.36,
+    "win_pct": 43.42,
+    "pf": 1.48,
+    "exp_r": 0.14
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 139,
+    "net_pts": 1138.61,
+    "exp_pts": 8.19,
+    "win_pct": 28.78,
+    "pf": 1.12,
+    "exp_r": 0.07
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 336,
+    "net_pts": 5781.77,
+    "exp_pts": 17.21,
+    "win_pct": 36.31,
+    "pf": 1.46,
+    "exp_r": 0.11
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 263,
+    "net_pts": -663.79,
+    "exp_pts": -2.52,
+    "win_pct": 26.24,
+    "pf": 0.96,
+    "exp_r": -0.05
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 216,
+    "net_pts": -20535.15,
+    "exp_pts": -95.07,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.6
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 192,
+    "net_pts": -9020.42,
+    "exp_pts": -46.98,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.49
+   },
+   {
+    "outcome": "small win",
+    "trades": 97,
+    "net_pts": 8052.66,
+    "exp_pts": 83.02,
+    "win_pct": 100.0,
+    "pf": 8052659966467.67,
+    "exp_r": 0.4
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 94,
+    "net_pts": 26620.9,
+    "exp_pts": 283.2,
+    "win_pct": 100.0,
+    "pf": 26620897417382.78,
+    "exp_r": 2.22
+   }
+  ]
+ },
+ "nifty50|FINAL_H4|1h": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 56,
+    "net_pts": -871.34,
+    "exp_pts": -15.56,
+    "win_pct": 28.57,
+    "pf": 0.79,
+    "exp_r": -0.13
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 115,
+    "net_pts": 1116.93,
+    "exp_pts": 9.71,
+    "win_pct": 33.91,
+    "pf": 1.17,
+    "exp_r": 0.09
+   },
+   {
+    "trend": "sideways",
+    "trades": 62,
+    "net_pts": 356.09,
+    "exp_pts": 5.74,
+    "win_pct": 32.26,
+    "pf": 1.08,
+    "exp_r": 0.2
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 68,
+    "net_pts": 1483.87,
+    "exp_pts": 21.82,
+    "win_pct": 30.88,
+    "pf": 1.28,
+    "exp_r": 0.14
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 14,
+    "net_pts": -155.38,
+    "exp_pts": -11.1,
+    "win_pct": 21.43,
+    "pf": 0.88,
+    "exp_r": -0.49
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 108,
+    "net_pts": 2694.98,
+    "exp_pts": 24.95,
+    "win_pct": 38.89,
+    "pf": 1.52,
+    "exp_r": 0.17
+   },
+   {
+    "vol": "normal",
+    "trades": 145,
+    "net_pts": -874.79,
+    "exp_pts": -6.03,
+    "win_pct": 25.52,
+    "pf": 0.92,
+    "exp_r": 0.01
+   },
+   {
+    "vol": "high",
+    "trades": 47,
+    "net_pts": -359.13,
+    "exp_pts": -7.64,
+    "win_pct": 29.79,
+    "pf": 0.92,
+    "exp_r": -0.12
+   },
+   {
+    "vol": "extreme",
+    "trades": 15,
+    "net_pts": 469.11,
+    "exp_pts": 31.27,
+    "win_pct": 40.0,
+    "pf": 1.31,
+    "exp_r": 0.33
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 47,
+    "net_pts": 212.43,
+    "exp_pts": 4.52,
+    "win_pct": 29.79,
+    "pf": 1.07,
+    "exp_r": 0.14
+   },
+   {
+    "session": "morning",
+    "trades": 80,
+    "net_pts": 1548.07,
+    "exp_pts": 19.35,
+    "win_pct": 36.25,
+    "pf": 1.32,
+    "exp_r": 0.15
+   },
+   {
+    "session": "midday",
+    "trades": 110,
+    "net_pts": 717.12,
+    "exp_pts": 6.52,
+    "win_pct": 30.91,
+    "pf": 1.09,
+    "exp_r": 0.03
+   },
+   {
+    "session": "afternoon",
+    "trades": 53,
+    "net_pts": -2578.97,
+    "exp_pts": -48.66,
+    "win_pct": 18.87,
+    "pf": 0.45,
+    "exp_r": -0.2
+   },
+   {
+    "session": "closing",
+    "trades": 25,
+    "net_pts": 2031.51,
+    "exp_pts": 81.26,
+    "win_pct": 48.0,
+    "pf": 2.42,
+    "exp_r": 0.31
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 18,
+    "net_pts": -1627.19,
+    "exp_pts": -90.4,
+    "win_pct": 11.11,
+    "pf": 0.3,
+    "exp_r": -0.26
+   },
+   {
+    "gap": "large up",
+    "trades": 16,
+    "net_pts": 1082.78,
+    "exp_pts": 67.67,
+    "win_pct": 50.0,
+    "pf": 1.89,
+    "exp_r": 0.03
+   },
+   {
+    "gap": "medium down",
+    "trades": 31,
+    "net_pts": -1364.53,
+    "exp_pts": -44.02,
+    "win_pct": 22.58,
+    "pf": 0.5,
+    "exp_r": -0.1
+   },
+   {
+    "gap": "medium up",
+    "trades": 90,
+    "net_pts": -313.34,
+    "exp_pts": -3.48,
+    "win_pct": 30.0,
+    "pf": 0.95,
+    "exp_r": 0.06
+   },
+   {
+    "gap": "small down",
+    "trades": 69,
+    "net_pts": 2714.08,
+    "exp_pts": 39.33,
+    "win_pct": 37.68,
+    "pf": 1.66,
+    "exp_r": 0.21
+   },
+   {
+    "gap": "small up",
+    "trades": 91,
+    "net_pts": 1438.37,
+    "exp_pts": 15.81,
+    "win_pct": 31.87,
+    "pf": 1.26,
+    "exp_r": 0.07
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 68,
+    "net_pts": -2008.3,
+    "exp_pts": -29.53,
+    "win_pct": 25.0,
+    "pf": 0.64,
+    "exp_r": -0.07
+   },
+   {
+    "weekday": "Tue",
+    "trades": 57,
+    "net_pts": 721.3,
+    "exp_pts": 12.65,
+    "win_pct": 35.09,
+    "pf": 1.21,
+    "exp_r": 0.15
+   },
+   {
+    "weekday": "Wed",
+    "trades": 62,
+    "net_pts": 815.08,
+    "exp_pts": 13.15,
+    "win_pct": 29.03,
+    "pf": 1.19,
+    "exp_r": -0.03
+   },
+   {
+    "weekday": "Thu",
+    "trades": 69,
+    "net_pts": 623.81,
+    "exp_pts": 9.04,
+    "win_pct": 31.88,
+    "pf": 1.13,
+    "exp_r": 0.1
+   },
+   {
+    "weekday": "Fri",
+    "trades": 59,
+    "net_pts": 1778.28,
+    "exp_pts": 30.14,
+    "win_pct": 37.29,
+    "pf": 1.48,
+    "exp_r": 0.15
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 119,
+    "net_pts": 2979.71,
+    "exp_pts": 25.04,
+    "win_pct": 31.93,
+    "pf": 1.47,
+    "exp_r": 0.11
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 119,
+    "net_pts": -901.62,
+    "exp_pts": -7.58,
+    "win_pct": 33.61,
+    "pf": 0.9,
+    "exp_r": 0.03
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 77,
+    "net_pts": -147.92,
+    "exp_pts": -1.92,
+    "win_pct": 27.27,
+    "pf": 0.98,
+    "exp_r": 0.03
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 183,
+    "net_pts": 1641.0,
+    "exp_pts": 8.97,
+    "win_pct": 35.52,
+    "pf": 1.14,
+    "exp_r": 0.11
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 132,
+    "net_pts": 289.17,
+    "exp_pts": 2.19,
+    "win_pct": 25.76,
+    "pf": 1.03,
+    "exp_r": -0.0
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 105,
+    "net_pts": -15228.09,
+    "exp_pts": -145.03,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.57
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 111,
+    "net_pts": -6699.59,
+    "exp_pts": -60.36,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.44
+   },
+   {
+    "outcome": "small win",
+    "trades": 48,
+    "net_pts": 5774.31,
+    "exp_pts": 120.3,
+    "win_pct": 100.0,
+    "pf": 5774313925639.3,
+    "exp_r": 0.41
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 51,
+    "net_pts": 18083.53,
+    "exp_pts": 354.58,
+    "win_pct": 100.0,
+    "pf": 18083534139644.3,
+    "exp_r": 2.13
+   }
+  ]
+ },
+ "nifty50|FINAL_H4|2h": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 23,
+    "net_pts": 496.62,
+    "exp_pts": 21.59,
+    "win_pct": 39.13,
+    "pf": 1.38,
+    "exp_r": -0.02
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 61,
+    "net_pts": 2709.44,
+    "exp_pts": 44.42,
+    "win_pct": 39.34,
+    "pf": 1.7,
+    "exp_r": 0.25
+   },
+   {
+    "trend": "sideways",
+    "trades": 48,
+    "net_pts": 129.05,
+    "exp_pts": 2.69,
+    "win_pct": 35.42,
+    "pf": 1.03,
+    "exp_r": 0.03
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 37,
+    "net_pts": 725.85,
+    "exp_pts": 19.62,
+    "win_pct": 37.84,
+    "pf": 1.15,
+    "exp_r": 0.18
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 5,
+    "net_pts": -434.01,
+    "exp_pts": -86.8,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.33
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 68,
+    "net_pts": 1880.54,
+    "exp_pts": 27.65,
+    "win_pct": 39.71,
+    "pf": 1.36,
+    "exp_r": 0.16
+   },
+   {
+    "vol": "normal",
+    "trades": 81,
+    "net_pts": -341.68,
+    "exp_pts": -4.22,
+    "win_pct": 30.86,
+    "pf": 0.96,
+    "exp_r": 0.05
+   },
+   {
+    "vol": "high",
+    "trades": 21,
+    "net_pts": 921.16,
+    "exp_pts": 43.86,
+    "win_pct": 38.1,
+    "pf": 1.41,
+    "exp_r": 0.16
+   },
+   {
+    "vol": "extreme",
+    "trades": 4,
+    "net_pts": 1166.92,
+    "exp_pts": 291.73,
+    "win_pct": 100.0,
+    "pf": 1166921852143.27,
+    "exp_r": 0.65
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 46,
+    "net_pts": 1682.22,
+    "exp_pts": 36.57,
+    "win_pct": 39.13,
+    "pf": 1.47,
+    "exp_r": 0.04
+   },
+   {
+    "session": "morning",
+    "trades": 14,
+    "net_pts": 2968.08,
+    "exp_pts": 212.01,
+    "win_pct": 78.57,
+    "pf": 8.04,
+    "exp_r": 0.68
+   },
+   {
+    "session": "midday",
+    "trades": 47,
+    "net_pts": 682.35,
+    "exp_pts": 14.52,
+    "win_pct": 27.66,
+    "pf": 1.17,
+    "exp_r": 0.13
+   },
+   {
+    "session": "afternoon",
+    "trades": 44,
+    "net_pts": -525.32,
+    "exp_pts": -11.94,
+    "win_pct": 27.27,
+    "pf": 0.88,
+    "exp_r": 0.11
+   },
+   {
+    "session": "closing",
+    "trades": 23,
+    "net_pts": -1180.4,
+    "exp_pts": -51.32,
+    "win_pct": 43.48,
+    "pf": 0.64,
+    "exp_r": -0.05
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 9,
+    "net_pts": 271.53,
+    "exp_pts": 30.17,
+    "win_pct": 44.44,
+    "pf": 1.29,
+    "exp_r": 0.07
+   },
+   {
+    "gap": "large up",
+    "trades": 13,
+    "net_pts": 34.84,
+    "exp_pts": 2.68,
+    "win_pct": 38.46,
+    "pf": 1.03,
+    "exp_r": 0.01
+   },
+   {
+    "gap": "medium down",
+    "trades": 13,
+    "net_pts": -1227.22,
+    "exp_pts": -94.4,
+    "win_pct": 23.08,
+    "pf": 0.32,
+    "exp_r": -0.24
+   },
+   {
+    "gap": "medium up",
+    "trades": 52,
+    "net_pts": 2952.32,
+    "exp_pts": 56.78,
+    "win_pct": 42.31,
+    "pf": 1.79,
+    "exp_r": 0.33
+   },
+   {
+    "gap": "small down",
+    "trades": 37,
+    "net_pts": 1728.57,
+    "exp_pts": 46.72,
+    "win_pct": 35.14,
+    "pf": 1.57,
+    "exp_r": 0.18
+   },
+   {
+    "gap": "small up",
+    "trades": 50,
+    "net_pts": -133.1,
+    "exp_pts": -2.66,
+    "win_pct": 34.0,
+    "pf": 0.97,
+    "exp_r": -0.0
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 37,
+    "net_pts": 893.57,
+    "exp_pts": 24.15,
+    "win_pct": 35.14,
+    "pf": 1.29,
+    "exp_r": 0.11
+   },
+   {
+    "weekday": "Tue",
+    "trades": 39,
+    "net_pts": 860.1,
+    "exp_pts": 22.05,
+    "win_pct": 35.9,
+    "pf": 1.26,
+    "exp_r": 0.13
+   },
+   {
+    "weekday": "Wed",
+    "trades": 27,
+    "net_pts": 875.35,
+    "exp_pts": 32.42,
+    "win_pct": 37.04,
+    "pf": 1.41,
+    "exp_r": 0.15
+   },
+   {
+    "weekday": "Thu",
+    "trades": 34,
+    "net_pts": 1336.41,
+    "exp_pts": 39.31,
+    "win_pct": 41.18,
+    "pf": 1.48,
+    "exp_r": 0.15
+   },
+   {
+    "weekday": "Fri",
+    "trades": 36,
+    "net_pts": 1130.43,
+    "exp_pts": 31.4,
+    "win_pct": 36.11,
+    "pf": 1.37,
+    "exp_r": 0.15
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 30,
+    "net_pts": 1792.66,
+    "exp_pts": 59.76,
+    "win_pct": 36.67,
+    "pf": 2.01,
+    "exp_r": 0.22
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 91,
+    "net_pts": 2655.6,
+    "exp_pts": 29.18,
+    "win_pct": 39.56,
+    "pf": 1.4,
+    "exp_r": 0.13
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 53,
+    "net_pts": -821.32,
+    "exp_pts": -15.5,
+    "win_pct": 32.08,
+    "pf": 0.89,
+    "exp_r": 0.06
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 107,
+    "net_pts": 4479.93,
+    "exp_pts": 41.87,
+    "win_pct": 42.99,
+    "pf": 1.56,
+    "exp_r": 0.18
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 67,
+    "net_pts": -852.98,
+    "exp_pts": -12.73,
+    "win_pct": 26.87,
+    "pf": 0.89,
+    "exp_r": 0.03
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 59,
+    "net_pts": -12172.12,
+    "exp_pts": -206.31,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.59
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 51,
+    "net_pts": -3527.73,
+    "exp_pts": -69.17,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.31
+   },
+   {
+    "outcome": "small win",
+    "trades": 34,
+    "net_pts": 6135.43,
+    "exp_pts": 180.45,
+    "win_pct": 100.0,
+    "pf": 6135429551279.87,
+    "exp_r": 0.41
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 30,
+    "net_pts": 13191.36,
+    "exp_pts": 439.71,
+    "win_pct": 100.0,
+    "pf": 13191359861511.59,
+    "exp_r": 1.93
+   }
+  ]
+ },
+ "nifty50|FINAL_H4|4h": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 17,
+    "net_pts": -604.45,
+    "exp_pts": -35.56,
+    "win_pct": 41.18,
+    "pf": 0.78,
+    "exp_r": -0.17
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 26,
+    "net_pts": -27.35,
+    "exp_pts": -1.05,
+    "win_pct": 34.62,
+    "pf": 0.99,
+    "exp_r": 0.05
+   },
+   {
+    "trend": "sideways",
+    "trades": 15,
+    "net_pts": 3522.56,
+    "exp_pts": 234.84,
+    "win_pct": 46.67,
+    "pf": 4.48,
+    "exp_r": 0.36
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 16,
+    "net_pts": 2470.67,
+    "exp_pts": 154.42,
+    "win_pct": 50.0,
+    "pf": 1.76,
+    "exp_r": 0.6
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 5,
+    "net_pts": -1372.31,
+    "exp_pts": -274.46,
+    "win_pct": 20.0,
+    "pf": 0.0,
+    "exp_r": -0.42
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 27,
+    "net_pts": 928.84,
+    "exp_pts": 34.4,
+    "win_pct": 37.04,
+    "pf": 1.35,
+    "exp_r": 0.09
+   },
+   {
+    "vol": "normal",
+    "trades": 40,
+    "net_pts": 874.13,
+    "exp_pts": 21.85,
+    "win_pct": 42.5,
+    "pf": 1.14,
+    "exp_r": 0.09
+   },
+   {
+    "vol": "high",
+    "trades": 11,
+    "net_pts": 395.29,
+    "exp_pts": 35.94,
+    "win_pct": 36.36,
+    "pf": 1.17,
+    "exp_r": 0.35
+   },
+   {
+    "vol": "extreme",
+    "trades": 1,
+    "net_pts": 1790.85,
+    "exp_pts": 1790.85,
+    "win_pct": 100.0,
+    "pf": 1790854219165.46,
+    "exp_r": 1.13
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 29,
+    "net_pts": 3868.69,
+    "exp_pts": 133.4,
+    "win_pct": 37.93,
+    "pf": 1.95,
+    "exp_r": 0.29
+   },
+   {
+    "session": "morning",
+    "trades": 15,
+    "net_pts": -662.12,
+    "exp_pts": -44.14,
+    "win_pct": 40.0,
+    "pf": 0.75,
+    "exp_r": -0.01
+   },
+   {
+    "session": "midday",
+    "trades": 13,
+    "net_pts": 1040.1,
+    "exp_pts": 80.01,
+    "win_pct": 46.15,
+    "pf": 1.9,
+    "exp_r": 0.15
+   },
+   {
+    "session": "afternoon",
+    "trades": 16,
+    "net_pts": -423.65,
+    "exp_pts": -26.48,
+    "win_pct": 43.75,
+    "pf": 0.83,
+    "exp_r": 0.14
+   },
+   {
+    "session": "closing",
+    "trades": 6,
+    "net_pts": 166.1,
+    "exp_pts": 27.68,
+    "win_pct": 33.33,
+    "pf": 1.26,
+    "exp_r": -0.21
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 3,
+    "net_pts": 837.72,
+    "exp_pts": 279.24,
+    "win_pct": 33.33,
+    "pf": 2.98,
+    "exp_r": 0.29
+   },
+   {
+    "gap": "large up",
+    "trades": 5,
+    "net_pts": 1443.92,
+    "exp_pts": 288.78,
+    "win_pct": 60.0,
+    "pf": 132.78,
+    "exp_r": 0.42
+   },
+   {
+    "gap": "medium down",
+    "trades": 10,
+    "net_pts": -497.75,
+    "exp_pts": -49.78,
+    "win_pct": 20.0,
+    "pf": 0.79,
+    "exp_r": 0.47
+   },
+   {
+    "gap": "medium up",
+    "trades": 21,
+    "net_pts": 1010.17,
+    "exp_pts": 48.1,
+    "win_pct": 47.62,
+    "pf": 1.44,
+    "exp_r": 0.16
+   },
+   {
+    "gap": "small down",
+    "trades": 14,
+    "net_pts": -137.75,
+    "exp_pts": -9.84,
+    "win_pct": 50.0,
+    "pf": 0.95,
+    "exp_r": 0.08
+   },
+   {
+    "gap": "small up",
+    "trades": 26,
+    "net_pts": 1332.81,
+    "exp_pts": 51.26,
+    "win_pct": 34.62,
+    "pf": 1.41,
+    "exp_r": -0.03
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 20,
+    "net_pts": 978.22,
+    "exp_pts": 48.91,
+    "win_pct": 50.0,
+    "pf": 1.26,
+    "exp_r": 0.17
+   },
+   {
+    "weekday": "Tue",
+    "trades": 18,
+    "net_pts": 925.04,
+    "exp_pts": 51.39,
+    "win_pct": 38.89,
+    "pf": 1.42,
+    "exp_r": 0.13
+   },
+   {
+    "weekday": "Wed",
+    "trades": 8,
+    "net_pts": 654.65,
+    "exp_pts": 81.83,
+    "win_pct": 50.0,
+    "pf": 1.81,
+    "exp_r": 0.19
+   },
+   {
+    "weekday": "Thu",
+    "trades": 18,
+    "net_pts": -1381.04,
+    "exp_pts": -76.72,
+    "win_pct": 22.22,
+    "pf": 0.33,
+    "exp_r": -0.16
+   },
+   {
+    "weekday": "Fri",
+    "trades": 15,
+    "net_pts": 2812.25,
+    "exp_pts": 187.48,
+    "win_pct": 46.67,
+    "pf": 2.27,
+    "exp_r": 0.45
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 16,
+    "net_pts": 1085.47,
+    "exp_pts": 67.84,
+    "win_pct": 37.5,
+    "pf": 1.36,
+    "exp_r": 0.06
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 41,
+    "net_pts": 305.48,
+    "exp_pts": 7.45,
+    "win_pct": 41.46,
+    "pf": 1.06,
+    "exp_r": 0.02
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 22,
+    "net_pts": 2598.17,
+    "exp_pts": 118.1,
+    "win_pct": 40.91,
+    "pf": 1.83,
+    "exp_r": 0.42
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 44,
+    "net_pts": 2512.97,
+    "exp_pts": 57.11,
+    "win_pct": 45.45,
+    "pf": 1.54,
+    "exp_r": 0.14
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 35,
+    "net_pts": 1476.15,
+    "exp_pts": 42.18,
+    "win_pct": 34.29,
+    "pf": 1.23,
+    "exp_r": 0.15
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 30,
+    "net_pts": -9533.29,
+    "exp_pts": -317.78,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.61
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 17,
+    "net_pts": -1512.03,
+    "exp_pts": -88.94,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.3
+   },
+   {
+    "outcome": "small win",
+    "trades": 18,
+    "net_pts": 3459.22,
+    "exp_pts": 192.18,
+    "win_pct": 100.0,
+    "pf": 3459219857045.11,
+    "exp_r": 0.4
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 14,
+    "net_pts": 11575.22,
+    "exp_pts": 826.8,
+    "win_pct": 100.0,
+    "pf": 11575222220641.82,
+    "exp_r": 1.96
+   }
+  ]
+ },
+ "nifty50|FINAL_H4|D1": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 9,
+    "net_pts": -2117.8,
+    "exp_pts": -235.31,
+    "win_pct": 11.11,
+    "pf": 0.04,
+    "exp_r": -0.35
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 12,
+    "net_pts": 915.82,
+    "exp_pts": 76.32,
+    "win_pct": 41.67,
+    "pf": 1.52,
+    "exp_r": 0.06
+   },
+   {
+    "trend": "sideways",
+    "trades": 9,
+    "net_pts": -906.63,
+    "exp_pts": -100.74,
+    "win_pct": 33.33,
+    "pf": 0.66,
+    "exp_r": -0.11
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 6,
+    "net_pts": 453.0,
+    "exp_pts": 75.5,
+    "win_pct": 33.33,
+    "pf": 1.41,
+    "exp_r": -0.14
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 2,
+    "net_pts": -2062.2,
+    "exp_pts": -1031.1,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.8
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 13,
+    "net_pts": 1338.98,
+    "exp_pts": 103.0,
+    "win_pct": 38.46,
+    "pf": 2.3,
+    "exp_r": 0.11
+   },
+   {
+    "vol": "normal",
+    "trades": 21,
+    "net_pts": -4405.15,
+    "exp_pts": -209.77,
+    "win_pct": 19.05,
+    "pf": 0.39,
+    "exp_r": -0.32
+   },
+   {
+    "vol": "high",
+    "trades": 3,
+    "net_pts": -1513.32,
+    "exp_pts": -504.44,
+    "win_pct": 33.33,
+    "pf": 0.05,
+    "exp_r": -0.36
+   },
+   {
+    "vol": "extreme",
+    "trades": 1,
+    "net_pts": 861.69,
+    "exp_pts": 861.69,
+    "win_pct": 100.0,
+    "pf": 861690450646.96,
+    "exp_r": 0.42
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 18,
+    "net_pts": -2059.44,
+    "exp_pts": -114.41,
+    "win_pct": 33.33,
+    "pf": 0.64,
+    "exp_r": -0.08
+   },
+   {
+    "session": "morning",
+    "trades": 7,
+    "net_pts": -617.8,
+    "exp_pts": -88.26,
+    "win_pct": 28.57,
+    "pf": 0.71,
+    "exp_r": -0.3
+   },
+   {
+    "session": "midday",
+    "trades": 4,
+    "net_pts": 872.09,
+    "exp_pts": 218.02,
+    "win_pct": 75.0,
+    "pf": 134.01,
+    "exp_r": 0.31
+   },
+   {
+    "session": "afternoon",
+    "trades": 8,
+    "net_pts": -1653.8,
+    "exp_pts": -206.73,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.39
+   },
+   {
+    "session": "closing",
+    "trades": 1,
+    "net_pts": -258.86,
+    "exp_pts": -258.86,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.39
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 2,
+    "net_pts": -1430.82,
+    "exp_pts": -715.41,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.54
+   },
+   {
+    "gap": "large up",
+    "trades": 2,
+    "net_pts": -1764.48,
+    "exp_pts": -882.24,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.68
+   },
+   {
+    "gap": "medium down",
+    "trades": 2,
+    "net_pts": -770.13,
+    "exp_pts": -385.07,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.45
+   },
+   {
+    "gap": "medium up",
+    "trades": 7,
+    "net_pts": -910.6,
+    "exp_pts": -130.09,
+    "win_pct": 28.57,
+    "pf": 0.26,
+    "exp_r": -0.29
+   },
+   {
+    "gap": "small down",
+    "trades": 11,
+    "net_pts": 1903.05,
+    "exp_pts": 173.0,
+    "win_pct": 45.45,
+    "pf": 1.98,
+    "exp_r": 0.28
+   },
+   {
+    "gap": "small up",
+    "trades": 14,
+    "net_pts": -744.84,
+    "exp_pts": -53.2,
+    "win_pct": 28.57,
+    "pf": 0.72,
+    "exp_r": -0.25
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 12,
+    "net_pts": -1560.26,
+    "exp_pts": -130.02,
+    "win_pct": 33.33,
+    "pf": 0.65,
+    "exp_r": 0.03
+   },
+   {
+    "weekday": "Tue",
+    "trades": 4,
+    "net_pts": -830.66,
+    "exp_pts": -207.66,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.5
+   },
+   {
+    "weekday": "Wed",
+    "trades": 12,
+    "net_pts": -1278.49,
+    "exp_pts": -106.54,
+    "win_pct": 33.33,
+    "pf": 0.59,
+    "exp_r": -0.27
+   },
+   {
+    "weekday": "Thu",
+    "trades": 6,
+    "net_pts": -388.42,
+    "exp_pts": -64.74,
+    "win_pct": 16.67,
+    "pf": 0.56,
+    "exp_r": -0.05
+   },
+   {
+    "weekday": "Fri",
+    "trades": 4,
+    "net_pts": 340.03,
+    "exp_pts": 85.01,
+    "win_pct": 50.0,
+    "pf": 1.67,
+    "exp_r": -0.18
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 1,
+    "net_pts": 1028.56,
+    "exp_pts": 1028.56,
+    "win_pct": 100.0,
+    "pf": 1028562579922.17,
+    "exp_r": 1.58
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 29,
+    "net_pts": -4006.12,
+    "exp_pts": -138.14,
+    "win_pct": 24.14,
+    "pf": 0.4,
+    "exp_r": -0.25
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 8,
+    "net_pts": -740.25,
+    "exp_pts": -92.53,
+    "win_pct": 37.5,
+    "pf": 0.76,
+    "exp_r": -0.01
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 26,
+    "net_pts": -2774.72,
+    "exp_pts": -106.72,
+    "win_pct": 30.77,
+    "pf": 0.57,
+    "exp_r": -0.15
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 12,
+    "net_pts": -943.08,
+    "exp_pts": -78.59,
+    "win_pct": 25.0,
+    "pf": 0.72,
+    "exp_r": -0.15
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 15,
+    "net_pts": -8067.19,
+    "exp_pts": -537.81,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.62
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 12,
+    "net_pts": -1730.96,
+    "exp_pts": -144.25,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.33
+   },
+   {
+    "outcome": "small win",
+    "trades": 9,
+    "net_pts": 4236.2,
+    "exp_pts": 470.69,
+    "win_pct": 100.0,
+    "pf": 4236195966650.2,
+    "exp_r": 0.39
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 2,
+    "net_pts": 1844.14,
+    "exp_pts": 922.07,
+    "win_pct": 100.0,
+    "pf": 1844144326475.64,
+    "exp_r": 1.95
+   }
+  ]
+ },
+ "banknifty|ASIS|5m": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 1075,
+    "net_pts": -21522.62,
+    "exp_pts": -20.02,
+    "win_pct": 12.74,
+    "pf": 0.48,
+    "exp_r": -0.17
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 1595,
+    "net_pts": -24131.56,
+    "exp_pts": -15.13,
+    "win_pct": 12.66,
+    "pf": 0.59,
+    "exp_r": -0.17
+   },
+   {
+    "trend": "sideways",
+    "trades": 1027,
+    "net_pts": -16284.94,
+    "exp_pts": -15.86,
+    "win_pct": 11.49,
+    "pf": 0.58,
+    "exp_r": -0.13
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 1086,
+    "net_pts": -12837.98,
+    "exp_pts": -11.82,
+    "win_pct": 11.6,
+    "pf": 0.65,
+    "exp_r": -0.12
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 400,
+    "net_pts": -3495.55,
+    "exp_pts": -8.74,
+    "win_pct": 12.5,
+    "pf": 0.78,
+    "exp_r": -0.04
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 1899,
+    "net_pts": -32147.14,
+    "exp_pts": -16.93,
+    "win_pct": 12.22,
+    "pf": 0.53,
+    "exp_r": -0.17
+   },
+   {
+    "vol": "normal",
+    "trades": 2494,
+    "net_pts": -39139.71,
+    "exp_pts": -15.69,
+    "win_pct": 12.39,
+    "pf": 0.59,
+    "exp_r": -0.14
+   },
+   {
+    "vol": "high",
+    "trades": 628,
+    "net_pts": -5271.89,
+    "exp_pts": -8.39,
+    "win_pct": 11.62,
+    "pf": 0.76,
+    "exp_r": -0.05
+   },
+   {
+    "vol": "extreme",
+    "trades": 162,
+    "net_pts": -1713.91,
+    "exp_pts": -10.58,
+    "win_pct": 11.73,
+    "pf": 0.71,
+    "exp_r": -0.03
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 481,
+    "net_pts": -9272.54,
+    "exp_pts": -19.28,
+    "win_pct": 14.35,
+    "pf": 0.53,
+    "exp_r": -0.08
+   },
+   {
+    "session": "morning",
+    "trades": 1367,
+    "net_pts": -20553.38,
+    "exp_pts": -15.04,
+    "win_pct": 13.31,
+    "pf": 0.54,
+    "exp_r": -0.14
+   },
+   {
+    "session": "midday",
+    "trades": 1597,
+    "net_pts": -27469.86,
+    "exp_pts": -17.2,
+    "win_pct": 12.02,
+    "pf": 0.46,
+    "exp_r": -0.2
+   },
+   {
+    "session": "afternoon",
+    "trades": 1291,
+    "net_pts": -22325.89,
+    "exp_pts": -17.29,
+    "win_pct": 8.99,
+    "pf": 0.55,
+    "exp_r": -0.16
+   },
+   {
+    "session": "closing",
+    "trades": 447,
+    "net_pts": 1349.01,
+    "exp_pts": 3.02,
+    "win_pct": 16.55,
+    "pf": 1.05,
+    "exp_r": 0.06
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 397,
+    "net_pts": -3141.58,
+    "exp_pts": -7.91,
+    "win_pct": 11.34,
+    "pf": 0.81,
+    "exp_r": -0.04
+   },
+   {
+    "gap": "large up",
+    "trades": 407,
+    "net_pts": -1965.3,
+    "exp_pts": -4.83,
+    "win_pct": 14.25,
+    "pf": 0.87,
+    "exp_r": -0.01
+   },
+   {
+    "gap": "medium down",
+    "trades": 858,
+    "net_pts": -11085.67,
+    "exp_pts": -12.92,
+    "win_pct": 12.7,
+    "pf": 0.66,
+    "exp_r": -0.1
+   },
+   {
+    "gap": "medium up",
+    "trades": 1199,
+    "net_pts": -20693.56,
+    "exp_pts": -17.26,
+    "win_pct": 12.09,
+    "pf": 0.52,
+    "exp_r": -0.16
+   },
+   {
+    "gap": "small down",
+    "trades": 989,
+    "net_pts": -17163.37,
+    "exp_pts": -17.35,
+    "win_pct": 12.13,
+    "pf": 0.53,
+    "exp_r": -0.17
+   },
+   {
+    "gap": "small up",
+    "trades": 1333,
+    "net_pts": -24223.18,
+    "exp_pts": -18.17,
+    "win_pct": 11.7,
+    "pf": 0.49,
+    "exp_r": -0.2
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 1039,
+    "net_pts": -21174.7,
+    "exp_pts": -20.38,
+    "win_pct": 12.03,
+    "pf": 0.47,
+    "exp_r": -0.17
+   },
+   {
+    "weekday": "Tue",
+    "trades": 1055,
+    "net_pts": -23734.73,
+    "exp_pts": -22.5,
+    "win_pct": 10.14,
+    "pf": 0.43,
+    "exp_r": -0.19
+   },
+   {
+    "weekday": "Wed",
+    "trades": 1003,
+    "net_pts": -9208.37,
+    "exp_pts": -9.18,
+    "win_pct": 13.36,
+    "pf": 0.74,
+    "exp_r": -0.09
+   },
+   {
+    "weekday": "Thu",
+    "trades": 989,
+    "net_pts": -17078.26,
+    "exp_pts": -17.27,
+    "win_pct": 12.64,
+    "pf": 0.53,
+    "exp_r": -0.17
+   },
+   {
+    "weekday": "Fri",
+    "trades": 1073,
+    "net_pts": -6159.48,
+    "exp_pts": -5.74,
+    "win_pct": 13.05,
+    "pf": 0.83,
+    "exp_r": -0.08
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 2249,
+    "net_pts": -40862.54,
+    "exp_pts": -18.17,
+    "win_pct": 11.69,
+    "pf": 0.5,
+    "exp_r": -0.18
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 1597,
+    "net_pts": -21811.69,
+    "exp_pts": -13.66,
+    "win_pct": 12.84,
+    "pf": 0.62,
+    "exp_r": -0.13
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 1337,
+    "net_pts": -15598.42,
+    "exp_pts": -11.67,
+    "win_pct": 12.34,
+    "pf": 0.7,
+    "exp_r": -0.09
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 2820,
+    "net_pts": -41533.03,
+    "exp_pts": -14.73,
+    "win_pct": 12.87,
+    "pf": 0.58,
+    "exp_r": -0.16
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 2363,
+    "net_pts": -36739.62,
+    "exp_pts": -15.55,
+    "win_pct": 11.43,
+    "pf": 0.6,
+    "exp_r": -0.12
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 2777,
+    "net_pts": -153482.15,
+    "exp_pts": -55.27,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.42
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 1773,
+    "net_pts": -37999.09,
+    "exp_pts": -21.43,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.26
+   },
+   {
+    "outcome": "small win",
+    "trades": 388,
+    "net_pts": 27049.49,
+    "exp_pts": 69.72,
+    "win_pct": 100.0,
+    "pf": 27049486006915.84,
+    "exp_r": 0.39
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 245,
+    "net_pts": 86159.11,
+    "exp_pts": 351.67,
+    "win_pct": 100.0,
+    "pf": 86159108861746.3,
+    "exp_r": 3.05
+   }
+  ]
+ },
+ "banknifty|ASIS|15m": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 447,
+    "net_pts": -9775.62,
+    "exp_pts": -21.87,
+    "win_pct": 9.17,
+    "pf": 0.51,
+    "exp_r": -0.11
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 608,
+    "net_pts": -9292.16,
+    "exp_pts": -15.28,
+    "win_pct": 8.72,
+    "pf": 0.65,
+    "exp_r": -0.09
+   },
+   {
+    "trend": "sideways",
+    "trades": 368,
+    "net_pts": 6155.92,
+    "exp_pts": 16.73,
+    "win_pct": 14.4,
+    "pf": 1.47,
+    "exp_r": 0.04
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 385,
+    "net_pts": 6602.32,
+    "exp_pts": 17.15,
+    "win_pct": 12.47,
+    "pf": 1.48,
+    "exp_r": 0.03
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 150,
+    "net_pts": 1307.28,
+    "exp_pts": 8.72,
+    "win_pct": 7.33,
+    "pf": 1.22,
+    "exp_r": 0.05
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 709,
+    "net_pts": -9063.22,
+    "exp_pts": -12.78,
+    "win_pct": 11.28,
+    "pf": 0.7,
+    "exp_r": -0.06
+   },
+   {
+    "vol": "normal",
+    "trades": 961,
+    "net_pts": 339.22,
+    "exp_pts": 0.35,
+    "win_pct": 9.89,
+    "pf": 1.01,
+    "exp_r": -0.02
+   },
+   {
+    "vol": "high",
+    "trades": 233,
+    "net_pts": 2850.44,
+    "exp_pts": 12.23,
+    "win_pct": 11.16,
+    "pf": 1.23,
+    "exp_r": -0.04
+   },
+   {
+    "vol": "extreme",
+    "trades": 55,
+    "net_pts": 871.31,
+    "exp_pts": 15.84,
+    "win_pct": 9.09,
+    "pf": 1.43,
+    "exp_r": 0.01
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 176,
+    "net_pts": -1352.8,
+    "exp_pts": -7.69,
+    "win_pct": 16.48,
+    "pf": 0.84,
+    "exp_r": -0.04
+   },
+   {
+    "session": "morning",
+    "trades": 564,
+    "net_pts": -3396.15,
+    "exp_pts": -6.02,
+    "win_pct": 10.82,
+    "pf": 0.84,
+    "exp_r": -0.04
+   },
+   {
+    "session": "midday",
+    "trades": 577,
+    "net_pts": -8857.04,
+    "exp_pts": -15.35,
+    "win_pct": 6.76,
+    "pf": 0.55,
+    "exp_r": -0.1
+   },
+   {
+    "session": "afternoon",
+    "trades": 482,
+    "net_pts": 2107.18,
+    "exp_pts": 4.37,
+    "win_pct": 9.34,
+    "pf": 1.09,
+    "exp_r": -0.02
+   },
+   {
+    "session": "closing",
+    "trades": 159,
+    "net_pts": 6496.56,
+    "exp_pts": 40.86,
+    "win_pct": 20.13,
+    "pf": 1.85,
+    "exp_r": 0.13
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 153,
+    "net_pts": 4013.43,
+    "exp_pts": 26.23,
+    "win_pct": 14.38,
+    "pf": 1.63,
+    "exp_r": 0.04
+   },
+   {
+    "gap": "large up",
+    "trades": 138,
+    "net_pts": 2704.11,
+    "exp_pts": 19.6,
+    "win_pct": 13.04,
+    "pf": 1.45,
+    "exp_r": 0.08
+   },
+   {
+    "gap": "medium down",
+    "trades": 321,
+    "net_pts": 5458.06,
+    "exp_pts": 17.0,
+    "win_pct": 9.66,
+    "pf": 1.48,
+    "exp_r": 0.02
+   },
+   {
+    "gap": "medium up",
+    "trades": 404,
+    "net_pts": -2005.6,
+    "exp_pts": -4.96,
+    "win_pct": 9.41,
+    "pf": 0.88,
+    "exp_r": -0.03
+   },
+   {
+    "gap": "small down",
+    "trades": 439,
+    "net_pts": -8607.09,
+    "exp_pts": -19.61,
+    "win_pct": 9.34,
+    "pf": 0.48,
+    "exp_r": -0.12
+   },
+   {
+    "gap": "small up",
+    "trades": 503,
+    "net_pts": -6565.18,
+    "exp_pts": -13.05,
+    "win_pct": 11.13,
+    "pf": 0.71,
+    "exp_r": -0.07
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 379,
+    "net_pts": -3741.69,
+    "exp_pts": -9.87,
+    "win_pct": 9.76,
+    "pf": 0.76,
+    "exp_r": -0.05
+   },
+   {
+    "weekday": "Tue",
+    "trades": 373,
+    "net_pts": -3884.81,
+    "exp_pts": -10.42,
+    "win_pct": 9.65,
+    "pf": 0.79,
+    "exp_r": -0.06
+   },
+   {
+    "weekday": "Wed",
+    "trades": 393,
+    "net_pts": -1354.43,
+    "exp_pts": -3.45,
+    "win_pct": 10.69,
+    "pf": 0.91,
+    "exp_r": -0.02
+   },
+   {
+    "weekday": "Thu",
+    "trades": 428,
+    "net_pts": -2164.78,
+    "exp_pts": -5.06,
+    "win_pct": 10.98,
+    "pf": 0.87,
+    "exp_r": -0.07
+   },
+   {
+    "weekday": "Fri",
+    "trades": 378,
+    "net_pts": 5745.56,
+    "exp_pts": 15.2,
+    "win_pct": 11.38,
+    "pf": 1.45,
+    "exp_r": 0.02
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 868,
+    "net_pts": -3955.02,
+    "exp_pts": -4.56,
+    "win_pct": 10.48,
+    "pf": 0.89,
+    "exp_r": -0.06
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 579,
+    "net_pts": -2629.59,
+    "exp_pts": -4.54,
+    "win_pct": 10.88,
+    "pf": 0.9,
+    "exp_r": -0.04
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 511,
+    "net_pts": 1582.35,
+    "exp_pts": 3.1,
+    "win_pct": 10.18,
+    "pf": 1.09,
+    "exp_r": -0.01
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 1079,
+    "net_pts": -1379.68,
+    "exp_pts": -1.28,
+    "win_pct": 11.58,
+    "pf": 0.97,
+    "exp_r": -0.02
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 879,
+    "net_pts": -3622.57,
+    "exp_pts": -4.12,
+    "win_pct": 9.22,
+    "pf": 0.91,
+    "exp_r": -0.05
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 1286,
+    "net_pts": -66666.01,
+    "exp_pts": -51.84,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.22
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 466,
+    "net_pts": -12851.96,
+    "exp_pts": -27.58,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.17
+   },
+   {
+    "outcome": "small win",
+    "trades": 123,
+    "net_pts": 17959.69,
+    "exp_pts": 146.01,
+    "win_pct": 100.0,
+    "pf": 17959693846457.19,
+    "exp_r": 0.41
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 83,
+    "net_pts": 56556.03,
+    "exp_pts": 681.4,
+    "win_pct": 100.0,
+    "pf": 56556027451328.02,
+    "exp_r": 2.93
+   }
+  ]
+ },
+ "banknifty|ASIS|30m": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 262,
+    "net_pts": -6947.46,
+    "exp_pts": -26.52,
+    "win_pct": 4.96,
+    "pf": 0.37,
+    "exp_r": -0.08
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 380,
+    "net_pts": -4272.71,
+    "exp_pts": -11.24,
+    "win_pct": 8.95,
+    "pf": 0.76,
+    "exp_r": -0.03
+   },
+   {
+    "trend": "sideways",
+    "trades": 228,
+    "net_pts": -2007.76,
+    "exp_pts": -8.81,
+    "win_pct": 7.02,
+    "pf": 0.83,
+    "exp_r": -0.06
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 235,
+    "net_pts": 2584.17,
+    "exp_pts": 11.0,
+    "win_pct": 8.51,
+    "pf": 1.3,
+    "exp_r": 0.01
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 85,
+    "net_pts": 934.8,
+    "exp_pts": 11.0,
+    "win_pct": 9.41,
+    "pf": 1.19,
+    "exp_r": 0.09
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 461,
+    "net_pts": -6783.71,
+    "exp_pts": -14.72,
+    "win_pct": 6.94,
+    "pf": 0.67,
+    "exp_r": -0.05
+   },
+   {
+    "vol": "normal",
+    "trades": 565,
+    "net_pts": -1848.2,
+    "exp_pts": -3.27,
+    "win_pct": 7.61,
+    "pf": 0.92,
+    "exp_r": -0.02
+   },
+   {
+    "vol": "high",
+    "trades": 127,
+    "net_pts": -548.03,
+    "exp_pts": -4.32,
+    "win_pct": 10.24,
+    "pf": 0.94,
+    "exp_r": 0.01
+   },
+   {
+    "vol": "extreme",
+    "trades": 37,
+    "net_pts": -529.02,
+    "exp_pts": -14.3,
+    "win_pct": 8.11,
+    "pf": 0.79,
+    "exp_r": -0.11
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 131,
+    "net_pts": -3180.39,
+    "exp_pts": -24.28,
+    "win_pct": 6.87,
+    "pf": 0.56,
+    "exp_r": -0.05
+   },
+   {
+    "session": "morning",
+    "trades": 363,
+    "net_pts": -1913.33,
+    "exp_pts": -5.27,
+    "win_pct": 6.61,
+    "pf": 0.88,
+    "exp_r": -0.03
+   },
+   {
+    "session": "midday",
+    "trades": 294,
+    "net_pts": -6965.13,
+    "exp_pts": -23.69,
+    "win_pct": 4.42,
+    "pf": 0.39,
+    "exp_r": -0.07
+   },
+   {
+    "session": "afternoon",
+    "trades": 289,
+    "net_pts": 2932.29,
+    "exp_pts": 10.15,
+    "win_pct": 9.69,
+    "pf": 1.27,
+    "exp_r": -0.0
+   },
+   {
+    "session": "closing",
+    "trades": 113,
+    "net_pts": -582.39,
+    "exp_pts": -5.15,
+    "win_pct": 15.04,
+    "pf": 0.93,
+    "exp_r": 0.02
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 91,
+    "net_pts": -796.31,
+    "exp_pts": -8.75,
+    "win_pct": 6.59,
+    "pf": 0.83,
+    "exp_r": 0.02
+   },
+   {
+    "gap": "large up",
+    "trades": 93,
+    "net_pts": 5092.06,
+    "exp_pts": 54.75,
+    "win_pct": 11.83,
+    "pf": 1.99,
+    "exp_r": 0.13
+   },
+   {
+    "gap": "medium down",
+    "trades": 216,
+    "net_pts": -4564.21,
+    "exp_pts": -21.13,
+    "win_pct": 5.56,
+    "pf": 0.53,
+    "exp_r": -0.08
+   },
+   {
+    "gap": "medium up",
+    "trades": 238,
+    "net_pts": -7160.42,
+    "exp_pts": -30.09,
+    "win_pct": 6.3,
+    "pf": 0.46,
+    "exp_r": -0.12
+   },
+   {
+    "gap": "small down",
+    "trades": 241,
+    "net_pts": -1864.21,
+    "exp_pts": -7.74,
+    "win_pct": 7.88,
+    "pf": 0.8,
+    "exp_r": -0.03
+   },
+   {
+    "gap": "small up",
+    "trades": 311,
+    "net_pts": -415.87,
+    "exp_pts": -1.34,
+    "win_pct": 9.0,
+    "pf": 0.97,
+    "exp_r": 0.01
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 231,
+    "net_pts": -6721.38,
+    "exp_pts": -29.1,
+    "win_pct": 6.06,
+    "pf": 0.41,
+    "exp_r": -0.07
+   },
+   {
+    "weekday": "Tue",
+    "trades": 213,
+    "net_pts": 932.35,
+    "exp_pts": 4.38,
+    "win_pct": 5.63,
+    "pf": 1.1,
+    "exp_r": -0.05
+   },
+   {
+    "weekday": "Wed",
+    "trades": 242,
+    "net_pts": -7531.59,
+    "exp_pts": -31.12,
+    "win_pct": 8.26,
+    "pf": 0.45,
+    "exp_r": -0.09
+   },
+   {
+    "weekday": "Thu",
+    "trades": 244,
+    "net_pts": -4054.62,
+    "exp_pts": -16.62,
+    "win_pct": 7.79,
+    "pf": 0.6,
+    "exp_r": -0.04
+   },
+   {
+    "weekday": "Fri",
+    "trades": 256,
+    "net_pts": 7730.34,
+    "exp_pts": 30.2,
+    "win_pct": 10.16,
+    "pf": 1.85,
+    "exp_r": 0.09
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 444,
+    "net_pts": -4380.32,
+    "exp_pts": -9.87,
+    "win_pct": 6.98,
+    "pf": 0.78,
+    "exp_r": -0.04
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 400,
+    "net_pts": -678.38,
+    "exp_pts": -1.7,
+    "win_pct": 10.0,
+    "pf": 0.97,
+    "exp_r": -0.03
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 346,
+    "net_pts": -4650.25,
+    "exp_pts": -13.44,
+    "win_pct": 5.78,
+    "pf": 0.67,
+    "exp_r": -0.02
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 639,
+    "net_pts": -1639.66,
+    "exp_pts": -2.57,
+    "win_pct": 8.29,
+    "pf": 0.94,
+    "exp_r": -0.01
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 551,
+    "net_pts": -8069.29,
+    "exp_pts": -14.64,
+    "win_pct": 6.9,
+    "pf": 0.72,
+    "exp_r": -0.05
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 910,
+    "net_pts": -49232.84,
+    "exp_pts": -54.1,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.16
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 189,
+    "net_pts": -4831.09,
+    "exp_pts": -25.56,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.12
+   },
+   {
+    "outcome": "small win",
+    "trades": 52,
+    "net_pts": 9512.94,
+    "exp_pts": 182.94,
+    "win_pct": 100.0,
+    "pf": 9512937866466.75,
+    "exp_r": 0.39
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 39,
+    "net_pts": 34842.04,
+    "exp_pts": 893.39,
+    "win_pct": 100.0,
+    "pf": 34842044889120.3,
+    "exp_r": 2.77
+   }
+  ]
+ },
+ "banknifty|ASIS|1h": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 132,
+    "net_pts": -3907.22,
+    "exp_pts": -29.6,
+    "win_pct": 6.06,
+    "pf": 0.51,
+    "exp_r": -0.04
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 189,
+    "net_pts": -311.52,
+    "exp_pts": -1.65,
+    "win_pct": 7.41,
+    "pf": 0.96,
+    "exp_r": 0.01
+   },
+   {
+    "trend": "sideways",
+    "trades": 145,
+    "net_pts": 8365.84,
+    "exp_pts": 57.7,
+    "win_pct": 8.97,
+    "pf": 2.47,
+    "exp_r": 0.08
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 115,
+    "net_pts": 3506.65,
+    "exp_pts": 30.49,
+    "win_pct": 7.83,
+    "pf": 1.67,
+    "exp_r": 0.04
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 46,
+    "net_pts": -3447.36,
+    "exp_pts": -74.94,
+    "win_pct": 4.35,
+    "pf": 0.13,
+    "exp_r": -0.08
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 259,
+    "net_pts": 451.54,
+    "exp_pts": 1.74,
+    "win_pct": 8.49,
+    "pf": 1.04,
+    "exp_r": 0.04
+   },
+   {
+    "vol": "normal",
+    "trades": 285,
+    "net_pts": 5857.51,
+    "exp_pts": 20.55,
+    "win_pct": 6.32,
+    "pf": 1.46,
+    "exp_r": -0.0
+   },
+   {
+    "vol": "high",
+    "trades": 65,
+    "net_pts": -1559.53,
+    "exp_pts": -23.99,
+    "win_pct": 7.69,
+    "pf": 0.64,
+    "exp_r": -0.0
+   },
+   {
+    "vol": "extreme",
+    "trades": 18,
+    "net_pts": -543.12,
+    "exp_pts": -30.17,
+    "win_pct": 5.56,
+    "pf": 0.66,
+    "exp_r": 0.02
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 120,
+    "net_pts": 937.62,
+    "exp_pts": 7.81,
+    "win_pct": 6.67,
+    "pf": 1.14,
+    "exp_r": -0.01
+   },
+   {
+    "session": "morning",
+    "trades": 153,
+    "net_pts": 4168.9,
+    "exp_pts": 27.25,
+    "win_pct": 6.54,
+    "pf": 1.54,
+    "exp_r": 0.01
+   },
+   {
+    "session": "midday",
+    "trades": 164,
+    "net_pts": -135.2,
+    "exp_pts": -0.82,
+    "win_pct": 6.71,
+    "pf": 0.98,
+    "exp_r": 0.04
+   },
+   {
+    "session": "afternoon",
+    "trades": 125,
+    "net_pts": 1140.21,
+    "exp_pts": 9.12,
+    "win_pct": 9.6,
+    "pf": 1.32,
+    "exp_r": 0.03
+   },
+   {
+    "session": "closing",
+    "trades": 65,
+    "net_pts": -1905.14,
+    "exp_pts": -29.31,
+    "win_pct": 7.69,
+    "pf": 0.69,
+    "exp_r": -0.01
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 51,
+    "net_pts": -2892.7,
+    "exp_pts": -56.72,
+    "win_pct": 3.92,
+    "pf": 0.16,
+    "exp_r": -0.04
+   },
+   {
+    "gap": "large up",
+    "trades": 41,
+    "net_pts": 6736.85,
+    "exp_pts": 164.31,
+    "win_pct": 14.63,
+    "pf": 8.33,
+    "exp_r": 0.2
+   },
+   {
+    "gap": "medium down",
+    "trades": 100,
+    "net_pts": 2561.57,
+    "exp_pts": 25.62,
+    "win_pct": 9.0,
+    "pf": 1.53,
+    "exp_r": 0.05
+   },
+   {
+    "gap": "medium up",
+    "trades": 120,
+    "net_pts": -3207.32,
+    "exp_pts": -26.73,
+    "win_pct": 7.5,
+    "pf": 0.68,
+    "exp_r": 0.01
+   },
+   {
+    "gap": "small down",
+    "trades": 148,
+    "net_pts": -2838.36,
+    "exp_pts": -19.18,
+    "win_pct": 4.73,
+    "pf": 0.5,
+    "exp_r": -0.05
+   },
+   {
+    "gap": "small up",
+    "trades": 167,
+    "net_pts": 3846.36,
+    "exp_pts": 23.03,
+    "win_pct": 7.78,
+    "pf": 1.59,
+    "exp_r": 0.03
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 132,
+    "net_pts": 2581.88,
+    "exp_pts": 19.56,
+    "win_pct": 9.09,
+    "pf": 1.49,
+    "exp_r": 0.08
+   },
+   {
+    "weekday": "Tue",
+    "trades": 109,
+    "net_pts": 942.73,
+    "exp_pts": 8.65,
+    "win_pct": 6.42,
+    "pf": 1.19,
+    "exp_r": 0.02
+   },
+   {
+    "weekday": "Wed",
+    "trades": 128,
+    "net_pts": -2158.95,
+    "exp_pts": -16.87,
+    "win_pct": 3.91,
+    "pf": 0.63,
+    "exp_r": -0.05
+   },
+   {
+    "weekday": "Thu",
+    "trades": 129,
+    "net_pts": -5634.43,
+    "exp_pts": -43.68,
+    "win_pct": 4.65,
+    "pf": 0.43,
+    "exp_r": -0.06
+   },
+   {
+    "weekday": "Fri",
+    "trades": 129,
+    "net_pts": 8475.15,
+    "exp_pts": 65.7,
+    "win_pct": 12.4,
+    "pf": 2.56,
+    "exp_r": 0.08
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 162,
+    "net_pts": 1352.06,
+    "exp_pts": 8.35,
+    "win_pct": 6.17,
+    "pf": 1.21,
+    "exp_r": 0.04
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 266,
+    "net_pts": 5963.02,
+    "exp_pts": 22.42,
+    "win_pct": 9.02,
+    "pf": 1.43,
+    "exp_r": 0.04
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 199,
+    "net_pts": -3108.68,
+    "exp_pts": -15.62,
+    "win_pct": 6.03,
+    "pf": 0.72,
+    "exp_r": -0.03
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 368,
+    "net_pts": 2571.08,
+    "exp_pts": 6.99,
+    "win_pct": 7.61,
+    "pf": 1.15,
+    "exp_r": 0.03
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 259,
+    "net_pts": 1635.32,
+    "exp_pts": 6.31,
+    "win_pct": 6.95,
+    "pf": 1.12,
+    "exp_r": -0.01
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 503,
+    "net_pts": -29034.46,
+    "exp_pts": -57.72,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.1
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 78,
+    "net_pts": -2504.89,
+    "exp_pts": -32.11,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.08
+   },
+   {
+    "outcome": "small win",
+    "trades": 30,
+    "net_pts": 10026.69,
+    "exp_pts": 334.22,
+    "win_pct": 100.0,
+    "pf": 10026692542404.51,
+    "exp_r": 0.48
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 16,
+    "net_pts": 25719.05,
+    "exp_pts": 1607.44,
+    "win_pct": 100.0,
+    "pf": 25719050810133.76,
+    "exp_r": 3.42
+   }
+  ]
+ },
+ "banknifty|ASIS|2h": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 95,
+    "net_pts": -5817.36,
+    "exp_pts": -61.24,
+    "win_pct": 4.21,
+    "pf": 0.37,
+    "exp_r": -0.07
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 132,
+    "net_pts": -2036.84,
+    "exp_pts": -15.43,
+    "win_pct": 3.03,
+    "pf": 0.7,
+    "exp_r": 0.0
+   },
+   {
+    "trend": "sideways",
+    "trades": 97,
+    "net_pts": 706.4,
+    "exp_pts": 7.28,
+    "win_pct": 6.19,
+    "pf": 1.27,
+    "exp_r": -0.0
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 71,
+    "net_pts": 1882.0,
+    "exp_pts": 26.51,
+    "win_pct": 12.68,
+    "pf": 1.56,
+    "exp_r": 0.04
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 15,
+    "net_pts": -151.82,
+    "exp_pts": -10.12,
+    "win_pct": 6.67,
+    "pf": 0.71,
+    "exp_r": -0.06
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 176,
+    "net_pts": -3125.46,
+    "exp_pts": -17.76,
+    "win_pct": 6.25,
+    "pf": 0.7,
+    "exp_r": 0.02
+   },
+   {
+    "vol": "normal",
+    "trades": 196,
+    "net_pts": -1871.75,
+    "exp_pts": -9.55,
+    "win_pct": 5.1,
+    "pf": 0.82,
+    "exp_r": -0.05
+   },
+   {
+    "vol": "high",
+    "trades": 30,
+    "net_pts": -972.36,
+    "exp_pts": -32.41,
+    "win_pct": 6.67,
+    "pf": 0.44,
+    "exp_r": 0.01
+   },
+   {
+    "vol": "extreme",
+    "trades": 8,
+    "net_pts": 551.94,
+    "exp_pts": 68.99,
+    "win_pct": 12.5,
+    "pf": 6.07,
+    "exp_r": 0.1
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 113,
+    "net_pts": -3276.03,
+    "exp_pts": -28.99,
+    "win_pct": 5.31,
+    "pf": 0.55,
+    "exp_r": -0.0
+   },
+   {
+    "session": "morning",
+    "trades": 58,
+    "net_pts": 1602.24,
+    "exp_pts": 27.62,
+    "win_pct": 5.17,
+    "pf": 1.93,
+    "exp_r": 0.05
+   },
+   {
+    "session": "midday",
+    "trades": 100,
+    "net_pts": -2174.16,
+    "exp_pts": -21.74,
+    "win_pct": 4.0,
+    "pf": 0.48,
+    "exp_r": -0.04
+   },
+   {
+    "session": "afternoon",
+    "trades": 82,
+    "net_pts": -2149.27,
+    "exp_pts": -26.21,
+    "win_pct": 7.32,
+    "pf": 0.63,
+    "exp_r": -0.0
+   },
+   {
+    "session": "closing",
+    "trades": 57,
+    "net_pts": 579.59,
+    "exp_pts": 10.17,
+    "win_pct": 8.77,
+    "pf": 1.16,
+    "exp_r": -0.06
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 30,
+    "net_pts": 476.96,
+    "exp_pts": 15.9,
+    "win_pct": 10.0,
+    "pf": 1.98,
+    "exp_r": 0.0
+   },
+   {
+    "gap": "large up",
+    "trades": 28,
+    "net_pts": 3808.02,
+    "exp_pts": 136.0,
+    "win_pct": 14.29,
+    "pf": 3.99,
+    "exp_r": 0.16
+   },
+   {
+    "gap": "medium down",
+    "trades": 76,
+    "net_pts": -1790.37,
+    "exp_pts": -23.56,
+    "win_pct": 5.26,
+    "pf": 0.58,
+    "exp_r": -0.06
+   },
+   {
+    "gap": "medium up",
+    "trades": 75,
+    "net_pts": -3536.34,
+    "exp_pts": -47.15,
+    "win_pct": 5.33,
+    "pf": 0.31,
+    "exp_r": -0.03
+   },
+   {
+    "gap": "small down",
+    "trades": 96,
+    "net_pts": -1711.69,
+    "exp_pts": -17.83,
+    "win_pct": 4.17,
+    "pf": 0.65,
+    "exp_r": 0.03
+   },
+   {
+    "gap": "small up",
+    "trades": 105,
+    "net_pts": -2664.2,
+    "exp_pts": -25.37,
+    "win_pct": 4.76,
+    "pf": 0.59,
+    "exp_r": -0.05
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 75,
+    "net_pts": -2638.49,
+    "exp_pts": -35.18,
+    "win_pct": 6.67,
+    "pf": 0.47,
+    "exp_r": -0.04
+   },
+   {
+    "weekday": "Tue",
+    "trades": 81,
+    "net_pts": 344.01,
+    "exp_pts": 4.25,
+    "win_pct": 6.17,
+    "pf": 1.06,
+    "exp_r": -0.02
+   },
+   {
+    "weekday": "Wed",
+    "trades": 80,
+    "net_pts": -1359.18,
+    "exp_pts": -16.99,
+    "win_pct": 2.5,
+    "pf": 0.62,
+    "exp_r": 0.05
+   },
+   {
+    "weekday": "Thu",
+    "trades": 80,
+    "net_pts": -3253.11,
+    "exp_pts": -40.66,
+    "win_pct": 7.5,
+    "pf": 0.37,
+    "exp_r": -0.07
+   },
+   {
+    "weekday": "Fri",
+    "trades": 93,
+    "net_pts": 1507.23,
+    "exp_pts": 16.21,
+    "win_pct": 6.45,
+    "pf": 1.44,
+    "exp_r": 0.01
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 78,
+    "net_pts": -2110.16,
+    "exp_pts": -27.05,
+    "win_pct": 3.85,
+    "pf": 0.44,
+    "exp_r": -0.07
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 207,
+    "net_pts": -1457.24,
+    "exp_pts": -7.04,
+    "win_pct": 6.76,
+    "pf": 0.9,
+    "exp_r": 0.01
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 125,
+    "net_pts": -1850.23,
+    "exp_pts": -14.8,
+    "win_pct": 5.6,
+    "pf": 0.59,
+    "exp_r": -0.02
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 248,
+    "net_pts": -3230.82,
+    "exp_pts": -13.03,
+    "win_pct": 6.45,
+    "pf": 0.77,
+    "exp_r": 0.01
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 162,
+    "net_pts": -2186.81,
+    "exp_pts": -13.5,
+    "win_pct": 4.94,
+    "pf": 0.74,
+    "exp_r": -0.04
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 342,
+    "net_pts": -20654.28,
+    "exp_pts": -60.39,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.09
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 44,
+    "net_pts": -1834.15,
+    "exp_pts": -41.69,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.08
+   },
+   {
+    "outcome": "small win",
+    "trades": 16,
+    "net_pts": 6181.17,
+    "exp_pts": 386.32,
+    "win_pct": 100.0,
+    "pf": 6181170765562.44,
+    "exp_r": 0.44
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 8,
+    "net_pts": 10889.63,
+    "exp_pts": 1361.2,
+    "win_pct": 100.0,
+    "pf": 10889632098904.12,
+    "exp_r": 2.87
+   }
+  ]
+ },
+ "banknifty|ASIS|4h": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 70,
+    "net_pts": -5192.9,
+    "exp_pts": -74.18,
+    "win_pct": 2.86,
+    "pf": 0.04,
+    "exp_r": -0.07
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 84,
+    "net_pts": 609.43,
+    "exp_pts": 7.26,
+    "win_pct": 3.57,
+    "pf": 1.17,
+    "exp_r": -0.03
+   },
+   {
+    "trend": "sideways",
+    "trades": 36,
+    "net_pts": -2463.56,
+    "exp_pts": -68.43,
+    "win_pct": 2.78,
+    "pf": 0.21,
+    "exp_r": -0.07
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 46,
+    "net_pts": -1454.07,
+    "exp_pts": -31.61,
+    "win_pct": 2.17,
+    "pf": 0.41,
+    "exp_r": 0.01
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 9,
+    "net_pts": 262.46,
+    "exp_pts": 29.16,
+    "win_pct": 11.11,
+    "pf": 3.22,
+    "exp_r": 0.02
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 88,
+    "net_pts": -4111.73,
+    "exp_pts": -46.72,
+    "win_pct": 3.41,
+    "pf": 0.35,
+    "exp_r": -0.05
+   },
+   {
+    "vol": "normal",
+    "trades": 135,
+    "net_pts": -4388.07,
+    "exp_pts": -32.5,
+    "win_pct": 2.22,
+    "pf": 0.46,
+    "exp_r": -0.04
+   },
+   {
+    "vol": "high",
+    "trades": 16,
+    "net_pts": 168.43,
+    "exp_pts": 10.53,
+    "win_pct": 6.25,
+    "pf": 1.79,
+    "exp_r": 0.0
+   },
+   {
+    "vol": "extreme",
+    "trades": 6,
+    "net_pts": 92.73,
+    "exp_pts": 15.46,
+    "win_pct": 16.67,
+    "pf": 2.19,
+    "exp_r": 0.0
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 88,
+    "net_pts": -3694.61,
+    "exp_pts": -41.98,
+    "win_pct": 4.55,
+    "pf": 0.42,
+    "exp_r": -0.03
+   },
+   {
+    "session": "morning",
+    "trades": 35,
+    "net_pts": -2017.33,
+    "exp_pts": -57.64,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.07
+   },
+   {
+    "session": "midday",
+    "trades": 38,
+    "net_pts": -1650.76,
+    "exp_pts": -43.44,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.05
+   },
+   {
+    "session": "afternoon",
+    "trades": 63,
+    "net_pts": -1917.23,
+    "exp_pts": -30.43,
+    "win_pct": 4.76,
+    "pf": 0.36,
+    "exp_r": -0.04
+   },
+   {
+    "session": "closing",
+    "trades": 21,
+    "net_pts": 1041.28,
+    "exp_pts": 49.58,
+    "win_pct": 4.76,
+    "pf": 1.63,
+    "exp_r": -0.01
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 16,
+    "net_pts": 160.76,
+    "exp_pts": 10.05,
+    "win_pct": 6.25,
+    "pf": 1.73,
+    "exp_r": 0.0
+   },
+   {
+    "gap": "large up",
+    "trades": 20,
+    "net_pts": 2146.26,
+    "exp_pts": 107.31,
+    "win_pct": 10.0,
+    "pf": 4.75,
+    "exp_r": 0.04
+   },
+   {
+    "gap": "medium down",
+    "trades": 36,
+    "net_pts": -2048.23,
+    "exp_pts": -56.9,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.06
+   },
+   {
+    "gap": "medium up",
+    "trades": 59,
+    "net_pts": -4685.0,
+    "exp_pts": -79.41,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.08
+   },
+   {
+    "gap": "small down",
+    "trades": 46,
+    "net_pts": -625.79,
+    "exp_pts": -13.6,
+    "win_pct": 2.17,
+    "pf": 0.7,
+    "exp_r": -0.01
+   },
+   {
+    "gap": "small up",
+    "trades": 68,
+    "net_pts": -3186.65,
+    "exp_pts": -46.86,
+    "win_pct": 5.88,
+    "pf": 0.37,
+    "exp_r": -0.04
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 55,
+    "net_pts": -3148.1,
+    "exp_pts": -57.24,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.05
+   },
+   {
+    "weekday": "Tue",
+    "trades": 39,
+    "net_pts": 199.79,
+    "exp_pts": 5.12,
+    "win_pct": 5.13,
+    "pf": 1.08,
+    "exp_r": -0.05
+   },
+   {
+    "weekday": "Wed",
+    "trades": 55,
+    "net_pts": -2721.04,
+    "exp_pts": -49.47,
+    "win_pct": 3.64,
+    "pf": 0.36,
+    "exp_r": -0.05
+   },
+   {
+    "weekday": "Thu",
+    "trades": 57,
+    "net_pts": -1608.84,
+    "exp_pts": -28.23,
+    "win_pct": 5.26,
+    "pf": 0.51,
+    "exp_r": -0.02
+   },
+   {
+    "weekday": "Fri",
+    "trades": 39,
+    "net_pts": -960.45,
+    "exp_pts": -24.63,
+    "win_pct": 2.56,
+    "pf": 0.28,
+    "exp_r": -0.03
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 33,
+    "net_pts": -1685.93,
+    "exp_pts": -51.09,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.05
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 155,
+    "net_pts": -4313.14,
+    "exp_pts": -27.83,
+    "win_pct": 4.52,
+    "pf": 0.59,
+    "exp_r": -0.04
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 57,
+    "net_pts": -2239.57,
+    "exp_pts": -39.29,
+    "win_pct": 1.75,
+    "pf": 0.15,
+    "exp_r": -0.03
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 147,
+    "net_pts": -6872.69,
+    "exp_pts": -46.75,
+    "win_pct": 2.04,
+    "pf": 0.27,
+    "exp_r": -0.05
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 98,
+    "net_pts": -1365.95,
+    "exp_pts": -13.94,
+    "win_pct": 5.1,
+    "pf": 0.74,
+    "exp_r": -0.03
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 214,
+    "net_pts": -14260.92,
+    "exp_pts": -66.64,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.07
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 23,
+    "net_pts": -460.88,
+    "exp_pts": -20.04,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.03
+   },
+   {
+    "outcome": "small win",
+    "trades": 5,
+    "net_pts": 1305.17,
+    "exp_pts": 261.03,
+    "win_pct": 100.0,
+    "pf": 1305171316476.56,
+    "exp_r": 0.23
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 3,
+    "net_pts": 5177.99,
+    "exp_pts": 1726.0,
+    "win_pct": 100.0,
+    "pf": 5177985128500.48,
+    "exp_r": 1.51
+   }
+  ]
+ },
+ "banknifty|ASIS|D1": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 28,
+    "net_pts": -1816.44,
+    "exp_pts": -64.87,
+    "win_pct": 3.57,
+    "pf": 0.01,
+    "exp_r": -0.05
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 43,
+    "net_pts": -1595.29,
+    "exp_pts": -37.1,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.02
+   },
+   {
+    "trend": "sideways",
+    "trades": 19,
+    "net_pts": -1200.98,
+    "exp_pts": -63.21,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.06
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 11,
+    "net_pts": -164.95,
+    "exp_pts": -15.0,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.01
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 6,
+    "net_pts": -95.43,
+    "exp_pts": -15.9,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.01
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 54,
+    "net_pts": -2698.96,
+    "exp_pts": -49.98,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.04
+   },
+   {
+    "vol": "normal",
+    "trades": 45,
+    "net_pts": -2081.24,
+    "exp_pts": -46.25,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.03
+   },
+   {
+    "vol": "high",
+    "trades": 4,
+    "net_pts": -65.01,
+    "exp_pts": -16.25,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.0
+   },
+   {
+    "vol": "extreme",
+    "trades": 4,
+    "net_pts": -27.87,
+    "exp_pts": -6.97,
+    "win_pct": 25.0,
+    "pf": 0.4,
+    "exp_r": -0.0
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 50,
+    "net_pts": -1695.01,
+    "exp_pts": -33.9,
+    "win_pct": 2.0,
+    "pf": 0.01,
+    "exp_r": -0.02
+   },
+   {
+    "session": "morning",
+    "trades": 29,
+    "net_pts": -1366.79,
+    "exp_pts": -47.13,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.05
+   },
+   {
+    "session": "midday",
+    "trades": 8,
+    "net_pts": -125.58,
+    "exp_pts": -15.7,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.01
+   },
+   {
+    "session": "afternoon",
+    "trades": 14,
+    "net_pts": -1118.06,
+    "exp_pts": -79.86,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.04
+   },
+   {
+    "session": "closing",
+    "trades": 6,
+    "net_pts": -567.64,
+    "exp_pts": -94.61,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.09
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 5,
+    "net_pts": -78.41,
+    "exp_pts": -15.68,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.01
+   },
+   {
+    "gap": "large up",
+    "trades": 7,
+    "net_pts": -104.31,
+    "exp_pts": -14.9,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.01
+   },
+   {
+    "gap": "medium down",
+    "trades": 17,
+    "net_pts": -267.51,
+    "exp_pts": -15.74,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.01
+   },
+   {
+    "gap": "medium up",
+    "trades": 19,
+    "net_pts": -393.76,
+    "exp_pts": -20.72,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.02
+   },
+   {
+    "gap": "small down",
+    "trades": 24,
+    "net_pts": -860.7,
+    "exp_pts": -35.86,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.03
+   },
+   {
+    "gap": "small up",
+    "trades": 35,
+    "net_pts": -3168.39,
+    "exp_pts": -90.53,
+    "win_pct": 2.86,
+    "pf": 0.01,
+    "exp_r": -0.06
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 25,
+    "net_pts": -392.4,
+    "exp_pts": -15.7,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.01
+   },
+   {
+    "weekday": "Tue",
+    "trades": 23,
+    "net_pts": -1028.07,
+    "exp_pts": -44.7,
+    "win_pct": 4.35,
+    "pf": 0.02,
+    "exp_r": -0.04
+   },
+   {
+    "weekday": "Wed",
+    "trades": 17,
+    "net_pts": -1102.06,
+    "exp_pts": -64.83,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.04
+   },
+   {
+    "weekday": "Thu",
+    "trades": 22,
+    "net_pts": -2030.44,
+    "exp_pts": -92.29,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.08
+   },
+   {
+    "weekday": "Fri",
+    "trades": 20,
+    "net_pts": -320.11,
+    "exp_pts": -16.01,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.01
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 6,
+    "net_pts": -566.92,
+    "exp_pts": -94.49,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.09
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 87,
+    "net_pts": -4086.71,
+    "exp_pts": -46.97,
+    "win_pct": 1.15,
+    "pf": 0.0,
+    "exp_r": -0.04
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 14,
+    "net_pts": -219.45,
+    "exp_pts": -15.67,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.01
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 73,
+    "net_pts": -4376.63,
+    "exp_pts": -59.95,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.05
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 34,
+    "net_pts": -496.45,
+    "exp_pts": -14.6,
+    "win_pct": 2.94,
+    "pf": 0.04,
+    "exp_r": -0.01
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 96,
+    "net_pts": -4619.87,
+    "exp_pts": -48.12,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.04
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 10,
+    "net_pts": -271.83,
+    "exp_pts": -27.18,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.03
+   },
+   {
+    "outcome": "small win",
+    "trades": 1,
+    "net_pts": 18.62,
+    "exp_pts": 18.62,
+    "win_pct": 100.0,
+    "pf": 18618986641.33,
+    "exp_r": 0.01
+   }
+  ]
+ },
+ "banknifty|FINAL_H4|5m": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 780,
+    "net_pts": -13770.43,
+    "exp_pts": -17.65,
+    "win_pct": 25.64,
+    "pf": 0.71,
+    "exp_r": -0.15
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 1180,
+    "net_pts": -14643.32,
+    "exp_pts": -12.41,
+    "win_pct": 25.0,
+    "pf": 0.78,
+    "exp_r": -0.14
+   },
+   {
+    "trend": "sideways",
+    "trades": 743,
+    "net_pts": -9198.1,
+    "exp_pts": -12.38,
+    "win_pct": 24.5,
+    "pf": 0.79,
+    "exp_r": -0.08
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 703,
+    "net_pts": 56.47,
+    "exp_pts": 0.08,
+    "win_pct": 27.17,
+    "pf": 1.0,
+    "exp_r": -0.02
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 258,
+    "net_pts": 2769.17,
+    "exp_pts": 10.73,
+    "win_pct": 25.58,
+    "pf": 1.14,
+    "exp_r": 0.04
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 1403,
+    "net_pts": -16906.71,
+    "exp_pts": -12.05,
+    "win_pct": 24.45,
+    "pf": 0.77,
+    "exp_r": -0.14
+   },
+   {
+    "vol": "normal",
+    "trades": 1745,
+    "net_pts": -19299.27,
+    "exp_pts": -11.06,
+    "win_pct": 25.16,
+    "pf": 0.82,
+    "exp_r": -0.09
+   },
+   {
+    "vol": "high",
+    "trades": 410,
+    "net_pts": 4372.99,
+    "exp_pts": 10.67,
+    "win_pct": 29.51,
+    "pf": 1.16,
+    "exp_r": 0.11
+   },
+   {
+    "vol": "extreme",
+    "trades": 106,
+    "net_pts": -2953.22,
+    "exp_pts": -27.86,
+    "win_pct": 29.25,
+    "pf": 0.7,
+    "exp_r": -0.15
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 393,
+    "net_pts": -7356.86,
+    "exp_pts": -18.72,
+    "win_pct": 33.59,
+    "pf": 0.73,
+    "exp_r": -0.07
+   },
+   {
+    "session": "morning",
+    "trades": 889,
+    "net_pts": -10756.54,
+    "exp_pts": -12.1,
+    "win_pct": 29.25,
+    "pf": 0.78,
+    "exp_r": -0.09
+   },
+   {
+    "session": "midday",
+    "trades": 1097,
+    "net_pts": -15953.21,
+    "exp_pts": -14.54,
+    "win_pct": 22.42,
+    "pf": 0.7,
+    "exp_r": -0.17
+   },
+   {
+    "session": "afternoon",
+    "trades": 956,
+    "net_pts": 2166.79,
+    "exp_pts": 2.27,
+    "win_pct": 21.03,
+    "pf": 1.04,
+    "exp_r": -0.06
+   },
+   {
+    "session": "closing",
+    "trades": 329,
+    "net_pts": -2886.39,
+    "exp_pts": -8.77,
+    "win_pct": 28.88,
+    "pf": 0.91,
+    "exp_r": 0.05
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 249,
+    "net_pts": 2623.81,
+    "exp_pts": 10.54,
+    "win_pct": 28.51,
+    "pf": 1.14,
+    "exp_r": 0.14
+   },
+   {
+    "gap": "large up",
+    "trades": 298,
+    "net_pts": 1837.66,
+    "exp_pts": 6.17,
+    "win_pct": 29.19,
+    "pf": 1.11,
+    "exp_r": 0.01
+   },
+   {
+    "gap": "medium down",
+    "trades": 620,
+    "net_pts": -4435.26,
+    "exp_pts": -7.15,
+    "win_pct": 24.84,
+    "pf": 0.89,
+    "exp_r": -0.05
+   },
+   {
+    "gap": "medium up",
+    "trades": 847,
+    "net_pts": -11074.07,
+    "exp_pts": -13.07,
+    "win_pct": 25.27,
+    "pf": 0.78,
+    "exp_r": -0.13
+   },
+   {
+    "gap": "small down",
+    "trades": 713,
+    "net_pts": -8942.24,
+    "exp_pts": -12.54,
+    "win_pct": 23.84,
+    "pf": 0.78,
+    "exp_r": -0.15
+   },
+   {
+    "gap": "small up",
+    "trades": 937,
+    "net_pts": -14796.11,
+    "exp_pts": -15.79,
+    "win_pct": 25.4,
+    "pf": 0.73,
+    "exp_r": -0.14
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 730,
+    "net_pts": -11355.25,
+    "exp_pts": -15.56,
+    "win_pct": 24.93,
+    "pf": 0.74,
+    "exp_r": -0.14
+   },
+   {
+    "weekday": "Tue",
+    "trades": 725,
+    "net_pts": -16153.43,
+    "exp_pts": -22.28,
+    "win_pct": 22.62,
+    "pf": 0.65,
+    "exp_r": -0.17
+   },
+   {
+    "weekday": "Wed",
+    "trades": 736,
+    "net_pts": -3369.09,
+    "exp_pts": -4.58,
+    "win_pct": 25.82,
+    "pf": 0.92,
+    "exp_r": -0.07
+   },
+   {
+    "weekday": "Thu",
+    "trades": 718,
+    "net_pts": -9965.92,
+    "exp_pts": -13.88,
+    "win_pct": 25.49,
+    "pf": 0.76,
+    "exp_r": -0.1
+   },
+   {
+    "weekday": "Fri",
+    "trades": 744,
+    "net_pts": 4893.6,
+    "exp_pts": 6.58,
+    "win_pct": 28.63,
+    "pf": 1.12,
+    "exp_r": 0.03
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 1651,
+    "net_pts": -25257.93,
+    "exp_pts": -15.3,
+    "win_pct": 23.14,
+    "pf": 0.74,
+    "exp_r": -0.14
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 1099,
+    "net_pts": -6933.51,
+    "exp_pts": -6.31,
+    "win_pct": 27.66,
+    "pf": 0.89,
+    "exp_r": -0.08
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 914,
+    "net_pts": -2594.77,
+    "exp_pts": -2.84,
+    "win_pct": 27.13,
+    "pf": 0.96,
+    "exp_r": -0.02
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 2042,
+    "net_pts": -17458.97,
+    "exp_pts": -8.55,
+    "win_pct": 26.05,
+    "pf": 0.84,
+    "exp_r": -0.11
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 1622,
+    "net_pts": -17327.25,
+    "exp_pts": -10.68,
+    "win_pct": 24.78,
+    "pf": 0.84,
+    "exp_r": -0.07
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 1437,
+    "net_pts": -146422.96,
+    "exp_pts": -101.89,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.66
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 1293,
+    "net_pts": -72528.92,
+    "exp_pts": -56.09,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.52
+   },
+   {
+    "outcome": "small win",
+    "trades": 514,
+    "net_pts": 47864.15,
+    "exp_pts": 93.12,
+    "win_pct": 100.0,
+    "pf": 47864154888676.88,
+    "exp_r": 0.38
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 420,
+    "net_pts": 136301.51,
+    "exp_pts": 324.53,
+    "win_pct": 100.0,
+    "pf": 136301511567332.48,
+    "exp_r": 2.59
+   }
+  ]
+ },
+ "banknifty|FINAL_H4|15m": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 270,
+    "net_pts": -5981.28,
+    "exp_pts": -22.15,
+    "win_pct": 25.93,
+    "pf": 0.76,
+    "exp_r": -0.18
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 339,
+    "net_pts": 1086.34,
+    "exp_pts": 3.2,
+    "win_pct": 28.91,
+    "pf": 1.03,
+    "exp_r": 0.02
+   },
+   {
+    "trend": "sideways",
+    "trades": 215,
+    "net_pts": 10699.57,
+    "exp_pts": 49.77,
+    "win_pct": 35.35,
+    "pf": 1.62,
+    "exp_r": 0.12
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 228,
+    "net_pts": 8607.03,
+    "exp_pts": 37.75,
+    "win_pct": 30.26,
+    "pf": 1.43,
+    "exp_r": 0.08
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 73,
+    "net_pts": 778.52,
+    "exp_pts": 10.66,
+    "win_pct": 24.66,
+    "pf": 1.08,
+    "exp_r": 0.07
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 435,
+    "net_pts": 4111.97,
+    "exp_pts": 9.45,
+    "win_pct": 30.8,
+    "pf": 1.13,
+    "exp_r": 0.02
+   },
+   {
+    "vol": "normal",
+    "trades": 531,
+    "net_pts": 3211.8,
+    "exp_pts": 6.05,
+    "win_pct": 28.06,
+    "pf": 1.06,
+    "exp_r": -0.01
+   },
+   {
+    "vol": "high",
+    "trades": 132,
+    "net_pts": 4907.49,
+    "exp_pts": 37.18,
+    "win_pct": 28.79,
+    "pf": 1.31,
+    "exp_r": -0.04
+   },
+   {
+    "vol": "extreme",
+    "trades": 27,
+    "net_pts": 2958.92,
+    "exp_pts": 109.59,
+    "win_pct": 37.04,
+    "pf": 2.36,
+    "exp_r": 0.24
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 103,
+    "net_pts": -658.43,
+    "exp_pts": -6.39,
+    "win_pct": 33.98,
+    "pf": 0.93,
+    "exp_r": 0.01
+   },
+   {
+    "session": "morning",
+    "trades": 383,
+    "net_pts": 3814.67,
+    "exp_pts": 9.96,
+    "win_pct": 31.33,
+    "pf": 1.11,
+    "exp_r": -0.01
+   },
+   {
+    "session": "midday",
+    "trades": 287,
+    "net_pts": 1985.7,
+    "exp_pts": 6.92,
+    "win_pct": 21.95,
+    "pf": 1.09,
+    "exp_r": -0.02
+   },
+   {
+    "session": "afternoon",
+    "trades": 266,
+    "net_pts": 3805.33,
+    "exp_pts": 14.31,
+    "win_pct": 28.2,
+    "pf": 1.13,
+    "exp_r": -0.07
+   },
+   {
+    "session": "closing",
+    "trades": 86,
+    "net_pts": 6242.91,
+    "exp_pts": 72.59,
+    "win_pct": 44.19,
+    "pf": 1.67,
+    "exp_r": 0.4
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 83,
+    "net_pts": 887.14,
+    "exp_pts": 10.69,
+    "win_pct": 31.33,
+    "pf": 1.07,
+    "exp_r": 0.05
+   },
+   {
+    "gap": "large up",
+    "trades": 80,
+    "net_pts": 6589.83,
+    "exp_pts": 82.37,
+    "win_pct": 42.5,
+    "pf": 1.99,
+    "exp_r": 0.26
+   },
+   {
+    "gap": "medium down",
+    "trades": 190,
+    "net_pts": 9958.13,
+    "exp_pts": 52.41,
+    "win_pct": 27.89,
+    "pf": 1.65,
+    "exp_r": 0.05
+   },
+   {
+    "gap": "medium up",
+    "trades": 240,
+    "net_pts": 3723.06,
+    "exp_pts": 15.51,
+    "win_pct": 29.58,
+    "pf": 1.18,
+    "exp_r": 0.01
+   },
+   {
+    "gap": "small down",
+    "trades": 234,
+    "net_pts": -3140.35,
+    "exp_pts": -13.42,
+    "win_pct": 25.21,
+    "pf": 0.85,
+    "exp_r": -0.09
+   },
+   {
+    "gap": "small up",
+    "trades": 298,
+    "net_pts": -2827.62,
+    "exp_pts": -9.49,
+    "win_pct": 29.53,
+    "pf": 0.9,
+    "exp_r": -0.03
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 228,
+    "net_pts": -7607.93,
+    "exp_pts": -33.37,
+    "win_pct": 26.32,
+    "pf": 0.7,
+    "exp_r": -0.16
+   },
+   {
+    "weekday": "Tue",
+    "trades": 227,
+    "net_pts": 2342.94,
+    "exp_pts": 10.32,
+    "win_pct": 28.19,
+    "pf": 1.12,
+    "exp_r": -0.02
+   },
+   {
+    "weekday": "Wed",
+    "trades": 220,
+    "net_pts": 4404.23,
+    "exp_pts": 20.02,
+    "win_pct": 29.09,
+    "pf": 1.23,
+    "exp_r": 0.05
+   },
+   {
+    "weekday": "Thu",
+    "trades": 238,
+    "net_pts": 3310.35,
+    "exp_pts": 13.91,
+    "win_pct": 30.67,
+    "pf": 1.16,
+    "exp_r": 0.02
+   },
+   {
+    "weekday": "Fri",
+    "trades": 209,
+    "net_pts": 12545.56,
+    "exp_pts": 60.03,
+    "win_pct": 33.01,
+    "pf": 1.63,
+    "exp_r": 0.15
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 575,
+    "net_pts": 6455.43,
+    "exp_pts": 11.23,
+    "win_pct": 27.13,
+    "pf": 1.13,
+    "exp_r": -0.03
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 307,
+    "net_pts": 4566.5,
+    "exp_pts": 14.87,
+    "win_pct": 32.25,
+    "pf": 1.18,
+    "exp_r": 0.04
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 243,
+    "net_pts": 4168.25,
+    "exp_pts": 17.15,
+    "win_pct": 31.28,
+    "pf": 1.14,
+    "exp_r": 0.04
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 636,
+    "net_pts": 15276.23,
+    "exp_pts": 24.02,
+    "win_pct": 30.35,
+    "pf": 1.31,
+    "exp_r": 0.06
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 489,
+    "net_pts": -86.04,
+    "exp_pts": -0.18,
+    "win_pct": 28.22,
+    "pf": 1.0,
+    "exp_r": -0.06
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 408,
+    "net_pts": -69635.38,
+    "exp_pts": -170.67,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.59
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 386,
+    "net_pts": -35139.98,
+    "exp_pts": -91.04,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.49
+   },
+   {
+    "outcome": "small win",
+    "trades": 176,
+    "net_pts": 32444.87,
+    "exp_pts": 184.35,
+    "win_pct": 100.0,
+    "pf": 32444870177015.69,
+    "exp_r": 0.41
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 155,
+    "net_pts": 87520.67,
+    "exp_pts": 564.65,
+    "win_pct": 100.0,
+    "pf": 87520673098590.52,
+    "exp_r": 2.36
+   }
+  ]
+ },
+ "banknifty|FINAL_H4|30m": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 123,
+    "net_pts": -2270.43,
+    "exp_pts": -18.46,
+    "win_pct": 28.46,
+    "pf": 0.86,
+    "exp_r": -0.12
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 196,
+    "net_pts": 5004.18,
+    "exp_pts": 25.53,
+    "win_pct": 29.08,
+    "pf": 1.21,
+    "exp_r": 0.1
+   },
+   {
+    "trend": "sideways",
+    "trades": 118,
+    "net_pts": -2571.78,
+    "exp_pts": -21.79,
+    "win_pct": 27.12,
+    "pf": 0.86,
+    "exp_r": -0.06
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 114,
+    "net_pts": 9119.08,
+    "exp_pts": 79.99,
+    "win_pct": 32.46,
+    "pf": 1.65,
+    "exp_r": 0.09
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 42,
+    "net_pts": -3050.82,
+    "exp_pts": -72.64,
+    "win_pct": 28.57,
+    "pf": 0.73,
+    "exp_r": -0.03
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 235,
+    "net_pts": 2615.57,
+    "exp_pts": 11.13,
+    "win_pct": 29.36,
+    "pf": 1.11,
+    "exp_r": 0.0
+   },
+   {
+    "vol": "normal",
+    "trades": 270,
+    "net_pts": 2568.23,
+    "exp_pts": 9.51,
+    "win_pct": 27.41,
+    "pf": 1.06,
+    "exp_r": 0.02
+   },
+   {
+    "vol": "high",
+    "trades": 71,
+    "net_pts": 1194.97,
+    "exp_pts": 16.83,
+    "win_pct": 35.21,
+    "pf": 1.08,
+    "exp_r": 0.04
+   },
+   {
+    "vol": "extreme",
+    "trades": 17,
+    "net_pts": -148.55,
+    "exp_pts": -8.74,
+    "win_pct": 29.41,
+    "pf": 0.95,
+    "exp_r": -0.02
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 49,
+    "net_pts": -1664.92,
+    "exp_pts": -33.98,
+    "win_pct": 24.49,
+    "pf": 0.79,
+    "exp_r": -0.07
+   },
+   {
+    "session": "morning",
+    "trades": 211,
+    "net_pts": 3072.17,
+    "exp_pts": 14.56,
+    "win_pct": 31.75,
+    "pf": 1.09,
+    "exp_r": 0.03
+   },
+   {
+    "session": "midday",
+    "trades": 159,
+    "net_pts": 7329.14,
+    "exp_pts": 46.1,
+    "win_pct": 31.45,
+    "pf": 1.42,
+    "exp_r": 0.06
+   },
+   {
+    "session": "afternoon",
+    "trades": 125,
+    "net_pts": -3692.62,
+    "exp_pts": -29.54,
+    "win_pct": 24.0,
+    "pf": 0.8,
+    "exp_r": -0.13
+   },
+   {
+    "session": "closing",
+    "trades": 49,
+    "net_pts": 1186.45,
+    "exp_pts": 24.21,
+    "win_pct": 28.57,
+    "pf": 1.24,
+    "exp_r": 0.22
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 43,
+    "net_pts": -4728.66,
+    "exp_pts": -109.97,
+    "win_pct": 20.93,
+    "pf": 0.59,
+    "exp_r": -0.0
+   },
+   {
+    "gap": "large up",
+    "trades": 51,
+    "net_pts": 7675.39,
+    "exp_pts": 150.5,
+    "win_pct": 49.02,
+    "pf": 2.22,
+    "exp_r": 0.23
+   },
+   {
+    "gap": "medium down",
+    "trades": 110,
+    "net_pts": 4110.96,
+    "exp_pts": 37.37,
+    "win_pct": 30.0,
+    "pf": 1.25,
+    "exp_r": 0.02
+   },
+   {
+    "gap": "medium up",
+    "trades": 130,
+    "net_pts": -1193.69,
+    "exp_pts": -9.18,
+    "win_pct": 26.92,
+    "pf": 0.93,
+    "exp_r": -0.07
+   },
+   {
+    "gap": "small down",
+    "trades": 121,
+    "net_pts": 3052.0,
+    "exp_pts": 25.22,
+    "win_pct": 28.93,
+    "pf": 1.22,
+    "exp_r": 0.07
+   },
+   {
+    "gap": "small up",
+    "trades": 138,
+    "net_pts": -2685.78,
+    "exp_pts": -19.46,
+    "win_pct": 26.09,
+    "pf": 0.85,
+    "exp_r": -0.03
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 118,
+    "net_pts": -10184.44,
+    "exp_pts": -86.31,
+    "win_pct": 22.03,
+    "pf": 0.5,
+    "exp_r": -0.25
+   },
+   {
+    "weekday": "Tue",
+    "trades": 109,
+    "net_pts": -317.97,
+    "exp_pts": -2.92,
+    "win_pct": 27.52,
+    "pf": 0.98,
+    "exp_r": -0.09
+   },
+   {
+    "weekday": "Wed",
+    "trades": 127,
+    "net_pts": 1132.47,
+    "exp_pts": 8.92,
+    "win_pct": 33.07,
+    "pf": 1.06,
+    "exp_r": 0.03
+   },
+   {
+    "weekday": "Thu",
+    "trades": 117,
+    "net_pts": -4932.57,
+    "exp_pts": -42.16,
+    "win_pct": 23.93,
+    "pf": 0.7,
+    "exp_r": -0.07
+   },
+   {
+    "weekday": "Fri",
+    "trades": 121,
+    "net_pts": 20550.46,
+    "exp_pts": 169.84,
+    "win_pct": 38.84,
+    "pf": 2.38,
+    "exp_r": 0.43
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 287,
+    "net_pts": -1775.91,
+    "exp_pts": -6.19,
+    "win_pct": 26.13,
+    "pf": 0.95,
+    "exp_r": -0.01
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 165,
+    "net_pts": 6678.39,
+    "exp_pts": 40.48,
+    "win_pct": 33.94,
+    "pf": 1.33,
+    "exp_r": -0.01
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 141,
+    "net_pts": 1327.74,
+    "exp_pts": 9.42,
+    "win_pct": 29.79,
+    "pf": 1.05,
+    "exp_r": 0.09
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 329,
+    "net_pts": 6431.43,
+    "exp_pts": 19.55,
+    "win_pct": 28.27,
+    "pf": 1.16,
+    "exp_r": 0.0
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 264,
+    "net_pts": -201.21,
+    "exp_pts": -0.76,
+    "win_pct": 30.3,
+    "pf": 1.0,
+    "exp_r": 0.03
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 220,
+    "net_pts": -59923.69,
+    "exp_pts": -272.38,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.63
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 200,
+    "net_pts": -24217.37,
+    "exp_pts": -121.09,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.43
+   },
+   {
+    "outcome": "small win",
+    "trades": 90,
+    "net_pts": 27596.08,
+    "exp_pts": 306.62,
+    "win_pct": 100.0,
+    "pf": 27596083093095.58,
+    "exp_r": 0.41
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 83,
+    "net_pts": 62775.2,
+    "exp_pts": 756.33,
+    "win_pct": 100.0,
+    "pf": 62775201020957.76,
+    "exp_r": 2.36
+   }
+  ]
+ },
+ "banknifty|FINAL_H4|1h": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 67,
+    "net_pts": -4081.32,
+    "exp_pts": -60.92,
+    "win_pct": 28.36,
+    "pf": 0.68,
+    "exp_r": -0.05
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 103,
+    "net_pts": -720.76,
+    "exp_pts": -7.0,
+    "win_pct": 25.24,
+    "pf": 0.96,
+    "exp_r": -0.02
+   },
+   {
+    "trend": "sideways",
+    "trades": 68,
+    "net_pts": 10190.52,
+    "exp_pts": 149.86,
+    "win_pct": 39.71,
+    "pf": 1.82,
+    "exp_r": 0.21
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 52,
+    "net_pts": 2113.27,
+    "exp_pts": 40.64,
+    "win_pct": 26.92,
+    "pf": 1.21,
+    "exp_r": 0.06
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 19,
+    "net_pts": -2053.89,
+    "exp_pts": -108.1,
+    "win_pct": 15.79,
+    "pf": 0.65,
+    "exp_r": -0.36
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 131,
+    "net_pts": 2664.24,
+    "exp_pts": 20.34,
+    "win_pct": 32.82,
+    "pf": 1.13,
+    "exp_r": 0.01
+   },
+   {
+    "vol": "normal",
+    "trades": 139,
+    "net_pts": -638.35,
+    "exp_pts": -4.59,
+    "win_pct": 23.74,
+    "pf": 0.98,
+    "exp_r": 0.0
+   },
+   {
+    "vol": "high",
+    "trades": 32,
+    "net_pts": 2280.95,
+    "exp_pts": 71.28,
+    "win_pct": 28.12,
+    "pf": 1.33,
+    "exp_r": -0.05
+   },
+   {
+    "vol": "extreme",
+    "trades": 7,
+    "net_pts": 1140.98,
+    "exp_pts": 163.0,
+    "win_pct": 57.14,
+    "pf": 1.68,
+    "exp_r": 0.7
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 49,
+    "net_pts": -813.45,
+    "exp_pts": -16.6,
+    "win_pct": 28.57,
+    "pf": 0.92,
+    "exp_r": -0.02
+   },
+   {
+    "session": "morning",
+    "trades": 79,
+    "net_pts": 7321.2,
+    "exp_pts": 92.67,
+    "win_pct": 32.91,
+    "pf": 1.52,
+    "exp_r": 0.1
+   },
+   {
+    "session": "midday",
+    "trades": 92,
+    "net_pts": 8151.48,
+    "exp_pts": 88.6,
+    "win_pct": 31.52,
+    "pf": 1.64,
+    "exp_r": 0.14
+   },
+   {
+    "session": "afternoon",
+    "trades": 62,
+    "net_pts": -3639.53,
+    "exp_pts": -58.7,
+    "win_pct": 22.58,
+    "pf": 0.73,
+    "exp_r": -0.14
+   },
+   {
+    "session": "closing",
+    "trades": 27,
+    "net_pts": -5571.89,
+    "exp_pts": -206.37,
+    "win_pct": 22.22,
+    "pf": 0.4,
+    "exp_r": -0.24
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 25,
+    "net_pts": 2080.1,
+    "exp_pts": 83.2,
+    "win_pct": 20.0,
+    "pf": 1.3,
+    "exp_r": 0.1
+   },
+   {
+    "gap": "large up",
+    "trades": 30,
+    "net_pts": 8193.83,
+    "exp_pts": 273.13,
+    "win_pct": 50.0,
+    "pf": 2.52,
+    "exp_r": 0.44
+   },
+   {
+    "gap": "medium down",
+    "trades": 50,
+    "net_pts": 1027.56,
+    "exp_pts": 20.55,
+    "win_pct": 28.0,
+    "pf": 1.11,
+    "exp_r": 0.09
+   },
+   {
+    "gap": "medium up",
+    "trades": 63,
+    "net_pts": -5385.78,
+    "exp_pts": -85.49,
+    "win_pct": 23.81,
+    "pf": 0.64,
+    "exp_r": -0.08
+   },
+   {
+    "gap": "small down",
+    "trades": 70,
+    "net_pts": 424.43,
+    "exp_pts": 6.06,
+    "win_pct": 28.57,
+    "pf": 1.04,
+    "exp_r": -0.12
+   },
+   {
+    "gap": "small up",
+    "trades": 71,
+    "net_pts": -892.33,
+    "exp_pts": -12.57,
+    "win_pct": 28.17,
+    "pf": 0.92,
+    "exp_r": -0.02
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 66,
+    "net_pts": -2848.0,
+    "exp_pts": -43.15,
+    "win_pct": 30.3,
+    "pf": 0.81,
+    "exp_r": -0.01
+   },
+   {
+    "weekday": "Tue",
+    "trades": 55,
+    "net_pts": -4426.37,
+    "exp_pts": -80.48,
+    "win_pct": 20.0,
+    "pf": 0.59,
+    "exp_r": -0.13
+   },
+   {
+    "weekday": "Wed",
+    "trades": 73,
+    "net_pts": 4751.31,
+    "exp_pts": 65.09,
+    "win_pct": 27.4,
+    "pf": 1.36,
+    "exp_r": 0.0
+   },
+   {
+    "weekday": "Thu",
+    "trades": 53,
+    "net_pts": -2366.21,
+    "exp_pts": -44.65,
+    "win_pct": 18.87,
+    "pf": 0.77,
+    "exp_r": -0.01
+   },
+   {
+    "weekday": "Fri",
+    "trades": 62,
+    "net_pts": 10337.09,
+    "exp_pts": 166.73,
+    "win_pct": 45.16,
+    "pf": 2.03,
+    "exp_r": 0.21
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 108,
+    "net_pts": -3926.8,
+    "exp_pts": -36.36,
+    "win_pct": 22.22,
+    "pf": 0.76,
+    "exp_r": -0.11
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 112,
+    "net_pts": 9411.65,
+    "exp_pts": 84.03,
+    "win_pct": 41.07,
+    "pf": 1.41,
+    "exp_r": 0.2
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 89,
+    "net_pts": -37.03,
+    "exp_pts": -0.42,
+    "win_pct": 21.35,
+    "pf": 1.0,
+    "exp_r": -0.06
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 182,
+    "net_pts": 8021.15,
+    "exp_pts": 44.07,
+    "win_pct": 30.22,
+    "pf": 1.29,
+    "exp_r": 0.09
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 127,
+    "net_pts": -2573.33,
+    "exp_pts": -20.26,
+    "win_pct": 26.77,
+    "pf": 0.92,
+    "exp_r": -0.1
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 120,
+    "net_pts": -45884.08,
+    "exp_pts": -382.37,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.59
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 100,
+    "net_pts": -13740.56,
+    "exp_pts": -137.41,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.38
+   },
+   {
+    "outcome": "small win",
+    "trades": 43,
+    "net_pts": 14094.98,
+    "exp_pts": 327.79,
+    "win_pct": 100.0,
+    "pf": 14094984417512.38,
+    "exp_r": 0.42
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 46,
+    "net_pts": 50977.48,
+    "exp_pts": 1108.21,
+    "win_pct": 100.0,
+    "pf": 50977476070742.73,
+    "exp_r": 2.05
+   }
+  ]
+ },
+ "banknifty|FINAL_H4|2h": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 42,
+    "net_pts": -5381.19,
+    "exp_pts": -128.12,
+    "win_pct": 26.19,
+    "pf": 0.56,
+    "exp_r": -0.09
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 63,
+    "net_pts": -8538.3,
+    "exp_pts": -135.53,
+    "win_pct": 25.4,
+    "pf": 0.55,
+    "exp_r": -0.18
+   },
+   {
+    "trend": "sideways",
+    "trades": 39,
+    "net_pts": 5840.05,
+    "exp_pts": 149.74,
+    "win_pct": 41.03,
+    "pf": 1.72,
+    "exp_r": 0.14
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 36,
+    "net_pts": 5767.72,
+    "exp_pts": 160.21,
+    "win_pct": 41.67,
+    "pf": 1.9,
+    "exp_r": 0.04
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 7,
+    "net_pts": -3083.83,
+    "exp_pts": -440.55,
+    "win_pct": 14.29,
+    "pf": 0.06,
+    "exp_r": -0.48
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 75,
+    "net_pts": 814.35,
+    "exp_pts": 10.86,
+    "win_pct": 28.0,
+    "pf": 1.06,
+    "exp_r": -0.04
+   },
+   {
+    "vol": "normal",
+    "trades": 93,
+    "net_pts": -4618.38,
+    "exp_pts": -49.66,
+    "win_pct": 32.26,
+    "pf": 0.84,
+    "exp_r": -0.1
+   },
+   {
+    "vol": "high",
+    "trades": 16,
+    "net_pts": -3225.05,
+    "exp_pts": -201.57,
+    "win_pct": 31.25,
+    "pf": 0.45,
+    "exp_r": -0.19
+   },
+   {
+    "vol": "extreme",
+    "trades": 3,
+    "net_pts": 1633.54,
+    "exp_pts": 544.51,
+    "win_pct": 100.0,
+    "pf": 1633538759366.69,
+    "exp_r": 1.05
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 52,
+    "net_pts": -4490.06,
+    "exp_pts": -86.35,
+    "win_pct": 21.15,
+    "pf": 0.7,
+    "exp_r": -0.21
+   },
+   {
+    "session": "morning",
+    "trades": 20,
+    "net_pts": 5684.95,
+    "exp_pts": 284.25,
+    "win_pct": 65.0,
+    "pf": 2.25,
+    "exp_r": 0.27
+   },
+   {
+    "session": "midday",
+    "trades": 41,
+    "net_pts": -2274.89,
+    "exp_pts": -55.49,
+    "win_pct": 26.83,
+    "pf": 0.76,
+    "exp_r": -0.11
+   },
+   {
+    "session": "afternoon",
+    "trades": 49,
+    "net_pts": 1079.95,
+    "exp_pts": 22.04,
+    "win_pct": 32.65,
+    "pf": 1.09,
+    "exp_r": 0.04
+   },
+   {
+    "session": "closing",
+    "trades": 25,
+    "net_pts": -5395.5,
+    "exp_pts": -215.82,
+    "win_pct": 32.0,
+    "pf": 0.32,
+    "exp_r": -0.15
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 15,
+    "net_pts": -1187.46,
+    "exp_pts": -79.16,
+    "win_pct": 40.0,
+    "pf": 0.72,
+    "exp_r": -0.12
+   },
+   {
+    "gap": "large up",
+    "trades": 16,
+    "net_pts": 515.22,
+    "exp_pts": 32.2,
+    "win_pct": 43.75,
+    "pf": 1.07,
+    "exp_r": 0.27
+   },
+   {
+    "gap": "medium down",
+    "trades": 33,
+    "net_pts": 780.98,
+    "exp_pts": 23.67,
+    "win_pct": 21.21,
+    "pf": 1.1,
+    "exp_r": -0.12
+   },
+   {
+    "gap": "medium up",
+    "trades": 42,
+    "net_pts": -2680.31,
+    "exp_pts": -63.82,
+    "win_pct": 35.71,
+    "pf": 0.75,
+    "exp_r": -0.04
+   },
+   {
+    "gap": "small down",
+    "trades": 38,
+    "net_pts": 792.79,
+    "exp_pts": 20.86,
+    "win_pct": 34.21,
+    "pf": 1.1,
+    "exp_r": 0.02
+   },
+   {
+    "gap": "small up",
+    "trades": 43,
+    "net_pts": -3616.78,
+    "exp_pts": -84.11,
+    "win_pct": 25.58,
+    "pf": 0.67,
+    "exp_r": -0.21
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 38,
+    "net_pts": -3487.78,
+    "exp_pts": -91.78,
+    "win_pct": 28.95,
+    "pf": 0.72,
+    "exp_r": -0.08
+   },
+   {
+    "weekday": "Tue",
+    "trades": 36,
+    "net_pts": 1737.37,
+    "exp_pts": 48.26,
+    "win_pct": 33.33,
+    "pf": 1.24,
+    "exp_r": 0.07
+   },
+   {
+    "weekday": "Wed",
+    "trades": 34,
+    "net_pts": -2747.71,
+    "exp_pts": -80.81,
+    "win_pct": 26.47,
+    "pf": 0.69,
+    "exp_r": -0.06
+   },
+   {
+    "weekday": "Thu",
+    "trades": 38,
+    "net_pts": -7861.93,
+    "exp_pts": -206.89,
+    "win_pct": 21.05,
+    "pf": 0.36,
+    "exp_r": -0.4
+   },
+   {
+    "weekday": "Fri",
+    "trades": 40,
+    "net_pts": 7582.47,
+    "exp_pts": 189.56,
+    "win_pct": 47.5,
+    "pf": 2.04,
+    "exp_r": 0.18
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 58,
+    "net_pts": -1082.36,
+    "exp_pts": -18.66,
+    "win_pct": 27.59,
+    "pf": 0.92,
+    "exp_r": -0.19
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 77,
+    "net_pts": 1136.98,
+    "exp_pts": 14.77,
+    "win_pct": 38.96,
+    "pf": 1.05,
+    "exp_r": 0.08
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 52,
+    "net_pts": -5450.17,
+    "exp_pts": -104.81,
+    "win_pct": 25.0,
+    "pf": 0.64,
+    "exp_r": -0.13
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 106,
+    "net_pts": 5096.34,
+    "exp_pts": 48.08,
+    "win_pct": 32.08,
+    "pf": 1.23,
+    "exp_r": 0.05
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 81,
+    "net_pts": -10491.89,
+    "exp_pts": -129.53,
+    "win_pct": 30.86,
+    "pf": 0.6,
+    "exp_r": -0.21
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 67,
+    "net_pts": -32281.0,
+    "exp_pts": -481.81,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.6
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 61,
+    "net_pts": -16613.98,
+    "exp_pts": -272.36,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.45
+   },
+   {
+    "outcome": "small win",
+    "trades": 34,
+    "net_pts": 12253.63,
+    "exp_pts": 360.4,
+    "win_pct": 100.0,
+    "pf": 12253631848520.54,
+    "exp_r": 0.38
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 25,
+    "net_pts": 31245.8,
+    "exp_pts": 1249.83,
+    "win_pct": 100.0,
+    "pf": 31245801298671.86,
+    "exp_r": 1.7
+   }
+  ]
+ },
+ "banknifty|FINAL_H4|4h": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 24,
+    "net_pts": -5234.27,
+    "exp_pts": -218.09,
+    "win_pct": 20.83,
+    "pf": 0.48,
+    "exp_r": -0.23
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 32,
+    "net_pts": -4438.0,
+    "exp_pts": -138.69,
+    "win_pct": 18.75,
+    "pf": 0.65,
+    "exp_r": -0.28
+   },
+   {
+    "trend": "sideways",
+    "trades": 16,
+    "net_pts": 2069.65,
+    "exp_pts": 129.35,
+    "win_pct": 37.5,
+    "pf": 1.36,
+    "exp_r": 0.01
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 16,
+    "net_pts": 3821.34,
+    "exp_pts": 238.83,
+    "win_pct": 43.75,
+    "pf": 2.26,
+    "exp_r": 0.35
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 2,
+    "net_pts": -766.41,
+    "exp_pts": -383.2,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.16
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 32,
+    "net_pts": -4867.79,
+    "exp_pts": -152.12,
+    "win_pct": 25.0,
+    "pf": 0.6,
+    "exp_r": -0.11
+   },
+   {
+    "vol": "normal",
+    "trades": 50,
+    "net_pts": -6040.68,
+    "exp_pts": -120.81,
+    "win_pct": 24.0,
+    "pf": 0.68,
+    "exp_r": -0.21
+   },
+   {
+    "vol": "high",
+    "trades": 7,
+    "net_pts": 3612.59,
+    "exp_pts": 516.08,
+    "win_pct": 42.86,
+    "pf": 4.39,
+    "exp_r": 0.57
+   },
+   {
+    "vol": "extreme",
+    "trades": 1,
+    "net_pts": 2748.19,
+    "exp_pts": 2748.19,
+    "win_pct": 100.0,
+    "pf": 2748192512888.33,
+    "exp_r": 0.83
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 30,
+    "net_pts": -2258.65,
+    "exp_pts": -75.29,
+    "win_pct": 20.0,
+    "pf": 0.78,
+    "exp_r": -0.1
+   },
+   {
+    "session": "morning",
+    "trades": 18,
+    "net_pts": -2639.75,
+    "exp_pts": -146.65,
+    "win_pct": 33.33,
+    "pf": 0.68,
+    "exp_r": -0.25
+   },
+   {
+    "session": "midday",
+    "trades": 6,
+    "net_pts": -1079.81,
+    "exp_pts": -179.97,
+    "win_pct": 33.33,
+    "pf": 0.43,
+    "exp_r": -0.26
+   },
+   {
+    "session": "afternoon",
+    "trades": 24,
+    "net_pts": 2693.09,
+    "exp_pts": 112.21,
+    "win_pct": 29.17,
+    "pf": 1.42,
+    "exp_r": 0.13
+   },
+   {
+    "session": "closing",
+    "trades": 12,
+    "net_pts": -1262.56,
+    "exp_pts": -105.21,
+    "win_pct": 25.0,
+    "pf": 0.76,
+    "exp_r": -0.24
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 6,
+    "net_pts": -1000.41,
+    "exp_pts": -166.74,
+    "win_pct": 33.33,
+    "pf": 0.53,
+    "exp_r": -0.42
+   },
+   {
+    "gap": "large up",
+    "trades": 5,
+    "net_pts": 1637.56,
+    "exp_pts": 327.51,
+    "win_pct": 60.0,
+    "pf": 1.77,
+    "exp_r": 0.26
+   },
+   {
+    "gap": "medium down",
+    "trades": 17,
+    "net_pts": -2884.8,
+    "exp_pts": -169.69,
+    "win_pct": 23.53,
+    "pf": 0.65,
+    "exp_r": -0.21
+   },
+   {
+    "gap": "medium up",
+    "trades": 15,
+    "net_pts": -2964.67,
+    "exp_pts": -197.64,
+    "win_pct": 26.67,
+    "pf": 0.51,
+    "exp_r": -0.25
+   },
+   {
+    "gap": "small down",
+    "trades": 15,
+    "net_pts": 834.58,
+    "exp_pts": 55.64,
+    "win_pct": 20.0,
+    "pf": 1.21,
+    "exp_r": -0.07
+   },
+   {
+    "gap": "small up",
+    "trades": 32,
+    "net_pts": -169.94,
+    "exp_pts": -5.31,
+    "win_pct": 25.0,
+    "pf": 0.98,
+    "exp_r": 0.03
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 21,
+    "net_pts": -2605.38,
+    "exp_pts": -124.07,
+    "win_pct": 38.1,
+    "pf": 0.67,
+    "exp_r": -0.06
+   },
+   {
+    "weekday": "Tue",
+    "trades": 15,
+    "net_pts": 1446.52,
+    "exp_pts": 96.43,
+    "win_pct": 33.33,
+    "pf": 1.3,
+    "exp_r": -0.1
+   },
+   {
+    "weekday": "Wed",
+    "trades": 18,
+    "net_pts": 701.68,
+    "exp_pts": 38.98,
+    "win_pct": 22.22,
+    "pf": 1.11,
+    "exp_r": -0.03
+   },
+   {
+    "weekday": "Thu",
+    "trades": 20,
+    "net_pts": -1504.04,
+    "exp_pts": -75.2,
+    "win_pct": 25.0,
+    "pf": 0.76,
+    "exp_r": 0.0
+   },
+   {
+    "weekday": "Fri",
+    "trades": 16,
+    "net_pts": -2586.47,
+    "exp_pts": -161.65,
+    "win_pct": 12.5,
+    "pf": 0.62,
+    "exp_r": -0.35
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 17,
+    "net_pts": 993.42,
+    "exp_pts": 58.44,
+    "win_pct": 29.41,
+    "pf": 1.16,
+    "exp_r": -0.17
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 54,
+    "net_pts": -4559.29,
+    "exp_pts": -84.43,
+    "win_pct": 25.93,
+    "pf": 0.78,
+    "exp_r": -0.13
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 19,
+    "net_pts": -981.81,
+    "exp_pts": -51.67,
+    "win_pct": 26.32,
+    "pf": 0.8,
+    "exp_r": 0.05
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 46,
+    "net_pts": -3391.98,
+    "exp_pts": -73.74,
+    "win_pct": 28.26,
+    "pf": 0.75,
+    "exp_r": -0.04
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 44,
+    "net_pts": -1155.7,
+    "exp_pts": -26.27,
+    "win_pct": 25.0,
+    "pf": 0.94,
+    "exp_r": -0.16
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 36,
+    "net_pts": -22528.76,
+    "exp_pts": -625.8,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.57
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 30,
+    "net_pts": -9907.0,
+    "exp_pts": -330.23,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.42
+   },
+   {
+    "outcome": "small win",
+    "trades": 15,
+    "net_pts": 9668.67,
+    "exp_pts": 644.58,
+    "win_pct": 100.0,
+    "pf": 9668666553018.32,
+    "exp_r": 0.41
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 9,
+    "net_pts": 18219.41,
+    "exp_pts": 2024.38,
+    "win_pct": 100.0,
+    "pf": 18219412847458.76,
+    "exp_r": 1.99
+   }
+  ]
+ },
+ "banknifty|FINAL_H4|D1": {
+  "trend": [
+   {
+    "trend": "strong_bull",
+    "trades": 9,
+    "net_pts": -2228.09,
+    "exp_pts": -247.57,
+    "win_pct": 22.22,
+    "pf": 0.43,
+    "exp_r": -0.06
+   },
+   {
+    "trend": "weak_bull",
+    "trades": 16,
+    "net_pts": -7056.67,
+    "exp_pts": -441.04,
+    "win_pct": 12.5,
+    "pf": 0.32,
+    "exp_r": -0.28
+   },
+   {
+    "trend": "sideways",
+    "trades": 8,
+    "net_pts": 2256.55,
+    "exp_pts": 282.07,
+    "win_pct": 37.5,
+    "pf": 2.26,
+    "exp_r": 0.04
+   },
+   {
+    "trend": "weak_bear",
+    "trades": 6,
+    "net_pts": -900.59,
+    "exp_pts": -150.1,
+    "win_pct": 33.33,
+    "pf": 0.76,
+    "exp_r": 0.03
+   },
+   {
+    "trend": "strong_bear",
+    "trades": 3,
+    "net_pts": -6937.34,
+    "exp_pts": -2312.45,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.66
+   }
+  ],
+  "volatility": [
+   {
+    "vol": "low",
+    "trades": 16,
+    "net_pts": 829.72,
+    "exp_pts": 51.86,
+    "win_pct": 25.0,
+    "pf": 1.21,
+    "exp_r": -0.01
+   },
+   {
+    "vol": "normal",
+    "trades": 22,
+    "net_pts": -10394.57,
+    "exp_pts": -472.48,
+    "win_pct": 18.18,
+    "pf": 0.3,
+    "exp_r": -0.23
+   },
+   {
+    "vol": "high",
+    "trades": 3,
+    "net_pts": -7825.61,
+    "exp_pts": -2608.54,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.62
+   },
+   {
+    "vol": "extreme",
+    "trades": 1,
+    "net_pts": 2524.32,
+    "exp_pts": 2524.32,
+    "win_pct": 100.0,
+    "pf": 2524315068418.23,
+    "exp_r": 0.7
+   }
+  ],
+  "session phase of entry": [
+   {
+    "session": "opening",
+    "trades": 22,
+    "net_pts": -16156.4,
+    "exp_pts": -734.38,
+    "win_pct": 18.18,
+    "pf": 0.19,
+    "exp_r": -0.28
+   },
+   {
+    "session": "morning",
+    "trades": 11,
+    "net_pts": 4737.95,
+    "exp_pts": 430.72,
+    "win_pct": 36.36,
+    "pf": 2.84,
+    "exp_r": 0.04
+   },
+   {
+    "session": "midday",
+    "trades": 4,
+    "net_pts": -2212.09,
+    "exp_pts": -553.02,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.34
+   },
+   {
+    "session": "afternoon",
+    "trades": 3,
+    "net_pts": -723.21,
+    "exp_pts": -241.07,
+    "win_pct": 33.33,
+    "pf": 0.53,
+    "exp_r": 0.36
+   },
+   {
+    "session": "closing",
+    "trades": 2,
+    "net_pts": -512.38,
+    "exp_pts": -256.19,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.23
+   }
+  ],
+  "opening gap of the entry day": [
+   {
+    "gap": "large down",
+    "trades": 3,
+    "net_pts": -4163.9,
+    "exp_pts": -1387.97,
+    "win_pct": 33.33,
+    "pf": 0.02,
+    "exp_r": -0.31
+   },
+   {
+    "gap": "large up",
+    "trades": 3,
+    "net_pts": -3503.36,
+    "exp_pts": -1167.79,
+    "win_pct": 33.33,
+    "pf": 0.31,
+    "exp_r": 0.07
+   },
+   {
+    "gap": "medium down",
+    "trades": 4,
+    "net_pts": -3827.1,
+    "exp_pts": -956.77,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.47
+   },
+   {
+    "gap": "medium up",
+    "trades": 3,
+    "net_pts": -1287.91,
+    "exp_pts": -429.3,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.38
+   },
+   {
+    "gap": "small down",
+    "trades": 11,
+    "net_pts": 208.58,
+    "exp_pts": 18.96,
+    "win_pct": 18.18,
+    "pf": 1.08,
+    "exp_r": -0.14
+   },
+   {
+    "gap": "small up",
+    "trades": 18,
+    "net_pts": -2292.45,
+    "exp_pts": -127.36,
+    "win_pct": 27.78,
+    "pf": 0.76,
+    "exp_r": -0.07
+   }
+  ],
+  "weekday": [
+   {
+    "weekday": "Mon",
+    "trades": 8,
+    "net_pts": -9766.81,
+    "exp_pts": -1220.85,
+    "win_pct": 25.0,
+    "pf": 0.15,
+    "exp_r": -0.23
+   },
+   {
+    "weekday": "Tue",
+    "trades": 12,
+    "net_pts": -4031.17,
+    "exp_pts": -335.93,
+    "win_pct": 16.67,
+    "pf": 0.41,
+    "exp_r": -0.11
+   },
+   {
+    "weekday": "Wed",
+    "trades": 9,
+    "net_pts": -5828.67,
+    "exp_pts": -647.63,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.49
+   },
+   {
+    "weekday": "Thu",
+    "trades": 8,
+    "net_pts": 1418.73,
+    "exp_pts": 177.34,
+    "win_pct": 37.5,
+    "pf": 1.93,
+    "exp_r": -0.01
+   },
+   {
+    "weekday": "Fri",
+    "trades": 5,
+    "net_pts": 3341.78,
+    "exp_pts": 668.36,
+    "win_pct": 40.0,
+    "pf": 3.95,
+    "exp_r": 0.21
+   }
+  ],
+  "previous-day level": [
+   {
+    "prev_day_level": "inside prev range",
+    "trades": 3,
+    "net_pts": 1795.54,
+    "exp_pts": 598.51,
+    "win_pct": 33.33,
+    "pf": 2.95,
+    "exp_r": 0.28
+   },
+   {
+    "prev_day_level": "long above prev high",
+    "trades": 32,
+    "net_pts": -6469.76,
+    "exp_pts": -202.18,
+    "win_pct": 21.88,
+    "pf": 0.58,
+    "exp_r": -0.13
+   },
+   {
+    "prev_day_level": "short below prev low",
+    "trades": 7,
+    "net_pts": -10191.92,
+    "exp_pts": -1455.99,
+    "win_pct": 14.29,
+    "pf": 0.01,
+    "exp_r": -0.44
+   }
+  ],
+  "consolidation vs expansion (prior 5 sessions)": [
+   {
+    "consolidation": "consolidation",
+    "trades": 24,
+    "net_pts": -665.31,
+    "exp_pts": -27.72,
+    "win_pct": 29.17,
+    "pf": 0.92,
+    "exp_r": -0.06
+   },
+   {
+    "consolidation": "expansion",
+    "trades": 18,
+    "net_pts": -14200.83,
+    "exp_pts": -788.94,
+    "win_pct": 11.11,
+    "pf": 0.24,
+    "exp_r": -0.29
+   }
+  ],
+  "trade outcome type": [
+   {
+    "outcome": "failed breakout (loss, MFE < 0.3R)",
+    "trades": 15,
+    "net_pts": -16328.09,
+    "exp_pts": -1088.54,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.51
+   },
+   {
+    "outcome": "loss after progress",
+    "trades": 18,
+    "net_pts": -10436.42,
+    "exp_pts": -579.8,
+    "win_pct": 0.0,
+    "pf": 0.0,
+    "exp_r": -0.4
+   },
+   {
+    "outcome": "small win",
+    "trades": 4,
+    "net_pts": 2863.54,
+    "exp_pts": 715.88,
+    "win_pct": 100.0,
+    "pf": 2863536806206.1,
+    "exp_r": 0.22
+   },
+   {
+    "outcome": "win >= 1R",
+    "trades": 5,
+    "net_pts": 9034.84,
+    "exp_pts": 1806.97,
+    "win_pct": 100.0,
+    "pf": 9034838605388.03,
+    "exp_r": 1.48
+   }
+  ]
+ }
+}

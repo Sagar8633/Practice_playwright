@@ -1,0 +1,1246 @@
+{
+ "range": [
+  {
+   "event": "H01 compression -> range break",
+   "N": 10,
+   "n": 897,
+   "ratio_all": 1.129,
+   "auc_all": 0.577,
+   "ratio_DEV": 1.121,
+   "ratio_VAL": 1.125,
+   "ratio_OOS": 1.136
+  },
+  {
+   "event": "H01 compression -> range break",
+   "N": 20,
+   "n": 897,
+   "ratio_all": 1.125,
+   "auc_all": 0.565,
+   "ratio_DEV": 1.104,
+   "ratio_VAL": 1.066,
+   "ratio_OOS": 1.149
+  },
+  {
+   "event": "H01 compression -> range break",
+   "N": 50,
+   "n": 897,
+   "ratio_all": 1.1,
+   "auc_all": 0.55,
+   "ratio_DEV": 1.092,
+   "ratio_VAL": 0.998,
+   "ratio_OOS": 1.114
+  },
+  {
+   "event": "H02/H03 volatility shock bar (>= 3 ATR)",
+   "N": 10,
+   "n": 1116,
+   "ratio_all": 1.446,
+   "auc_all": 0.72,
+   "ratio_DEV": 1.495,
+   "ratio_VAL": 1.556,
+   "ratio_OOS": 1.413
+  },
+  {
+   "event": "H02/H03 volatility shock bar (>= 3 ATR)",
+   "N": 20,
+   "n": 1116,
+   "ratio_all": 1.339,
+   "auc_all": 0.665,
+   "ratio_DEV": 1.331,
+   "ratio_VAL": 1.576,
+   "ratio_OOS": 1.312
+  },
+  {
+   "event": "H02/H03 volatility shock bar (>= 3 ATR)",
+   "N": 50,
+   "n": 1116,
+   "ratio_all": 1.093,
+   "auc_all": 0.564,
+   "ratio_DEV": 1.072,
+   "ratio_VAL": 1.151,
+   "ratio_OOS": 1.101
+  },
+  {
+   "event": "H04 first expansion after low-vol regime",
+   "N": 10,
+   "n": 985,
+   "ratio_all": 1.292,
+   "auc_all": 0.652,
+   "ratio_DEV": 1.239,
+   "ratio_VAL": 1.3,
+   "ratio_OOS": 1.36
+  },
+  {
+   "event": "H04 first expansion after low-vol regime",
+   "N": 20,
+   "n": 985,
+   "ratio_all": 1.375,
+   "auc_all": 0.655,
+   "ratio_DEV": 1.408,
+   "ratio_VAL": 1.345,
+   "ratio_OOS": 1.323
+  },
+  {
+   "event": "H04 first expansion after low-vol regime",
+   "N": 50,
+   "n": 985,
+   "ratio_all": 1.369,
+   "auc_all": 0.673,
+   "ratio_DEV": 1.35,
+   "ratio_VAL": 1.254,
+   "ratio_OOS": 1.416
+  },
+  {
+   "event": "H05 previous-day high/low sweep + rejection",
+   "N": 10,
+   "n": 4957,
+   "ratio_all": 1.034,
+   "auc_all": 0.507,
+   "ratio_DEV": 1.024,
+   "ratio_VAL": 1.028,
+   "ratio_OOS": 1.049
+  },
+  {
+   "event": "H05 previous-day high/low sweep + rejection",
+   "N": 20,
+   "n": 4957,
+   "ratio_all": 0.993,
+   "auc_all": 0.493,
+   "ratio_DEV": 1.0,
+   "ratio_VAL": 0.97,
+   "ratio_OOS": 0.986
+  },
+  {
+   "event": "H05 previous-day high/low sweep + rejection",
+   "N": 50,
+   "n": 4957,
+   "ratio_all": 0.922,
+   "auc_all": 0.464,
+   "ratio_DEV": 0.913,
+   "ratio_VAL": 0.955,
+   "ratio_OOS": 0.921
+  },
+  {
+   "event": "H06 previous-day high/low break (close beyond)",
+   "N": 10,
+   "n": 2838,
+   "ratio_all": 1.08,
+   "auc_all": 0.542,
+   "ratio_DEV": 1.062,
+   "ratio_VAL": 1.014,
+   "ratio_OOS": 1.115
+  },
+  {
+   "event": "H06 previous-day high/low break (close beyond)",
+   "N": 20,
+   "n": 2838,
+   "ratio_all": 1.045,
+   "auc_all": 0.516,
+   "ratio_DEV": 1.039,
+   "ratio_VAL": 1.034,
+   "ratio_OOS": 1.053
+  },
+  {
+   "event": "H06 previous-day high/low break (close beyond)",
+   "N": 50,
+   "n": 2838,
+   "ratio_all": 0.924,
+   "auc_all": 0.464,
+   "ratio_DEV": 0.924,
+   "ratio_VAL": 0.89,
+   "ratio_OOS": 0.926
+  },
+  {
+   "event": "H07 Asian range break in London (10-12h)",
+   "N": 10,
+   "n": 986,
+   "ratio_all": 1.021,
+   "auc_all": 0.513,
+   "ratio_DEV": 0.979,
+   "ratio_VAL": 1.155,
+   "ratio_OOS": 1.028
+  },
+  {
+   "event": "H07 Asian range break in London (10-12h)",
+   "N": 20,
+   "n": 986,
+   "ratio_all": 0.974,
+   "auc_all": 0.482,
+   "ratio_DEV": 0.969,
+   "ratio_VAL": 1.108,
+   "ratio_OOS": 0.954
+  },
+  {
+   "event": "H07 Asian range break in London (10-12h)",
+   "N": 50,
+   "n": 986,
+   "ratio_all": 1.033,
+   "auc_all": 0.521,
+   "ratio_DEV": 1.077,
+   "ratio_VAL": 1.105,
+   "ratio_OOS": 0.982
+  },
+  {
+   "event": "H08 Asian range sweep + rejection in London",
+   "N": 10,
+   "n": 2518,
+   "ratio_all": 1.031,
+   "auc_all": 0.517,
+   "ratio_DEV": 1.034,
+   "ratio_VAL": 1.129,
+   "ratio_OOS": 1.003
+  },
+  {
+   "event": "H08 Asian range sweep + rejection in London",
+   "N": 20,
+   "n": 2518,
+   "ratio_all": 1.045,
+   "auc_all": 0.539,
+   "ratio_DEV": 1.045,
+   "ratio_VAL": 1.24,
+   "ratio_OOS": 1.004
+  },
+  {
+   "event": "H08 Asian range sweep + rejection in London",
+   "N": 50,
+   "n": 2518,
+   "ratio_all": 1.188,
+   "auc_all": 0.593,
+   "ratio_DEV": 1.249,
+   "ratio_VAL": 1.313,
+   "ratio_OOS": 1.104
+  },
+  {
+   "event": "H09 London range break in NY (15-19h)",
+   "N": 10,
+   "n": 2046,
+   "ratio_all": 1.156,
+   "auc_all": 0.584,
+   "ratio_DEV": 1.185,
+   "ratio_VAL": 1.237,
+   "ratio_OOS": 1.119
+  },
+  {
+   "event": "H09 London range break in NY (15-19h)",
+   "N": 20,
+   "n": 2046,
+   "ratio_all": 1.085,
+   "auc_all": 0.534,
+   "ratio_DEV": 1.088,
+   "ratio_VAL": 1.16,
+   "ratio_OOS": 1.06
+  },
+  {
+   "event": "H09 London range break in NY (15-19h)",
+   "N": 50,
+   "n": 2046,
+   "ratio_all": 0.843,
+   "auc_all": 0.419,
+   "ratio_DEV": 0.817,
+   "ratio_VAL": 0.824,
+   "ratio_OOS": 0.859
+  },
+  {
+   "event": "H10 London opening-range (15 min) break",
+   "N": 10,
+   "n": 1775,
+   "ratio_all": 0.989,
+   "auc_all": 0.5,
+   "ratio_DEV": 0.995,
+   "ratio_VAL": 1.089,
+   "ratio_OOS": 0.961
+  },
+  {
+   "event": "H10 London opening-range (15 min) break",
+   "N": 20,
+   "n": 1775,
+   "ratio_all": 0.939,
+   "auc_all": 0.45,
+   "ratio_DEV": 0.947,
+   "ratio_VAL": 0.981,
+   "ratio_OOS": 0.918
+  },
+  {
+   "event": "H10 London opening-range (15 min) break",
+   "N": 50,
+   "n": 1775,
+   "ratio_all": 0.896,
+   "auc_all": 0.455,
+   "ratio_DEV": 0.938,
+   "ratio_VAL": 0.965,
+   "ratio_OOS": 0.857
+  },
+  {
+   "event": "H10 NY opening-range (15 min) break",
+   "N": 10,
+   "n": 2101,
+   "ratio_all": 1.45,
+   "auc_all": 0.72,
+   "ratio_DEV": 1.462,
+   "ratio_VAL": 1.537,
+   "ratio_OOS": 1.425
+  },
+  {
+   "event": "H10 NY opening-range (15 min) break",
+   "N": 20,
+   "n": 2101,
+   "ratio_all": 1.444,
+   "auc_all": 0.708,
+   "ratio_DEV": 1.451,
+   "ratio_VAL": 1.591,
+   "ratio_OOS": 1.406
+  },
+  {
+   "event": "H10 NY opening-range (15 min) break",
+   "N": 50,
+   "n": 2101,
+   "ratio_all": 1.12,
+   "auc_all": 0.578,
+   "ratio_DEV": 1.065,
+   "ratio_VAL": 1.215,
+   "ratio_OOS": 1.142
+  },
+  {
+   "event": "H11 equal highs/lows sweep + rejection",
+   "N": 10,
+   "n": 1664,
+   "ratio_all": 1.089,
+   "auc_all": 0.544,
+   "ratio_DEV": 1.096,
+   "ratio_VAL": 1.14,
+   "ratio_OOS": 1.068
+  },
+  {
+   "event": "H11 equal highs/lows sweep + rejection",
+   "N": 20,
+   "n": 1664,
+   "ratio_all": 1.094,
+   "auc_all": 0.547,
+   "ratio_DEV": 1.116,
+   "ratio_VAL": 1.05,
+   "ratio_OOS": 1.079
+  },
+  {
+   "event": "H11 equal highs/lows sweep + rejection",
+   "N": 50,
+   "n": 1664,
+   "ratio_all": 1.078,
+   "auc_all": 0.549,
+   "ratio_DEV": 1.085,
+   "ratio_VAL": 1.208,
+   "ratio_OOS": 1.035
+  },
+  {
+   "event": "H12 VWAP displacement >= 3 ATR",
+   "N": 10,
+   "n": 89280,
+   "ratio_all": 0.972,
+   "auc_all": 0.483,
+   "ratio_DEV": 0.957,
+   "ratio_VAL": 0.977,
+   "ratio_OOS": 0.981
+  },
+  {
+   "event": "H12 VWAP displacement >= 3 ATR",
+   "N": 20,
+   "n": 89280,
+   "ratio_all": 0.954,
+   "auc_all": 0.473,
+   "ratio_DEV": 0.941,
+   "ratio_VAL": 0.947,
+   "ratio_OOS": 0.961
+  },
+  {
+   "event": "H12 VWAP displacement >= 3 ATR",
+   "N": 50,
+   "n": 89280,
+   "ratio_all": 0.946,
+   "auc_all": 0.459,
+   "ratio_DEV": 0.921,
+   "ratio_VAL": 0.919,
+   "ratio_OOS": 0.967
+  },
+  {
+   "event": "H13 20-bar z-score >= 3",
+   "N": 10,
+   "n": 1652,
+   "ratio_all": 1.352,
+   "auc_all": 0.682,
+   "ratio_DEV": 1.387,
+   "ratio_VAL": 1.389,
+   "ratio_OOS": 1.314
+  },
+  {
+   "event": "H13 20-bar z-score >= 3",
+   "N": 20,
+   "n": 1652,
+   "ratio_all": 1.311,
+   "auc_all": 0.659,
+   "ratio_DEV": 1.39,
+   "ratio_VAL": 1.398,
+   "ratio_OOS": 1.237
+  },
+  {
+   "event": "H13 20-bar z-score >= 3",
+   "N": 50,
+   "n": 1652,
+   "ratio_all": 1.138,
+   "auc_all": 0.581,
+   "ratio_DEV": 1.154,
+   "ratio_VAL": 1.122,
+   "ratio_OOS": 1.125
+  },
+  {
+   "event": "H14 displacement from previous close >= 1.5 daily ATR (first)",
+   "N": 10,
+   "n": 202,
+   "ratio_all": 0.909,
+   "auc_all": 0.449,
+   "ratio_DEV": 0.764,
+   "ratio_VAL": null,
+   "ratio_OOS": 1.025
+  },
+  {
+   "event": "H14 displacement from previous close >= 1.5 daily ATR (first)",
+   "N": 20,
+   "n": 202,
+   "ratio_all": 0.833,
+   "auc_all": 0.392,
+   "ratio_DEV": 0.678,
+   "ratio_VAL": null,
+   "ratio_OOS": 0.935
+  },
+  {
+   "event": "H14 displacement from previous close >= 1.5 daily ATR (first)",
+   "N": 50,
+   "n": 202,
+   "ratio_all": 0.668,
+   "auc_all": 0.352,
+   "ratio_DEV": 0.551,
+   "ratio_VAL": null,
+   "ratio_OOS": 0.924
+  },
+  {
+   "event": "H15 five consecutive candles",
+   "N": 10,
+   "n": 6275,
+   "ratio_all": 1.029,
+   "auc_all": 0.523,
+   "ratio_DEV": 1.026,
+   "ratio_VAL": 1.058,
+   "ratio_OOS": 1.024
+  },
+  {
+   "event": "H15 five consecutive candles",
+   "N": 20,
+   "n": 6275,
+   "ratio_all": 1.015,
+   "auc_all": 0.515,
+   "ratio_DEV": 1.01,
+   "ratio_VAL": 1.029,
+   "ratio_OOS": 1.015
+  },
+  {
+   "event": "H15 five consecutive candles",
+   "N": 50,
+   "n": 6275,
+   "ratio_all": 0.991,
+   "auc_all": 0.502,
+   "ratio_DEV": 0.989,
+   "ratio_VAL": 1.003,
+   "ratio_OOS": 0.993
+  },
+  {
+   "event": "H16 SEQ displacement -> 38% retrace -> reclaim",
+   "N": 10,
+   "n": 2096,
+   "ratio_all": 1.223,
+   "auc_all": 0.625,
+   "ratio_DEV": 1.233,
+   "ratio_VAL": 1.289,
+   "ratio_OOS": 1.182
+  },
+  {
+   "event": "H16 SEQ displacement -> 38% retrace -> reclaim",
+   "N": 20,
+   "n": 2096,
+   "ratio_all": 1.181,
+   "auc_all": 0.587,
+   "ratio_DEV": 1.184,
+   "ratio_VAL": 1.228,
+   "ratio_OOS": 1.17
+  },
+  {
+   "event": "H16 SEQ displacement -> 38% retrace -> reclaim",
+   "N": 50,
+   "n": 2096,
+   "ratio_all": 0.992,
+   "auc_all": 0.503,
+   "ratio_DEV": 1.009,
+   "ratio_VAL": 0.993,
+   "ratio_OOS": 0.976
+  },
+  {
+   "event": "H17 SEQ prev-day break -> retest holds",
+   "N": 10,
+   "n": 1612,
+   "ratio_all": 1.04,
+   "auc_all": 0.516,
+   "ratio_DEV": 1.026,
+   "ratio_VAL": 0.983,
+   "ratio_OOS": 1.057
+  },
+  {
+   "event": "H17 SEQ prev-day break -> retest holds",
+   "N": 20,
+   "n": 1612,
+   "ratio_all": 0.987,
+   "auc_all": 0.497,
+   "ratio_DEV": 0.971,
+   "ratio_VAL": 0.978,
+   "ratio_OOS": 0.997
+  },
+  {
+   "event": "H17 SEQ prev-day break -> retest holds",
+   "N": 50,
+   "n": 1612,
+   "ratio_all": 0.911,
+   "auc_all": 0.472,
+   "ratio_DEV": 0.882,
+   "ratio_VAL": 0.937,
+   "ratio_OOS": 0.923
+  },
+  {
+   "event": "H18 long wick rejection at the day's extreme",
+   "N": 10,
+   "n": 2279,
+   "ratio_all": 1.174,
+   "auc_all": 0.592,
+   "ratio_DEV": 1.172,
+   "ratio_VAL": 1.167,
+   "ratio_OOS": 1.178
+  },
+  {
+   "event": "H18 long wick rejection at the day's extreme",
+   "N": 20,
+   "n": 2279,
+   "ratio_all": 1.152,
+   "auc_all": 0.588,
+   "ratio_DEV": 1.182,
+   "ratio_VAL": 1.17,
+   "ratio_OOS": 1.127
+  },
+  {
+   "event": "H18 long wick rejection at the day's extreme",
+   "N": 50,
+   "n": 2279,
+   "ratio_all": 1.071,
+   "auc_all": 0.546,
+   "ratio_DEV": 1.072,
+   "ratio_VAL": 1.163,
+   "ratio_OOS": 1.048
+  },
+  {
+   "event": "H19 exhaustion climax after >= 4 ATR move",
+   "N": 10,
+   "n": 874,
+   "ratio_all": 1.457,
+   "auc_all": 0.723,
+   "ratio_DEV": 1.486,
+   "ratio_VAL": 1.613,
+   "ratio_OOS": 1.379
+  },
+  {
+   "event": "H19 exhaustion climax after >= 4 ATR move",
+   "N": 20,
+   "n": 874,
+   "ratio_all": 1.348,
+   "auc_all": 0.688,
+   "ratio_DEV": 1.373,
+   "ratio_VAL": 1.618,
+   "ratio_OOS": 1.257
+  },
+  {
+   "event": "H19 exhaustion climax after >= 4 ATR move",
+   "N": 50,
+   "n": 874,
+   "ratio_all": 1.114,
+   "auc_all": 0.576,
+   "ratio_DEV": 1.121,
+   "ratio_VAL": 1.228,
+   "ratio_OOS": 1.047
+  },
+  {
+   "event": "H20 third touch of the day's extreme (fade)",
+   "N": 10,
+   "n": 1153,
+   "ratio_all": 1.123,
+   "auc_all": 0.578,
+   "ratio_DEV": 1.151,
+   "ratio_VAL": 1.15,
+   "ratio_OOS": 1.069
+  },
+  {
+   "event": "H20 third touch of the day's extreme (fade)",
+   "N": 20,
+   "n": 1153,
+   "ratio_all": 1.154,
+   "auc_all": 0.576,
+   "ratio_DEV": 1.174,
+   "ratio_VAL": 1.243,
+   "ratio_OOS": 1.13
+  },
+  {
+   "event": "H20 third touch of the day's extreme (fade)",
+   "N": 50,
+   "n": 1153,
+   "ratio_all": 1.046,
+   "auc_all": 0.538,
+   "ratio_DEV": 1.07,
+   "ratio_VAL": 1.107,
+   "ratio_OOS": 1.016
+  },
+  {
+   "event": "H21 London open: first 30 min direction -> continuation",
+   "N": 10,
+   "n": 830,
+   "ratio_all": 1.097,
+   "auc_all": 0.561,
+   "ratio_DEV": 1.103,
+   "ratio_VAL": 1.205,
+   "ratio_OOS": 1.044
+  },
+  {
+   "event": "H21 London open: first 30 min direction -> continuation",
+   "N": 20,
+   "n": 830,
+   "ratio_all": 0.988,
+   "auc_all": 0.518,
+   "ratio_DEV": 0.989,
+   "ratio_VAL": 1.074,
+   "ratio_OOS": 0.957
+  },
+  {
+   "event": "H21 London open: first 30 min direction -> continuation",
+   "N": 50,
+   "n": 830,
+   "ratio_all": 0.859,
+   "auc_all": 0.432,
+   "ratio_DEV": 0.88,
+   "ratio_VAL": 0.951,
+   "ratio_OOS": 0.829
+  },
+  {
+   "event": "H21 NY open: first 30 min direction -> continuation",
+   "N": 10,
+   "n": 827,
+   "ratio_all": 1.542,
+   "auc_all": 0.763,
+   "ratio_DEV": 1.716,
+   "ratio_VAL": 1.833,
+   "ratio_OOS": 1.423
+  },
+  {
+   "event": "H21 NY open: first 30 min direction -> continuation",
+   "N": 20,
+   "n": 827,
+   "ratio_all": 1.747,
+   "auc_all": 0.798,
+   "ratio_DEV": 1.888,
+   "ratio_VAL": 1.964,
+   "ratio_OOS": 1.6
+  },
+  {
+   "event": "H21 NY open: first 30 min direction -> continuation",
+   "N": 50,
+   "n": 827,
+   "ratio_all": 1.371,
+   "auc_all": 0.674,
+   "ratio_DEV": 1.389,
+   "ratio_VAL": 1.476,
+   "ratio_OOS": 1.316
+  },
+  {
+   "event": "H21 Asian open: first 30 min direction -> continuation",
+   "N": 10,
+   "n": 824,
+   "ratio_all": 1.02,
+   "auc_all": 0.507,
+   "ratio_DEV": 1.028,
+   "ratio_VAL": 0.992,
+   "ratio_OOS": 1.022
+  },
+  {
+   "event": "H21 Asian open: first 30 min direction -> continuation",
+   "N": 20,
+   "n": 824,
+   "ratio_all": 1.271,
+   "auc_all": 0.639,
+   "ratio_DEV": 1.26,
+   "ratio_VAL": 1.322,
+   "ratio_OOS": 1.266
+  },
+  {
+   "event": "H21 Asian open: first 30 min direction -> continuation",
+   "N": 50,
+   "n": 824,
+   "ratio_all": 1.341,
+   "auc_all": 0.662,
+   "ratio_DEV": 1.33,
+   "ratio_VAL": 1.328,
+   "ratio_OOS": 1.37
+  },
+  {
+   "event": "H25 STATE compression -> expansion",
+   "N": 10,
+   "n": 698,
+   "ratio_all": 1.251,
+   "auc_all": 0.642,
+   "ratio_DEV": 1.288,
+   "ratio_VAL": 1.203,
+   "ratio_OOS": 1.259
+  },
+  {
+   "event": "H25 STATE compression -> expansion",
+   "N": 20,
+   "n": 698,
+   "ratio_all": 1.253,
+   "auc_all": 0.643,
+   "ratio_DEV": 1.315,
+   "ratio_VAL": 1.319,
+   "ratio_OOS": 1.179
+  },
+  {
+   "event": "H25 STATE compression -> expansion",
+   "N": 50,
+   "n": 698,
+   "ratio_all": 1.085,
+   "auc_all": 0.535,
+   "ratio_DEV": 1.093,
+   "ratio_VAL": 1.154,
+   "ratio_OOS": 1.063
+  },
+  {
+   "event": "H26 STATE expansion -> retracement (continuation)",
+   "N": 10,
+   "n": 5087,
+   "ratio_all": 1.133,
+   "auc_all": 0.584,
+   "ratio_DEV": 1.164,
+   "ratio_VAL": 1.102,
+   "ratio_OOS": 1.117
+  },
+  {
+   "event": "H26 STATE expansion -> retracement (continuation)",
+   "N": 20,
+   "n": 5087,
+   "ratio_all": 1.107,
+   "auc_all": 0.554,
+   "ratio_DEV": 1.137,
+   "ratio_VAL": 1.101,
+   "ratio_OOS": 1.086
+  },
+  {
+   "event": "H26 STATE expansion -> retracement (continuation)",
+   "N": 50,
+   "n": 5087,
+   "ratio_all": 0.925,
+   "auc_all": 0.472,
+   "ratio_DEV": 0.944,
+   "ratio_VAL": 0.855,
+   "ratio_OOS": 0.925
+  },
+  {
+   "event": "H27 STATE trend -> exhaustion (fade)",
+   "N": 10,
+   "n": 428,
+   "ratio_all": 1.412,
+   "auc_all": 0.707,
+   "ratio_DEV": 1.457,
+   "ratio_VAL": 1.356,
+   "ratio_OOS": 1.379
+  },
+  {
+   "event": "H27 STATE trend -> exhaustion (fade)",
+   "N": 20,
+   "n": 428,
+   "ratio_all": 1.315,
+   "auc_all": 0.645,
+   "ratio_DEV": 1.371,
+   "ratio_VAL": 1.382,
+   "ratio_OOS": 1.256
+  },
+  {
+   "event": "H27 STATE trend -> exhaustion (fade)",
+   "N": 50,
+   "n": 428,
+   "ratio_all": 1.083,
+   "auc_all": 0.563,
+   "ratio_DEV": 1.097,
+   "ratio_VAL": 1.093,
+   "ratio_OOS": 1.064
+  },
+  {
+   "event": "H28 STATE breakout -> failure within 3 bars (reversal)",
+   "N": 10,
+   "n": 1350,
+   "ratio_all": 0.988,
+   "auc_all": 0.5,
+   "ratio_DEV": 0.983,
+   "ratio_VAL": 0.934,
+   "ratio_OOS": 1.02
+  },
+  {
+   "event": "H28 STATE breakout -> failure within 3 bars (reversal)",
+   "N": 20,
+   "n": 1350,
+   "ratio_all": 0.961,
+   "auc_all": 0.481,
+   "ratio_DEV": 0.986,
+   "ratio_VAL": 0.872,
+   "ratio_OOS": 0.959
+  },
+  {
+   "event": "H28 STATE breakout -> failure within 3 bars (reversal)",
+   "N": 50,
+   "n": 1350,
+   "ratio_all": 0.864,
+   "auc_all": 0.438,
+   "ratio_DEV": 0.887,
+   "ratio_VAL": 0.782,
+   "ratio_OOS": 0.865
+  }
+ ],
+ "profile": [
+  {
+   "hour": 0,
+   "median_fwd20_atr": 3.565,
+   "DEV": 3.114,
+   "VAL": NaN,
+   "OOS": 3.879
+  },
+  {
+   "hour": 1,
+   "median_fwd20_atr": 4.414,
+   "DEV": 4.262,
+   "VAL": 3.712,
+   "OOS": 4.716
+  },
+  {
+   "hour": 2,
+   "median_fwd20_atr": 6.086,
+   "DEV": 6.02,
+   "VAL": 6.274,
+   "OOS": 6.084
+  },
+  {
+   "hour": 3,
+   "median_fwd20_atr": 5.72,
+   "DEV": 5.593,
+   "VAL": 6.1,
+   "OOS": 5.746
+  },
+  {
+   "hour": 4,
+   "median_fwd20_atr": 4.076,
+   "DEV": 4.144,
+   "VAL": 4.248,
+   "OOS": 3.963
+  },
+  {
+   "hour": 5,
+   "median_fwd20_atr": 3.37,
+   "DEV": 3.363,
+   "VAL": 3.458,
+   "OOS": 3.354
+  },
+  {
+   "hour": 6,
+   "median_fwd20_atr": 3.701,
+   "DEV": 3.85,
+   "VAL": 3.57,
+   "OOS": 3.609
+  },
+  {
+   "hour": 7,
+   "median_fwd20_atr": 5.27,
+   "DEV": 5.412,
+   "VAL": 5.329,
+   "OOS": 5.125
+  },
+  {
+   "hour": 8,
+   "median_fwd20_atr": 5.688,
+   "DEV": 6.434,
+   "VAL": 6.088,
+   "OOS": 5.134
+  },
+  {
+   "hour": 9,
+   "median_fwd20_atr": 5.029,
+   "DEV": 5.758,
+   "VAL": 5.043,
+   "OOS": 4.552
+  },
+  {
+   "hour": 10,
+   "median_fwd20_atr": 4.214,
+   "DEV": 4.31,
+   "VAL": 4.336,
+   "OOS": 4.136
+  },
+  {
+   "hour": 11,
+   "median_fwd20_atr": 3.719,
+   "DEV": 3.746,
+   "VAL": 3.763,
+   "OOS": 3.682
+  },
+  {
+   "hour": 12,
+   "median_fwd20_atr": 3.926,
+   "DEV": 3.865,
+   "VAL": 4.063,
+   "OOS": 3.901
+  },
+  {
+   "hour": 13,
+   "median_fwd20_atr": 4.813,
+   "DEV": 4.894,
+   "VAL": 4.933,
+   "OOS": 4.722
+  },
+  {
+   "hour": 14,
+   "median_fwd20_atr": 7.038,
+   "DEV": 7.883,
+   "VAL": 7.674,
+   "OOS": 6.36
+  },
+  {
+   "hour": 15,
+   "median_fwd20_atr": 6.767,
+   "DEV": 7.091,
+   "VAL": 7.262,
+   "OOS": 6.447
+  },
+  {
+   "hour": 16,
+   "median_fwd20_atr": 4.978,
+   "DEV": 5.009,
+   "VAL": 4.951,
+   "OOS": 4.953
+  },
+  {
+   "hour": 17,
+   "median_fwd20_atr": 3.303,
+   "DEV": 3.178,
+   "VAL": 3.32,
+   "OOS": 3.405
+  },
+  {
+   "hour": 18,
+   "median_fwd20_atr": 2.917,
+   "DEV": 2.817,
+   "VAL": 2.956,
+   "OOS": 2.976
+  },
+  {
+   "hour": 19,
+   "median_fwd20_atr": 3.077,
+   "DEV": 3.056,
+   "VAL": 2.93,
+   "OOS": 3.119
+  },
+  {
+   "hour": 20,
+   "median_fwd20_atr": 3.166,
+   "DEV": 3.061,
+   "VAL": 2.962,
+   "OOS": 3.343
+  },
+  {
+   "hour": 21,
+   "median_fwd20_atr": 3.29,
+   "DEV": 2.97,
+   "VAL": 2.977,
+   "OOS": 3.634
+  },
+  {
+   "hour": 22,
+   "median_fwd20_atr": 3.331,
+   "DEV": 2.862,
+   "VAL": 3.163,
+   "OOS": 3.848
+  },
+  {
+   "hour": 23,
+   "median_fwd20_atr": 4.113,
+   "DEV": 3.545,
+   "VAL": 3.498,
+   "OOS": 4.917
+  }
+ ],
+ "straddle": [
+  {
+   "event": "RANDOM BARS (baseline)",
+   "a": 0.25,
+   "T": 0.75,
+   "n": 6296,
+   "ambiguous": 1704,
+   "exp_all": -0.259,
+   "share_triggered": 1.0,
+   "exp_DEV": -0.408,
+   "exp_VAL": -0.332,
+   "exp_OOS": -0.148
+  },
+  {
+   "event": "H21 NY open: first 30 min direction -> continuation",
+   "a": 0.25,
+   "T": 0.75,
+   "n": 437,
+   "ambiguous": 390,
+   "exp_all": 0.191,
+   "share_triggered": 1.0,
+   "exp_DEV": 0.122,
+   "exp_VAL": 0.294,
+   "exp_OOS": 0.206
+  },
+  {
+   "event": "H10 NY opening-range (15 min) break",
+   "a": 0.25,
+   "T": 0.75,
+   "n": 1448,
+   "ambiguous": 653,
+   "exp_all": -0.038,
+   "share_triggered": 1.0,
+   "exp_DEV": -0.098,
+   "exp_VAL": -0.018,
+   "exp_OOS": -0.006
+  },
+  {
+   "event": "H19 exhaustion climax after >= 4 ATR move",
+   "a": 0.25,
+   "T": 0.75,
+   "n": 473,
+   "ambiguous": 401,
+   "exp_all": 0.079,
+   "share_triggered": 1.0,
+   "exp_DEV": 0.023,
+   "exp_VAL": -0.066,
+   "exp_OOS": 0.165
+  },
+  {
+   "event": "H02/H03 volatility shock bar (>= 3 ATR)",
+   "a": 0.25,
+   "T": 0.75,
+   "n": 599,
+   "ambiguous": 517,
+   "exp_all": 0.127,
+   "share_triggered": 1.0,
+   "exp_DEV": 0.019,
+   "exp_VAL": 0.119,
+   "exp_OOS": 0.199
+  },
+  {
+   "event": "H13 20-bar z-score >= 3",
+   "a": 0.25,
+   "T": 0.75,
+   "n": 987,
+   "ambiguous": 665,
+   "exp_all": 0.023,
+   "share_triggered": 1.0,
+   "exp_DEV": -0.08,
+   "exp_VAL": -0.002,
+   "exp_OOS": 0.091
+  },
+  {
+   "event": "H04 first expansion after low-vol regime",
+   "a": 0.25,
+   "T": 0.75,
+   "n": 614,
+   "ambiguous": 371,
+   "exp_all": -0.124,
+   "share_triggered": 1.0,
+   "exp_DEV": -0.282,
+   "exp_VAL": -0.372,
+   "exp_OOS": 0.052
+  },
+  {
+   "event": "RANDOM BARS (baseline)",
+   "a": 0.5,
+   "T": 1.5,
+   "n": 7820,
+   "ambiguous": 180,
+   "exp_all": -0.365,
+   "share_triggered": 1.0,
+   "exp_DEV": -0.556,
+   "exp_VAL": -0.495,
+   "exp_OOS": -0.189
+  },
+  {
+   "event": "H21 NY open: first 30 min direction -> continuation",
+   "a": 0.5,
+   "T": 1.5,
+   "n": 704,
+   "ambiguous": 123,
+   "exp_all": 0.105,
+   "share_triggered": 1.0,
+   "exp_DEV": 0.036,
+   "exp_VAL": -0.038,
+   "exp_OOS": 0.19
+  },
+  {
+   "event": "H10 NY opening-range (15 min) break",
+   "a": 0.5,
+   "T": 1.5,
+   "n": 1988,
+   "ambiguous": 113,
+   "exp_all": -0.197,
+   "share_triggered": 1.0,
+   "exp_DEV": -0.279,
+   "exp_VAL": -0.214,
+   "exp_OOS": -0.128
+  },
+  {
+   "event": "H19 exhaustion climax after >= 4 ATR move",
+   "a": 0.5,
+   "T": 1.5,
+   "n": 786,
+   "ambiguous": 88,
+   "exp_all": -0.221,
+   "share_triggered": 1.0,
+   "exp_DEV": -0.355,
+   "exp_VAL": -0.445,
+   "exp_OOS": 0.003
+  },
+  {
+   "event": "H02/H03 volatility shock bar (>= 3 ATR)",
+   "a": 0.5,
+   "T": 1.5,
+   "n": 980,
+   "ambiguous": 136,
+   "exp_all": -0.186,
+   "share_triggered": 1.0,
+   "exp_DEV": -0.291,
+   "exp_VAL": -0.238,
+   "exp_OOS": -0.092
+  },
+  {
+   "event": "H13 20-bar z-score >= 3",
+   "a": 0.5,
+   "T": 1.5,
+   "n": 1515,
+   "ambiguous": 137,
+   "exp_all": -0.217,
+   "share_triggered": 0.998,
+   "exp_DEV": -0.351,
+   "exp_VAL": -0.268,
+   "exp_OOS": -0.106
+  },
+  {
+   "event": "H04 first expansion after low-vol regime",
+   "a": 0.5,
+   "T": 1.5,
+   "n": 884,
+   "ambiguous": 101,
+   "exp_all": -0.407,
+   "share_triggered": 1.0,
+   "exp_DEV": -0.596,
+   "exp_VAL": -0.59,
+   "exp_OOS": -0.211
+  },
+  {
+   "event": "RANDOM BARS (baseline)",
+   "a": 1.0,
+   "T": 2.0,
+   "n": 7983,
+   "ambiguous": 17,
+   "exp_all": -0.369,
+   "share_triggered": 0.999,
+   "exp_DEV": -0.57,
+   "exp_VAL": -0.505,
+   "exp_OOS": -0.18
+  },
+  {
+   "event": "H21 NY open: first 30 min direction -> continuation",
+   "a": 1.0,
+   "T": 2.0,
+   "n": 782,
+   "ambiguous": 45,
+   "exp_all": -0.07,
+   "share_triggered": 1.0,
+   "exp_DEV": -0.236,
+   "exp_VAL": 0.072,
+   "exp_OOS": 0.012
+  },
+  {
+   "event": "H10 NY opening-range (15 min) break",
+   "a": 1.0,
+   "T": 2.0,
+   "n": 2079,
+   "ambiguous": 22,
+   "exp_all": -0.217,
+   "share_triggered": 1.0,
+   "exp_DEV": -0.42,
+   "exp_VAL": -0.112,
+   "exp_OOS": -0.08
+  },
+  {
+   "event": "H19 exhaustion climax after >= 4 ATR move",
+   "a": 1.0,
+   "T": 2.0,
+   "n": 869,
+   "ambiguous": 5,
+   "exp_all": -0.297,
+   "share_triggered": 1.0,
+   "exp_DEV": -0.351,
+   "exp_VAL": -0.519,
+   "exp_OOS": -0.151
+  },
+  {
+   "event": "H02/H03 volatility shock bar (>= 3 ATR)",
+   "a": 1.0,
+   "T": 2.0,
+   "n": 1103,
+   "ambiguous": 13,
+   "exp_all": -0.325,
+   "share_triggered": 1.0,
+   "exp_DEV": -0.396,
+   "exp_VAL": -0.385,
+   "exp_OOS": -0.252
+  },
+  {
+   "event": "H13 20-bar z-score >= 3",
+   "a": 1.0,
+   "T": 2.0,
+   "n": 1644,
+   "ambiguous": 8,
+   "exp_all": -0.329,
+   "share_triggered": 0.998,
+   "exp_DEV": -0.356,
+   "exp_VAL": -0.338,
+   "exp_OOS": -0.306
+  },
+  {
+   "event": "H04 first expansion after low-vol regime",
+   "a": 1.0,
+   "T": 2.0,
+   "n": 980,
+   "ambiguous": 5,
+   "exp_all": -0.614,
+   "share_triggered": 1.0,
+   "exp_DEV": -0.873,
+   "exp_VAL": -0.83,
+   "exp_OOS": -0.323
+  }
+ ],
+ "top_events": [
+  "H21 NY open: first 30 min direction -> continuation",
+  "H10 NY opening-range (15 min) break",
+  "H19 exhaustion climax after >= 4 ATR move",
+  "H02/H03 volatility shock bar (>= 3 ATR)",
+  "H13 20-bar z-score >= 3",
+  "H04 first expansion after low-vol regime"
+ ]
+}

@@ -1,0 +1,178 @@
+{
+ "bottom_line": [
+  "<strong>The permission system does what it is for: when the signal is wrong it loses much less, and it does not get in the way when the signal is right.</strong> Over five years on M3 the baseline lost $2,752 at 0.02 lot on 3,399 trades. The recommended stack loses $572 on 835 trades, the loss falls in every period (development -$1,579 to -$373, validation -$705 to -$198, out of sample -$467 to -$1), the longest losing streak drops from 19 to 16, and the drawdown from $2,856 to $907. With 0.5% risk sizing the same five years end at $857 from $1,000 with a 15.8% maximum drawdown, against a wipe-out at fixed lots.",
+  "<strong>It does not make money, and nothing here suggests it can.</strong> Every phase and every period stays negative or flat. Among the 2,632 trades the stack blocks, 1,599 would have lost and 1,031 would have won: the gates are filtering a coin flip whose losses are larger than its wins, which is why blocking pays. The net benefit of blocking ($2,174) is almost exactly the improvement; the management changes add $97.",
+  "Enable Level 1 and the four Level 2 and 4 items that helped in all three periods. Keep the volatility ban, the chop lockout, the hybrid stop and the health exit switched off: each looked good on 2021 to 2024 and hurt in 2025 to 2026."
+ ],
+ "loss_guard_rows": [
+  [
+   "Spread consumes the trade",
+   "Cost gate: spread / ATR <= 0.5 and spread / (2R) <= 0.10",
+   "Alone: +$317 and +$441 versus baseline; each blocks 385 to 493 trades of which 73 to 77% would have lost. Retained."
+  ],
+  [
+   "Immediate flip",
+   "Signal must still hold 2 bars later, plus 2 ATR from the previous signal",
+   "Confirm 2 bars: +$610. Distance 2 ATR: +$1,596, the largest single gain, consistent in all periods. Confirm 1 bar is worse than nothing (-$24). Retained (confirm 2, distance 2)."
+  ],
+  [
+   "Chop",
+   "Chop-score lockout (>= 4 of 7)",
+   "+$79 alone; the score marks streak-prone periods but not losing trades. Rejected as a lockout, kept as telemetry."
+  ],
+  [
+   "Initial SL hit immediately",
+   "Structure + ATR stop (floor 1 ATR, cap 4 ATR)",
+   "+$607 overall but out of sample -$540 versus -$467. Experimental."
+  ],
+  [
+   "Large volatility spike",
+   "Extreme: no trade above 1.5x median ATR; elevated 1.25x: half risk",
+   "Ban: +$696 overall, -$796 versus -$467 out of sample (the 2025-26 winners were high-vol). Ban rejected; the half-risk rule retained in risk sizing."
+  ],
+  [
+   "Winner becomes loser",
+   "R-based locks: +1R keeps +0.25R, +1.5R keeps +0.75R",
+   "+$626, +$669 on the trades both runs took, the only rule positive out of sample (+$43). Retained."
+  ],
+  [
+   "Opposite signal causes loss",
+   "Never reverse; opposite signal is information",
+   "Already the baseline's behaviour; every close-or-reverse model was worse (phase 1)."
+  ],
+  [
+   "Repeated losses",
+   "2 losses: half risk; 3: pause 60 min; 4: stop for the day",
+   "+$1,039 alone, streak 19 to 14. Retained."
+  ],
+  [
+   "Fixed lot during drawdown",
+   "0.5% of equity per trade, minimum-lot skip rule",
+   "Baseline: ruin at fixed lots versus -73% at 0.5% risk; recommended stack: -14% with a 15.8% drawdown. Required."
+  ],
+  [
+   "Bad session",
+   "Session filter",
+   "Rejected in phase 1: hourly sign does not replicate between periods."
+  ],
+  [
+   "News spike",
+   "Event window",
+   "Untested: no calendar data. Architecture and logging only."
+  ],
+  [
+   "Slippage",
+   "Execution-quality check",
+   "Untested: no fill data. Logging only; the engine's slippage sensitivity is in the phase-1 robustness table."
+  ],
+  [
+   "Too many trades",
+   "Max 2 attempts per direction until a newer pivot and a 1 ATR move",
+   "+$118 alone, blocks 91 trades. Cheap, retained."
+  ],
+  [
+   "Margin exhaustion",
+   "Minimum-lot risk gate (0.01 lot must not risk more than 2% of equity)",
+   "Skips 3,239 signals from a $1,000 account with 0.5% risk; that is the honest answer for the account size."
+  ],
+  [
+   "Daily loss",
+   "No new trades after a 2% daily loss",
+   "+$181 alone; inside the stack it blocks a 50/50 sample (-$112). Retained as a hard limit for survival, not as a profit source."
+  ]
+ ],
+ "flow": [
+  [
+   "act",
+   "Signal bar closes (TWK flip, M3)"
+  ],
+  [
+   "lvl",
+   "LEVEL 1 HARD SAFETY"
+  ],
+  [
+   "gate",
+   "Daily loss limit reached? -> NO_TRADE: DAILY_LOSS_LIMIT"
+  ],
+  [
+   "gate",
+   "Losing streak: 3 -> paused 60 min, 4 -> stopped for the day -> NO_TRADE: CONSEC_LOSS_PAUSE / CONSEC_LOSS_STOP_DAY"
+  ],
+  [
+   "gate",
+   "Spread > 0.5 x ATR or > 10% of the 2R target? -> NO_TRADE: SPREAD_VS_ATR / SPREAD_VS_REWARD"
+  ],
+  [
+   "lvl",
+   "LEVEL 2 STOP THE DESTRUCTIVE BEHAVIOUR"
+  ],
+  [
+   "gate",
+   "Closer than 2 ATR to the previous signal? -> NO_TRADE: SIGNAL_DISTANCE"
+  ],
+  [
+   "gate",
+   "Two losses in this direction and no reset (newer pivot + 1 ATR move)? -> NO_TRADE: MAX_ATTEMPTS_DIR"
+  ],
+  [
+   "gate",
+   "Direction still holds 2 bars later? If not -> NO_TRADE: CONFIRM_FAILED"
+  ],
+  [
+   "lvl",
+   "LEVEL 3 ENVIRONMENT"
+  ],
+  [
+   "gate",
+   "Any of the last 3 bars wider than 2 ATR? -> NO_TRADE: LARGE_CANDLE"
+  ],
+  [
+   "gate",
+   "(off) ATR above 1.5x median -> VOL_EXTREME; chop score >= 4 -> CHOP_LOCK"
+  ],
+  [
+   "lvl",
+   "SHIPPED FILTERS AND STOP"
+  ],
+  [
+   "gate",
+   "Volume ratio, M1 box, M3 box, ADX as today; pivot or purple stop; 2R target"
+  ],
+  [
+   "lvl",
+   "RISK"
+  ],
+  [
+   "gate",
+   "Lot = equity x 0.5% / stop (half if ATR > 1.25x median or after 2 losses). Minimum lot would risk > 2%? -> NO_TRADE: RISK_MIN_LOT"
+  ],
+  [
+   "act",
+   "ENTRY, then management: purple trail, +1R lock +0.25R, +1.5R lock +0.75R, +900 pts lock and 1:1 trail; hold through opposite signals"
+  ]
+ ],
+ "flow_note": "Every NO_TRADE carries its tag into the decision log, so the next backtest or the live journal can be aggregated by reason exactly as in section 4. The baseline already answers NO_TRADE 22,953 times out of 26,352 signals; the recommended stack answers it 25,517 times.",
+ "attribution": [
+  "The accounting separates three effects. Blocking: baseline trades the protected run did not take, valued at what they actually did. New trades: signals the protected run took because a blocked trade had freed the slot. Management: the difference on trades both runs took. For the recommended stack the improvement is $2,179, of which $2,174 is blocking, $97 management, and -$92 the new trades let in.",
+  "Blocked trades are 61% losers by count and lose more per trade than the blocked winners make, so blocking a random sample of this signal is profitable. The gates differ a lot in precision. The 2-bar confirmation blocks 116 trades of which 106 would have lost (+$854 net benefit): a flip that reverses within two bars is the one thing this signal does reliably predict. The 2 ATR distance blocks 1,325 (56% losers, +$596), the large-candle lock 271 (56%, +$300), the spread gates 542 (73%, +$424). The daily-loss limit and the stop-for-the-day rule block 299 trades that are exactly 50/50 (-$240 together): they are damage limiters, not trade selectors, and their value is the survival shown in section 7, not the P&L here."
+ ],
+ "sequence": [
+  "Phase 1 (risk) takes the loss from $2,752 to $1,551 without changing the trade quality (profit factor 0.84 to 0.87). Phase 2 (anti-flip) to $1,178 with far fewer trades. Phase 3 (environment) to $488, the best net in the sequence, but its out-of-sample result depends on the volatility ban, which removed the 2025 to 2026 winners. Phase 4 (management) as a block makes it worse ($598) because the health exit and the hybrid stop hurt out of sample; only the R locks help.",
+  "The recommended stack is the sequence with the out-of-sample failures removed: $572 net, profit factor 0.88, out of sample -$1 on 587 trades. In the development and validation years its profit factor (0.56, 0.55) is below the baseline's (0.60, 0.58) because the gates leave a smaller, noisier sample; in dollars it loses a quarter as much. No period is positive."
+ ],
+ "chop": "The score does not line up with losing trades: expectancy is worst at a score of 3 (-$1.44) and better at 4 and 5 on tiny samples. It does line up weakly with losing sequences (the share of trades that start a three-loss streak rises from 19% at score 0 to 26% at 3 and 46% at 5), which is the streak ladder's job, already covered. As a lockout it blocks 212 trades for $79. Not enabled.",
+ "equity": "Fixed 0.02 lot from $1,000 is ruin for the baseline (equity goes negative) and still a 57% loss for the recommended stack, because a losing 2022 to 2024 at fixed size is unavoidable. Risk sizing at 0.5% turns the baseline into -73% and the recommended stack into -14% with a 15.8% maximum drawdown and no month of forced inactivity. The minimum-lot gate is doing a lot of the work: from a $1,000 account, 0.5% is $5, so any stop wider than $5 per ounce cannot be taken at 0.01 lot and is skipped. That is 3,239 of the 26,352 signals and it is correct behaviour for that account size.",
+ "enable": [
+  "<strong>Level 1, always on:</strong> risk sizing 0.5% with the minimum-lot skip, daily loss 2%, streak ladder (2 half, 3 pause, 4 stop), spread / ATR <= 0.5, spread / (2R) <= 0.10, margin check, max exposure. Measured: -$2,752 to -$1,551 alone, ruin to -73% with sizing.",
+  "<strong>Level 2, retained on evidence:</strong> 2 ATR distance from the previous signal (+$1,596, all periods), 2-bar direction confirmation (+$610; do not use 1 bar), 2 attempts per direction with a pivot-and-1-ATR reset (+$118), and the R locks at +1R and +1.5R (+$626, positive out of sample). Together with Level 1: -$572, -$14% on equity.",
+  "<strong>Level 3, experimental, off by default:</strong> volatility ban (hurts out of sample; use the half-risk rule instead), chop lockout (no effect), hybrid stop (mixed), trade-health exit (negative), HTF and session filters (rejected in phase 1), news window (no data), execution-quality gate (no data). The large-candle lock is the exception: positive alone (+$353) and inside the stack (+$300), so it is included in the recommended set.",
+  "<strong>The result to expect:</strong> a system that trades about 170 times a year instead of 700, loses slowly instead of quickly, and survives. Not a system that makes money. That would need a signal with an edge, which phase 2 showed this one is not."
+ ],
+ "untested": [
+  "<strong>News windows.</strong> No economic-calendar data offline. The engine has no event gate; the MQL5 inputs <code>NewsMinutesBefore</code> / <code>NewsMinutesAfter</code> and a per-trade <code>near_event</code> flag should be added so a demo run can measure it.",
+  "<strong>Spread spikes.</strong> The spread model is a yearly median, so <code>SpreadSpikeMultiple</code> could not be evaluated; the EA's existing auto limit (2x the median of the last 1,000 bars) stays on and should log <code>spread_at_signal</code>, <code>spread_at_order</code>, <code>spread_at_exit</code>.",
+  "<strong>Execution quality.</strong> No fill data. Log <code>signal_price</code>, <code>requested_price</code>, <code>fill_price</code>, <code>slippage</code>, <code>latency_ms</code>, <code>atr_at_signal</code>; reject when expected slippage exceeds a configurable share of the stop.",
+  "<strong>Tick-level trailing.</strong> Bar-level replay; the phase-1 worst-path variant shows the direction of the error (worse), not its size.",
+  "<strong>Decision log.</strong> Every signal, every tag, every counterfactual: the CSV that the engine now writes (<code>decisions</code>) is the format the EA should write too, with the run id, so the same attribution table can be built from live demo data."
+ ]
+}

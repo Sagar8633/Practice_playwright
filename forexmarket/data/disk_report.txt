@@ -1,0 +1,34 @@
+﻿C free GB: 0
+    1.79 GB  C:\Users\samja\AppData\Local\Temp
+    1.52 GB  C:\Users\samja\AppData\Local\Temp\claude
+    0.10 GB  C:\Users\samja\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\Tester
+    4.40 GB  C:\Users\samja\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\bases
+    1.90 GB  C:\Users\samja\AppData\Roaming\MetaQuotes\Tester
+    6.92 GB  C:\Users\samja\AppData\Local\ms-playwright
+    0.03 GB  C:\Users\samja\.cache
+    0.94 GB  C:\Users\samja\Downloads
+    0.09 GB  C:\Users\samja\AppData\Local\pip
+    0.07 GB  C:\Users\samja\AppData\Local\npm-cache
+    0.00 GB  C:\Windows\Temp
+--- largest files in Temp\claude ---
+    17.4 MB  C:\Users\samja\AppData\Local\Temp\claude\d--Practice-Playwright\5671797d-1308-40db-8491-f3415673d2c4\scratchpad\idc_incr_out.pkl
+    14.9 MB  C:\Users\samja\AppData\Local\Temp\claude\bash-edit-diff\4246416655806897231-9074531011879371705-64606faae16f1e82\objects\d0\2dd570ff9fe4cfab7f81e965b9d5c6b10f1599
+    14.9 MB  C:\Users\samja\AppData\Local\Temp\claude\bash-edit-diff\4120487809891156458-18046243883483068920-9d0e24383bed7a3a\objects\d0\2dd570ff9fe4cfab7f81e965b9d5c6b10f1599
+    14.9 MB  C:\Users\samja\AppData\Local\Temp\claude\bash-edit-diff\4120487809891156458-9074531011879371705-1cb31fef9a4d95c6\objects\d0\2dd570ff9fe4cfab7f81e965b9d5c6b10f1599
+    14.9 MB  C:\Users\samja\AppData\Local\Temp\claude\bash-edit-diff\4120487809891156458-9074531011879371705-12af3fc2a5ecb796\objects\d0\2dd570ff9fe4cfab7f81e965b9d5c6b10f1599
+    14.9 MB  C:\Users\samja\AppData\Local\Temp\claude\bash-edit-diff\16797801615890703092-18046243883483068920-9ae2f5c624aa0603\objects\d0\2dd570ff9fe4cfab7f81e965b9d5c6b10f1599
+    14.9 MB  C:\Users\samja\AppData\Local\Temp\claude\bash-edit-diff\4246416655806897231-9074531011879371705-da66fac4ad6504d1\objects\d0\2dd570ff9fe4cfab7f81e965b9d5c6b10f1599
+    14.9 MB  C:\Users\samja\AppData\Local\Temp\claude\bash-edit-diff\4246416655806897231-18046243883483068920-d962d9458a56203d\objects\d0\2dd570ff9fe4cfab7f81e965b9d5c6b10f1599
+--- largest files on C:\Users\samja (top 12) ---
+    3.82 GB  C:\Users\samja\OneDrive\Documents\Virtual Machines\Ubuntu 64-bit\Ubuntu 64-bit-s005.vmdk  17-02-2025 12:45:31
+    3.76 GB  C:\Users\samja\OneDrive\Documents\Virtual Machines\Ubuntu 64-bit\Ubuntu 64-bit-s006.vmdk  17-02-2025 12:45:31
+    3.76 GB  C:\Users\samja\OneDrive\Documents\Virtual Machines\Ubuntu 64-bit\Ubuntu 64-bit-s008.vmdk  17-02-2025 12:45:31
+    3.75 GB  C:\Users\samja\OneDrive\Documents\Virtual Machines\Ubuntu 64-bit\Ubuntu 64-bit-s007.vmdk  17-02-2025 12:45:31
+    3.75 GB  C:\Users\samja\OneDrive\Documents\Virtual Machines\Ubuntu 64-bit\Ubuntu 64-bit-s003.vmdk  17-02-2025 12:45:31
+    3.74 GB  C:\Users\samja\OneDrive\Documents\Virtual Machines\Ubuntu 64-bit\Ubuntu 64-bit-s004.vmdk  17-02-2025 12:45:31
+    3.73 GB  C:\Users\samja\OneDrive\Documents\Virtual Machines\Ubuntu 64-bit\Ubuntu 64-bit-s002.vmdk  17-02-2025 12:36:31
+    3.72 GB  C:\Users\samja\OneDrive\Documents\Virtual Machines\Ubuntu 64-bit\Ubuntu 64-bit-s010.vmdk  17-02-2025 12:45:31
+    2.92 GB  C:\Users\samja\OneDrive\Documents\Virtual Machines\Ubuntu 64-bit\Ubuntu 64-bit-s009.vmdk  17-02-2025 12:45:31
+    2.69 GB  C:\Users\samja\OneDrive\Documents\Virtual Machines\Ubuntu 64-bit\Ubuntu 64-bit-s011.vmdk  17-02-2025 12:45:31
+    1.51 GB  C:\Users\samja\OneDrive\Documents\Virtual Machines\Ubuntu 64-bit\Ubuntu 64-bit-s001.vmdk  17-02-2025 12:45:16
+    1.29 GB  C:\Users\samja\OneDrive\Pictures\sagar\pictures\ITMS\analytic_server.zip  10-09-2024 10:47:24

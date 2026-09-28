@@ -1,0 +1,210 @@
+{
+ "generated": "2026-09-26 12:49",
+ "n_rows": 4991,
+ "duka_spread_median": 0.64,
+ "all": {
+  "n": 4991,
+  "pnl_bar_mean": 0.43,
+  "pnl_tick_mean": -0.373,
+  "pnl_be_mean": 0.885,
+  "win_bar": 0.799,
+  "win_tick": 0.753,
+  "reasons_tick": {
+   "SL_trail": 3766,
+   "HEALTH": 905,
+   "SL": 320
+  },
+  "trail_n": 3905,
+  "trail_pnl_bar": 2.008,
+  "trail_pnl_tick": 0.946,
+  "trail_pnl_be": 0.885,
+  "lambda_median": 0.0,
+  "lambda_mean": 0.058,
+  "lambda_share_below_0_1": 0.541,
+  "lambda_share_above_0_5": 0.127,
+  "tick_exit_within_be_plus_5pts": 0.677,
+  "secs_to_activation_median": 43.0,
+  "hold_tick_s_median": 50.0
+ },
+ "M1": {
+  "n": 3754,
+  "pnl_bar_mean": 0.436,
+  "pnl_tick_mean": -0.348,
+  "pnl_be_mean": 0.88,
+  "win_bar": 0.783,
+  "win_tick": 0.733,
+  "reasons_tick": {
+   "SL_trail": 2755,
+   "HEALTH": 759,
+   "SL": 240
+  },
+  "trail_n": 2877,
+  "trail_pnl_bar": 2.005,
+  "trail_pnl_tick": 0.929,
+  "trail_pnl_be": 0.88,
+  "lambda_median": 0.0,
+  "lambda_mean": 0.047,
+  "lambda_share_below_0_1": 0.549,
+  "lambda_share_above_0_5": 0.125,
+  "tick_exit_within_be_plus_5pts": 0.677,
+  "secs_to_activation_median": 39.0,
+  "hold_tick_s_median": 46.0
+ },
+ "M5": {
+  "n": 1237,
+  "pnl_bar_mean": 0.41,
+  "pnl_tick_mean": -0.448,
+  "pnl_be_mean": 0.901,
+  "win_bar": 0.85,
+  "win_tick": 0.814,
+  "reasons_tick": {
+   "SL_trail": 1011,
+   "HEALTH": 146,
+   "SL": 80
+  },
+  "trail_n": 1028,
+  "trail_pnl_bar": 2.015,
+  "trail_pnl_tick": 0.991,
+  "trail_pnl_be": 0.897,
+  "lambda_median": 0.0,
+  "lambda_mean": 0.087,
+  "lambda_share_below_0_1": 0.518,
+  "lambda_share_above_0_5": 0.131,
+  "tick_exit_within_be_plus_5pts": 0.677,
+  "secs_to_activation_median": 60.0,
+  "hold_tick_s_median": 67.0
+ },
+ "by_reason_bar": {
+  "HEALTH": {
+   "n": 960,
+   "pnl_bar_mean": -5.547,
+   "pnl_tick_mean": -5.313,
+   "pnl_be_mean": 0.88,
+   "win_bar": 0.001,
+   "win_tick": 0.001,
+   "reasons_tick": {
+    "HEALTH": 905,
+    "SL": 55
+   }
+  },
+  "SL": {
+   "n": 42,
+   "pnl_bar_mean": -12.374,
+   "pnl_tick_mean": -12.599,
+   "pnl_be_mean": 1.025,
+   "win_bar": 0.0,
+   "win_tick": 0.0,
+   "reasons_tick": {
+    "SL": 42
+   }
+  },
+  "SL_gap": {
+   "n": 84,
+   "pnl_bar_mean": 1.774,
+   "pnl_tick_mean": 0.923,
+   "pnl_be_mean": 0.898,
+   "win_bar": 1.0,
+   "win_tick": 0.964,
+   "reasons_tick": {
+    "SL_trail": 81,
+    "SL": 3
+   }
+  },
+  "SL_trail": {
+   "n": 820,
+   "pnl_bar_mean": 2.029,
+   "pnl_tick_mean": 0.943,
+   "pnl_be_mean": 0.88,
+   "win_bar": 1.0,
+   "win_tick": 0.939,
+   "reasons_tick": {
+    "SL_trail": 773,
+    "SL": 47
+   },
+   "trail_n": 820,
+   "trail_pnl_bar": 2.029,
+   "trail_pnl_tick": 0.943,
+   "trail_pnl_be": 0.88,
+   "lambda_median": -0.0,
+   "lambda_mean": 0.085,
+   "lambda_share_below_0_1": 0.589,
+   "lambda_share_above_0_5": 0.115,
+   "tick_exit_within_be_plus_5pts": 0.68,
+   "secs_to_activation_median": 52.0,
+   "hold_tick_s_median": 56.5
+  },
+  "TRAIL": {
+   "n": 3085,
+   "pnl_bar_mean": 2.002,
+   "pnl_tick_mean": 0.946,
+   "pnl_be_mean": 0.886,
+   "win_bar": 1.0,
+   "win_tick": 0.942,
+   "reasons_tick": {
+    "SL_trail": 2912,
+    "SL": 173
+   },
+   "trail_n": 3085,
+   "trail_pnl_bar": 2.002,
+   "trail_pnl_tick": 0.946,
+   "trail_pnl_be": 0.886,
+   "lambda_median": 0.0,
+   "lambda_mean": 0.05,
+   "lambda_share_below_0_1": 0.528,
+   "lambda_share_above_0_5": 0.13,
+   "tick_exit_within_be_plus_5pts": 0.676,
+   "secs_to_activation_median": 39.0,
+   "hold_tick_s_median": 47.0
+  }
+ },
+ "by_side": {
+  "BUY": {
+   "n": 2481,
+   "pnl_bar_mean": 0.337,
+   "pnl_tick_mean": -0.324,
+   "pnl_be_mean": 0.884,
+   "win_bar": 0.804,
+   "win_tick": 0.751,
+   "reasons_tick": {
+    "SL_trail": 1866,
+    "HEALTH": 444,
+    "SL": 171
+   },
+   "trail_n": 1945,
+   "trail_pnl_bar": 1.804,
+   "trail_pnl_tick": 0.913,
+   "trail_pnl_be": 0.884,
+   "lambda_median": -0.0,
+   "lambda_mean": 0.041,
+   "lambda_share_below_0_1": 0.546,
+   "lambda_share_above_0_5": 0.121,
+   "tick_exit_within_be_plus_5pts": 0.703,
+   "secs_to_activation_median": 52.0,
+   "hold_tick_s_median": 60.0
+  },
+  "SELL": {
+   "n": 2510,
+   "pnl_bar_mean": 0.521,
+   "pnl_tick_mean": -0.42,
+   "pnl_be_mean": 0.887,
+   "win_bar": 0.795,
+   "win_tick": 0.755,
+   "reasons_tick": {
+    "SL_trail": 1900,
+    "HEALTH": 461,
+    "SL": 149
+   },
+   "trail_n": 1960,
+   "trail_pnl_bar": 2.21,
+   "trail_pnl_tick": 0.978,
+   "trail_pnl_be": 0.885,
+   "lambda_median": 0.0,
+   "lambda_mean": 0.073,
+   "lambda_share_below_0_1": 0.536,
+   "lambda_share_above_0_5": 0.132,
+   "tick_exit_within_be_plus_5pts": 0.651,
+   "secs_to_activation_median": 36.0,
+   "hold_tick_s_median": 41.5
+  }
+ }
+}

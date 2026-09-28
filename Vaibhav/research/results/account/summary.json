@@ -1,0 +1,366 @@
+{
+ "broker": {
+  "symbol": "GOLD (XM Global MT5)",
+  "min_lot": 0.01,
+  "lot_step": 0.01,
+  "contract_oz_per_lot": 100,
+  "usd_per_usd_move_per_0.01_lot": 1.0,
+  "leverage": 1000.0,
+  "margin_per_0.01_lot_at_4286": 4.29,
+  "margin_per_0.01_lot_at_2000": 2.0,
+  "stop_out_level": 0.2,
+  "margin_call_level": 0.5,
+  "swap_long_usd_per_night_0.01": -0.868,
+  "swap_short_usd_per_night_0.01": 0.198
+ },
+ "per_timeframe": [
+  {
+   "tf": "M1",
+   "trades": 54900,
+   "risk_usd_median": 2.1,
+   "risk_usd_p90": 6.8,
+   "risk_usd_max": 111.84,
+   "risk_pct_of_200_median": 1.0,
+   "risk_pct_of_200_p90": 3.4,
+   "share_trades_risk_gt_1pct_of_200": 0.525,
+   "share_trades_risk_gt_5pct_of_200": 0.046,
+   "share_trades_risk_gt_20pct_of_200": 0.002,
+   "min_account_for_1pct_rule_median_trade": 210.0,
+   "min_account_for_1pct_rule_p90_trade": 680.0,
+   "min_account_for_2pct_rule_median_trade": 105.0,
+   "max_simultaneous_exposure": "1 position x 0.01 lot (EA allows one pending or one position at a time)",
+   "margin_used_per_trade": 2.0,
+   "worst_single_loss_usd": -42.94,
+   "worst_loss_pct_of_200": 21.5,
+   "max_consecutive_losses": 45,
+   "losing_streak_usd": -128.19,
+   "mc_shuffle_p_ruin_200": 1.0,
+   "mc_bootstrap_p_ruin_200": 1.0,
+   "mc_shuffle_dd_p95": 30297.92,
+   "mc_bootstrap_end_p05": -31551.6,
+   "mc_bootstrap_end_median": -30038.29,
+   "mc_p_dd_gt_50pct": 1.0,
+   "historical_first_ruin_date_200": "2020-09-11",
+   "historical_min_balance_200": -30039.03,
+   "stop_out_equity_threshold": 0.4,
+   "swap_share_of_gross_pct": -0.5
+  },
+  {
+   "tf": "M5",
+   "trades": 12320,
+   "risk_usd_median": 4.36,
+   "risk_usd_p90": 15.97,
+   "risk_usd_max": 196.6,
+   "risk_pct_of_200_median": 2.2,
+   "risk_pct_of_200_p90": 8.0,
+   "share_trades_risk_gt_1pct_of_200": 0.861,
+   "share_trades_risk_gt_5pct_of_200": 0.203,
+   "share_trades_risk_gt_20pct_of_200": 0.015,
+   "min_account_for_1pct_rule_median_trade": 436.0,
+   "min_account_for_1pct_rule_p90_trade": 1597.0,
+   "min_account_for_2pct_rule_median_trade": 218.0,
+   "max_simultaneous_exposure": "1 position x 0.01 lot (EA allows one pending or one position at a time)",
+   "margin_used_per_trade": 2.0,
+   "worst_single_loss_usd": -74.38,
+   "worst_loss_pct_of_200": 37.2,
+   "max_consecutive_losses": 38,
+   "losing_streak_usd": -177.22,
+   "mc_shuffle_p_ruin_200": 1.0,
+   "mc_bootstrap_p_ruin_200": 1.0,
+   "mc_shuffle_dd_p95": 5321.25,
+   "mc_bootstrap_end_p05": -6070.69,
+   "mc_bootstrap_end_median": -4814.35,
+   "mc_p_dd_gt_50pct": 1.0,
+   "historical_first_ruin_date_200": "2020-10-05",
+   "historical_min_balance_200": -5111.94,
+   "stop_out_equity_threshold": 0.4,
+   "swap_share_of_gross_pct": -2.5
+  },
+  {
+   "tf": "M15",
+   "trades": 4559,
+   "risk_usd_median": 8.17,
+   "risk_usd_p90": 29.44,
+   "risk_usd_max": 380.85,
+   "risk_pct_of_200_median": 4.1,
+   "risk_pct_of_200_p90": 14.7,
+   "share_trades_risk_gt_1pct_of_200": 0.977,
+   "share_trades_risk_gt_5pct_of_200": 0.411,
+   "share_trades_risk_gt_20pct_of_200": 0.051,
+   "min_account_for_1pct_rule_median_trade": 817.0,
+   "min_account_for_1pct_rule_p90_trade": 2944.0,
+   "min_account_for_2pct_rule_median_trade": 408.0,
+   "max_simultaneous_exposure": "1 position x 0.01 lot (EA allows one pending or one position at a time)",
+   "margin_used_per_trade": 2.03,
+   "worst_single_loss_usd": -79.84,
+   "worst_loss_pct_of_200": 39.9,
+   "max_consecutive_losses": 51,
+   "losing_streak_usd": -281.21,
+   "mc_shuffle_p_ruin_200": 1.0,
+   "mc_bootstrap_p_ruin_200": 0.9633,
+   "mc_shuffle_dd_p95": 1796.87,
+   "mc_bootstrap_end_p05": -2013.33,
+   "mc_bootstrap_end_median": -799.53,
+   "mc_p_dd_gt_50pct": 1.0,
+   "historical_first_ruin_date_200": "2021-04-14",
+   "historical_min_balance_200": -1381.42,
+   "stop_out_equity_threshold": 0.41,
+   "swap_share_of_gross_pct": -22.6
+  },
+  {
+   "tf": "D1",
+   "trades": 85,
+   "risk_usd_median": 91.96,
+   "risk_usd_p90": 224.87,
+   "risk_usd_max": 424.9,
+   "risk_pct_of_200_median": 46.0,
+   "risk_pct_of_200_p90": 112.4,
+   "share_trades_risk_gt_1pct_of_200": 1.0,
+   "share_trades_risk_gt_5pct_of_200": 1.0,
+   "share_trades_risk_gt_20pct_of_200": 0.906,
+   "min_account_for_1pct_rule_median_trade": 9196.0,
+   "min_account_for_1pct_rule_p90_trade": 22487.0,
+   "min_account_for_2pct_rule_median_trade": 4598.0,
+   "max_simultaneous_exposure": "1 position x 0.01 lot (EA allows one pending or one position at a time)",
+   "margin_used_per_trade": 2.21,
+   "worst_single_loss_usd": -111.65,
+   "worst_loss_pct_of_200": 55.8,
+   "max_consecutive_losses": 8,
+   "losing_streak_usd": -111.65,
+   "mc_shuffle_p_ruin_200": 0.018,
+   "mc_bootstrap_p_ruin_200": 0.0817,
+   "mc_shuffle_dd_p95": 222.53,
+   "mc_bootstrap_end_p05": 106.88,
+   "mc_bootstrap_end_median": 767.72,
+   "mc_p_dd_gt_50pct": 1.0,
+   "historical_first_ruin_date_200": "never",
+   "historical_min_balance_200": 67.64,
+   "stop_out_equity_threshold": 0.44,
+   "swap_share_of_gross_pct": -30.0
+  }
+ ],
+ "ea_as_provided_on_200": {
+  "M1": {
+   "A_low": {
+    "trades": 702,
+    "net_profit": -193.49,
+    "blocked_sl_pct": 440778.0,
+    "profit_factor": 0.401,
+    "max_dd_usd": 193.49,
+    "ruin": false,
+    "end_balance": 6.51
+   },
+   "B_real": {
+    "trades": 349,
+    "net_profit": -196.36,
+    "blocked_sl_pct": 442883.0,
+    "profit_factor": 0.186,
+    "max_dd_usd": 196.36,
+    "ruin": false,
+    "end_balance": 3.64
+   },
+   "C_stress": {
+    "trades": 172,
+    "net_profit": -196.46,
+    "blocked_sl_pct": 443968.0,
+    "profit_factor": 0.053,
+    "max_dd_usd": 196.46,
+    "ruin": false,
+    "end_balance": 3.54
+   }
+  },
+  "M5": {
+   "A_low": {
+    "trades": 867,
+    "net_profit": -160.38,
+    "blocked_sl_pct": 81903.0,
+    "profit_factor": 0.734,
+    "max_dd_usd": 183.6,
+    "ruin": false,
+    "end_balance": 39.62
+   },
+   "B_real": {
+    "trades": 469,
+    "net_profit": -170.36,
+    "blocked_sl_pct": 84304.0,
+    "profit_factor": 0.577,
+    "max_dd_usd": 170.36,
+    "ruin": false,
+    "end_balance": 29.64
+   },
+   "C_stress": {
+    "trades": 182,
+    "net_profit": -175.74,
+    "blocked_sl_pct": 86067.0,
+    "profit_factor": 0.267,
+    "max_dd_usd": 175.74,
+    "ruin": false,
+    "end_balance": 24.26
+   }
+  },
+  "M15": {
+   "A_low": {
+    "trades": 289,
+    "net_profit": -45.91,
+    "blocked_sl_pct": 28542.0,
+    "profit_factor": 0.838,
+    "max_dd_usd": 68.09,
+    "ruin": false,
+    "end_balance": 154.09
+   },
+   "B_real": {
+    "trades": 166,
+    "net_profit": -83.52,
+    "blocked_sl_pct": 29219.0,
+    "profit_factor": 0.557,
+    "max_dd_usd": 83.52,
+    "ruin": false,
+    "end_balance": 116.48
+   },
+   "C_stress": {
+    "trades": 81,
+    "net_profit": -115.12,
+    "blocked_sl_pct": 29730.0,
+    "profit_factor": 0.084,
+    "max_dd_usd": 115.12,
+    "ruin": false,
+    "end_balance": 84.88
+   }
+  },
+  "D1": {
+   "A_low": {
+    "trades": 0,
+    "net_profit": 0.0,
+    "blocked_sl_pct": 370.0,
+    "profit_factor": NaN,
+    "max_dd_usd": 0.0,
+    "ruin": 0.0,
+    "end_balance": 200.0
+   },
+   "B_real": {
+    "trades": 0,
+    "net_profit": 0.0,
+    "blocked_sl_pct": 370.0,
+    "profit_factor": NaN,
+    "max_dd_usd": 0.0,
+    "ruin": 0.0,
+    "end_balance": 200.0
+   },
+   "C_stress": {
+    "trades": 0,
+    "net_profit": 0.0,
+    "blocked_sl_pct": 370.0,
+    "profit_factor": NaN,
+    "max_dd_usd": 0.0,
+    "ruin": 0.0,
+    "end_balance": 200.0
+   }
+  }
+ },
+ "strategy_on_200_no_filter": {
+  "M1": {
+   "A_low": {
+    "trades": 668,
+    "net_profit": -198.5,
+    "profit_factor": 0.618,
+    "max_dd_usd": 198.5,
+    "ruin": false,
+    "end_balance": 1.5
+   },
+   "B_real": {
+    "trades": 284,
+    "net_profit": -199.25,
+    "profit_factor": 0.356,
+    "max_dd_usd": 199.25,
+    "ruin": false,
+    "end_balance": 0.75
+   },
+   "C_stress": {
+    "trades": 132,
+    "net_profit": -198.98,
+    "profit_factor": 0.143,
+    "max_dd_usd": 198.98,
+    "ruin": false,
+    "end_balance": 1.02
+   }
+  },
+  "M5": {
+   "A_low": {
+    "trades": 356,
+    "net_profit": -198.5,
+    "profit_factor": 0.643,
+    "max_dd_usd": 203.93,
+    "ruin": false,
+    "end_balance": 1.5
+   },
+   "B_real": {
+    "trades": 185,
+    "net_profit": -199.04,
+    "profit_factor": 0.462,
+    "max_dd_usd": 201.7,
+    "ruin": false,
+    "end_balance": 0.96
+   },
+   "C_stress": {
+    "trades": 143,
+    "net_profit": -200.29,
+    "profit_factor": 0.408,
+    "max_dd_usd": 200.56,
+    "ruin": true,
+    "end_balance": -0.29
+   }
+  },
+  "M15": {
+   "A_low": {
+    "trades": 607,
+    "net_profit": -198.81,
+    "profit_factor": 0.84,
+    "max_dd_usd": 227.33,
+    "ruin": false,
+    "end_balance": 1.19
+   },
+   "B_real": {
+    "trades": 404,
+    "net_profit": -199.83,
+    "profit_factor": 0.783,
+    "max_dd_usd": 199.83,
+    "ruin": true,
+    "end_balance": 0.17
+   },
+   "C_stress": {
+    "trades": 119,
+    "net_profit": -200.42,
+    "profit_factor": 0.45,
+    "max_dd_usd": 200.42,
+    "ruin": true,
+    "end_balance": -0.42
+   }
+  },
+  "D1": {
+   "A_low": {
+    "trades": 85,
+    "net_profit": 894.51,
+    "profit_factor": 5.022,
+    "max_dd_usd": 150.17,
+    "ruin": false,
+    "end_balance": 1094.51
+   },
+   "B_real": {
+    "trades": 85,
+    "net_profit": 619.14,
+    "profit_factor": 2.946,
+    "max_dd_usd": 179.4,
+    "ruin": false,
+    "end_balance": 819.14
+   },
+   "C_stress": {
+    "trades": 38,
+    "net_profit": -199.94,
+    "profit_factor": 0.376,
+    "max_dd_usd": 206.96,
+    "ruin": true,
+    "end_balance": 0.06
+   }
+  }
+ }
+}

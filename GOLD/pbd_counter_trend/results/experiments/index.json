@@ -1,0 +1,94 @@
+{
+ "impulse_definition": {
+  "rows": 32,
+  "seconds": 7.9
+ },
+ "impulse_k": {
+  "rows": 40,
+  "seconds": 8.8
+ },
+ "impulse_N": {
+  "rows": 32,
+  "seconds": 6.6
+ },
+ "range_min_bars": {
+  "rows": 40,
+  "seconds": 8.2
+ },
+ "range_max_width": {
+  "rows": 24,
+  "seconds": 5.1
+ },
+ "range_min_width": {
+  "rows": 32,
+  "seconds": 8.4
+ },
+ "range_max_drift": {
+  "rows": 24,
+  "seconds": 4.8
+ },
+ "range_max_bars": {
+  "rows": 24,
+  "seconds": 5.0
+ },
+ "breakout_penetration": {
+  "rows": 32,
+  "seconds": 6.1
+ },
+ "breakout_confirmation": {
+  "rows": 32,
+  "seconds": 5.9
+ },
+ "pullback_depth": {
+  "rows": 16,
+  "seconds": 5.4
+ },
+ "pullback_window": {
+  "rows": 12,
+  "seconds": 4.1
+ },
+ "stop_pingpong": {
+  "rows": 20,
+  "seconds": 8.9
+ },
+ "stop_breakout": {
+  "rows": 16,
+  "seconds": 8.2
+ },
+ "target_pingpong": {
+  "rows": 16,
+  "seconds": 8.1
+ },
+ "zone_pingpong": {
+  "rows": 12,
+  "seconds": 4.4
+ },
+ "max_hold": {
+  "rows": 24,
+  "seconds": 2.3
+ },
+ "session_filter": {
+  "rows": 56,
+  "seconds": 3.8
+ },
+ "volatility_filter": {
+  "rows": 40,
+  "seconds": 2.9
+ },
+ "news_filter": {
+  "rows": 24,
+  "seconds": 1.9
+ },
+ "va_proximity": {
+  "rows": 56,
+  "seconds": 2.7
+ },
+ "max_touches": {
+  "rows": 16,
+  "seconds": 1.3
+ },
+ "structure_side": {
+  "rows": 32,
+  "seconds": 1.3
+ }
+}

@@ -1,0 +1,151 @@
+SOURCE OF TRUTH — Kamlesh Behere's CURRENT resume, transcribed verbatim from the
+PDF he supplied (Kamlesh_Behere_QA_Automation_Engineer_4_YOE.pdf).
+
+Nothing outside this file is known about him. Any claim in a redesigned resume
+must trace back to a line below. Do not invent employers, dates, tools,
+metrics, certifications or degrees.
+
+================================================================================
+
+KAMLESH BEHERE
+QA Engineer | QA Automation Engineer | Playwright | TypeScript | API Testing
+Surat, Gujarat, India | Phone: +91 6351689471 | Email: kamshb26@gmail.com
+
+PROFESSIONAL SUMMARY
+
+Results-driven QA Engineer 4+ years of experience in Manual Testing and Automation Testing
+across Financial Services and Healthcare. Proficient in designing and executing Functional,
+Regression, Smoke, Sanity, Integration, and End-to-End test cases, with strong hands-on
+experience automating critical workflows using Playwright with TypeScript following the Page
+Object Model (POM).
+
+Skilled in API Testing using Postman and Playwright API, backend data validation using SQL, and
+executing automated test suites through Jenkins as part of CI/CD pipelines. Experienced in defect
+lifecycle management using Jira/PMS, version control using Git/GitHub, and Agile/Scrum practices
+including daily stand-ups, sprint planning, and release testing. Seeking a QA Automation Engineer
+role to leverage strong Software Testing, Test Automation, and API Testing expertise.
+
+CORE SKILLS
+
+Manual Testing: Software Testing, Functional Testing, Regression Testing, Smoke Testing, Sanity
+Testing, Integration Testing, End-to-End Testing, UI Testing, Negative Testing, Test Case Design,
+Test Planning
+
+Automation Testing: Playwright, TypeScript, JavaScript (Basics), Page Object Model (POM),
+Playwright Fixtures, Reusable Utilities, Cross-Browser Testing, Test Automation
+
+API Testing: API Testing, Postman, Playwright API
+
+Database: SQL, Backend Data Validation
+
+Tools & Practices: Jenkins, CI/CD, PMS & Jira, Defect Life Cycle Management, Git, GitHub, Agile,
+Scrum
+
+Domain Exposure: Healthcare / Medical Billing (EDI, Claims, ERA/835, EMR), Financial Services
+(Mortgage Lending)
+
+AI & Emerging Tech: AI-Assisted Test Case & Script Generation (ChatGPT, Claude and GitHub
+Copilot), GenAI Tools Awareness
+
+PROFESSIONAL EXPERIENCE
+
+Superworks (Ultimate Business Systems Pvt. Ltd)                              Surat, India
+[NOTE: no employment date range is printed on the current resume — this is a gap]
+
+- Analyzed requirements, user stories, and acceptance criteria to design comprehensive test
+  scenarios and test cases across multiple product modules.
+- Performed manual functional, regression, smoke, sanity, integration, and end-to-end testing to
+  ensure product quality prior to release.
+- Automated critical business workflows using Playwright with TypeScript, following the Page
+  Object Model (POM) for maintainable and reusable test scripts.
+- Built reusable utilities and Playwright fixtures to reduce test script duplication and improve
+  automation suite maintainability.
+- Performed API testing using Postman and Playwright API, validating REST API status codes,
+  request/response payloads, and authorization.
+- Validated backend data integrity by writing and executing SQL queries against application
+  databases.
+- Executed automation test suites through Jenkins as part of CI/CD pipelines to support
+  continuous integration and release cycles.
+- Logged, tracked, and managed defects through their complete lifecycle using Jira, and performed
+  defect retesting and regression validation.
+- Collaborated with cross-functional teams in an Agile/Scrum environment, participating in daily
+  stand-ups, sprint planning, and release testing activities.
+- Maintained test scripts and version-controlled test artifacts using Git and GitHub.
+
+KEY ACHIEVEMENTS
+
+- Reduced regression execution time by 40% through parallel Playwright execution.
+- Improved automation stability by minimizing flaky tests using Playwright auto-wait and locator
+  strategies.
+- Delivered 100% sprint automation coverage within 2 weeks (Best Performer Award – 2025).
+- Led the "AI Syndicate" team in an organizational AI Hackathon, contributing to the design and
+  development of an Intelligent 24x7 Support Automation & Smart Resolving System that leveraged AI
+  to automate support processes, provide real-time assistance, and improve issue-resolution
+  efficiency.
+
+PROJECT EXPERIENCE
+
+Priority Financial Network (PFN)
+Domain: Financial Services                                          Feb 2024 – Present
+
+Modules: Borrower Management, Loan Application, Loan Product Selection, Property Details,
+Employment & Income, Assets & Liabilities, Document Management, Loan Processing, Underwriting,
+Loan Status, Closing, Loan Servicing, Roles & Permissions
+
+- Tested end-to-end mortgage loan application workflows, including borrower, property,
+  employment, income, and financial information validation.
+- Validated mandatory field validations, negative scenarios, document upload, and document
+  validation.
+- Contributed to framework enhancements aligned with modular Page Object design.
+- Tested loan status transitions and role-based access between borrower, loan officer, processor,
+  and underwriter.
+- Automated critical workflows using Playwright and TypeScript, and performed API testing
+  validating status codes, payloads, and authorization.
+- Leveraged MCP, Claude and GitHub Copilot to accelerate test case generation, automation script
+  development, code review, debugging, and test coverage analysis.
+- Used SQL to validate loan and borrower records, and executed regression suites using Jenkins.
+- Improved overall automation coverage by 50%, reducing manual regression efforts.
+- Logged defects in PMS and performed retesting to verify fixes.
+
+Cortex EDI
+Domain: Healthcare / Medical Billing / EDI                          Aug 2022 - Jan 2024
+
+Modules: Patient Management, Insurance & Eligibility, Claims, Claim Scrubbing, Claim Submission,
+Claim Status, ERA/835, Payment Posting, Accounts Receivable, Reporting, EMR, Inventory,
+Role-Based Access
+
+- Tested patient management, insurance and eligibility verification workflows, and end-to-end
+  claims lifecycle from creation through submission.
+- Tested claim scrubbing rules, claim submission, and claim status tracking to validate accurate
+  EDI transaction processing.
+- Validated ERA/835 remittance advice processing and payment posting workflows against expected
+  reimbursement and adjustment data.
+- Tested Accounts Receivable, Reporting, EMR, Inventory, and role-based access control across
+  multiple user roles.
+- Automated critical workflows using Playwright with TypeScript, and performed API testing using
+  Postman to validate EDI transaction requests and responses.
+- Implemented parallel execution across Chromium, Firefox, and WebKit, reducing regression time
+  significantly.
+- Integrated Playwright API request context to validate backend services (payments, inventory).
+- Used JSON-based data-driven testing for scalable scenario execution.
+- Validated backend data integrity using SQL, executed automation suites through Jenkins, and
+  logged/tracked defects using Jira with Git for version control.
+
+EDUCATION
+
+Bachelor of Engineering
+North Maharashtra University
+[NOTE: no graduation year is printed on the current resume — this is a gap]
+
+================================================================================
+KNOWN GAPS IN THE SOURCE (do NOT fill these in with invented data — surface them
+as placeholders for Kamlesh to complete):
+  1. No employment date range on the Superworks entry.
+  2. No graduation year, degree branch, or CGPA on the Education entry.
+  3. No LinkedIn or GitHub URL anywhere.
+  4. "4+ years" in the summary vs. project dates starting Aug 2022 — the arithmetic
+     needs Kamlesh to confirm his actual start date.
+  5. Whether Superworks is his only employer, or whether Cortex EDI (Aug 2022 - Jan
+     2024) was at a different company, is ambiguous: both projects sit under one
+     unlabelled employment block.
+  6. No certifications listed (e.g. ISTQB) — unknown whether he holds any.

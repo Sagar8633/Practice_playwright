@@ -1,0 +1,219 @@
+
+### cost sensitivity A_pingpong
+  playbook          variant period    n  expectancy    pf  total_r  win_rate  max_dd_r  spread_r
+A_pingpong            ideal    DEV  808      -0.087 0.863  -70.040     0.374   -86.872     0.000
+A_pingpong            ideal    VAL  377       0.027 1.044   10.141     0.395   -25.188     0.000
+A_pingpong            ideal    OOS  502      -0.069 0.896  -34.590     0.367   -45.777     0.000
+A_pingpong            ideal    ALL 1687      -0.056 0.912  -94.489     0.376  -103.250     0.000
+A_pingpong      spread_only    DEV  806      -0.176 0.728 -141.907     0.356  -153.444     0.091
+A_pingpong      spread_only    VAL  377      -0.082 0.869  -30.833     0.374   -43.494     0.091
+A_pingpong      spread_only    OOS  496      -0.124 0.815  -61.262     0.355   -66.747     0.091
+A_pingpong      spread_only    ALL 1679      -0.139 0.785 -234.003     0.360  -240.576     0.091
+A_pingpong       real_slip0    DEV  799      -0.220 0.670 -175.949     0.353  -185.260     0.096
+A_pingpong       real_slip0    VAL  371      -0.107 0.829  -39.843     0.375   -47.438     0.096
+A_pingpong       real_slip0    OOS  490      -0.116 0.827  -56.871     0.361   -61.509     0.096
+A_pingpong       real_slip0    ALL 1660      -0.164 0.751 -272.663     0.360  -278.192     0.096
+A_pingpong             real    DEV  800      -0.289 0.588 -231.518     0.352  -238.824     0.092
+A_pingpong             real    VAL  371      -0.156 0.760  -57.804     0.372   -64.651     0.092
+A_pingpong             real    OOS  490      -0.139 0.796  -67.935     0.361   -71.571     0.092
+A_pingpong             real    ALL 1661      -0.215 0.686 -357.256     0.359  -361.484     0.092
+A_pingpong     real_slip0.2    DEV  800      -0.342 0.528 -273.978     0.352  -279.450     0.087
+A_pingpong     real_slip0.2    VAL  370      -0.201 0.701  -74.354     0.370   -80.540     0.087
+A_pingpong     real_slip0.2    OOS  490      -0.160 0.767  -78.526     0.361   -81.186     0.087
+A_pingpong     real_slip0.2    ALL 1660      -0.257 0.634 -426.858     0.359  -429.847     0.087
+A_pingpong    real_ecn_comm    DEV  800      -0.322 0.556 -257.336     0.352  -263.784     0.092
+A_pingpong    real_ecn_comm    VAL  371      -0.178 0.732  -66.092     0.372   -72.689     0.092
+A_pingpong    real_ecn_comm    OOS  490      -0.149 0.783  -72.908     0.361   -76.126     0.092
+A_pingpong    real_ecn_comm    ALL 1661      -0.239 0.659 -396.336     0.359  -399.987     0.092
+A_pingpong      real_delay5    DEV  783      -0.379 0.517 -296.677     0.350  -303.543     0.123
+A_pingpong      real_delay5    VAL  368      -0.163 0.751  -59.863     0.370   -65.739     0.123
+A_pingpong      real_delay5    OOS  477      -0.164 0.760  -78.363     0.358   -79.310     0.123
+A_pingpong      real_delay5    ALL 1628      -0.267 0.632 -434.903     0.357  -436.749     0.123
+A_pingpong real_spread_x0.5    DEV  804      -0.255 0.633 -205.406     0.359  -215.953     0.048
+A_pingpong real_spread_x0.5    VAL  372      -0.108 0.831  -40.360     0.384   -47.866     0.048
+A_pingpong real_spread_x0.5    OOS  491      -0.110 0.838  -53.864     0.365   -60.471     0.048
+A_pingpong real_spread_x0.5    ALL 1667      -0.180 0.735 -299.630     0.367  -306.896     0.048
+A_pingpong real_spread_x1.5    DEV  805      -0.327 0.541 -263.529     0.343  -268.401     0.135
+A_pingpong real_spread_x1.5    VAL  373      -0.184 0.718  -68.747     0.365   -75.035     0.135
+A_pingpong real_spread_x1.5    OOS  489      -0.152 0.776  -74.361     0.360   -77.642     0.135
+A_pingpong real_spread_x1.5    ALL 1667      -0.244 0.646 -406.637     0.353  -410.446     0.135
+A_pingpong real_spread_x2.0    DEV  806      -0.372 0.490 -300.073     0.331  -302.089     0.179
+A_pingpong real_spread_x2.0    VAL  375      -0.216 0.672  -80.999     0.360   -86.780     0.179
+A_pingpong real_spread_x2.0    OOS  490      -0.183 0.732  -89.680     0.355   -92.335     0.179
+A_pingpong real_spread_x2.0    ALL 1671      -0.282 0.598 -470.752     0.345  -473.876     0.179
+
+### cost sensitivity B1_pullback
+   playbook          variant period   n  expectancy    pf  total_r  win_rate  max_dd_r  spread_r
+B1_pullback            ideal    DEV 463       0.006 1.009    2.910     0.309   -54.088     0.000
+B1_pullback            ideal    VAL 215      -0.145 0.808  -31.129     0.260   -39.637     0.000
+B1_pullback            ideal    OOS 282      -0.155 0.790  -43.716     0.287   -53.759     0.000
+B1_pullback            ideal    ALL 960      -0.075 0.896  -71.936     0.292  -136.911     0.000
+B1_pullback      spread_only    DEV 461      -0.096 0.865  -44.231     0.291   -70.301     0.092
+B1_pullback      spread_only    VAL 214      -0.231 0.698  -49.385     0.252   -56.170     0.092
+B1_pullback      spread_only    OOS 281      -0.207 0.723  -58.162     0.278   -67.825     0.092
+B1_pullback      spread_only    ALL 956      -0.159 0.783 -151.779     0.278  -185.601     0.092
+B1_pullback       real_slip0    DEV 454      -0.104 0.860  -47.318     0.282   -73.925     0.104
+B1_pullback       real_slip0    VAL 212      -0.257 0.670  -54.441     0.250   -61.505     0.104
+B1_pullback       real_slip0    OOS 278      -0.258 0.660  -71.754     0.273   -79.637     0.104
+B1_pullback       real_slip0    ALL 944      -0.184 0.757 -173.514     0.272  -206.562     0.104
+B1_pullback             real    DEV 455      -0.193 0.756  -87.801     0.281  -102.718     0.099
+B1_pullback             real    VAL 212      -0.308 0.619  -65.202     0.250   -71.697     0.099
+B1_pullback             real    OOS 278      -0.278 0.639  -77.171     0.273   -84.636     0.099
+B1_pullback             real    ALL 945      -0.244 0.691 -230.175     0.272  -251.158     0.099
+B1_pullback     real_slip0.2    DEV 454      -0.252 0.690 -114.361     0.280  -123.553     0.091
+B1_pullback     real_slip0.2    VAL 212      -0.353 0.575  -74.926     0.250   -80.907     0.091
+B1_pullback     real_slip0.2    OOS 278      -0.296 0.620  -82.383     0.273   -89.440     0.091
+B1_pullback     real_slip0.2    ALL 944      -0.288 0.643 -271.670     0.271  -286.563     0.091
+B1_pullback    real_ecn_comm    DEV 455      -0.228 0.721 -103.916     0.279  -115.042     0.099
+B1_pullback    real_ecn_comm    VAL 212      -0.332 0.598  -70.387     0.250   -76.760     0.099
+B1_pullback    real_ecn_comm    OOS 278      -0.287 0.630  -79.847     0.273   -87.164     0.099
+B1_pullback    real_ecn_comm    ALL 945      -0.269 0.667 -254.149     0.271  -271.210     0.099
+B1_pullback      real_delay5    DEV 452      -0.227 0.709 -102.538     0.283  -117.731     0.108
+B1_pullback      real_delay5    VAL 210      -0.198 0.753  -41.573     0.262   -49.124     0.108
+B1_pullback      real_delay5    OOS 276      -0.309 0.605  -85.230     0.268   -91.995     0.108
+B1_pullback      real_delay5    ALL 938      -0.245 0.689 -229.342     0.274  -249.825     0.108
+B1_pullback real_spread_x0.5    DEV 454      -0.141 0.818  -64.090     0.291   -88.095     0.051
+B1_pullback real_spread_x0.5    VAL 212      -0.285 0.647  -60.445     0.250   -66.966     0.051
+B1_pullback real_spread_x0.5    OOS 278      -0.257 0.664  -71.529     0.277   -79.251     0.051
+B1_pullback real_spread_x0.5    ALL 944      -0.208 0.734 -196.064     0.278  -226.344     0.051
+B1_pullback real_spread_x1.5    DEV 454      -0.265 0.672 -120.394     0.271  -130.023     0.145
+B1_pullback real_spread_x1.5    VAL 212      -0.329 0.592  -69.644     0.250   -76.113     0.145
+B1_pullback real_spread_x1.5    OOS 278      -0.307 0.602  -85.382     0.270   -92.598     0.145
+B1_pullback real_spread_x1.5    ALL 944      -0.292 0.634 -275.420     0.266  -290.914     0.145
+B1_pullback real_spread_x2.0    DEV 452      -0.347 0.580 -156.625     0.261  -166.063     0.189
+B1_pullback real_spread_x2.0    VAL 212      -0.371 0.546  -78.679     0.241   -84.096     0.189
+B1_pullback real_spread_x2.0    OOS 278      -0.319 0.589  -88.664     0.266   -95.642     0.189
+B1_pullback real_spread_x2.0    ALL 942      -0.344 0.575 -323.969     0.258  -339.077     0.189
+
+### grid impulse_k x rng_min_bars (A)
+            grid   playbook  imp_k  rng_min_bars period    n  expectancy    pf  total_r  win_rate  max_dd_r
+impk_x_minbars_A A_pingpong  2.500             4    DEV 1400      -0.190 0.689 -266.028     0.424  -271.584
+impk_x_minbars_A A_pingpong  2.500             4    VAL  707      -0.079 0.867  -55.838     0.443   -69.344
+impk_x_minbars_A A_pingpong  2.500             4    OOS  909      -0.097 0.836  -88.581     0.430  -116.915
+impk_x_minbars_A A_pingpong  2.500             8    DEV  978      -0.278 0.596 -271.545     0.364  -277.556
+impk_x_minbars_A A_pingpong  2.500             8    VAL  488      -0.154 0.763  -75.098     0.375   -86.523
+impk_x_minbars_A A_pingpong  2.500             8    OOS  680      -0.134 0.798  -91.428     0.363   -93.806
+impk_x_minbars_A A_pingpong  2.500            16    DEV  590      -0.319 0.570 -188.204     0.312  -194.996
+impk_x_minbars_A A_pingpong  2.500            16    VAL  290      -0.174 0.757  -50.519     0.314   -51.940
+impk_x_minbars_A A_pingpong  2.500            16    OOS  407      -0.203 0.717  -82.650     0.305   -88.115
+impk_x_minbars_A A_pingpong  3.500             4    DEV 1017      -0.171 0.719 -174.351     0.425  -186.222
+impk_x_minbars_A A_pingpong  3.500             4    VAL  495      -0.083 0.862  -41.236     0.426   -45.248
+impk_x_minbars_A A_pingpong  3.500             4    OOS  608      -0.035 0.939  -21.419     0.436   -58.932
+impk_x_minbars_A A_pingpong  3.500             8    DEV  800      -0.289 0.588 -231.518     0.352  -238.824
+impk_x_minbars_A A_pingpong  3.500             8    VAL  371      -0.156 0.760  -57.804     0.372   -64.651
+impk_x_minbars_A A_pingpong  3.500             8    OOS  490      -0.139 0.796  -67.935     0.361   -71.571
+impk_x_minbars_A A_pingpong  3.500            16    DEV  496      -0.318 0.572 -157.633     0.308  -162.696
+impk_x_minbars_A A_pingpong  3.500            16    VAL  224      -0.193 0.734  -43.325     0.304   -44.513
+impk_x_minbars_A A_pingpong  3.500            16    OOS  326      -0.185 0.741  -60.281     0.319   -68.697
+impk_x_minbars_A A_pingpong  5.000             4    DEV  521      -0.164 0.738  -85.221     0.411   -93.932
+impk_x_minbars_A A_pingpong  5.000             4    VAL  251      -0.142 0.765  -35.534     0.418   -41.134
+impk_x_minbars_A A_pingpong  5.000             4    OOS  299      -0.173 0.730  -51.600     0.371   -66.968
+impk_x_minbars_A A_pingpong  5.000             8    DEV  461      -0.290 0.595 -133.646     0.345  -140.582
+impk_x_minbars_A A_pingpong  5.000             8    VAL  226      -0.013 0.979   -2.976     0.398   -30.080
+impk_x_minbars_A A_pingpong  5.000             8    OOS  257      -0.099 0.854  -25.448     0.354   -34.037
+impk_x_minbars_A A_pingpong  5.000            16    DEV  355      -0.303 0.585 -107.606     0.315  -114.030
+impk_x_minbars_A A_pingpong  5.000            16    VAL  137      -0.261 0.630  -35.822     0.314   -37.010
+impk_x_minbars_A A_pingpong  5.000            16    OOS  196      -0.190 0.739  -37.333     0.291   -42.329
+
+### grid pp_stop_atr x zone (A)
+         grid   playbook  pp_stop_atr  zone period   n  expectancy    pf  total_r  win_rate  max_dd_r
+stop_x_zone_A A_pingpong        0.500 0.100    DEV 696      -0.324 0.581 -225.265     0.303  -231.726
+stop_x_zone_A A_pingpong        0.500 0.100    VAL 336      -0.155 0.778  -52.060     0.324   -67.322
+stop_x_zone_A A_pingpong        0.500 0.100    OOS 436      -0.126 0.821  -55.099     0.321   -60.918
+stop_x_zone_A A_pingpong        0.500 0.200    DEV 800      -0.289 0.588 -231.518     0.352  -238.824
+stop_x_zone_A A_pingpong        0.500 0.200    VAL 371      -0.156 0.760  -57.804     0.372   -64.651
+stop_x_zone_A A_pingpong        0.500 0.200    OOS 490      -0.139 0.796  -67.935     0.361   -71.571
+stop_x_zone_A A_pingpong        0.500 0.300    DEV 844      -0.227 0.644 -191.415     0.403  -198.762
+stop_x_zone_A A_pingpong        0.500 0.300    VAL 388      -0.137 0.774  -53.174     0.410   -63.664
+stop_x_zone_A A_pingpong        0.500 0.300    OOS 525      -0.125 0.800  -65.459     0.411   -67.459
+stop_x_zone_A A_pingpong        1.000 0.100    DEV 640      -0.245 0.626 -156.881     0.383  -163.372
+stop_x_zone_A A_pingpong        1.000 0.100    VAL 308      -0.053 0.910  -16.422     0.419   -35.509
+stop_x_zone_A A_pingpong        1.000 0.100    OOS 404      -0.173 0.731  -70.053     0.391   -72.971
+stop_x_zone_A A_pingpong        1.000 0.200    DEV 732      -0.219 0.631 -160.563     0.432  -168.459
+stop_x_zone_A A_pingpong        1.000 0.200    VAL 342      -0.159 0.727  -54.435     0.453   -57.345
+stop_x_zone_A A_pingpong        1.000 0.200    OOS 449      -0.157 0.740  -70.490     0.428   -71.207
+stop_x_zone_A A_pingpong        1.000 0.300    DEV 775      -0.185 0.663 -143.558     0.475  -150.537
+stop_x_zone_A A_pingpong        1.000 0.300    VAL 359      -0.141 0.741  -50.595     0.490   -56.193
+stop_x_zone_A A_pingpong        1.000 0.300    OOS 474      -0.116 0.787  -54.810     0.479   -55.974
+stop_x_zone_A A_pingpong        2.000 0.100    DEV 604      -0.150 0.697  -90.407     0.518   -97.208
+stop_x_zone_A A_pingpong        2.000 0.100    VAL 297       0.002 1.005    0.660     0.569   -15.654
+stop_x_zone_A A_pingpong        2.000 0.100    OOS 384      -0.068 0.857  -26.082     0.539   -30.725
+stop_x_zone_A A_pingpong        2.000 0.200    DEV 693      -0.130 0.705  -90.427     0.560   -96.328
+stop_x_zone_A A_pingpong        2.000 0.200    VAL 329      -0.023 0.941   -7.601     0.605   -17.186
+stop_x_zone_A A_pingpong        2.000 0.200    OOS 429      -0.078 0.827  -33.633     0.562   -35.959
+stop_x_zone_A A_pingpong        2.000 0.300    DEV 734      -0.113 0.722  -83.121     0.594   -85.311
+stop_x_zone_A A_pingpong        2.000 0.300    VAL 345      -0.021 0.942   -7.385     0.629   -15.008
+stop_x_zone_A A_pingpong        2.000 0.300    OOS 456      -0.062 0.846  -28.423     0.603   -29.299
+
+### grid imp_k x rng_min_bars (B1)
+             grid    playbook  imp_k  rng_min_bars period   n  expectancy    pf  total_r  win_rate  max_dd_r
+impk_x_minbars_B1 B1_pullback  2.500             4    DEV 797      -0.256 0.650 -203.888     0.324  -204.687
+impk_x_minbars_B1 B1_pullback  2.500             4    VAL 435      -0.174 0.744  -75.534     0.356   -76.373
+impk_x_minbars_B1 B1_pullback  2.500             4    OOS 563       0.062 1.095   34.643     0.364   -39.492
+impk_x_minbars_B1 B1_pullback  2.500             8    DEV 582      -0.205 0.738 -119.079     0.285  -131.381
+impk_x_minbars_B1 B1_pullback  2.500             8    VAL 293      -0.234 0.695  -68.593     0.283   -75.240
+impk_x_minbars_B1 B1_pullback  2.500             8    OOS 397      -0.216 0.707  -85.632     0.300   -90.415
+impk_x_minbars_B1 B1_pullback  2.500            16    DEV 352      -0.264 0.686  -92.996     0.227  -105.146
+impk_x_minbars_B1 B1_pullback  2.500            16    VAL 181      -0.247 0.691  -44.637     0.232   -50.529
+impk_x_minbars_B1 B1_pullback  2.500            16    OOS 243      -0.176 0.785  -42.694     0.251   -52.391
+impk_x_minbars_B1 B1_pullback  3.500             4    DEV 581      -0.254 0.659 -147.488     0.318  -148.287
+impk_x_minbars_B1 B1_pullback  3.500             4    VAL 308      -0.116 0.835  -35.872     0.331   -44.006
+impk_x_minbars_B1 B1_pullback  3.500             4    OOS 374       0.122 1.184   45.642     0.353   -29.199
+impk_x_minbars_B1 B1_pullback  3.500             8    DEV 455      -0.193 0.756  -87.801     0.281  -102.718
+impk_x_minbars_B1 B1_pullback  3.500             8    VAL 212      -0.308 0.619  -65.202     0.250   -71.697
+impk_x_minbars_B1 B1_pullback  3.500             8    OOS 278      -0.278 0.639  -77.171     0.273   -84.636
+impk_x_minbars_B1 B1_pullback  3.500            16    DEV 298      -0.338 0.609 -100.796     0.211  -109.294
+impk_x_minbars_B1 B1_pullback  3.500            16    VAL 139      -0.358 0.571  -49.753     0.216   -54.127
+impk_x_minbars_B1 B1_pullback  3.500            16    OOS 200      -0.185 0.781  -36.967     0.240   -47.466
+impk_x_minbars_B1 B1_pullback  5.000             4    DEV 317      -0.231 0.703  -73.143     0.281   -79.926
+impk_x_minbars_B1 B1_pullback  5.000             4    VAL 167      -0.106 0.859  -17.622     0.293   -28.619
+impk_x_minbars_B1 B1_pullback  5.000             4    OOS 178       0.088 1.128   15.696     0.337   -21.899
+impk_x_minbars_B1 B1_pullback  5.000             8    DEV 277      -0.294 0.638  -81.545     0.238   -96.555
+impk_x_minbars_B1 B1_pullback  5.000             8    VAL 127      -0.343 0.581  -43.540     0.244   -43.540
+impk_x_minbars_B1 B1_pullback  5.000             8    OOS 152      -0.272 0.664  -41.388     0.257   -46.378
+impk_x_minbars_B1 B1_pullback  5.000            16    DEV 209      -0.254 0.707  -53.167     0.215   -62.022
+impk_x_minbars_B1 B1_pullback  5.000            16    VAL  85      -0.344 0.591  -29.205     0.224   -31.304
+impk_x_minbars_B1 B1_pullback  5.000            16    OOS 125      -0.176 0.800  -21.944     0.192   -33.237
+
+### grid bo_stop_atr x pb_depth_atr (B1)
+           grid    playbook  bo_stop_atr  pb_depth_atr period   n  expectancy    pf  total_r  win_rate  max_dd_r
+stop_x_depth_B1 B1_pullback        0.500         0.000    DEV 367      -0.142 0.816  -52.056     0.294   -61.909
+stop_x_depth_B1 B1_pullback        0.500         0.000    VAL 166      -0.259 0.671  -42.933     0.271   -47.615
+stop_x_depth_B1 B1_pullback        0.500         0.000    OOS 218      -0.225 0.708  -49.077     0.266   -58.285
+stop_x_depth_B1 B1_pullback        0.500         0.250    DEV 455      -0.193 0.756  -87.801     0.281  -102.718
+stop_x_depth_B1 B1_pullback        0.500         0.250    VAL 212      -0.308 0.619  -65.202     0.250   -71.697
+stop_x_depth_B1 B1_pullback        0.500         0.250    OOS 278      -0.278 0.639  -77.171     0.273   -84.636
+stop_x_depth_B1 B1_pullback        0.500         0.500    DEV 512      -0.243 0.683 -124.422     0.291  -124.884
+stop_x_depth_B1 B1_pullback        0.500         0.500    VAL 240      -0.260 0.655  -62.408     0.300   -68.136
+stop_x_depth_B1 B1_pullback        0.500         0.500    OOS 326      -0.153 0.784  -49.949     0.328   -60.564
+stop_x_depth_B1 B1_pullback        1.000         0.000    DEV 365      -0.012 0.982   -4.203     0.378   -40.187
+stop_x_depth_B1 B1_pullback        1.000         0.000    VAL 164      -0.170 0.752  -27.950     0.348   -38.377
+stop_x_depth_B1 B1_pullback        1.000         0.000    OOS 215      -0.112 0.832  -24.002     0.358   -33.327
+stop_x_depth_B1 B1_pullback        1.000         0.250    DEV 450      -0.099 0.852  -44.638     0.362   -62.490
+stop_x_depth_B1 B1_pullback        1.000         0.250    VAL 209      -0.164 0.763  -34.234     0.344   -48.642
+stop_x_depth_B1 B1_pullback        1.000         0.250    OOS 273      -0.122 0.817  -33.385     0.359   -40.847
+stop_x_depth_B1 B1_pullback        1.000         0.500    DEV 503      -0.145 0.780  -72.830     0.370   -79.070
+stop_x_depth_B1 B1_pullback        1.000         0.500    VAL 237      -0.155 0.763  -36.629     0.384   -50.293
+stop_x_depth_B1 B1_pullback        1.000         0.500    OOS 319      -0.077 0.876  -24.565     0.404   -44.323
+stop_x_depth_B1 B1_pullback        1.500         0.000    DEV 359      -0.009 0.985   -3.263     0.435   -33.247
+stop_x_depth_B1 B1_pullback        1.500         0.000    VAL 164      -0.212 0.670  -34.766     0.384   -39.118
+stop_x_depth_B1 B1_pullback        1.500         0.000    OOS 213      -0.040 0.933   -8.470     0.423   -23.908
+stop_x_depth_B1 B1_pullback        1.500         0.250    DEV 441      -0.067 0.889  -29.372     0.422   -54.538
+stop_x_depth_B1 B1_pullback        1.500         0.250    VAL 205      -0.106 0.829  -21.666     0.405   -33.692
+stop_x_depth_B1 B1_pullback        1.500         0.250    OOS 270      -0.086 0.859  -23.166     0.411   -36.088
+stop_x_depth_B1 B1_pullback        1.500         0.500    DEV 495      -0.087 0.852  -42.978     0.436   -56.351
+stop_x_depth_B1 B1_pullback        1.500         0.500    VAL 235      -0.120 0.796  -28.132     0.438   -37.423
+stop_x_depth_B1 B1_pullback        1.500         0.500    OOS 314      -0.042 0.925  -13.153     0.455   -34.327
+
+### walk-forward
+   playbook  test_year  chosen  train_expectancy  train_n  test_n  test_expectancy  test_pf  baseline_test_n  baseline_test_expectancy
+ A_pingpong       2023 stop2.0            -0.106      388     305           -0.162    0.642              343                    -0.235
+ A_pingpong       2024 stop2.0            -0.130      693     254            0.022    1.059              287                    -0.132
+ A_pingpong       2025 stop2.0            -0.090      947     291           -0.117    0.752              334                    -0.166
+ A_pingpong       2026 stop2.0            -0.096     1238     213           -0.059    0.865              240                    -0.135
+B1_pullback       2023 stop1.0             0.002      261     189           -0.239    0.658              192                    -0.405
+B1_pullback       2024 stop1.5            -0.067      441     160           -0.134    0.784              164                    -0.320
+B1_pullback       2025 stop1.5            -0.085      601     186           -0.067    0.886              192                    -0.260
+B1_pullback       2026 stop1.5            -0.080      787     129           -0.085    0.868              134                    -0.299
+total 102s
+exit 0

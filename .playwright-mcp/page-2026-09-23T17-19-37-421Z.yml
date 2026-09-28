@@ -1,0 +1,6 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]
+  - generic [ref=e4]:
+    - text: Sign in to view this page.
+    - link "Sign in" [ref=e6] [cursor=pointer]:
+      - /url: /login?returnTo=%2Fartifact%2FMtuRnejMjbPbuVHEh3Eeig

@@ -1,0 +1,30 @@
+# Data audit: forex majors, silver, bitcoin, US oil (28 Sep 2026)
+
+Three path resolutions per instrument, all in XM server time (EET, UTC+2/+3):
+
+* **1-minute path** (timeframes 1m to D1): Dukascopy was the planned source, but its data feed rate-limited this machine (HTTP 429 for hours after three parallel downloaders were started). The seven majors therefore use FXCM's public minute archive (`candledata.fxcorporate.com`, UTC, bid OHLC, no volume, weekly files; holes: 2024 weeks 35 and 51-53, 2025 weeks 1-2 and 29-30, 2026 weeks 18-20 and 38-39 are absent, so June-July 2026 and late September 2026 are missing), bitcoin uses Binance BTCUSDT 1-minute klines (UTC, volume present, complete). Silver and oil have no free minute source and are tested from 15 minutes up.
+* **15-minute path** (timeframes 15m to D1 for silver and oil): XM's own M15 bars pulled from the terminal, about Sep 2022 (silver/oil: Jul 2022) to Sep 2026, with XM's spread and tick volume.
+* **Hourly path** (the long D1 test, 2015-2026): XM's own H1 bars for every symbol, with spread and tick volume. XM's H1 spread by year and server hour is also the spread model of every run.
+
+No bar is filled or interpolated. Timestamps: UTC sources converted with the EU-DST rule; XM bars are already in server time.
+
+| Instrument | 1-minute source | M1 months (missing) | M1 rows | Dups | OHLC errors | Intraweek gaps > 1 min (hours lost) | Gaps > 40 h | Volume in M1 | XM vs M1 close diff (pts, median / p99) | XM M15 from | XM H1 from | XM spread by year (pts) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| EURUSD | FXCM candle archive (majors) / Binance BTCUSDT (bitcoin) | 59 (2026-06, 2026-07) | 1,713,965 | 0 | 0 | 6023 (324) | 12 | no | 9.0 / 20.0 | 2022-09-15 | 2015-01-02 | 2021: 16.0, 2022: 16.0, 2023: 16.0, 2024: 17.0, 2025: 17.0, 2026: 19.0 |
+| GBPUSD | FXCM candle archive (majors) / Binance BTCUSDT (bitcoin) | 59 (2026-06, 2026-07) | 1,711,597 | 0 | 0 | 6021 (249) | 12 | no | 11.0 / 25.0 | 2022-09-15 | 2015-01-02 | 2021: 19.0, 2022: 19.0, 2023: 19.0, 2024: 19.0, 2025: 18.0, 2026: 21.0 |
+| USDJPY | FXCM candle archive (majors) / Binance BTCUSDT (bitcoin) | 59 (2026-06, 2026-07) | 1,708,645 | 0 | 0 | 6349 (317) | 12 | no | 11.0 / 25.0 | 2022-09-15 | 2015-01-02 | 2021: 15.0, 2022: 15.0, 2023: 15.0, 2024: 20.0, 2025: 20.0, 2026: 21.0 |
+| AUDUSD | FXCM candle archive (majors) / Binance BTCUSDT (bitcoin) | 59 (2026-06, 2026-07) | 1,708,996 | 0 | 0 | 7130 (315) | 12 | no | 11.0 / 21.0 | 2022-09-15 | 2015-01-02 | 2021: 16.0, 2022: 16.0, 2023: 16.0, 2024: 23.0, 2025: 23.0, 2026: 23.0 |
+| USDCAD | FXCM candle archive (majors) / Binance BTCUSDT (bitcoin) | 59 (2026-06, 2026-07) | 1,707,555 | 0 | 0 | 7975 (308) | 12 | no |  /  | 2022-09-15 | 2016-10-18 | 2021: 18.0, 2022: 18.0, 2023: 18.0, 2024: 25.0, 2025: 25.0, 2026: 27.0 |
+| USDCHF | FXCM candle archive (majors) / Binance BTCUSDT (bitcoin) | 59 (2026-06, 2026-07) | 1,701,027 | 0 | 0 | 7614 (397) | 12 | no | 11.0 / 25.0 | 2022-09-15 | 2015-01-02 | 2021: 16.0, 2022: 19.0, 2023: 19.0, 2024: 21.0, 2025: 20.0, 2026: 23.0 |
+| NZDUSD | FXCM candle archive (majors) / Binance BTCUSDT (bitcoin) | 59 (2026-06, 2026-07) | 1,706,323 | 0 | 0 | 7296 (316) | 12 | no |  /  | 2022-09-15 | 2016-10-18 | 2021: 25.0, 2022: 25.0, 2023: 25.0, 2024: 28.0, 2025: 28.0, 2026: 28.0 |
+| Silver (XM SILVER) | Dukascopy M1 bid (dukascopy-node) | 3 (2021-12, 2022-01, 2022-02, 2022-03, 2022-04, 2022-05, 2022-06, 2022-07, 2022-08, 2022-09, 2022-10, 2022-11, 2022-12, 2023-01, 2023-02, 2023-03, 2023-04, 2023-05, 2023-06, 2023-07, 2023-08, 2023-09, 2023-10, 2023-11, 2023-12, 2024-01, 2024-02, 2024-03, 2024-04, 2024-05, 2024-06, 2024-07, 2024-08, 2024-09, 2024-10, 2024-11, 2024-12, 2025-01, 2025-02, 2025-03, 2025-04, 2025-05, 2025-06, 2025-07, 2025-08, 2025-09, 2025-10, 2025-11, 2025-12, 2026-01, 2026-02, 2026-03, 2026-04, 2026-05, 2026-06, 2026-07, 2026-08, 2026-09) | 87,989 | 0 | 0 | 834 (76) | 12 | yes |  /  | 2022-07-04 | 2015-01-02 | 2021: 33.0, 2022: 33.0, 2023: 33.0, 2024: 33.0, 2025: 30.0, 2026: 60.0 |
+| Bitcoin (XM BTCUSD) | FXCM candle archive (majors) / Binance BTCUSDT (bitcoin) | 61 (none) | 2,667,833 | 0 | 0 | 2 (3) | 0 | yes | 2070.0 / 3359.01 | 2023-11-19 | 2018-09-10 | 2021: 12773.5, 2022: 3213.0, 2023: 3051.0, 2024: 9275.0, 2025: 6000.0, 2026: 5000.0 |
+| US Oil (XM OILCash) | none available (Dukascopy rate-limited; no free alternative) | 0 (2021-09, 2021-10, 2021-11, 2021-12, 2022-01, 2022-02, 2022-03, 2022-04, 2022-05, 2022-06, 2022-07, 2022-08, 2022-09, 2022-10, 2022-11, 2022-12, 2023-01, 2023-02, 2023-03, 2023-04, 2023-05, 2023-06, 2023-07, 2023-08, 2023-09, 2023-10, 2023-11, 2023-12, 2024-01, 2024-02, 2024-03, 2024-04, 2024-05, 2024-06, 2024-07, 2024-08, 2024-09, 2024-10, 2024-11, 2024-12, 2025-01, 2025-02, 2025-03, 2025-04, 2025-05, 2025-06, 2025-07, 2025-08, 2025-09, 2025-10, 2025-11, 2025-12, 2026-01, 2026-02, 2026-03, 2026-04, 2026-05, 2026-06, 2026-07, 2026-08, 2026-09) | 0 |  |  |  (0) | 0 |  |  /  | 2022-06-23 | 2015-01-02 | 2021: 4.0, 2022: 4.0, 2023: 4.0, 2024: 4.0, 2025: 4.0, 2026: 4.0 |
+
+## Notes
+
+* Where the minute data carries no volume (FXCM), the EA's volume filter is switched off for those runs and the report says so; on the XM 15-minute and hourly paths and on Binance the filter runs on real (tick) volume, which is what the EA sees in MetaTrader.
+* Weekend bars exist only for bitcoin (24/7). Silver keeps XM's 01:00-23:58 metals session; forex and oil keep their sources' coverage.
+* XM's prices differ from the fallback feeds by a few points at the median (FX) and by a constant level of about $21 for bitcoin (BTCUSDT versus XM's USD contract); stop distances and the strategy's relative moves are unaffected.
+* Prices are float32 in the caches for forex, silver and oil (7 significant digits) and float64 for bitcoin.
+* Look-ahead: signals use completed bars only; fills, stops and trailing are evaluated on the next path bar's range. On the 15-minute and hourly paths the intrabar order of events inside a bar is unknown; the same conservative rules as in the gold study apply (existing stop first, then fills, then stop moves).

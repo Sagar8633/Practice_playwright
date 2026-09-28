@@ -1,0 +1,1083 @@
+{
+ "default_M1_hedge_calib": {
+  "session": [
+   {
+    "session": "Asia 00-09",
+    "n": "531",
+    "net": "-402.07",
+    "exp": "-0.76",
+    "win": "0.39"
+   },
+   {
+    "session": "London 10-14",
+    "n": "371",
+    "net": "-164.63",
+    "exp": "-0.44",
+    "win": "0.4"
+   },
+   {
+    "session": "NY/overlap 15-18",
+    "n": "1913",
+    "net": "-2013.55",
+    "exp": "-1.05",
+    "win": "0.58"
+   },
+   {
+    "session": "NY late 19-23",
+    "n": "355",
+    "net": "-360.1",
+    "exp": "-1.01",
+    "win": "0.41"
+   }
+  ],
+  "period": [
+   {
+    "period": "DEV",
+    "n": "1160",
+    "net": "-980.01",
+    "exp": "-0.84",
+    "win": "0.52"
+   },
+   {
+    "period": "OOS",
+    "n": "1230",
+    "net": "-980.01",
+    "exp": "-0.8",
+    "win": "0.54"
+   },
+   {
+    "period": "VAL",
+    "n": "780",
+    "net": "-980.33",
+    "exp": "-1.26",
+    "win": "0.44"
+   }
+  ],
+  "year": [
+   {
+    "year": "2021",
+    "n": "491",
+    "net": "-516.32",
+    "exp": "-1.05",
+    "win": "0.7"
+   },
+   {
+    "year": "2022",
+    "n": "669",
+    "net": "-463.68",
+    "exp": "-0.69",
+    "win": "0.39"
+   },
+   {
+    "year": "2024",
+    "n": "780",
+    "net": "-980.33",
+    "exp": "-1.26",
+    "win": "0.44"
+   },
+   {
+    "year": "2025",
+    "n": "1230",
+    "net": "-980.01",
+    "exp": "-0.8",
+    "win": "0.54"
+   }
+  ],
+  "with_trend": [
+   {
+    "with_trend": "False",
+    "n": "1639",
+    "net": "-1146.55",
+    "exp": "-0.7",
+    "win": "0.51"
+   },
+   {
+    "with_trend": "True",
+    "n": "1531",
+    "net": "-1793.79",
+    "exp": "-1.17",
+    "win": "0.5"
+   }
+  ],
+  "vol_regime": [
+   {
+    "vol_regime": "low",
+    "n": "24",
+    "net": "-195.44",
+    "exp": "-8.14",
+    "win": "0.54"
+   },
+   {
+    "vol_regime": "normal",
+    "n": "250",
+    "net": "11.6",
+    "exp": "0.05",
+    "win": "0.5"
+   },
+   {
+    "vol_regime": "high",
+    "n": "2896",
+    "net": "-2756.5",
+    "exp": "-0.95",
+    "win": "0.51"
+   }
+  ],
+  "exit_reason": [
+   {
+    "exit_reason": "CHAIN_COVERED",
+    "n": "156",
+    "net": "-3011.69",
+    "exp": "-19.31",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "CHAIN_RESEED",
+    "n": "49",
+    "net": "114.0",
+    "exp": "2.33",
+    "win": "0.96"
+   },
+   {
+    "exit_reason": "CHAIN_RESEED_PARTIAL",
+    "n": "49",
+    "net": "-1477.51",
+    "exp": "-30.15",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "CHAIN_ROLL",
+    "n": "73",
+    "net": "41.5",
+    "exp": "0.57",
+    "win": "1.0"
+   },
+   {
+    "exit_reason": "HEALTH",
+    "n": "113",
+    "net": "-973.88",
+    "exp": "-8.62",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "PARTIAL_L1",
+    "n": "14",
+    "net": "-17.92",
+    "exp": "-1.28",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "PARTIAL_L2",
+    "n": "4",
+    "net": "-4.45",
+    "exp": "-1.11",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "PARTIAL_L3",
+    "n": "2",
+    "net": "-2.46",
+    "exp": "-1.23",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "SL",
+    "n": "1036",
+    "net": "-1989.47",
+    "exp": "-1.92",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "SL_be",
+    "n": "22",
+    "net": "0.0",
+    "exp": "0.0",
+    "win": "1.0"
+   },
+   {
+    "exit_reason": "SL_gap",
+    "n": "206",
+    "net": "-39.14",
+    "exp": "-0.19",
+    "win": "0.13"
+   },
+   {
+    "exit_reason": "SL_hedge_lock",
+    "n": "119",
+    "net": "2342.84",
+    "exp": "19.69",
+    "win": "1.0"
+   },
+   {
+    "exit_reason": "SL_tight",
+    "n": "1",
+    "net": "-3.0",
+    "exp": "-3.0",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "SL_trail",
+    "n": "341",
+    "net": "788.58",
+    "exp": "2.31",
+    "win": "1.0"
+   },
+   {
+    "exit_reason": "TRAIL",
+    "n": "985",
+    "net": "1292.26",
+    "exp": "1.31",
+    "win": "1.0"
+   }
+  ],
+  "via": [
+   {
+    "via": "hedge",
+    "n": "338",
+    "net": "-1501.38",
+    "exp": "-4.44",
+    "win": "0.62"
+   },
+   {
+    "via": "reentry",
+    "n": "1",
+    "net": "-5.33",
+    "exp": "-5.33",
+    "win": "0.0"
+   },
+   {
+    "via": "signal",
+    "n": "2831",
+    "net": "-1433.64",
+    "exp": "-0.51",
+    "win": "0.49"
+   }
+  ],
+  "side": [
+   {
+    "side": "BUY",
+    "n": "1373",
+    "net": "-1267.39",
+    "exp": "-0.92",
+    "win": "0.52"
+   },
+   {
+    "side": "SELL",
+    "n": "1797",
+    "net": "-1672.96",
+    "exp": "-0.93",
+    "win": "0.5"
+   }
+  ],
+  "loss_patterns": {
+   "losers": 1561,
+   "loser_share_hedge_legs": 0.081,
+   "loss_from_hedge_legs": -4669.0,
+   "loss_total": -7633.0,
+   "losers_in_NY": 0.515,
+   "losers_against_htf": 0.512,
+   "losers_high_vol": 0.912,
+   "median_loser_hold_min": 1.0,
+   "median_winner_hold_min": 2.0,
+   "top10_losses_share": 0.134,
+   "losers_reversal": 0.238,
+   "exit_reasons_losers": {
+    "SL": 1036,
+    "SL_gap": 180,
+    "CHAIN_COVERED": 156,
+    "HEALTH": 113,
+    "CHAIN_RESEED_PARTIAL": 49,
+    "PARTIAL_L1": 14,
+    "PARTIAL_L2": 4,
+    "TRAIL": 3
+   }
+  }
+ },
+ "default_M5_hedge_calib": {
+  "session": [
+   {
+    "session": "Asia 00-09",
+    "n": "1128",
+    "net": "-722.85",
+    "exp": "-0.64",
+    "win": "0.49"
+   },
+   {
+    "session": "London 10-14",
+    "n": "1004",
+    "net": "-801.38",
+    "exp": "-0.8",
+    "win": "0.58"
+   },
+   {
+    "session": "NY/overlap 15-18",
+    "n": "2074",
+    "net": "-1078.94",
+    "exp": "-0.52",
+    "win": "0.65"
+   },
+   {
+    "session": "NY late 19-23",
+    "n": "568",
+    "net": "-337.77",
+    "exp": "-0.59",
+    "win": "0.54"
+   }
+  ],
+  "period": [
+   {
+    "period": "DEV",
+    "n": "1817",
+    "net": "-980.31",
+    "exp": "-0.54",
+    "win": "0.6"
+   },
+   {
+    "period": "OOS",
+    "n": "1229",
+    "net": "-980.17",
+    "exp": "-0.8",
+    "win": "0.53"
+   },
+   {
+    "period": "VAL",
+    "n": "1728",
+    "net": "-980.46",
+    "exp": "-0.57",
+    "win": "0.61"
+   }
+  ],
+  "year": [
+   {
+    "year": "2021",
+    "n": "1051",
+    "net": "-531.45",
+    "exp": "-0.51",
+    "win": "0.73"
+   },
+   {
+    "year": "2022",
+    "n": "766",
+    "net": "-448.86",
+    "exp": "-0.59",
+    "win": "0.42"
+   },
+   {
+    "year": "2024",
+    "n": "1728",
+    "net": "-980.46",
+    "exp": "-0.57",
+    "win": "0.61"
+   },
+   {
+    "year": "2025",
+    "n": "1229",
+    "net": "-980.17",
+    "exp": "-0.8",
+    "win": "0.53"
+   }
+  ],
+  "with_trend": [
+   {
+    "with_trend": "False",
+    "n": "2298",
+    "net": "-1970.53",
+    "exp": "-0.86",
+    "win": "0.57"
+   },
+   {
+    "with_trend": "True",
+    "n": "2476",
+    "net": "-970.41",
+    "exp": "-0.39",
+    "win": "0.6"
+   }
+  ],
+  "vol_regime": [
+   {
+    "vol_regime": "low",
+    "n": "7",
+    "net": "55.15",
+    "exp": "7.88",
+    "win": "0.71"
+   },
+   {
+    "vol_regime": "normal",
+    "n": "100",
+    "net": "-157.06",
+    "exp": "-1.57",
+    "win": "0.42"
+   },
+   {
+    "vol_regime": "high",
+    "n": "4667",
+    "net": "-2839.03",
+    "exp": "-0.61",
+    "win": "0.59"
+   }
+  ],
+  "exit_reason": [
+   {
+    "exit_reason": "CHAIN_COVERED",
+    "n": "274",
+    "net": "-5096.32",
+    "exp": "-18.6",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "CHAIN_RESEED",
+    "n": "63",
+    "net": "94.63",
+    "exp": "1.5",
+    "win": "0.94"
+   },
+   {
+    "exit_reason": "CHAIN_RESEED_PARTIAL",
+    "n": "63",
+    "net": "-1661.47",
+    "exp": "-26.37",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "CHAIN_ROLL",
+    "n": "111",
+    "net": "45.75",
+    "exp": "0.41",
+    "win": "0.97"
+   },
+   {
+    "exit_reason": "HEALTH",
+    "n": "184",
+    "net": "-1253.7",
+    "exp": "-6.81",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "PARTIAL_L1",
+    "n": "26",
+    "net": "-28.33",
+    "exp": "-1.09",
+    "win": "0.08"
+   },
+   {
+    "exit_reason": "PARTIAL_L2",
+    "n": "12",
+    "net": "-17.01",
+    "exp": "-1.42",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "PARTIAL_L3",
+    "n": "2",
+    "net": "-2.8",
+    "exp": "-1.4",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "SL",
+    "n": "1231",
+    "net": "-2524.82",
+    "exp": "-2.05",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "SL_be",
+    "n": "60",
+    "net": "0.0",
+    "exp": "0.0",
+    "win": "1.0"
+   },
+   {
+    "exit_reason": "SL_gap",
+    "n": "254",
+    "net": "76.09",
+    "exp": "0.3",
+    "win": "0.31"
+   },
+   {
+    "exit_reason": "SL_hedge_lock",
+    "n": "243",
+    "net": "4572.45",
+    "exp": "18.82",
+    "win": "0.99"
+   },
+   {
+    "exit_reason": "SL_tight",
+    "n": "2",
+    "net": "-11.31",
+    "exp": "-5.65",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "SL_trail",
+    "n": "666",
+    "net": "1064.29",
+    "exp": "1.6",
+    "win": "0.99"
+   },
+   {
+    "exit_reason": "TRAIL",
+    "n": "1583",
+    "net": "1801.61",
+    "exp": "1.14",
+    "win": "1.0"
+   }
+  ],
+  "via": [
+   {
+    "via": "hedge",
+    "n": "522",
+    "net": "-1112.29",
+    "exp": "-2.13",
+    "win": "0.65"
+   },
+   {
+    "via": "reentry",
+    "n": "11",
+    "net": "-5.51",
+    "exp": "-0.5",
+    "win": "0.55"
+   },
+   {
+    "via": "signal",
+    "n": "4241",
+    "net": "-1823.14",
+    "exp": "-0.43",
+    "win": "0.58"
+   }
+  ],
+  "side": [
+   {
+    "side": "BUY",
+    "n": "2325",
+    "net": "-919.51",
+    "exp": "-0.4",
+    "win": "0.58"
+   },
+   {
+    "side": "SELL",
+    "n": "2449",
+    "net": "-2021.43",
+    "exp": "-0.83",
+    "win": "0.59"
+   }
+  ],
+  "loss_patterns": {
+   "losers": 1980,
+   "loser_share_hedge_legs": 0.093,
+   "loss_from_hedge_legs": -6431.0,
+   "loss_total": -10754.0,
+   "losers_in_NY": 0.367,
+   "losers_against_htf": 0.494,
+   "losers_high_vol": 0.97,
+   "median_loser_hold_min": 3.0,
+   "median_winner_hold_min": 5.0,
+   "top10_losses_share": 0.115,
+   "losers_reversal": 0.127,
+   "exit_reasons_losers": {
+    "SL": 1231,
+    "CHAIN_COVERED": 274,
+    "HEALTH": 184,
+    "SL_gap": 174,
+    "CHAIN_RESEED_PARTIAL": 63,
+    "PARTIAL_L1": 24,
+    "PARTIAL_L2": 12,
+    "SL_trail": 4
+   }
+  }
+ },
+ "default_M1_nohedge_calib": {
+  "session": [
+   {
+    "session": "Asia 00-09",
+    "n": "1059",
+    "net": "-671.27",
+    "exp": "-0.63",
+    "win": "0.57"
+   },
+   {
+    "session": "London 10-14",
+    "n": "718",
+    "net": "-408.53",
+    "exp": "-0.57",
+    "win": "0.55"
+   },
+   {
+    "session": "NY/overlap 15-18",
+    "n": "3623",
+    "net": "-1476.79",
+    "exp": "-0.41",
+    "win": "0.61"
+   },
+   {
+    "session": "NY late 19-23",
+    "n": "698",
+    "net": "-384.3",
+    "exp": "-0.55",
+    "win": "0.58"
+   }
+  ],
+  "period": [
+   {
+    "period": "DEV",
+    "n": "2074",
+    "net": "-980.18",
+    "exp": "-0.47",
+    "win": "0.58"
+   },
+   {
+    "period": "OOS",
+    "n": "1979",
+    "net": "-980.48",
+    "exp": "-0.5",
+    "win": "0.59"
+   },
+   {
+    "period": "VAL",
+    "n": "2045",
+    "net": "-980.23",
+    "exp": "-0.48",
+    "win": "0.59"
+   }
+  ],
+  "year": [
+   {
+    "year": "2021",
+    "n": "467",
+    "net": "-194.62",
+    "exp": "-0.42",
+    "win": "0.67"
+   },
+   {
+    "year": "2022",
+    "n": "1607",
+    "net": "-785.56",
+    "exp": "-0.49",
+    "win": "0.56"
+   },
+   {
+    "year": "2024",
+    "n": "2045",
+    "net": "-980.23",
+    "exp": "-0.48",
+    "win": "0.59"
+   },
+   {
+    "year": "2025",
+    "n": "1979",
+    "net": "-980.48",
+    "exp": "-0.5",
+    "win": "0.59"
+   }
+  ],
+  "with_trend": [
+   {
+    "with_trend": "False",
+    "n": "3116",
+    "net": "-1505.96",
+    "exp": "-0.48",
+    "win": "0.59"
+   },
+   {
+    "with_trend": "True",
+    "n": "2982",
+    "net": "-1434.93",
+    "exp": "-0.48",
+    "win": "0.59"
+   }
+  ],
+  "vol_regime": [
+   {
+    "vol_regime": "low",
+    "n": "3",
+    "net": "2.42",
+    "exp": "0.81",
+    "win": "0.67"
+   },
+   {
+    "vol_regime": "normal",
+    "n": "428",
+    "net": "-251.9",
+    "exp": "-0.59",
+    "win": "0.57"
+   },
+   {
+    "vol_regime": "high",
+    "n": "5667",
+    "net": "-2691.41",
+    "exp": "-0.47",
+    "win": "0.59"
+   }
+  ],
+  "exit_reason": [
+   {
+    "exit_reason": "HEALTH",
+    "n": "790",
+    "net": "-2535.15",
+    "exp": "-3.21",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "PARTIAL_L1",
+    "n": "35",
+    "net": "-47.11",
+    "exp": "-1.35",
+    "win": "0.03"
+   },
+   {
+    "exit_reason": "PARTIAL_L2",
+    "n": "11",
+    "net": "-15.32",
+    "exp": "-1.39",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "PARTIAL_L3",
+    "n": "7",
+    "net": "-10.5",
+    "exp": "-1.5",
+    "win": "0.14"
+   },
+   {
+    "exit_reason": "SL",
+    "n": "1479",
+    "net": "-4130.62",
+    "exp": "-2.79",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "SL_be",
+    "n": "52",
+    "net": "0.0",
+    "exp": "0.0",
+    "win": "1.0"
+   },
+   {
+    "exit_reason": "SL_gap",
+    "n": "220",
+    "net": "-35.75",
+    "exp": "-0.16",
+    "win": "0.22"
+   },
+   {
+    "exit_reason": "SL_tight",
+    "n": "8",
+    "net": "-40.99",
+    "exp": "-5.12",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "SL_trail",
+    "n": "742",
+    "net": "1029.95",
+    "exp": "1.39",
+    "win": "1.0"
+   },
+   {
+    "exit_reason": "TRAIL",
+    "n": "2754",
+    "net": "2844.61",
+    "exp": "1.03",
+    "win": "1.0"
+   }
+  ],
+  "via": [
+   {
+    "via": "reentry",
+    "n": "42",
+    "net": "3.23",
+    "exp": "0.08",
+    "win": "0.67"
+   },
+   {
+    "via": "signal",
+    "n": "6056",
+    "net": "-2944.12",
+    "exp": "-0.49",
+    "win": "0.59"
+   }
+  ],
+  "side": [
+   {
+    "side": "BUY",
+    "n": "2700",
+    "net": "-1140.87",
+    "exp": "-0.42",
+    "win": "0.59"
+   },
+   {
+    "side": "SELL",
+    "n": "3398",
+    "net": "-1800.02",
+    "exp": "-0.53",
+    "win": "0.59"
+   }
+  ],
+  "loss_patterns": {
+   "losers": 2501,
+   "loser_share_hedge_legs": 0.0,
+   "loss_from_hedge_legs": 0.0,
+   "loss_total": -6898.0,
+   "losers_in_NY": 0.57,
+   "losers_against_htf": 0.51,
+   "losers_high_vol": 0.926,
+   "median_loser_hold_min": 2.0,
+   "median_winner_hold_min": 2.0,
+   "top10_losses_share": 0.014,
+   "losers_reversal": 0.158,
+   "exit_reasons_losers": {
+    "SL": 1479,
+    "HEALTH": 790,
+    "SL_gap": 172,
+    "PARTIAL_L1": 34,
+    "PARTIAL_L2": 11,
+    "SL_tight": 8,
+    "PARTIAL_L3": 6,
+    "TRAIL": 1
+   }
+  }
+ },
+ "default_M5_nohedge_calib": {
+  "session": [
+   {
+    "session": "Asia 00-09",
+    "n": "1790",
+    "net": "-896.52",
+    "exp": "-0.5",
+    "win": "0.56"
+   },
+   {
+    "session": "London 10-14",
+    "n": "1491",
+    "net": "-554.52",
+    "exp": "-0.37",
+    "win": "0.6"
+   },
+   {
+    "session": "NY/overlap 15-18",
+    "n": "2693",
+    "net": "-1084.35",
+    "exp": "-0.4",
+    "win": "0.67"
+   },
+   {
+    "session": "NY late 19-23",
+    "n": "806",
+    "net": "-405.09",
+    "exp": "-0.5",
+    "win": "0.59"
+   }
+  ],
+  "period": [
+   {
+    "period": "DEV",
+    "n": "2313",
+    "net": "-980.02",
+    "exp": "-0.42",
+    "win": "0.61"
+   },
+   {
+    "period": "OOS",
+    "n": "2237",
+    "net": "-980.31",
+    "exp": "-0.44",
+    "win": "0.63"
+   },
+   {
+    "period": "VAL",
+    "n": "2230",
+    "net": "-980.15",
+    "exp": "-0.44",
+    "win": "0.62"
+   }
+  ],
+  "year": [
+   {
+    "year": "2021",
+    "n": "1003",
+    "net": "-388.39",
+    "exp": "-0.39",
+    "win": "0.72"
+   },
+   {
+    "year": "2022",
+    "n": "1310",
+    "net": "-591.63",
+    "exp": "-0.45",
+    "win": "0.52"
+   },
+   {
+    "year": "2024",
+    "n": "2230",
+    "net": "-980.15",
+    "exp": "-0.44",
+    "win": "0.62"
+   },
+   {
+    "year": "2025",
+    "n": "2237",
+    "net": "-980.31",
+    "exp": "-0.44",
+    "win": "0.63"
+   }
+  ],
+  "with_trend": [
+   {
+    "with_trend": "False",
+    "n": "3261",
+    "net": "-1590.33",
+    "exp": "-0.49",
+    "win": "0.61"
+   },
+   {
+    "with_trend": "True",
+    "n": "3519",
+    "net": "-1350.15",
+    "exp": "-0.38",
+    "win": "0.63"
+   }
+  ],
+  "vol_regime": [
+   {
+    "vol_regime": "normal",
+    "n": "281",
+    "net": "-122.87",
+    "exp": "-0.44",
+    "win": "0.42"
+   },
+   {
+    "vol_regime": "high",
+    "n": "6499",
+    "net": "-2817.61",
+    "exp": "-0.43",
+    "win": "0.63"
+   }
+  ],
+  "exit_reason": [
+   {
+    "exit_reason": "HEALTH",
+    "n": "771",
+    "net": "-2658.17",
+    "exp": "-3.45",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "PARTIAL_L1",
+    "n": "39",
+    "net": "-51.34",
+    "exp": "-1.32",
+    "win": "0.05"
+   },
+   {
+    "exit_reason": "PARTIAL_L2",
+    "n": "14",
+    "net": "-17.7",
+    "exp": "-1.26",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "PARTIAL_L3",
+    "n": "5",
+    "net": "-6.76",
+    "exp": "-1.35",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "SL",
+    "n": "1582",
+    "net": "-4360.64",
+    "exp": "-2.76",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "SL_be",
+    "n": "99",
+    "net": "-1.74",
+    "exp": "-0.02",
+    "win": "0.99"
+   },
+   {
+    "exit_reason": "SL_gap",
+    "n": "310",
+    "net": "56.6",
+    "exp": "0.18",
+    "win": "0.44"
+   },
+   {
+    "exit_reason": "SL_tight",
+    "n": "6",
+    "net": "-32.54",
+    "exp": "-5.42",
+    "win": "0.0"
+   },
+   {
+    "exit_reason": "SL_trail",
+    "n": "1142",
+    "net": "1299.68",
+    "exp": "1.14",
+    "win": "1.0"
+   },
+   {
+    "exit_reason": "TRAIL",
+    "n": "2812",
+    "net": "2832.13",
+    "exp": "1.01",
+    "win": "1.0"
+   }
+  ],
+  "via": [
+   {
+    "via": "reentry",
+    "n": "84",
+    "net": "-34.83",
+    "exp": "-0.41",
+    "win": "0.62"
+   },
+   {
+    "via": "signal",
+    "n": "6696",
+    "net": "-2905.65",
+    "exp": "-0.43",
+    "win": "0.62"
+   }
+  ],
+  "side": [
+   {
+    "side": "BUY",
+    "n": "3290",
+    "net": "-1330.08",
+    "exp": "-0.4",
+    "win": "0.62"
+   },
+   {
+    "side": "SELL",
+    "n": "3490",
+    "net": "-1610.4",
+    "exp": "-0.46",
+    "win": "0.62"
+   }
+  ],
+  "loss_patterns": {
+   "losers": 2593,
+   "loser_share_hedge_legs": 0.0,
+   "loss_from_hedge_legs": 0.0,
+   "loss_total": -7263.0,
+   "losers_in_NY": 0.339,
+   "losers_against_htf": 0.495,
+   "losers_high_vol": 0.937,
+   "median_loser_hold_min": 5.0,
+   "median_winner_hold_min": 4.0,
+   "top10_losses_share": 0.013,
+   "losers_reversal": 0.103,
+   "exit_reasons_losers": {
+    "SL": 1582,
+    "HEALTH": 771,
+    "SL_gap": 173,
+    "PARTIAL_L1": 37,
+    "PARTIAL_L2": 14,
+    "SL_tight": 6,
+    "PARTIAL_L3": 5,
+    "SL_trail": 2
+   }
+  }
+ }
+}

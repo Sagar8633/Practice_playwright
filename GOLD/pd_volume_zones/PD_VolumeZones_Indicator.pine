@@ -1,0 +1,442 @@
+//@version=6
+// =====================================================================
+//  Previous-Day Volume Zones   (PD VolZones)
+//
+//  Once per completed trading day the script:
+//    1. takes that day's High and Low as the two outer boundaries,
+//    2. builds a fixed-range volume profile between them (N bins),
+//    3. keeps ONLY the protruding high-volume nodes: a bin becomes a
+//       candidate when it is the largest bin of its neighbourhood AND it
+//       stands above the valleys on both sides by at least "Minimum
+//       prominence" (a fraction of its own volume) AND it holds at least
+//       "Minimum volume vs. day POC" of the biggest bin of the day,
+//    4. merges the neighbouring bins that hold >= "Zone extension
+//       threshold" of the peak's volume into the same rectangle,
+//    5. drops weaker candidates closer than "Minimum zone separation" to
+//       a stronger one and keeps at most "Maximum internal zones",
+//    6. draws a dashed POC line through each rectangle.
+//
+//  Day High / Day Low are structural lines (optionally with a thin
+//  boundary rectangle). Internal rectangles are purely volume-derived.
+//  Nothing is hardcoded - every level comes from the profiled day.
+//
+//  The drawings stay on the chart through the FOLLOWING day, which is the
+//  day they are meant to be traded on (see PD_VolumeZones_Strategy.pine).
+//
+//  Apply it on the timeframe you trade (5 min). The profile is built from
+//  the chart's bars, or optionally from a lower timeframe (1 min).
+// =====================================================================
+indicator("Previous-Day Volume Zones", "PD VolZones", overlay = true,
+     max_boxes_count = 500, max_lines_count = 500, max_labels_count = 100)
+
+// ------------------------------------------------------------------ //
+//  INPUTS
+// ------------------------------------------------------------------ //
+gD = "Trading day"
+sessStr = input.session("0000-0000", "Day session (profile window)", group = gD,
+     tooltip = "Bars inside this window make up one day. 0000-0000 = the whole calendar day in the timezone below. Use e.g. 0600-2100 to profile only part of it.")
+tzStr   = input.string("Asia/Kolkata", "Timezone", group = gD,
+     tooltip = "IANA name such as Asia/Kolkata, UTC or America/New_York. Empty = the exchange timezone of the symbol.")
+minHours = input.float(8, "Minimum day length (hours)", minval = 0.5, step = 0.5, group = gD,
+     tooltip = "A day with less than this many hours of bars (the Saturday stub after the Friday close, a holiday) is skipped and the previous zones stay active.")
+
+gP = "Volume profile"
+nBins      = input.int(40, "Volume bins", minval = 10, maxval = 200, group = gP,
+     tooltip = "Rows between Day Low and Day High.")
+useLTF     = input.bool(false, "Build the profile from a lower timeframe", group = gP,
+     tooltip = "Uses intrabar data (timeframe below) instead of the chart's bars. Finer histogram, but TradingView caps intrabar history, so older days silently fall back to chart bars.")
+ltfStr     = input.timeframe("1", "Lower timeframe", group = gP)
+smoothBins = input.int(1, "Smoothing (bins)", minval = 1, maxval = 9, step = 2, group = gP,
+     tooltip = "Odd number. Averages each bin with its neighbours before looking for peaks. 1 = off.")
+
+gZ = "Zone detection"
+minProm   = input.float(0.20, "Minimum prominence (0-1)", minval = 0, maxval = 1, step = 0.05, group = gZ,
+     tooltip = "A peak must stand above the valleys on BOTH sides by this fraction of its own volume. Higher = fewer, deeper zones.")
+minShare  = input.float(0.25, "Minimum volume vs. day POC (0-1)", minval = 0, maxval = 1, step = 0.05, group = gZ,
+     tooltip = "A peak must hold at least this fraction of the biggest bin's volume.")
+peakWin   = input.int(2, "Peak window (bins each side)", minval = 1, maxval = 10, group = gZ,
+     tooltip = "A bin is a peak only when it is the largest within this many bins on each side.")
+extendThr = input.float(0.75, "Zone extension threshold (0-1)", minval = 0, maxval = 1, step = 0.05, group = gZ,
+     tooltip = "Neighbouring bins holding at least this fraction of the peak's volume are merged into the same rectangle.")
+maxHalf   = input.int(1, "Maximum rectangle half-height (bins)", minval = 0, maxval = 20, group = gZ)
+minSep    = input.int(3, "Minimum zone separation (bins)", minval = 0, maxval = 50, group = gZ,
+     tooltip = "A weaker peak whose rectangle would sit closer than this (empty bins, edge to edge) to a stronger zone is dropped.")
+maxZones  = input.int(4, "Maximum internal zones", minval = 0, maxval = 20, group = gZ)
+pocMode   = input.string("Highest-volume bin", "POC line", options = ["Highest-volume bin", "Rectangle midpoint"], group = gZ)
+
+gB = "Day High / Day Low"
+showHL    = input.bool(true, "Draw Day High / Day Low lines", group = gB)
+edgeZones = input.bool(true, "Rectangle at Day High and Day Low", group = gB,
+     tooltip = "Adds a boundary rectangle of the height below at each extreme. Internal zones are kept out of those rows.")
+edgeBins  = input.int(2, "Boundary rectangle height (bins)", minval = 1, maxval = 10, group = gB)
+
+gV = "Visuals"
+showHist  = input.bool(true, "Profile histogram (latest day only)", group = gV)
+histWidth = input.int(60, "Histogram max width (bars)", minval = 5, maxval = 500, group = gV)
+showText  = input.bool(true, "Labels", group = gV)
+markTaps  = input.bool(true, "Mark POC taps", group = gV,
+     tooltip = "Orange dot on every bar whose range crosses a POC line of an active zone.")
+colHL     = input.color(#787b86, "Day High / Low", group = gV)
+colBorder = input.color(#787b86, "Rectangle border", group = gV)
+colFill   = input.color(color.new(#9c27b0, 90), "Rectangle fill", group = gV)
+colPOC    = input.color(#e91e63, "POC line", group = gV)
+colHist   = input.color(color.new(#26c6da, 60), "Histogram", group = gV)
+colHistHi = input.color(color.new(#e91e63, 40), "Histogram inside a zone", group = gV)
+
+// ------------------------------------------------------------------ //
+//  DAY / SESSION DETECTION
+// ------------------------------------------------------------------ //
+tzUse    = tzStr == "" ? syminfo.timezone : tzStr
+inSess   = not na(time(timeframe.period, sessStr, tzUse))
+dayKey   = year(time, tzUse) * 10000 + month(time, tzUse) * 100 + dayofmonth(time, tzUse)
+newDay   = dayKey != nz(dayKey[1], dayKey)
+sessOpen = inSess and (not inSess[1] or newDay)
+sessDone = inSess[1] and (not inSess or newDay)
+
+// Intrabar data. The call must stay at global scope; when the option is off
+// (or the chart is already at/below that timeframe) it degenerates to one
+// element per bar and is ignored.
+ltfOk = useLTF and timeframe.in_seconds(ltfStr) < timeframe.in_seconds()
+[ltfH, ltfL, ltfV] = request.security_lower_tf(syminfo.tickerid, ltfOk ? ltfStr : timeframe.period,
+     [high, low, volume], ignore_invalid_timeframe = true)
+
+// ------------------------------------------------------------------ //
+//  STATE
+// ------------------------------------------------------------------ //
+var hiArr = array.new<float>()          // bars of the day being accumulated
+var loArr = array.new<float>()
+var vlArr = array.new<float>()
+var int sessStartBar = na
+var int sessBars     = 0
+
+var zTop  = array.new<float>()          // active zones (built from the last completed day)
+var zBot  = array.new<float>()
+var zPoc  = array.new<float>()
+var zType = array.new<int>()            // 0 = internal HVN, 1 = Day High, 2 = Day Low
+var zBox  = array.new<box>()
+var zLine = array.new<line>()
+var hlLines   = array.new<line>()       // Day High / Day Low lines
+var hlLabels  = array.new<label>()
+var histBoxes = array.new<box>()
+var float pdh = na
+var float pdl = na
+
+// ------------------------------------------------------------------ //
+//  PROFILE MATHS (pure functions)
+// ------------------------------------------------------------------ //
+// Spread every bar's volume over the bins its range covers, pro rata.
+f_profile(array<float> hi, array<float> lo, array<float> vol, float pLow, float binSize, int n) =>
+    prof = array.new<float>(n, 0.0)
+    cnt = array.size(vol)
+    if cnt > 0
+        for i = 0 to cnt - 1
+            bh = array.get(hi, i)
+            bl = array.get(lo, i)
+            bq = array.get(vol, i)
+            if bq > 0 and not na(bh) and not na(bl)
+                b0 = math.max(0, math.min(n - 1, math.floor((bl - pLow) / binSize)))
+                b1 = math.max(0, math.min(n - 1, math.floor((bh - pLow) / binSize)))
+                if b1 <= b0
+                    array.set(prof, b0, array.get(prof, b0) + bq)
+                else
+                    span = bh - bl
+                    for j = b0 to b1
+                        binLo = pLow + j * binSize
+                        binHi = binLo + binSize
+                        ov = math.min(bh, binHi) - math.max(bl, binLo)
+                        if ov > 0
+                            array.set(prof, j, array.get(prof, j) + bq * ov / span)
+    prof
+
+// Centred moving average over the bins (w = 1 returns a copy).
+f_smooth(array<float> v, int w) =>
+    n = array.size(v)
+    out = array.copy(v)
+    half = math.floor(w / 2)
+    if half > 0 and n > 0
+        for i = 0 to n - 1
+            s = 0.0
+            c = 0
+            for j = math.max(0, i - half) to math.min(n - 1, i + half)
+                s += array.get(v, j)
+                c += 1
+            array.set(out, i, s / c)
+    out
+
+// True when bin i is the largest within +/- w bins (ties go to the lower index).
+f_isPeak(array<float> v, int i, int w) =>
+    n = array.size(v)
+    pv = array.get(v, i)
+    ok = pv > 0
+    if ok
+        for j = math.max(0, i - w) to math.min(n - 1, i + w)
+            if j != i
+                q = array.get(v, j)
+                if q > pv or (q == pv and j < i)
+                    ok := false
+    ok
+
+// Topographic prominence: peak height above the higher of the two valleys
+// that separate it from the nearest taller bin on each side (or the edge).
+f_prominence(array<float> v, int i) =>
+    n = array.size(v)
+    pv = array.get(v, i)
+    minL = pv
+    j = i - 1
+    while j >= 0 and array.get(v, j) <= pv
+        minL := math.min(minL, array.get(v, j))
+        j -= 1
+    minR = pv
+    j := i + 1
+    while j < n and array.get(v, j) <= pv
+        minR := math.min(minR, array.get(v, j))
+        j += 1
+    pv - math.max(minL, minR)
+
+// Grow the rectangle from the peak while the neighbours stay "high volume".
+f_extend(array<float> v, int i, float thr, int maxH) =>
+    n = array.size(v)
+    lim = thr * array.get(v, i)
+    lo = i
+    hi = i
+    while lo > 0 and i - lo < maxH and array.get(v, lo - 1) >= lim
+        lo -= 1
+    while hi < n - 1 and hi - i < maxH and array.get(v, hi + 1) >= lim
+        hi += 1
+    [lo, hi]
+
+// Index of the largest bin inside [a, b].
+f_argmax(array<float> v, int a, int b) =>
+    best = a
+    bv = array.get(v, a)
+    if b > a
+        for j = a + 1 to b
+            if array.get(v, j) > bv
+                bv := array.get(v, j)
+                best := j
+    best
+
+// Sum of bins [a, b].
+f_sumRange(array<float> v, int a, int b) =>
+    s = 0.0
+    if b >= a
+        for j = a to b
+            s += array.get(v, j)
+    s
+
+// ------------------------------------------------------------------ //
+//  DRAWING HELPERS (mutate the global arrays; never reassign globals)
+// ------------------------------------------------------------------ //
+f_addZone(float top, float bot, float poc, int kind, float share) =>
+    txt = not showText ? "" : kind == 1 ? "PDH" : kind == 2 ? "PDL" : "HVN " + str.tostring(share * 100, "#") + "%"
+    bx = box.new(sessStartBar, top, bar_index, bot, border_color = colBorder, border_width = 1,
+         bgcolor = colFill, extend = extend.right, text = txt, text_size = size.small,
+         text_color = colBorder, text_halign = text.align_left, text_valign = text.align_center)
+    pl = line.new(sessStartBar, poc, bar_index, poc, extend = extend.right, color = colPOC,
+         style = line.style_dashed, width = 1)
+    array.push(zTop, top)
+    array.push(zBot, bot)
+    array.push(zPoc, poc)
+    array.push(zType, kind)
+    array.push(zBox, bx)
+    array.push(zLine, pl)
+
+f_addHL(float price, string txt) =>
+    array.push(hlLines, line.new(sessStartBar, price, bar_index, price, extend = extend.right, color = colHL, width = 1))
+    if showText
+        array.push(hlLabels, label.new(bar_index, price, txt + " " + str.tostring(price, format.mintick),
+             style = label.style_label_left, color = color.new(colHL, 100), textcolor = colHL, size = size.small))
+
+// Stop extending yesterday's drawings and forget them (they stay on the chart
+// until TradingView's max_boxes/max_lines garbage collection removes them).
+f_freeze() =>
+    nOld = array.size(zBox)
+    if nOld > 0
+        for k = 0 to nOld - 1
+            bx = array.get(zBox, k)
+            box.set_extend(bx, extend.none)
+            box.set_right(bx, bar_index - 1)
+            pl = array.get(zLine, k)
+            line.set_extend(pl, extend.none)
+            line.set_x2(pl, bar_index - 1)
+    nHL = array.size(hlLines)
+    if nHL > 0
+        for k = 0 to nHL - 1
+            hl = array.get(hlLines, k)
+            line.set_extend(hl, extend.none)
+            line.set_x2(hl, bar_index - 1)
+    nLb = array.size(hlLabels)
+    if nLb > 0
+        for k = 0 to nLb - 1
+            label.delete(array.get(hlLabels, k))
+    array.clear(zTop)
+    array.clear(zBot)
+    array.clear(zPoc)
+    array.clear(zType)
+    array.clear(zBox)
+    array.clear(zLine)
+    array.clear(hlLines)
+    array.clear(hlLabels)
+
+f_inZone(float price) =>
+    hit = false
+    nZ = array.size(zTop)
+    if nZ > 0
+        for k = 0 to nZ - 1
+            if price <= array.get(zTop, k) and price >= array.get(zBot, k)
+                hit := true
+    hit
+
+// ------------------------------------------------------------------ //
+//  1. A DAY JUST ENDED -> BUILD ITS PROFILE AND THE ZONES
+// ------------------------------------------------------------------ //
+if sessDone and barstate.isconfirmed
+    if sessBars * timeframe.in_seconds() / 3600 >= minHours and array.size(vlArr) > 0
+        pHigh = array.max(hiArr)
+        pLow  = array.min(loArr)
+        rng   = pHigh - pLow
+        if rng > 0
+            binSize = rng / nBins
+            raw   = f_profile(hiArr, loArr, vlArr, pLow, binSize, nBins)
+            sv    = f_smooth(raw, smoothBins)
+            maxV  = array.max(sv)
+            totV  = array.sum(raw)
+            edge  = edgeZones ? edgeBins : 0
+            // ---- candidate peaks (inside the boundary rows) -------------
+            cIdx = array.new<int>()
+            cLo  = array.new<int>()
+            cHi  = array.new<int>()
+            cVol = array.new<float>()
+            if maxV > 0 and nBins - 1 - edge >= edge
+                for i = edge to nBins - 1 - edge
+                    if f_isPeak(sv, i, peakWin)
+                        pv   = array.get(sv, i)
+                        prom = f_prominence(sv, i)
+                        if pv / maxV >= minShare and prom / pv >= minProm
+                            [el, eh] = f_extend(sv, i, extendThr, maxHalf)
+                            array.push(cIdx, i)
+                            array.push(cLo, math.max(el, edge))
+                            array.push(cHi, math.min(eh, nBins - 1 - edge))
+                            array.push(cVol, pv)
+            // ---- strongest first; drop the ones too close to a keeper ----
+            sIdx = array.new<int>()
+            sLo  = array.new<int>()
+            sHi  = array.new<int>()
+            nC = array.size(cIdx)
+            if nC > 0
+                used = array.new<bool>(nC, false)
+                for p = 1 to nC
+                    best  = -1
+                    bestV = -1.0
+                    for c = 0 to nC - 1
+                        if not array.get(used, c) and array.get(cVol, c) > bestV
+                            bestV := array.get(cVol, c)
+                            best  := c
+                    array.set(used, best, true)
+                    okSep = true
+                    nS = array.size(sIdx)
+                    if nS > 0
+                        for s = 0 to nS - 1
+                            gap = math.max(array.get(sLo, s) - array.get(cHi, best), array.get(cLo, best) - array.get(sHi, s)) - 1
+                            if gap < minSep
+                                okSep := false
+                    if okSep and array.size(sIdx) < maxZones
+                        array.push(sIdx, array.get(cIdx, best))
+                        array.push(sLo, array.get(cLo, best))
+                        array.push(sHi, array.get(cHi, best))
+            // ---- replace yesterday's drawings ----------------------------
+            f_freeze()
+            pdh := pHigh
+            pdl := pLow
+            if showHL
+                f_addHL(pHigh, "PDH")
+                f_addHL(pLow, "PDL")
+            if edgeZones and edgeBins < nBins
+                hiLo = nBins - edgeBins
+                pkH  = f_argmax(sv, hiLo, nBins - 1)
+                topH = pHigh
+                botH = pLow + hiLo * binSize
+                pocH = pocMode == "Rectangle midpoint" ? (topH + botH) / 2 : pLow + (pkH + 0.5) * binSize
+                f_addZone(topH, botH, pocH, 1, totV > 0 ? f_sumRange(raw, hiLo, nBins - 1) / totV : 0)
+                pkL  = f_argmax(sv, 0, edgeBins - 1)
+                topL = pLow + edgeBins * binSize
+                botL = pLow
+                pocL = pocMode == "Rectangle midpoint" ? (topL + botL) / 2 : pLow + (pkL + 0.5) * binSize
+                f_addZone(topL, botL, pocL, 2, totV > 0 ? f_sumRange(raw, 0, edgeBins - 1) / totV : 0)
+            nSel = array.size(sIdx)
+            if nSel > 0
+                for s = 0 to nSel - 1
+                    pk  = array.get(sIdx, s)
+                    lb  = array.get(sLo, s)
+                    hb  = array.get(sHi, s)
+                    zb  = pLow + lb * binSize
+                    zt  = pLow + (hb + 1) * binSize
+                    zp  = pocMode == "Rectangle midpoint" ? (zt + zb) / 2 : pLow + (pk + 0.5) * binSize
+                    f_addZone(zt, zb, zp, 0, totV > 0 ? f_sumRange(raw, lb, hb) / totV : 0)
+            // ---- histogram of the day just profiled ----------------------
+            nH = array.size(histBoxes)
+            if nH > 0
+                for i = 0 to nH - 1
+                    box.delete(array.get(histBoxes, i))
+            array.clear(histBoxes)
+            if showHist
+                rawMax = array.max(raw)
+                if rawMax > 0
+                    for i = 0 to nBins - 1
+                        v = array.get(raw, i)
+                        if v > 0
+                            wBars = math.max(1, math.round(histWidth * v / rawMax))
+                            bLo = pLow + i * binSize
+                            bHi = bLo + binSize
+                            inZ = f_inZone(bLo + binSize / 2)
+                            array.push(histBoxes, box.new(sessStartBar, bHi, sessStartBar + wBars, bLo,
+                                 border_color = na, bgcolor = inZ ? colHistHi : colHist))
+    // start accumulating the new day from scratch
+    array.clear(hiArr)
+    array.clear(loArr)
+    array.clear(vlArr)
+    sessBars := 0
+
+// ------------------------------------------------------------------ //
+//  2. A DAY STARTS
+// ------------------------------------------------------------------ //
+if sessOpen and barstate.isconfirmed
+    sessStartBar := bar_index
+
+// ------------------------------------------------------------------ //
+//  3. ACCUMULATE THE CURRENT BAR (confirmed bars only, so no duplicates)
+// ------------------------------------------------------------------ //
+if inSess and barstate.isconfirmed
+    if na(sessStartBar)
+        sessStartBar := bar_index
+    sessBars += 1
+    nL = array.size(ltfV)
+    if ltfOk and nL > 0
+        for k = 0 to nL - 1
+            array.push(hiArr, array.get(ltfH, k))
+            array.push(loArr, array.get(ltfL, k))
+            array.push(vlArr, nz(array.get(ltfV, k)))
+    else
+        array.push(hiArr, high)
+        array.push(loArr, low)
+        array.push(vlArr, nz(volume))
+
+// ------------------------------------------------------------------ //
+//  4. PER-BAR HOUSEKEEPING: keep labels at the right edge, mark POC taps
+// ------------------------------------------------------------------ //
+nLbl = array.size(hlLabels)
+if nLbl > 0
+    for k = 0 to nLbl - 1
+        label.set_x(array.get(hlLabels, k), bar_index)
+
+float tapPx = na
+nZa = array.size(zPoc)
+if markTaps and nZa > 0
+    for k = 0 to nZa - 1
+        poc = array.get(zPoc, k)
+        if na(tapPx) and low <= poc and high >= poc
+            tapPx := poc
+
+plotshape(tapPx, "POC tap", shape.circle, location.absolute, color.new(color.orange, 30), size = size.tiny)
+plot(pdh, "Previous day high", display = display.data_window)
+plot(pdl, "Previous day low",  display = display.data_window)

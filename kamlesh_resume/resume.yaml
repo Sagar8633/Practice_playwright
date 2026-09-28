@@ -1,0 +1,109 @@
+name: KAMLESH BEHERE
+title: QA Engineer | QA Automation Engineer | 4+ Years | Playwright | TypeScript | API Testing | SQL
+contact:
+- 'Surat, Gujarat, India | +91 6351689471 | kamshb26@gmail.com'
+- 'LinkedIn: [CONFIRM: linkedin.com/in/your-handle]'
+summary: >-
+  Results-driven QA Engineer with 4+ years of experience in Manual Testing and Automation
+  Testing across Financial Services (mortgage lending) and Healthcare (medical billing / EDI).
+  Designs and executes Functional, Regression, Smoke, Sanity, Integration and End-to-End test
+  cases, automates critical business workflows in Playwright with TypeScript following the Page
+  Object Model (POM), performs API Testing with Postman and Playwright API, validates backend
+  data with SQL, and runs automated suites through Jenkins CI/CD pipelines. Reduced regression
+  execution time by 40% through parallel Playwright execution and improved automation stability
+  by minimizing flaky tests using Playwright auto-wait and locator strategies. Experienced in
+  defect lifecycle management with Jira/PMS, version control with Git/GitHub, and Agile/Scrum
+  practices. Seeking a QA Automation Engineer role to leverage strong Software Testing, Test
+  Automation and API Testing expertise.
+skills:
+- label: Manual Testing
+  items: Quality Assurance (QA), Software Testing, Manual Testing, Functional Testing, Regression
+    Testing, Smoke Testing, Sanity Testing, Integration Testing, End-to-End (E2E) Testing, UI
+    Testing, Web Application Testing, Negative Testing, Test Case Design, Test Planning
+- label: Automation Testing
+  items: Playwright, TypeScript, JavaScript (Basics), Test Automation, Page Object Model (POM),
+    Playwright Fixtures, Reusable Utilities, Automation Framework Enhancement, Locator Strategies,
+    Auto-Wait, Parallel Test Execution, Cross-Browser Testing (Chromium, Firefox, WebKit),
+    Data-Driven Testing (JSON)
+- label: API & Database Testing
+  items: API Testing, REST API Testing, Postman, Playwright API (APIRequestContext), SQL, Backend
+    Data Validation, Database Testing
+- label: Tools & Practices
+  items: Jenkins, CI/CD Pipelines, Git, GitHub, Version Control, Jira, PMS, Defect Life Cycle
+    Management, Agile, Scrum, Sprint Planning, Daily Stand-ups, Release Testing
+- label: AI & Emerging Tech
+  items: MCP (Model Context Protocol), GitHub Copilot, Claude, ChatGPT, AI-Assisted Test Case and
+    Script Generation, AI-Assisted Code Review and Debugging, Test Coverage Analysis, GenAI Tools
+    Awareness
+- label: Domain Knowledge
+  items: Healthcare / Medical Billing (EDI, Claims, Claim Scrubbing, ERA/835, Payment Posting,
+    EMR), Financial Services (Mortgage Lending, Loan Origination, Underwriting, Loan Servicing),
+    Role-Based Access Control (RBAC)
+experience:
+- title: QA Automation Engineer - Priority Financial Network (PFN), Mortgage Lending Platform
+  org: Superworks (Ultimate Business Systems Pvt. Ltd)
+  loc: Surat, India
+  dates: Feb 2024 - Present
+  bullets:
+  - 'Delivered 100% sprint automation coverage within a 2-week sprint, automating the full
+    accepted sprint scope - Best Performer Award, 2025.'
+  - 'Improved overall automation coverage by 50%, reducing manual regression effort.'
+  - 'Analyzed requirements, user stories and acceptance criteria to design comprehensive test
+    scenarios and test cases across multiple product modules, covering mandatory field
+    validations, negative scenarios, document upload and document validation.'
+  - 'Performed manual functional, regression, smoke, sanity, integration and end-to-end testing
+    of mortgage loan application workflows prior to release, including borrower, property,
+    employment, income and financial information validation.'
+  - 'Tested loan status transitions and role-based access between borrower, loan officer,
+    processor and underwriter.'
+  - 'Contributed to framework enhancements aligned with modular Page Object design, and built
+    reusable utilities and Playwright fixtures to reduce test script duplication and improve
+    automation suite maintainability.'
+  - 'Automated critical workflows using Playwright with TypeScript and performed API testing with
+    Postman and Playwright API, validating REST API status codes, request/response payloads and
+    authorization.'
+  - 'Used SQL to validate loan and borrower records, executed regression suites through Jenkins
+    CI/CD pipelines, logged defects in PMS and performed retesting to verify fixes, and
+    version-controlled test scripts and artifacts using Git and GitHub.'
+  - 'Leveraged MCP, Claude and GitHub Copilot to accelerate test case generation, automation
+    script development, code review, debugging and test coverage analysis.'
+  - 'Collaborated with cross-functional teams in an Agile/Scrum environment, participating in
+    daily stand-ups, sprint planning and release testing activities.'
+  - 'Modules tested - Borrower Management, Loan Application, Loan Product Selection, Property
+    Details, Employment & Income, Assets & Liabilities, Document Management, Loan Processing,
+    Underwriting, Loan Status, Closing, Loan Servicing, Roles & Permissions.'
+- title: QA Automation Engineer - Cortex EDI, Healthcare / Medical Billing Platform
+  org: 'Superworks (Ultimate Business Systems Pvt. Ltd) [CONFIRM: or prior employer]'
+  dates: Aug 2022 - Jan 2024
+  bullets:
+  - 'Implemented parallel cross-browser execution by configuring Playwright projects for
+    Chromium, Firefox and WebKit, significantly reducing regression execution time.'
+  - 'Automated critical workflows using Playwright with TypeScript and performed API testing
+    using Postman to validate EDI transaction requests and responses, driving scenarios from
+    JSON-based data-driven test data for scalable execution.'
+  - 'Integrated Playwright API request context to validate backend services, covering payments
+    and inventory.'
+  - 'Tested patient management, insurance and eligibility verification workflows, and the
+    end-to-end claims lifecycle from creation through submission.'
+  - 'Tested claim scrubbing rules, claim submission and claim status tracking to validate
+    accurate EDI transaction processing, and validated ERA/835 remittance advice processing and
+    payment posting workflows against expected reimbursement and adjustment data.'
+  - 'Tested Accounts Receivable, Reporting, EMR, Inventory and role-based access control across
+    multiple user roles.'
+  - 'Validated backend data integrity using SQL, executed automation suites through Jenkins, and
+    logged and tracked defects using Jira with Git for version control.'
+  - 'Modules tested - Patient Management, Insurance & Eligibility, Claims, Claim Scrubbing, Claim
+    Submission, Claim Status, ERA/835, Payment Posting, Accounts Receivable, Reporting, EMR,
+    Inventory, Role-Based Access.'
+projects:
+- label: AI Syndicate - Organizational AI Hackathon
+  description: >-
+    Led the "AI Syndicate" team in an organizational AI Hackathon, contributing to the design and
+    development of an Intelligent 24x7 Support Automation & Smart Resolving System that
+    leveraged AI to automate support processes, provide real-time assistance and improve
+    issue-resolution efficiency.
+education:
+- degree: 'Bachelor of Engineering ([CONFIRM: branch])'
+  institution: North Maharashtra University
+  years: '[CONFIRM: graduation year]'
+output_basename: Kamlesh_Behere_QA_Automation_Engineer_4YOE

@@ -1,0 +1,34 @@
+{
+ "nifty50_1min": {
+  "rows": 438667,
+  "duplicates_dropped": 0,
+  "first": "2022-01-03 09:15:00",
+  "last": "2026-09-25 15:29:00",
+  "days": 1174,
+  "volume_nonzero": 0
+ },
+ "nifty50_daily": {
+  "rows": 4890,
+  "duplicates_dropped": 0,
+  "first": "2007-01-02 00:00:00",
+  "last": "2026-09-25 00:00:00",
+  "days": 4890,
+  "volume_nonzero": 0
+ },
+ "banknifty_1min": {
+  "rows": 438613,
+  "duplicates_dropped": 0,
+  "first": "2022-01-03 09:15:00",
+  "last": "2026-09-25 15:29:00",
+  "days": 1174,
+  "volume_nonzero": 0
+ },
+ "banknifty_daily": {
+  "rows": 4881,
+  "duplicates_dropped": 0,
+  "first": "2007-01-02 09:15:00",
+  "last": "2026-09-25 00:00:00",
+  "days": 4877,
+  "volume_nonzero": 0
+ }
+}

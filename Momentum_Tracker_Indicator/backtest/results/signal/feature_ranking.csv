@@ -1,0 +1,34 @@
+feature,description,kind,best_bucket,best_exp11,best_n,worst_bucket,worst_exp11,separation,order_holds_in_periods,best_positive_in_periods,best_DEV,best_VAL,best_OOS
+class_1atr,outcome class (diagnostic only),c,moderate_winner,1.0,3015,moderate_loser,-1.0,2.0,3,3,1.0,1.0,1.0
+cost_over_reward,spread / (2 x stop),q,Q1 low,-0.126,5392,Q5 high,-0.544,0.418,3,0,-0.201,-0.284,-0.109
+atr_ratio,ATR / 30-day median,q,Q5 high,-0.163,5393,Q1 low,-0.521,0.358,3,0,-0.203,-0.311,-0.079
+session,session (server time),c,overlap_15-20,-0.192,5850,late_00-02,-0.429,0.237,3,0,-0.277,-0.215,-0.114
+body_ratio,body / range of the signal bar,q,Q2,-0.268,5391,Q5 high,-0.368,0.1,3,0,-0.42,-0.342,-0.132
+adx,ADX(14),q,Q5 high,-0.268,5392,Q1 low,-0.345,0.077,3,0,-0.382,-0.385,-0.15
+close_loc,close location inside the signal bar (1 = at the extreme),q,Q2,-0.284,5392,Q5 high,-0.355,0.071,3,0,-0.448,-0.372,-0.126
+vol_ratio,M1 up/down volume ratio in the signal direction,q,Q3,-0.278,5393,Q5 high,-0.348,0.07,3,0,-0.408,-0.36,-0.153
+purple_dist,|close - purple line| / ATR at the flip (penetration),q,Q1 low,-0.286,5393,Q5 high,-0.353,0.067,3,0,-0.422,-0.393,-0.149
+atr_slope,ATR change over 10 bars / ATR,q,Q5 high,-0.28,5393,Q1 low,-0.334,0.054,3,0,-0.42,-0.335,-0.139
+range_ratio,signal bar range / ATR,q,Q3,-0.278,5392,Q4,-0.328,0.05,3,0,-0.403,-0.341,-0.158
+room_behind,distance from the 50-bar extreme behind / ATR,q,Q2,-0.289,5392,Q5 high,-0.334,0.045,3,0,-0.434,-0.391,-0.145
+prev_range_ratio,previous bar range / ATR,q,Q2,-0.293,5392,Q1 low,-0.334,0.041,3,0,-0.419,-0.404,-0.157
+minutes_since_prev,minutes since the previous signal,q,Q3,-0.28,5131,Q5 high,-0.32,0.041,3,0,-0.43,-0.349,-0.132
+dow,day of week (0 = Monday),c,3,-0.291,5430,4,-0.329,0.039,3,0,-0.424,-0.405,-0.141
+adx_slope,ADX change over 5 bars,q,Q3,-0.287,5392,Q4,-0.323,0.036,3,0,-0.447,-0.336,-0.131
+swing_dist,distance to the last confirmed pivot behind / ATR,q,Q2,-0.288,5392,Q5 high,-0.321,0.033,3,0,-0.423,-0.362,-0.15
+opp_ago,bars since the opposite flip (signal age of the previous leg),q,Q3,-0.286,4341,Q1 low,-0.318,0.032,3,0,-0.432,-0.353,-0.14
+dist_prev_sig,|close - previous signal close| / ATR (extent of the previous leg),q,Q1 low,-0.3,5393,Q2,-0.324,0.024,3,0,-0.453,-0.368,-0.152
+px_vs_ema50,(close - EMA50) / ATR in the signal direction,q,Q1 low,-0.296,5392,Q5 high,-0.319,0.022,3,0,-0.422,-0.409,-0.161
+dist_ema,|close - EMA20| / ATR,q,Q4,-0.302,5392,Q3,-0.315,0.013,3,0,-0.423,-0.384,-0.175
+box_m3,M3 box agrees,b,False,-0.304,13242,True,-0.312,0.008,3,0,-0.442,-0.381,-0.164
+pivot_dist,structure stop size / ATR (when a pivot exists),q,Q4,-0.291,4797,Q5 high,-0.327,0.036,2,0,-0.457,-0.393,-0.121
+room_ahead,distance to the 50-bar extreme ahead / ATR (negative = breakout),q,Q1 low,-0.291,5392,Q4,-0.321,0.031,2,0,-0.417,-0.42,-0.141
+ema_sep,(EMA20 - EMA50) / ATR in the signal direction,q,Q3,-0.292,5393,Q2,-0.316,0.024,2,0,-0.446,-0.413,-0.13
+ema50_slope,EMA50 slope / ATR in the signal direction,q,Q1 low,-0.297,5392,Q2,-0.319,0.022,2,0,-0.423,-0.401,-0.159
+htf15_aligned,M15 Supertrend agrees,b,False,-0.302,15789,True,-0.316,0.014,2,0,-0.444,-0.37,-0.165
+htf60_aligned,H1 Supertrend agrees,b,False,-0.304,13867,True,-0.312,0.009,2,0,-0.44,-0.417,-0.156
+ema15_aligned,M15 EMA50 slope agrees,b,False,-0.304,14867,True,-0.312,0.008,2,0,-0.439,-0.405,-0.163
+box_m1,M1 box agrees,b,True,-0.306,18890,False,-0.313,0.008,2,0,-0.439,-0.411,-0.165
+ea_pass,passes all shipped EA filters,b,True,-0.306,4069,False,-0.308,0.002,2,0,-0.438,-0.378,-0.178
+prev_outcome,previous raw signal outcome (1x1 net),c,prev_flat,1.0,1,prev_loss,-0.334,1.334,1,1,1.0,,
+bbw_atr,Bollinger width / ATR,q,Q1 low,-0.299,5393,Q4,-0.315,0.017,1,0,-0.437,-0.381,-0.178

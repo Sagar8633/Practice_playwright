@@ -1,0 +1,21 @@
+- generic [ref=f31e1]:
+  - generic [ref=f31e4]:
+    - generic [ref=f31e6]:
+      - generic [ref=f31e7]:
+        - button [ref=f31e8]:
+          - heading "Untitled script" [level=2] [ref=f31e12]
+        - button "Save" [ref=f31e16]
+      - button "More" [ref=f31e25]
+    - code [ref=f31e32]:
+      - generic [ref=f31e33]:
+        - generic [ref=f31e36]: "1"
+        - textbox "Editor content;Press Alt+F1 for Accessibility Options." [active] [ref=f31e48]
+    - generic [ref=f31e52]:
+      - button [ref=f31e55]
+      - generic [ref=f31e63]:
+        - button "Line 1, Col 1" [ref=f31e64]
+        - link "Pine Script® v3" [ref=f31e65]:
+          - /url: https://www.tradingview.com/pine-script-reference/v3
+  - generic [ref=f31e67]:
+    - alert
+    - alert

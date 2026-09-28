@@ -1,0 +1,17 @@
+Strategy,Trades,Win_pct,PF,Expectancy,Net_PL,Max_DD,Recovery,OOS_PF,Cost_Robustness,Overfit_Risk,DEV_PF,VAL_PF,ruin
+BASELINE TWK M3 (0.02 lot),5354,38.4,0.8,-0.91,-4888.0,4995.0,-0.98,0.94,fails at normal cost (flat before spread),n/a (not optimised here),0.65,0.66,False
+"Nyao default M1, hedge on (shipped), tick-calibrated",1160,51.4,0.66,-0.84,-980.0,992.0,-0.99,0.66,fails at normal cost,n/a: negative at every setting,0.66,0.48,True
+"Nyao default M1, hedge off, tick-calibrated",2074,56.9,0.56,-0.47,-980.0,985.0,-1.0,0.58,fails at normal cost,n/a: negative at every setting,0.56,0.58,True
+"Nyao default M5, hedge on, tick-calibrated",1817,57.8,0.73,-0.54,-980.0,1069.0,-0.92,0.58,fails at normal cost,n/a: negative at every setting,0.73,0.79,True
+"Nyao default M5, hedge off, tick-calibrated",2313,58.3,0.59,-0.42,-980.0,981.0,-1.0,0.6,fails at normal cost,n/a: negative at every setting,0.59,0.6,True
+"Nyao default M3, hedge on, tick-calibrated",1262,54.8,0.67,-0.78,-980.0,984.0,-1.0,0.71,fails at normal cost,n/a: negative at every setting,0.67,0.64,True
+"Nyao default M1, hedge on, BAR-OPTIMISTIC bound",3792,60.9,0.91,-0.26,-980.0,1018.0,-0.96,0.9,fails at normal cost,n/a: negative at every setting,0.91,1.0,True
+"Nyao default M5, hedge off, BAR-OPTIMISTIC bound",50502,80.1,1.28,0.36,18009.0,523.0,34.45,1.36,fails at normal cost,n/a: negative at every setting,0.95,0.98,False
+Nyao safe profile M5,1184,75.3,0.73,-0.25,-295.0,296.0,-1.0,0.76,fails at normal cost,n/a: negative at every setting,0.73,0.75,False
+Nyao aggressive profile M1,159,66.7,0.53,-6.61,-1051.0,1085.0,-0.97,0.69,fails at normal cost,n/a: negative at every setting,0.53,0.4,True
+"Nyao entry only (M1, SL 1.5 ATR, TP 1.5R)",6653,34.7,0.81,-0.39,-2627.0,,,0.85,fails at normal cost,"low sensitivity, negative everywhere",0.75,0.81,
+"Nyao entry only (M5, SL 1.5 ATR, TP 1.5R)",7180,35.6,0.85,-0.39,-2805.0,,,0.89,fails at normal cost,"low sensitivity, negative everywhere",0.79,0.85,
+"Nyao entry only (M3, SL 1.5 ATR, TP 1.5R)",8685,36.0,0.86,-0.33,-2828.0,,,0.88,fails at normal cost,"low sensitivity, negative everywhere",0.85,0.84,
+"Nyao research: fixed_M1_nohedge (fixed $10 stop, no ruin stop)",41816,75.3,0.65,-0.47,-19665.0,19690.0,-1.0,0.64,"gross before spread -1444, spread 18221",n/a,0.69,0.7,
+"Nyao research: fixed_M5_nohedge (fixed $10 stop, no ruin stop)",28754,77.5,0.69,-0.37,-10601.0,10623.0,-1.0,0.69,"gross before spread +801, spread 11402",n/a,0.69,0.69,
+"Nyao research: fixed_M5_hedge (fixed $10 stop, no ruin stop)",29460,78.2,0.81,-0.69,-20188.0,20402.0,-0.99,0.8,"gross before spread -986, spread 19203",n/a,0.8,0.87,

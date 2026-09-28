@@ -1,0 +1,2378 @@
+- generic [active] [ref=f2e1]:
+  - button [ref=f2e4]
+  - generic [ref=f2e7]:
+    - toolbar [ref=f2e12]:
+      - button "Watchlist, details, and news" [pressed] [ref=f2e13]
+      - button "Alerts" [ref=f2e17]:
+        - img "1 unread alert notification" [ref=f2e23]: "1"
+      - button "Chats" [ref=f2e24]
+      - button "Screeners" [ref=f2e29]
+      - button "Calendars" [ref=f2e34]
+      - button "Community" [ref=f2e38]
+      - button "Notifications" [ref=f2e45]
+      - button "Products" [ref=f2e49]
+      - button "Help Center" [ref=f2e54]
+    - generic [ref=f2e60]:
+      - generic [ref=f2e61]:
+        - generic [ref=f2e64]:
+          - button "Watchlist" [ref=f2e66]
+          - generic [ref=f2e76]:
+            - button "Add symbol" [ref=f2e77]
+            - button "Advanced view" [ref=f2e81]
+            - button "Settings" [disabled] [ref=f2e85]
+        - generic [ref=f2e92]:
+          - generic [ref=f2e94]:
+            - button "Symbol" [ref=f2e96]
+            - button "Last" [ref=f2e98]
+            - button "Chg" [ref=f2e100]
+            - button "Chg%" [ref=f2e102]
+          - progressbar [ref=f2e105]
+      - generic [ref=f2e108]:
+        - generic [ref=f2e113]: XAUUSD
+        - generic [ref=f2e114]:
+          - button "Metrics" [ref=f2e115]
+          - generic "Add note" [ref=f2e119]
+          - generic "Settings" [ref=f2e124]
+  - generic [ref=f2e133]:
+    - generic [ref=f2e135]:
+      - link "TradingView main page" [ref=f2e138] [cursor=pointer]:
+        - /url: /
+      - generic [ref=f2e144]:
+        - button "Search" [ref=f2e147]:
+          - generic [ref=f2e150]: Search (Ctrl+K)
+        - navigation [ref=f2e151]:
+          - list [ref=f2e152]:
+            - listitem [ref=f2e153]:
+              - link [ref=f2e154] [cursor=pointer]:
+                - /url: /chart/
+                - text: Products
+                - button "Products menu" [ref=f2e155]
+            - listitem [ref=f2e158]:
+              - link [ref=f2e159] [cursor=pointer]:
+                - /url: /ideas/
+                - text: Community
+                - button "Community menu" [ref=f2e160]
+            - listitem [ref=f2e163]:
+              - link [ref=f2e164] [cursor=pointer]:
+                - /url: /markets/
+                - text: Markets
+                - button "Markets menu" [ref=f2e165]
+            - listitem [ref=f2e168]:
+              - link [ref=f2e169] [cursor=pointer]:
+                - /url: /brokers/
+                - text: Brokers
+                - button "Brokers menu" [ref=f2e170]
+            - listitem [ref=f2e173]:
+              - link [ref=f2e174] [cursor=pointer]:
+                - /url: /support/
+                - text: More
+                - button "More menu" [ref=f2e175]
+      - generic [ref=f2e178]:
+        - button "Open user menu" [ref=f2e179] [cursor=pointer]
+        - link "Upgrade" [ref=f2e184] [cursor=pointer]:
+          - /url: /pricing/?source=header_go_pro_button&feature=Buy%20Pro
+    - main "Main content" [ref=f2e187]:
+      - generic [ref=f2e190]:
+        - generic [ref=f2e191]:
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - tablist:
+                        - tab "Indian stocks"
+                        - tab "Crypto"
+                        - tab "Futures"
+                        - tab "Forex"
+                        - tab "Economy"
+                        - tab "Brokers"
+        - generic [ref=f2e192]:
+          - generic [ref=f2e194]:
+            - link [ref=f2e199] [cursor=pointer]:
+              - /url: /markets/
+              - heading [level=2] [ref=f2e200]:
+                - text: Market
+                - generic [ref=f2e201]: summary
+            - generic [ref=f2e206]:
+              - generic [ref=f2e209]:
+                - generic [ref=f2e216]:
+                  - link "Nifty 50 NIFTY" [ref=f2e217] [cursor=pointer]:
+                    - /url: /symbols/NSE-NIFTY/
+                    - generic [ref=f2e218]: Nifty 50
+                    - generic [ref=f2e219]: NIFTY
+                  - button
+                - generic [ref=f2e247]:
+                  - generic [ref=f2e248]: Major indices
+                  - list [ref=f2e250]:
+                    - listitem [ref=f2e251]:
+                      - generic [ref=f2e253]:
+                        - link "Sensex" [ref=f2e255] [cursor=pointer]:
+                          - /url: /symbols/BSE-SENSEX/
+                        - generic [ref=f2e259]: SENSEX
+                    - listitem [ref=f2e263]:
+                      - generic [ref=f2e265]:
+                        - link "S&P 500" [ref=f2e267] [cursor=pointer]:
+                          - /url: /symbols/SPX/?exchange=SP
+                        - generic [ref=f2e271]: SPX
+                    - listitem [ref=f2e275]:
+                      - generic [ref=f2e277]:
+                        - link "Nasdaq 100" [ref=f2e279] [cursor=pointer]:
+                          - /url: /symbols/NASDAQ-NDX/
+                        - generic [ref=f2e283]: NDX
+                    - listitem [ref=f2e287]:
+                      - generic [ref=f2e289]:
+                        - link "Japan 225" [ref=f2e291] [cursor=pointer]:
+                          - /url: /symbols/TVC-NI225/
+                        - generic [ref=f2e295]: NI225
+                    - listitem [ref=f2e299]:
+                      - generic [ref=f2e301]:
+                        - link "SSE Composite" [ref=f2e303] [cursor=pointer]:
+                          - /url: /symbols/SSE-000001/
+                        - generic [ref=f2e307]: "000001"
+                    - listitem [ref=f2e311]:
+                      - generic [ref=f2e313]:
+                        - link "FTSE 100" [ref=f2e315] [cursor=pointer]:
+                          - /url: /symbols/FTSE-UKX/
+                        - generic [ref=f2e319]: UKX
+                  - link [ref=f2e323] [cursor=pointer]:
+                    - /url: /markets/indices/quotes-major/
+                    - generic [ref=f2e326]:
+                      - text: See all major
+                      - generic [ref=f2e327]: indices
+                - generic [ref=f2e332]:
+                  - link "Crypto market cap TOTAL" [ref=f2e339] [cursor=pointer]:
+                    - /url: /symbols/TOTAL/?exchange=CRYPTOCAP
+                    - generic [ref=f2e340]: Crypto market cap
+                    - generic [ref=f2e341]: TOTAL
+                  - link "Bitcoin dominance Bitcoin — Ethereum — Others —" [ref=f2e355] [cursor=pointer]:
+                    - /url: /markets/cryptocurrencies/dominance
+                    - generic [ref=f2e356]:
+                      - heading "Bitcoin dominance" [level=3] [ref=f2e357]
+                      - generic [ref=f2e359]:
+                        - generic [ref=f2e360]:
+                          - generic [ref=f2e361]: Bitcoin
+                          - generic [ref=f2e364]: —
+                        - generic [ref=f2e365]:
+                          - generic [ref=f2e366]: Ethereum
+                          - generic [ref=f2e369]: —
+                        - generic [ref=f2e370]:
+                          - generic [ref=f2e371]: Others
+                          - generic [ref=f2e374]: —
+                  - list [ref=f2e377]:
+                    - listitem [ref=f2e378]:
+                      - generic [ref=f2e380]:
+                        - link "Bitcoin" [ref=f2e382] [cursor=pointer]:
+                          - /url: /symbols/BTCUSD/?exchange=BITSTAMP
+                        - generic [ref=f2e386]: BTCUSD
+                    - listitem [ref=f2e390]:
+                      - generic [ref=f2e392]:
+                        - link "Ethereum" [ref=f2e394] [cursor=pointer]:
+                          - /url: /symbols/ETHUSD/?exchange=BITSTAMP
+                        - generic [ref=f2e398]: ETHUSD
+                  - link [ref=f2e402] [cursor=pointer]:
+                    - /url: /markets/cryptocurrencies/prices-all/
+                    - generic [ref=f2e405]:
+                      - text: See all crypto
+                      - generic [ref=f2e406]: coins
+                - generic [ref=f2e411]:
+                  - link "USD to INR USDINR" [ref=f2e419] [cursor=pointer]:
+                    - /url: /symbols/USDINR/?exchange=FX_IDC
+                    - generic [ref=f2e420]: USD to INR
+                    - generic [ref=f2e421]: USDINR
+                  - list [ref=f2e435]:
+                    - listitem [ref=f2e436]:
+                      - generic [ref=f2e438]:
+                        - link "Light crude oil" [ref=f2e440] [cursor=pointer]:
+                          - /url: /symbols/NYMEX-CL1!/
+                        - generic [ref=f2e444]: CL1!
+                    - listitem [ref=f2e448]:
+                      - generic [ref=f2e450]:
+                        - link "Natural gas" [ref=f2e452] [cursor=pointer]:
+                          - /url: /symbols/NYMEX-NG1!/
+                        - generic [ref=f2e456]: NG1!
+                    - listitem [ref=f2e460]:
+                      - generic [ref=f2e462]:
+                        - link "Gold" [ref=f2e464] [cursor=pointer]:
+                          - /url: /symbols/COMEX-GC1!/
+                        - generic [ref=f2e468]: GC1!
+                    - listitem [ref=f2e472]:
+                      - generic [ref=f2e474]:
+                        - link "Copper" [ref=f2e476] [cursor=pointer]:
+                          - /url: /symbols/COMEX-HG1!/
+                        - generic [ref=f2e480]: HG1!
+                  - link [ref=f2e484] [cursor=pointer]:
+                    - /url: /markets/futures/quotes-all/
+                    - generic [ref=f2e487]:
+                      - text: See all
+                      - generic [ref=f2e488]: futures
+                - generic [ref=f2e493]:
+                  - link "India 10Y yield IN10Y" [ref=f2e500] [cursor=pointer]:
+                    - /url: /symbols/TVC-IN10Y/
+                    - generic [ref=f2e501]: India 10Y yield
+                    - generic [ref=f2e502]: IN10Y
+                  - link "India annual inflation rate INIRYY" [ref=f2e517] [cursor=pointer]:
+                    - /url: /symbols/ECONOMICS-INIRYY/
+                    - generic [ref=f2e518]: India annual inflation rate
+                    - generic [ref=f2e519]: INIRYY
+                  - link [ref=f2e576] [cursor=pointer]:
+                    - /url: /markets/world-economy/countries/india/
+                    - generic [ref=f2e579]:
+                      - text: See all economic
+                      - generic [ref=f2e580]: indicators
+              - link [ref=f2e589] [cursor=pointer]:
+                - /url: /ipo-calendar/?countries=us
+                - heading [level=3] [ref=f2e590]:
+                  - text: Featured
+                  - generic [ref=f2e591]: IPOs
+              - generic [ref=f2e682]:
+                - link [ref=f2e687] [cursor=pointer]:
+                  - /url: /ideas/
+                  - heading [level=3] [ref=f2e688]:
+                    - text: Community
+                    - generic [ref=f2e689]: ideas
+                - generic [ref=f2e694]:
+                  - tablist [ref=f2e697]:
+                    - tab "Editors' picks" [selected] [ref=f2e698]
+                    - tab "For you" [ref=f2e701]
+                    - tab "Following" [ref=f2e704]
+                    - tab "Popular" [ref=f2e707]
+                    - button [aria-hidden]:
+                      - generic: More
+                  - generic [ref=f2e712]:
+                    - article [ref=f2e713]:
+                      - generic [ref=f2e714]:
+                        - link "KRT Packaging Analysis" [ref=f2e715] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/KRT/H4dfKIeg-KRT-Packaging-Analysis/
+                        - link "THIS IS MY CHART FOR SWING TRADE FOR LEARNING PURPOSE The current price of KRT is 51.24$ I am going to buy this stock because of the reasons as follows- 1. A good move up depicting good buying in the past 2. It has got time correction which was required.depicting weak hands are out 3. It is sh" [ref=f2e716] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/KRT/H4dfKIeg-KRT-Packaging-Analysis/
+                      - generic [ref=f2e720]:
+                        - link "Editors' picks" [ref=f2e721] [cursor=pointer]:
+                          - /url: /ideas/editors-picks/
+                        - generic:
+                          - link [ref=f2e722] [cursor=pointer]:
+                            - /url: /symbols/NASDAQ-KRT/
+                            - img "NASDAQ:KRT" [ref=f2e723]
+                          - generic "Long" [ref=f2e724]
+                        - link [aria-hidden] [ref=f2e729] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/KRT/H4dfKIeg-KRT-Packaging-Analysis/
+                      - generic [ref=f2e732]:
+                        - link "by amitsinghcs" [ref=f2e734] [cursor=pointer]:
+                          - /url: /u/amitsinghcs/
+                        - generic:
+                          - time
+                    - article [ref=f2e736]:
+                      - generic [ref=f2e737]:
+                        - link "ENGINERSIN Multi-Year Structural Breakout on Monthly Chart" [ref=f2e738] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/ENGINERSIN/0EQvILak-ENGINERSIN-Multi-Year-Structural-Breakout-on-Monthly-Chart/
+                        - 'link "The monthly chart for Engineers India Limited presents a compelling long-term bullish setup following a significant structural breakout. Technical Analysis: The stock has spent several years consolidating below major historical resistance zones. As highlighted on the chart: Red Line (266.10): Rep" [ref=f2e739] [cursor=pointer]':
+                          - /url: https://in.tradingview.com/chart/ENGINERSIN/0EQvILak-ENGINERSIN-Multi-Year-Structural-Breakout-on-Monthly-Chart/
+                      - generic [ref=f2e743]:
+                        - link "Editors' picks" [ref=f2e744] [cursor=pointer]:
+                          - /url: /ideas/editors-picks/
+                        - link [ref=f2e745] [cursor=pointer]:
+                          - /url: /symbols/NSE-ENGINERSIN/
+                          - img "NSE:ENGINERSIN" [ref=f2e746]
+                        - link [aria-hidden] [ref=f2e747] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/ENGINERSIN/0EQvILak-ENGINERSIN-Multi-Year-Structural-Breakout-on-Monthly-Chart/
+                      - generic [ref=f2e750]:
+                        - link "by ParamjitMahapatro" [ref=f2e752] [cursor=pointer]:
+                          - /url: /u/ParamjitMahapatro/
+                        - generic:
+                          - time
+                    - article [ref=f2e754]:
+                      - generic [ref=f2e755]:
+                        - link "CNXENERGY - Important Support Zone Test" [ref=f2e756] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/CNXENERGY/p8tPPLey-CNXENERGY-Important-Support-Zone-Test/
+                        - link "CNXENERGY had earlier given a breakout above the 36,500–37,000 zone and rallied strongly towards 41,828. After that, price formed a corrective LH–LL structure and eventually returned to the previous breakout zone. Now, 36,500–37,000 is acting as support, and price has started recovering from this" [ref=f2e757] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/CNXENERGY/p8tPPLey-CNXENERGY-Important-Support-Zone-Test/
+                      - generic [ref=f2e761]:
+                        - link "Editors' picks" [ref=f2e762] [cursor=pointer]:
+                          - /url: /ideas/editors-picks/
+                        - link [ref=f2e763] [cursor=pointer]:
+                          - /url: /symbols/NSE-CNXENERGY/
+                          - img "NSE:CNXENERGY" [ref=f2e764]
+                        - link [aria-hidden] [ref=f2e765] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/CNXENERGY/p8tPPLey-CNXENERGY-Important-Support-Zone-Test/
+                      - generic [ref=f2e768]:
+                        - link "by SatpalS" [ref=f2e770] [cursor=pointer]:
+                          - /url: /u/SatpalS/
+                        - generic:
+                          - time
+                    - article [ref=f2e772]:
+                      - generic [ref=f2e773]:
+                        - 'link "GOLD : Major Turnaround for Bulltrend (CUP HANDLE pattern)" [ref=f2e774] [cursor=pointer]':
+                          - /url: https://in.tradingview.com/chart/XAUUSD/2b5VT9f7-GOLD-Major-Turnaround-for-Bulltrend-CUP-HANDLE-pattern/
+                        - 'link "Gold has shown a Bullish CUP HANDLE patterns. Buy signal will emerge after $4510 and after this $4700 will be a temporary resistance. A massive and sharp rally will begin which may lead to #5450-$5475 and more. Many factors are emerging to fuel it''s price to rise further. My advice don''t short the" [ref=f2e775] [cursor=pointer]':
+                          - /url: https://in.tradingview.com/chart/XAUUSD/2b5VT9f7-GOLD-Major-Turnaround-for-Bulltrend-CUP-HANDLE-pattern/
+                      - generic [ref=f2e779]:
+                        - link "Editors' picks" [ref=f2e780] [cursor=pointer]:
+                          - /url: /ideas/editors-picks/
+                        - link [ref=f2e781] [cursor=pointer]:
+                          - /url: /symbols/XAUUSD/
+                          - img "OANDA:XAUUSD" [ref=f2e782]
+                        - link [aria-hidden] [ref=f2e783] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/XAUUSD/2b5VT9f7-GOLD-Major-Turnaround-for-Bulltrend-CUP-HANDLE-pattern/
+                      - generic [ref=f2e786]:
+                        - link "by maneeshaggarwal" [ref=f2e788] [cursor=pointer]:
+                          - /url: /u/maneeshaggarwal/
+                        - generic:
+                          - time
+                    - article [ref=f2e790]:
+                      - generic [ref=f2e791]:
+                        - link "Action Construction Equipment Ltd. — Technical Analysis (1W Char" [ref=f2e792] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/ACE/mZf8utkC-Action-Construction-Equipment-Ltd-Technical-Analysis-1W-Char/
+                        - 'link "Trend & Pattern Breakout: The stock has logged a multi-month trendline breakout on the weekly timeframe, ending its extended correction phase from late 2024 to mid-2026. The weekly candle has closed decisively above the falling channel resistance around the 1,050–1,100 zone. Dynamic Support: Moving" [ref=f2e793] [cursor=pointer]':
+                          - /url: https://in.tradingview.com/chart/ACE/mZf8utkC-Action-Construction-Equipment-Ltd-Technical-Analysis-1W-Char/
+                      - generic [ref=f2e797]:
+                        - link "Editors' picks" [ref=f2e798] [cursor=pointer]:
+                          - /url: /ideas/editors-picks/
+                        - generic:
+                          - link [ref=f2e799] [cursor=pointer]:
+                            - /url: /symbols/NSE-ACE/
+                            - img "NSE:ACE" [ref=f2e800]
+                          - generic "Long" [ref=f2e801]
+                        - link [aria-hidden] [ref=f2e806] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/ACE/mZf8utkC-Action-Construction-Equipment-Ltd-Technical-Analysis-1W-Char/
+                      - generic [ref=f2e809]:
+                        - link "by PowerOfTA" [ref=f2e811] [cursor=pointer]:
+                          - /url: /u/PowerOfTA/
+                        - generic:
+                          - time
+                    - article [ref=f2e813]:
+                      - generic [ref=f2e814]:
+                        - 'link "Monthly vs Weekly: Why One Timeframe Is Never the Full Picture" [ref=f2e815] [cursor=pointer]':
+                          - /url: https://in.tradingview.com/chart/EMUDHRA/RNNDaQW8-Monthly-vs-Weekly-Why-One-Timeframe-Is-Never-the-Full-Picture/
+                        - link "Looking at only one timeframe can show you the structure. Looking at multiple timeframes can show you the structure within the structure. This historical chart compares the Monthly and Weekly timeframes to demonstrate how market peaks, supply-demand transitions and counter-trendlines can appear d" [ref=f2e816] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/EMUDHRA/RNNDaQW8-Monthly-vs-Weekly-Why-One-Timeframe-Is-Never-the-Full-Picture/
+                      - generic [ref=f2e820]:
+                        - link "Editors' picks" [ref=f2e821] [cursor=pointer]:
+                          - /url: /ideas/editors-picks/
+                        - generic:
+                          - link [ref=f2e822] [cursor=pointer]:
+                            - /url: /symbols/NSE-EMUDHRA/
+                            - img "NSE:EMUDHRA" [ref=f2e823]
+                          - generic "Long" [ref=f2e824]
+                        - link [aria-hidden] [ref=f2e829] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/EMUDHRA/RNNDaQW8-Monthly-vs-Weekly-Why-One-Timeframe-Is-Never-the-Full-Picture/
+                      - generic [ref=f2e832]:
+                        - link "by Averoy_Apoorv_Analysis" [ref=f2e834] [cursor=pointer]:
+                          - /url: /u/Averoy_Apoorv_Analysis/
+                        - generic:
+                          - time
+                    - article [ref=f2e836]:
+                      - generic [ref=f2e837]:
+                        - 'link "STYL : Cup & Handle Taking Shape — Demand Zone Holds" [ref=f2e838] [cursor=pointer]':
+                          - /url: https://in.tradingview.com/chart/STYL/1v067mbb-STYL-Cup-Handle-Taking-Shape-Demand-Zone-Holds/
+                        - 'link "Seshaasai Technologies Ltd. NSE:STYL is developing an interesting Cup & Handle structure on the daily chart, with the handle currently testing an important demand/confluence area. Key Observations : 1. Cup formation: After the post-listing decline, price formed a broad base and recovered" [ref=f2e839] [cursor=pointer]':
+                          - /url: https://in.tradingview.com/chart/STYL/1v067mbb-STYL-Cup-Handle-Taking-Shape-Demand-Zone-Holds/
+                      - generic [ref=f2e843]:
+                        - link "Editors' picks" [ref=f2e844] [cursor=pointer]:
+                          - /url: /ideas/editors-picks/
+                        - generic:
+                          - link [ref=f2e845] [cursor=pointer]:
+                            - /url: /symbols/NSE-STYL/
+                            - img "NSE:STYL" [ref=f2e846]
+                          - generic "Long" [ref=f2e847]
+                        - link [aria-hidden] [ref=f2e852] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/STYL/1v067mbb-STYL-Cup-Handle-Taking-Shape-Demand-Zone-Holds/
+                      - generic [ref=f2e855]:
+                        - link "by KingDoxa_trades" [ref=f2e857] [cursor=pointer]:
+                          - /url: /u/KingDoxa_trades/
+                        - generic:
+                          - time
+                    - article [ref=f2e859]:
+                      - generic [ref=f2e860]:
+                        - link "Tata Motors Passenger Vehicles Ltd (1D)" [ref=f2e861] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/TMPV/YuqMDVR0-Tata-Motors-Passenger-Vehicles-Ltd-1D/
+                        - 'link "Key Technical Levels Current Price: ₹306.40 Buy Trigger Zone: Above ₹306.40 – ₹308.00 Stop Loss (SL): ₹304.40 (Tight intraday level) / ₹296.50 (Swing low structural support) Target 1: ₹320.00 Target 2: ₹336.02 Target 3 (1:3 R:R): ₹351.55 Technical Understanding & Indicators Support Bounce: The p" [ref=f2e862] [cursor=pointer]':
+                          - /url: https://in.tradingview.com/chart/TMPV/YuqMDVR0-Tata-Motors-Passenger-Vehicles-Ltd-1D/
+                      - generic [ref=f2e866]:
+                        - link "Editors' picks" [ref=f2e867] [cursor=pointer]:
+                          - /url: /ideas/editors-picks/
+                        - link [ref=f2e868] [cursor=pointer]:
+                          - /url: /symbols/NSE-TMPV/
+                          - img "NSE:TMPV" [ref=f2e869]
+                        - link [aria-hidden] [ref=f2e870] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/TMPV/YuqMDVR0-Tata-Motors-Passenger-Vehicles-Ltd-1D/
+                      - generic [ref=f2e873]:
+                        - link "by Alice Blue" [ref=f2e875] [cursor=pointer]:
+                          - /url: /u/ALICEBLUE/
+                        - generic:
+                          - time
+                    - article [ref=f2e877]:
+                      - generic [ref=f2e878]:
+                        - link "NIFTY — POTENTIAL BULLISH REVERSAL SETUP" [ref=f2e879] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/NIFTY/2DmeQ6lb-NIFTY-POTENTIAL-BULLISH-REVERSAL-SETUP/
+                        - 'link "NIFTY is showing an interesting technical structure that could indicate a shift from bearish momentum toward a potential bullish reversal. The setup is based on two key technical observations across different timeframes: 🔹 15-Minute: 30 EMA & 50 EMA crossover + price reaction from the EMA zone 🔹 1" [ref=f2e880] [cursor=pointer]':
+                          - /url: https://in.tradingview.com/chart/NIFTY/2DmeQ6lb-NIFTY-POTENTIAL-BULLISH-REVERSAL-SETUP/
+                      - generic [ref=f2e884]:
+                        - link "Editors' picks" [ref=f2e885] [cursor=pointer]:
+                          - /url: /ideas/editors-picks/
+                        - generic:
+                          - link [ref=f2e886] [cursor=pointer]:
+                            - /url: /symbols/NSE-NIFTY/
+                            - img "NSE:NIFTY" [ref=f2e887]
+                          - generic "Long" [ref=f2e888]
+                        - link [aria-hidden] [ref=f2e893] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/NIFTY/2DmeQ6lb-NIFTY-POTENTIAL-BULLISH-REVERSAL-SETUP/
+                      - generic [ref=f2e896]:
+                        - link "by peace_lover" [ref=f2e898] [cursor=pointer]:
+                          - /url: /u/peace_lover/
+                        - generic:
+                          - time
+                    - article [ref=f2e900]:
+                      - generic [ref=f2e901]:
+                        - link "Bikaji Foods International - DIWALI PICK !!" [ref=f2e902] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/BIKAJI/KQ6Cvpmw-Bikaji-Foods-International-DIWALI-PICK/
+                        - 'link "Date 17.09.2026 Bikaji Foods Timeframe : Weekly Chart Cmp 552 Few Technical Highlights - For Buy (1) PE contraction from 135X to 48X (2) Weekly RSI Oversold (3) Consolidation at Descending Triangle''s Neckline & Double Bottom (4) 50% price correction from lifehighs (5) Steady operating marging" [ref=f2e903] [cursor=pointer]':
+                          - /url: https://in.tradingview.com/chart/BIKAJI/KQ6Cvpmw-Bikaji-Foods-International-DIWALI-PICK/
+                      - generic [ref=f2e907]:
+                        - link "Editors' picks" [ref=f2e908] [cursor=pointer]:
+                          - /url: /ideas/editors-picks/
+                        - generic:
+                          - link [ref=f2e909] [cursor=pointer]:
+                            - /url: /symbols/NSE-BIKAJI/
+                            - img "NSE:BIKAJI" [ref=f2e910]
+                          - generic "Long" [ref=f2e911]
+                        - link [aria-hidden] [ref=f2e916] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/chart/BIKAJI/KQ6Cvpmw-Bikaji-Foods-International-DIWALI-PICK/
+                      - generic [ref=f2e919]:
+                        - link "by AnkurSingh" [ref=f2e921] [cursor=pointer]:
+                          - /url: /u/AnkurSingh/
+                        - generic:
+                          - time
+                    - link [ref=f2e923] [cursor=pointer]:
+                      - /url: /ideas/editors-picks/
+                      - paragraph [ref=f2e924]:
+                        - generic [ref=f2e925]: See all editors' picks ideas
+              - generic [ref=f2e929]:
+                - link [ref=f2e934] [cursor=pointer]:
+                  - /url: /scripts/
+                  - heading [level=3] [ref=f2e935]:
+                    - text: Indicators and
+                    - generic [ref=f2e936]: strategies
+                - generic [ref=f2e941]:
+                  - tablist [ref=f2e944]:
+                    - tab "Editors' picks" [selected] [ref=f2e945]
+                    - tab "Following" [ref=f2e948]
+                    - tab "Popular" [ref=f2e951]
+                    - button [aria-hidden]:
+                      - generic: More
+                  - generic [ref=f2e956]:
+                    - article [ref=f2e957]:
+                      - generic [ref=f2e958]:
+                        - link "Trend Target Ribbon [BOSWaves]" [ref=f2e959] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/tnQ7FvvW-Trend-Target-Ribbon-BOSWaves/
+                        - link "Trend Target Ribbon - ALMA Conviction Trend Detection with Integrated Structure-Based Position Planning and R-Multiple Target Tracking Overview Trend Target Ribbon is an ALMA-based trend identification system that combines slope-normalized momentum confirmation with standard deviation band" [ref=f2e960] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/tnQ7FvvW-Trend-Target-Ribbon-BOSWaves/
+                      - generic [ref=f2e964]:
+                        - link "Editors' picks" [ref=f2e965] [cursor=pointer]:
+                          - /url: /scripts/editors-picks/
+                        - generic: Indicator
+                        - link [aria-hidden] [ref=f2e968] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/tnQ7FvvW-Trend-Target-Ribbon-BOSWaves/
+                      - link "by BOSWaves" [ref=f2e973] [cursor=pointer]:
+                        - /url: /u/BOSWaves/
+                    - article [ref=f2e975]:
+                      - generic [ref=f2e976]:
+                        - link "Wyckoff [theUltimator5]" [ref=f2e977] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/tJzKloJn-Wyckoff-theUltimator5/
+                        - link "This indicator was designed to be a comprehensive, intuitive, overly engineered algorithm that plots Wyckoff accumulation and distribution patterns on the chart as they arise. It shows the current status of the regime on a side panel, while also overlaying the accumulation or distribution schematic" [ref=f2e978] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/tJzKloJn-Wyckoff-theUltimator5/
+                      - generic [ref=f2e982]:
+                        - link "Editors' picks" [ref=f2e983] [cursor=pointer]:
+                          - /url: /scripts/editors-picks/
+                        - generic: Indicator
+                        - link [aria-hidden] [ref=f2e986] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/tJzKloJn-Wyckoff-theUltimator5/
+                      - link "by TheUltimator5" [ref=f2e991] [cursor=pointer]:
+                        - /url: /u/TheUltimator5/
+                    - article [ref=f2e993]:
+                      - generic [ref=f2e994]:
+                        - link "XeL OnlineRecursion" [ref=f2e995] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/16ZuFZF4-XeL-OnlineRecursion/
+                        - link "XeL OnlineRecursion is a Pine Script library for online and streaming statistical estimation on continuous numerical and financial data. The library is designed around recursive statistical populations whose retained state is updated observation by observation. Most recursive components use consta" [ref=f2e996] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/16ZuFZF4-XeL-OnlineRecursion/
+                      - generic [ref=f2e1000]:
+                        - link "Editors' picks" [ref=f2e1001] [cursor=pointer]:
+                          - /url: /scripts/editors-picks/
+                        - generic: Library
+                        - link [aria-hidden] [ref=f2e1004] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/16ZuFZF4-XeL-OnlineRecursion/
+                      - link "by xel_arjona" [ref=f2e1009] [cursor=pointer]:
+                        - /url: /u/xel_arjona/
+                    - article [ref=f2e1011]:
+                      - generic [ref=f2e1012]:
+                        - link "Dual-Phase Reversal by DGT" [ref=f2e1013] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/cmFOrVlp-Dual-Phase-Reversal-by-DGT/
+                        - link "Dual-Phase Reversal • Exhaustion, Pivots & Pressure Dual-Phase Reversal (DPR) is a two-phase market exhaustion framework that tracks directional momentum through Momentum Exhaustion and Terminal Exhaustion . It combines sequential price conditions, Momentum Shift initiation, phase qualificatio" [ref=f2e1014] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/cmFOrVlp-Dual-Phase-Reversal-by-DGT/
+                      - generic [ref=f2e1018]:
+                        - link "Editors' picks" [ref=f2e1019] [cursor=pointer]:
+                          - /url: /scripts/editors-picks/
+                        - generic: Indicator
+                        - link [aria-hidden] [ref=f2e1022] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/cmFOrVlp-Dual-Phase-Reversal-by-DGT/
+                      - link "by dgtrd" [ref=f2e1027] [cursor=pointer]:
+                        - /url: /u/dgtrd/
+                    - article [ref=f2e1029]:
+                      - generic [ref=f2e1030]:
+                        - link "Zeiierman Trend Pressure (Zeiierman)" [ref=f2e1031] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/SEdUWOIJ-Zeiierman-Trend-Pressure-Zeiierman/
+                        - link "█ Overview Zeiierman Trend Pressure (Zeiierman) is a multi-layer trend pressure and exhaustion oscillator designed to visualize short-term momentum, persistent trend structure, directional pressure, and exhaustion states within a normalized 0 to -100 range. Instead of relying on a single osci" [ref=f2e1032] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/SEdUWOIJ-Zeiierman-Trend-Pressure-Zeiierman/
+                      - generic [ref=f2e1036]:
+                        - link "Editors' picks" [ref=f2e1037] [cursor=pointer]:
+                          - /url: /scripts/editors-picks/
+                        - generic: Indicator
+                        - link [aria-hidden] [ref=f2e1040] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/SEdUWOIJ-Zeiierman-Trend-Pressure-Zeiierman/
+                      - link "by Zeiierman" [ref=f2e1045] [cursor=pointer]:
+                        - /url: /u/Zeiierman/
+                    - article [ref=f2e1047]:
+                      - generic [ref=f2e1048]:
+                        - link "Volume Delta Footprint Map (Zeiierman)" [ref=f2e1049] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/7vcb6M4J-Volume-Delta-Footprint-Map-Zeiierman/
+                        - link "█ Overview Volume Delta Footprint Map (Zeiierman) is a lower-timeframe volume delta mapping indicator that visualizes where buying and selling pressure develops across both price and time. The indicator uses lower-timeframe data to estimate the buying and selling activity occurring inside each" [ref=f2e1050] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/7vcb6M4J-Volume-Delta-Footprint-Map-Zeiierman/
+                      - generic [ref=f2e1054]:
+                        - link "Editors' picks" [ref=f2e1055] [cursor=pointer]:
+                          - /url: /scripts/editors-picks/
+                        - generic: Indicator
+                        - link [aria-hidden] [ref=f2e1058] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/7vcb6M4J-Volume-Delta-Footprint-Map-Zeiierman/
+                      - link "by Zeiierman" [ref=f2e1063] [cursor=pointer]:
+                        - /url: /u/Zeiierman/
+                    - article [ref=f2e1065]:
+                      - generic [ref=f2e1066]:
+                        - link "Initial Balance Auction Intelligence by DGT" [ref=f2e1067] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/ks2QGulb-Initial-Balance-Auction-Intelligence-by-DGT/
+                        - 'link "Initial Balance Auction Intelligence (ɪʙAUC) - Market State Engine ɪʙAUC is an Auction Market Theory framework that tracks how price develops after the Initial Balance (IB), rather than treating it as static support/resistance. Using configurable post-IB auction windows, it identifies: Acceptan" [ref=f2e1068] [cursor=pointer]':
+                          - /url: https://in.tradingview.com/script/ks2QGulb-Initial-Balance-Auction-Intelligence-by-DGT/
+                      - generic [ref=f2e1072]:
+                        - link "Editors' picks" [ref=f2e1073] [cursor=pointer]:
+                          - /url: /scripts/editors-picks/
+                        - generic: Indicator
+                        - link [aria-hidden] [ref=f2e1076] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/ks2QGulb-Initial-Balance-Auction-Intelligence-by-DGT/
+                      - link "by dgtrd" [ref=f2e1081] [cursor=pointer]:
+                        - /url: /u/dgtrd/
+                    - article [ref=f2e1083]:
+                      - generic [ref=f2e1084]:
+                        - link "BYO Pattern V1 [Trendoscope]" [ref=f2e1085] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/e2S2v4fl-BYO-Pattern-V1-Trendoscope/
+                        - link "🎲 Overview BYO Pattern V1 (Build Your Own Pattern) is a highly flexible open-source indicator that empowers traders to design, define, and automatically detect custom geometric patterns based on Fibonacci ratios between zigzag pivots. Unlike traditional harmonic or chart pattern indicators that" [ref=f2e1086] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/e2S2v4fl-BYO-Pattern-V1-Trendoscope/
+                      - generic [ref=f2e1090]:
+                        - link "Editors' picks" [ref=f2e1091] [cursor=pointer]:
+                          - /url: /scripts/editors-picks/
+                        - generic: Indicator
+                        - link [aria-hidden] [ref=f2e1094] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/e2S2v4fl-BYO-Pattern-V1-Trendoscope/
+                      - link "by Trendoscope" [ref=f2e1099] [cursor=pointer]:
+                        - /url: /u/Trendoscope/
+                    - article [ref=f2e1101]:
+                      - generic [ref=f2e1102]:
+                        - link "TASC 2026.09 Adaptive SuperSmoother" [ref=f2e1103] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/FnlMn99W-TASC-2026-09-Adaptive-SuperSmoother/
+                        - link "█ OVERVIEW This script implements the Adaptive SuperSmoother by John F. Ehlers, as presented in the \"Improved Filter Performance\" article from the September 2026 edition of the TASC Traders' Tips . The script demonstrates a simple technique to adapt the SuperSmoother's critical period to improve" [ref=f2e1104] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/FnlMn99W-TASC-2026-09-Adaptive-SuperSmoother/
+                      - generic [ref=f2e1108]:
+                        - link "Editors' picks" [ref=f2e1109] [cursor=pointer]:
+                          - /url: /scripts/editors-picks/
+                        - generic: Indicator
+                        - link [aria-hidden] [ref=f2e1112] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/FnlMn99W-TASC-2026-09-Adaptive-SuperSmoother/
+                      - link "by PineCodersTASC" [ref=f2e1117] [cursor=pointer]:
+                        - /url: /u/PineCodersTASC/
+                    - article [ref=f2e1119]:
+                      - generic [ref=f2e1120]:
+                        - link "std_time" [ref=f2e1121] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/ezlWRUv8-std-time/
+                        - 'link "std_time is a full calendar for Pine Script v6: the class of time infrastructure other ecosystems get from java.time, C++20 chrono and exchange_calendars, written natively in Pine. Civil dates, durations and periods, time zones with real daylight-saving rules, twelve exchange calendars (NYSE, LSE, C" [ref=f2e1122] [cursor=pointer]':
+                          - /url: https://in.tradingview.com/script/ezlWRUv8-std-time/
+                      - generic [ref=f2e1126]:
+                        - link "Editors' picks" [ref=f2e1127] [cursor=pointer]:
+                          - /url: /scripts/editors-picks/
+                        - generic: Library
+                        - link [aria-hidden] [ref=f2e1130] [cursor=pointer]:
+                          - /url: https://in.tradingview.com/script/ezlWRUv8-std-time/
+                      - link "by The_Peaceful_Lizard" [ref=f2e1135] [cursor=pointer]:
+                        - /url: /u/The_Peaceful_Lizard/
+                    - link [ref=f2e1137] [cursor=pointer]:
+                      - /url: /scripts/editors-picks/
+                      - paragraph [ref=f2e1138]:
+                        - generic [ref=f2e1139]: See all indicators and strategies
+              - generic [ref=f2e1143]:
+                - link [ref=f2e1148] [cursor=pointer]:
+                  - /url: /news/top-stories/all/
+                  - heading [level=3] [ref=f2e1149]:
+                    - text: Top
+                    - generic [ref=f2e1150]: stories
+                - link [ref=f2e1215] [cursor=pointer]:
+                  - /url: /news/top-stories/all/
+                  - generic [ref=f2e1218]:
+                    - text: Keep
+                    - generic [ref=f2e1219]: reading
+          - generic [ref=f2e1224]:
+            - link [ref=f2e1230] [cursor=pointer]:
+              - /url: /markets/stocks-india/
+              - heading [level=2] [ref=f2e1231]:
+                - text: Indian
+                - generic [ref=f2e1232]: stocks
+            - generic [ref=f2e1237]:
+              - generic [ref=f2e1238]:
+                - heading "Community trends" [level=3] [ref=f2e1243]
+                - generic [ref=f2e1246]:
+                  - link "ICICIBANK ICICI Bank Limited" [ref=f2e1251] [cursor=pointer]:
+                    - /url: /symbols/NSE-ICICIBANK/
+                    - generic [ref=f2e1252]: ICICIBANK
+                    - generic [ref=f2e1255]: ICICI Bank Limited
+                  - link "INFY Infosys Limited" [ref=f2e1260] [cursor=pointer]:
+                    - /url: /symbols/NSE-INFY/
+                    - generic [ref=f2e1261]: INFY
+                    - generic [ref=f2e1264]: Infosys Limited
+                  - link "DRREDDY Dr. Reddy's Laboratories Ltd." [ref=f2e1269] [cursor=pointer]:
+                    - /url: /symbols/NSE-DRREDDY/
+                    - generic [ref=f2e1270]: DRREDDY
+                    - generic [ref=f2e1273]: Dr. Reddy's Laboratories Ltd.
+                  - link "WIPRO Wipro Limited" [ref=f2e1278] [cursor=pointer]:
+                    - /url: /symbols/NSE-WIPRO/
+                    - generic [ref=f2e1279]: WIPRO
+                    - generic [ref=f2e1282]: Wipro Limited
+                  - link "AXISBANK Axis Bank Limited" [ref=f2e1287] [cursor=pointer]:
+                    - /url: /symbols/NSE-AXISBANK/
+                    - generic [ref=f2e1288]: AXISBANK
+                    - generic [ref=f2e1291]: Axis Bank Limited
+                  - link "RELIANCE Reliance Industries Limited" [ref=f2e1296] [cursor=pointer]:
+                    - /url: /symbols/NSE-RELIANCE/
+                    - generic [ref=f2e1297]: RELIANCE
+                    - generic [ref=f2e1300]: Reliance Industries Limited
+                  - link "ADANIENT Adani Enterprises Limited" [ref=f2e1305] [cursor=pointer]:
+                    - /url: /symbols/NSE-ADANIENT/
+                    - generic [ref=f2e1306]: ADANIENT
+                    - generic [ref=f2e1309]: Adani Enterprises Limited
+                  - link "ADANIPORTS Adani Ports & Special Economic Zone Ltd" [ref=f2e1314] [cursor=pointer]:
+                    - /url: /symbols/NSE-ADANIPORTS/
+                    - generic [ref=f2e1315]: ADANIPORTS
+                    - generic [ref=f2e1318]: Adani Ports & Special Economic Zone Ltd
+                  - link "APOLLO Apollo Micro Systems Ltd." [ref=f2e1323] [cursor=pointer]:
+                    - /url: /symbols/NSE-APOLLO/
+                    - generic [ref=f2e1324]: APOLLO
+                    - generic [ref=f2e1327]: Apollo Micro Systems Ltd.
+                  - link "HDFCBANK HDFC Bank Limited" [ref=f2e1332] [cursor=pointer]:
+                    - /url: /symbols/NSE-HDFCBANK/
+                    - generic [ref=f2e1333]: HDFCBANK
+                    - generic [ref=f2e1336]: HDFC Bank Limited
+              - generic [ref=f2e1337]:
+                - link [ref=f2e1342] [cursor=pointer]:
+                  - /url: /markets/stocks-india/ideas/
+                  - heading [level=3] [ref=f2e1343]:
+                    - text: Trade
+                    - generic [ref=f2e1344]: ideas
+                - generic [ref=f2e1352]:
+                  - article [ref=f2e1353]:
+                    - generic [ref=f2e1354]:
+                      - link "Sellers Lost Control. Now This Reversal Can Get Aggressive" [ref=f2e1355] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/ASTEC/QjANx0wx-Sellers-Lost-Control-Now-This-Reversal-Can-Get-Aggressive/
+                      - link "Astec Lifesciences is finally showing signs of a major trend reversal after almost 4 years of continuous selling pressure. The stock has been respecting this long term falling trendline since its 2022 peak and every major recovery was rejected near it. But this time the structure has changed. Price" [ref=f2e1356] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/ASTEC/QjANx0wx-Sellers-Lost-Control-Now-This-Reversal-Can-Get-Aggressive/
+                    - generic [ref=f2e1360]:
+                      - generic:
+                        - link [ref=f2e1361] [cursor=pointer]:
+                          - /url: /symbols/NSE-ASTEC/
+                          - img "NSE:ASTEC" [ref=f2e1362]
+                        - generic "Long" [ref=f2e1363]
+                      - link [aria-hidden] [ref=f2e1368] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/ASTEC/QjANx0wx-Sellers-Lost-Control-Now-This-Reversal-Can-Get-Aggressive/
+                    - generic [ref=f2e1371]:
+                      - link "by Marketik" [ref=f2e1373] [cursor=pointer]:
+                        - /url: /u/Marketik/
+                      - generic:
+                        - time
+                  - article [ref=f2e1375]:
+                    - generic [ref=f2e1376]:
+                      - link "Buy Today, Sell Tomorrow for 3–5% – Daily Breakout Setup" [ref=f2e1377] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/CHEMPLASTS/TibX3GDw-Buy-Today-Sell-Tomorrow-for-3-5-Daily-Breakout-Setup/
+                      - 'link "CHEMPLAST SANMAR LIMITED — BTST BREAKOUT SETUP Entry, Stop Loss & Targets Are Clearly Defined — Helping You Plan Your Trade With Confidence. 📊 Stock Strength: 69/100 (Note: Higher score indicates stronger stock conditions, not guaranteed returns.) A bullish breakout has appeared on the 1D timefra" [ref=f2e1378] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/CHEMPLASTS/TibX3GDw-Buy-Today-Sell-Tomorrow-for-3-5-Daily-Breakout-Setup/
+                    - generic [ref=f2e1382]:
+                      - generic:
+                        - link [ref=f2e1383] [cursor=pointer]:
+                          - /url: /symbols/NSE-CHEMPLASTS/
+                          - img "NSE:CHEMPLASTS" [ref=f2e1384]
+                        - generic "Long" [ref=f2e1385]
+                      - link [aria-hidden] [ref=f2e1390] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/CHEMPLASTS/TibX3GDw-Buy-Today-Sell-Tomorrow-for-3-5-Daily-Breakout-Setup/
+                    - generic [ref=f2e1393]:
+                      - link "by nemichandbhati" [ref=f2e1395] [cursor=pointer]:
+                        - /url: /u/nemichandbhati/
+                      - generic:
+                        - time
+                  - article [ref=f2e1397]:
+                    - generic [ref=f2e1398]:
+                      - 'link "SAMBHV: Major Resistance Breakout Backed by Surging Volume" [ref=f2e1399] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/SAMBHV/ftjd5ARC-SAMBHV-Major-Resistance-Breakout-Backed-by-Surging-Volume/
+                      - link "Looking at the weekly chart for Sambhv Steel Tubes Limited, we can observe a highly constructive structural shift. The stock has spent the better part of the year forming a wide consolidation base and has now staged a powerful breakout above a critical resistance threshold. Here is the breakdown o" [ref=f2e1400] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/SAMBHV/ftjd5ARC-SAMBHV-Major-Resistance-Breakout-Backed-by-Surging-Volume/
+                    - generic [ref=f2e1404]:
+                      - link [ref=f2e1405] [cursor=pointer]:
+                        - /url: /symbols/NSE-SAMBHV/
+                        - img "NSE:SAMBHV" [ref=f2e1406]
+                      - link [aria-hidden] [ref=f2e1407] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/SAMBHV/ftjd5ARC-SAMBHV-Major-Resistance-Breakout-Backed-by-Surging-Volume/
+                    - generic [ref=f2e1410]:
+                      - link "by ParamjitMahapatro" [ref=f2e1412] [cursor=pointer]:
+                        - /url: /u/ParamjitMahapatro/
+                      - generic:
+                        - time
+                  - article [ref=f2e1414]:
+                    - generic [ref=f2e1415]:
+                      - 'link "The Real Trading Edge: Patience, Risk & Position Sizing" [ref=f2e1416] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/COFORGE/DCSRupy9-The-Real-Trading-Edge-Patience-Risk-Position-Sizing/
+                      - link "Trading is not only about finding the perfect entry. Over time, I’ve learned that some of the biggest differences come from much simpler things — patience, risk management and position sizing. In this video, I revisit one of my older trades, not to showcase the outcome, but to discuss the process b" [ref=f2e1417] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/COFORGE/DCSRupy9-The-Real-Trading-Edge-Patience-Risk-Position-Sizing/
+                    - generic [ref=f2e1421]:
+                      - generic:
+                        - link [ref=f2e1422] [cursor=pointer]:
+                          - /url: /symbols/NSE-COFORGE/
+                          - img "NSE:COFORGE" [ref=f2e1423]
+                        - generic "Long" [ref=f2e1424]
+                      - time [ref=f2e1431]: 19:16
+                      - link [aria-hidden] [ref=f2e1432] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/COFORGE/DCSRupy9-The-Real-Trading-Edge-Patience-Risk-Position-Sizing/
+                    - generic [ref=f2e1435]:
+                      - link "by Averoy_Apoorv_Analysis" [ref=f2e1437] [cursor=pointer]:
+                        - /url: /u/Averoy_Apoorv_Analysis/
+                      - generic:
+                        - time
+                  - article [ref=f2e1439]:
+                    - generic [ref=f2e1440]:
+                      - link "Loooonnng time BO" [ref=f2e1441] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BHEL/FC5tgs2z-Loooonnng-time-BO/
+                      - link "Ideally such scrips would move slowly and give very good returns over the years. The pattern formation has itself taken more than a decade, so expecting results in weeks or months would be unfair. Therefore I would avoid this one, since I can keep a trade active for a few weeks or months. Havin" [ref=f2e1442] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BHEL/FC5tgs2z-Loooonnng-time-BO/
+                    - generic [ref=f2e1446]:
+                      - generic:
+                        - link [ref=f2e1447] [cursor=pointer]:
+                          - /url: /symbols/NSE-BHEL/
+                          - img "NSE:BHEL" [ref=f2e1448]
+                        - generic "Long" [ref=f2e1449]
+                      - link [aria-hidden] [ref=f2e1454] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BHEL/FC5tgs2z-Loooonnng-time-BO/
+                    - generic [ref=f2e1457]:
+                      - link "by srjatav" [ref=f2e1459] [cursor=pointer]:
+                        - /url: /u/srjatav/
+                      - generic:
+                        - time
+                  - article [ref=f2e1461]:
+                    - generic [ref=f2e1462]:
+                      - 'link "Weinstein 4-Stage Cycle Breakdown: A Visual Guide for Shilpa Med" [ref=f2e1463] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/SHILPAMED/WUp5fEs7-Weinstein-4-Stage-Cycle-Breakdown-A-Visual-Guide-for-Shilpa-Med/
+                      - link "Understanding the broad structural trend is one of the most vital rules in market participation. By utilizing Stan Weinstein's 4-Stage Framework, traders can objectively differentiate between low-risk accumulation zones and high-risk capital traps. Below is a weekly breakdown of Shilpa Medicare Li" [ref=f2e1464] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/SHILPAMED/WUp5fEs7-Weinstein-4-Stage-Cycle-Breakdown-A-Visual-Guide-for-Shilpa-Med/
+                    - generic [ref=f2e1468]:
+                      - generic:
+                        - link [ref=f2e1469] [cursor=pointer]:
+                          - /url: /symbols/NSE-SHILPAMED/
+                          - img "NSE:SHILPAMED" [ref=f2e1470]
+                        - generic "Long" [ref=f2e1471]
+                      - link [aria-hidden] [ref=f2e1476] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/SHILPAMED/WUp5fEs7-Weinstein-4-Stage-Cycle-Breakdown-A-Visual-Guide-for-Shilpa-Med/
+                    - generic [ref=f2e1479]:
+                      - link "by sravan_kadaveru" [ref=f2e1481] [cursor=pointer]:
+                        - /url: /u/sravan_kadaveru/
+                      - generic:
+                        - time
+                  - article [ref=f2e1483]:
+                    - generic [ref=f2e1484]:
+                      - link "SUPREMEIND — Weekly chart" [ref=f2e1485] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/SUPREMEIND/JvGq0pyX-SUPREMEIND-Weekly-chart/
+                      - 'link "Price is approaching a long-term descending trendline while repeatedly finding support around the ₹3,250–₹3,350 zone. A decisive breakout above the trendline could signal a change in structure, while rejection would keep the broader downtrend intact. Key levels: 🔹 Resistance: ₹3,600–₹3,700 🔹 Supp" [ref=f2e1486] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/SUPREMEIND/JvGq0pyX-SUPREMEIND-Weekly-chart/
+                    - generic [ref=f2e1490]:
+                      - link [ref=f2e1491] [cursor=pointer]:
+                        - /url: /symbols/NSE-SUPREMEIND/
+                        - img "NSE:SUPREMEIND" [ref=f2e1492]
+                      - link [aria-hidden] [ref=f2e1493] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/SUPREMEIND/JvGq0pyX-SUPREMEIND-Weekly-chart/
+                    - generic [ref=f2e1496]:
+                      - link "by StockBreakoutIN" [ref=f2e1498] [cursor=pointer]:
+                        - /url: /u/StockBreakoutIN/
+                      - generic:
+                        - time
+                  - article [ref=f2e1500]:
+                    - generic [ref=f2e1501]:
+                      - link "BUY TODAY SELL TOMORROW for 5%" [ref=f2e1502] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/ZOTA/fQXVvEf4-BUY-TODAY-SELL-TOMORROW-for-5/
+                      - link "DON’T HAVE TIME TO MANAGE YOUR TRADES? - Take BTST trades at 3:25 pm every day - Try to exit by taking 4-7% profit of each trade - SL can also be maintained as closing below the low of the breakout candle Now, why do I prefer BTST over swing trades? The primary reason is that I have observed that" [ref=f2e1503] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/ZOTA/fQXVvEf4-BUY-TODAY-SELL-TOMORROW-for-5/
+                    - generic [ref=f2e1507]:
+                      - link [ref=f2e1508] [cursor=pointer]:
+                        - /url: /symbols/NSE-ZOTA/
+                        - img "NSE:ZOTA" [ref=f2e1509]
+                      - link [aria-hidden] [ref=f2e1510] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/ZOTA/fQXVvEf4-BUY-TODAY-SELL-TOMORROW-for-5/
+                    - generic [ref=f2e1513]:
+                      - link "by Kapil-Mittal" [ref=f2e1515] [cursor=pointer]:
+                        - /url: /u/Kapil-Mittal/
+                      - generic:
+                        - time
+                  - article [ref=f2e1517]:
+                    - generic [ref=f2e1518]:
+                      - link "IKS Symmetrical Triangle Breakout with Strong Volume" [ref=f2e1519] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/IKS/g4vUFOhf-IKS-Symmetrical-Triangle-Breakout-with-Strong-Volume/
+                      - 'link "🔥 Inventurus Knowledge Solutions: Symmetrical Triangle Breakout with Strong Volume 📊 MARKET STRUCTURE SNAPSHOT | NSE: IKS | DAILY Closing Price: 1,869.20 Core Trend: Developing Bullish Structure Market State: Bullish Expansion / Breakout Chart Pattern: Symmetrical Triangle — Bullish Breakout Candle" [ref=f2e1520] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/IKS/g4vUFOhf-IKS-Symmetrical-Triangle-Breakout-with-Strong-Volume/
+                    - generic [ref=f2e1524]:
+                      - generic:
+                        - link [ref=f2e1525] [cursor=pointer]:
+                          - /url: /symbols/NSE-IKS/
+                          - img "NSE:IKS" [ref=f2e1526]
+                        - generic "Long" [ref=f2e1527]
+                      - link [aria-hidden] [ref=f2e1532] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/IKS/g4vUFOhf-IKS-Symmetrical-Triangle-Breakout-with-Strong-Volume/
+                    - generic [ref=f2e1535]:
+                      - link "by simpletradewithpatience" [ref=f2e1537] [cursor=pointer]:
+                        - /url: /u/simpletradewithpatience/
+                      - generic:
+                        - time
+                  - article [ref=f2e1539]:
+                    - generic [ref=f2e1540]:
+                      - link "ENGINEERS INDIA LTD" [ref=f2e1541] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/ENGINERSIN/41tKcXuA-ENGINEERS-INDIA-LTD/
+                      - 'link "*🏗️ ENGINEERS INDIA LTD — Weekly Chart Breakdown** *Chart by @RShivashankar | TradingView* 🕯️ **Current:** ₹302.55 | **+6.06%** (+₹17.30) ━━━━━━━━━━━━━━━━ **🔓 THE SETUP** On the weekly view you can see it more clearly: price broke out above the ₹270 zone, pulled back to retest it, held, and is no" [ref=f2e1542] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/ENGINERSIN/41tKcXuA-ENGINEERS-INDIA-LTD/
+                    - generic [ref=f2e1546]:
+                      - generic:
+                        - link [ref=f2e1547] [cursor=pointer]:
+                          - /url: /symbols/NSE-ENGINERSIN/
+                          - img "NSE:ENGINERSIN" [ref=f2e1548]
+                        - generic "Long" [ref=f2e1549]
+                      - link [aria-hidden] [ref=f2e1554] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/ENGINERSIN/41tKcXuA-ENGINEERS-INDIA-LTD/
+                    - generic [ref=f2e1557]:
+                      - link "by RShivashankar" [ref=f2e1559] [cursor=pointer]:
+                        - /url: /u/RShivashankar/
+                      - generic:
+                        - time
+                  - link [ref=f2e1561] [cursor=pointer]:
+                    - /url: /markets/stocks-india/ideas/
+                    - paragraph [ref=f2e1562]:
+                      - generic [ref=f2e1563]: See all stocks ideas
+              - generic [ref=f2e1569]:
+                - generic [ref=f2e1570]:
+                  - link [ref=f2e1575] [cursor=pointer]:
+                    - /url: /markets/stocks-india/market-movers-active/
+                    - heading [level=3] [ref=f2e1576]:
+                      - text: Highest volume
+                      - generic [ref=f2e1577]: stocks
+                  - generic [ref=f2e1583]:
+                    - generic [ref=f2e1585]:
+                      - link "Ola Electric Mobility Limited" [ref=f2e1587] [cursor=pointer]:
+                        - /url: /symbols/NSE-OLAELEC/
+                      - generic [ref=f2e1591]: OLAELEC
+                    - generic [ref=f2e1596]:
+                      - link "PC Jeweller Ltd." [ref=f2e1598] [cursor=pointer]:
+                        - /url: /symbols/NSE-PCJEWELLER/
+                      - generic [ref=f2e1602]: PCJEWELLER
+                    - generic [ref=f2e1607]:
+                      - link "HDFC Bank Limited" [ref=f2e1609] [cursor=pointer]:
+                        - /url: /symbols/NSE-HDFCBANK/
+                      - generic [ref=f2e1613]: HDFCBANK
+                    - generic [ref=f2e1618]:
+                      - generic [ref=f2e1619]: K
+                      - link "Kanohar Electricals Ltd" [ref=f2e1621] [cursor=pointer]:
+                        - /url: /symbols/NSE-KANOHAR/
+                      - generic [ref=f2e1625]: KANOHAR
+                    - generic [ref=f2e1630]:
+                      - link "Marine Electricals (India) Limited" [ref=f2e1632] [cursor=pointer]:
+                        - /url: /symbols/NSE-MARINE/
+                      - generic [ref=f2e1636]: MARINE
+                    - generic [ref=f2e1641]:
+                      - link "Bandhan Bank Ltd." [ref=f2e1643] [cursor=pointer]:
+                        - /url: /symbols/NSE-BANDHANBNK/
+                      - generic [ref=f2e1647]: BANDHANBNK
+                  - link [ref=f2e1653] [cursor=pointer]:
+                    - /url: /markets/stocks-india/market-movers-active/
+                    - generic [ref=f2e1656]:
+                      - text: See all most actively traded
+                      - generic [ref=f2e1657]: stocks
+                - generic [ref=f2e1661]:
+                  - link [ref=f2e1666] [cursor=pointer]:
+                    - /url: /markets/stocks-india/market-movers-most-volatile/
+                    - heading [level=3] [ref=f2e1667]:
+                      - text: Most volatile
+                      - generic [ref=f2e1668]: stocks
+                  - generic [ref=f2e1674]:
+                    - generic [ref=f2e1676]:
+                      - link "Vishvprabha Ventures Ltd." [ref=f2e1678] [cursor=pointer]:
+                        - /url: /symbols/BSE-VISVEN/
+                      - generic [ref=f2e1682]: VISVEN
+                    - generic [ref=f2e1687]:
+                      - link "Cresto Techno Limited" [ref=f2e1689] [cursor=pointer]:
+                        - /url: /symbols/NSE-CRESTO/
+                      - generic [ref=f2e1693]: CRESTO
+                    - generic [ref=f2e1698]:
+                      - link "Shree Metalloys Limited" [ref=f2e1700] [cursor=pointer]:
+                        - /url: /symbols/BSE-SHREMETAL/
+                      - generic [ref=f2e1704]: SHREMETAL
+                    - generic [ref=f2e1709]:
+                      - link "Striders Impex Limited" [ref=f2e1711] [cursor=pointer]:
+                        - /url: /symbols/NSE-STRIDERS/
+                      - generic [ref=f2e1715]: STRIDERS
+                    - generic [ref=f2e1720]:
+                      - generic [ref=f2e1721]: F
+                      - link "Farm Peace Limited" [ref=f2e1723] [cursor=pointer]:
+                        - /url: /symbols/BSE-FARMPEACE/
+                      - generic [ref=f2e1727]: FARMPEACE
+                    - generic [ref=f2e1732]:
+                      - link "Advik Capital Ltd" [ref=f2e1734] [cursor=pointer]:
+                        - /url: /symbols/NSE-ADVIKCA/
+                      - generic [ref=f2e1738]: ADVIKCA
+                  - link [ref=f2e1744] [cursor=pointer]:
+                    - /url: /markets/stocks-india/market-movers-most-volatile/
+                    - generic [ref=f2e1747]:
+                      - text: See all stocks with biggest price
+                      - generic [ref=f2e1748]: changes
+              - generic [ref=f2e1754]:
+                - generic [ref=f2e1755]:
+                  - link [ref=f2e1760] [cursor=pointer]:
+                    - /url: /markets/stocks-india/market-movers-gainers/
+                    - heading [level=3] [ref=f2e1761]:
+                      - text: Stock
+                      - generic [ref=f2e1762]: gainers
+                  - link [ref=f2e1814] [cursor=pointer]:
+                    - /url: /markets/stocks-india/market-movers-gainers/
+                    - generic [ref=f2e1817]:
+                      - text: See all stocks with largest daily
+                      - generic [ref=f2e1818]: growth
+                - generic [ref=f2e1822]:
+                  - link [ref=f2e1827] [cursor=pointer]:
+                    - /url: /markets/stocks-india/market-movers-losers/
+                    - heading [level=3] [ref=f2e1828]:
+                      - text: Stock
+                      - generic [ref=f2e1829]: losers
+                  - link [ref=f2e1881] [cursor=pointer]:
+                    - /url: /markets/stocks-india/market-movers-losers/
+                    - generic [ref=f2e1884]:
+                      - text: See all stocks with largest daily
+                      - generic [ref=f2e1885]: drop
+              - generic [ref=f2e1889]:
+                - link [ref=f2e1894] [cursor=pointer]:
+                  - /url: /earnings-calendar/?countries=in
+                  - heading [level=3] [ref=f2e1895]:
+                    - text: Earnings
+                    - generic [ref=f2e1896]: Calendar
+                - generic [ref=f2e1902]:
+                  - link "Oct 8 IREDA Indian Renewable Energy Development Agency Ltd. Actual — Estimate —" [ref=f2e1903] [cursor=pointer]:
+                    - /url: /symbols/NSE-IREDA/
+                    - generic "Oct 8, 2026, 12:00 GMT" [ref=f2e1906]: Oct 8
+                    - generic [ref=f2e1908]:
+                      - generic [ref=f2e1909]: IREDA
+                      - generic [ref=f2e1910]: Indian Renewable Energy Development Agency Ltd.
+                    - generic [ref=f2e1911]:
+                      - generic [ref=f2e1912]:
+                        - generic [ref=f2e1913]: Actual
+                        - generic [ref=f2e1914]: —
+                      - generic [ref=f2e1916]:
+                        - generic [ref=f2e1917]: Estimate
+                        - generic [ref=f2e1918]: —
+                  - link "Oct 8 TATAELXSI Tata Elxsi Limited Actual — Estimate 29.21 INR" [ref=f2e1920] [cursor=pointer]:
+                    - /url: /symbols/NSE-TATAELXSI/
+                    - generic "Oct 8, 2026, 12:00 GMT" [ref=f2e1923]: Oct 8
+                    - generic [ref=f2e1925]:
+                      - generic [ref=f2e1926]: TATAELXSI
+                      - generic [ref=f2e1927]: Tata Elxsi Limited
+                    - generic [ref=f2e1928]:
+                      - generic [ref=f2e1929]:
+                        - generic [ref=f2e1930]: Actual
+                        - generic [ref=f2e1931]: —
+                      - generic [ref=f2e1933]:
+                        - generic [ref=f2e1934]: Estimate
+                        - generic [ref=f2e1935]:
+                          - generic [ref=f2e1936]: "29.21"
+                          - generic [ref=f2e1937]: INR
+                  - link "Oct 8 ANANDRATHI Anand Rathi Wealth Ltd. Actual — Estimate —" [ref=f2e1938] [cursor=pointer]:
+                    - /url: /symbols/NSE-ANANDRATHI/
+                    - generic "Oct 8, 2026, 12:00 GMT" [ref=f2e1941]: Oct 8
+                    - generic [ref=f2e1943]:
+                      - generic [ref=f2e1944]: ANANDRATHI
+                      - generic [ref=f2e1945]: Anand Rathi Wealth Ltd.
+                    - generic [ref=f2e1946]:
+                      - generic [ref=f2e1947]:
+                        - generic [ref=f2e1948]: Actual
+                        - generic [ref=f2e1949]: —
+                      - generic [ref=f2e1951]:
+                        - generic [ref=f2e1952]: Estimate
+                        - generic [ref=f2e1953]: —
+                  - link "Oct 12 DMART Avenue Supermarts Ltd. Actual — Estimate 13.36 INR" [ref=f2e1955] [cursor=pointer]:
+                    - /url: /symbols/NSE-DMART/
+                    - generic "Oct 12, 2026, 12:00 GMT" [ref=f2e1958]: Oct 12
+                    - generic [ref=f2e1960]:
+                      - generic [ref=f2e1961]: DMART
+                      - generic [ref=f2e1962]: Avenue Supermarts Ltd.
+                    - generic [ref=f2e1963]:
+                      - generic [ref=f2e1964]:
+                        - generic [ref=f2e1965]: Actual
+                        - generic [ref=f2e1966]: —
+                      - generic [ref=f2e1968]:
+                        - generic [ref=f2e1969]: Estimate
+                        - generic [ref=f2e1970]:
+                          - generic [ref=f2e1971]: "13.36"
+                          - generic [ref=f2e1972]: INR
+                  - link "Oct 12 HCLTECH HCL Technologies Limited Actual — Estimate 17.65 INR" [ref=f2e1973] [cursor=pointer]:
+                    - /url: /symbols/NSE-HCLTECH/
+                    - generic "Oct 12, 2026, 12:00 GMT" [ref=f2e1976]: Oct 12
+                    - generic [ref=f2e1978]:
+                      - generic [ref=f2e1979]: HCLTECH
+                      - generic [ref=f2e1980]: HCL Technologies Limited
+                    - generic [ref=f2e1981]:
+                      - generic [ref=f2e1982]:
+                        - generic [ref=f2e1983]: Actual
+                        - generic [ref=f2e1984]: —
+                      - generic [ref=f2e1986]:
+                        - generic [ref=f2e1987]: Estimate
+                        - generic [ref=f2e1988]:
+                          - generic [ref=f2e1989]: "17.65"
+                          - generic [ref=f2e1990]: INR
+                  - link "Oct 14 TCS Tata Consultancy Services Limited Actual — Estimate 37.71 INR" [ref=f2e1991] [cursor=pointer]:
+                    - /url: /symbols/NSE-TCS/
+                    - generic "Oct 14, 2026, 12:00 GMT" [ref=f2e1994]: Oct 14
+                    - generic [ref=f2e1996]:
+                      - generic [ref=f2e1997]: TCS
+                      - generic [ref=f2e1998]: Tata Consultancy Services Limited
+                    - generic [ref=f2e1999]:
+                      - generic [ref=f2e2000]:
+                        - generic [ref=f2e2001]: Actual
+                        - generic [ref=f2e2002]: —
+                      - generic [ref=f2e2004]:
+                        - generic [ref=f2e2005]: Estimate
+                        - generic [ref=f2e2006]:
+                          - generic [ref=f2e2007]: "37.71"
+                          - generic [ref=f2e2008]: INR
+                  - link "Oct 14 JTLIND JTL Industries Limited Actual — Estimate —" [ref=f2e2009] [cursor=pointer]:
+                    - /url: /symbols/NSE-JTLIND/
+                    - generic "Oct 14, 2026, 12:00 GMT" [ref=f2e2012]: Oct 14
+                    - generic [ref=f2e2014]:
+                      - generic [ref=f2e2015]: JTLIND
+                      - generic [ref=f2e2016]: JTL Industries Limited
+                    - generic [ref=f2e2017]:
+                      - generic [ref=f2e2018]:
+                        - generic [ref=f2e2019]: Actual
+                        - generic [ref=f2e2020]: —
+                      - generic [ref=f2e2022]:
+                        - generic [ref=f2e2023]: Estimate
+                        - generic [ref=f2e2024]: —
+                  - link "Oct 15 CYIENT Cyient Limited Actual — Estimate 13.96 INR" [ref=f2e2026] [cursor=pointer]:
+                    - /url: /symbols/NSE-CYIENT/
+                    - generic "Oct 15, 2026, 12:00 GMT" [ref=f2e2029]: Oct 15
+                    - generic [ref=f2e2031]:
+                      - generic [ref=f2e2032]: CYIENT
+                      - generic [ref=f2e2033]: Cyient Limited
+                    - generic [ref=f2e2034]:
+                      - generic [ref=f2e2035]:
+                        - generic [ref=f2e2036]: Actual
+                        - generic [ref=f2e2037]: —
+                      - generic [ref=f2e2039]:
+                        - generic [ref=f2e2040]: Estimate
+                        - generic [ref=f2e2041]:
+                          - generic [ref=f2e2042]: "13.96"
+                          - generic [ref=f2e2043]: INR
+                  - link [ref=f2e2044] [cursor=pointer]:
+                    - /url: /earnings-calendar/?countries=in
+                    - paragraph [ref=f2e2045]:
+                      - generic [ref=f2e2046]: See more events
+                - link [ref=f2e2052] [cursor=pointer]:
+                  - /url: /earnings-calendar/?countries=in
+                  - generic [ref=f2e2055]:
+                    - text: See all
+                    - generic [ref=f2e2056]: events
+              - generic [ref=f2e2060]:
+                - link [ref=f2e2065] [cursor=pointer]:
+                  - /url: /ipo-calendar/?countries=in
+                  - heading [level=3] [ref=f2e2066]:
+                    - text: IPO
+                    - generic [ref=f2e2067]: Calendar
+                - link [ref=f2e2178] [cursor=pointer]:
+                  - /url: /ipo-calendar/?countries=in
+                  - generic [ref=f2e2181]:
+                    - text: See all
+                    - generic [ref=f2e2182]: events
+              - generic [ref=f2e2186]:
+                - link [ref=f2e2191] [cursor=pointer]:
+                  - /url: /markets/stocks-india/news/
+                  - heading [level=3] [ref=f2e2192]:
+                    - text: Indian stocks
+                    - generic [ref=f2e2193]: news
+                - link [ref=f2e2258] [cursor=pointer]:
+                  - /url: /markets/stocks-india/news/
+                  - generic [ref=f2e2261]:
+                    - text: Keep
+                    - generic [ref=f2e2262]: reading
+          - generic [ref=f2e2267]:
+            - link [ref=f2e2272] [cursor=pointer]:
+              - /url: /markets/cryptocurrencies/
+              - heading "Crypto" [level=2] [ref=f2e2273]
+            - generic [ref=f2e2279]:
+              - generic [ref=f2e2280]:
+                - heading "Community trends" [level=3] [ref=f2e2285]
+                - generic [ref=f2e2288]:
+                  - link "DOGEUSD Dogecoin" [ref=f2e2293] [cursor=pointer]:
+                    - /url: /symbols/DOGEUSD/?exchange=COINBASE
+                    - generic [ref=f2e2294]: DOGEUSD
+                    - generic [ref=f2e2297]: Dogecoin
+                  - link "ETHUSD Ethereum" [ref=f2e2302] [cursor=pointer]:
+                    - /url: /symbols/ETHUSD/?exchange=BITSTAMP
+                    - generic [ref=f2e2303]: ETHUSD
+                    - generic [ref=f2e2306]: Ethereum
+                  - link "SOLUSD Solana" [ref=f2e2311] [cursor=pointer]:
+                    - /url: /symbols/SOLUSD/?exchange=COINBASE
+                    - generic [ref=f2e2312]: SOLUSD
+                    - generic [ref=f2e2315]: Solana
+                  - link "XRPUSD XRP" [ref=f2e2320] [cursor=pointer]:
+                    - /url: /symbols/XRPUSD/?exchange=COINBASE
+                    - generic [ref=f2e2321]: XRPUSD
+                    - generic [ref=f2e2324]: XRP
+                  - link "ADAUSD Cardano" [ref=f2e2329] [cursor=pointer]:
+                    - /url: /symbols/ADAUSD/?exchange=COINBASE
+                    - generic [ref=f2e2330]: ADAUSD
+                    - generic [ref=f2e2333]: Cardano
+                  - link "BTCEUR Bitcoin / Euro" [ref=f2e2338] [cursor=pointer]:
+                    - /url: /symbols/BTCEUR/?exchange=COINBASE
+                    - generic [ref=f2e2339]: BTCEUR
+                    - generic [ref=f2e2342]: Bitcoin / Euro
+                  - link "BTCUSDC Bitcoin / USD Coin" [ref=f2e2347] [cursor=pointer]:
+                    - /url: /symbols/BTCUSDC/?exchange=BINANCE
+                    - generic [ref=f2e2348]: BTCUSDC
+                    - generic [ref=f2e2351]: Bitcoin / USD Coin
+                  - link "BTCUSDT Bitcoin / TetherUS" [ref=f2e2356] [cursor=pointer]:
+                    - /url: /symbols/BTCUSDT/?exchange=BINANCE
+                    - generic [ref=f2e2357]: BTCUSDT
+                    - generic [ref=f2e2360]: Bitcoin / TetherUS
+                  - link "ETHBTC Ethereum / Bitcoin" [ref=f2e2365] [cursor=pointer]:
+                    - /url: /symbols/ETHBTC/?exchange=BINANCE
+                    - generic [ref=f2e2366]: ETHBTC
+                    - generic [ref=f2e2369]: Ethereum / Bitcoin
+                  - link "BTCUSD Bitcoin" [ref=f2e2374] [cursor=pointer]:
+                    - /url: /symbols/BTCUSD/?exchange=BITSTAMP
+                    - generic [ref=f2e2375]: BTCUSD
+                    - generic [ref=f2e2378]: Bitcoin
+              - generic [ref=f2e2379]:
+                - link [ref=f2e2384] [cursor=pointer]:
+                  - /url: /markets/cryptocurrencies/ideas/
+                  - heading [level=3] [ref=f2e2385]:
+                    - text: Trade
+                    - generic [ref=f2e2386]: ideas
+                - generic [ref=f2e2394]:
+                  - article [ref=f2e2395]:
+                    - generic [ref=f2e2396]:
+                      - link "BTC SL HUNTOING M0DE IS ON" [ref=f2e2397] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSD/nOsAbhRW-BTC-SL-HUNTOING-M0DE-IS-ON/
+                      - link "BTC MARKET STRUCTURE — RANGE / LIQUIDITY PHASE BTC is currently trading inside a defined range around 81.25K–81.90K. Price has repeatedly interacted with both sides of this zone without establishing a sustained breakout. The recent highs and lows create obvious liquidity pools, meaning short-term" [ref=f2e2398] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSD/nOsAbhRW-BTC-SL-HUNTOING-M0DE-IS-ON/
+                    - generic [ref=f2e2402]:
+                      - link [ref=f2e2403] [cursor=pointer]:
+                        - /url: /symbols/BTCUSD/
+                        - img "CRYPTO:BTCUSD" [ref=f2e2404]
+                      - link [aria-hidden] [ref=f2e2405] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSD/nOsAbhRW-BTC-SL-HUNTOING-M0DE-IS-ON/
+                    - generic [ref=f2e2408]:
+                      - link "by CHARTHUNTER2021" [ref=f2e2410] [cursor=pointer]:
+                        - /url: /u/CHARTHUNTER2021/
+                      - generic:
+                        - time
+                  - article [ref=f2e2412]:
+                    - generic [ref=f2e2413]:
+                      - link "BTC/USDT - Clears Trendline, Bulls Target Weekend" [ref=f2e2414] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSDT/IOV1XGaY-BTC-USDT-Clears-Trendline-Bulls-Target-Weekend/
+                      - link "BINANCE:BTCUSDT has broken above the long descending trendline and pushed through 80K, giving the chart its clearest bullish shift in several sessions. Price is also moving back above the Ichimoku structure, while the 79.1K–80.5K zone now becomes the area I want to see buyers defend on any pullba" [ref=f2e2415] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSDT/IOV1XGaY-BTC-USDT-Clears-Trendline-Bulls-Target-Weekend/
+                    - generic [ref=f2e2419]:
+                      - generic:
+                        - link [ref=f2e2420] [cursor=pointer]:
+                          - /url: /symbols/BTCUSDT/
+                          - img "BINANCE:BTCUSDT" [ref=f2e2421]
+                        - generic "Long" [ref=f2e2422]
+                      - link [aria-hidden] [ref=f2e2427] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSDT/IOV1XGaY-BTC-USDT-Clears-Trendline-Bulls-Target-Weekend/
+                    - generic [ref=f2e2430]:
+                      - link "by AuricVerse_HQ" [ref=f2e2432] [cursor=pointer]:
+                        - /url: /u/AuricVerse_HQ/
+                      - time [ref=f2e2435]: Updated
+                  - article [ref=f2e2436]:
+                    - generic [ref=f2e2437]:
+                      - link "BTCUSD | $90K NEXT? SWING TRADE SETUP" [ref=f2e2438] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSD/Z0GfuzK0-BTCUSD-90K-NEXT-SWING-TRADE-SETUP/
+                      - 'link "BTCUSD | $90K NEXT? 🟢📈 LONG SETUP — BREAKOUT & RETEST 📍 Entry: $85,000–$86,000 after bullish confirmation 🎯 TP1: $87,500 🎯 TP2: $90,000 🛡️ SL: Below $82,000 Bias: Bullish 🟢 Reason: BTCUSD has broken above the $85K resistance zone with strong momentum. A successful retest of $85K as support could" [ref=f2e2439] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/BTCUSD/Z0GfuzK0-BTCUSD-90K-NEXT-SWING-TRADE-SETUP/
+                    - generic [ref=f2e2443]:
+                      - generic:
+                        - link [ref=f2e2444] [cursor=pointer]:
+                          - /url: /symbols/BTCUSD/
+                          - img "BITSTAMP:BTCUSD" [ref=f2e2445]
+                        - generic "Long" [ref=f2e2446]
+                      - link [aria-hidden] [ref=f2e2451] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSD/Z0GfuzK0-BTCUSD-90K-NEXT-SWING-TRADE-SETUP/
+                    - generic [ref=f2e2454]:
+                      - link "by MRCryptoEdge" [ref=f2e2456] [cursor=pointer]:
+                        - /url: /u/MRCryptoEdge/
+                      - generic:
+                        - time
+                  - article [ref=f2e2458]:
+                    - generic [ref=f2e2459]:
+                      - link "BITCOIN (BTC/USD) – DAILY CHART - Fibonacci Analysis" [ref=f2e2460] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSD/JVo4jjUl-BITCOIN-BTC-USD-DAILY-CHART-Fibonacci-Analysis/
+                      - 'link "Bitcoin is consolidating above the 0.618 Fibonacci support. A sustained breakout above $77,987 may open the way toward higher resistance levels. 🎯 TRADE LEVELS: 🟢 Entry: Above $77,987 🛑 Stop Loss: $74,616 🎯 Target 1: $82,281 🎯 Target 2: $94,681 📌 Wait for daily candle confirmation above resistanc" [ref=f2e2461] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/BTCUSD/JVo4jjUl-BITCOIN-BTC-USD-DAILY-CHART-Fibonacci-Analysis/
+                    - generic [ref=f2e2465]:
+                      - generic:
+                        - link [ref=f2e2466] [cursor=pointer]:
+                          - /url: /symbols/BTCUSD/
+                          - img "BITSTAMP:BTCUSD" [ref=f2e2467]
+                        - generic "Long" [ref=f2e2468]
+                      - link [aria-hidden] [ref=f2e2473] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSD/JVo4jjUl-BITCOIN-BTC-USD-DAILY-CHART-Fibonacci-Analysis/
+                    - generic [ref=f2e2476]:
+                      - link "by LogicTradeRoom" [ref=f2e2478] [cursor=pointer]:
+                        - /url: /u/LogicTradeRoom/
+                      - time [ref=f2e2481]: Updated
+                  - article [ref=f2e2482]:
+                    - generic [ref=f2e2483]:
+                      - 'link "BTCUSDT: Buyers Are Defending the Bigger Picture" [ref=f2e2484] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/BTCUSDT/g4U2fGsE-BTCUSDT-Buyers-Are-Defending-the-Bigger-Picture/
+                      - link "BTCUSDT has already delivered a strong expansion higher. Now, instead of chasing the move, the market appears to be building a base before deciding on its next direction. What catches my attention is where this consolidation is happening. Price is holding around a previous breakout area while the b" [ref=f2e2485] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSDT/g4U2fGsE-BTCUSDT-Buyers-Are-Defending-the-Bigger-Picture/
+                    - generic [ref=f2e2489]:
+                      - generic:
+                        - link [ref=f2e2490] [cursor=pointer]:
+                          - /url: /symbols/BTCUSDT/
+                          - img "BINANCE:BTCUSDT" [ref=f2e2491]
+                        - generic "Long" [ref=f2e2492]
+                      - link [aria-hidden] [ref=f2e2497] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSDT/g4U2fGsE-BTCUSDT-Buyers-Are-Defending-the-Bigger-Picture/
+                    - generic [ref=f2e2500]:
+                      - link "by GoldenPearl_trad" [ref=f2e2502] [cursor=pointer]:
+                        - /url: /u/GoldenPearl_trad/
+                      - time [ref=f2e2505]: Updated
+                  - article [ref=f2e2506]:
+                    - generic [ref=f2e2507]:
+                      - link "BTC bearish idea" [ref=f2e2508] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSD/keack1Ps-BTC-bearish-idea/
+                      - link "1)BTC is in major resistance zone 2)still there is no MSS for sells 3) After the Mss we can see the big sells" [ref=f2e2509] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSD/keack1Ps-BTC-bearish-idea/
+                    - generic [ref=f2e2513]:
+                      - link [ref=f2e2514] [cursor=pointer]:
+                        - /url: /symbols/BTCUSD/
+                        - img "CRYPTO:BTCUSD" [ref=f2e2515]
+                      - link [aria-hidden] [ref=f2e2516] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSD/keack1Ps-BTC-bearish-idea/
+                    - generic [ref=f2e2519]:
+                      - link "by LetsStock" [ref=f2e2521] [cursor=pointer]:
+                        - /url: /u/LetsStock/
+                      - generic:
+                        - time
+                  - article [ref=f2e2523]:
+                    - generic [ref=f2e2524]:
+                      - link "Trend continues" [ref=f2e2525] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/PEPEUSDT/JfrOewOL-Trend-continues/
+                      - link "It is in an uptrend, and buy-side liquidity is taken with high volumes. It travelled to take support at the super trend. It is also above the 200 EMA, and it has started its upward journey again." [ref=f2e2526] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/PEPEUSDT/JfrOewOL-Trend-continues/
+                    - generic [ref=f2e2530]:
+                      - link [ref=f2e2531] [cursor=pointer]:
+                        - /url: /symbols/PEPEUSDT/
+                        - img "BINANCE:PEPEUSDT" [ref=f2e2532]
+                      - link [aria-hidden] [ref=f2e2533] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/PEPEUSDT/JfrOewOL-Trend-continues/
+                    - generic [ref=f2e2536]:
+                      - link "by drmukur" [ref=f2e2538] [cursor=pointer]:
+                        - /url: /u/drmukur/
+                      - generic:
+                        - time
+                  - article [ref=f2e2540]:
+                    - generic [ref=f2e2541]:
+                      - 'link "BTCUSDT: Bullish breakout accelerates. 90K in sight" [ref=f2e2542] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/BTCUSDT/z8RrobFF-BTCUSDT-Bullish-breakout-accelerates-90K-in-sight/
+                      - link "BTCUSDT is trading around 85,800 USDT following a strong breakout from a descending channel. The price has rapidly extended into the 86K–87K range and remains above the EMA cluster, signaling a clear shift in short-term structure toward the bulls. After such a steep rally, I do not favor chasing th" [ref=f2e2543] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSDT/z8RrobFF-BTCUSDT-Bullish-breakout-accelerates-90K-in-sight/
+                    - generic [ref=f2e2547]:
+                      - generic:
+                        - link [ref=f2e2548] [cursor=pointer]:
+                          - /url: /symbols/BTCUSDT/
+                          - img "BINANCE:BTCUSDT" [ref=f2e2549]
+                        - generic "Long" [ref=f2e2550]
+                      - link [aria-hidden] [ref=f2e2555] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSDT/z8RrobFF-BTCUSDT-Bullish-breakout-accelerates-90K-in-sight/
+                    - generic [ref=f2e2558]:
+                      - link "by DomicChaina" [ref=f2e2560] [cursor=pointer]:
+                        - /url: /u/DomicChaina/
+                      - time [ref=f2e2563]: Updated
+                  - article [ref=f2e2564]:
+                    - generic [ref=f2e2565]:
+                      - link "BTC chart prediction !" [ref=f2e2566] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSD/i2sDj5jh-BTC-chart-prediction/
+                      - link "I think CRYPTOCAP:BTC bottomed at ~$58k it should go up from here with/without a retracement \"THIS IS NOT A FINANCIAL ADVISE DO YOUR OWN RESEARCH\"" [ref=f2e2567] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSD/i2sDj5jh-BTC-chart-prediction/
+                    - generic [ref=f2e2571]:
+                      - generic:
+                        - link [ref=f2e2572] [cursor=pointer]:
+                          - /url: /symbols/BTCUSD/
+                          - img "BITSTAMP:BTCUSD" [ref=f2e2573]
+                        - generic "Long" [ref=f2e2574]
+                      - link [aria-hidden] [ref=f2e2579] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/BTCUSD/i2sDj5jh-BTC-chart-prediction/
+                    - generic [ref=f2e2582]:
+                      - link "by make_2" [ref=f2e2584] [cursor=pointer]:
+                        - /url: /u/make_2/
+                      - generic:
+                        - time
+                  - article [ref=f2e2586]:
+                    - generic [ref=f2e2587]:
+                      - 'link "SOL/USDT: Bearish MACD Divergence After Rally — Short Setup" [ref=f2e2588] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/SOLUSDT/RGkNv509-SOL-USDT-Bearish-MACD-Divergence-After-Rally-Short-Setup/
+                      - 'link "Bias: Short (Bearish) Timeframe: 15-Minute (15m) Instrument: SOL/USDT (Binance) Technical Analysis: Bearish MACD Divergence: While SOL pushed higher into the $120.00 resistance zone forming a higher high, the MACD indicator marked clear lower highs. This loss of upside momentum suggests ex" [ref=f2e2589] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/SOLUSDT/RGkNv509-SOL-USDT-Bearish-MACD-Divergence-After-Rally-Short-Setup/
+                    - generic [ref=f2e2593]:
+                      - link [ref=f2e2594] [cursor=pointer]:
+                        - /url: /symbols/SOLUSDT/
+                        - img "BINANCE:SOLUSDT" [ref=f2e2595]
+                      - link [aria-hidden] [ref=f2e2596] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/SOLUSDT/RGkNv509-SOL-USDT-Bearish-MACD-Divergence-After-Rally-Short-Setup/
+                    - generic [ref=f2e2599]:
+                      - link "by nikhilbansal" [ref=f2e2601] [cursor=pointer]:
+                        - /url: /u/nikhilbansal/
+                      - generic:
+                        - time
+                  - link [ref=f2e2603] [cursor=pointer]:
+                    - /url: /markets/cryptocurrencies/ideas/
+                    - paragraph [ref=f2e2604]:
+                      - generic [ref=f2e2605]: See all crypto ideas
+              - generic [ref=f2e2611]:
+                - generic [ref=f2e2612]:
+                  - link [ref=f2e2617] [cursor=pointer]:
+                    - /url: /markets/cryptocurrencies/prices-gainers/
+                    - heading [level=3] [ref=f2e2618]:
+                      - text: Crypto
+                      - generic [ref=f2e2619]: gainers
+                  - generic [ref=f2e2624]:
+                    - generic [ref=f2e2626]:
+                      - link "MarsCoin" [ref=f2e2628] [cursor=pointer]:
+                        - /url: /symbols/MARSCOIN6USD/?exchange=CRYPTO
+                      - generic [ref=f2e2632]: MARSCOIN6USD
+                      - generic [ref=f2e2635]: +36.98%
+                    - generic [ref=f2e2638]:
+                      - link "Meteora" [ref=f2e2640] [cursor=pointer]:
+                        - /url: /symbols/METEUSD/?exchange=CRYPTO
+                      - generic [ref=f2e2644]: METEUSD
+                      - generic [ref=f2e2647]: +31.40%
+                    - generic [ref=f2e2650]:
+                      - link "Useless Coin" [ref=f2e2652] [cursor=pointer]:
+                        - /url: /symbols/USELESSUSD/?exchange=CRYPTO
+                      - generic [ref=f2e2656]: USELESSUSD
+                      - generic [ref=f2e2659]: +30.61%
+                    - generic [ref=f2e2662]:
+                      - link "Bitcoin Cash" [ref=f2e2664] [cursor=pointer]:
+                        - /url: /symbols/BCHUSD/?exchange=CRYPTO
+                      - generic [ref=f2e2668]: BCHUSD
+                      - generic [ref=f2e2671]: +27.85%
+                    - generic [ref=f2e2674]:
+                      - link "SuperVerse" [ref=f2e2676] [cursor=pointer]:
+                        - /url: /symbols/SUPERUSD/?exchange=CRYPTO
+                      - generic [ref=f2e2680]: SUPERUSD
+                      - generic [ref=f2e2683]: +25.46%
+                    - generic [ref=f2e2686]:
+                      - link "Pudgy Penguins" [ref=f2e2688] [cursor=pointer]:
+                        - /url: /symbols/PENGUPUDUSD/?exchange=CRYPTO
+                      - generic [ref=f2e2692]: PENGUPUDUSD
+                      - generic [ref=f2e2695]: +21.62%
+                  - link [ref=f2e2699] [cursor=pointer]:
+                    - /url: /markets/cryptocurrencies/prices-gainers/
+                    - generic [ref=f2e2702]:
+                      - text: See all coins with largest daily
+                      - generic [ref=f2e2703]: growth
+                - generic [ref=f2e2707]:
+                  - link [ref=f2e2712] [cursor=pointer]:
+                    - /url: /markets/cryptocurrencies/prices-losers/
+                    - heading [level=3] [ref=f2e2713]:
+                      - text: Crypto
+                      - generic [ref=f2e2714]: losers
+                  - generic [ref=f2e2719]:
+                    - generic [ref=f2e2721]:
+                      - link "AIOZ Network" [ref=f2e2723] [cursor=pointer]:
+                        - /url: /symbols/AIOZUSD/?exchange=CRYPTO
+                      - generic [ref=f2e2727]: AIOZUSD
+                      - generic [ref=f2e2730]: −10.96%
+                    - generic [ref=f2e2733]:
+                      - link "Humanity" [ref=f2e2735] [cursor=pointer]:
+                        - /url: /symbols/HUSD/?exchange=CRYPTO
+                      - generic [ref=f2e2739]: HUSD
+                      - generic [ref=f2e2742]: −7.70%
+                    - generic [ref=f2e2745]:
+                      - link "Seeker" [ref=f2e2747] [cursor=pointer]:
+                        - /url: /symbols/SKRSUSD/?exchange=CRYPTO
+                      - generic [ref=f2e2751]: SKRSUSD
+                      - generic [ref=f2e2754]: −4.19%
+                    - generic [ref=f2e2757]:
+                      - link "MemeCore" [ref=f2e2759] [cursor=pointer]:
+                        - /url: /symbols/MEMECOREUSD/?exchange=CRYPTO
+                      - generic [ref=f2e2763]: MEMECOREUSD
+                      - generic [ref=f2e2766]: −3.88%
+                    - generic [ref=f2e2769]:
+                      - link "Stacks" [ref=f2e2771] [cursor=pointer]:
+                        - /url: /symbols/STXSUSD/?exchange=CRYPTO
+                      - generic [ref=f2e2775]: STXSUSD
+                      - generic [ref=f2e2778]: −3.67%
+                    - generic [ref=f2e2781]:
+                      - link "Pieverse" [ref=f2e2783] [cursor=pointer]:
+                        - /url: /symbols/PIEVERSEUSD/?exchange=CRYPTO
+                      - generic [ref=f2e2787]: PIEVERSEUSD
+                      - generic [ref=f2e2790]: −2.30%
+                  - link [ref=f2e2794] [cursor=pointer]:
+                    - /url: /markets/cryptocurrencies/prices-losers/
+                    - generic [ref=f2e2797]:
+                      - text: See all coins with largest daily
+                      - generic [ref=f2e2798]: drop
+              - generic [ref=f2e2802]:
+                - link [ref=f2e2807] [cursor=pointer]:
+                  - /url: /markets/cryptocurrencies/news/
+                  - heading [level=3] [ref=f2e2808]:
+                    - text: Crypto
+                    - generic [ref=f2e2809]: news
+                - link [ref=f2e2874] [cursor=pointer]:
+                  - /url: /markets/cryptocurrencies/news/
+                  - generic [ref=f2e2877]:
+                    - text: Keep
+                    - generic [ref=f2e2878]: reading
+          - generic [ref=f2e2883]:
+            - link [ref=f2e2888] [cursor=pointer]:
+              - /url: /markets/futures/
+              - heading [level=2] [ref=f2e2889]:
+                - text: Futures and
+                - generic [ref=f2e2890]: commodities
+            - generic [ref=f2e2895]:
+              - generic [ref=f2e2896]:
+                - link [ref=f2e2901] [cursor=pointer]:
+                  - /url: /markets/futures/ideas/
+                  - heading [level=3] [ref=f2e2902]:
+                    - text: Trade
+                    - generic [ref=f2e2903]: ideas
+                - generic [ref=f2e2911]:
+                  - article [ref=f2e2912]:
+                    - generic [ref=f2e2913]:
+                      - 'link "XAUUSD: Sellers Keep Winning at This Trendline" [ref=f2e2914] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/XAUUSD/mdIZGMRw-XAUUSD-Sellers-Keep-Winning-at-This-Trendline/
+                      - 'link "Looking at XAUUSD on the 4H chart, one thing stands out clearly: sellers are still respecting the same descending trendline. Price has tested this trendline several times, and each attempt has been followed by rejection. More importantly, the latest recovery has now reached the 4,390–4,430 resistan" [ref=f2e2915] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/XAUUSD/mdIZGMRw-XAUUSD-Sellers-Keep-Winning-at-This-Trendline/
+                    - generic [ref=f2e2919]:
+                      - generic:
+                        - link [ref=f2e2920] [cursor=pointer]:
+                          - /url: /symbols/XAUUSD/
+                          - img "OANDA:XAUUSD" [ref=f2e2921]
+                        - generic "Short" [ref=f2e2922]
+                      - link [aria-hidden] [ref=f2e2927] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/mdIZGMRw-XAUUSD-Sellers-Keep-Winning-at-This-Trendline/
+                    - generic [ref=f2e2930]:
+                      - link "by GoldenPearl_trad" [ref=f2e2932] [cursor=pointer]:
+                        - /url: /u/GoldenPearl_trad/
+                      - time [ref=f2e2935]: Updated
+                  - article [ref=f2e2936]:
+                    - generic [ref=f2e2937]:
+                      - link "XAUUSD 30M — Support Bounce" [ref=f2e2938] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/TODUykZL-XAUUSD-30M-Support-Bounce/
+                      - 'link "Gold is sitting around the $4,336–$4,345 support zone while price is still below the falling trendline. A clean break above the trendline could open the way toward the $4,370–$4,400 area. OANDA:XAUUSD LONG Setup Entry: $4,340–$4,350 TP1: $4,370 TP2: $4,400 SL: $4,330 Fundamentals: The Fed rai" [ref=f2e2939] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/XAUUSD/TODUykZL-XAUUSD-30M-Support-Bounce/
+                    - generic [ref=f2e2943]:
+                      - generic:
+                        - link [ref=f2e2944] [cursor=pointer]:
+                          - /url: /symbols/XAUUSD/
+                          - img "OANDA:XAUUSD" [ref=f2e2945]
+                        - generic "Long" [ref=f2e2946]
+                      - link [aria-hidden] [ref=f2e2951] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/TODUykZL-XAUUSD-30M-Support-Bounce/
+                    - generic [ref=f2e2954]:
+                      - link "by Dr_Rabbit_" [ref=f2e2956] [cursor=pointer]:
+                        - /url: /u/Dr_Rabbit_/
+                      - generic:
+                        - time
+                  - article [ref=f2e2958]:
+                    - generic [ref=f2e2959]:
+                      - link "XAUUSD Bullish Breakout – Trendline Resistance Retest" [ref=f2e2960] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/I3LvCv8i-XAUUSD-Bullish-Breakout-Trendline-Resistance-Retest/
+                      - link "Gold is showing a potential bullish setup after breaking above the descending trendline and holding the breakout area as support. Price is consolidating above the **4,300–4,320 support region**, while the previous range resistance has been challenged. A sustained move above **4,360** could strengthe" [ref=f2e2961] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/I3LvCv8i-XAUUSD-Bullish-Breakout-Trendline-Resistance-Retest/
+                    - generic [ref=f2e2965]:
+                      - generic:
+                        - link [ref=f2e2966] [cursor=pointer]:
+                          - /url: /symbols/XAUUSD/
+                          - img "PEPPERSTONE:XAUUSD" [ref=f2e2967]
+                        - generic "Long" [ref=f2e2968]
+                      - link [aria-hidden] [ref=f2e2973] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/I3LvCv8i-XAUUSD-Bullish-Breakout-Trendline-Resistance-Retest/
+                    - generic [ref=f2e2976]:
+                      - link "by Alpha_Trade_Scope" [ref=f2e2978] [cursor=pointer]:
+                        - /url: /u/Alpha_Trade_Scope/
+                      - time [ref=f2e2981]: Updated
+                  - article [ref=f2e2982]:
+                    - generic [ref=f2e2983]:
+                      - link "XAUUSD — 4,365 Retest or 4,310 Sweep?" [ref=f2e2984] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/HZJ0GpAB-XAUUSD-4-365-Retest-or-4-310-Sweep/
+                      - link "Gold is trading around 4,346 after losing the rising M30 trendline. Short-term momentum has weakened, with 4,338 now acting as the first support. Treasury yields remain elevated after the Fed rate hike, while officials continue to warn that inflation is still too high. Oil prices are easing, whic" [ref=f2e2985] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/HZJ0GpAB-XAUUSD-4-365-Retest-or-4-310-Sweep/
+                    - generic [ref=f2e2989]:
+                      - generic:
+                        - link [ref=f2e2990] [cursor=pointer]:
+                          - /url: /symbols/XAUUSD/
+                          - img "OANDA:XAUUSD" [ref=f2e2991]
+                        - generic "Short" [ref=f2e2992]
+                      - link [aria-hidden] [ref=f2e2997] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/HZJ0GpAB-XAUUSD-4-365-Retest-or-4-310-Sweep/
+                    - generic [ref=f2e3000]:
+                      - link "by Tiara_PrimeGold" [ref=f2e3002] [cursor=pointer]:
+                        - /url: /u/Tiara_PrimeGold/
+                      - time [ref=f2e3005]: Updated
+                  - article [ref=f2e3006]:
+                    - generic [ref=f2e3007]:
+                      - link "XAU/USD - Trendline Gives Way, Next Target Reach" [ref=f2e3008] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/MXg7lFjO-XAU-USD-Trendline-Gives-Way-Next-Target-Reach/
+                      - link "OANDA:XAUUSD has broken above the long descending trendline and is now consolidating around 4,344. The key area remains the 4,253–4,421 buy zone; holding above the broken trendline would strengthen the case that sellers are losing control. If buyers continue to defend this structure and Gold push" [ref=f2e3009] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/MXg7lFjO-XAU-USD-Trendline-Gives-Way-Next-Target-Reach/
+                    - generic [ref=f2e3013]:
+                      - generic:
+                        - link [ref=f2e3014] [cursor=pointer]:
+                          - /url: /symbols/XAUUSD/
+                          - img "OANDA:XAUUSD" [ref=f2e3015]
+                        - generic "Long" [ref=f2e3016]
+                      - link [aria-hidden] [ref=f2e3021] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/MXg7lFjO-XAU-USD-Trendline-Gives-Way-Next-Target-Reach/
+                    - generic [ref=f2e3024]:
+                      - link "by AuricVerse_HQ" [ref=f2e3026] [cursor=pointer]:
+                        - /url: /u/AuricVerse_HQ/
+                      - time [ref=f2e3029]: Updated
+                  - article [ref=f2e3030]:
+                    - generic [ref=f2e3031]:
+                      - 'link "Copper : Hidden Gem Bullish Breakout soon" [ref=f2e3032] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/COPPER1!/93V484EB-Copper-Hidden-Gem-Bullish-Breakout-soon/
+                      - link "Copper is about to have a breakout from a very Bullish Triangle pattern. A close above Rs.1430 with a big candle and volume will give a massive rally, whose target may be Rs. 1700-1750 in near future. My advice don't short the commodities for a long period. Be careful about investment / trading." [ref=f2e3033] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/COPPER1!/93V484EB-Copper-Hidden-Gem-Bullish-Breakout-soon/
+                    - generic [ref=f2e3037]:
+                      - link [ref=f2e3038] [cursor=pointer]:
+                        - /url: /symbols/MCX-COPPER1!/
+                        - img "MCX:COPPER1!" [ref=f2e3039]
+                      - link [aria-hidden] [ref=f2e3040] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/COPPER1!/93V484EB-Copper-Hidden-Gem-Bullish-Breakout-soon/
+                    - generic [ref=f2e3043]:
+                      - link "by maneeshaggarwal" [ref=f2e3045] [cursor=pointer]:
+                        - /url: /u/maneeshaggarwal/
+                      - generic:
+                        - time
+                  - article [ref=f2e3047]:
+                    - generic [ref=f2e3048]:
+                      - link "XAUUSD — Bearish Liquidity Retest Toward Demand" [ref=f2e3049] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/RqXEC6Zt-XAUUSD-Bearish-Liquidity-Retest-Toward-Demand/
+                      - link "Market Pulse Gold remains under pressure from the Fed’s higher-for-longer message and continued expectations for additional tightening. Lower oil prices and slightly softer Treasury yields are offering some support, but for now the macro picture still makes sustained upside difficult. What the Ch" [ref=f2e3050] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/RqXEC6Zt-XAUUSD-Bearish-Liquidity-Retest-Toward-Demand/
+                    - generic [ref=f2e3054]:
+                      - generic:
+                        - link [ref=f2e3055] [cursor=pointer]:
+                          - /url: /symbols/XAUUSD/
+                          - img "OANDA:XAUUSD" [ref=f2e3056]
+                        - generic "Short" [ref=f2e3057]
+                      - link [aria-hidden] [ref=f2e3062] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/RqXEC6Zt-XAUUSD-Bearish-Liquidity-Retest-Toward-Demand/
+                    - generic [ref=f2e3065]:
+                      - link "by Audrey_Quinn" [ref=f2e3067] [cursor=pointer]:
+                        - /url: /u/Audrey_Quinn/
+                      - generic:
+                        - time
+                  - article [ref=f2e3069]:
+                    - generic [ref=f2e3070]:
+                      - link "XAUUSD — 4510 Is Where It Gets Dirty" [ref=f2e3071] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/bmOOAQXs-XAUUSD-4510-Is-Where-It-Gets-Dirty/
+                      - link "XAUUSD — 4510 Is Where It Gets Dirty Gold bounced. But this is not clean bullish control yet. Price reacted from the lower area around 4,235 - 4,280, then pushed back above 4,350. Nice recovery, yeah. But look at where price is now. Right in the middle. Around 4,378, gold is still trading inside" [ref=f2e3072] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/bmOOAQXs-XAUUSD-4510-Is-Where-It-Gets-Dirty/
+                    - generic [ref=f2e3076]:
+                      - generic:
+                        - link [ref=f2e3077] [cursor=pointer]:
+                          - /url: /symbols/XAUUSD/
+                          - img "OANDA:XAUUSD" [ref=f2e3078]
+                        - generic "Long" [ref=f2e3079]
+                      - link [aria-hidden] [ref=f2e3084] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/bmOOAQXs-XAUUSD-4510-Is-Where-It-Gets-Dirty/
+                    - generic [ref=f2e3087]:
+                      - link "by Ethan_TraderPro" [ref=f2e3089] [cursor=pointer]:
+                        - /url: /u/Ethan_TraderPro/
+                      - time [ref=f2e3092]: Updated
+                  - article [ref=f2e3093]:
+                    - generic [ref=f2e3094]:
+                      - link "XAUUSD Long prediction 4350 > 4600" [ref=f2e3095] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/zkYPL2lU-XAUUSD-Long-prediction-4350-4600/
+                      - 'link "1. Gold is sitting at the day’s lower range Live feeds show: Day Low: ~$4323–4322 Current price: ~$4343 Gold is bouncing off the lower end of today’s range, which often acts as intraday demand for liquidity rebalancing. This is a classic NY session low sweep → retracement long setup. 2. Dollar st" [ref=f2e3096] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/XAUUSD/zkYPL2lU-XAUUSD-Long-prediction-4350-4600/
+                    - generic [ref=f2e3100]:
+                      - generic:
+                        - link [ref=f2e3101] [cursor=pointer]:
+                          - /url: /symbols/XAUUSD/
+                          - img "FPMARKETS:XAUUSD" [ref=f2e3102]
+                        - generic "Long" [ref=f2e3103]
+                      - link [aria-hidden] [ref=f2e3108] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/XAUUSD/zkYPL2lU-XAUUSD-Long-prediction-4350-4600/
+                    - generic [ref=f2e3111]:
+                      - link "by CFDPROPTRADER" [ref=f2e3113] [cursor=pointer]:
+                        - /url: /u/CFDPROPTRADER/
+                      - generic:
+                        - time
+                  - article [ref=f2e3115]:
+                    - generic [ref=f2e3116]:
+                      - link "WTI Crude Oil — 15M Analysis" [ref=f2e3117] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/USOIL/IaD2uoDr-WTI-Crude-Oil-15M-Analysis/
+                      - 'link "Bearish bias after strong breakdown from 93.7–94.2 resistance. 🔴 Resistance: 90.37 → 93.70–94.20 🟢 Support: 88.40–90.00 📉 Below 90.37: bearish continuation possible 🎯 Downside: 89.00 → 88.40 🔄 Bullish scenario: Reclaim & sustain above 90.37 can trigger a bounce toward 93.0+ ⚠️ Avoid chasing shorts" [ref=f2e3118] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/USOIL/IaD2uoDr-WTI-Crude-Oil-15M-Analysis/
+                    - generic [ref=f2e3122]:
+                      - generic:
+                        - link [ref=f2e3123] [cursor=pointer]:
+                          - /url: /symbols/USOIL/
+                          - img "TVC:USOIL" [ref=f2e3124]
+                        - generic "Short" [ref=f2e3125]
+                      - link [aria-hidden] [ref=f2e3130] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/USOIL/IaD2uoDr-WTI-Crude-Oil-15M-Analysis/
+                    - generic [ref=f2e3133]:
+                      - link "by LogicTradeRoom" [ref=f2e3135] [cursor=pointer]:
+                        - /url: /u/LogicTradeRoom/
+                      - generic:
+                        - time
+                  - link [ref=f2e3137] [cursor=pointer]:
+                    - /url: /markets/futures/ideas/
+                    - paragraph [ref=f2e3138]:
+                      - generic [ref=f2e3139]: See all futures ideas
+              - generic [ref=f2e3145]:
+                - generic [ref=f2e3146]:
+                  - link [ref=f2e3151] [cursor=pointer]:
+                    - /url: /markets/futures/quotes-energy/
+                    - heading [level=3] [ref=f2e3152]:
+                      - text: Energy
+                      - generic [ref=f2e3153]: futures
+                  - generic [ref=f2e3159]:
+                    - generic [ref=f2e3161]:
+                      - link "Crude oil" [ref=f2e3163] [cursor=pointer]:
+                        - /url: /symbols/MCX-CRUDEOIL1!/
+                      - generic [ref=f2e3167]: CRUDEOIL1!
+                    - generic [ref=f2e3172]:
+                      - link "Natural gas" [ref=f2e3174] [cursor=pointer]:
+                        - /url: /symbols/MCX-NATURALGAS1!/
+                      - generic [ref=f2e3178]: NATURALGAS1!
+                    - generic [ref=f2e3183]:
+                      - link "Light crude oil" [ref=f2e3185] [cursor=pointer]:
+                        - /url: /symbols/NYMEX-CL1!/
+                      - generic [ref=f2e3189]: CL1!
+                    - generic [ref=f2e3194]:
+                      - link "Brent crude oil" [ref=f2e3196] [cursor=pointer]:
+                        - /url: /symbols/ICEEUR-BRN1!/
+                      - generic [ref=f2e3200]: BRN1!
+                    - generic [ref=f2e3205]:
+                      - link "RBOB gasoline" [ref=f2e3207] [cursor=pointer]:
+                        - /url: /symbols/NYMEX-RB1!/
+                      - generic [ref=f2e3211]: RB1!
+                    - generic [ref=f2e3216]:
+                      - link "NY Harbor ULSD" [ref=f2e3218] [cursor=pointer]:
+                        - /url: /symbols/NYMEX-HO1!/
+                      - generic [ref=f2e3222]: HO1!
+                  - link [ref=f2e3228] [cursor=pointer]:
+                    - /url: /markets/futures/quotes-energy/
+                    - generic [ref=f2e3231]:
+                      - text: See all energy
+                      - generic [ref=f2e3232]: futures
+                - generic [ref=f2e3236]:
+                  - link [ref=f2e3241] [cursor=pointer]:
+                    - /url: /markets/futures/quotes-metals/
+                    - heading [level=3] [ref=f2e3242]:
+                      - text: Metals
+                      - generic [ref=f2e3243]: futures
+                  - generic [ref=f2e3249]:
+                    - generic [ref=f2e3251]:
+                      - link "Gold" [ref=f2e3253] [cursor=pointer]:
+                        - /url: /symbols/MCX-GOLD1!/
+                      - generic [ref=f2e3257]: GOLD1!
+                    - generic [ref=f2e3262]:
+                      - link "Silver" [ref=f2e3264] [cursor=pointer]:
+                        - /url: /symbols/MCX-SILVER1!/
+                      - generic [ref=f2e3268]: SILVER1!
+                    - generic [ref=f2e3273]:
+                      - link "Aluminum" [ref=f2e3275] [cursor=pointer]:
+                        - /url: /symbols/MCX-ALUMINIUM1!/
+                      - generic [ref=f2e3279]: ALUMINIUM1!
+                    - generic [ref=f2e3284]:
+                      - link "Copper" [ref=f2e3286] [cursor=pointer]:
+                        - /url: /symbols/MCX-COPPER1!/
+                      - generic [ref=f2e3290]: COPPER1!
+                    - generic [ref=f2e3295]:
+                      - link "Zinc" [ref=f2e3297] [cursor=pointer]:
+                        - /url: /symbols/MCX-ZINC1!/
+                      - generic [ref=f2e3301]: ZINC1!
+                    - generic [ref=f2e3306]:
+                      - link "Lead" [ref=f2e3308] [cursor=pointer]:
+                        - /url: /symbols/MCX-LEAD1!/
+                      - generic [ref=f2e3312]: LEAD1!
+                  - link [ref=f2e3318] [cursor=pointer]:
+                    - /url: /markets/futures/quotes-metals/
+                    - generic [ref=f2e3321]:
+                      - text: See all metals
+                      - generic [ref=f2e3322]: futures
+              - generic [ref=f2e3326]:
+                - link [ref=f2e3331] [cursor=pointer]:
+                  - /url: /markets/futures/news/
+                  - heading [level=3] [ref=f2e3332]:
+                    - text: Futures
+                    - generic [ref=f2e3333]: news
+                - link [ref=f2e3398] [cursor=pointer]:
+                  - /url: /markets/futures/news/
+                  - generic [ref=f2e3401]:
+                    - text: Keep
+                    - generic [ref=f2e3402]: reading
+          - generic [ref=f2e3407]:
+            - link [ref=f2e3412] [cursor=pointer]:
+              - /url: /markets/currencies/
+              - heading [level=2] [ref=f2e3413]:
+                - text: Forex and
+                - generic [ref=f2e3414]: currencies
+            - generic [ref=f2e3419]:
+              - generic [ref=f2e3420]:
+                - link [ref=f2e3425] [cursor=pointer]:
+                  - /url: /markets/currencies/ideas/
+                  - heading [level=3] [ref=f2e3426]:
+                    - text: Trade
+                    - generic [ref=f2e3427]: ideas
+                - generic [ref=f2e3435]:
+                  - article [ref=f2e3436]:
+                    - generic [ref=f2e3437]:
+                      - link "AUDCAD Bullish Movement expected" [ref=f2e3438] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/AUDCAD/gtaQnKuX-AUDCAD-Bullish-Movement-expected/
+                      - 'link "After a long consolidation on Daily Timeframe its time to ride the trend by putting stop loss at 1 which is a psycological level. I will place two Buy Limit orders at the same entry level: Once TP1 is hit, I will move the SL of the remaining trade to Breakeven and let the second position run towar" [ref=f2e3439] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/AUDCAD/gtaQnKuX-AUDCAD-Bullish-Movement-expected/
+                    - generic [ref=f2e3443]:
+                      - link "PEPPERSTONE:AUDCAD" [ref=f2e3444] [cursor=pointer]:
+                        - /url: /symbols/AUDCAD/
+                      - link [aria-hidden] [ref=f2e3446] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/AUDCAD/gtaQnKuX-AUDCAD-Bullish-Movement-expected/
+                    - generic [ref=f2e3449]:
+                      - link "by hameedops" [ref=f2e3451] [cursor=pointer]:
+                        - /url: /u/hameedops/
+                      - time [ref=f2e3454]: Updated
+                  - article [ref=f2e3455]:
+                    - generic [ref=f2e3456]:
+                      - link "USD/CHF Bullish Breakout Setup" [ref=f2e3457] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/USDCHF/oyziUdM0-USD-CHF-Bullish-Breakout-Setup/
+                      - link "An ascending trendline supports strong upward momentum, with resistance levels in sight. The highlighted trade zone shows a clear risk‑reward setup — stop‑loss protection below trend support and profit targets aligned with breakout potential." [ref=f2e3458] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/USDCHF/oyziUdM0-USD-CHF-Bullish-Breakout-Setup/
+                    - generic [ref=f2e3462]:
+                      - generic:
+                        - link "OANDA:USDCHF" [ref=f2e3463] [cursor=pointer]:
+                          - /url: /symbols/USDCHF/
+                        - generic "Long" [ref=f2e3465]
+                      - link [aria-hidden] [ref=f2e3470] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/USDCHF/oyziUdM0-USD-CHF-Bullish-Breakout-Setup/
+                    - generic [ref=f2e3473]:
+                      - link "by IndexTrader13" [ref=f2e3475] [cursor=pointer]:
+                        - /url: /u/IndexTrader13/
+                      - generic:
+                        - time
+                  - article [ref=f2e3477]:
+                    - generic [ref=f2e3478]:
+                      - link "GBPJPY 15M — Elliott Wave Count | Potential Wave (E) Reversal" [ref=f2e3479] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/GBPJPY/o1zBJ3y8-GBPJPY-15M-Elliott-Wave-Count-Potential-Wave-E-Reversal/
+                      - 'link "GBPJPY appears to be completing a corrective structure, with the current price action developing into a final 5-wave impulse from the Wave (D) low. Elliott Wave structure: (A) — Initial recovery (B) — Corrective decline (C) — Recovery toward the upper channel (D) — Pullback into the lower boundary" [ref=f2e3480] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/GBPJPY/o1zBJ3y8-GBPJPY-15M-Elliott-Wave-Count-Potential-Wave-E-Reversal/
+                    - generic [ref=f2e3484]:
+                      - generic:
+                        - link "FX:GBPJPY" [ref=f2e3485] [cursor=pointer]:
+                          - /url: /symbols/GBPJPY/
+                        - generic "Short" [ref=f2e3487]
+                      - link [aria-hidden] [ref=f2e3492] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/GBPJPY/o1zBJ3y8-GBPJPY-15M-Elliott-Wave-Count-Potential-Wave-E-Reversal/
+                    - generic [ref=f2e3495]:
+                      - link "by Dinesh_Kryptonian" [ref=f2e3497] [cursor=pointer]:
+                        - /url: /u/Dinesh_Kryptonian/
+                      - generic:
+                        - time
+                  - article [ref=f2e3499]:
+                    - generic [ref=f2e3500]:
+                      - link "EUR/USD | Buy Trade" [ref=f2e3501] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/EURUSD/Zr9d34KW-EUR-USD-Buy-Trade/
+                      - link "Based on my analysis, I’m looking for a bullish move in EUR/USD. Check out my chart to view my ideal entry, stop-loss & target placement. Remember :- * Move your SL to breakeven once the trade reaches 1:1.5 R. * Aim for a minimum reward of 1:2 R. * Don't risk more than 2% of your total margin." [ref=f2e3502] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/EURUSD/Zr9d34KW-EUR-USD-Buy-Trade/
+                    - generic [ref=f2e3506]:
+                      - generic:
+                        - link "OANDA:EURUSD" [ref=f2e3507] [cursor=pointer]:
+                          - /url: /symbols/EURUSD/
+                        - generic "Long" [ref=f2e3509]
+                      - link [aria-hidden] [ref=f2e3514] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/EURUSD/Zr9d34KW-EUR-USD-Buy-Trade/
+                    - generic [ref=f2e3517]:
+                      - link "by ManojDurgapal" [ref=f2e3519] [cursor=pointer]:
+                        - /url: /u/ManojDurgapal/
+                      - generic:
+                        - time
+                  - article [ref=f2e3521]:
+                    - generic [ref=f2e3522]:
+                      - 'link "USDCHF: Bullish Retest Sets the Stage for Another Push Higher" [ref=f2e3523] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/USDCHF/4lcOuBaM-USDCHF-Bullish-Retest-Sets-the-Stage-for-Another-Push-Higher/
+                      - link "USDCHF continues to respect a well-defined ascending channel, keeping the broader structure tilted in favor of buyers. The important development came when price broke above the previous resistance zone and extended toward 0.8260. Since then, the market has pulled back into that same area, turning t" [ref=f2e3524] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/USDCHF/4lcOuBaM-USDCHF-Bullish-Retest-Sets-the-Stage-for-Another-Push-Higher/
+                    - generic [ref=f2e3528]:
+                      - generic:
+                        - link "OANDA:USDCHF" [ref=f2e3529] [cursor=pointer]:
+                          - /url: /symbols/USDCHF/
+                        - generic "Long" [ref=f2e3531]
+                      - link [aria-hidden] [ref=f2e3536] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/USDCHF/4lcOuBaM-USDCHF-Bullish-Retest-Sets-the-Stage-for-Another-Push-Higher/
+                    - generic [ref=f2e3539]:
+                      - link "by GoldenPearl_trad" [ref=f2e3541] [cursor=pointer]:
+                        - /url: /u/GoldenPearl_trad/
+                      - generic:
+                        - time
+                  - article [ref=f2e3543]:
+                    - generic [ref=f2e3544]:
+                      - link "EURUSD SHORT" [ref=f2e3545] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/EURUSD/EGZi3xp3-EURUSD-SHORT/
+                      - link "EURUSD SHORT See technical analysis overview for the selected timeframe." [ref=f2e3546] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/EURUSD/EGZi3xp3-EURUSD-SHORT/
+                    - generic [ref=f2e3550]:
+                      - generic:
+                        - link "FX:EURUSD" [ref=f2e3551] [cursor=pointer]:
+                          - /url: /symbols/EURUSD/
+                        - generic "Short" [ref=f2e3553]
+                      - link [aria-hidden] [ref=f2e3558] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/EURUSD/EGZi3xp3-EURUSD-SHORT/
+                    - generic [ref=f2e3561]:
+                      - link "by EarningTraderr" [ref=f2e3563] [cursor=pointer]:
+                        - /url: /u/EarningTraderr/
+                      - generic:
+                        - time
+                  - article [ref=f2e3565]:
+                    - generic [ref=f2e3566]:
+                      - link "EURUSD Daily Chart - Bullish A-B-C Correction,Trend Reversal" [ref=f2e3567] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/EURUSD/Xi7BMaqO-EURUSD-Daily-Chart-Bullish-A-B-C-Correction-Trend-Reversal/
+                      - 'link "1. Pattern: This is a classic Elliott Wave A-B-C correction. You correctly marked A at the swing low (1.15500), B at the lower high (1.16900), and C at the final bottom (1.14365 - 1.14663). The price is now completing the C wave.2. Key Level: The pink shaded zone around 1.14300 to 1.14700 is the str" [ref=f2e3568] [cursor=pointer]':
+                        - /url: https://in.tradingview.com/chart/EURUSD/Xi7BMaqO-EURUSD-Daily-Chart-Bullish-A-B-C-Correction-Trend-Reversal/
+                    - generic [ref=f2e3572]:
+                      - generic:
+                        - link "OANDA:EURUSD" [ref=f2e3573] [cursor=pointer]:
+                          - /url: /symbols/EURUSD/
+                        - generic "Long" [ref=f2e3575]
+                      - link [aria-hidden] [ref=f2e3580] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/EURUSD/Xi7BMaqO-EURUSD-Daily-Chart-Bullish-A-B-C-Correction-Trend-Reversal/
+                    - generic [ref=f2e3583]:
+                      - link "by Knickk" [ref=f2e3585] [cursor=pointer]:
+                        - /url: /u/Knickk/
+                      - generic:
+                        - time
+                  - article [ref=f2e3587]:
+                    - generic [ref=f2e3588]:
+                      - link "EURUSD Outlook for the upcoming week!" [ref=f2e3589] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/EURUSD/c9ls77t7-EURUSD-Outlook-for-the-upcoming-week/
+                      - link "Currently price is showing strong bearish moves, taking support of 1.1454 for a brief consolidation at a Fibonacci bounce-back zone, if this consolidation lasted for few more days and price forms a nice formation then we can expect breakout and moves in the upward direction (but long entries would s" [ref=f2e3590] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/EURUSD/c9ls77t7-EURUSD-Outlook-for-the-upcoming-week/
+                    - generic [ref=f2e3594]:
+                      - link "FX:EURUSD" [ref=f2e3595] [cursor=pointer]:
+                        - /url: /symbols/EURUSD/
+                      - link [aria-hidden] [ref=f2e3597] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/EURUSD/c9ls77t7-EURUSD-Outlook-for-the-upcoming-week/
+                    - generic [ref=f2e3600]:
+                      - link "by CrazyTrades247" [ref=f2e3602] [cursor=pointer]:
+                        - /url: /u/CrazyTrades247/
+                      - generic:
+                        - time
+                  - article [ref=f2e3604]:
+                    - generic [ref=f2e3605]:
+                      - link "USD TO FALL AGAINST GBP" [ref=f2e3606] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/USDGBP/1TpkObh1-USD-TO-FALL-AGAINST-GBP/
+                      - link "USD TO FALL AGAINST GBP. I have noticed that USD has reached its Level of SSL (Sell Side Liquidity), This can Trigger a fall in US against GBP. Which can directly or Indirectly affect SnP500 Stocks." [ref=f2e3607] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/USDGBP/1TpkObh1-USD-TO-FALL-AGAINST-GBP/
+                    - generic [ref=f2e3611]:
+                      - generic:
+                        - link "FX_IDC:USDGBP" [ref=f2e3612] [cursor=pointer]:
+                          - /url: /symbols/USDGBP/
+                        - generic "Short" [ref=f2e3614]
+                      - link [aria-hidden] [ref=f2e3619] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/USDGBP/1TpkObh1-USD-TO-FALL-AGAINST-GBP/
+                    - generic [ref=f2e3622]:
+                      - link "by giksongeorge" [ref=f2e3624] [cursor=pointer]:
+                        - /url: /u/giksongeorge/
+                      - generic:
+                        - time
+                  - article [ref=f2e3626]:
+                    - generic [ref=f2e3627]:
+                      - link "USDCAD Long position idea" [ref=f2e3628] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/USDCAD/tIlu43ss-USDCAD-Long-position-idea/
+                      - link "Daily break out confirmation Coming to the new support as a retest & potential entry Take profit is the next resistance" [ref=f2e3629] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/USDCAD/tIlu43ss-USDCAD-Long-position-idea/
+                    - generic [ref=f2e3633]:
+                      - generic:
+                        - link "FX:USDCAD" [ref=f2e3634] [cursor=pointer]:
+                          - /url: /symbols/USDCAD/
+                        - generic "Long" [ref=f2e3636]
+                      - link [aria-hidden] [ref=f2e3641] [cursor=pointer]:
+                        - /url: https://in.tradingview.com/chart/USDCAD/tIlu43ss-USDCAD-Long-position-idea/
+                    - generic [ref=f2e3644]:
+                      - link "by Smart_Tradez" [ref=f2e3646] [cursor=pointer]:
+                        - /url: /u/Smart_Tradez/
+                      - generic:
+                        - time
+                  - link [ref=f2e3648] [cursor=pointer]:
+                    - /url: /markets/currencies/ideas/
+                    - paragraph [ref=f2e3649]:
+                      - generic [ref=f2e3650]: See all forex ideas
+              - generic [ref=f2e3654]:
+                - link [ref=f2e3659] [cursor=pointer]:
+                  - /url: /markets/currencies/rates-major/
+                  - heading [level=3] [ref=f2e3660]:
+                    - text: Forex
+                    - generic [ref=f2e3661]: performance
+                - generic [ref=f2e3666]:
+                  - generic [ref=f2e3667]:
+                    - link "EURUSD −0.18%" [ref=f2e3669] [cursor=pointer]:
+                      - /url: /symbols/EURUSD/?exchange=FX_IDC
+                      - generic [ref=f2e3671]: EURUSD
+                      - generic [ref=f2e3676]: −0.18%
+                    - link "JPYUSD −0.14%" [ref=f2e3678] [cursor=pointer]:
+                      - /url: /symbols/JPYUSD/?exchange=FX_IDC
+                      - generic [ref=f2e3680]: JPYUSD
+                      - generic [ref=f2e3685]: −0.14%
+                    - link "GBPUSD −0.18%" [ref=f2e3687] [cursor=pointer]:
+                      - /url: /symbols/GBPUSD/?exchange=FX_IDC
+                      - generic [ref=f2e3689]: GBPUSD
+                      - generic [ref=f2e3694]: −0.18%
+                    - link "AUDUSD −0.17%" [ref=f2e3696] [cursor=pointer]:
+                      - /url: /symbols/AUDUSD/?exchange=FX_IDC
+                      - generic [ref=f2e3698]: AUDUSD
+                      - generic [ref=f2e3703]: −0.17%
+                    - link "CHFUSD −0.17%" [ref=f2e3705] [cursor=pointer]:
+                      - /url: /symbols/CHFUSD/?exchange=FX_IDC
+                      - generic [ref=f2e3707]: CHFUSD
+                      - generic [ref=f2e3712]: −0.17%
+                    - link "CADUSD −0.15%" [ref=f2e3714] [cursor=pointer]:
+                      - /url: /symbols/CADUSD/?exchange=FX_IDC
+                      - generic [ref=f2e3716]: CADUSD
+                      - generic [ref=f2e3721]: −0.15%
+                    - link "NZDUSD −0.43%" [ref=f2e3723] [cursor=pointer]:
+                      - /url: /symbols/NZDUSD/?exchange=FX_IDC
+                      - generic [ref=f2e3725]: NZDUSD
+                      - generic [ref=f2e3730]: −0.43%
+                    - link "INRUSD −0.07%" [ref=f2e3732] [cursor=pointer]:
+                      - /url: /symbols/INRUSD/?exchange=FX_IDC
+                      - generic [ref=f2e3734]: INRUSD
+                      - generic [ref=f2e3739]: −0.07%
+                  - generic [ref=f2e3741]:
+                    - button "1D" [ref=f2e3742]
+                    - button "1W" [ref=f2e3745]
+                    - button "1M" [ref=f2e3748]
+                    - button "3M" [ref=f2e3751]
+                    - button "6M" [ref=f2e3754]
+                    - button "YTD" [ref=f2e3757]
+                    - button "1Y" [ref=f2e3760]
+                    - button "5Y" [ref=f2e3763]
+                    - button "All" [ref=f2e3766]
+                - link [ref=f2e3771] [cursor=pointer]:
+                  - /url: /markets/currencies/rates-major/
+                  - generic [ref=f2e3774]:
+                    - text: See all
+                    - generic [ref=f2e3775]: rates
+              - generic [ref=f2e3779]:
+                - link [ref=f2e3784] [cursor=pointer]:
+                  - /url: /markets/currencies/news/
+                  - heading [level=3] [ref=f2e3785]:
+                    - text: Forex
+                    - generic [ref=f2e3786]: news
+                - link [ref=f2e3851] [cursor=pointer]:
+                  - /url: /markets/currencies/news/
+                  - generic [ref=f2e3854]:
+                    - text: Keep
+                    - generic [ref=f2e3855]: reading
+          - generic [ref=f2e3860]:
+            - link [ref=f2e3865] [cursor=pointer]:
+              - /url: /markets/world-economy/
+              - heading "Economy" [level=2] [ref=f2e3866]
+            - generic [ref=f2e3872]:
+              - generic [ref=f2e3873]:
+                - link [ref=f2e3878] [cursor=pointer]:
+                  - /url: /markets/world-economy/charts-global-trends/
+                  - heading [level=3] [ref=f2e3879]:
+                    - text: Global inflation
+                    - generic [ref=f2e3880]: map
+                - toolbar [ref=f2e3890]:
+                  - img:
+                    - generic [ref=f2e3891]:
+                      - generic "-34.25 to 0%" [ref=f2e3892]
+                      - generic [ref=f2e3895]: 0%
+                    - generic [ref=f2e3896]:
+                      - generic "0 to 3%" [ref=f2e3897]
+                      - generic [ref=f2e3900]: 3%
+                    - generic [ref=f2e3901]:
+                      - generic "3 to 7%" [ref=f2e3902]
+                      - generic [ref=f2e3905]: 7%
+                    - generic [ref=f2e3906]:
+                      - generic "7 to 12%" [ref=f2e3907]
+                      - generic [ref=f2e3910]: 12%
+                    - generic [ref=f2e3911]:
+                      - generic "12 to 25%" [ref=f2e3912]
+                      - generic [ref=f2e3915]: 25%
+                    - generic "25 to 534.2%" [ref=f2e3917]
+                - link [ref=f2e4131] [cursor=pointer]:
+                  - /url: /markets/world-economy/charts-global-trends/
+                  - generic [ref=f2e4134]:
+                    - text: See more global
+                    - generic [ref=f2e4135]: trends
+              - generic [ref=f2e4139]:
+                - generic [ref=f2e4141]:
+                  - link [ref=f2e4144] [cursor=pointer]:
+                    - /url: /economic-calendar/
+                    - heading [level=3] [ref=f2e4145]:
+                      - text: Economic
+                      - generic [ref=f2e4146]: Calendar
+                  - link "Get widget" [ref=f2e4150] [cursor=pointer]:
+                    - /url: /widget-docs/widgets/calendars/economic-calendar/
+                - link [ref=f2e4232] [cursor=pointer]:
+                  - /url: /economic-calendar/
+                  - generic [ref=f2e4235]:
+                    - text: See all market
+                    - generic [ref=f2e4236]: events
+          - generic [ref=f2e4241]:
+            - generic [ref=f2e4242]:
+              - link [ref=f2e4246] [cursor=pointer]:
+                - /url: /brokers/
+                - heading [level=2] [ref=f2e4247]:
+                  - text: Trading and
+                  - generic [ref=f2e4248]: brokers
+              - generic [ref=f2e4252]: Trade directly on Supercharts through our supported, fully-verified, and user-reviewed brokers.
+            - link "Interactive Brokers Interactive Brokers Stocks, Forex, Bonds, Options 4.2 •Good Genuine rating by TradingView" [ref=f2e4259] [cursor=pointer]:
+              - /url: /broker/IBKR/
+              - generic [ref=f2e4260]:
+                - img "Interactive Brokers" [ref=f2e4262]
+                - generic [ref=f2e4263]:
+                  - generic [ref=f2e4264]: Interactive Brokers
+                  - generic [ref=f2e4266]: Stocks, Forex, Bonds, Options
+                - generic [ref=f2e4268]:
+                  - generic [ref=f2e4272]:
+                    - generic [ref=f2e4273]: "4.2"
+                    - generic [ref=f2e4274]: •Good
+                  - button "Genuine rating by TradingView" [ref=f2e4275]
+    - contentinfo [ref=f2e4279]:
+      - generic [ref=f2e4281]:
+        - separator [aria-hidden] [ref=f2e4282]
+        - generic [ref=f2e4283]:
+          - generic [ref=f2e4284]:
+            - generic [ref=f2e4285]:
+              - generic [ref=f2e4286]:
+                - generic [ref=f2e4287]:
+                  - link "TradingView main page" [ref=f2e4288] [cursor=pointer]:
+                    - /url: /
+                  - generic [ref=f2e4290]: Made by humans
+                - generic [ref=f2e4294]:
+                  - link "TradingView on X" [ref=f2e4295] [cursor=pointer]:
+                    - /url: https://x.com/tradingview/
+                  - link "TradingView on Facebook" [ref=f2e4300] [cursor=pointer]:
+                    - /url: https://www.facebook.com/tradingview/
+                  - link "TradingView on YouTube" [ref=f2e4305] [cursor=pointer]:
+                    - /url: https://www.youtube.com/@TradingView
+                  - link "TradingView on Instagram" [ref=f2e4310] [cursor=pointer]:
+                    - /url: https://www.instagram.com/tradingview/
+                  - link "TradingView on LinkedIn" [ref=f2e4315] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/company/tradingview/
+                  - link "TradingView on Telegram" [ref=f2e4320] [cursor=pointer]:
+                    - /url: https://t.me/tradingview/
+                  - link "TradingView on TikTok" [ref=f2e4325] [cursor=pointer]:
+                    - /url: https://www.tiktok.com/@tradingview/
+                  - link "TradingView on Reddit" [ref=f2e4330] [cursor=pointer]:
+                    - /url: https://www.reddit.com/r/TradingView/
+              - generic [ref=f2e4335]:
+                - button "English ‎(India)‎" [ref=f2e4336]
+                - paragraph [ref=f2e4346]:
+                  - generic [ref=f2e4347]:
+                    - text: Select market data provided by
+                    - link "ICE Data Services" [ref=f2e4348] [cursor=pointer]:
+                      - /url: https://www.ice.com/fixed-income-data-services
+                    - text: .
+                  - generic [ref=f2e4349]: Select reference data provided by FactSet. Copyright © 2026 FactSet Research Systems Inc.
+                  - generic [ref=f2e4350]: Copyright © 2026, American Bankers Association. CUSIP Database provided by FactSet Research Systems Inc. All rights reserved.
+                  - generic [ref=f2e4351]:
+                    - text: SEC filings and other documents provided by
+                    - link "Quartr" [ref=f2e4352] [cursor=pointer]:
+                      - /url: https://quartr.com/
+                    - text: .
+                  - generic [ref=f2e4353]: © 2026 TradingView, Inc.
+            - generic [ref=f2e4354]:
+              - generic [ref=f2e4355]:
+                - generic [ref=f2e4356]:
+                  - generic [ref=f2e4357]: More than a product
+                  - list [ref=f2e4358]:
+                    - listitem [ref=f2e4359]:
+                      - link "Supercharts" [ref=f2e4360] [cursor=pointer]:
+                        - /url: /chart/
+                - generic [ref=f2e4361]:
+                  - generic [ref=f2e4362]: Screeners
+                  - list [ref=f2e4363]:
+                    - listitem [ref=f2e4364]:
+                      - link "Stocks" [ref=f2e4365] [cursor=pointer]:
+                        - /url: /screener/
+                    - listitem [ref=f2e4366]:
+                      - link "ETFs" [ref=f2e4367] [cursor=pointer]:
+                        - /url: /etf-screener/
+                    - listitem [ref=f2e4368]:
+                      - link "Bonds" [ref=f2e4369] [cursor=pointer]:
+                        - /url: /bond-screener/
+                    - listitem [ref=f2e4370]:
+                      - link "Crypto coins" [ref=f2e4371] [cursor=pointer]:
+                        - /url: /crypto-coins-screener/
+                    - listitem [ref=f2e4372]:
+                      - link "CEX pairs" [ref=f2e4373] [cursor=pointer]:
+                        - /url: /cex-screener/
+                    - listitem [ref=f2e4374]:
+                      - link "DEX pairs" [ref=f2e4375] [cursor=pointer]:
+                        - /url: /dex-screener/
+                    - listitem [ref=f2e4376]:
+                      - link "Pine" [ref=f2e4377] [cursor=pointer]:
+                        - /url: /pine-screener/
+                - generic [ref=f2e4378]:
+                  - generic [ref=f2e4379]: Heatmaps
+                  - list [ref=f2e4380]:
+                    - listitem [ref=f2e4381]:
+                      - link "Stocks" [ref=f2e4382] [cursor=pointer]:
+                        - /url: /heatmap/stock/
+                    - listitem [ref=f2e4383]:
+                      - link "ETFs" [ref=f2e4384] [cursor=pointer]:
+                        - /url: /heatmap/etf/
+                    - listitem [ref=f2e4385]:
+                      - link "Crypto coins" [ref=f2e4386] [cursor=pointer]:
+                        - /url: /heatmap/crypto/
+                - generic [ref=f2e4387]:
+                  - generic [ref=f2e4388]: Calendars
+                  - list [ref=f2e4389]:
+                    - listitem [ref=f2e4390]:
+                      - link "Economic" [ref=f2e4391] [cursor=pointer]:
+                        - /url: /economic-calendar/
+                    - listitem [ref=f2e4392]:
+                      - link "Earnings" [ref=f2e4393] [cursor=pointer]:
+                        - /url: /earnings-calendar/
+                    - listitem [ref=f2e4394]:
+                      - link "Dividends" [ref=f2e4395] [cursor=pointer]:
+                        - /url: /dividend-calendar/
+                    - listitem [ref=f2e4396]:
+                      - link "IPOs" [ref=f2e4397] [cursor=pointer]:
+                        - /url: /ipo-calendar/
+                - generic [ref=f2e4398]:
+                  - generic [ref=f2e4399]: More products
+                  - list [ref=f2e4400]:
+                    - listitem [ref=f2e4401]:
+                      - link "Portfolios" [ref=f2e4402] [cursor=pointer]:
+                        - /url: /portfolios/
+                    - listitem [ref=f2e4403]:
+                      - link "Yield Curves" [ref=f2e4404] [cursor=pointer]:
+                        - /url: /yield-curves/
+                    - listitem [ref=f2e4405]:
+                      - link "Options" [ref=f2e4406] [cursor=pointer]:
+                        - /url: /options/
+                    - listitem [ref=f2e4407]:
+                      - link "Macro Maps" [ref=f2e4408] [cursor=pointer]:
+                        - /url: /macro-maps/
+                    - listitem [ref=f2e4409]:
+                      - link "Pine Script®" [ref=f2e4410] [cursor=pointer]:
+                        - /url: https://www.tradingview.com/pine-script-docs/
+                    - listitem [ref=f2e4411]:
+                      - link "MCP Server" [ref=f2e4412] [cursor=pointer]:
+                        - /url: https://www.tradingview.com/mcp/docs
+                - generic [ref=f2e4413]:
+                  - generic [ref=f2e4414]: Apps
+                  - list [ref=f2e4415]:
+                    - listitem [ref=f2e4416]:
+                      - link "Mobile" [ref=f2e4417] [cursor=pointer]:
+                        - /url: /mobile/
+                    - listitem [ref=f2e4418]:
+                      - link "Desktop" [ref=f2e4419] [cursor=pointer]:
+                        - /url: /desktop/
+              - generic [ref=f2e4420]:
+                - generic [ref=f2e4421]:
+                  - generic [ref=f2e4422]: Tools & subscriptions
+                  - list [ref=f2e4423]:
+                    - listitem [ref=f2e4424]:
+                      - link "Features" [ref=f2e4425] [cursor=pointer]:
+                        - /url: /features/
+                    - listitem [ref=f2e4426]:
+                      - link "Pricing" [ref=f2e4427] [cursor=pointer]:
+                        - /url: /pricing/?source=footer&feature=pricing
+                    - listitem [ref=f2e4428]:
+                      - link "Market data" [ref=f2e4429] [cursor=pointer]:
+                        - /url: /data-coverage/
+                    - listitem [ref=f2e4430]:
+                      - link "Gift plans" [ref=f2e4431] [cursor=pointer]:
+                        - /url: /gifts/
+                - generic [ref=f2e4432]:
+                  - generic [ref=f2e4433]: Trading
+                  - list [ref=f2e4434]:
+                    - listitem [ref=f2e4435]:
+                      - link "Overview" [ref=f2e4436] [cursor=pointer]:
+                        - /url: /trading/
+                    - listitem [ref=f2e4437]:
+                      - link "Brokers" [ref=f2e4438] [cursor=pointer]:
+                        - /url: /brokers/
+                    - listitem [ref=f2e4439]:
+                      - link "Brokers comparison" [ref=f2e4440] [cursor=pointer]:
+                        - /url: /brokers/compare/
+                    - listitem [ref=f2e4441]:
+                      - link "The Leap" [ref=f2e4442] [cursor=pointer]:
+                        - /url: /the-leap/?source=footer
+                - generic [ref=f2e4443]:
+                  - generic [ref=f2e4444]: Special offers
+                  - list [ref=f2e4445]:
+                    - listitem [ref=f2e4446]:
+                      - link "CME Group futures" [ref=f2e4447] [cursor=pointer]:
+                        - /url: /cme/
+                    - listitem [ref=f2e4448]:
+                      - link "Eurex futures" [ref=f2e4449] [cursor=pointer]:
+                        - /url: /eurex/
+                    - listitem [ref=f2e4450]:
+                      - link "US stocks bundle" [ref=f2e4451] [cursor=pointer]:
+                        - /url: /us-markets-bundle/
+                - generic [ref=f2e4452]:
+                  - generic [ref=f2e4453]: About company
+                  - list [ref=f2e4454]:
+                    - listitem [ref=f2e4455]:
+                      - link "Who we are" [ref=f2e4456] [cursor=pointer]:
+                        - /url: /about/
+                    - listitem [ref=f2e4457]:
+                      - link "Space mission" [ref=f2e4458] [cursor=pointer]:
+                        - /url: /space-mission/
+                    - listitem [ref=f2e4459]:
+                      - link "Blog" [ref=f2e4460] [cursor=pointer]:
+                        - /url: https://www.tradingview.com/blog/en/
+                    - listitem [ref=f2e4461]:
+                      - link "Help Center" [ref=f2e4462] [cursor=pointer]:
+                        - /url: /support/
+                    - listitem [ref=f2e4463]:
+                      - link "Careers" [ref=f2e4464] [cursor=pointer]:
+                        - /url: /careers/
+                    - listitem [ref=f2e4465]:
+                      - link "Media kit" [ref=f2e4466] [cursor=pointer]:
+                        - /url: /media-kit/
+                - generic [ref=f2e4467]:
+                  - generic [ref=f2e4468]: Merch
+                  - list [ref=f2e4469]:
+                    - listitem [ref=f2e4470]:
+                      - link "TradingView store" [ref=f2e4471] [cursor=pointer]:
+                        - /url: https://tradingviewstore.com/
+                    - listitem [ref=f2e4472]:
+                      - link "Tarot cards for traders" [ref=f2e4473] [cursor=pointer]:
+                        - /url: /tarot-reading/
+                    - listitem [ref=f2e4474]:
+                      - link "The C63 TradeTime" [ref=f2e4475] [cursor=pointer]:
+                        - /url: /tradetime/
+                - generic [ref=f2e4476]:
+                  - generic [ref=f2e4477]: Policies & security
+                  - list [ref=f2e4478]:
+                    - listitem [ref=f2e4479]:
+                      - link "Terms of Use" [ref=f2e4480] [cursor=pointer]:
+                        - /url: /policies/
+                    - listitem [ref=f2e4481]:
+                      - link "Disclaimer" [ref=f2e4482] [cursor=pointer]:
+                        - /url: /disclaimer/
+                    - listitem [ref=f2e4483]:
+                      - link "Privacy Policy" [ref=f2e4484] [cursor=pointer]:
+                        - /url: /privacy-policy/
+                    - listitem [ref=f2e4485]:
+                      - link "Cookies Policy" [ref=f2e4486] [cursor=pointer]:
+                        - /url: /cookies-policy/
+                    - listitem [ref=f2e4487]:
+                      - link "Accessibility Statement" [ref=f2e4488] [cursor=pointer]:
+                        - /url: /accessibility/
+                    - listitem [ref=f2e4489]:
+                      - link "Security tips" [ref=f2e4490] [cursor=pointer]:
+                        - /url: /security/
+                    - listitem [ref=f2e4491]:
+                      - link "Bug Bounty program" [ref=f2e4492] [cursor=pointer]:
+                        - /url: /bounty/
+                    - listitem [ref=f2e4493]:
+                      - link "Status page" [ref=f2e4494] [cursor=pointer]:
+                        - /url: https://status.tradingview.com/
+              - generic [ref=f2e4495]:
+                - generic [ref=f2e4496]:
+                  - generic [ref=f2e4497]: Community
+                  - list [ref=f2e4498]:
+                    - listitem [ref=f2e4499]:
+                      - link "Social network" [ref=f2e4500] [cursor=pointer]:
+                        - /url: /social-network/
+                    - listitem [ref=f2e4501]:
+                      - link "Wall of Love" [ref=f2e4502] [cursor=pointer]:
+                        - /url: /wall-of-love/
+                    - listitem [ref=f2e4503]:
+                      - link "Refer a friend" [ref=f2e4504] [cursor=pointer]:
+                        - /url: /share-your-love/?source=footer&feature=refer_friend
+                    - listitem [ref=f2e4505]:
+                      - link "Creator program" [ref=f2e4506] [cursor=pointer]:
+                        - /url: /creator-program/
+                    - listitem [ref=f2e4507]:
+                      - link "House Rules" [ref=f2e4508] [cursor=pointer]:
+                        - /url: /house-rules/
+                    - listitem [ref=f2e4509]:
+                      - link "Moderators" [ref=f2e4510] [cursor=pointer]:
+                        - /url: /moderators/
+                - generic [ref=f2e4511]:
+                  - generic [ref=f2e4512]: Ideas
+                  - list [ref=f2e4513]:
+                    - listitem [ref=f2e4514]:
+                      - link "Trading" [ref=f2e4515] [cursor=pointer]:
+                        - /url: /ideas/
+                    - listitem [ref=f2e4516]:
+                      - link "Education" [ref=f2e4517] [cursor=pointer]:
+                        - /url: /ideas/?type=education
+                    - listitem [ref=f2e4518]:
+                      - link "Editors' picks" [ref=f2e4519] [cursor=pointer]:
+                        - /url: /ideas/editors-picks/
+                - generic [ref=f2e4520]:
+                  - generic [ref=f2e4521]: Pine Script
+                  - list [ref=f2e4522]:
+                    - listitem [ref=f2e4523]:
+                      - link "Indicators & strategies" [ref=f2e4524] [cursor=pointer]:
+                        - /url: /scripts/
+                    - listitem [ref=f2e4525]:
+                      - link "Wizards" [ref=f2e4526] [cursor=pointer]:
+                        - /url: /wizards/
+                    - listitem [ref=f2e4527]:
+                      - link "Freelancers" [ref=f2e4528] [cursor=pointer]:
+                        - /url: /pine-script-freelancers/
+                    - listitem [ref=f2e4529]:
+                      - link "Marketplace" [ref=f2e4530] [cursor=pointer]:
+                        - /url: /scripts/marketplace/
+              - generic [ref=f2e4531]:
+                - generic [ref=f2e4532]:
+                  - generic [ref=f2e4533]: Business solutions
+                  - list [ref=f2e4534]:
+                    - listitem [ref=f2e4535]:
+                      - link "Widgets" [ref=f2e4536] [cursor=pointer]:
+                        - /url: /widget/
+                    - listitem [ref=f2e4537]:
+                      - link "Charting libraries" [ref=f2e4538] [cursor=pointer]:
+                        - /url: /free-charting-libraries/
+                    - listitem [ref=f2e4539]:
+                      - link "Lightweight Charts™" [ref=f2e4540] [cursor=pointer]:
+                        - /url: /lightweight-charts/
+                    - listitem [ref=f2e4541]:
+                      - link "Advanced Charts" [ref=f2e4542] [cursor=pointer]:
+                        - /url: /advanced-charts/
+                    - listitem [ref=f2e4543]:
+                      - link "Trading Platform" [ref=f2e4544] [cursor=pointer]:
+                        - /url: /trading-platform/
+                - generic [ref=f2e4545]:
+                  - generic [ref=f2e4546]: Growth opportunities
+                  - list [ref=f2e4547]:
+                    - listitem [ref=f2e4548]:
+                      - link "Advertising" [ref=f2e4549] [cursor=pointer]:
+                        - /url: /advertising-info/
+                    - listitem [ref=f2e4550]:
+                      - link "Brokerage integration" [ref=f2e4551] [cursor=pointer]:
+                        - /url: /brokerage-integration/
+                    - listitem [ref=f2e4552]:
+                      - link "Partner program" [ref=f2e4553] [cursor=pointer]:
+                        - /url: /partner-program/
+                    - listitem [ref=f2e4554]:
+                      - link "Education program" [ref=f2e4555] [cursor=pointer]:
+                        - /url: /students/
+          - img "Look First" [ref=f2e4557]

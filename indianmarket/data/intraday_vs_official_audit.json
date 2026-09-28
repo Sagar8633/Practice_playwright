@@ -1,0 +1,45 @@
+{
+ "nifty50": {
+  "close_diff_median": 9.3,
+  "close_diff_max": 119.7,
+  "high_diff_p95": 1.6,
+  "low_diff_p95": 1.67,
+  "high_diff_gt5": 22,
+  "low_diff_gt5": 16,
+  "sessions": 1171,
+  "short_weekday_sessions": {
+   "2025-10-21": 60
+  },
+  "missing_minutes": 7,
+  "special_sessions": {
+   "2024-01-20": 375,
+   "2024-03-02": 105,
+   "2024-05-18": 105,
+   "2025-02-01": 375,
+   "2025-10-21": 60,
+   "2026-02-01": 375
+  }
+ },
+ "banknifty": {
+  "close_diff_median": 27.2,
+  "close_diff_max": 277.65,
+  "high_diff_p95": 6.15,
+  "low_diff_p95": 7.38,
+  "high_diff_gt5": 71,
+  "low_diff_gt5": 86,
+  "sessions": 1171,
+  "short_weekday_sessions": {
+   "2022-03-07": 325,
+   "2025-10-21": 60
+  },
+  "missing_minutes": 4,
+  "special_sessions": {
+   "2024-01-20": 375,
+   "2024-03-02": 105,
+   "2024-05-18": 105,
+   "2025-02-01": 375,
+   "2025-10-21": 60,
+   "2026-02-01": 375
+  }
+ }
+}

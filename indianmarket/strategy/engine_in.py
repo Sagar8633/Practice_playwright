@@ -1,0 +1,1101 @@
+"""Indian equity-index port of the SimpleSMA18Bot research engine (NIFTY 50 / NIFTY BANK).
+
+Same simulation core as ../../Vaibhav/research/sma18_engine.py (the gold engine, an exact port of SimpleSMA18Bot.mq5 v1.00 plus
+research switches). Only the market model changed:
+  * Path bars = 1-minute index candles (Upstox, IST) restricted to the NSE cash session 09:15-15:30, or daily candles.
+  * Signal bars are anchored at the 09:15 session open (3m, 5m, ..., 60m, 120m, 240m); tf_minutes >= 375 = one bar per session.
+  * POINT = 0.05 (NSE index tick). The EA's point inputs (buffer 10, BE 500/10, swing buffer 50, trailing 1000/500/50) therefore
+    mean 0.5 / 25 / 0.5 / 2.5 / 50 / 25 / 2.5 index points. thr_mode 1 gives the scale-free ATR version.
+  * CONTRACT = 1 and lots = 1 -> every money figure is in INDEX POINTS PER UNIT. Rupees per futures lot = points x lot size;
+    exchange and statutory charges are added afterwards by costs.py (they depend on turnover, not on the path).
+  * No swap (index futures carry no overnight financing; basis and rollover are not modelled), spread = fixed points (bid/ask of
+    the futures), slippage in ticks per side. Indices have no volume: the EA's volume filter cannot be evaluated (use_volume False).
+  * Session filter works on 15-minute slots of the day (slot 0 = 09:15-09:29 ... slot 24 = 15:15-15:29), not server hours.
+  * allow_buy / allow_sell arrays (one flag per signal bar) gate the setup for experiment filters (gap, HTF trend, regime).
+"""
+from __future__ import annotations
+
+import json, math, os
+from dataclasses import dataclass, field, asdict
+
+import numpy as np
+import pandas as pd
+import numba as nb
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+DATA = os.path.join(os.path.dirname(HERE), "data")
+POINT = 0.05
+CONTRACT = 1.0
+NAN = float("nan")
+
+# NSE cash session (IST): first 1-minute bar 09:15, last 15:29 (the 15:30 print belongs to the closing session).
+SESSION_OPEN_MIN = 9 * 60 + 15
+SESSION_CLOSE_MIN = 15 * 60 + 30
+NSLOT = 25                 # 15-minute slots of the session: 09:15-09:29 = 0 ... 15:15-15:29 = 24
+
+EXIT_REASONS = {0: "open", 1: "SL_initial", 2: "SL_breakeven", 3: "SL_swing", 4: "SL_chandelier", 5: "SL_trailing",
+                6: "SL_atr_trail", 7: "SL_twk_trail", 8: "MA18_exit", 9: "risk_filter", 10: "end_of_test",
+                11: "time_exit", 12: "stop_out", 13: "SL_lock", 14: "partial_close", 15: "partial_loss"}
+
+# ----------------------------------------------------------------------------------------------------------------
+# Parameters
+# ----------------------------------------------------------------------------------------------------------------
+
+@dataclass
+class Params:
+    tf_minutes: int = 1440
+    lots: float = 1.0                  # 1 index unit -> P&L in points
+    # --- entry
+    fast: int = 18
+    trend: int = 200
+    vol_period: int = 20
+    use_volume: bool = False           # indices have no volume: the EA filter cannot be evaluated (documented deviation)
+    use_trend: bool = True             # MA18 > MA200 and closes above MA200 (EA: on). Off = MA18-only entry
+    confirm_bars: int = 2              # consecutive closes required (EA: 2)
+    swing_strength: int = 2
+    swing_search: int = 100
+    entry_buffer_pts: int = 10
+    pending_invalidate: bool = True    # cancel pending when the close crosses MA18 (EA: on)
+    pending_ratchet: bool = True       # tighten the pending SL to the newest swing (EA: on)
+    pending_max_bars: int = 0          # 0 = never expires (EA)
+    # --- initial stop
+    sl_mode: int = 0                   # 0 swing (EA) | 1 ATR | 2 swing capped at sl_cap_pts | 3 swing with ATR floor | 4 swing clamped [floor, cap] ATR
+                                       # 5 MA18 - buffer | 6 fixed points (sl_cap_pts) | 7 swing - sl_atr_mult x ATR buffer
+    sl_atr_period: int = 14
+    sl_atr_mult: float = 2.0
+    sl_floor_atr: float = 0.5
+    sl_cap_pts: int = 0
+    min_sl_pts: int = 0                # widen any stop tighter than this (0 = off)
+    # --- break-even
+    be_enable: bool = True
+    be_trigger_pts: int = 500
+    be_offset_pts: int = 10
+    # --- protection (bitmask: 1 swing, 2 chandelier, 4 fixed trailing, 8 ATR trailing, 16 TWK 3-stage, 32 R-lock)
+    protection: int = 1
+    prot_start_mode: int = 1           # 0 immediately, 1 after prot_start_pts
+    prot_start_pts: int = 500
+    swing_buffer_pts: int = 50
+    chand_lookback: int = 22
+    atr_period: int = 22
+    atr_mult: float = 3.0
+    trail_start_pts: int = 1000
+    trail_dist_pts: int = 500
+    trail_step_pts: int = 50
+    atr_trail_mult: float = 2.0
+    twk_act_pts: int = 200             # TWK MomentumEA: trail the Supertrend(1.5,10) line from +200 pts
+    twk_prot_pts: int = 500            # +500 pts: lock +100 and 1:1 trail with a 400-pt gap
+    twk_lock_pts: int = 100
+    twk_gap_pts: int = 400
+    twk_min_improve_pts: int = 5
+    lock_trigger_pts: int = 0          # R-lock (protection bit 32): at profit >= trigger move SL to entry + lock_level
+    lock_level_pts: int = 0
+    thr_mode: int = 0                  # 0: *_pts are points | 1: hundredths of ATR(atr_period) at entry | 2: hundredths of R (initial risk)
+    # --- exits
+    ma_exit: bool = True               # close when the completed bar closes through MA18 (EA: on)
+    use_risk_filter: bool = False
+    max_loss_pts: int = 300
+    time_exit_bars: int = 0            # close at the new bar after N signal bars if the trade is not in profit (0 = off)
+    # --- entry filters
+    use_sl_pct: bool = True
+    max_sl_pct: float = 1.0
+    use_session: bool = False
+    session_slots: tuple = ()          # allowed 15-minute slots of the session (0 = 09:15-09:29 ... 24 = 15:15-15:29)
+    use_adx: bool = False
+    adx_period: int = 14
+    adx_min: float = 25.0
+    adx_rising: bool = False
+    adx_lookback: int = 3
+    adx_consecutive: bool = False
+    use_vol_filter: bool = False       # ATR(atr_period) / SMA100(ATR) must be within [vol_filter_min, vol_filter_max]
+    vol_filter_min: float = 0.0
+    vol_filter_max: float = 0.0        # 0 = no upper bound
+    max_spread_pts: float = 0.0        # 0 = off; no new setup when the spread at the new bar exceeds this
+    slope_filter_bars: int = 0         # 0 = off; MA18 must have risen over N bars for a buy (fallen for a sell)
+    max_dist_atr: float = 0.0          # 0 = off; no setup when |close - MA18| > x ATR (extended move)
+    # --- costs
+    spread_mult: float = 1.0
+    spread_add_pts: float = 0.0
+    spread_fixed_pts: float = 0.0      # futures bid/ask spread in ticks (0 = trade the index print)
+    slippage_pts: float = 0.0          # ticks per side
+    swap: bool = False                 # no overnight financing on index futures
+    # --- account
+    start_balance: float = 1e9         # points; large so that the gold-engine account logic never interferes
+    leverage: float = 1000.0
+    margin_check: bool = False
+    sizing: int = 0                    # 0 fixed (1 unit) - the only mode used here
+    risk_pct: float = 1.0
+    max_lots: float = 1.0
+    base_balance: float = 200.0        # sizing 2: balance of the first tier; the lot doubles each time the balance doubles
+    partial_enable: bool = False       # partial exit at a floating-profit target that scales with the lot tier
+    partial_profit_usd: float = 100.0  # trigger at tiers 0 and 1
+    partial_doubles: bool = True       # from tier 2 the trigger doubles with each tier (200, 400, ...)
+    partial_pct: float = 50.0          # share of the position volume to close
+    partial_min_mode: int = 0          # 0 = skip when the share is below the minimum lot, 1 = close the whole position
+    partial_per01: float = 0.0         # > 0: profit target = max(partial_min_usd, partial_per01 x lots / 0.01) instead of the tier rule
+    partial_min_usd: float = 100.0
+    ploss_enable: bool = False         # loss-side partial exit, once per position
+    ploss_per01: float = 50.0          # loss target = max(ploss_min_usd, ploss_per01 x lots / 0.01)
+    ploss_min_usd: float = 100.0
+    ploss_pct: float = 50.0
+    # --- simulation
+    trail_mode: int = 0                # 0 path, 1 worst
+    path: str = "nifty50"              # "nifty50" | "banknifty" (1-minute) | "nifty50_daily" | "banknifty_daily"
+    start: str = ""                    # inclusive IST bounds for trading (indicators use all data)
+    end: str = ""
+
+    def key(self):
+        return json.dumps(asdict(self), sort_keys=True, default=str)
+
+
+# ----------------------------------------------------------------------------------------------------------------
+# Data
+# ----------------------------------------------------------------------------------------------------------------
+
+_PATH_CACHE: dict = {}
+_TF_CACHE: dict = {}
+_SPREAD = None
+
+
+def load_path(kind: str = "nifty50") -> dict:
+    """Path bars in IST. kind 'nifty50' / 'banknifty': 1-minute candles restricted to 09:15-15:29 (pre-open 09:07 prints, the
+    15:30/15:31 closing prints and the evening Muhurat sessions are dropped and counted). kind '*_daily': one bar per session
+    from the daily file (2007-), stamped at 09:15. The 'hour' array holds the 15-minute session slot (0..24) for the session filter."""
+    if kind in _PATH_CACHE:
+        return _PATH_CACHE[kind]
+    daily = kind.endswith("_daily"); base = kind.replace("_daily", "")
+    npz = os.path.join(DATA, base, f"{kind}_path.npz")
+    if os.path.exists(npz):
+        z = np.load(npz); d = {k: z[k] for k in z.files}
+    else:
+        df = pd.read_csv(os.path.join(DATA, base, f"{base}_{'daily' if daily else '1min'}_upstox.csv.gz"), parse_dates=["time"])
+        df = df.drop_duplicates("time").sort_values("time")
+        t = df["time"].to_numpy().astype("datetime64[s]").astype(np.int64)
+        if daily:
+            t = (t // 86400) * 86400 + SESSION_OPEN_MIN * 60
+            keep = np.ones(len(t), dtype=bool)
+        else:
+            mod = (t % 86400) // 60
+            keep = (mod >= SESSION_OPEN_MIN) & (mod < SESSION_CLOSE_MIN)
+        d = {"t": t[keep], "o": df["open"].to_numpy(np.float64)[keep], "h": df["high"].to_numpy(np.float64)[keep],
+             "l": df["low"].to_numpy(np.float64)[keep], "c": df["close"].to_numpy(np.float64)[keep], "v": df["volume"].to_numpy(np.float64)[keep],
+             "dropped_out_of_session": np.array(int((~keep).sum()))}
+        np.savez(npz, **d)
+    d["t"] = d["t"].astype(np.int64)
+    mod = (d["t"] % 86400) // 60
+    d["hour"] = np.clip((mod - SESSION_OPEN_MIN) // 15, 0, NSLOT - 1).astype(np.int64)
+    d["day"] = (d["t"] // 86400).astype(np.int64)
+    d["wday"] = ((d["day"] + 3) % 7).astype(np.int64)     # Monday = 0
+    d["year"] = pd.to_datetime(d["t"], unit="s").year.to_numpy().astype(np.int64)
+    d["dropped_out_of_session"] = int(d["dropped_out_of_session"])
+    _PATH_CACHE[kind] = d
+    return d
+
+
+def build_tf(path: dict, tf_minutes: int) -> dict:
+    """Signal-timeframe bars from path bars (server time buckets) + mapping arrays."""
+    key = (id(path), tf_minutes)
+    if key in _TF_CACHE:
+        return _TF_CACHE[key]
+    t = path["t"]
+    day = t // 86400; mod = (t % 86400) // 60
+    if tf_minutes >= 375:      # one bar per session
+        bucket = day * 86400 + SESSION_OPEN_MIN * 60
+    else:                      # anchored at 09:15: 60m bars are 09:15, 10:15 ... 15:15 (the last one is a 15-minute stub)
+        bucket = day * 86400 + (SESSION_OPEN_MIN + ((mod - SESSION_OPEN_MIN) // tf_minutes) * tf_minutes) * 60
+    change = np.empty(len(t), bool); change[0] = True; change[1:] = bucket[1:] != bucket[:-1]
+    starts = np.where(change)[0]
+    ends = np.append(starts[1:], len(t))
+    n = len(starts)
+    tf = {"t": bucket[starts], "o": path["o"][starts], "c": path["c"][ends - 1],
+          "h": np.maximum.reduceat(path["h"], starts), "l": np.minimum.reduceat(path["l"], starts), "v": np.add.reduceat(path["v"], starts),
+          "n": n}
+    tfj = np.cumsum(change) - 1
+    tf["tfj"] = tfj.astype(np.int64)
+    tf["newbar"] = change.astype(np.int8)
+    tf["hour"] = np.clip((((tf["t"] % 86400) // 60) - SESSION_OPEN_MIN) // 15, 0, NSLOT - 1).astype(np.int64)
+    _TF_CACHE[key] = tf
+    return tf
+
+
+# ----------------------------------------------------------------------------------------------------------------
+# Indicators (MT5 definitions)
+# ----------------------------------------------------------------------------------------------------------------
+
+def sma(x, n):
+    return pd.Series(x).rolling(n, min_periods=n).mean().to_numpy()
+
+
+def true_range(h, l, c):
+    tr = np.empty(len(c)); tr[0] = h[0] - l[0]
+    pc = c[:-1]
+    tr[1:] = np.maximum(h[1:] - l[1:], np.maximum(np.abs(h[1:] - pc), np.abs(l[1:] - pc)))
+    return tr
+
+
+def atr_mt5(h, l, c, n):
+    """MT5 iATR = simple moving average of true range."""
+    return sma(true_range(h, l, c), n)
+
+
+def adx_mt5(h, l, c, n):
+    """MT5 iADX (ADX.mq5): EMA(period) of raw +DI/-DI, DX, then EMA(period) of DX."""
+    m = len(c)
+    pdm = np.zeros(m); ndm = np.zeros(m)
+    dh = np.diff(h); dl = -np.diff(l)
+    up = (dh > 0) & (dh > dl); dn = (dl > 0) & (dl > dh)
+    pdm[1:] = np.where(up, dh, 0.0); ndm[1:] = np.where(dn, dl, 0.0)
+    tr = true_range(h, l, c)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        pdi_raw = np.where(tr > 0, 100.0 * pdm / tr, 0.0); ndi_raw = np.where(tr > 0, 100.0 * ndm / tr, 0.0)
+    alpha = 2.0 / (n + 1)
+    pdi = pd.Series(pdi_raw).ewm(alpha=alpha, adjust=False).mean().to_numpy()
+    ndi = pd.Series(ndi_raw).ewm(alpha=alpha, adjust=False).mean().to_numpy()
+    s = pdi + ndi
+    with np.errstate(divide="ignore", invalid="ignore"):
+        dx = np.where(s > 0, 100.0 * np.abs(pdi - ndi) / s, 0.0)
+    adx = pd.Series(dx).ewm(alpha=alpha, adjust=False).mean().to_numpy()
+    adx[: 2 * n] = NAN
+    return adx
+
+
+@nb.njit(cache=True)
+def swing_levels(h, l, strength, search):
+    """GetSwingLow / GetSwingHigh as of each completed bar j (shift 1 = j). Fallback = low[j] / high[j]."""
+    n = len(l)
+    swl = np.empty(n); swh = np.empty(n)
+    for j in range(n):
+        found = False
+        for s in range(strength + 1, search + 1):
+            idx = j - s + 1
+            if idx - strength < 0:
+                break
+            low = l[idx]
+            ok = True
+            for i in range(1, strength + 1):
+                if l[idx + i] <= low or l[idx - i] <= low:
+                    ok = False; break
+            if ok:
+                swl[j] = low; found = True; break
+        if not found:
+            swl[j] = l[j]
+        found = False
+        for s in range(strength + 1, search + 1):
+            idx = j - s + 1
+            if idx - strength < 0:
+                break
+            high = h[idx]
+            ok = True
+            for i in range(1, strength + 1):
+                if h[idx + i] >= high or h[idx - i] >= high:
+                    ok = False; break
+            if ok:
+                swh[j] = high; found = True; break
+        if not found:
+            swh[j] = h[j]
+    return swl, swh
+
+
+def rma(src, n):
+    s = pd.Series(src); sma_ = s.rolling(n, min_periods=n).mean().to_numpy()
+    out = np.full(len(src), NAN); valid = np.where(~np.isnan(sma_))[0]
+    if len(valid) == 0:
+        return out
+    f = valid[0]; x = src[f:].astype(float).copy(); x[0] = sma_[f]
+    out[f:] = pd.Series(x).ewm(alpha=1.0 / n, adjust=False).mean().to_numpy()
+    return out
+
+
+def supertrend(h, l, c, factor, atr_len):
+    """TradingView ta.supertrend (TWK_Core). dir -1 = uptrend (line below price), +1 = downtrend."""
+    atr = rma(true_range(h, l, c), atr_len)
+    n = len(c); st = np.full(n, NAN); d_ = np.ones(n, dtype=np.int8)
+    hl2 = ((h + l) / 2.0).tolist(); atr_l = atr.tolist(); c_l = c.tolist()
+    lower_prev = upper_prev = NAN; prev_st = NAN
+    for i in range(n):
+        a = atr_l[i]; upper = lower = NAN
+        if not math.isnan(a):
+            src = hl2[i]; upper = src + factor * a; lower = src - factor * a
+            pl = 0.0 if math.isnan(lower_prev) else lower_prev; pu = 0.0 if math.isnan(upper_prev) else upper_prev
+            if i > 0:
+                c1 = c_l[i - 1]
+                lower = lower if (lower > pl or c1 < pl) else pl
+                upper = upper if (upper < pu or c1 > pu) else pu
+            else:
+                lower = lower if lower > pl else pl; upper = upper if upper < pu else pu
+        atr_prev_na = (i == 0) or math.isnan(atr_l[i - 1])
+        if atr_prev_na:
+            d = 1
+        elif (not math.isnan(prev_st)) and prev_st == upper_prev:
+            d = -1 if c_l[i] > upper else 1
+        else:
+            d = 1 if c_l[i] < lower else -1
+        d_[i] = d
+        cur = NAN if math.isnan(a) else (lower if d == -1 else upper)
+        st[i] = cur; prev_st = cur; lower_prev, upper_prev = lower, upper
+    return st, d_
+
+
+_IND_CACHE: dict = {}
+
+
+def indicators(tf: dict, p: Params) -> dict:
+    key = (id(tf), p.fast, p.trend, p.vol_period, p.swing_strength, p.swing_search, p.atr_period, p.adx_period, p.chand_lookback, p.sl_atr_period)
+    if key in _IND_CACHE:
+        return _IND_CACHE[key]
+    h, l, c, v = tf["h"], tf["l"], tf["c"], tf["v"]
+    ind = {"ma_f": sma(c, p.fast), "ma_t": sma(c, p.trend), "volavg": sma(v, p.vol_period),
+           "atr": atr_mt5(h, l, c, p.atr_period), "atr_sl": atr_mt5(h, l, c, p.sl_atr_period), "adx": adx_mt5(h, l, c, p.adx_period),
+           "chhi": pd.Series(h).rolling(p.chand_lookback, min_periods=p.chand_lookback).max().to_numpy(),
+           "chlo": pd.Series(l).rolling(p.chand_lookback, min_periods=p.chand_lookback).min().to_numpy()}
+    ind["swl"], ind["swh"] = swing_levels(h, l, p.swing_strength, p.swing_search)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        ind["atr_ratio"] = np.nan_to_num(ind["atr"] / sma(ind["atr"], 100), nan=-1.0)
+    st, sd = supertrend(h, l, c, 1.5, 10)
+    ind["st_line"] = st; ind["st_dir"] = sd.astype(np.int64)
+    for k in ("ma_f", "ma_t", "volavg", "atr", "atr_sl", "adx", "chhi", "chlo"):
+        ind[k] = np.nan_to_num(ind[k], nan=-1.0)
+    ind["st_line"] = np.nan_to_num(ind["st_line"], nan=-1.0)
+    _IND_CACHE[key] = ind
+    return ind
+
+
+# ----------------------------------------------------------------------------------------------------------------
+# Core simulation
+# ----------------------------------------------------------------------------------------------------------------
+
+NCOL = 32
+(C_KIN, C_KOUT, C_SIDE, C_ENTRY, C_EXIT, C_ISL, C_SLX, C_LOTS, C_PNL, C_SWAP, C_MFE, C_MAE, C_KMFE, C_REASON, C_JIN, C_JPEND, C_RISK,
+ C_BAL, C_SPR, C_ATR, C_ADX, C_SLSRC, C_KPEND, C_BE, C_PROT, C_MINEQ, C_SLIP, C_MAXSL, C_KMAE, C_PENDPX, C_PENDSL0, C_STAGE) = range(NCOL)
+NSTAT = 24
+(S_PLACED, S_CANCEL, S_FILLED, S_EXPIRED, S_INVALID, S_BLK_SLPCT, S_BLK_ADX, S_BLK_SESSION, S_BLK_MARGIN, S_AMBIG_FILL, S_PATH_EXIT,
+ S_REJ_MODIFY, S_SIG_BUY, S_SIG_SELL, S_RUIN, S_FINAL_BAL, S_MAX_BAL, S_MAXDD_BAL, S_MAXDD_EQ, S_BLK_TIME, S_STOPOUT, S_MINBAL, S_BLK_TREND, S_NBARS) = range(NSTAT)
+
+# parameter vector indices
+PK = ["lots", "entry_buffer_pts", "be_enable", "be_trigger_pts", "be_offset_pts", "protection", "prot_start_mode", "prot_start_pts", "swing_buffer_pts",
+      "atr_mult", "trail_start_pts", "trail_dist_pts", "trail_step_pts", "ma_exit", "use_risk_filter", "max_loss_pts", "use_sl_pct", "max_sl_pct",
+      "use_session", "use_adx", "adx_min", "adx_rising", "adx_lookback", "adx_consecutive", "sl_mode", "sl_atr_mult", "sl_cap_pts", "slippage_pts",
+      "swap", "start_balance", "leverage", "margin_check", "trail_mode", "atr_trail_mult", "twk_act_pts", "twk_prot_pts", "twk_lock_pts", "twk_gap_pts",
+      "thr_mode", "pending_invalidate", "pending_ratchet", "pending_max_bars", "use_volume", "use_trend", "confirm_bars", "warmup", "sl_floor_atr",
+      "twk_min_improve_pts", "swap_long_pts", "swap_short_pts", "time_exit_bars", "min_sl_pts", "sizing", "risk_pct", "max_lots", "lock_trigger_pts",
+      "lock_level_pts", "k_start", "k_end", "use_vol_filter", "vol_filter_min", "vol_filter_max", "max_spread_pts", "slope_filter_bars", "max_dist_atr",
+      "base_balance", "partial_enable", "partial_profit_usd", "partial_doubles", "partial_pct", "partial_min_mode",
+      "partial_per01", "partial_min_usd", "ploss_enable", "ploss_per01", "ploss_min_usd", "ploss_pct"]
+PI = {k: i for i, k in enumerate(PK)}
+
+
+@nb.njit(cache=True)
+def _sim(t, o, h, l, c, spr, hour, day, wday, tfj, newbar,
+         tf_h, tf_l, tf_c, tf_v, ma_f, ma_t, volavg, swl, swh, atr, atr_sl, adx, chhi, chlo, st_line, st_dir, atr_ratio,
+         allow_buy, allow_sell, P, sess, out, stats):
+    n = len(t)
+    lots0 = P[0]; buf = P[1] * POINT
+    be_on = P[2] > 0.5; be_trig_v = P[3]; be_off = P[4] * POINT
+    prot = int(P[5]); prot_start_mode = int(P[6]); prot_start_v = P[7]; sw_buf_v = P[8]
+    ch_mult = P[9]; tr_start_v = P[10]; tr_dist_v = P[11]; tr_step_v = P[12]
+    ma_exit = P[13] > 0.5; risk_filter = P[14] > 0.5; max_loss = P[15] * POINT
+    use_slpct = P[16] > 0.5; max_slpct = P[17]
+    use_sess = P[18] > 0.5; use_adx = P[19] > 0.5; adx_min = P[20]; adx_rising = P[21] > 0.5; adx_lb = int(P[22]); adx_consec = P[23] > 0.5
+    sl_mode = int(P[24]); sl_atr_mult = P[25]; sl_cap = P[26] * POINT; slip = P[27] * POINT
+    swap_on = P[28] > 0.5; balance = P[29]; leverage = P[30]; margin_check = P[31] > 0.5; worst_mode = P[32] > 0.5
+    atr_tr_mult = P[33]; twk_act_v = P[34]; twk_prot_v = P[35]; twk_lock_v = P[36]; twk_gap_v = P[37]
+    thr_mode = int(P[38]); pend_inval = P[39] > 0.5; pend_ratchet = P[40] > 0.5; pend_max = int(P[41])
+    use_vol = P[42] > 0.5; use_trend = P[43] > 0.5; confirm = int(P[44]); warm = int(P[45]); sl_floor_atr = P[46]
+    twk_min_imp = P[47] * POINT; swap_long = P[48]; swap_short = P[49]; time_exit = int(P[50]); min_sl = P[51] * POINT
+    sizing = int(P[52]); risk_pct = P[53]; max_lots = P[54]; lock_trig_v = P[55]; lock_lvl_v = P[56]
+    k_start = int(P[57]); k_end = int(P[58])
+    use_volf = P[59] > 0.5; volf_min = P[60]; volf_max = P[61]; max_spread = P[62] * POINT; slope_bars = int(P[63]); max_dist = P[64]
+    base_bal = P[65]; partial_on = P[66] > 0.5; partial_usd = P[67]; partial_dbl = P[68] > 0.5; partial_pct = P[69]; partial_min = int(P[70])
+    partial_per01 = P[71]; partial_min_usd = P[72]; ploss_on = P[73] > 0.5; ploss_per01 = P[74]; ploss_min_usd = P[75]; ploss_pct = P[76]
+
+    ntr = 0
+    pend = 0; pend_px = 0.0; pend_sl = 0.0; pend_j = -1; pend_k = -1; pend_bars = 0; pend_sl0 = 0.0
+    pos = 0; entry = 0.0; sl = 0.0; isl = 0.0; sl_src = 0; best = 0.0; worst = 0.0; k_in = -1; j_in = -1; k_best = -1; k_worst = -1
+    lots = lots0; pos_swap = 0.0; risk_usd = 0.0; spr_in = 0.0; atr_in = 0.0; adx_in = 0.0; be_flag = 0.0; prot_flag = 0.0
+    slip_tot = 0.0; stage = 0; max_sl = 0.0; unit = POINT; margin = 0.0; risk_px = 0.0
+    ptier = 0; tier = 0; partial_done = False; ploss_done = False
+    be_trig = 0.0; prot_start = 0.0; sw_buf = 0.0; tr_start = 0.0; tr_dist = 0.0; tr_step = 0.0
+    twk_act = 0.0; twk_prot = 0.0; twk_lock = 0.0; twk_gap = 0.0; lock_trig = 0.0; lock_lvl = 0.0
+    max_bal = balance; min_bal = balance; peak_eq = balance; maxdd_bal = 0.0; maxdd_eq = 0.0; ruin = False
+    last_day = day[0]
+
+    for k in range(n):
+        if k < k_start:
+            continue
+        if k >= k_end:
+            break
+        if ruin:
+            break
+        j = tfj[k] - 1          # completed signal bar (shift 1)
+        jc = j
+        # ------------------------------------------------------------ swap at the server rollover
+        if pos != 0 and day[k] != last_day and swap_on:
+            nights = 3.0 if wday[k - 1] == 2 else 1.0
+            pts = swap_long if pos == 1 else swap_short
+            pos_swap += nights * pts * POINT * CONTRACT * lots
+        last_day = day[k]
+        sp = spr[k]
+        closed_this_bar = False
+
+        # ============================================================ NEW BAR LOGIC (first tick of the bar)
+        if newbar[k] == 1 and j >= warm:
+            # --- (a) MA18 exit / time exit on the completed bar
+            if pos != 0 and ma_exit:
+                if (pos == 1 and tf_c[j] <= ma_f[j]) or (pos == -1 and tf_c[j] >= ma_f[j]):
+                    px = (o[k] - slip) if pos == 1 else (o[k] + sp + slip)
+                    reason = 8
+                    # record trade
+                    pnl = ((px - entry) if pos == 1 else (entry - px)) * CONTRACT * lots + pos_swap
+                    balance += pnl
+                    out[ntr, C_KIN] = k_in; out[ntr, C_KOUT] = k; out[ntr, C_SIDE] = pos; out[ntr, C_ENTRY] = entry; out[ntr, C_EXIT] = px
+                    out[ntr, C_ISL] = isl; out[ntr, C_SLX] = sl; out[ntr, C_LOTS] = lots; out[ntr, C_PNL] = pnl; out[ntr, C_SWAP] = pos_swap
+                    out[ntr, C_MFE] = (best - entry) if pos == 1 else (entry - best); out[ntr, C_MAE] = (entry - worst) if pos == 1 else (worst - entry)
+                    out[ntr, C_KMFE] = k_best; out[ntr, C_REASON] = reason; out[ntr, C_JIN] = j_in; out[ntr, C_JPEND] = pend_j; out[ntr, C_RISK] = risk_usd
+                    out[ntr, C_BAL] = balance; out[ntr, C_SPR] = spr_in; out[ntr, C_ATR] = atr_in; out[ntr, C_ADX] = adx_in; out[ntr, C_SLSRC] = sl_src
+                    out[ntr, C_KPEND] = pend_k; out[ntr, C_BE] = be_flag; out[ntr, C_PROT] = prot_flag
+                    out[ntr, C_MINEQ] = balance - pnl - (((entry - worst) if pos == 1 else (worst - entry)) * CONTRACT * lots)
+                    out[ntr, C_SLIP] = slip_tot + slip; out[ntr, C_MAXSL] = max_sl; out[ntr, C_KMAE] = k_worst; out[ntr, C_PENDPX] = pend_px; out[ntr, C_PENDSL0] = pend_sl0
+                    out[ntr, C_STAGE] = stage
+                    ntr += 1
+                    pos = 0; closed_this_bar = True
+                    if balance > max_bal: max_bal = balance
+                    if balance < min_bal: min_bal = balance
+                    if max_bal - balance > maxdd_bal: maxdd_bal = max_bal - balance
+                    if balance <= 0.0: ruin = True
+            if pos != 0 and time_exit > 0 and not closed_this_bar:
+                if (tfj[k] - j_in) >= time_exit:
+                    cur = (o[k] - entry) if pos == 1 else (entry - (o[k] + sp))
+                    if cur <= 0.0:
+                        px = (o[k] - slip) if pos == 1 else (o[k] + sp + slip)
+                        pnl = ((px - entry) if pos == 1 else (entry - px)) * CONTRACT * lots + pos_swap
+                        balance += pnl
+                        out[ntr, C_KIN] = k_in; out[ntr, C_KOUT] = k; out[ntr, C_SIDE] = pos; out[ntr, C_ENTRY] = entry; out[ntr, C_EXIT] = px
+                        out[ntr, C_ISL] = isl; out[ntr, C_SLX] = sl; out[ntr, C_LOTS] = lots; out[ntr, C_PNL] = pnl; out[ntr, C_SWAP] = pos_swap
+                        out[ntr, C_MFE] = (best - entry) if pos == 1 else (entry - best); out[ntr, C_MAE] = (entry - worst) if pos == 1 else (worst - entry)
+                        out[ntr, C_KMFE] = k_best; out[ntr, C_REASON] = 11; out[ntr, C_JIN] = j_in; out[ntr, C_JPEND] = pend_j; out[ntr, C_RISK] = risk_usd
+                        out[ntr, C_BAL] = balance; out[ntr, C_SPR] = spr_in; out[ntr, C_ATR] = atr_in; out[ntr, C_ADX] = adx_in; out[ntr, C_SLSRC] = sl_src
+                        out[ntr, C_KPEND] = pend_k; out[ntr, C_BE] = be_flag; out[ntr, C_PROT] = prot_flag
+                        out[ntr, C_MINEQ] = balance - pnl - (((entry - worst) if pos == 1 else (worst - entry)) * CONTRACT * lots)
+                        out[ntr, C_SLIP] = slip_tot + slip; out[ntr, C_MAXSL] = max_sl; out[ntr, C_KMAE] = k_worst; out[ntr, C_PENDPX] = pend_px; out[ntr, C_PENDSL0] = pend_sl0
+                        out[ntr, C_STAGE] = stage
+                        ntr += 1
+                        pos = 0; closed_this_bar = True
+                        if balance > max_bal: max_bal = balance
+                        if balance < min_bal: min_bal = balance
+                        if max_bal - balance > maxdd_bal: maxdd_bal = max_bal - balance
+                        if balance <= 0.0: ruin = True
+            # --- (b) pending order management (EA returns after this block)
+            if pend != 0:
+                pend_bars += 1
+                if pend_ratchet:
+                    if pend == 1:
+                        if swl[j] > pend_sl: pend_sl = swl[j]
+                    else:
+                        if swh[j] < pend_sl: pend_sl = swh[j]
+                cancel = False
+                if pend_inval:
+                    if pend == 1 and tf_c[j] < ma_f[j]: cancel = True
+                    if pend == -1 and tf_c[j] > ma_f[j]: cancel = True
+                if cancel:
+                    pend = 0; stats[S_CANCEL] += 1
+                elif pend_max > 0 and pend_bars >= pend_max:
+                    pend = 0; stats[S_EXPIRED] += 1
+            # --- (c) new setup
+            elif pos == 0:
+                ok = True
+                if use_sess and sess[hour[k]] == 0:
+                    ok = False; stats[S_BLK_SESSION] += 1
+                if ok and use_adx:
+                    if adx[j] < adx_min:
+                        ok = False
+                    elif adx_consec:
+                        for i in range(0, adx_lb):
+                            if adx[j - i] <= adx[j - i - 1]:
+                                ok = False; break
+                    elif adx_rising:
+                        if not (adx[j] > adx[j - adx_lb]):
+                            ok = False
+                    if not ok: stats[S_BLK_ADX] += 1
+                if ok and use_volf:
+                    if atr_ratio[j] < 0 or atr_ratio[j] < volf_min or (volf_max > 0 and atr_ratio[j] > volf_max):
+                        ok = False; stats[S_BLK_TREND] += 1
+                if ok and max_spread > 0 and sp > max_spread:
+                    ok = False; stats[S_BLK_TREND] += 1
+                if ok and max_dist > 0 and abs(tf_c[j] - ma_f[j]) > max_dist * atr[j]:
+                    ok = False; stats[S_BLK_TREND] += 1
+                if ok:
+                    buy = True; sell = True
+                    for i in range(confirm):
+                        jj = j - i
+                        if use_trend:
+                            if not (ma_f[jj] > ma_t[jj] and tf_c[jj] > ma_t[jj]): buy = False
+                            if not (ma_f[jj] < ma_t[jj] and tf_c[jj] < ma_t[jj]): sell = False
+                        if not (tf_c[jj] > ma_f[jj]): buy = False
+                        if not (tf_c[jj] < ma_f[jj]): sell = False
+                    if use_vol and not (tf_v[j] > volavg[j]):
+                        buy = False; sell = False
+                    if slope_bars > 0:
+                        if not (ma_f[j] > ma_f[j - slope_bars]): buy = False
+                        if not (ma_f[j] < ma_f[j - slope_bars]): sell = False
+                    if (buy and allow_buy[j] == 0) or (sell and allow_sell[j] == 0):
+                        stats[S_BLK_TREND] += 1
+                        if allow_buy[j] == 0: buy = False
+                        if allow_sell[j] == 0: sell = False
+                    side = 1 if buy else (-1 if sell else 0)
+                    if side != 0:
+                        if side == 1: stats[S_SIG_BUY] += 1
+                        else: stats[S_SIG_SELL] += 1
+                        e = (tf_h[j] + buf) if side == 1 else (tf_l[j] - buf)
+                        a_sl = atr_sl[j]
+                        # ---- initial stop
+                        if side == 1:
+                            s0 = swl[j]
+                            if sl_mode == 1: s0 = e - sl_atr_mult * a_sl
+                            elif sl_mode == 2: s0 = max(swl[j], e - sl_cap)
+                            elif sl_mode == 3: s0 = min(swl[j], e - sl_floor_atr * a_sl)
+                            elif sl_mode == 4: s0 = min(max(swl[j], e - sl_atr_mult * a_sl), e - sl_floor_atr * a_sl)
+                            elif sl_mode == 5: s0 = ma_f[j] - sw_buf_v * POINT
+                            elif sl_mode == 6: s0 = e - sl_cap
+                            elif sl_mode == 7: s0 = swl[j] - sl_atr_mult * a_sl
+                            if min_sl > 0 and e - s0 < min_sl: s0 = e - min_sl
+                        else:
+                            s0 = swh[j]
+                            if sl_mode == 1: s0 = e + sl_atr_mult * a_sl
+                            elif sl_mode == 2: s0 = min(swh[j], e + sl_cap)
+                            elif sl_mode == 3: s0 = max(swh[j], e + sl_floor_atr * a_sl)
+                            elif sl_mode == 4: s0 = max(min(swh[j], e + sl_atr_mult * a_sl), e + sl_floor_atr * a_sl)
+                            elif sl_mode == 5: s0 = ma_f[j] + sw_buf_v * POINT
+                            elif sl_mode == 6: s0 = e + sl_cap
+                            elif sl_mode == 7: s0 = swh[j] + sl_atr_mult * a_sl
+                            if min_sl > 0 and s0 - e < min_sl: s0 = e + min_sl
+                        s0 = round(round(s0 / POINT) * POINT * 100.0) / 100.0
+                        dist = (e - s0) if side == 1 else (s0 - e)
+                        # ---- lot size
+                        L = lots0; ptier = 0
+                        if sizing == 1 and dist > 0:
+                            L = math.floor((balance * risk_pct / 100.0) / (dist * CONTRACT) / 0.01) * 0.01
+                            if L < 0.01: L = 0.01
+                            if L > max_lots: L = max_lots
+                        elif sizing == 2:
+                            bb = balance
+                            while bb >= 2.0 * base_bal and ptier < 30:
+                                bb = bb / 2.0; ptier += 1
+                            if balance < base_bal: ptier = 0
+                            L = lots0 * (2.0 ** ptier)
+                            if L > max_lots: L = max_lots
+                            L = math.floor(L / 0.01 + 1e-9) * 0.01
+                            if L < 0.01: L = 0.01
+                        elif sizing == 3:
+                            steps = math.floor(balance / base_bal + 1e-9) if base_bal > 0 else 1
+                            if steps < 1: steps = 1
+                            L = lots0 * steps
+                            if L > max_lots: L = max_lots
+                            L = math.floor(L / 0.01 + 1e-9) * 0.01
+                            if L < 0.01: L = 0.01
+                            ptier = int(round(L / lots0)) - 1
+                        # ---- SL % filter (OrderCalcProfit at LotSize)
+                        risk_try = dist * CONTRACT * L
+                        if dist <= 0:
+                            stats[S_INVALID] += 1
+                        elif use_slpct and max_slpct > 0 and risk_try > balance * max_slpct / 100.0:
+                            stats[S_BLK_SLPCT] += 1
+                        else:
+                            # ---- MT5 validity: buy stop above ask, sell stop below bid
+                            valid = (e > o[k] + sp) if side == 1 else (e < o[k])
+                            if not valid:
+                                stats[S_INVALID] += 1
+                            else:
+                                pend = side; pend_px = e; pend_sl = s0; pend_sl0 = s0; pend_j = j; pend_k = k; pend_bars = 0; lots = L
+                                stats[S_PLACED] += 1
+
+        # ============================================================ TICK-LEVEL LOGIC (every path bar)
+        # --- pending fill
+        if pend != 0 and pos == 0:
+            fill = -1.0
+            if pend == 1:
+                if o[k] + sp >= pend_px: fill = o[k] + sp
+                elif h[k] + sp >= pend_px: fill = pend_px
+            else:
+                if o[k] <= pend_px: fill = o[k]
+                elif l[k] <= pend_px: fill = pend_px
+            if fill > 0:
+                margin = fill * CONTRACT * lots / leverage
+                if margin_check and balance < margin:
+                    stats[S_BLK_MARGIN] += 1; pend = 0
+                else:
+                    if pend == 1: fill += slip
+                    else: fill -= slip
+                    pos = pend; entry = fill; sl = pend_sl; isl = pend_sl; sl_src = 1; pend = 0
+                    best = h[k] if pos == 1 else (l[k] + sp); worst = l[k] if pos == 1 else (h[k] + sp)
+                    k_in = k; j_in = tfj[k]; k_best = k; k_worst = k; pos_swap = 0.0; be_flag = 0.0; prot_flag = 0.0; slip_tot = slip; stage = 0
+                    tier = ptier; partial_done = False; ploss_done = False
+                    spr_in = sp; atr_in = atr[jc]; adx_in = adx[jc]; max_sl = sl
+                    risk_px = (entry - isl) if pos == 1 else (isl - entry)
+                    risk_usd = risk_px * CONTRACT * lots
+                    # threshold units
+                    if thr_mode == 1: unit = atr_in / 100.0
+                    elif thr_mode == 2: unit = risk_px / 100.0
+                    else: unit = POINT
+                    be_trig = be_trig_v * unit; prot_start = prot_start_v * unit; sw_buf = sw_buf_v * unit
+                    tr_start = tr_start_v * unit; tr_dist = tr_dist_v * unit; tr_step = tr_step_v * unit
+                    twk_act = twk_act_v * unit; twk_prot = twk_prot_v * unit; twk_lock = twk_lock_v * unit; twk_gap = twk_gap_v * unit
+                    lock_trig = lock_trig_v * unit; lock_lvl = lock_lvl_v * unit
+                    stats[S_FILLED] += 1
+                    # same-bar stop after the fill (order unknown): path rule = close beyond the stop
+                    hit0 = (c[k] <= sl) if pos == 1 else (c[k] + sp >= sl)
+                    if hit0:
+                        stats[S_AMBIG_FILL] += 1
+                        px = (sl - slip) if pos == 1 else (sl + slip)
+                        pnl = ((px - entry) if pos == 1 else (entry - px)) * CONTRACT * lots
+                        balance += pnl
+                        out[ntr, C_KIN] = k_in; out[ntr, C_KOUT] = k; out[ntr, C_SIDE] = pos; out[ntr, C_ENTRY] = entry; out[ntr, C_EXIT] = px
+                        out[ntr, C_ISL] = isl; out[ntr, C_SLX] = sl; out[ntr, C_LOTS] = lots; out[ntr, C_PNL] = pnl; out[ntr, C_SWAP] = 0.0
+                        out[ntr, C_MFE] = (best - entry) if pos == 1 else (entry - best); out[ntr, C_MAE] = (entry - worst) if pos == 1 else (worst - entry)
+                        out[ntr, C_KMFE] = k; out[ntr, C_REASON] = 1; out[ntr, C_JIN] = j_in; out[ntr, C_JPEND] = pend_j; out[ntr, C_RISK] = risk_usd
+                        out[ntr, C_BAL] = balance; out[ntr, C_SPR] = spr_in; out[ntr, C_ATR] = atr_in; out[ntr, C_ADX] = adx_in; out[ntr, C_SLSRC] = 1
+                        out[ntr, C_KPEND] = pend_k; out[ntr, C_BE] = 0.0; out[ntr, C_PROT] = 0.0; out[ntr, C_MINEQ] = balance - pnl - risk_usd
+                        out[ntr, C_SLIP] = slip_tot + slip; out[ntr, C_MAXSL] = max_sl; out[ntr, C_KMAE] = k; out[ntr, C_PENDPX] = pend_px; out[ntr, C_PENDSL0] = pend_sl0
+                        out[ntr, C_STAGE] = 0
+                        ntr += 1; pos = 0; closed_this_bar = True
+                        if balance > max_bal: max_bal = balance
+                        if balance < min_bal: min_bal = balance
+                        if max_bal - balance > maxdd_bal: maxdd_bal = max_bal - balance
+                        if balance <= 0.0: ruin = True
+                        continue
+
+        # --- open position management
+        if pos != 0 and not closed_this_bar:
+            # 1. existing stop (and emergency risk filter as an effective stop)
+            eff = sl
+            eff_src = sl_src
+            if risk_filter:
+                rf = (entry - max_loss) if pos == 1 else (entry + max_loss)
+                if (pos == 1 and rf > eff) or (pos == -1 and rf < eff):
+                    eff = rf; eff_src = 9
+            hit = (l[k] <= eff) if pos == 1 else (h[k] + sp >= eff)
+            if hit:
+                px = (eff - slip) if pos == 1 else (eff + slip)
+                # a gap through the stop fills at the open
+                if pos == 1 and o[k] < eff: px = o[k] - slip
+                if pos == -1 and o[k] + sp > eff: px = o[k] + sp + slip
+                if pos == 1 and l[k] < worst: worst = l[k]; k_worst = k
+                if pos == -1 and h[k] + sp > worst: worst = h[k] + sp; k_worst = k
+                pnl = ((px - entry) if pos == 1 else (entry - px)) * CONTRACT * lots + pos_swap
+                balance += pnl
+                reason = eff_src if eff_src != 9 else 9
+                if eff_src == 1: reason = 1
+                out[ntr, C_KIN] = k_in; out[ntr, C_KOUT] = k; out[ntr, C_SIDE] = pos; out[ntr, C_ENTRY] = entry; out[ntr, C_EXIT] = px
+                out[ntr, C_ISL] = isl; out[ntr, C_SLX] = eff; out[ntr, C_LOTS] = lots; out[ntr, C_PNL] = pnl; out[ntr, C_SWAP] = pos_swap
+                out[ntr, C_MFE] = (best - entry) if pos == 1 else (entry - best); out[ntr, C_MAE] = (entry - worst) if pos == 1 else (worst - entry)
+                out[ntr, C_KMFE] = k_best; out[ntr, C_REASON] = reason; out[ntr, C_JIN] = j_in; out[ntr, C_JPEND] = pend_j; out[ntr, C_RISK] = risk_usd
+                out[ntr, C_BAL] = balance; out[ntr, C_SPR] = spr_in; out[ntr, C_ATR] = atr_in; out[ntr, C_ADX] = adx_in; out[ntr, C_SLSRC] = eff_src
+                out[ntr, C_KPEND] = pend_k; out[ntr, C_BE] = be_flag; out[ntr, C_PROT] = prot_flag
+                out[ntr, C_MINEQ] = balance - pnl - (((entry - worst) if pos == 1 else (worst - entry)) * CONTRACT * lots)
+                out[ntr, C_SLIP] = slip_tot + slip; out[ntr, C_MAXSL] = max_sl; out[ntr, C_KMAE] = k_worst; out[ntr, C_PENDPX] = pend_px; out[ntr, C_PENDSL0] = pend_sl0
+                out[ntr, C_STAGE] = stage
+                ntr += 1; pos = 0
+                if balance > max_bal: max_bal = balance
+                if balance < min_bal: min_bal = balance
+                if max_bal - balance > maxdd_bal: maxdd_bal = max_bal - balance
+                if balance <= 0.0: ruin = True
+                continue
+            # 2. excursions
+            if pos == 1:
+                if h[k] > best: best = h[k]; k_best = k
+                if l[k] < worst: worst = l[k]; k_worst = k
+                profit = h[k] - entry
+                cur_best_px = h[k]
+            else:
+                if l[k] + sp < best: best = l[k] + sp; k_best = k
+                if h[k] + sp > worst: worst = h[k] + sp; k_worst = k
+                profit = entry - (l[k] + sp)
+                cur_best_px = l[k] + sp
+            # equity drawdown tracking (mark at the worst point of the bar)
+            open_pnl_worst = (((l[k] - entry) if pos == 1 else (entry - (h[k] + sp))) * CONTRACT * lots) + pos_swap
+            eq = balance + open_pnl_worst
+            if eq > peak_eq: peak_eq = eq
+            if peak_eq - eq > maxdd_eq: maxdd_eq = peak_eq - eq
+            # stop-out at 20% margin level
+            if margin_check and eq <= 0.2 * margin:
+                px = (l[k] - slip) if pos == 1 else (h[k] + sp + slip)
+                pnl = ((px - entry) if pos == 1 else (entry - px)) * CONTRACT * lots + pos_swap
+                balance += pnl
+                out[ntr, C_KIN] = k_in; out[ntr, C_KOUT] = k; out[ntr, C_SIDE] = pos; out[ntr, C_ENTRY] = entry; out[ntr, C_EXIT] = px
+                out[ntr, C_ISL] = isl; out[ntr, C_SLX] = sl; out[ntr, C_LOTS] = lots; out[ntr, C_PNL] = pnl; out[ntr, C_SWAP] = pos_swap
+                out[ntr, C_MFE] = (best - entry) if pos == 1 else (entry - best); out[ntr, C_MAE] = (entry - worst) if pos == 1 else (worst - entry)
+                out[ntr, C_KMFE] = k_best; out[ntr, C_REASON] = 12; out[ntr, C_JIN] = j_in; out[ntr, C_JPEND] = pend_j; out[ntr, C_RISK] = risk_usd
+                out[ntr, C_BAL] = balance; out[ntr, C_SPR] = spr_in; out[ntr, C_ATR] = atr_in; out[ntr, C_ADX] = adx_in; out[ntr, C_SLSRC] = sl_src
+                out[ntr, C_KPEND] = pend_k; out[ntr, C_BE] = be_flag; out[ntr, C_PROT] = prot_flag; out[ntr, C_MINEQ] = eq
+                out[ntr, C_SLIP] = slip_tot + slip; out[ntr, C_MAXSL] = max_sl; out[ntr, C_KMAE] = k_worst; out[ntr, C_PENDPX] = pend_px; out[ntr, C_PENDSL0] = pend_sl0
+                out[ntr, C_STAGE] = stage
+                ntr += 1; pos = 0; stats[S_STOPOUT] += 1; ruin = True
+                continue
+            # 2a. loss-side partial exit (study 4b): close a share when the floating loss reaches the per-lot target
+            if ploss_on and not ploss_done:
+                ltrig = max(ploss_min_usd, ploss_per01 * lots / 0.01)
+                if pos == 1:
+                    pxl = entry - ltrig / (CONTRACT * lots); lreached = l[k] <= pxl; lfill = o[k] if o[k] <= pxl else pxl
+                else:
+                    pxl = entry + ltrig / (CONTRACT * lots); lreached = (h[k] + sp) >= pxl; lfill = (o[k] + sp) if (o[k] + sp) >= pxl else pxl
+                if lreached:
+                    cv = math.floor(lots * ploss_pct / 100.0 / 0.01 + 1e-9) * 0.01
+                    if cv < 0.01 and partial_min == 1:
+                        cv = lots
+                    if cv < 0.01:
+                        ploss_done = True
+                    else:
+                        px = (lfill - slip) if pos == 1 else (lfill + slip)
+                        pnl = ((px - entry) if pos == 1 else (entry - px)) * CONTRACT * cv
+                        balance += pnl
+                        out[ntr, C_KIN] = k_in; out[ntr, C_KOUT] = k; out[ntr, C_SIDE] = pos; out[ntr, C_ENTRY] = entry; out[ntr, C_EXIT] = px
+                        out[ntr, C_ISL] = isl; out[ntr, C_SLX] = sl; out[ntr, C_LOTS] = cv; out[ntr, C_PNL] = pnl; out[ntr, C_SWAP] = 0.0
+                        out[ntr, C_MFE] = (best - entry) if pos == 1 else (entry - best); out[ntr, C_MAE] = (entry - worst) if pos == 1 else (worst - entry)
+                        out[ntr, C_KMFE] = k_best; out[ntr, C_REASON] = 15; out[ntr, C_JIN] = j_in; out[ntr, C_JPEND] = pend_j; out[ntr, C_RISK] = risk_usd
+                        out[ntr, C_BAL] = balance; out[ntr, C_SPR] = spr_in; out[ntr, C_ATR] = atr_in; out[ntr, C_ADX] = adx_in; out[ntr, C_SLSRC] = sl_src
+                        out[ntr, C_KPEND] = pend_k; out[ntr, C_BE] = be_flag; out[ntr, C_PROT] = prot_flag; out[ntr, C_MINEQ] = balance - pnl
+                        out[ntr, C_SLIP] = slip_tot + slip; out[ntr, C_MAXSL] = max_sl; out[ntr, C_KMAE] = k_worst; out[ntr, C_PENDPX] = pend_px; out[ntr, C_PENDSL0] = pend_sl0
+                        out[ntr, C_STAGE] = tier
+                        ntr += 1
+                        ploss_done = True
+                        if balance < min_bal: min_bal = balance
+                        if max_bal - balance > maxdd_bal: maxdd_bal = max_bal - balance
+                        if balance <= 0.0: ruin = True
+                        if cv >= lots - 1e-9:
+                            pos = 0
+                            continue
+                        lots = lots - cv
+            # 2b. partial exit at a floating-profit target that scales with the lot tier (study 4)
+            if partial_on and not partial_done:
+                if partial_per01 > 0:
+                    trig = max(partial_min_usd, partial_per01 * lots / 0.01)
+                else:
+                    trig = partial_usd * ((2.0 ** (tier - 1)) if (partial_dbl and tier >= 2) else 1.0)
+                if pos == 1:
+                    pxt = entry + trig / (CONTRACT * lots); reached = h[k] >= pxt; fillp = o[k] if o[k] >= pxt else pxt
+                else:
+                    pxt = entry - trig / (CONTRACT * lots); reached = (l[k] + sp) <= pxt; fillp = (o[k] + sp) if (o[k] + sp) <= pxt else pxt
+                if reached:
+                    cv = math.floor(lots * partial_pct / 100.0 / 0.01 + 1e-9) * 0.01
+                    if cv < 0.01 and partial_min == 1:
+                        cv = lots
+                    if cv < 0.01:
+                        partial_done = True
+                    else:
+                        px = (fillp - slip) if pos == 1 else (fillp + slip)
+                        pnl = ((px - entry) if pos == 1 else (entry - px)) * CONTRACT * cv
+                        balance += pnl
+                        out[ntr, C_KIN] = k_in; out[ntr, C_KOUT] = k; out[ntr, C_SIDE] = pos; out[ntr, C_ENTRY] = entry; out[ntr, C_EXIT] = px
+                        out[ntr, C_ISL] = isl; out[ntr, C_SLX] = sl; out[ntr, C_LOTS] = cv; out[ntr, C_PNL] = pnl; out[ntr, C_SWAP] = 0.0
+                        out[ntr, C_MFE] = (best - entry) if pos == 1 else (entry - best); out[ntr, C_MAE] = (entry - worst) if pos == 1 else (worst - entry)
+                        out[ntr, C_KMFE] = k_best; out[ntr, C_REASON] = 14; out[ntr, C_JIN] = j_in; out[ntr, C_JPEND] = pend_j; out[ntr, C_RISK] = risk_usd
+                        out[ntr, C_BAL] = balance; out[ntr, C_SPR] = spr_in; out[ntr, C_ATR] = atr_in; out[ntr, C_ADX] = adx_in; out[ntr, C_SLSRC] = sl_src
+                        out[ntr, C_KPEND] = pend_k; out[ntr, C_BE] = be_flag; out[ntr, C_PROT] = prot_flag; out[ntr, C_MINEQ] = balance - pnl
+                        out[ntr, C_SLIP] = slip_tot + slip; out[ntr, C_MAXSL] = max_sl; out[ntr, C_KMAE] = k_worst; out[ntr, C_PENDPX] = pend_px; out[ntr, C_PENDSL0] = pend_sl0
+                        out[ntr, C_STAGE] = tier
+                        ntr += 1
+                        partial_done = True
+                        if balance > max_bal: max_bal = balance
+                        if cv >= lots - 1e-9:
+                            pos = 0
+                            continue
+                        lots = lots - cv
+            # 3. stop moves: break-even, then protection (tighten only)
+            cand = sl; src = sl_src
+            if be_on and profit >= be_trig - 1e-9:
+                c1 = (entry + be_off) if pos == 1 else (entry - be_off)
+                if (pos == 1 and c1 > cand) or (pos == -1 and c1 < cand):
+                    cand = c1; src = 2
+            active = (prot_start_mode == 0) or (profit >= prot_start - 1e-9)
+            if active and prot != 0:
+                prot_flag = 1.0
+                if prot & 1:   # swing
+                    c2 = (swl[jc] - sw_buf) if pos == 1 else (swh[jc] + sw_buf)
+                    if (pos == 1 and c2 > cand) or (pos == -1 and c2 < cand):
+                        cand = c2; src = 3
+                if prot & 2 and atr[jc] > 0:   # chandelier
+                    c2 = (chhi[jc] - atr[jc] * ch_mult) if pos == 1 else (chlo[jc] + atr[jc] * ch_mult)
+                    if (pos == 1 and c2 > cand) or (pos == -1 and c2 < cand):
+                        cand = c2; src = 4
+                if prot & 4:   # fixed trailing
+                    if profit >= tr_start - 1e-9:
+                        c2 = (cur_best_px - tr_dist) if pos == 1 else (cur_best_px + tr_dist)
+                        if sl == 0.0 or ((c2 - sl) if pos == 1 else (sl - c2)) >= tr_step - 1e-9:
+                            if (pos == 1 and c2 > cand) or (pos == -1 and c2 < cand):
+                                cand = c2; src = 5
+                if prot & 8 and atr[jc] > 0:   # ATR trailing
+                    if profit >= tr_start - 1e-9:
+                        c2 = (cur_best_px - atr_tr_mult * atr[jc]) if pos == 1 else (cur_best_px + atr_tr_mult * atr[jc])
+                        if ((c2 - sl) if pos == 1 else (sl - c2)) >= tr_step - 1e-9:
+                            if (pos == 1 and c2 > cand) or (pos == -1 and c2 < cand):
+                                cand = c2; src = 6
+            if prot & 16:      # TWK MomentumEA 3-stage trailing (independent of prot_start)
+                if profit >= twk_prot - 1e-9: stage = max(stage, 2)
+                elif profit >= twk_act - 1e-9: stage = max(stage, 1)
+                if stage >= 1 and st_line[jc] > 0:
+                    fav = (st_dir[jc] == -1) if pos == 1 else (st_dir[jc] == 1)
+                    if fav:
+                        c2 = st_line[jc]
+                        if ((pos == 1 and c2 > cand) or (pos == -1 and c2 < cand)) and abs(c2 - sl) >= twk_min_imp - 1e-9:
+                            cand = c2; src = 7
+                if stage >= 2:
+                    c2 = (entry + twk_lock) if pos == 1 else (entry - twk_lock)
+                    if (pos == 1 and c2 > cand) or (pos == -1 and c2 < cand):
+                        cand = c2; src = 7
+                    c2 = (cur_best_px - twk_gap) if pos == 1 else (cur_best_px + twk_gap)
+                    if ((pos == 1 and c2 > cand) or (pos == -1 and c2 < cand)) and abs(c2 - sl) >= twk_min_imp - 1e-9:
+                        cand = c2; src = 7
+            if prot & 32 and lock_trig > 0 and profit >= lock_trig - 1e-9:
+                c2 = (entry + lock_lvl) if pos == 1 else (entry - lock_lvl)
+                if (pos == 1 and c2 > cand) or (pos == -1 and c2 < cand):
+                    cand = c2; src = 13
+            if cand != sl:
+                cand = round(round(cand / POINT) * POINT * 100.0) / 100.0
+                # MT5 validity: the new stop must be on the correct side of the market at some moment in this bar
+                can_set = (cand < h[k]) if pos == 1 else (cand > l[k] + sp)
+                if not can_set:
+                    stats[S_REJ_MODIFY] += 1
+                elif (pos == 1 and cand > sl) or (pos == -1 and cand < sl):
+                    sl = cand; sl_src = src
+                    if src == 2: be_flag = 1.0
+                    if pos == 1 and sl > max_sl: max_sl = sl
+                    if pos == -1 and (max_sl == 0.0 or sl < max_sl): max_sl = sl
+                    against = (c[k] < o[k]) if pos == 1 else (c[k] > o[k])
+                    if worst_mode: against = True
+                    if pos == 1:
+                        hit2 = (c[k] <= sl) or (against and l[k] <= sl)
+                    else:
+                        hit2 = (c[k] + sp >= sl) or (against and h[k] + sp >= sl)
+                    if hit2:
+                        stats[S_PATH_EXIT] += 1
+                        px = (sl - slip) if pos == 1 else (sl + slip)
+                        pnl = ((px - entry) if pos == 1 else (entry - px)) * CONTRACT * lots + pos_swap
+                        balance += pnl
+                        out[ntr, C_KIN] = k_in; out[ntr, C_KOUT] = k; out[ntr, C_SIDE] = pos; out[ntr, C_ENTRY] = entry; out[ntr, C_EXIT] = px
+                        out[ntr, C_ISL] = isl; out[ntr, C_SLX] = sl; out[ntr, C_LOTS] = lots; out[ntr, C_PNL] = pnl; out[ntr, C_SWAP] = pos_swap
+                        out[ntr, C_MFE] = (best - entry) if pos == 1 else (entry - best); out[ntr, C_MAE] = (entry - worst) if pos == 1 else (worst - entry)
+                        out[ntr, C_KMFE] = k_best; out[ntr, C_REASON] = sl_src; out[ntr, C_JIN] = j_in; out[ntr, C_JPEND] = pend_j; out[ntr, C_RISK] = risk_usd
+                        out[ntr, C_BAL] = balance; out[ntr, C_SPR] = spr_in; out[ntr, C_ATR] = atr_in; out[ntr, C_ADX] = adx_in; out[ntr, C_SLSRC] = sl_src
+                        out[ntr, C_KPEND] = pend_k; out[ntr, C_BE] = be_flag; out[ntr, C_PROT] = prot_flag
+                        out[ntr, C_MINEQ] = balance - pnl - (((entry - worst) if pos == 1 else (worst - entry)) * CONTRACT * lots)
+                        out[ntr, C_SLIP] = slip_tot + slip; out[ntr, C_MAXSL] = max_sl; out[ntr, C_KMAE] = k_worst; out[ntr, C_PENDPX] = pend_px; out[ntr, C_PENDSL0] = pend_sl0
+                        out[ntr, C_STAGE] = stage
+                        ntr += 1; pos = 0
+                        if balance > max_bal: max_bal = balance
+                        if balance < min_bal: min_bal = balance
+                        if max_bal - balance > maxdd_bal: maxdd_bal = max_bal - balance
+                        if balance <= 0.0: ruin = True
+                        continue
+        if pos == 0:
+            if balance > peak_eq: peak_eq = balance
+    # end of test: close open position at the last close
+    if pos != 0 and ntr < out.shape[0]:
+        kk = min(k_end, n) - 1
+        px = (c[kk] - slip) if pos == 1 else (c[kk] + spr[kk] + slip)
+        pnl = ((px - entry) if pos == 1 else (entry - px)) * CONTRACT * lots + pos_swap
+        balance += pnl
+        out[ntr, C_KIN] = k_in; out[ntr, C_KOUT] = kk; out[ntr, C_SIDE] = pos; out[ntr, C_ENTRY] = entry; out[ntr, C_EXIT] = px
+        out[ntr, C_ISL] = isl; out[ntr, C_SLX] = sl; out[ntr, C_LOTS] = lots; out[ntr, C_PNL] = pnl; out[ntr, C_SWAP] = pos_swap
+        out[ntr, C_MFE] = (best - entry) if pos == 1 else (entry - best); out[ntr, C_MAE] = (entry - worst) if pos == 1 else (worst - entry)
+        out[ntr, C_KMFE] = k_best; out[ntr, C_REASON] = 10; out[ntr, C_JIN] = j_in; out[ntr, C_JPEND] = pend_j; out[ntr, C_RISK] = risk_usd
+        out[ntr, C_BAL] = balance; out[ntr, C_SPR] = spr_in; out[ntr, C_ATR] = atr_in; out[ntr, C_ADX] = adx_in; out[ntr, C_SLSRC] = sl_src
+        out[ntr, C_KPEND] = pend_k; out[ntr, C_BE] = be_flag; out[ntr, C_PROT] = prot_flag
+        out[ntr, C_MINEQ] = balance - pnl - (((entry - worst) if pos == 1 else (worst - entry)) * CONTRACT * lots)
+        out[ntr, C_SLIP] = slip_tot + slip; out[ntr, C_MAXSL] = max_sl; out[ntr, C_KMAE] = k_worst; out[ntr, C_PENDPX] = pend_px; out[ntr, C_PENDSL0] = pend_sl0
+        out[ntr, C_STAGE] = stage
+        ntr += 1
+        if balance > max_bal: max_bal = balance
+        if max_bal - balance > maxdd_bal: maxdd_bal = max_bal - balance
+    stats[S_RUIN] = 1.0 if ruin else 0.0
+    stats[S_FINAL_BAL] = balance; stats[S_MAX_BAL] = max_bal; stats[S_MAXDD_BAL] = maxdd_bal; stats[S_MAXDD_EQ] = max(maxdd_eq, maxdd_bal); stats[S_MINBAL] = min_bal
+    return ntr
+
+
+# ----------------------------------------------------------------------------------------------------------------
+# Runner
+# ----------------------------------------------------------------------------------------------------------------
+
+def _spread_array(path: dict, p: Params) -> np.ndarray:
+    """Fixed futures bid/ask spread in ticks (the index print is treated as the bid)."""
+    return np.full(len(path["t"]), (max(p.spread_fixed_pts, 0.0) * p.spread_mult + p.spread_add_pts) * POINT, dtype=np.float64)
+
+
+def run(p: Params, verbose: bool = False, allow_buy=None, allow_sell=None) -> tuple[pd.DataFrame, dict]:
+    """allow_buy / allow_sell: optional int8 arrays with one flag per signal bar (1 = setup allowed) for experiment filters."""
+    path = load_path(p.path)
+    tf = build_tf(path, p.tf_minutes)
+    ind = indicators(tf, p)
+    spr = _spread_array(path, p)
+    t = path["t"]
+    k_start = 0; k_end = len(t)
+    if p.start:
+        k_start = int(np.searchsorted(t, int(pd.Timestamp(p.start).timestamp())))
+    if p.end:
+        k_end = int(np.searchsorted(t, int(pd.Timestamp(p.end).timestamp())))
+    warm = max(p.trend, p.swing_search, p.chand_lookback, 2 * p.adx_period, p.atr_period, p.sl_atr_period) + 3
+    vec = np.zeros(len(PK))
+    d = asdict(p)
+    for k_, i in PI.items():
+        if k_ in d:
+            v = d[k_]
+            vec[i] = float(v) if not isinstance(v, (tuple, list, str)) else 0.0
+    vec[PI["warmup"]] = warm; vec[PI["swap_long_pts"]] = 0.0; vec[PI["swap_short_pts"]] = 0.0
+    vec[PI["k_start"]] = k_start; vec[PI["k_end"]] = k_end
+    sess = np.zeros(NSLOT, dtype=np.int64)
+    for h_ in p.session_slots:
+        sess[h_] = 1
+    ab = np.ones(tf["n"], dtype=np.int64) if allow_buy is None else np.asarray(allow_buy, dtype=np.int64)
+    asl = np.ones(tf["n"], dtype=np.int64) if allow_sell is None else np.asarray(allow_sell, dtype=np.int64)
+    assert len(ab) == tf["n"] and len(asl) == tf["n"], "allow arrays must have one entry per signal bar"
+    max_tr = min(len(t) // 2 + 10, 600000)
+    out = np.zeros((max_tr, NCOL)); stats = np.zeros(NSTAT)
+    ntr = _sim(t, path["o"], path["h"], path["l"], path["c"], spr, path["hour"], path["day"], path["wday"], tf["tfj"], tf["newbar"],
+               tf["h"], tf["l"], tf["c"], tf["v"], ind["ma_f"], ind["ma_t"], ind["volavg"], ind["swl"], ind["swh"], ind["atr"], ind["atr_sl"], ind["adx"],
+               ind["chhi"], ind["chlo"], ind["st_line"], ind["st_dir"], ind["atr_ratio"], ab, asl, vec, sess, out, stats)
+    cols = ["k_in", "k_out", "side", "entry", "exit", "isl", "sl_exit", "lots", "pnl", "swap", "mfe_px", "mae_px", "k_mfe", "reason", "j_in", "j_pend", "risk_usd",
+            "balance", "spread_entry", "atr_entry", "adx_entry", "sl_src", "k_pend", "be_hit", "prot_active", "min_equity", "slip_usd", "max_sl", "k_mae", "pend_px", "pend_sl0", "stage"]
+    tr = pd.DataFrame(out[:ntr], columns=cols)
+    for c_ in ("k_in", "k_out", "side", "k_mfe", "reason", "j_in", "j_pend", "sl_src", "k_pend", "k_mae", "stage"):
+        tr[c_] = tr[c_].astype(np.int64)
+    if ntr:
+        tr["time_in"] = pd.to_datetime(t[tr["k_in"].to_numpy()], unit="s")
+        tr["time_out"] = pd.to_datetime(t[tr["k_out"].to_numpy()], unit="s")
+        tr["time_mfe"] = pd.to_datetime(t[tr["k_mfe"].to_numpy()], unit="s")
+        tr["time_pend"] = pd.to_datetime(t[tr["k_pend"].to_numpy()], unit="s")
+        tr["hold_min"] = (tr["k_out"].map(lambda i: t[i]) - tr["time_in"].astype("int64") // 10**9) / 60.0
+        tr["bars_held"] = tf["tfj"][tr["k_out"].to_numpy()] - tr["j_in"].to_numpy() + 1
+        tr["mfe_usd"] = tr["mfe_px"].clip(lower=0) * CONTRACT * tr["lots"]
+        tr["mae_usd"] = tr["mae_px"].clip(lower=0) * CONTRACT * tr["lots"]
+        tr["gross_usd"] = tr["pnl"] - tr["swap"]
+        tr["r"] = np.where(tr["risk_usd"] > 0, tr["pnl"] / tr["risk_usd"], NAN)
+        tr["mfe_r"] = np.where(tr["risk_usd"] > 0, tr["mfe_usd"] / tr["risk_usd"], NAN)
+        tr["mae_r"] = np.where(tr["risk_usd"] > 0, tr["mae_usd"] / tr["risk_usd"], NAN)
+        tr["giveback_usd"] = tr["mfe_usd"] - tr["pnl"]
+        tr["giveback_pct"] = np.where(tr["mfe_usd"] > 0, 100.0 * tr["giveback_usd"] / tr["mfe_usd"], NAN)
+        tr["exit_reason"] = tr["reason"].map(EXIT_REASONS)
+        tr["hour_in"] = tr["time_in"].dt.hour
+        tr["weekday_in"] = tr["time_in"].dt.weekday
+        tr["minute_in"] = tr["time_in"].dt.hour * 60 + tr["time_in"].dt.minute
+        tr["slot_in"] = ((tr["minute_in"] - SESSION_OPEN_MIN) // 15).clip(0, NSLOT - 1)
+        tr["session"] = tr["minute_in"].map(session_of_minute)
+        tr["date_in"] = tr["time_in"].dt.normalize()
+        tr["pts"] = tr["pnl"] / tr["lots"]                      # index points per unit (the money unit of this engine)
+        tr["fill_delay_bars"] = tr["j_in"] - tr["j_pend"] - 1
+    st = {k_: float(stats[i]) for k_, i in {"pending_placed": S_PLACED, "pending_cancelled": S_CANCEL, "filled": S_FILLED, "pending_expired": S_EXPIRED,
+                                            "rejected_invalid_price": S_INVALID, "blocked_sl_pct": S_BLK_SLPCT, "blocked_adx": S_BLK_ADX, "blocked_session": S_BLK_SESSION,
+                                            "blocked_margin": S_BLK_MARGIN, "ambiguous_fill_and_stop": S_AMBIG_FILL, "path_assumption_exits": S_PATH_EXIT,
+                                            "rejected_sl_modify": S_REJ_MODIFY, "signals_buy": S_SIG_BUY, "signals_sell": S_SIG_SELL, "ruin": S_RUIN,
+                                            "final_balance": S_FINAL_BAL, "max_balance": S_MAX_BAL, "maxdd_balance": S_MAXDD_BAL, "maxdd_equity": S_MAXDD_EQ,
+                                            "stop_out": S_STOPOUT, "min_balance": S_MINBAL, "blocked_extra": S_BLK_TREND}.items()}
+    st["path_bars"] = int(k_end - k_start); st["tf_bars"] = int(tf["tfj"][k_end - 1] - tf["tfj"][k_start] + 1) if k_end > k_start else 0
+    st["start"] = str(pd.Timestamp(t[k_start], unit="s")) if k_start < len(t) else ""; st["end"] = str(pd.Timestamp(t[max(k_end - 1, 0)], unit="s"))
+    return tr, st
+
+
+def session_of_minute(m: int) -> str:
+    """Indian cash-session phases by minute of day: opening 09:15-09:44, morning 09:45-11:29, midday 11:30-13:29,
+    afternoon 13:30-14:59, closing 15:00-15:29."""
+    if m < 9 * 60 + 45: return "opening"
+    if m < 11 * 60 + 30: return "morning"
+    if m < 13 * 60 + 30: return "midday"
+    if m < 15 * 60: return "afternoon"
+    return "closing"
+
+
+# ----------------------------------------------------------------------------------------------------------------
+# Metrics
+# ----------------------------------------------------------------------------------------------------------------
+
+def metrics(tr: pd.DataFrame, st: dict, start_balance: float, months: float | None = None, seed: int = 7) -> dict:
+    m = {"trades": int(len(tr)), "start_balance": start_balance, "end_balance": round(st["final_balance"], 2)}
+    if len(tr) == 0:
+        m.update({"net_profit": 0.0, "net_profit_pct": 0.0, "profit_factor": NAN, "win_rate": NAN, "expectancy": NAN, "max_dd_usd": 0.0, "max_dd_pct": 0.0})
+        m.update({k: v for k, v in st.items() if k in ("pending_placed", "pending_cancelled", "filled", "rejected_invalid_price", "blocked_sl_pct", "blocked_adx", "blocked_session", "blocked_margin", "signals_buy", "signals_sell", "ruin")})
+        return m
+    pnl = tr["pnl"].to_numpy()
+    wins = pnl[pnl > 0]; losses = pnl[pnl < 0]
+    gp = float(wins.sum()); gl = float(-losses.sum())
+    m["net_profit"] = round(float(pnl.sum()), 2); m["net_profit_pct"] = round(100.0 * pnl.sum() / start_balance, 1)
+    m["gross_profit"] = round(gp, 2); m["gross_loss"] = round(-gl, 2)
+    m["profit_factor"] = round(gp / gl, 3) if gl > 0 else (float("inf") if gp > 0 else NAN)
+    m["expectancy"] = round(float(pnl.mean()), 3)
+    m["expectancy_r"] = round(float(np.nanmean(tr["r"])), 3) if tr["r"].notna().any() else NAN
+    m["avg_win"] = round(float(wins.mean()), 2) if len(wins) else 0.0; m["avg_loss"] = round(float(losses.mean()), 2) if len(losses) else 0.0
+    m["largest_win"] = round(float(pnl.max()), 2); m["largest_loss"] = round(float(pnl.min()), 2)
+    m["wins"] = int(len(wins)); m["losses"] = int(len(losses)); m["breakeven"] = int((pnl == 0).sum())
+    m["win_rate"] = round(100.0 * len(wins) / len(pnl), 1)
+    m["payoff"] = round(abs(wins.mean() / losses.mean()), 3) if len(wins) and len(losses) else NAN
+    # streaks
+    s = np.sign(pnl); cw = cl = mw = ml = 0
+    for x in s:
+        if x > 0: cw += 1; cl = 0
+        elif x < 0: cl += 1; cw = 0
+        else: cw = cl = 0
+        mw = max(mw, cw); ml = max(ml, cl)
+    m["max_consec_wins"] = mw; m["max_consec_losses"] = ml
+    # drawdown from the trade sequence (balance) and the engine's equity mark
+    bal = start_balance + np.cumsum(pnl); peak = np.maximum.accumulate(np.concatenate([[start_balance], bal]))[1:]
+    dd = peak - bal
+    m["max_dd_usd"] = round(float(dd.max()), 2); m["max_dd_pct"] = round(float((dd / peak).max() * 100), 1)
+    m["max_dd_equity_usd"] = round(st["maxdd_equity"], 2)
+    m["min_balance"] = round(st["min_balance"], 2); m["ruin"] = bool(st["ruin"])
+    m["avg_hold_min"] = round(float(tr["hold_min"].mean()), 1); m["median_hold_min"] = round(float(tr["hold_min"].median()), 1)
+    m["avg_bars_held"] = round(float(tr["bars_held"].mean()), 1)
+    m["avg_mfe_usd"] = round(float(tr["mfe_usd"].mean()), 2); m["avg_mae_usd"] = round(float(tr["mae_usd"].mean()), 2)
+    m["avg_mfe_r"] = round(float(np.nanmean(tr["mfe_r"])), 3); m["avg_mae_r"] = round(float(np.nanmean(tr["mae_r"])), 3)
+    m["mfe_to_realized"] = round(float(tr["mfe_usd"].sum() / pnl.sum()), 3) if pnl.sum() != 0 else NAN
+    gb = tr["giveback_usd"]
+    m["giveback_total"] = round(float(gb.clip(lower=0).sum()), 2); m["giveback_avg"] = round(float(gb.mean()), 2); m["giveback_median"] = round(float(gb.median()), 2)
+    m["giveback_worst"] = round(float(gb.max()), 2)
+    m["giveback_pct_median"] = round(float(tr["giveback_pct"].median()), 1) if tr["giveback_pct"].notna().any() else NAN
+    m["profit_to_loss_1usd"] = int(((tr["mfe_usd"] >= 1.0) & (pnl < 0)).sum()); m["profit_to_loss_2usd"] = int(((tr["mfe_usd"] >= 2.0) & (pnl < 0)).sum())
+    m["profit_to_loss_5usd"] = int(((tr["mfe_usd"] >= 5.0) & (pnl < 0)).sum()); m["profit_to_loss_10usd"] = int(((tr["mfe_usd"] >= 10.0) & (pnl < 0)).sum())
+    m["profit_to_loss_1r"] = int(((tr["mfe_r"] >= 1.0) & (pnl < 0)).sum()); m["profit_to_loss_2r"] = int(((tr["mfe_r"] >= 2.0) & (pnl < 0)).sum())
+    m["avg_risk_usd"] = round(float(tr["risk_usd"].mean()), 2); m["median_risk_usd"] = round(float(tr["risk_usd"].median()), 2); m["max_risk_usd"] = round(float(tr["risk_usd"].max()), 2)
+    m["sl_hit_rate"] = round(100.0 * float((tr["reason"] == 1).mean()), 1)
+    m["exit_mix"] = {k: int(v) for k, v in tr["exit_reason"].value_counts().items()}
+    m["swap_total"] = round(float(tr["swap"].sum()), 2)
+    m["long_trades"] = int((tr["side"] == 1).sum()); m["long_net"] = round(float(tr.loc[tr["side"] == 1, "pnl"].sum()), 2)
+    m["short_trades"] = int((tr["side"] == -1).sum()); m["short_net"] = round(float(tr.loc[tr["side"] == -1, "pnl"].sum()), 2)
+    if months:
+        m["trades_per_month"] = round(len(tr) / months, 2)
+        yrs = months / 12.0
+        eb = st["final_balance"]
+        m["cagr_pct"] = round(100.0 * ((eb / start_balance) ** (1 / yrs) - 1), 1) if eb > 0 and yrs > 0 else -100.0
+    # t-stat of the mean trade and bootstrap CI
+    if len(pnl) > 1:
+        m["t_stat"] = round(float(pnl.mean() / (pnl.std(ddof=1) / math.sqrt(len(pnl)))), 2)
+        rng = np.random.default_rng(seed)
+        bs = np.array([rng.choice(pnl, len(pnl)).mean() for _ in range(2000)])
+        m["mean_trade_ci95"] = [round(float(np.percentile(bs, 2.5)), 3), round(float(np.percentile(bs, 97.5)), 3)]
+    m.update({k: v for k, v in st.items() if k in ("pending_placed", "pending_cancelled", "filled", "pending_expired", "rejected_invalid_price", "blocked_sl_pct", "blocked_adx",
+                                                  "blocked_session", "blocked_margin", "ambiguous_fill_and_stop", "path_assumption_exits", "rejected_sl_modify", "signals_buy", "signals_sell", "stop_out", "blocked_extra")})
+    return m
+
+
+def months_between(a: str, b: str) -> float:
+    return (pd.Timestamp(b) - pd.Timestamp(a)).days / 30.4375
+
+
+def monte_carlo(pnl: np.ndarray, start_balance: float, n: int = 5000, seed: int = 11, ruin_level: float = 0.0) -> dict:
+    """Trade-order shuffles and bootstrap resamples. Fixed lots, so P&L per trade is unchanged by the sequence."""
+    if len(pnl) < 5:
+        return {}
+    rng = np.random.default_rng(seed)
+    res = {}
+    for mode in ("shuffle", "bootstrap"):
+        dds = np.empty(n); ends = np.empty(n); ruins = 0; streaks = np.empty(n)
+        for i in range(n):
+            seq = rng.permutation(pnl) if mode == "shuffle" else rng.choice(pnl, len(pnl))
+            bal = start_balance + np.cumsum(seq)
+            peak = np.maximum.accumulate(np.concatenate([[start_balance], bal]))
+            dds[i] = (peak[1:] - bal).max(); ends[i] = bal[-1]
+            if bal.min() <= ruin_level: ruins += 1
+            s = np.sign(seq); cl = ml = 0
+            for x in s:
+                cl = cl + 1 if x < 0 else 0
+                ml = max(ml, cl)
+            streaks[i] = ml
+        res[mode] = {"dd_median": round(float(np.median(dds)), 2), "dd_p95": round(float(np.percentile(dds, 95)), 2), "dd_worst": round(float(dds.max()), 2),
+                     "end_median": round(float(np.median(ends)), 2), "end_p05": round(float(np.percentile(ends, 5)), 2), "end_p95": round(float(np.percentile(ends, 95)), 2),
+                     "p_ruin": round(ruins / n, 4), "p_dd_gt_50pct": round(float((dds > 0.5 * start_balance).mean()), 4), "p_end_below_start": round(float((ends < start_balance).mean()), 4),
+                     "losing_streak_median": float(np.median(streaks)), "losing_streak_p95": float(np.percentile(streaks, 95))}
+    return res

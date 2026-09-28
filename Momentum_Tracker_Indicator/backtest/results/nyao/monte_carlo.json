@@ -1,0 +1,126 @@
+{
+ "fixed_M5_nohedge": {
+  "trades": 28754,
+  "trades_per_year": 5676,
+  "mean_trade": -0.369,
+  "ci95": [
+   -0.404,
+   -0.334
+  ],
+  "p_mean_positive": 0.0,
+  "yearly_pnl_p5_p50_p95": [
+   -2468,
+   -2094,
+   -1688
+  ],
+  "p_losing_year": 1.0,
+  "real_max_dd": 10623,
+  "shuffled_dd_p5_p50_p95": [
+   10605,
+   10617,
+   10662
+  ],
+  "rolling_12m_windows": 50,
+  "rolling_12m_negative_share": 1.0,
+  "rolling_12m_best": -720,
+  "rolling_12m_worst": -5137,
+  "net": -10601,
+  "spread_paid": 11402,
+  "gross": 801,
+  "net_with_3pt_slippage": -11464,
+  "net_with_spread_x1_25": -13452
+ },
+ "fixed_M1_nohedge": {
+  "trades": 41816,
+  "trades_per_year": 8254,
+  "mean_trade": -0.47,
+  "ci95": [
+   -0.501,
+   -0.441
+  ],
+  "p_mean_positive": 0.0,
+  "yearly_pnl_p5_p50_p95": [
+   -4392,
+   -3897,
+   -3425
+  ],
+  "p_losing_year": 1.0,
+  "real_max_dd": 19690,
+  "shuffled_dd_p5_p50_p95": [
+   19667,
+   19678,
+   19711
+  ],
+  "rolling_12m_windows": 50,
+  "rolling_12m_negative_share": 1.0,
+  "rolling_12m_best": -364,
+  "rolling_12m_worst": -15231,
+  "net": -19665,
+  "spread_paid": 18221,
+  "gross": -1444,
+  "net_with_3pt_slippage": -20920,
+  "net_with_spread_x1_25": -24220
+ },
+ "fixed_M5_hedge": {
+  "trades": 29460,
+  "trades_per_year": 5815,
+  "mean_trade": -0.685,
+  "ci95": [
+   -0.903,
+   -0.463
+  ],
+  "p_mean_positive": 0.0,
+  "yearly_pnl_p5_p50_p95": [
+   -6357,
+   -4041,
+   -1530
+  ],
+  "p_losing_year": 0.996,
+  "real_max_dd": 20402,
+  "shuffled_dd_p5_p50_p95": [
+   20237,
+   20544,
+   21332
+  ],
+  "rolling_12m_windows": 50,
+  "rolling_12m_negative_share": 1.0,
+  "rolling_12m_best": -1762,
+  "rolling_12m_worst": -8817,
+  "net": -20188,
+  "spread_paid": 19203,
+  "gross": -986,
+  "net_with_3pt_slippage": -21682,
+  "net_with_spread_x1_25": -24989
+ },
+ "entryonly_M5_rr1.5": {
+  "trades": 7180,
+  "trades_per_year": 1776,
+  "mean_trade": -0.391,
+  "ci95": [
+   -0.519,
+   -0.271
+  ],
+  "p_mean_positive": 0.0,
+  "yearly_pnl_p5_p50_p95": [
+   -1078,
+   -682,
+   -301
+  ],
+  "p_losing_year": 0.998,
+  "real_max_dd": 2819,
+  "shuffled_dd_p5_p50_p95": [
+   2810,
+   2863,
+   2986
+  ],
+  "rolling_12m_windows": 38,
+  "rolling_12m_negative_share": 0.8947368421052632,
+  "rolling_12m_best": 0,
+  "rolling_12m_worst": -1156,
+  "net": -2805,
+  "spread_paid": 2556,
+  "gross": -249,
+  "net_with_3pt_slippage": -3021,
+  "net_with_spread_x1_25": -3444
+ }
+}

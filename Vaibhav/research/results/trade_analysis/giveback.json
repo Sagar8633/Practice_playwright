@@ -1,0 +1,1667 @@
+{
+ "M1": {
+  "overall": {
+   "trades": 54900,
+   "avg_giveback": 2.57,
+   "median_giveback": 1.66,
+   "worst_giveback": 117.72,
+   "median_giveback_pct": 163.7,
+   "total_mfe": 110747.57,
+   "total_realized": -30212.35,
+   "share_trades_with_mfe_ge_1usd": 0.378,
+   "avg_dd_after_mfe": 2.97
+  },
+  "direction": {
+   "long": {
+    "trades": 25925,
+    "net": -13584.05,
+    "avg_mfe": 1.92,
+    "avg_giveback": 2.44,
+    "median_giveback_pct": 160.7,
+    "worst_giveback": 95.52,
+    "p2l_2usd": 1978,
+    "p2l_2usd_damage": -3486.04
+   },
+   "short": {
+    "trades": 28975,
+    "net": -16628.3,
+    "avg_mfe": 2.11,
+    "avg_giveback": 2.68,
+    "median_giveback_pct": 166.2,
+    "worst_giveback": 117.72,
+    "p2l_2usd": 2630,
+    "p2l_2usd_damage": -4796.08
+   }
+  },
+  "session": {
+   "Asia": {
+    "trades": 15937,
+    "net": -8282.07,
+    "avg_mfe": 1.79,
+    "avg_giveback": 2.31,
+    "median_giveback_pct": 163.8,
+    "worst_giveback": 117.72,
+    "p2l_2usd": 1073,
+    "p2l_2usd_damage": -2114.91
+   },
+   "London": {
+    "trades": 12328,
+    "net": -7029.13,
+    "avg_mfe": 1.84,
+    "avg_giveback": 2.41,
+    "median_giveback_pct": 164.9,
+    "worst_giveback": 54.14,
+    "p2l_2usd": 926,
+    "p2l_2usd_damage": -1458.04
+   },
+   "London/NY": {
+    "trades": 10929,
+    "net": -5514.53,
+    "avg_mfe": 2.6,
+    "avg_giveback": 3.1,
+    "median_giveback_pct": 159.7,
+    "worst_giveback": 95.52,
+    "p2l_2usd": 1299,
+    "p2l_2usd_damage": -2097.21
+   },
+   "NewYork": {
+    "trades": 11905,
+    "net": -7363.81,
+    "avg_mfe": 2.14,
+    "avg_giveback": 2.76,
+    "median_giveback_pct": 161.0,
+    "worst_giveback": 90.07,
+    "p2l_2usd": 1116,
+    "p2l_2usd_damage": -2162.17
+   },
+   "Sydney": {
+    "trades": 3801,
+    "net": -2022.81,
+    "avg_mfe": 1.51,
+    "avg_giveback": 2.04,
+    "median_giveback_pct": 183.2,
+    "worst_giveback": 75.41,
+    "p2l_2usd": 194,
+    "p2l_2usd_damage": -449.79
+   }
+  },
+  "regime": {
+   "nan/nan": {
+    "trades": 11130,
+    "net": -5999.92,
+    "avg_mfe": 2.05,
+    "avg_giveback": 2.59,
+    "median_giveback_pct": 160.9,
+    "worst_giveback": 117.72,
+    "p2l_2usd": 937,
+    "p2l_2usd_damage": -1737.02
+   },
+   "range/high_vol": {
+    "trades": 1508,
+    "net": -864.7,
+    "avg_mfe": 1.25,
+    "avg_giveback": 1.82,
+    "median_giveback_pct": 168.7,
+    "worst_giveback": 38.34,
+    "p2l_2usd": 56,
+    "p2l_2usd_damage": -74.56
+   },
+   "range/low_vol": {
+    "trades": 1108,
+    "net": -521.75,
+    "avg_mfe": 1.2,
+    "avg_giveback": 1.67,
+    "median_giveback_pct": 161.4,
+    "worst_giveback": 22.2,
+    "p2l_2usd": 35,
+    "p2l_2usd_damage": -43.64
+   },
+   "range/mid_vol": {
+    "trades": 1828,
+    "net": -1387.24,
+    "avg_mfe": 1.52,
+    "avg_giveback": 2.28,
+    "median_giveback_pct": 175.7,
+    "worst_giveback": 34.17,
+    "p2l_2usd": 133,
+    "p2l_2usd_damage": -199.83
+   },
+   "strong_trend/high_vol": {
+    "trades": 11959,
+    "net": -6026.03,
+    "avg_mfe": 3.33,
+    "avg_giveback": 3.83,
+    "median_giveback_pct": 154.8,
+    "worst_giveback": 90.07,
+    "p2l_2usd": 1810,
+    "p2l_2usd_damage": -3756.39
+   },
+   "strong_trend/low_vol": {
+    "trades": 7355,
+    "net": -3927.07,
+    "avg_mfe": 1.05,
+    "avg_giveback": 1.58,
+    "median_giveback_pct": 168.9,
+    "worst_giveback": 14.19,
+    "p2l_2usd": 207,
+    "p2l_2usd_damage": -225.82
+   },
+   "strong_trend/mid_vol": {
+    "trades": 9712,
+    "net": -5409.48,
+    "avg_mfe": 2.04,
+    "avg_giveback": 2.59,
+    "median_giveback_pct": 162.8,
+    "worst_giveback": 75.41,
+    "p2l_2usd": 873,
+    "p2l_2usd_damage": -1446.6
+   },
+   "weak_trend/high_vol": {
+    "trades": 2423,
+    "net": -1578.24,
+    "avg_mfe": 2.18,
+    "avg_giveback": 2.84,
+    "median_giveback_pct": 166.9,
+    "worst_giveback": 47.57,
+    "p2l_2usd": 267,
+    "p2l_2usd_damage": -426.68
+   },
+   "weak_trend/low_vol": {
+    "trades": 3485,
+    "net": -1938.53,
+    "avg_mfe": 0.8,
+    "avg_giveback": 1.35,
+    "median_giveback_pct": 176.2,
+    "worst_giveback": 9.86,
+    "p2l_2usd": 47,
+    "p2l_2usd_damage": -31.19
+   },
+   "weak_trend/mid_vol": {
+    "trades": 4392,
+    "net": -2559.4,
+    "avg_mfe": 1.5,
+    "avg_giveback": 2.09,
+    "median_giveback_pct": 167.5,
+    "worst_giveback": 18.63,
+    "p2l_2usd": 243,
+    "p2l_2usd_damage": -340.39
+   }
+  },
+  "exit_reason": {
+   "MA18_exit": {
+    "trades": 42814,
+    "net": -27045.59,
+    "avg_mfe": 1.79,
+    "avg_giveback": 2.42,
+    "median_giveback_pct": 167.5,
+    "worst_giveback": 95.52,
+    "p2l_2usd": 3343,
+    "p2l_2usd_damage": -7186.23
+   },
+   "SL_breakeven": {
+    "trades": 1486,
+    "net": -36.98,
+    "avg_mfe": 8.02,
+    "avg_giveback": 8.05,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 51.28,
+    "p2l_2usd": 1074,
+    "p2l_2usd_damage": -38.76
+   },
+   "SL_initial": {
+    "trades": 9186,
+    "net": -14690.76,
+    "avg_mfe": 0.18,
+    "avg_giveback": 1.78,
+    "median_giveback_pct": 598.6,
+    "worst_giveback": 45.62,
+    "p2l_2usd": 189,
+    "p2l_2usd_damage": -1050.19
+   },
+   "SL_swing": {
+    "trades": 1413,
+    "net": 11553.58,
+    "avg_mfe": 14.68,
+    "avg_giveback": 6.5,
+    "median_giveback_pct": 44.7,
+    "worst_giveback": 117.72,
+    "p2l_2usd": 2,
+    "p2l_2usd_damage": -6.94
+   },
+   "end_of_test": {
+    "trades": 1,
+    "net": 7.39,
+    "avg_mfe": 18.53,
+    "avg_giveback": 11.14,
+    "median_giveback_pct": 60.1,
+    "worst_giveback": 11.14,
+    "p2l_2usd": 0,
+    "p2l_2usd_damage": 0.0
+   }
+  },
+  "year": {
+   "2020": {
+    "trades": 2949,
+    "net": -1551.96,
+    "avg_mfe": 1.24,
+    "avg_giveback": 1.77,
+    "median_giveback_pct": 165.3,
+    "worst_giveback": 22.2,
+    "p2l_2usd": 107,
+    "p2l_2usd_damage": -88.01
+   },
+   "2021": {
+    "trades": 8747,
+    "net": -4849.89,
+    "avg_mfe": 0.93,
+    "avg_giveback": 1.48,
+    "median_giveback_pct": 167.9,
+    "worst_giveback": 23.2,
+    "p2l_2usd": 206,
+    "p2l_2usd_damage": -199.33
+   },
+   "2022": {
+    "trades": 8972,
+    "net": -4793.36,
+    "avg_mfe": 1.01,
+    "avg_giveback": 1.54,
+    "median_giveback_pct": 172.0,
+    "worst_giveback": 19.84,
+    "p2l_2usd": 223,
+    "p2l_2usd_damage": -204.82
+   },
+   "2023": {
+    "trades": 8080,
+    "net": -4223.16,
+    "avg_mfe": 0.89,
+    "avg_giveback": 1.42,
+    "median_giveback_pct": 167.7,
+    "worst_giveback": 38.34,
+    "p2l_2usd": 151,
+    "p2l_2usd_damage": -168.38
+   },
+   "2024": {
+    "trades": 8769,
+    "net": -4664.12,
+    "avg_mfe": 1.37,
+    "avg_giveback": 1.9,
+    "median_giveback_pct": 167.3,
+    "worst_giveback": 16.08,
+    "p2l_2usd": 382,
+    "p2l_2usd_damage": -413.68
+   },
+   "2025": {
+    "trades": 9680,
+    "net": -5593.86,
+    "avg_mfe": 2.77,
+    "avg_giveback": 3.35,
+    "median_giveback_pct": 161.0,
+    "worst_giveback": 42.92,
+    "p2l_2usd": 1190,
+    "p2l_2usd_damage": -2078.94
+   },
+   "2026": {
+    "trades": 7703,
+    "net": -4536.0,
+    "avg_mfe": 5.7,
+    "avg_giveback": 6.29,
+    "median_giveback_pct": 142.1,
+    "worst_giveback": 117.72,
+    "p2l_2usd": 2349,
+    "p2l_2usd_damage": -5128.97
+   }
+  }
+ },
+ "M5": {
+  "overall": {
+   "trades": 12320,
+   "avg_giveback": 5.21,
+   "median_giveback": 3.61,
+   "worst_giveback": 177.52,
+   "median_giveback_pct": 148.3,
+   "total_mfe": 59260.29,
+   "total_realized": -4977.42,
+   "share_trades_with_mfe_ge_1usd": 0.607,
+   "avg_dd_after_mfe": 5.93
+  },
+  "direction": {
+   "long": {
+    "trades": 6490,
+    "net": -2569.95,
+    "avg_mfe": 4.45,
+    "avg_giveback": 4.84,
+    "median_giveback_pct": 151.0,
+    "worst_giveback": 116.79,
+    "p2l_2usd": 1318,
+    "p2l_2usd_damage": -3138.3
+   },
+   "short": {
+    "trades": 5830,
+    "net": -2407.47,
+    "avg_mfe": 5.21,
+    "avg_giveback": 5.63,
+    "median_giveback_pct": 144.3,
+    "worst_giveback": 177.52,
+    "p2l_2usd": 1270,
+    "p2l_2usd_damage": -2918.68
+   }
+  },
+  "session": {
+   "Asia": {
+    "trades": 3633,
+    "net": -1219.03,
+    "avg_mfe": 4.39,
+    "avg_giveback": 4.73,
+    "median_giveback_pct": 143.3,
+    "worst_giveback": 126.18,
+    "p2l_2usd": 665,
+    "p2l_2usd_damage": -1433.18
+   },
+   "London": {
+    "trades": 2995,
+    "net": -1731.58,
+    "avg_mfe": 4.01,
+    "avg_giveback": 4.59,
+    "median_giveback_pct": 158.3,
+    "worst_giveback": 120.89,
+    "p2l_2usd": 582,
+    "p2l_2usd_damage": -1155.45
+   },
+   "London/NY": {
+    "trades": 2861,
+    "net": -847.86,
+    "avg_mfe": 6.21,
+    "avg_giveback": 6.51,
+    "median_giveback_pct": 148.4,
+    "worst_giveback": 80.83,
+    "p2l_2usd": 743,
+    "p2l_2usd_damage": -1984.6
+   },
+   "NewYork": {
+    "trades": 2149,
+    "net": -617.16,
+    "avg_mfe": 5.24,
+    "avg_giveback": 5.52,
+    "median_giveback_pct": 124.1,
+    "worst_giveback": 177.52,
+    "p2l_2usd": 483,
+    "p2l_2usd_damage": -1200.9
+   },
+   "Sydney": {
+    "trades": 682,
+    "net": -561.78,
+    "avg_mfe": 3.32,
+    "avg_giveback": 4.15,
+    "median_giveback_pct": 184.6,
+    "worst_giveback": 38.48,
+    "p2l_2usd": 115,
+    "p2l_2usd_damage": -282.85
+   }
+  },
+  "regime": {
+   "nan/nan": {
+    "trades": 2504,
+    "net": -1055.44,
+    "avg_mfe": 4.84,
+    "avg_giveback": 5.26,
+    "median_giveback_pct": 152.1,
+    "worst_giveback": 126.18,
+    "p2l_2usd": 517,
+    "p2l_2usd_damage": -1182.11
+   },
+   "range/high_vol": {
+    "trades": 343,
+    "net": -138.37,
+    "avg_mfe": 3.28,
+    "avg_giveback": 3.68,
+    "median_giveback_pct": 162.8,
+    "worst_giveback": 31.04,
+    "p2l_2usd": 42,
+    "p2l_2usd_damage": -71.32
+   },
+   "range/low_vol": {
+    "trades": 273,
+    "net": -95.14,
+    "avg_mfe": 3.06,
+    "avg_giveback": 3.41,
+    "median_giveback_pct": 168.2,
+    "worst_giveback": 26.07,
+    "p2l_2usd": 34,
+    "p2l_2usd_damage": -69.63
+   },
+   "range/mid_vol": {
+    "trades": 411,
+    "net": -375.34,
+    "avg_mfe": 3.72,
+    "avg_giveback": 4.64,
+    "median_giveback_pct": 182.8,
+    "worst_giveback": 35.37,
+    "p2l_2usd": 75,
+    "p2l_2usd_damage": -201.72
+   },
+   "strong_trend/high_vol": {
+    "trades": 2702,
+    "net": -750.2,
+    "avg_mfe": 7.37,
+    "avg_giveback": 7.65,
+    "median_giveback_pct": 114.3,
+    "worst_giveback": 177.52,
+    "p2l_2usd": 805,
+    "p2l_2usd_damage": -2215.91
+   },
+   "strong_trend/low_vol": {
+    "trades": 1664,
+    "net": -816.92,
+    "avg_mfe": 2.8,
+    "avg_giveback": 3.29,
+    "median_giveback_pct": 162.3,
+    "worst_giveback": 38.48,
+    "p2l_2usd": 220,
+    "p2l_2usd_damage": -397.69
+   },
+   "strong_trend/mid_vol": {
+    "trades": 2147,
+    "net": -564.11,
+    "avg_mfe": 5.03,
+    "avg_giveback": 5.29,
+    "median_giveback_pct": 143.3,
+    "worst_giveback": 116.79,
+    "p2l_2usd": 508,
+    "p2l_2usd_damage": -1166.24
+   },
+   "weak_trend/high_vol": {
+    "trades": 516,
+    "net": -428.74,
+    "avg_mfe": 5.28,
+    "avg_giveback": 6.11,
+    "median_giveback_pct": 154.1,
+    "worst_giveback": 49.23,
+    "p2l_2usd": 133,
+    "p2l_2usd_damage": -331.41
+   },
+   "weak_trend/low_vol": {
+    "trades": 789,
+    "net": -280.39,
+    "avg_mfe": 2.33,
+    "avg_giveback": 2.68,
+    "median_giveback_pct": 165.9,
+    "worst_giveback": 13.1,
+    "p2l_2usd": 67,
+    "p2l_2usd_damage": -103.71
+   },
+   "weak_trend/mid_vol": {
+    "trades": 971,
+    "net": -472.76,
+    "avg_mfe": 3.82,
+    "avg_giveback": 4.31,
+    "median_giveback_pct": 156.5,
+    "worst_giveback": 38.55,
+    "p2l_2usd": 187,
+    "p2l_2usd_damage": -317.25
+   }
+  },
+  "exit_reason": {
+   "MA18_exit": {
+    "trades": 8722,
+    "net": -7877.99,
+    "avg_mfe": 3.39,
+    "avg_giveback": 4.29,
+    "median_giveback_pct": 191.5,
+    "worst_giveback": 120.89,
+    "p2l_2usd": 1593,
+    "p2l_2usd_damage": -4804.58
+   },
+   "SL_breakeven": {
+    "trades": 1458,
+    "net": -4.74,
+    "avg_mfe": 9.32,
+    "avg_giveback": 9.32,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 80.16,
+    "p2l_2usd": 811,
+    "p2l_2usd_damage": -6.33
+   },
+   "SL_initial": {
+    "trades": 1390,
+    "net": -5214.78,
+    "avg_mfe": 0.72,
+    "avg_giveback": 4.47,
+    "median_giveback_pct": 512.7,
+    "worst_giveback": 40.2,
+    "p2l_2usd": 184,
+    "p2l_2usd_damage": -1246.06
+   },
+   "SL_swing": {
+    "trades": 750,
+    "net": 8120.09,
+    "avg_mfe": 20.14,
+    "avg_giveback": 9.31,
+    "median_giveback_pct": 49.3,
+    "worst_giveback": 177.52,
+    "p2l_2usd": 0,
+    "p2l_2usd_damage": 0.0
+   }
+  },
+  "year": {
+   "2020": {
+    "trades": 656,
+    "net": -432.96,
+    "avg_mfe": 3.01,
+    "avg_giveback": 3.67,
+    "median_giveback_pct": 187.8,
+    "worst_giveback": 21.72,
+    "p2l_2usd": 114,
+    "p2l_2usd_damage": -218.26
+   },
+   "2021": {
+    "trades": 1960,
+    "net": -1249.98,
+    "avg_mfe": 2.4,
+    "avg_giveback": 3.04,
+    "median_giveback_pct": 182.8,
+    "worst_giveback": 51.85,
+    "p2l_2usd": 236,
+    "p2l_2usd_damage": -395.92
+   },
+   "2022": {
+    "trades": 1973,
+    "net": -1054.03,
+    "avg_mfe": 2.71,
+    "avg_giveback": 3.25,
+    "median_giveback_pct": 165.9,
+    "worst_giveback": 32.51,
+    "p2l_2usd": 230,
+    "p2l_2usd_damage": -419.5
+   },
+   "2023": {
+    "trades": 1849,
+    "net": -767.96,
+    "avg_mfe": 2.43,
+    "avg_giveback": 2.84,
+    "median_giveback_pct": 168.8,
+    "worst_giveback": 38.48,
+    "p2l_2usd": 178,
+    "p2l_2usd_damage": -260.81
+   },
+   "2024": {
+    "trades": 1961,
+    "net": -1007.3,
+    "avg_mfe": 3.46,
+    "avg_giveback": 3.97,
+    "median_giveback_pct": 161.7,
+    "worst_giveback": 22.52,
+    "p2l_2usd": 316,
+    "p2l_2usd_damage": -692.39
+   },
+   "2025": {
+    "trades": 2137,
+    "net": -661.83,
+    "avg_mfe": 6.62,
+    "avg_giveback": 6.93,
+    "median_giveback_pct": 115.4,
+    "worst_giveback": 87.2,
+    "p2l_2usd": 510,
+    "p2l_2usd_damage": -1711.13
+   },
+   "2026": {
+    "trades": 1784,
+    "net": 196.64,
+    "avg_mfe": 12.22,
+    "avg_giveback": 12.11,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 177.52,
+    "p2l_2usd": 1004,
+    "p2l_2usd_damage": -2358.97
+   }
+  }
+ },
+ "M15": {
+  "overall": {
+   "trades": 4559,
+   "avg_giveback": 8.25,
+   "median_giveback": 6.11,
+   "worst_giveback": 181.04,
+   "median_giveback_pct": 100.0,
+   "total_mfe": 36607.12,
+   "total_realized": -983.88,
+   "share_trades_with_mfe_ge_1usd": 0.759,
+   "avg_dd_after_mfe": 9.34
+  },
+  "direction": {
+   "long": {
+    "trades": 2434,
+    "net": -267.89,
+    "avg_mfe": 7.76,
+    "avg_giveback": 7.87,
+    "median_giveback_pct": 100.5,
+    "worst_giveback": 147.71,
+    "p2l_2usd": 692,
+    "p2l_2usd_damage": -2323.5
+   },
+   "short": {
+    "trades": 2125,
+    "net": -715.99,
+    "avg_mfe": 8.34,
+    "avg_giveback": 8.68,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 181.04,
+    "p2l_2usd": 583,
+    "p2l_2usd_damage": -1900.61
+   }
+  },
+  "session": {
+   "Asia": {
+    "trades": 1280,
+    "net": -45.95,
+    "avg_mfe": 7.61,
+    "avg_giveback": 7.65,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 181.04,
+    "p2l_2usd": 327,
+    "p2l_2usd_damage": -917.06
+   },
+   "London": {
+    "trades": 1198,
+    "net": -1395.02,
+    "avg_mfe": 6.04,
+    "avg_giveback": 7.21,
+    "median_giveback_pct": 138.8,
+    "worst_giveback": 149.05,
+    "p2l_2usd": 337,
+    "p2l_2usd_damage": -1044.69
+   },
+   "London/NY": {
+    "trades": 1180,
+    "net": -123.91,
+    "avg_mfe": 9.16,
+    "avg_giveback": 9.26,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 107.89,
+    "p2l_2usd": 325,
+    "p2l_2usd_damage": -1393.15
+   },
+   "NewYork": {
+    "trades": 729,
+    "net": 222.79,
+    "avg_mfe": 9.46,
+    "avg_giveback": 9.16,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 170.32,
+    "p2l_2usd": 235,
+    "p2l_2usd_damage": -758.81
+   },
+   "Sydney": {
+    "trades": 172,
+    "net": 358.22,
+    "avg_mfe": 11.15,
+    "avg_giveback": 9.07,
+    "median_giveback_pct": 122.2,
+    "worst_giveback": 147.71,
+    "p2l_2usd": 51,
+    "p2l_2usd_damage": -110.4
+   }
+  },
+  "regime": {
+   "nan/nan": {
+    "trades": 904,
+    "net": -82.1,
+    "avg_mfe": 8.02,
+    "avg_giveback": 8.11,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 181.04,
+    "p2l_2usd": 245,
+    "p2l_2usd_damage": -787.84
+   },
+   "range/high_vol": {
+    "trades": 123,
+    "net": -70.66,
+    "avg_mfe": 5.75,
+    "avg_giveback": 6.32,
+    "median_giveback_pct": 158.6,
+    "worst_giveback": 32.63,
+    "p2l_2usd": 17,
+    "p2l_2usd_damage": -60.44
+   },
+   "range/low_vol": {
+    "trades": 103,
+    "net": 95.24,
+    "avg_mfe": 6.4,
+    "avg_giveback": 5.47,
+    "median_giveback_pct": 121.9,
+    "worst_giveback": 21.16,
+    "p2l_2usd": 14,
+    "p2l_2usd_damage": -36.75
+   },
+   "range/mid_vol": {
+    "trades": 148,
+    "net": -160.15,
+    "avg_mfe": 6.9,
+    "avg_giveback": 7.98,
+    "median_giveback_pct": 131.4,
+    "worst_giveback": 47.73,
+    "p2l_2usd": 45,
+    "p2l_2usd_damage": -161.74
+   },
+   "strong_trend/high_vol": {
+    "trades": 1045,
+    "net": -389.72,
+    "avg_mfe": 11.15,
+    "avg_giveback": 11.52,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 170.32,
+    "p2l_2usd": 393,
+    "p2l_2usd_damage": -1305.3
+   },
+   "strong_trend/low_vol": {
+    "trades": 609,
+    "net": -338.94,
+    "avg_mfe": 4.99,
+    "avg_giveback": 5.54,
+    "median_giveback_pct": 138.1,
+    "worst_giveback": 59.43,
+    "p2l_2usd": 113,
+    "p2l_2usd_damage": -327.09
+   },
+   "strong_trend/mid_vol": {
+    "trades": 800,
+    "net": 112.57,
+    "avg_mfe": 8.58,
+    "avg_giveback": 8.44,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 147.71,
+    "p2l_2usd": 244,
+    "p2l_2usd_damage": -908.47
+   },
+   "weak_trend/high_vol": {
+    "trades": 186,
+    "net": 92.09,
+    "avg_mfe": 9.3,
+    "avg_giveback": 8.8,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 51.55,
+    "p2l_2usd": 61,
+    "p2l_2usd_damage": -255.86
+   },
+   "weak_trend/low_vol": {
+    "trades": 276,
+    "net": -93.36,
+    "avg_mfe": 4.24,
+    "avg_giveback": 4.58,
+    "median_giveback_pct": 139.0,
+    "worst_giveback": 16.59,
+    "p2l_2usd": 59,
+    "p2l_2usd_damage": -122.59
+   },
+   "weak_trend/mid_vol": {
+    "trades": 365,
+    "net": -148.86,
+    "avg_mfe": 6.9,
+    "avg_giveback": 7.3,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 38.88,
+    "p2l_2usd": 84,
+    "p2l_2usd_damage": -258.03
+   }
+  },
+  "exit_reason": {
+   "MA18_exit": {
+    "trades": 2487,
+    "net": -3351.94,
+    "avg_mfe": 5.65,
+    "avg_giveback": 7.0,
+    "median_giveback_pct": 227.0,
+    "worst_giveback": 170.32,
+    "p2l_2usd": 688,
+    "p2l_2usd_damage": -3410.33
+   },
+   "SL_breakeven": {
+    "trades": 1179,
+    "net": -30.97,
+    "avg_mfe": 10.41,
+    "avg_giveback": 10.44,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 181.04,
+    "p2l_2usd": 481,
+    "p2l_2usd_damage": -33.35
+   },
+   "SL_initial": {
+    "trades": 485,
+    "net": -2853.22,
+    "avg_mfe": 1.12,
+    "avg_giveback": 7.0,
+    "median_giveback_pct": 527.6,
+    "worst_giveback": 38.88,
+    "p2l_2usd": 106,
+    "p2l_2usd_damage": -780.44
+   },
+   "SL_swing": {
+    "trades": 408,
+    "net": 5252.25,
+    "avg_mfe": 23.86,
+    "avg_giveback": 10.98,
+    "median_giveback_pct": 50.8,
+    "worst_giveback": 147.71,
+    "p2l_2usd": 0,
+    "p2l_2usd_damage": 0.0
+   }
+  },
+  "year": {
+   "2020": {
+    "trades": 224,
+    "net": -106.1,
+    "avg_mfe": 5.73,
+    "avg_giveback": 6.21,
+    "median_giveback_pct": 173.2,
+    "worst_giveback": 23.0,
+    "p2l_2usd": 46,
+    "p2l_2usd_damage": -148.93
+   },
+   "2021": {
+    "trades": 681,
+    "net": -340.1,
+    "avg_mfe": 4.62,
+    "avg_giveback": 5.12,
+    "median_giveback_pct": 164.7,
+    "worst_giveback": 55.62,
+    "p2l_2usd": 119,
+    "p2l_2usd_damage": -281.25
+   },
+   "2022": {
+    "trades": 713,
+    "net": -382.97,
+    "avg_mfe": 4.88,
+    "avg_giveback": 5.42,
+    "median_giveback_pct": 154.4,
+    "worst_giveback": 26.97,
+    "p2l_2usd": 137,
+    "p2l_2usd_damage": -438.29
+   },
+   "2023": {
+    "trades": 660,
+    "net": -232.88,
+    "avg_mfe": 4.53,
+    "avg_giveback": 4.89,
+    "median_giveback_pct": 148.8,
+    "worst_giveback": 59.43,
+    "p2l_2usd": 123,
+    "p2l_2usd_damage": -321.9
+   },
+   "2024": {
+    "trades": 704,
+    "net": -220.35,
+    "avg_mfe": 6.3,
+    "avg_giveback": 6.61,
+    "median_giveback_pct": 114.8,
+    "worst_giveback": 32.95,
+    "p2l_2usd": 136,
+    "p2l_2usd_damage": -535.97
+   },
+   "2025": {
+    "trades": 834,
+    "net": -181.63,
+    "avg_mfe": 10.0,
+    "avg_giveback": 10.22,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 59.19,
+    "p2l_2usd": 214,
+    "p2l_2usd_damage": -1024.04
+   },
+   "2026": {
+    "trades": 743,
+    "net": 480.16,
+    "avg_mfe": 17.4,
+    "avg_giveback": 16.76,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 181.04,
+    "p2l_2usd": 500,
+    "p2l_2usd_damage": -1473.73
+   }
+  }
+ },
+ "D1": {
+  "overall": {
+   "trades": 85,
+   "avg_giveback": 50.8,
+   "median_giveback": 17.82,
+   "worst_giveback": 977.11,
+   "median_giveback_pct": 100.0,
+   "total_mfe": 4937.08,
+   "total_realized": 619.14,
+   "share_trades_with_mfe_ge_1usd": 1.0,
+   "avg_dd_after_mfe": 50.1
+  },
+  "direction": {
+   "long": {
+    "trades": 56,
+    "net": 695.81,
+    "avg_mfe": 77.15,
+    "avg_giveback": 64.73,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 977.11,
+    "p2l_2usd": 29,
+    "p2l_2usd_damage": -174.07
+   },
+   "short": {
+    "trades": 29,
+    "net": -76.67,
+    "avg_mfe": 21.26,
+    "avg_giveback": 23.9,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 116.08,
+    "p2l_2usd": 8,
+    "p2l_2usd_damage": -122.14
+   }
+  },
+  "session": {
+   "Asia": {
+    "trades": 42,
+    "net": 477.99,
+    "avg_mfe": 76.71,
+    "avg_giveback": 65.33,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 977.11,
+    "p2l_2usd": 19,
+    "p2l_2usd_damage": -104.45
+   },
+   "London": {
+    "trades": 11,
+    "net": 231.89,
+    "avg_mfe": 61.96,
+    "avg_giveback": 40.88,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 128.1,
+    "p2l_2usd": 2,
+    "p2l_2usd_damage": -3.47
+   },
+   "London/NY": {
+    "trades": 20,
+    "net": -195.34,
+    "avg_mfe": 20.27,
+    "avg_giveback": 30.04,
+    "median_giveback_pct": 101.2,
+    "worst_giveback": 116.08,
+    "p2l_2usd": 10,
+    "p2l_2usd_damage": -173.52
+   },
+   "NewYork": {
+    "trades": 11,
+    "net": 104.6,
+    "avg_mfe": 55.48,
+    "avg_giveback": 45.97,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 181.4,
+    "p2l_2usd": 5,
+    "p2l_2usd_damage": -14.76
+   },
+   "Sydney": {
+    "trades": 1,
+    "net": -0.0,
+    "avg_mfe": 18.07,
+    "avg_giveback": 18.07,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 18.07,
+    "p2l_2usd": 1,
+    "p2l_2usd_damage": -0.0
+   }
+  },
+  "regime": {
+   "nan/nan": {
+    "trades": 15,
+    "net": 488.2,
+    "avg_mfe": 160.52,
+    "avg_giveback": 127.97,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 977.11,
+    "p2l_2usd": 7,
+    "p2l_2usd_damage": -63.57
+   },
+   "range/high_vol": {
+    "trades": 3,
+    "net": -0.27,
+    "avg_mfe": 26.24,
+    "avg_giveback": 26.33,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 53.01,
+    "p2l_2usd": 1,
+    "p2l_2usd_damage": -0.87
+   },
+   "range/low_vol": {
+    "trades": 1,
+    "net": -2.61,
+    "avg_mfe": 7.13,
+    "avg_giveback": 9.74,
+    "median_giveback_pct": 136.5,
+    "worst_giveback": 9.74,
+    "p2l_2usd": 1,
+    "p2l_2usd_damage": -2.61
+   },
+   "strong_trend/high_vol": {
+    "trades": 15,
+    "net": 61.87,
+    "avg_mfe": 35.62,
+    "avg_giveback": 31.49,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 257.54,
+    "p2l_2usd": 4,
+    "p2l_2usd_damage": -7.82
+   },
+   "strong_trend/low_vol": {
+    "trades": 17,
+    "net": -81.56,
+    "avg_mfe": 34.48,
+    "avg_giveback": 39.28,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 132.94,
+    "p2l_2usd": 8,
+    "p2l_2usd_damage": -177.86
+   },
+   "strong_trend/mid_vol": {
+    "trades": 17,
+    "net": 148.73,
+    "avg_mfe": 52.67,
+    "avg_giveback": 43.92,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 128.1,
+    "p2l_2usd": 10,
+    "p2l_2usd_damage": -22.58
+   },
+   "weak_trend/high_vol": {
+    "trades": 1,
+    "net": 0.0,
+    "avg_mfe": 8.75,
+    "avg_giveback": 8.75,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 8.75,
+    "p2l_2usd": 0,
+    "p2l_2usd_damage": 0.0
+   },
+   "weak_trend/low_vol": {
+    "trades": 9,
+    "net": 4.19,
+    "avg_mfe": 37.04,
+    "avg_giveback": 36.57,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 181.4,
+    "p2l_2usd": 3,
+    "p2l_2usd_damage": -20.91
+   },
+   "weak_trend/mid_vol": {
+    "trades": 7,
+    "net": 0.59,
+    "avg_mfe": 12.24,
+    "avg_giveback": 12.15,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 17.7,
+    "p2l_2usd": 3,
+    "p2l_2usd_damage": -0.0
+   }
+  },
+  "exit_reason": {
+   "MA18_exit": {
+    "trades": 7,
+    "net": -36.69,
+    "avg_mfe": 75.08,
+    "avg_giveback": 80.32,
+    "median_giveback_pct": 412.2,
+    "worst_giveback": 181.4,
+    "p2l_2usd": 3,
+    "p2l_2usd_damage": -168.38
+   },
+   "SL_breakeven": {
+    "trades": 70,
+    "net": -81.05,
+    "avg_mfe": 36.63,
+    "avg_giveback": 37.79,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 977.11,
+    "p2l_2usd": 33,
+    "p2l_2usd_damage": -88.58
+   },
+   "SL_initial": {
+    "trades": 1,
+    "net": -39.25,
+    "avg_mfe": 2.69,
+    "avg_giveback": 41.94,
+    "median_giveback_pct": 1559.1,
+    "worst_giveback": 41.94,
+    "p2l_2usd": 1,
+    "p2l_2usd_damage": -39.25
+   },
+   "SL_swing": {
+    "trades": 7,
+    "net": 776.13,
+    "avg_mfe": 263.51,
+    "avg_giveback": 152.63,
+    "median_giveback_pct": 58.5,
+    "worst_giveback": 427.23,
+    "p2l_2usd": 0,
+    "p2l_2usd_damage": 0.0
+   }
+  },
+  "year": {
+   "2021": {
+    "trades": 7,
+    "net": -31.48,
+    "avg_mfe": 17.93,
+    "avg_giveback": 22.43,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 86.55,
+    "p2l_2usd": 2,
+    "p2l_2usd_damage": -12.23
+   },
+   "2022": {
+    "trades": 15,
+    "net": 56.56,
+    "avg_mfe": 37.89,
+    "avg_giveback": 34.12,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 181.4,
+    "p2l_2usd": 4,
+    "p2l_2usd_damage": -54.88
+   },
+   "2023": {
+    "trades": 16,
+    "net": -157.44,
+    "avg_mfe": 29.47,
+    "avg_giveback": 39.32,
+    "median_giveback_pct": 101.2,
+    "worst_giveback": 132.94,
+    "p2l_2usd": 8,
+    "p2l_2usd_damage": -179.6
+   },
+   "2024": {
+    "trades": 18,
+    "net": 128.22,
+    "avg_mfe": 38.97,
+    "avg_giveback": 31.85,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 128.1,
+    "p2l_2usd": 6,
+    "p2l_2usd_damage": -21.71
+   },
+   "2025": {
+    "trades": 16,
+    "net": 638.91,
+    "avg_mfe": 117.97,
+    "avg_giveback": 78.04,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 427.23,
+    "p2l_2usd": 8,
+    "p2l_2usd_damage": -12.16
+   },
+   "2026": {
+    "trades": 13,
+    "net": -15.63,
+    "avg_mfe": 90.96,
+    "avg_giveback": 92.17,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 977.11,
+    "p2l_2usd": 9,
+    "p2l_2usd_damage": -15.63
+   }
+  }
+ },
+ "D1_23y": {
+  "overall": {
+   "trades": 329,
+   "avg_giveback": 32.87,
+   "median_giveback": 16.45,
+   "worst_giveback": 977.11,
+   "median_giveback_pct": 100.0,
+   "total_mfe": 10934.3,
+   "total_realized": 121.32,
+   "share_trades_with_mfe_ge_1usd": 0.967,
+   "avg_dd_after_mfe": 34.07
+  },
+  "direction": {
+   "long": {
+    "trades": 230,
+    "net": -116.89,
+    "avg_mfe": 37.12,
+    "avg_giveback": 37.63,
+    "median_giveback_pct": 107.9,
+    "worst_giveback": 977.11,
+    "p2l_2usd": 146,
+    "p2l_2usd_damage": -1170.94
+   },
+   "short": {
+    "trades": 99,
+    "net": 238.21,
+    "avg_mfe": 24.21,
+    "avg_giveback": 21.81,
+    "median_giveback_pct": 99.1,
+    "worst_giveback": 116.08,
+    "p2l_2usd": 12,
+    "p2l_2usd_damage": -213.79
+   }
+  },
+  "session": {
+   "Asia": {
+    "trades": 126,
+    "net": 259.54,
+    "avg_mfe": 45.15,
+    "avg_giveback": 43.09,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 977.11,
+    "p2l_2usd": 63,
+    "p2l_2usd_damage": -682.44
+   },
+   "London": {
+    "trades": 58,
+    "net": 123.29,
+    "avg_mfe": 26.8,
+    "avg_giveback": 24.67,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 105.02,
+    "p2l_2usd": 17,
+    "p2l_2usd_damage": -70.77
+   },
+   "London/NY": {
+    "trades": 90,
+    "net": -238.97,
+    "avg_mfe": 24.96,
+    "avg_giveback": 27.62,
+    "median_giveback_pct": 107.6,
+    "worst_giveback": 230.96,
+    "p2l_2usd": 50,
+    "p2l_2usd_damage": -448.19
+   },
+   "NewYork": {
+    "trades": 51,
+    "net": -36.83,
+    "avg_mfe": 25.44,
+    "avg_giveback": 26.17,
+    "median_giveback_pct": 103.4,
+    "worst_giveback": 181.4,
+    "p2l_2usd": 25,
+    "p2l_2usd_damage": -173.78
+   },
+   "Sydney": {
+    "trades": 4,
+    "net": 14.28,
+    "avg_mfe": 36.64,
+    "avg_giveback": 33.07,
+    "median_giveback_pct": 103.9,
+    "worst_giveback": 57.02,
+    "p2l_2usd": 3,
+    "p2l_2usd_damage": -9.55
+   }
+  },
+  "regime": {
+   "nan/nan": {
+    "trades": 56,
+    "net": 212.74,
+    "avg_mfe": 57.62,
+    "avg_giveback": 53.82,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 977.11,
+    "p2l_2usd": 27,
+    "p2l_2usd_damage": -326.33
+   },
+   "range/high_vol": {
+    "trades": 7,
+    "net": 76.76,
+    "avg_mfe": 50.32,
+    "avg_giveback": 39.36,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 91.86,
+    "p2l_2usd": 3,
+    "p2l_2usd_damage": -24.22
+   },
+   "range/low_vol": {
+    "trades": 11,
+    "net": 9.12,
+    "avg_mfe": 15.45,
+    "avg_giveback": 14.62,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 43.57,
+    "p2l_2usd": 2,
+    "p2l_2usd_damage": -3.47
+   },
+   "range/mid_vol": {
+    "trades": 7,
+    "net": -34.09,
+    "avg_mfe": 15.71,
+    "avg_giveback": 20.58,
+    "median_giveback_pct": 105.4,
+    "worst_giveback": 50.73,
+    "p2l_2usd": 5,
+    "p2l_2usd_damage": -12.86
+   },
+   "strong_trend/high_vol": {
+    "trades": 54,
+    "net": 122.71,
+    "avg_mfe": 32.22,
+    "avg_giveback": 29.95,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 257.54,
+    "p2l_2usd": 26,
+    "p2l_2usd_damage": -175.54
+   },
+   "strong_trend/low_vol": {
+    "trades": 77,
+    "net": -178.1,
+    "avg_mfe": 28.51,
+    "avg_giveback": 30.82,
+    "median_giveback_pct": 106.4,
+    "worst_giveback": 189.81,
+    "p2l_2usd": 39,
+    "p2l_2usd_damage": -404.74
+   },
+   "strong_trend/mid_vol": {
+    "trades": 45,
+    "net": -27.26,
+    "avg_mfe": 29.84,
+    "avg_giveback": 30.45,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 128.1,
+    "p2l_2usd": 22,
+    "p2l_2usd_damage": -153.4
+   },
+   "weak_trend/high_vol": {
+    "trades": 14,
+    "net": -56.4,
+    "avg_mfe": 21.53,
+    "avg_giveback": 25.56,
+    "median_giveback_pct": 103.7,
+    "worst_giveback": 97.97,
+    "p2l_2usd": 6,
+    "p2l_2usd_damage": -82.12
+   },
+   "weak_trend/low_vol": {
+    "trades": 27,
+    "net": -65.15,
+    "avg_mfe": 21.72,
+    "avg_giveback": 24.13,
+    "median_giveback_pct": 106.0,
+    "worst_giveback": 181.4,
+    "p2l_2usd": 15,
+    "p2l_2usd_damage": -108.26
+   },
+   "weak_trend/mid_vol": {
+    "trades": 31,
+    "net": 61.0,
+    "avg_mfe": 29.34,
+    "avg_giveback": 27.37,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 230.96,
+    "p2l_2usd": 13,
+    "p2l_2usd_damage": -93.79
+   }
+  },
+  "exit_reason": {
+   "MA18_exit": {
+    "trades": 58,
+    "net": -647.11,
+    "avg_mfe": 36.7,
+    "avg_giveback": 47.85,
+    "median_giveback_pct": 584.5,
+    "worst_giveback": 189.81,
+    "p2l_2usd": 29,
+    "p2l_2usd_damage": -818.31
+   },
+   "SL_breakeven": {
+    "trades": 232,
+    "net": -322.08,
+    "avg_mfe": 21.28,
+    "avg_giveback": 22.66,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 977.11,
+    "p2l_2usd": 117,
+    "p2l_2usd_damage": -356.91
+   },
+   "SL_initial": {
+    "trades": 10,
+    "net": -225.48,
+    "avg_mfe": 1.76,
+    "avg_giveback": 24.31,
+    "median_giveback_pct": 1169.5,
+    "worst_giveback": 52.38,
+    "p2l_2usd": 4,
+    "p2l_2usd_damage": -113.64
+   },
+   "SL_swing": {
+    "trades": 29,
+    "net": 1315.98,
+    "avg_mfe": 132.84,
+    "avg_giveback": 87.46,
+    "median_giveback_pct": 72.3,
+    "worst_giveback": 427.23,
+    "p2l_2usd": 8,
+    "p2l_2usd_damage": -95.86
+   }
+  },
+  "year": {
+   "2004": {
+    "trades": 8,
+    "net": -104.48,
+    "avg_mfe": 9.77,
+    "avg_giveback": 22.83,
+    "median_giveback_pct": 267.1,
+    "worst_giveback": 37.67,
+    "p2l_2usd": 6,
+    "p2l_2usd_damage": -84.68
+   },
+   "2005": {
+    "trades": 11,
+    "net": -94.56,
+    "avg_mfe": 12.53,
+    "avg_giveback": 21.13,
+    "median_giveback_pct": 198.9,
+    "worst_giveback": 69.46,
+    "p2l_2usd": 5,
+    "p2l_2usd_damage": -59.87
+   },
+   "2006": {
+    "trades": 10,
+    "net": 6.0,
+    "avg_mfe": 28.55,
+    "avg_giveback": 27.95,
+    "median_giveback_pct": 110.5,
+    "worst_giveback": 103.11,
+    "p2l_2usd": 7,
+    "p2l_2usd_damage": -30.34
+   },
+   "2007": {
+    "trades": 16,
+    "net": -66.6,
+    "avg_mfe": 20.31,
+    "avg_giveback": 24.47,
+    "median_giveback_pct": 110.6,
+    "worst_giveback": 82.84,
+    "p2l_2usd": 12,
+    "p2l_2usd_damage": -65.28
+   },
+   "2008": {
+    "trades": 15,
+    "net": 52.71,
+    "avg_mfe": 34.17,
+    "avg_giveback": 30.66,
+    "median_giveback_pct": 109.2,
+    "worst_giveback": 91.86,
+    "p2l_2usd": 9,
+    "p2l_2usd_damage": -50.45
+   },
+   "2009": {
+    "trades": 19,
+    "net": -89.9,
+    "avg_mfe": 23.39,
+    "avg_giveback": 28.13,
+    "median_giveback_pct": 112.9,
+    "worst_giveback": 97.97,
+    "p2l_2usd": 11,
+    "p2l_2usd_damage": -55.12
+   },
+   "2010": {
+    "trades": 22,
+    "net": -32.64,
+    "avg_mfe": 22.18,
+    "avg_giveback": 23.66,
+    "median_giveback_pct": 111.6,
+    "worst_giveback": 84.86,
+    "p2l_2usd": 18,
+    "p2l_2usd_damage": -86.67
+   },
+   "2011": {
+    "trades": 11,
+    "net": 137.81,
+    "avg_mfe": 54.31,
+    "avg_giveback": 41.78,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 230.96,
+    "p2l_2usd": 3,
+    "p2l_2usd_damage": -15.23
+   },
+   "2012": {
+    "trades": 14,
+    "net": -101.93,
+    "avg_mfe": 13.3,
+    "avg_giveback": 20.58,
+    "median_giveback_pct": 101.7,
+    "worst_giveback": 53.2,
+    "p2l_2usd": 6,
+    "p2l_2usd_damage": -53.04
+   },
+   "2013": {
+    "trades": 16,
+    "net": 138.39,
+    "avg_mfe": 41.6,
+    "avg_giveback": 32.95,
+    "median_giveback_pct": 97.7,
+    "worst_giveback": 115.06,
+    "p2l_2usd": 2,
+    "p2l_2usd_damage": -32.33
+   },
+   "2014": {
+    "trades": 13,
+    "net": -5.36,
+    "avg_mfe": 22.2,
+    "avg_giveback": 22.61,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 45.11,
+    "p2l_2usd": 4,
+    "p2l_2usd_damage": -40.98
+   },
+   "2015": {
+    "trades": 16,
+    "net": 9.52,
+    "avg_mfe": 15.43,
+    "avg_giveback": 14.83,
+    "median_giveback_pct": 97.7,
+    "worst_giveback": 40.39,
+    "p2l_2usd": 2,
+    "p2l_2usd_damage": -37.08
+   },
+   "2016": {
+    "trades": 14,
+    "net": -140.78,
+    "avg_mfe": 9.14,
+    "avg_giveback": 19.2,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 53.73,
+    "p2l_2usd": 4,
+    "p2l_2usd_damage": -88.84
+   },
+   "2017": {
+    "trades": 11,
+    "net": -46.87,
+    "avg_mfe": 14.47,
+    "avg_giveback": 18.74,
+    "median_giveback_pct": 117.4,
+    "worst_giveback": 41.49,
+    "p2l_2usd": 7,
+    "p2l_2usd_damage": -49.05
+   },
+   "2018": {
+    "trades": 12,
+    "net": -23.71,
+    "avg_mfe": 17.75,
+    "avg_giveback": 19.73,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 56.66,
+    "p2l_2usd": 4,
+    "p2l_2usd_damage": -44.38
+   },
+   "2019": {
+    "trades": 11,
+    "net": -50.77,
+    "avg_mfe": 24.18,
+    "avg_giveback": 28.8,
+    "median_giveback_pct": 135.6,
+    "worst_giveback": 69.22,
+    "p2l_2usd": 8,
+    "p2l_2usd_damage": -113.13
+   },
+   "2020": {
+    "trades": 17,
+    "net": -0.48,
+    "avg_mfe": 38.71,
+    "avg_giveback": 38.74,
+    "median_giveback_pct": 103.5,
+    "worst_giveback": 189.81,
+    "p2l_2usd": 9,
+    "p2l_2usd_damage": -61.96
+   },
+   "2021": {
+    "trades": 13,
+    "net": -29.6,
+    "avg_mfe": 25.7,
+    "avg_giveback": 27.98,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 86.55,
+    "p2l_2usd": 3,
+    "p2l_2usd_damage": -34.01
+   },
+   "2022": {
+    "trades": 15,
+    "net": 56.56,
+    "avg_mfe": 37.89,
+    "avg_giveback": 34.12,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 181.4,
+    "p2l_2usd": 4,
+    "p2l_2usd_damage": -54.88
+   },
+   "2023": {
+    "trades": 16,
+    "net": -157.44,
+    "avg_mfe": 29.8,
+    "avg_giveback": 39.64,
+    "median_giveback_pct": 101.2,
+    "worst_giveback": 132.94,
+    "p2l_2usd": 8,
+    "p2l_2usd_damage": -179.6
+   },
+   "2024": {
+    "trades": 20,
+    "net": 42.19,
+    "avg_mfe": 40.28,
+    "avg_giveback": 38.17,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 128.1,
+    "p2l_2usd": 9,
+    "p2l_2usd_damage": -120.03
+   },
+   "2025": {
+    "trades": 16,
+    "net": 638.91,
+    "avg_mfe": 117.85,
+    "avg_giveback": 77.92,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 427.23,
+    "p2l_2usd": 8,
+    "p2l_2usd_damage": -12.16
+   },
+   "2026": {
+    "trades": 13,
+    "net": -15.63,
+    "avg_mfe": 91.02,
+    "avg_giveback": 92.23,
+    "median_giveback_pct": 100.0,
+    "worst_giveback": 977.11,
+    "p2l_2usd": 9,
+    "p2l_2usd_damage": -15.63
+   }
+  }
+ }
+}

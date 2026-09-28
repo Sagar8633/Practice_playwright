@@ -1,0 +1,76 @@
+//@version=6
+// =============================================================================
+//  trade_with_kareena  —  FLOW  (separate bottom pane)
+//  • Realtime Momentum Flow oscillator (histogram + line + flip markers)
+//  • ADX trend-strength value (like the original "ADX: 42.3")
+//  Pair this with the "trade_with_kareena Tracker" indicator (overlay on price).
+// =============================================================================
+indicator("trade_with_kareena Flow", shorttitle="TWK Flow", overlay=false)
+
+grpF = "Momentum Flow"
+flowLen   = input.int(20, "Flow smoothing length", minval=1, group=grpF)
+flowMult  = input.float(1.0, "Flow visual scale", minval=0.1, group=grpF)
+useVolStr = input.bool(true, "Weight by volume strength", group=grpF)
+
+grpA = "ADX"
+adxLen      = input.int(14, "ADX DI length", minval=1, group=grpA)
+adxSmooth   = input.int(14, "ADX smoothing", minval=1, group=grpA)
+adxThresh   = input.float(25, "Strong-trend threshold", group=grpA)
+showAdxLine = input.bool(false, "Plot ADX line (rescales pane)", group=grpA, tooltip="ADX is 0-100; plotting it on this pane will visually flatten the small Flow values. Off by default — the value is always shown in the corner box.")
+
+grpC = "Colors"
+colBuy  = input.color(color.new(#26a69a, 0), "Buy / Positive", group=grpC)
+colSell = input.color(color.new(#ef5350, 0), "Sell / Negative", group=grpC)
+
+// ---------------- Buy/Sell split + MTF aggregate ----------------
+buyingVolume() =>
+    rng = math.max(high - low, syminfo.mintick)
+    volume * ((close - low) / rng)
+sellingVolume() =>
+    rng = math.max(high - low, syminfo.mintick)
+    volume * ((high - close) / rng)
+
+f_tf(tf) =>
+    bv = request.security(syminfo.tickerid, tf, buyingVolume(),  barmerge.gaps_off, barmerge.lookahead_off)
+    sv = request.security(syminfo.tickerid, tf, sellingVolume(), barmerge.gaps_off, barmerge.lookahead_off)
+    v  = request.security(syminfo.tickerid, tf, volume,          barmerge.gaps_off, barmerge.lookahead_off)
+    va = request.security(syminfo.tickerid, tf, ta.sma(volume, 20), barmerge.gaps_off, barmerge.lookahead_off)
+    base = (bv - sv) / math.max(bv + sv, 1)
+    strength = useVolStr ? math.max(v / math.max(va, 1), 0.0) : 1.0
+    base * strength
+
+sc1   = f_tf("1")
+sc3   = f_tf("3")
+sc5   = f_tf("5")
+sc15  = f_tf("15")
+sc30  = f_tf("30")
+sc60  = f_tf("60")
+sc240 = f_tf("240")
+scD   = f_tf("1D")
+
+aggScore = (sc1 + sc3 + sc5 + sc15 + sc30 + sc60 + sc240 + scD) / 8.0
+flow = ta.ema(aggScore, flowLen) * flowMult
+flowCol = flow > 0 ? colBuy : flow < 0 ? colSell : color.gray
+histCol = flow >= 0 ? (flow >= nz(flow[1]) ? colBuy : color.new(colBuy, 55)) : (flow <= nz(flow[1]) ? colSell : color.new(colSell, 55))
+
+plot(flow, "Momentum Flow Hist", color=histCol, style=plot.style_columns)
+plot(flow, "Momentum Flow Line", color=flowCol, linewidth=2)
+hline(0, "Zero", color=color.new(color.gray, 60), linestyle=hline.style_dotted)
+
+flipUp   = ta.crossover(flow, 0)
+flipDown = ta.crossunder(flow, 0)
+plotshape(flipUp,   "Flow Up",   shape.triangleup,   location.bottom, colBuy,  size=size.tiny)
+plotshape(flipDown, "Flow Down", shape.triangledown, location.top,    colSell, size=size.tiny)
+
+// ---------------- ADX ----------------
+[diP, diM, adxVal] = ta.dmi(adxLen, adxSmooth)
+adxCol = adxVal >= adxThresh ? color.new(color.orange, 0) : color.new(color.gray, 30)
+plot(showAdxLine ? adxVal : na, "ADX", color=adxCol, linewidth=1)
+
+var table at = na
+if na(at)
+    at := table.new(position.bottom_right, 1, 1, border_width=1)
+table.cell(at, 0, 0, "ADX: " + str.tostring(adxVal, "#0.0") + (adxVal >= adxThresh ? "  STRONG" : "  weak"), text_color=color.white, bgcolor=adxCol, text_size=size.small)
+
+alertcondition(flipUp,   "Momentum Flow BULLISH", "Flow crossed above zero")
+alertcondition(flipDown, "Momentum Flow BEARISH", "Flow crossed below zero")

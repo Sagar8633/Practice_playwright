@@ -1,0 +1,2014 @@
+{
+ "M1": {
+  "folds": [
+   {
+    "fold": 1,
+    "train": [
+     "2020-09-01",
+     "2022-09-01"
+    ],
+    "val": [
+     "2022-09-01",
+     "2023-09-01"
+    ],
+    "test": [
+     "2023-09-01",
+     "2024-09-01"
+    ],
+    "configs": 120,
+    "eligible": 120,
+    "share_positive_train": 0.0,
+    "share_positive_val": 0.0,
+    "share_positive_test": 0.0,
+    "ea_untouched": {
+     "config": "none | swing | E01 EA",
+     "train_trades": 17793,
+     "train_expR": -0.399,
+     "train_pf": 0.373,
+     "train_net": -9809.27,
+     "val_trades": 8411,
+     "val_expR": -0.423,
+     "val_pf": 0.384,
+     "val_net": -4349.61,
+     "test_trades": 8246,
+     "test_expR": -0.383,
+     "test_pf": 0.454,
+     "test_net": -4183.03,
+     "test_dd": 4183.03
+    },
+    "train_best": {
+     "config": "vol>=1+ADX>=25 | swing3 | E09 ATRtrail2+BE",
+     "train_trades": 8490,
+     "train_expR": -0.244,
+     "train_pf": 0.418,
+     "train_net": -4362.05,
+     "val_trades": 3753,
+     "val_expR": -0.248,
+     "val_pf": 0.436,
+     "val_net": -1790.58,
+     "test_trades": 3867,
+     "test_expR": -0.223,
+     "test_pf": 0.493,
+     "test_net": -1808.27,
+     "test_dd": 1809.48
+    },
+    "train_best_passes_val": false,
+    "selected": null,
+    "n_pass_val": 0,
+    "top5_train_vs_test": [
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": -0.244,
+      "val_expR": -0.248,
+      "test_expR": -0.223,
+      "test_net": -1808.27
+     },
+     {
+      "config": "NY 13-22 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": -0.248,
+      "val_expR": -0.257,
+      "test_expR": -0.221,
+      "test_net": -1777.49
+     },
+     {
+      "config": "NY 13-22 | swing3 | E13 TWK",
+      "train_expR": -0.26,
+      "val_expR": -0.266,
+      "test_expR": -0.241,
+      "test_net": -1724.54
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E16 Chand+BE noMA",
+      "train_expR": -0.26,
+      "val_expR": -0.247,
+      "test_expR": -0.248,
+      "test_net": -1893.87
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E03 Chand+BE",
+      "train_expR": -0.26,
+      "val_expR": -0.256,
+      "test_expR": -0.244,
+      "test_net": -1945.33
+     }
+    ],
+    "degradation_train_to_test_expR_top5": 0.019
+   },
+   {
+    "fold": 2,
+    "train": [
+     "2021-09-01",
+     "2023-09-01"
+    ],
+    "val": [
+     "2023-09-01",
+     "2024-09-01"
+    ],
+    "test": [
+     "2024-09-01",
+     "2025-09-01"
+    ],
+    "configs": 120,
+    "eligible": 120,
+    "share_positive_train": 0.0,
+    "share_positive_val": 0.0,
+    "share_positive_test": 0.0,
+    "ea_untouched": {
+     "config": "none | swing | E01 EA",
+     "train_trades": 17409,
+     "train_expR": -0.423,
+     "train_pf": 0.367,
+     "train_net": -9397.14,
+     "val_trades": 8246,
+     "val_expR": -0.383,
+     "val_pf": 0.454,
+     "val_net": -4183.03,
+     "test_trades": 9418,
+     "test_expR": -0.268,
+     "test_pf": 0.532,
+     "test_net": -5495.54,
+     "test_dd": 5503.43
+    },
+    "train_best": {
+     "config": "vol>=1+ADX>=25 | swing3 | E09 ATRtrail2+BE",
+     "train_trades": 7938,
+     "train_expR": -0.257,
+     "train_pf": 0.41,
+     "train_net": -4023.91,
+     "val_trades": 3867,
+     "val_expR": -0.223,
+     "val_pf": 0.493,
+     "val_net": -1808.27,
+     "test_trades": 4452,
+     "test_expR": -0.151,
+     "test_pf": 0.567,
+     "test_net": -2371.66,
+     "test_dd": 2372.05
+    },
+    "train_best_passes_val": false,
+    "selected": null,
+    "n_pass_val": 0,
+    "top5_train_vs_test": [
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": -0.257,
+      "val_expR": -0.223,
+      "test_expR": -0.151,
+      "test_net": -2371.66
+     },
+     {
+      "config": "NY 13-22 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": -0.261,
+      "val_expR": -0.221,
+      "test_expR": -0.201,
+      "test_net": -2935.57
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E16 Chand+BE noMA",
+      "train_expR": -0.265,
+      "val_expR": -0.248,
+      "test_expR": -0.154,
+      "test_net": -1895.35
+     },
+     {
+      "config": "NY 13-22 | swing3 | E16 Chand+BE noMA",
+      "train_expR": -0.269,
+      "val_expR": -0.25,
+      "test_expR": -0.206,
+      "test_net": -2222.98
+     },
+     {
+      "config": "NY 13-22 | swing3 | E13 TWK",
+      "train_expR": -0.271,
+      "val_expR": -0.241,
+      "test_expR": -0.204,
+      "test_net": -2747.25
+     }
+    ],
+    "degradation_train_to_test_expR_top5": 0.081
+   },
+   {
+    "fold": 3,
+    "train": [
+     "2022-09-01",
+     "2024-09-01"
+    ],
+    "val": [
+     "2024-09-01",
+     "2025-09-01"
+    ],
+    "test": [
+     "2025-09-01",
+     "2026-09-26"
+    ],
+    "configs": 120,
+    "eligible": 120,
+    "share_positive_train": 0.0,
+    "share_positive_val": 0.0,
+    "share_positive_test": 0.0,
+    "ea_untouched": {
+     "config": "none | swing | E01 EA",
+     "train_trades": 16657,
+     "train_expR": -0.403,
+     "train_pf": 0.421,
+     "train_net": -8532.64,
+     "val_trades": 9418,
+     "val_expR": -0.268,
+     "val_pf": 0.532,
+     "val_net": -5495.54,
+     "test_trades": 11032,
+     "test_expR": -0.138,
+     "test_pf": 0.746,
+     "test_net": -6374.91,
+     "test_dd": 6412.58
+    },
+    "train_best": {
+     "config": "vol>=1+ADX>=25 | swing3 | E09 ATRtrail2+BE",
+     "train_trades": 7620,
+     "train_expR": -0.236,
+     "train_pf": 0.466,
+     "train_net": -3598.85,
+     "val_trades": 4452,
+     "val_expR": -0.151,
+     "val_pf": 0.567,
+     "val_net": -2371.66,
+     "test_trades": 5206,
+     "test_expR": -0.054,
+     "test_pf": 0.898,
+     "test_net": -1165.38,
+     "test_dd": 1192.46
+    },
+    "train_best_passes_val": false,
+    "selected": null,
+    "n_pass_val": 0,
+    "top5_train_vs_test": [
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": -0.236,
+      "val_expR": -0.151,
+      "test_expR": -0.054,
+      "test_net": -1165.38
+     },
+     {
+      "config": "NY 13-22 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": -0.239,
+      "val_expR": -0.201,
+      "test_expR": -0.089,
+      "test_net": -2782.76
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E16 Chand+BE noMA",
+      "train_expR": -0.248,
+      "val_expR": -0.154,
+      "test_expR": -0.061,
+      "test_net": -812.83
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E13 TWK",
+      "train_expR": -0.25,
+      "val_expR": -0.158,
+      "test_expR": -0.051,
+      "test_net": -460.39
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E03 Chand+BE",
+      "train_expR": -0.25,
+      "val_expR": -0.159,
+      "test_expR": -0.064,
+      "test_net": -1148.36
+     }
+    ],
+    "degradation_train_to_test_expR_top5": 0.181
+   }
+  ],
+  "audit": {
+   "configs_tested": 120,
+   "eligible": 120,
+   "positive_all_three_splits": 0,
+   "share_positive_dev": 0.0,
+   "share_positive_val": 0.0,
+   "share_positive_oos": 0.0,
+   "best_in_sample": {
+    "config": "vol>=1+ADX>=25 | swing3 | E09 ATRtrail2+BE",
+    "dev_expR": -0.245,
+    "dev_pf": 0.424,
+    "val_expR": -0.211,
+    "oos_expR": -0.085,
+    "oos_net": -2761.64,
+    "oos_pf": 0.82
+   },
+   "best_in_sample_oos": null,
+   "robust_candidates": []
+  },
+  "candidate": null,
+  "ea_monte_carlo_200": {
+   "shuffle": {
+    "dd_median": 30224.59,
+    "dd_p95": 30302.01,
+    "dd_worst": 30609.84,
+    "end_median": -30012.35,
+    "end_p05": -30012.35,
+    "end_p95": -30012.35,
+    "p_ruin": 1.0,
+    "p_dd_gt_50pct": 1.0,
+    "p_end_below_start": 1.0,
+    "losing_streak_median": 41.0,
+    "losing_streak_p95": 52.0
+   },
+   "bootstrap": {
+    "dd_median": 30249.86,
+    "dd_p95": 31737.45,
+    "dd_worst": 33540.02,
+    "end_median": -30027.01,
+    "end_p05": -31516.49,
+    "end_p95": -28470.89,
+    "p_ruin": 1.0,
+    "p_dd_gt_50pct": 1.0,
+    "p_end_below_start": 1.0,
+    "losing_streak_median": 41.0,
+    "losing_streak_p95": 52.0
+   }
+  }
+ },
+ "M5": {
+  "folds": [
+   {
+    "fold": 1,
+    "train": [
+     "2020-09-01",
+     "2022-09-01"
+    ],
+    "val": [
+     "2022-09-01",
+     "2023-09-01"
+    ],
+    "test": [
+     "2023-09-01",
+     "2024-09-01"
+    ],
+    "configs": 120,
+    "eligible": 120,
+    "share_positive_train": 0.0,
+    "share_positive_val": 0.0,
+    "share_positive_test": 0.0,
+    "ea_untouched": {
+     "config": "none | swing | E01 EA",
+     "train_trades": 3959,
+     "train_expR": -0.227,
+     "train_pf": 0.581,
+     "train_net": -2468.81,
+     "val_trades": 1893,
+     "val_expR": -0.199,
+     "val_pf": 0.65,
+     "val_net": -919.95,
+     "test_trades": 1887,
+     "test_expR": -0.174,
+     "test_pf": 0.678,
+     "test_net": -923.22,
+     "test_dd": 933.2
+    },
+    "train_best": {
+     "config": "vol>=1+ADX>=25 | swing3 | E16 Chand+BE noMA",
+     "train_trades": 1770,
+     "train_expR": -0.121,
+     "train_pf": 0.682,
+     "train_net": -997.04,
+     "val_trades": 857,
+     "val_expR": -0.095,
+     "val_pf": 0.766,
+     "val_net": -342.08,
+     "test_trades": 889,
+     "test_expR": -0.124,
+     "test_pf": 0.66,
+     "test_net": -576.6,
+     "test_dd": 588.01
+    },
+    "train_best_passes_val": false,
+    "selected": null,
+    "n_pass_val": 0,
+    "top5_train_vs_test": [
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E16 Chand+BE noMA",
+      "train_expR": -0.121,
+      "val_expR": -0.095,
+      "test_expR": -0.124,
+      "test_net": -576.6
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": -0.122,
+      "val_expR": -0.094,
+      "test_expR": -0.113,
+      "test_net": -548.31
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E03 Chand+BE",
+      "train_expR": -0.123,
+      "val_expR": -0.09,
+      "test_expR": -0.131,
+      "test_net": -563.85
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E13 TWK",
+      "train_expR": -0.125,
+      "val_expR": -0.091,
+      "test_expR": -0.114,
+      "test_net": -545.24
+     },
+     {
+      "config": "NY 13-22 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": -0.127,
+      "val_expR": -0.101,
+      "test_expR": -0.097,
+      "test_net": -445.68
+     }
+    ],
+    "degradation_train_to_test_expR_top5": 0.008
+   },
+   {
+    "fold": 2,
+    "train": [
+     "2021-09-01",
+     "2023-09-01"
+    ],
+    "val": [
+     "2023-09-01",
+     "2024-09-01"
+    ],
+    "test": [
+     "2024-09-01",
+     "2025-09-01"
+    ],
+    "configs": 120,
+    "eligible": 120,
+    "share_positive_train": 0.0,
+    "share_positive_val": 0.0,
+    "share_positive_test": 0.0,
+    "ea_untouched": {
+     "config": "none | swing | E01 EA",
+     "train_trades": 3874,
+     "train_expR": -0.214,
+     "train_pf": 0.616,
+     "train_net": -2092.37,
+     "val_trades": 1887,
+     "val_expR": -0.174,
+     "val_pf": 0.678,
+     "val_net": -923.22,
+     "test_trades": 2028,
+     "test_expR": -0.097,
+     "test_pf": 0.844,
+     "test_net": -648.13,
+     "test_dd": 679.47
+    },
+    "train_best": {
+     "config": "vol>=1+ADX>=25 | swing3 | E16 Chand+BE noMA",
+     "train_trades": 1747,
+     "train_expR": -0.1,
+     "train_pf": 0.711,
+     "train_net": -867.67,
+     "val_trades": 889,
+     "val_expR": -0.124,
+     "val_pf": 0.66,
+     "val_net": -576.6,
+     "test_trades": 874,
+     "test_expR": -0.048,
+     "test_pf": 0.9,
+     "test_net": -227.6,
+     "test_dd": 333.27
+    },
+    "train_best_passes_val": false,
+    "selected": null,
+    "n_pass_val": 0,
+    "top5_train_vs_test": [
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E16 Chand+BE noMA",
+      "train_expR": -0.1,
+      "val_expR": -0.124,
+      "test_expR": -0.048,
+      "test_net": -227.6
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E03 Chand+BE",
+      "train_expR": -0.101,
+      "val_expR": -0.131,
+      "test_expR": -0.03,
+      "test_net": -101.49
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E13 TWK",
+      "train_expR": -0.104,
+      "val_expR": -0.114,
+      "test_expR": -0.054,
+      "test_net": -295.96
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": -0.105,
+      "val_expR": -0.113,
+      "test_expR": -0.051,
+      "test_net": -404.14
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E00 SL+MA18",
+      "train_expR": -0.106,
+      "val_expR": -0.154,
+      "test_expR": -0.032,
+      "test_net": -90.25
+     }
+    ],
+    "degradation_train_to_test_expR_top5": 0.06
+   },
+   {
+    "fold": 3,
+    "train": [
+     "2022-09-01",
+     "2024-09-01"
+    ],
+    "val": [
+     "2024-09-01",
+     "2025-09-01"
+    ],
+    "test": [
+     "2025-09-01",
+     "2026-09-26"
+    ],
+    "configs": 120,
+    "eligible": 120,
+    "share_positive_train": 0.0,
+    "share_positive_val": 0.0,
+    "share_positive_test": 0.867,
+    "ea_untouched": {
+     "config": "none | swing | E01 EA",
+     "train_trades": 3780,
+     "train_expR": -0.187,
+     "train_pf": 0.665,
+     "train_net": -1843.17,
+     "val_trades": 2028,
+     "val_expR": -0.097,
+     "val_pf": 0.844,
+     "val_net": -648.13,
+     "test_trades": 2553,
+     "test_expR": -0.026,
+     "test_pf": 0.998,
+     "test_net": -17.31,
+     "test_dd": 640.54
+    },
+    "train_best": {
+     "config": "NY 13-22 | swing3 | E09 ATRtrail2+BE",
+     "train_trades": 2020,
+     "train_expR": -0.099,
+     "train_pf": 0.741,
+     "train_net": -777.49,
+     "val_trades": 1039,
+     "val_expR": -0.054,
+     "val_pf": 0.88,
+     "val_net": -240.22,
+     "test_trades": 1287,
+     "test_expR": -0.017,
+     "test_pf": 1.086,
+     "test_net": 376.57,
+     "test_dd": 423.5
+    },
+    "train_best_passes_val": false,
+    "selected": null,
+    "n_pass_val": 0,
+    "top5_train_vs_test": [
+     {
+      "config": "NY 13-22 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": -0.099,
+      "val_expR": -0.054,
+      "test_expR": -0.017,
+      "test_net": 376.57
+     },
+     {
+      "config": "NY 13-22 | swing | E16 Chand+BE noMA",
+      "train_expR": -0.102,
+      "val_expR": -0.053,
+      "test_expR": -0.027,
+      "test_net": -50.86
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E13 TWK",
+      "train_expR": -0.102,
+      "val_expR": -0.054,
+      "test_expR": -0.001,
+      "test_net": 845.53
+     },
+     {
+      "config": "NY 13-22 | ATR3 | E16 Chand+BE noMA",
+      "train_expR": -0.103,
+      "val_expR": -0.052,
+      "test_expR": -0.023,
+      "test_net": -120.65
+     },
+     {
+      "config": "NY 13-22 | swing3 | E01 EA",
+      "train_expR": -0.103,
+      "val_expR": -0.046,
+      "test_expR": -0.033,
+      "test_net": -6.61
+     }
+    ],
+    "degradation_train_to_test_expR_top5": 0.082
+   }
+  ],
+  "audit": {
+   "configs_tested": 120,
+   "eligible": 120,
+   "positive_all_three_splits": 0,
+   "share_positive_dev": 0.0,
+   "share_positive_val": 0.0,
+   "share_positive_oos": 0.642,
+   "best_in_sample": {
+    "config": "vol>=1+ADX>=25 | swing3 | E16 Chand+BE noMA",
+    "dev_expR": -0.112,
+    "dev_pf": 0.709,
+    "val_expR": -0.099,
+    "oos_expR": -0.021,
+    "oos_net": 51.96,
+    "oos_pf": 1.009
+   },
+   "best_in_sample_oos": null,
+   "robust_candidates": []
+  },
+  "candidate": null,
+  "ea_monte_carlo_200": {
+   "shuffle": {
+    "dd_median": 5074.84,
+    "dd_p95": 5316.31,
+    "dd_worst": 5771.74,
+    "end_median": -4777.42,
+    "end_p05": -4777.42,
+    "end_p95": -4777.42,
+    "p_ruin": 1.0,
+    "p_dd_gt_50pct": 1.0,
+    "p_end_below_start": 1.0,
+    "losing_streak_median": 26.0,
+    "losing_streak_p95": 34.0
+   },
+   "bootstrap": {
+    "dd_median": 5097.75,
+    "dd_p95": 6438.02,
+    "dd_worst": 7722.63,
+    "end_median": -4766.49,
+    "end_p05": -6127.81,
+    "end_p95": -3372.63,
+    "p_ruin": 1.0,
+    "p_dd_gt_50pct": 1.0,
+    "p_end_below_start": 1.0,
+    "losing_streak_median": 26.0,
+    "losing_streak_p95": 34.0
+   }
+  }
+ },
+ "M15": {
+  "folds": [
+   {
+    "fold": 1,
+    "train": [
+     "2020-09-01",
+     "2022-09-01"
+    ],
+    "val": [
+     "2022-09-01",
+     "2023-09-01"
+    ],
+    "test": [
+     "2023-09-01",
+     "2024-09-01"
+    ],
+    "configs": 120,
+    "eligible": 120,
+    "share_positive_train": 0.0,
+    "share_positive_val": 0.0,
+    "share_positive_test": 0.333,
+    "ea_untouched": {
+     "config": "none | swing | E01 EA",
+     "train_trades": 1395,
+     "train_expR": -0.111,
+     "train_pf": 0.738,
+     "train_net": -765.92,
+     "val_trades": 665,
+     "val_expR": -0.11,
+     "val_pf": 0.774,
+     "val_net": -315.39,
+     "test_trades": 682,
+     "test_expR": -0.062,
+     "test_pf": 0.904,
+     "test_net": -139.14,
+     "test_dd": 225.25
+    },
+    "train_best": {
+     "config": "vol>=1+ADX>=25 | swing3 | E04 Trail+BE",
+     "train_trades": 493,
+     "train_expR": 0.014,
+     "train_pf": 0.881,
+     "train_net": -151.15,
+     "val_trades": 249,
+     "val_expR": -0.057,
+     "val_pf": 0.862,
+     "val_net": -88.39,
+     "test_trades": 259,
+     "test_expR": 0.004,
+     "test_pf": 1.017,
+     "test_net": 10.27,
+     "test_dd": 77.92
+    },
+    "train_best_passes_val": false,
+    "selected": null,
+    "n_pass_val": 0,
+    "top5_train_vs_test": [
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E04 Trail+BE",
+      "train_expR": 0.014,
+      "val_expR": -0.057,
+      "test_expR": 0.004,
+      "test_net": 10.27
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing | E04 Trail+BE",
+      "train_expR": 0.009,
+      "val_expR": -0.07,
+      "test_expR": -0.012,
+      "test_net": 5.47
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing | E01 EA",
+      "train_expR": 0.008,
+      "val_expR": -0.067,
+      "test_expR": 0.002,
+      "test_net": 65.98
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E01 EA",
+      "train_expR": 0.004,
+      "val_expR": -0.056,
+      "test_expR": 0.004,
+      "test_net": 63.17
+     },
+     {
+      "config": "vol>=1 | swing3 | E04 Trail+BE",
+      "train_expR": -0.005,
+      "val_expR": -0.047,
+      "test_expR": -0.018,
+      "test_net": -31.31
+     }
+    ],
+    "degradation_train_to_test_expR_top5": -0.01
+   },
+   {
+    "fold": 2,
+    "train": [
+     "2021-09-01",
+     "2023-09-01"
+    ],
+    "val": [
+     "2023-09-01",
+     "2024-09-01"
+    ],
+    "test": [
+     "2024-09-01",
+     "2025-09-01"
+    ],
+    "configs": 120,
+    "eligible": 120,
+    "share_positive_train": 0.0,
+    "share_positive_val": 0.333,
+    "share_positive_test": 0.15,
+    "ea_untouched": {
+     "config": "none | swing | E01 EA",
+     "train_trades": 1362,
+     "train_expR": -0.106,
+     "train_pf": 0.755,
+     "train_net": -683.24,
+     "val_trades": 682,
+     "val_expR": -0.062,
+     "val_pf": 0.904,
+     "val_net": -139.14,
+     "test_trades": 763,
+     "test_expR": -0.057,
+     "test_pf": 0.899,
+     "test_net": -212.38,
+     "test_dd": 372.83
+    },
+    "train_best": {
+     "config": "vol>=1 | swing3 | E13 TWK",
+     "train_trades": 718,
+     "train_expR": -0.021,
+     "train_pf": 0.894,
+     "train_net": -175.02,
+     "val_trades": 371,
+     "val_expR": -0.006,
+     "val_pf": 1.011,
+     "val_net": 10.15,
+     "test_trades": 472,
+     "test_expR": -0.054,
+     "test_pf": 0.849,
+     "test_net": -212.86,
+     "test_dd": 278.12
+    },
+    "train_best_passes_val": false,
+    "selected": {
+     "config": "vol>=1+ADX>=25 | swing3 | E13 TWK",
+     "train_trades": 560,
+     "train_expR": -0.031,
+     "train_pf": 0.813,
+     "train_net": -255.21,
+     "val_trades": 281,
+     "val_expR": 0.028,
+     "val_pf": 1.128,
+     "val_net": 84.41,
+     "test_trades": 361,
+     "test_expR": -0.051,
+     "test_pf": 0.765,
+     "test_net": -275.5,
+     "test_dd": 317.11
+    },
+    "n_pass_val": 17,
+    "top5_train_vs_test": [
+     {
+      "config": "vol>=1 | swing3 | E13 TWK",
+      "train_expR": -0.021,
+      "val_expR": -0.006,
+      "test_expR": -0.054,
+      "test_net": -212.86
+     },
+     {
+      "config": "vol>=1 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": -0.024,
+      "val_expR": -0.032,
+      "test_expR": -0.056,
+      "test_net": -201.42
+     },
+     {
+      "config": "vol>=1 | swing3 | E04 Trail+BE",
+      "train_expR": -0.028,
+      "val_expR": -0.018,
+      "test_expR": -0.057,
+      "test_net": -19.56
+     },
+     {
+      "config": "vol>=1 | swing3 | E03 Chand+BE",
+      "train_expR": -0.03,
+      "val_expR": -0.044,
+      "test_expR": -0.066,
+      "test_net": -198.87
+     },
+     {
+      "config": "vol>=1 | swing | E09 ATRtrail2+BE",
+      "train_expR": -0.031,
+      "val_expR": -0.032,
+      "test_expR": -0.075,
+      "test_net": -204.8
+     }
+    ],
+    "degradation_train_to_test_expR_top5": -0.035
+   },
+   {
+    "fold": 3,
+    "train": [
+     "2022-09-01",
+     "2024-09-01"
+    ],
+    "val": [
+     "2024-09-01",
+     "2025-09-01"
+    ],
+    "test": [
+     "2025-09-01",
+     "2026-09-26"
+    ],
+    "configs": 120,
+    "eligible": 120,
+    "share_positive_train": 0.083,
+    "share_positive_val": 0.15,
+    "share_positive_test": 0.942,
+    "ea_untouched": {
+     "config": "none | swing | E01 EA",
+     "train_trades": 1347,
+     "train_expR": -0.086,
+     "train_pf": 0.84,
+     "train_net": -454.53,
+     "val_trades": 763,
+     "val_expR": -0.057,
+     "val_pf": 0.899,
+     "val_net": -212.38,
+     "test_trades": 1054,
+     "test_expR": 0.014,
+     "test_pf": 1.109,
+     "test_net": 448.95,
+     "test_dd": 342.65
+    },
+    "train_best": {
+     "config": "vol>=1+ADX>=25 | ATR3 | E00 SL+MA18",
+     "train_trades": 433,
+     "train_expR": 0.009,
+     "train_pf": 1.022,
+     "train_net": 28.95,
+     "val_trades": 234,
+     "val_expR": -0.053,
+     "val_pf": 0.8,
+     "val_net": -219.02,
+     "test_trades": 248,
+     "test_expR": 0.107,
+     "test_pf": 1.474,
+     "test_net": 1046.03,
+     "test_dd": 350.73
+    },
+    "train_best_passes_val": false,
+    "selected": {
+     "config": "none | swing3 | E16 Chand+BE noMA",
+     "train_trades": 1367,
+     "train_expR": -0.064,
+     "train_pf": 0.851,
+     "train_net": -438.29,
+     "val_trades": 692,
+     "val_expR": 0.01,
+     "val_pf": 1.069,
+     "val_net": 140.29,
+     "test_trades": 1028,
+     "test_expR": 0.022,
+     "test_pf": 1.125,
+     "test_net": 524.77,
+     "test_dd": 305.3
+    },
+    "n_pass_val": 3,
+    "top5_train_vs_test": [
+     {
+      "config": "vol>=1+ADX>=25 | ATR3 | E00 SL+MA18",
+      "train_expR": 0.009,
+      "val_expR": -0.053,
+      "test_expR": 0.107,
+      "test_net": 1046.03
+     },
+     {
+      "config": "vol>=1 | ATR3 | E00 SL+MA18",
+      "train_expR": 0.003,
+      "val_expR": -0.046,
+      "test_expR": 0.074,
+      "test_net": 1282.22
+     },
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E13 TWK",
+      "train_expR": -0.007,
+      "val_expR": -0.051,
+      "test_expR": -0.004,
+      "test_net": 375.1
+     },
+     {
+      "config": "vol>=1 | ATR3 | E20 R-BE1R+swing1R",
+      "train_expR": -0.008,
+      "val_expR": -0.042,
+      "test_expR": 0.078,
+      "test_net": 1290.18
+     },
+     {
+      "config": "vol>=1+ADX>=25 | ATR3 | E01 EA",
+      "train_expR": -0.009,
+      "val_expR": -0.034,
+      "test_expR": 0.031,
+      "test_net": 353.97
+     }
+    ],
+    "degradation_train_to_test_expR_top5": 0.06
+   }
+  ],
+  "audit": {
+   "configs_tested": 120,
+   "eligible": 120,
+   "positive_all_three_splits": 0,
+   "share_positive_dev": 0.0,
+   "share_positive_val": 0.283,
+   "share_positive_oos": 0.908,
+   "best_in_sample": {
+    "config": "vol>=1+ADX>=25 | swing3 | E04 Trail+BE",
+    "dev_expR": -0.01,
+    "dev_pf": 0.874,
+    "val_expR": -0.006,
+    "oos_expR": -0.014,
+    "oos_net": 247.37,
+    "oos_pf": 1.082
+   },
+   "best_in_sample_oos": null,
+   "robust_candidates": []
+  },
+  "candidate": null,
+  "ea_monte_carlo_200": {
+   "shuffle": {
+    "dd_median": 1364.59,
+    "dd_p95": 1800.43,
+    "dd_worst": 2652.01,
+    "end_median": -783.88,
+    "end_p05": -783.88,
+    "end_p95": -783.88,
+    "p_ruin": 1.0,
+    "p_dd_gt_50pct": 1.0,
+    "p_end_below_start": 1.0,
+    "losing_streak_median": 16.0,
+    "losing_streak_p95": 22.0
+   },
+   "bootstrap": {
+    "dd_median": 1402.01,
+    "dd_p95": 2437.0,
+    "dd_worst": 3656.27,
+    "end_median": -757.24,
+    "end_p05": -2000.3,
+    "end_p95": 526.19,
+    "p_ruin": 0.963,
+    "p_dd_gt_50pct": 1.0,
+    "p_end_below_start": 0.8906,
+    "losing_streak_median": 16.0,
+    "losing_streak_p95": 22.0
+   }
+  }
+ },
+ "D1": {
+  "folds": [
+   {
+    "fold": 1,
+    "train": [
+     "2020-09-01",
+     "2022-09-01"
+    ],
+    "val": [
+     "2022-09-01",
+     "2023-09-01"
+    ],
+    "test": [
+     "2023-09-01",
+     "2024-09-01"
+    ],
+    "configs": 96,
+    "eligible": 42,
+    "share_positive_train": 0.531,
+    "share_positive_val": 0.188,
+    "share_positive_test": 0.74,
+    "ea_untouched": {
+     "config": "none | swing | E01 EA",
+     "train_trades": 18,
+     "train_expR": -0.019,
+     "train_pf": 1.111,
+     "train_net": 9.86,
+     "val_trades": 10,
+     "val_expR": 0.024,
+     "val_pf": 2.854,
+     "val_net": 24.15,
+     "test_trades": 20,
+     "test_expR": 0.021,
+     "test_pf": 0.813,
+     "test_net": -32.36,
+     "test_dd": 166.37
+    },
+    "train_best": {
+     "config": "ADX>=25 | ATR3 | E09 ATRtrail2+BE",
+     "train_trades": 10,
+     "train_expR": 0.165,
+     "train_pf": 20.215,
+     "train_net": 100.22,
+     "val_trades": 15,
+     "val_expR": -0.046,
+     "val_pf": 0.62,
+     "val_net": -53.56,
+     "test_trades": 15,
+     "test_expR": 0.248,
+     "test_pf": 7.714,
+     "test_net": 248.99,
+     "test_dd": 30.42
+    },
+    "train_best_passes_val": false,
+    "selected": {
+     "config": "ADX>=25 | swing | E03 Chand+BE",
+     "train_trades": 10,
+     "train_expR": 0.069,
+     "train_pf": 4.838,
+     "train_net": 43.35,
+     "val_trades": 11,
+     "val_expR": 0.018,
+     "val_pf": 2.622,
+     "val_net": 21.12,
+     "test_trades": 13,
+     "test_expR": 0.183,
+     "test_pf": 3.271,
+     "test_net": 140.6,
+     "test_dd": 51.64
+    },
+    "n_pass_val": 14,
+    "top5_train_vs_test": [
+     {
+      "config": "ADX>=25 | ATR3 | E09 ATRtrail2+BE",
+      "train_expR": 0.165,
+      "val_expR": -0.046,
+      "test_expR": 0.248,
+      "test_net": 248.99
+     },
+     {
+      "config": "ADX>=25 | swing | E09 ATRtrail2+BE",
+      "train_expR": 0.164,
+      "val_expR": -0.041,
+      "test_expR": 0.228,
+      "test_net": 248.99
+     },
+     {
+      "config": "ADX>=25 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": 0.102,
+      "val_expR": -0.004,
+      "test_expR": 0.21,
+      "test_net": 248.99
+     },
+     {
+      "config": "ADX>=25 | ATR3 | E04 Trail+BE",
+      "train_expR": 0.074,
+      "val_expR": -0.068,
+      "test_expR": 0.037,
+      "test_net": 119.77
+     },
+     {
+      "config": "ADX>=25 | ATR3 | E13 TWK",
+      "train_expR": 0.073,
+      "val_expR": -0.062,
+      "test_expR": 0.037,
+      "test_net": 120.34
+     }
+    ],
+    "degradation_train_to_test_expR_top5": 0.036
+   },
+   {
+    "fold": 2,
+    "train": [
+     "2021-09-01",
+     "2023-09-01"
+    ],
+    "val": [
+     "2023-09-01",
+     "2024-09-01"
+    ],
+    "test": [
+     "2024-09-01",
+     "2025-09-01"
+    ],
+    "configs": 96,
+    "eligible": 84,
+    "share_positive_train": 0.26,
+    "share_positive_val": 0.74,
+    "share_positive_test": 0.604,
+    "ea_untouched": {
+     "config": "none | swing | E01 EA",
+     "train_trades": 26,
+     "train_expR": 0.006,
+     "train_pf": 1.475,
+     "train_net": 43.52,
+     "val_trades": 20,
+     "val_expR": 0.021,
+     "val_pf": 0.813,
+     "val_net": -32.36,
+     "test_trades": 19,
+     "test_expR": 0.127,
+     "test_pf": 7.113,
+     "test_net": 138.02,
+     "test_dd": 14.76
+    },
+    "train_best": {
+     "config": "none | ATR3 | E00 SL+MA18",
+     "train_trades": 13,
+     "train_expR": 0.073,
+     "train_pf": 0.835,
+     "train_net": -49.41,
+     "val_trades": 10,
+     "val_expR": -0.12,
+     "val_pf": 0.634,
+     "val_net": -130.84,
+     "test_trades": 9,
+     "test_expR": -0.002,
+     "test_pf": 0.814,
+     "test_net": -58.27,
+     "test_dd": 213.95
+    },
+    "train_best_passes_val": false,
+    "selected": {
+     "config": "none | swing | E00 SL+MA18",
+     "train_trades": 13,
+     "train_expR": 0.06,
+     "train_pf": 0.89,
+     "train_net": -30.95,
+     "val_trades": 10,
+     "val_expR": 0.108,
+     "val_pf": 0.616,
+     "val_net": -140.92,
+     "test_trades": 9,
+     "test_expR": 0.01,
+     "test_pf": 0.814,
+     "test_net": -58.27,
+     "test_dd": 213.95
+    },
+    "n_pass_val": 75,
+    "top5_train_vs_test": [
+     {
+      "config": "none | ATR3 | E00 SL+MA18",
+      "train_expR": 0.073,
+      "val_expR": -0.12,
+      "test_expR": -0.002,
+      "test_net": -58.27
+     },
+     {
+      "config": "none | ATR3 | E20 R-BE1R+swing1R",
+      "train_expR": 0.073,
+      "val_expR": -0.058,
+      "test_expR": -0.002,
+      "test_net": -58.27
+     },
+     {
+      "config": "none | swing | E00 SL+MA18",
+      "train_expR": 0.06,
+      "val_expR": 0.108,
+      "test_expR": 0.01,
+      "test_net": -58.27
+     },
+     {
+      "config": "none | swing | E20 R-BE1R+swing1R",
+      "train_expR": 0.06,
+      "val_expR": 0.142,
+      "test_expR": 0.026,
+      "test_net": -50.67
+     },
+     {
+      "config": "ADX>=25 | ATR3 | E03 Chand+BE",
+      "train_expR": 0.047,
+      "val_expR": 0.162,
+      "test_expR": 0.083,
+      "test_net": 146.11
+     }
+    ],
+    "degradation_train_to_test_expR_top5": -0.04
+   },
+   {
+    "fold": 3,
+    "train": [
+     "2022-09-01",
+     "2024-09-01"
+    ],
+    "val": [
+     "2024-09-01",
+     "2025-09-01"
+    ],
+    "test": [
+     "2025-09-01",
+     "2026-09-26"
+    ],
+    "configs": 96,
+    "eligible": 96,
+    "share_positive_train": 0.74,
+    "share_positive_val": 0.604,
+    "share_positive_test": 0.75,
+    "ea_untouched": {
+     "config": "none | swing | E01 EA",
+     "train_trades": 30,
+     "train_expR": 0.022,
+     "train_pf": 0.956,
+     "train_net": -8.21,
+     "val_trades": 19,
+     "val_expR": 0.127,
+     "val_pf": 7.113,
+     "val_net": 138.02,
+     "test_trades": 18,
+     "test_expR": 0.19,
+     "test_pf": 24.005,
+     "test_net": 479.47,
+     "test_dd": 20.84
+    },
+    "train_best": {
+     "config": "vol>=1+ADX>=25 | swing3 | E09 ATRtrail2+BE",
+     "train_trades": 19,
+     "train_expR": 0.119,
+     "train_pf": 2.225,
+     "train_net": 120.8,
+     "val_trades": 4,
+     "val_expR": 0.159,
+     "val_pf": 13.445,
+     "val_net": 172.92,
+     "test_trades": 10,
+     "test_expR": 0.219,
+     "test_pf": 6.005,
+     "test_net": 792.32,
+     "test_dd": 158.32
+    },
+    "train_best_passes_val": true,
+    "selected": {
+     "config": "vol>=1+ADX>=25 | swing3 | E09 ATRtrail2+BE",
+     "train_trades": 19,
+     "train_expR": 0.119,
+     "train_pf": 2.225,
+     "train_net": 120.8,
+     "val_trades": 4,
+     "val_expR": 0.159,
+     "val_pf": 13.445,
+     "val_net": 172.92,
+     "test_trades": 10,
+     "test_expR": 0.219,
+     "test_pf": 6.005,
+     "test_net": 792.32,
+     "test_dd": 158.32
+    },
+    "n_pass_val": 57,
+    "top5_train_vs_test": [
+     {
+      "config": "vol>=1+ADX>=25 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": 0.119,
+      "val_expR": 0.159,
+      "test_expR": 0.219,
+      "test_net": 792.32
+     },
+     {
+      "config": "vol>=1+ADX>=25 | ATR3 | E09 ATRtrail2+BE",
+      "train_expR": 0.11,
+      "val_expR": 0.211,
+      "test_expR": 0.382,
+      "test_net": 792.32
+     },
+     {
+      "config": "vol>=1 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": 0.108,
+      "val_expR": 0.089,
+      "test_expR": 0.183,
+      "test_net": 792.32
+     },
+     {
+      "config": "ADX>=25 | swing | E03 Chand+BE",
+      "train_expR": 0.107,
+      "val_expR": 0.154,
+      "test_expR": 0.474,
+      "test_net": 1223.35
+     },
+     {
+      "config": "ADX>=25 | swing3 | E09 ATRtrail2+BE",
+      "train_expR": 0.103,
+      "val_expR": 0.093,
+      "test_expR": 0.327,
+      "test_net": 1250.8
+     }
+    ],
+    "degradation_train_to_test_expR_top5": 0.208
+   }
+  ],
+  "audit": {
+   "configs_tested": 96,
+   "eligible": 84,
+   "positive_all_three_splits": 19,
+   "share_positive_dev": 0.302,
+   "share_positive_val": 0.604,
+   "share_positive_oos": 0.792,
+   "best_in_sample": {
+    "config": "none | ATR3 | E20 R-BE1R+swing1R",
+    "dev_expR": 0.052,
+    "dev_pf": 0.81,
+    "val_expR": -0.061,
+    "oos_expR": 0.302,
+    "oos_net": 219.36,
+    "oos_pf": 1.39
+   },
+   "best_in_sample_oos": null,
+   "robust_candidates": [
+    {
+     "config": "ADX>=25 | ATR3 | E03 Chand+BE",
+     "dev_trades": 21,
+     "dev_expR": 0.047,
+     "dev_pf": 3.651,
+     "dev_net": 64.47,
+     "val_expR": 0.092,
+     "val_pf": 1.969,
+     "val_net": 102.39,
+     "oos_trades": 22,
+     "oos_expR": 0.469,
+     "oos_pf": 86.315,
+     "oos_net": 1407.66,
+     "oos_dd": 8.68,
+     "all_trades": 62,
+     "all_net": 1574.52,
+     "all_pf": 11.747,
+     "all_dd": 64.67,
+     "all_expR": 0.21,
+     "all_win": 46.8,
+     "all_giveback": 46.46,
+     "all_p2l": 28,
+     "positive_dev_val_oos": true
+    },
+    {
+     "config": "ADX>=25 | swing | E03 Chand+BE",
+     "dev_trades": 21,
+     "dev_expR": 0.042,
+     "dev_pf": 3.651,
+     "dev_net": 64.47,
+     "val_expR": 0.083,
+     "val_pf": 1.969,
+     "val_net": 102.39,
+     "oos_trades": 22,
+     "oos_expR": 0.45,
+     "oos_pf": 86.315,
+     "oos_net": 1407.66,
+     "oos_dd": 8.68,
+     "all_trades": 62,
+     "all_net": 1574.52,
+     "all_pf": 11.747,
+     "all_dd": 64.67,
+     "all_expR": 0.2,
+     "all_win": 46.8,
+     "all_giveback": 46.46,
+     "all_p2l": 28,
+     "positive_dev_val_oos": true
+    },
+    {
+     "config": "ADX>=25 | ATR3 | E16 Chand+BE noMA",
+     "dev_trades": 21,
+     "dev_expR": 0.013,
+     "dev_pf": 1.507,
+     "dev_net": 16.78,
+     "val_expR": 0.152,
+     "val_pf": 2.601,
+     "val_net": 162.26,
+     "oos_trades": 22,
+     "oos_expR": 0.45,
+     "oos_pf": 84.137,
+     "oos_net": 1371.72,
+     "oos_dd": 8.68,
+     "all_trades": 59,
+     "all_net": 1550.76,
+     "all_pf": 11.274,
+     "all_dd": 73.43,
+     "all_expR": 0.214,
+     "all_win": 47.5,
+     "all_giveback": 50.03,
+     "all_p2l": 27,
+     "positive_dev_val_oos": true
+    },
+    {
+     "config": "ADX>=25 | swing | E09 ATRtrail2+BE",
+     "dev_trades": 25,
+     "dev_expR": 0.041,
+     "dev_pf": 1.319,
+     "dev_net": 46.66,
+     "val_expR": 0.153,
+     "val_pf": 5.611,
+     "val_net": 243.06,
+     "oos_trades": 24,
+     "oos_expR": 0.435,
+     "oos_pf": 10.2,
+     "oos_net": 1528.47,
+     "oos_dd": 154.85,
+     "all_trades": 70,
+     "all_net": 1818.19,
+     "all_pf": 5.98,
+     "all_dd": 154.85,
+     "all_expR": 0.21,
+     "all_win": 51.4,
+     "all_giveback": 38.88,
+     "all_p2l": 29,
+     "positive_dev_val_oos": true
+    },
+    {
+     "config": "ADX>=25 | ATR3 | E09 ATRtrail2+BE",
+     "dev_trades": 25,
+     "dev_expR": 0.038,
+     "dev_pf": 1.319,
+     "dev_net": 46.66,
+     "val_expR": 0.173,
+     "val_pf": 5.611,
+     "val_net": 243.06,
+     "oos_trades": 24,
+     "oos_expR": 0.428,
+     "oos_pf": 10.2,
+     "oos_net": 1528.47,
+     "oos_dd": 154.85,
+     "all_trades": 70,
+     "all_net": 1818.19,
+     "all_pf": 5.98,
+     "all_dd": 154.85,
+     "all_expR": 0.213,
+     "all_win": 51.4,
+     "all_giveback": 38.88,
+     "all_p2l": 29,
+     "positive_dev_val_oos": true
+    },
+    {
+     "config": "ADX>=25 | swing | E16 Chand+BE noMA",
+     "dev_trades": 21,
+     "dev_expR": 0.013,
+     "dev_pf": 1.507,
+     "dev_net": 16.78,
+     "val_expR": 0.131,
+     "val_pf": 2.601,
+     "val_net": 162.26,
+     "oos_trades": 22,
+     "oos_expR": 0.404,
+     "oos_pf": 84.137,
+     "oos_net": 1371.72,
+     "oos_dd": 8.68,
+     "all_trades": 59,
+     "all_net": 1550.76,
+     "all_pf": 11.274,
+     "all_dd": 73.43,
+     "all_expR": 0.191,
+     "all_win": 47.5,
+     "all_giveback": 50.03,
+     "all_p2l": 27,
+     "positive_dev_val_oos": true
+    },
+    {
+     "config": "none | swing | E09 ATRtrail2+BE",
+     "dev_trades": 34,
+     "dev_expR": -0.005,
+     "dev_pf": 1.025,
+     "dev_net": 6.73,
+     "val_expR": 0.102,
+     "val_pf": 3.346,
+     "val_net": 199.75,
+     "oos_trades": 31,
+     "oos_expR": 0.337,
+     "oos_pf": 10.254,
+     "oos_net": 1529.33,
+     "oos_dd": 154.85,
+     "all_trades": 93,
+     "all_net": 1735.82,
+     "all_pf": 4.348,
+     "all_dd": 154.85,
+     "all_expR": 0.141,
+     "all_win": 50.5,
+     "all_giveback": 34.57,
+     "all_p2l": 39,
+     "positive_dev_val_oos": true
+    },
+    {
+     "config": "none | ATR3 | E09 ATRtrail2+BE",
+     "dev_trades": 34,
+     "dev_expR": 0.007,
+     "dev_pf": 1.002,
+     "dev_net": 0.51,
+     "val_expR": 0.101,
+     "val_pf": 3.346,
+     "val_net": 199.75,
+     "oos_trades": 31,
+     "oos_expR": 0.332,
+     "oos_pf": 10.254,
+     "oos_net": 1529.33,
+     "oos_dd": 154.85,
+     "all_trades": 93,
+     "all_net": 1729.6,
+     "all_pf": 4.296,
+     "all_dd": 154.85,
+     "all_expR": 0.144,
+     "all_win": 50.5,
+     "all_giveback": 34.63,
+     "all_p2l": 39,
+     "positive_dev_val_oos": true
+    },
+    {
+     "config": "ADX>=25 | swing3 | E03 Chand+BE",
+     "dev_trades": 21,
+     "dev_expR": 0.033,
+     "dev_pf": 3.651,
+     "dev_net": 64.47,
+     "val_expR": 0.019,
+     "val_pf": 1.969,
+     "val_net": 102.39,
+     "oos_trades": 22,
+     "oos_expR": 0.321,
+     "oos_pf": 86.315,
+     "oos_net": 1407.66,
+     "oos_dd": 8.68,
+     "all_trades": 62,
+     "all_net": 1574.52,
+     "all_pf": 11.747,
+     "all_dd": 64.67,
+     "all_expR": 0.131,
+     "all_win": 46.8,
+     "all_giveback": 46.46,
+     "all_p2l": 28,
+     "positive_dev_val_oos": true
+    },
+    {
+     "config": "ADX>=25 | swing3 | E16 Chand+BE noMA",
+     "dev_trades": 21,
+     "dev_expR": 0.008,
+     "dev_pf": 1.507,
+     "dev_net": 16.78,
+     "val_expR": 0.051,
+     "val_pf": 2.601,
+     "val_net": 162.26,
+     "oos_trades": 22,
+     "oos_expR": 0.312,
+     "oos_pf": 84.137,
+     "oos_net": 1371.72,
+     "oos_dd": 8.68,
+     "all_trades": 59,
+     "all_net": 1550.76,
+     "all_pf": 11.274,
+     "all_dd": 73.43,
+     "all_expR": 0.133,
+     "all_win": 47.5,
+     "all_giveback": 50.03,
+     "all_p2l": 27,
+     "positive_dev_val_oos": true
+    }
+   ]
+  },
+  "candidate": {
+   "config": "ADX>=25 | ATR3 | E03 Chand+BE",
+   "params": {
+    "use_adx": true,
+    "adx_min": 25.0,
+    "sl_mode": 1,
+    "sl_atr_mult": 3.0,
+    "protection": 2,
+    "prot_start_mode": 0
+   },
+   "sensitivity": {
+    "atr_mult": [
+     {
+      "value": 1.5,
+      "all_net": 973.59,
+      "all_expR": 0.08,
+      "all_pf": 2.603,
+      "oos_net": 847.23,
+      "oos_expR": 0.154,
+      "trades": 85
+     },
+     {
+      "value": 2.25,
+      "all_net": 1630.38,
+      "all_expR": 0.235,
+      "all_pf": 7.095,
+      "oos_net": 1335.59,
+      "oos_expR": 0.479,
+      "trades": 64
+     },
+     {
+      "value": 3.0,
+      "all_net": 1574.52,
+      "all_expR": 0.21,
+      "all_pf": 11.747,
+      "oos_net": 1407.66,
+      "oos_expR": 0.469,
+      "trades": 62
+     },
+     {
+      "value": 3.75,
+      "all_net": 1351.61,
+      "all_expR": 0.184,
+      "all_pf": 12.507,
+      "oos_net": 1196.07,
+      "oos_expR": 0.41,
+      "trades": 62
+     },
+     {
+      "value": 4.5,
+      "all_net": 1230.47,
+      "all_expR": 0.176,
+      "all_pf": 12.048,
+      "oos_net": 1042.27,
+      "oos_expR": 0.365,
+      "trades": 62
+     }
+    ],
+    "chand_lookback": [
+     {
+      "value": 11,
+      "all_net": 1592.73,
+      "all_expR": 0.212,
+      "all_pf": 14.457,
+      "oos_net": 1407.66,
+      "oos_expR": 0.469,
+      "trades": 62
+     },
+     {
+      "value": 16,
+      "all_net": 1602.67,
+      "all_expR": 0.214,
+      "all_pf": 14.541,
+      "oos_net": 1407.66,
+      "oos_expR": 0.469,
+      "trades": 62
+     },
+     {
+      "value": 22,
+      "all_net": 1574.52,
+      "all_expR": 0.21,
+      "all_pf": 11.747,
+      "oos_net": 1407.66,
+      "oos_expR": 0.469,
+      "trades": 62
+     },
+     {
+      "value": 28,
+      "all_net": 1677.08,
+      "all_expR": 0.231,
+      "all_pf": 24.136,
+      "oos_net": 1418.48,
+      "oos_expR": 0.471,
+      "trades": 62
+     },
+     {
+      "value": 33,
+      "all_net": 1521.4,
+      "all_expR": 0.225,
+      "all_pf": 8.0,
+      "oos_net": 1257.5,
+      "oos_expR": 0.448,
+      "trades": 62
+     }
+    ],
+    "be_trigger_pts": [
+     {
+      "value": 300,
+      "all_net": 917.52,
+      "all_expR": 0.114,
+      "all_pf": 5.9,
+      "oos_net": 828.5,
+      "oos_expR": 0.323,
+      "trades": 79
+     },
+     {
+      "value": 400,
+      "all_net": 900.37,
+      "all_expR": 0.127,
+      "all_pf": 5.246,
+      "oos_net": 820.69,
+      "oos_expR": 0.335,
+      "trades": 71
+     },
+     {
+      "value": 500,
+      "all_net": 1574.52,
+      "all_expR": 0.21,
+      "all_pf": 11.747,
+      "oos_net": 1407.66,
+      "oos_expR": 0.469,
+      "trades": 62
+     },
+     {
+      "value": 600,
+      "all_net": 1521.33,
+      "all_expR": 0.203,
+      "all_pf": 8.717,
+      "oos_net": 1407.66,
+      "oos_expR": 0.469,
+      "trades": 61
+     },
+     {
+      "value": 700,
+      "all_net": 1552.16,
+      "all_expR": 0.234,
+      "all_pf": 8.285,
+      "oos_net": 1395.22,
+      "oos_expR": 0.467,
+      "trades": 58
+     }
+    ],
+    "sl_atr_mult": [
+     {
+      "value": 2.25,
+      "all_net": 1578.84,
+      "all_expR": 0.271,
+      "all_pf": 12.104,
+      "oos_net": 1407.66,
+      "oos_expR": 0.595,
+      "trades": 62
+     },
+     {
+      "value": 2.625,
+      "all_net": 1574.52,
+      "all_expR": 0.234,
+      "all_pf": 11.747,
+      "oos_net": 1407.66,
+      "oos_expR": 0.519,
+      "trades": 62
+     },
+     {
+      "value": 3.0,
+      "all_net": 1574.52,
+      "all_expR": 0.21,
+      "all_pf": 11.747,
+      "oos_net": 1407.66,
+      "oos_expR": 0.469,
+      "trades": 62
+     },
+     {
+      "value": 3.375,
+      "all_net": 1574.52,
+      "all_expR": 0.193,
+      "all_pf": 11.747,
+      "oos_net": 1407.66,
+      "oos_expR": 0.43,
+      "trades": 62
+     },
+     {
+      "value": 3.75,
+      "all_net": 1574.52,
+      "all_expR": 0.179,
+      "all_pf": 11.747,
+      "oos_net": 1407.66,
+      "oos_expR": 0.399,
+      "trades": 62
+     }
+    ],
+    "adx_min": [
+     {
+      "value": 20,
+      "all_net": 1491.1,
+      "all_expR": 0.151,
+      "all_pf": 6.463,
+      "oos_net": 1410.27,
+      "oos_expR": 0.383,
+      "trades": 81
+     },
+     {
+      "value": 22.5,
+      "all_net": 1540.29,
+      "all_expR": 0.19,
+      "all_pf": 7.878,
+      "oos_net": 1410.27,
+      "oos_expR": 0.398,
+      "trades": 69
+     },
+     {
+      "value": 25,
+      "all_net": 1574.52,
+      "all_expR": 0.21,
+      "all_pf": 11.747,
+      "oos_net": 1407.66,
+      "oos_expR": 0.469,
+      "trades": 62
+     },
+     {
+      "value": 27.5,
+      "all_net": 1519.59,
+      "all_expR": 0.203,
+      "all_pf": 9.489,
+      "oos_net": 1410.27,
+      "oos_expR": 0.545,
+      "trades": 59
+     },
+     {
+      "value": 30,
+      "all_net": 1563.38,
+      "all_expR": 0.229,
+      "all_pf": 12.561,
+      "oos_net": 1414.61,
+      "oos_expR": 0.577,
+      "trades": 54
+     }
+    ],
+    "fast": [
+     {
+      "value": 14,
+      "all_net": 1544.19,
+      "all_expR": 0.19,
+      "all_pf": 7.159,
+      "oos_net": 1475.4,
+      "oos_expR": 0.439,
+      "trades": 65
+     },
+     {
+      "value": 16,
+      "all_net": 1603.94,
+      "all_expR": 0.216,
+      "all_pf": 10.057,
+      "oos_net": 1475.4,
+      "oos_expR": 0.439,
+      "trades": 62
+     },
+     {
+      "value": 18,
+      "all_net": 1574.52,
+      "all_expR": 0.21,
+      "all_pf": 11.747,
+      "oos_net": 1407.66,
+      "oos_expR": 0.469,
+      "trades": 62
+     },
+     {
+      "value": 20,
+      "all_net": 948.5,
+      "all_expR": 0.153,
+      "all_pf": 6.691,
+      "oos_net": 800.46,
+      "oos_expR": 0.289,
+      "trades": 65
+     },
+     {
+      "value": 22,
+      "all_net": 909.81,
+      "all_expR": 0.145,
+      "all_pf": 5.939,
+      "oos_net": 771.09,
+      "oos_expR": 0.281,
+      "trades": 65
+     }
+    ],
+    "trend": [
+     {
+      "value": 150,
+      "all_net": 1546.16,
+      "all_expR": 0.2,
+      "all_pf": 9.801,
+      "oos_net": 1408.45,
+      "oos_expR": 0.413,
+      "trades": 64
+     },
+     {
+      "value": 175,
+      "all_net": 1576.92,
+      "all_expR": 0.216,
+      "all_pf": 11.882,
+      "oos_net": 1408.45,
+      "oos_expR": 0.43,
+      "trades": 62
+     },
+     {
+      "value": 200,
+      "all_net": 1574.52,
+      "all_expR": 0.21,
+      "all_pf": 11.747,
+      "oos_net": 1407.66,
+      "oos_expR": 0.469,
+      "trades": 62
+     },
+     {
+      "value": 225,
+      "all_net": 1529.15,
+      "all_expR": 0.204,
+      "all_pf": 9.036,
+      "oos_net": 1407.66,
+      "oos_expR": 0.491,
+      "trades": 60
+     },
+     {
+      "value": 250,
+      "all_net": 1574.68,
+      "all_expR": 0.241,
+      "all_pf": 11.877,
+      "oos_net": 1407.66,
+      "oos_expR": 0.607,
+      "trades": 54
+     }
+    ]
+   },
+   "monte_carlo": {
+    "at_200": {
+     "shuffle": {
+      "dd_median": 61.04,
+      "dd_p95": 104.62,
+      "dd_worst": 132.41,
+      "end_median": 1774.52,
+      "end_p05": 1774.52,
+      "end_p95": 1774.52,
+      "p_ruin": 0.0,
+      "p_dd_gt_50pct": 0.0792,
+      "p_end_below_start": 0.0,
+      "losing_streak_median": 5.0,
+      "losing_streak_p95": 7.0
+     },
+     "bootstrap": {
+      "dd_median": 59.46,
+      "dd_p95": 135.11,
+      "dd_worst": 312.19,
+      "end_median": 1691.33,
+      "end_p05": 471.19,
+      "end_p95": 3354.19,
+      "p_ruin": 0.0016,
+      "p_dd_gt_50pct": 0.1628,
+      "p_end_below_start": 0.0094,
+      "losing_streak_median": 5.0,
+      "losing_streak_p95": 8.0
+     }
+    },
+    "at_100x_median_risk": {
+     "shuffle": {
+      "dd_median": 61.04,
+      "dd_p95": 104.62,
+      "dd_worst": 132.41,
+      "end_median": 10248.52,
+      "end_p05": 10248.52,
+      "end_p95": 10248.52,
+      "p_ruin": 0.0,
+      "p_dd_gt_50pct": 0.0,
+      "p_end_below_start": 0.0,
+      "losing_streak_median": 5.0,
+      "losing_streak_p95": 7.0
+     },
+     "bootstrap": {
+      "dd_median": 59.46,
+      "dd_p95": 135.11,
+      "dd_worst": 312.19,
+      "end_median": 10165.33,
+      "end_p05": 8945.19,
+      "end_p95": 11828.19,
+      "p_ruin": 0.0,
+      "p_dd_gt_50pct": 0.0,
+      "p_end_below_start": 0.0094,
+      "losing_streak_median": 5.0,
+      "losing_streak_p95": 8.0
+     }
+    },
+    "median_risk_usd": 86.73999999999978
+   }
+  }
+ }
+}

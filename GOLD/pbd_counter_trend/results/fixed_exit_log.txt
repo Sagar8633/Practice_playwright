@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "D:\Practice_Playwright\GOLD\pbd_counter_trend\fixed_exit_lab.py", line 104, in <module>
+    main()
+  File "D:\Practice_Playwright\GOLD\pbd_counter_trend\fixed_exit_lab.py", line 52, in main
+    m1, m15, path = load_all()
+                    ^^^^^^^^^^
+  File "D:\Practice_Playwright\GOLD\pbd_counter_trend\pbd\run.py", line 22, in load_all
+    _cache["m1"] = m1; _cache["m15"] = m15; _cache["path"] = Path(m1)
+                                                             ^^^^^^^^
+  File "D:\Practice_Playwright\GOLD\pbd_counter_trend\pbd\engine.py", line 35, in __init__
+    self.ti = self.t.astype("int64") // 10**9
+              ~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 13.5 MiB for an array with shape (1766192,) and data type int64
+exit 1

@@ -1,0 +1,215 @@
+//@version=6
+// =============================================================================
+//  trade_with_kareena  —  TRACKER  (overlay on price chart)
+//  • MTF Buying/Selling volume table — GREEN rows (positive) / RED rows (negative)
+//  • R-Factor composite panel
+//  • Smart Trail (purple trailing line, Multiplier 1.5)
+//  • LONG / SHORT signals from the Smart Trail crossover (flip)
+//  • Institutional footprint bubbles (green = buying spike, red = selling spike)
+//  Pair with "trade_with_kareena Flow" (bottom pane: Flow + ADX).
+// =============================================================================
+indicator("trade_with_kareena Tracker", shorttitle="TWK Tracker", overlay=true, max_labels_count=500, max_boxes_count=100, max_lines_count=100)
+
+// ---------------- Inputs ----------------
+grpT = "Table"
+showTbl   = input.bool(true, "Show combined table", group=grpT)
+tblPos    = input.string("top_right", "Table position", options=["top_right","top_left","bottom_right","bottom_left","middle_right"], group=grpT)
+volLen    = input.int(20, "Volume MA Length (bars)", minval=1, group=grpT, tooltip="Buying = sum of up-bar volume, Selling = sum of down-bar volume, over this many bars of each timeframe. 20 matches the original.")
+rowAlpha  = input.int(15, "Row color opacity", minval=0, maxval=80, group=grpT, tooltip="0 = solid color, higher = more transparent.")
+tblSize   = input.string("small", "Table font size", options=["small","normal","large","huge"], group=grpT)
+
+grpR = "R-Factor"
+rLen     = input.int(14, "R-Factor lookback", minval=2, group=grpR)
+benchSym = input.symbol("NSE:NIFTY", "Benchmark for Sector Strength", group=grpR, tooltip="Index/sector for relative strength. For crypto try CRYPTOCAP:TOTAL or BINANCE:BTCUSDT. Invalid symbols score 0.")
+
+grpL = "Smart Trail (purple line)"
+showLine = input.bool(true, "Show Smart Trail", group=grpL)
+stMult   = input.float(1.5, "Multiplier", minval=0.5, group=grpL, tooltip="ATR multiplier. 1.5 matches the original — lower hugs price tighter.")
+stATR    = input.int(10, "ATR length", minval=1, group=grpL)
+colLine  = input.color(#7e57c2, "Line color", group=grpL)
+
+grpS = "LONG / SHORT Signals"
+showSig    = input.bool(true, "Show LONG/SHORT signals", group=grpS)
+sigConfirm = input.bool(false, "Require R-Factor confirmation", group=grpS, tooltip="If on, LONG needs R-Factor>0 and SHORT needs R-Factor<0. Off = pure Smart Trail crossover (like the original).")
+
+grpB = "Institutional Footprint Bubbles"
+showBub   = input.bool(true, "Show footprint bubbles", group=grpB)
+bubLen    = input.int(20, "Volume average length", minval=1, group=grpB)
+bubMult   = input.float(1.8, "Volume threshold (x avg)", minval=1.0, group=grpB)
+
+grpD = "Reversal Pivot Dots"
+showDots = input.bool(true, "Show purple pivot dots", group=grpD)
+pivLen   = input.int(5, "Pivot strength (bars each side)", minval=1, group=grpD, tooltip="Higher = only bigger swings. The dots mark swing highs/lows that price often reacts to (support/resistance).")
+colDot   = input.color(#9c27b0, "Dot color", group=grpD)
+
+grpP = "1:2 Auto Positions (R:R)"
+showPos  = input.bool(true, "Plot LONG/SHORT positions", group=grpP)
+rr       = input.float(2.0, "Reward : Risk", minval=0.5, group=grpP, tooltip="Target distance = this x stop distance. 2 = 1:2.")
+projBars = input.int(24, "Projection width (bars)", minval=3, group=grpP)
+
+grpC = "Colors"
+colBuy  = input.color(color.new(#26a69a, 0), "Buy / Positive", group=grpC)
+colSell = input.color(color.new(#ef5350, 0), "Sell / Negative", group=grpC)
+
+// ---------------- MTF buying/selling volume (sum up vs sum down over volLen bars) -
+f_tf(tf) =>
+    [bV, sV] = request.security(syminfo.tickerid, tf, [math.sum(close > open ? volume : 0.0, volLen), math.sum(close < open ? volume : 0.0, volLen)], barmerge.gaps_off, barmerge.lookahead_off)
+    score = (bV - sV) / math.max(bV + sV, 1)
+    [bV, sV, score]
+
+[bv1,  sv1,  sc1]  = f_tf("1")
+[bv3,  sv3,  sc3]  = f_tf("3")
+[bv5,  sv5,  sc5]  = f_tf("5")
+[bv15, sv15, sc15] = f_tf("15")
+[bv30, sv30, sc30] = f_tf("30")
+[bv60, sv60, sc60] = f_tf("60")
+[bv120,sv120,sc120]= f_tf("120")
+[bv240,sv240,sc240]= f_tf("240")
+[bvD,  svD,  scD]  = f_tf("1D")
+
+// ---------------- helpers ----------------
+f_fmt(x) =>
+    a = math.abs(x)
+    a >= 1e9 ? str.tostring(x/1e9, "#.##")+"B" : a >= 1e6 ? str.tostring(x/1e6, "#.##")+"M" : a >= 1e3 ? str.tostring(x/1e3, "#.##")+"K" : str.tostring(x, "#.##")
+f_resTxt(s) => s > 0 ? "Positive (BUY)" : s < 0 ? "Negative (SELL)" : "Neutral"
+f_rowCol(s) => s > 0 ? color.new(colBuy, rowAlpha) : s < 0 ? color.new(colSell, rowAlpha) : color.new(color.gray, 40)
+f_pos(p) => p=="top_left"?position.top_left : p=="top_right"?position.top_right : p=="bottom_left"?position.bottom_left : p=="bottom_right"?position.bottom_right : position.middle_right
+f_sc(v) => (v >= 0 ? "+" : "") + str.tostring(v, "#0.0")
+f_tsize(s) => s=="small"?size.small : s=="normal"?size.normal : s=="huge"?size.huge : size.large
+ts = f_tsize(tblSize)
+
+f_row(tbl, row, label, bv, sv, sc) =>
+    rc = f_rowCol(sc)
+    table.cell(tbl, 0, row, label,        text_color=color.white, bgcolor=rc, text_size=ts)
+    table.cell(tbl, 1, row, f_fmt(bv),    text_color=color.white, bgcolor=rc, text_size=ts)
+    table.cell(tbl, 2, row, f_fmt(sv),    text_color=color.white, bgcolor=rc, text_size=ts)
+    table.cell(tbl, 3, row, f_resTxt(sc), text_color=color.white, bgcolor=rc, text_size=ts)
+
+f_comp(tbl, row, name, score) =>
+    cc = f_rowCol(score)
+    table.cell(tbl, 0, row, name,        text_color=color.white, bgcolor=cc, text_size=ts)
+    table.cell(tbl, 1, row, f_sc(score), text_color=color.white, bgcolor=cc, text_size=ts)
+    table.cell(tbl, 2, row, "",          text_color=color.white, bgcolor=cc, text_size=ts)
+    table.cell(tbl, 3, row, "",          text_color=color.white, bgcolor=cc, text_size=ts)
+
+// ---------------- R-FACTOR composite (each component ~ -20..+20) ----------------
+priceMom   = (ta.rsi(close, rLen) - 50) / 50 * 20
+volRatio   = volume / math.max(ta.sma(volume, rLen), 1)
+volScore   = math.max(math.min(volRatio - 1, 1), -1) * 20
+bench      = request.security(benchSym, timeframe.period, close, barmerge.gaps_off, barmerge.lookahead_off, ignore_invalid_symbol=true)
+rs         = na(bench) or na(bench[rLen]) ? na : (close / close[rLen]) / (bench / bench[rLen])
+sectorScore= na(rs) ? 0.0 : math.max(math.min((rs - 1) * 50, 1), -1) * 20
+oiScore    = math.max(math.min(ta.roc(ta.sma(volume, rLen), rLen) / 100, 1), -1) * 20
+smartScore = (ta.mfi(hlc3, rLen) - 50) / 50 * 20
+
+rFactor = priceMom + volScore + sectorScore + oiScore + smartScore
+rCol    = f_rowCol(rFactor)
+rBias   = rFactor > 33 ? "STRONG BUY" : rFactor > 0 ? "BUY" : rFactor < -33 ? "STRONG SELL" : rFactor < 0 ? "SELL" : "NEUTRAL"
+
+// ---------------- Combined table (light header, green/red rows) ----------------
+hCol = color.new(#2a2e39, 0)
+var table mt = na
+if showTbl
+    if na(mt)
+        mt := table.new(f_pos(tblPos), 4, 16, border_width=1)
+    table.cell(mt, 0,0,"Periods",        text_color=color.white, bgcolor=hCol, text_size=ts)
+    table.cell(mt, 1,0,"Buying Volume",  text_color=color.white, bgcolor=hCol, text_size=ts)
+    table.cell(mt, 2,0,"Selling Volume", text_color=color.white, bgcolor=hCol, text_size=ts)
+    table.cell(mt, 3,0,"Result",         text_color=color.white, bgcolor=hCol, text_size=ts)
+    f_row(mt,1,"1m",  bv1,  sv1,  sc1)
+    f_row(mt,2,"3m",  bv3,  sv3,  sc3)
+    f_row(mt,3,"5m",  bv5,  sv5,  sc5)
+    f_row(mt,4,"15m", bv15, sv15, sc15)
+    f_row(mt,5,"30m", bv30, sv30, sc30)
+    f_row(mt,6,"1h",  bv60, sv60, sc60)
+    f_row(mt,7,"2h",  bv120,sv120,sc120)
+    f_row(mt,8,"4h",  bv240,sv240,sc240)
+    f_row(mt,9,"1D",  bvD,  svD,  scD)
+    table.cell(mt, 0,10,"R-FACTOR",         text_color=color.white, bgcolor=rCol, text_size=ts)
+    table.cell(mt, 1,10,str.tostring(rFactor,"#0.0"), text_color=color.white, bgcolor=rCol, text_size=ts)
+    table.cell(mt, 2,10,"BIAS",             text_color=color.white, bgcolor=rCol, text_size=ts)
+    table.cell(mt, 3,10,rBias,              text_color=color.white, bgcolor=rCol, text_size=ts)
+    f_comp(mt,11,"Price Momentum",   priceMom)
+    f_comp(mt,12,"Volume",           volScore)
+    f_comp(mt,13,"Sector Strength",  sectorScore)
+    f_comp(mt,14,"OI / Derivatives", oiScore)
+    f_comp(mt,15,"Smart Money Flow", smartScore)
+
+// ---------------- Smart Trail (purple trailing line) ----------------
+[stVal, stDir] = ta.supertrend(stMult, stATR)
+plot(showLine ? stVal : na, "Smart Trail", color=colLine, linewidth=2, style=plot.style_linebr)
+
+// ---------------- LONG / SHORT signals from Smart Trail crossover ----------------
+bullFlip = stDir < 0 and stDir[1] >= 0   // trail flips below price -> uptrend
+bearFlip = stDir > 0 and stDir[1] <= 0   // trail flips above price -> downtrend
+longSig  = bullFlip and (not sigConfirm or rFactor > 0)
+shortSig = bearFlip and (not sigConfirm or rFactor < 0)
+
+if showSig and longSig
+    label.new(bar_index, low, "LONG", yloc=yloc.belowbar, style=label.style_label_up, color=colBuy, textcolor=color.white, size=size.small)
+if showSig and shortSig
+    label.new(bar_index, high, "SHORT", yloc=yloc.abovebar, style=label.style_label_down, color=colSell, textcolor=color.white, size=size.small)
+
+// ---------------- Institutional footprint bubbles ----------------
+vAvg  = ta.sma(volume, bubLen)
+isBig = volume >= bubMult * vAvg
+ratio = volume / math.max(vAvg, 1)
+bSize = ratio > 4 ? size.huge : ratio > 3 ? size.large : ratio > 2 ? size.normal : size.small
+bubCol = close >= open ? color.new(colBuy, 10) : color.new(colSell, 10)
+if showBub and isBig
+    label.new(bar_index, hlc3, f_fmt(volume), style=label.style_circle, color=bubCol, textcolor=color.white, size=bSize)
+
+// ---------------- Reversal pivot dots (S/R the chart reacts at) ----------------
+ph = ta.pivothigh(high, pivLen, pivLen)
+pl = ta.pivotlow(low, pivLen, pivLen)
+plotshape(showDots and not na(ph), title="Pivot High Dot", style=shape.circle, location=location.abovebar, color=colDot, offset=-pivLen, size=size.tiny)
+plotshape(showDots and not na(pl), title="Pivot Low Dot",  style=shape.circle, location=location.belowbar, color=colDot, offset=-pivLen, size=size.tiny)
+
+// ---------------- 1:2 Auto LONG/SHORT positions (bias + S/R + Smart Trail) -------
+// Stop = nearest pivot support/resistance (or Smart Trail if none); Target = rr x risk.
+var float lastPL = na
+var float lastPH = na
+if not na(pl)
+    lastPL := pl
+if not na(ph)
+    lastPH := ph
+
+// Keep only ONE position — the current/latest one (delete the previous on each new signal).
+var box   pbRwd = na
+var box   pbRsk = na
+var line  plEnt = na
+var label plLE  = na
+var label plLT  = na
+var label plLS  = na
+
+if showPos and (longSig or shortSig)
+    isL = longSig
+    entry = close
+    sl = isL ? ((not na(lastPL) and lastPL < close) ? lastPL : stVal) : ((not na(lastPH) and lastPH > close) ? lastPH : stVal)
+    risk = isL ? (entry - sl) : (sl - entry)
+    if risk > 0
+        tp = isL ? (entry + rr * risk) : (entry - rr * risk)
+        l = bar_index
+        rgt = l + projBars
+        // clear the previous position so only the current one stays
+        if not na(pbRwd)
+            box.delete(pbRwd)
+        if not na(pbRsk)
+            box.delete(pbRsk)
+        if not na(plEnt)
+            line.delete(plEnt)
+        if not na(plLE)
+            label.delete(plLE)
+        if not na(plLT)
+            label.delete(plLT)
+        if not na(plLS)
+            label.delete(plLS)
+        pbRwd := box.new(l, math.max(entry, tp), rgt, math.min(entry, tp), border_color=color.new(colBuy, 0),  bgcolor=color.new(colBuy, 60))
+        pbRsk := box.new(l, math.max(entry, sl), rgt, math.min(entry, sl), border_color=color.new(colSell, 0), bgcolor=color.new(colSell, 60))
+        plEnt := line.new(l, entry, rgt, entry, color=color.new(color.white, 0), width=2, style=line.style_dashed)
+        plLE := label.new(l, entry, (isL ? "LONG @ " : "SHORT @ ") + str.tostring(entry, format.mintick) + "  (1:" + str.tostring(rr, "#.#") + ")", style=label.style_label_right, color=color.new(color.gray, 10), textcolor=color.white, size=size.small)
+        plLT := label.new(l, tp, "TP " + str.tostring(tp, format.mintick), style=label.style_label_right, color=color.new(colBuy, 0),  textcolor=color.white, size=size.small)
+        plLS := label.new(l, sl, "SL " + str.tostring(sl, format.mintick), style=label.style_label_right, color=color.new(colSell, 0), textcolor=color.white, size=size.small)
+
+alertcondition(longSig,  "TWK LONG signal",  "trade_with_kareena: LONG (Smart Trail flip up)")
+alertcondition(shortSig, "TWK SHORT signal", "trade_with_kareena: SHORT (Smart Trail flip down)")

@@ -1,0 +1,96 @@
+{
+  "name": "PBD counter-trend swing framework (Patrick Nill) - objective rule set for XAUUSD",
+  "version": "baseline-1.0 (pre-registered 2026-09-26, not tuned)",
+  "status": "BASELINE SPECIFICATION. No 'Gold Strategy Specification' is issued: see FINAL_REPORT.md section 20.",
+  "instrument": "XAUUSD spot (Dukascopy bid bars; XM GOLD spread/swap)",
+  "primary_timeframe": "M15 (UTC-aligned, bar time = floor to 15 min)",
+  "execution_timeframe": "M1 path for stops, targets, MFE/MAE",
+  "sessions_utc_dst_aware": {
+    "asia": "09:00-17:00 Asia/Tokyo and not London",
+    "london": "08:00-16:30 Europe/London and not New York",
+    "overlap": "London and New York both open (08:00-16:30 London AND 08:00-17:00 New York)",
+    "newyork": "08:00-17:00 America/New_York and not London",
+    "offhours": "everything else"
+  },
+  "weekly_value_area": {
+    "week": "Sunday 21:00 UTC to next Sunday 21:00 UTC",
+    "volume_source_primary": "Dukascopy traded volume on M1 bars (single-venue real volume, NOT COMEX, NOT footprint)",
+    "volume_source_sensitivity": ["XM MT5 tick volume on M15", "TPO count on M15"],
+    "bin_width_usd": "max(0.10, round(0.00025 * first high of the week, 2))",
+    "distribution": "each bar's volume spread uniformly over every bin its low-high touches",
+    "value_area_pct": 0.70,
+    "expansion": "from POC, two bins at a time toward the side with more volume (CBOT method)",
+    "reference_used_for_trading": "PREVIOUS COMPLETED week's VAH / VAL / POC for the whole current week (no look-ahead)",
+    "developing_variant": "current-week VA recomputed at every M15 close from bars up to that close (sensitivity only)"
+  },
+  "impulse": {
+    "definition_primary": "atr",
+    "definitions_tested": {
+      "atr": "|close[i] - close[i-N]| >= imp_k * ATR14[i-N] and efficiency_ratio >= imp_eff",
+      "pct": "|close[i] - close[i-N]| >= trailing-30-day 98th percentile of |N-bar moves| and efficiency_ratio >= imp_eff",
+      "rangeexp": "N-bar high-low range >= imp_rexp * trailing-30-day median N-bar range and efficiency_ratio >= imp_eff",
+      "consec": ">= imp_consec consecutive same-direction closes and |move| >= 2 * ATR14[i-N]"
+    },
+    "N_bars": 8,
+    "imp_k": 3.5,
+    "imp_eff": 0.6,
+    "efficiency_ratio": "|net move| / sum(|close-to-close changes|) over the window",
+    "no_data_gap_inside_window": true,
+    "origin": "lowest low (P) / highest high (B) within 4N bars before the window, accepted only if the path from it to the extreme never retraced more than 50% of itself; otherwise the window's own extreme",
+    "extreme_tracking": "the extreme keeps updating while price makes new highs (P) / lows (B) before a range forms",
+    "abandon_if": "close retraces more than 61.8% of the impulse, or no range forms within 24 bars of the extreme",
+    "structure_type": "P = upward impulse then range; B = downward impulse then range; the impulse is never traded"
+  },
+  "consolidation_range": {
+    "confirmation_window_bars": 8,
+    "window_position": "the last 8 bars, which must start at or after the impulse extreme bar",
+    "width_max": "<= 0.6 * impulse size",
+    "width_min": ">= 0.5 * pre-impulse ATR14",
+    "drift_max": "|close_end - close_start| <= 0.5 * width over the window",
+    "location": "range low (P) must sit above origin + 38.2% of the impulse (range high below for B)",
+    "range_high": "highest high of the confirmation window (frozen)",
+    "range_low": "lowest low of the confirmation window (frozen)",
+    "touch": "a bar entering the 20%-of-width zone at a boundary (consecutive bars count once)",
+    "max_duration_bars": 288,
+    "min_touches_required_baseline": "1 per side by construction (touch filters tested separately)"
+  },
+  "playbook_A_pingpong": {
+    "long_signal": "bar low <= range_low + 0.20*width AND close > range_low AND close <= range_low + 0.5*width AND side re-armed",
+    "short_signal": "mirror at range high",
+    "rearm": "a new same-side signal needs a close at least 30% of width away from that boundary first",
+    "entry": "market at the open of the M1 bar after the signal bar close (+1 min delay in the realistic model)",
+    "stop": "boundary -/+ 0.5 * ATR14 at signal time",
+    "target": "boundary +/- 0.9 * width (just inside the opposite boundary)",
+    "stops_when": "a valid breakout occurs (setup invalid) or the range expires"
+  },
+  "playbook_B_breakout_pullback": {
+    "breakout": "M15 close beyond a boundary by >= 0.25 * ATR14 (confirmation variants: bar range >= 1.5 ATR, volume >= 1.5x 20-bar average, both)",
+    "pullback": "within 16 bars a bar reaches boundary +/- 0.25 ATR and closes on the breakout side",
+    "failed_breakout": "close back inside the range by > 0.25 ATR -> back to RANGE state",
+    "entry": "market after the pullback bar closes",
+    "stop": "beyond min/max(pullback extreme, boundary) by 0.5 * ATR14",
+    "target_counter_impulse": "origin of the impulse",
+    "target_continuation": "boundary +/- 1.0 * width (measured move)",
+    "B2_variant": "entry at the breakout close without waiting for the pullback"
+  },
+  "management": {
+    "max_hold": "288 M15 bars (72 h), exit at the next M1 open",
+    "one_position_at_a_time": true,
+    "risk_per_trade": "1% of equity (all statistics in R; the 1%-compounding curve starts at 10,000 USD)"
+  },
+  "costs_realistic": {
+    "spread": "XM GOLD per-bar spread (median 0.25 USD in 2022 to 0.40 USD in 2026); long pays the ask, short exits at the ask",
+    "slippage_usd_per_oz": 0.10,
+    "commission": "0 (XM Standard); 0.07 USD/oz ECN variant in the sensitivity table",
+    "swap_usd_per_oz_per_night": {"long": -0.8684, "short": 0.1979, "wednesday": "x3"},
+    "execution_delay": "fill at the open of the M1 bar starting 1 min after the signal bar close",
+    "intrabar_rule": "stop and target in the same M1 bar -> stop first; open beyond the stop -> filled at the open"
+  },
+  "data_split": {
+    "DEV": "2021-09-01 to 2023-12-31",
+    "VAL": "2024-01-01 to 2025-03-31",
+    "OOS": "2025-04-01 to 2026-09-25",
+    "walk_forward": "test years 2023-2026, candidate chosen on all earlier years"
+  },
+  "version_B_footprint": "NOT AVAILABLE. No bid/ask footprint or COMEX order-flow data exists in the dataset. Tick volume and Dukascopy volume are not treated as footprint data."
+}

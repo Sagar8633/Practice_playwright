@@ -1,0 +1,450 @@
+{
+ "BASELINE": {
+  "group": "baseline",
+  "rule": "shipped M3 preset: ratio 1.2, boxes, ADX 20, pivot/purple stop, trail 360/900/180, hold through opposite"
+ },
+ "cost_reward<=0.05": {
+  "group": "T1 cost",
+  "rule": "spread / (RR x stop) <= 0.05"
+ },
+ "cost_reward<=0.1": {
+  "group": "T1 cost",
+  "rule": "spread / (RR x stop) <= 0.1"
+ },
+ "cost_reward<=0.15": {
+  "group": "T1 cost",
+  "rule": "spread / (RR x stop) <= 0.15"
+ },
+ "cost_reward<=0.2": {
+  "group": "T1 cost",
+  "rule": "spread / (RR x stop) <= 0.2"
+ },
+ "cost_stop<=0.1": {
+  "group": "T1 cost",
+  "rule": "spread / stop <= 0.1"
+ },
+ "cost_stop<=0.2": {
+  "group": "T1 cost",
+  "rule": "spread / stop <= 0.2"
+ },
+ "cost_stop<=0.3": {
+  "group": "T1 cost",
+  "rule": "spread / stop <= 0.3"
+ },
+ "cool_1m_all": {
+  "group": "T2 cooldown",
+  "rule": "no all entry for 1 min after a loss"
+ },
+ "cool_1m_same": {
+  "group": "T2 cooldown",
+  "rule": "no same entry for 1 min after a loss"
+ },
+ "cool_1m_opposite": {
+  "group": "T2 cooldown",
+  "rule": "no opposite entry for 1 min after a loss"
+ },
+ "cool_3m_all": {
+  "group": "T2 cooldown",
+  "rule": "no all entry for 3 min after a loss"
+ },
+ "cool_3m_same": {
+  "group": "T2 cooldown",
+  "rule": "no same entry for 3 min after a loss"
+ },
+ "cool_3m_opposite": {
+  "group": "T2 cooldown",
+  "rule": "no opposite entry for 3 min after a loss"
+ },
+ "cool_5m_all": {
+  "group": "T2 cooldown",
+  "rule": "no all entry for 5 min after a loss"
+ },
+ "cool_5m_same": {
+  "group": "T2 cooldown",
+  "rule": "no same entry for 5 min after a loss"
+ },
+ "cool_5m_opposite": {
+  "group": "T2 cooldown",
+  "rule": "no opposite entry for 5 min after a loss"
+ },
+ "cool_10m_all": {
+  "group": "T2 cooldown",
+  "rule": "no all entry for 10 min after a loss"
+ },
+ "cool_10m_same": {
+  "group": "T2 cooldown",
+  "rule": "no same entry for 10 min after a loss"
+ },
+ "cool_10m_opposite": {
+  "group": "T2 cooldown",
+  "rule": "no opposite entry for 10 min after a loss"
+ },
+ "cool_15m_all": {
+  "group": "T2 cooldown",
+  "rule": "no all entry for 15 min after a loss"
+ },
+ "cool_15m_same": {
+  "group": "T2 cooldown",
+  "rule": "no same entry for 15 min after a loss"
+ },
+ "cool_15m_opposite": {
+  "group": "T2 cooldown",
+  "rule": "no opposite entry for 15 min after a loss"
+ },
+ "cool_20m_all": {
+  "group": "T2 cooldown",
+  "rule": "no all entry for 20 min after a loss"
+ },
+ "cool_20m_same": {
+  "group": "T2 cooldown",
+  "rule": "no same entry for 20 min after a loss"
+ },
+ "cool_20m_opposite": {
+  "group": "T2 cooldown",
+  "rule": "no opposite entry for 20 min after a loss"
+ },
+ "cool_30m_all": {
+  "group": "T2 cooldown",
+  "rule": "no all entry for 30 min after a loss"
+ },
+ "cool_30m_same": {
+  "group": "T2 cooldown",
+  "rule": "no same entry for 30 min after a loss"
+ },
+ "cool_30m_opposite": {
+  "group": "T2 cooldown",
+  "rule": "no opposite entry for 30 min after a loss"
+ },
+ "cool_1bars": {
+  "group": "T2 cooldown",
+  "rule": "no entry for 1 closed M3 bars after a loss"
+ },
+ "cool_2bars": {
+  "group": "T2 cooldown",
+  "rule": "no entry for 2 closed M3 bars after a loss"
+ },
+ "cool_3bars": {
+  "group": "T2 cooldown",
+  "rule": "no entry for 3 closed M3 bars after a loss"
+ },
+ "cool_5bars": {
+  "group": "T2 cooldown",
+  "rule": "no entry for 5 closed M3 bars after a loss"
+ },
+ "cool_10bars": {
+  "group": "T2 cooldown",
+  "rule": "no entry for 10 closed M3 bars after a loss"
+ },
+ "reentry_dist>=0.5atr": {
+  "group": "T2 cooldown",
+  "rule": "|price - last exit| >= 0.5 x ATR"
+ },
+ "reentry_dist>=1.0atr": {
+  "group": "T2 cooldown",
+  "rule": "|price - last exit| >= 1.0 x ATR"
+ },
+ "reentry_dist>=2.0atr": {
+  "group": "T2 cooldown",
+  "rule": "|price - last exit| >= 2.0 x ATR"
+ },
+ "opp_signal_age>=3": {
+  "group": "T2 cooldown",
+  "rule": "previous opposite signal at least 3 bars old (signal reset)"
+ },
+ "opp_signal_age>=5": {
+  "group": "T2 cooldown",
+  "rule": "previous opposite signal at least 5 bars old (signal reset)"
+ },
+ "opp_signal_age>=10": {
+  "group": "T2 cooldown",
+  "rule": "previous opposite signal at least 10 bars old (signal reset)"
+ },
+ "opp_signal_age>=20": {
+  "group": "T2 cooldown",
+  "rule": "previous opposite signal at least 20 bars old (signal reset)"
+ },
+ "flips_10<=1": {
+  "group": "T3/T4 chop",
+  "rule": "at most 1 other flips in the last 10 bars"
+ },
+ "flips_10<=2": {
+  "group": "T3/T4 chop",
+  "rule": "at most 2 other flips in the last 10 bars"
+ },
+ "flips_10<=3": {
+  "group": "T3/T4 chop",
+  "rule": "at most 3 other flips in the last 10 bars"
+ },
+ "flips_20<=2": {
+  "group": "T3/T4 chop",
+  "rule": "at most 2 other flips in the last 20 bars"
+ },
+ "flips_20<=3": {
+  "group": "T3/T4 chop",
+  "rule": "at most 3 other flips in the last 20 bars"
+ },
+ "flips_20<=4": {
+  "group": "T3/T4 chop",
+  "rule": "at most 4 other flips in the last 20 bars"
+ },
+ "flips_30<=4": {
+  "group": "T3/T4 chop",
+  "rule": "at most 4 other flips in the last 30 bars"
+ },
+ "flips_30<=6": {
+  "group": "T3/T4 chop",
+  "rule": "at most 6 other flips in the last 30 bars"
+ },
+ "atr_ratio>=0.7": {
+  "group": "T3 chop",
+  "rule": "ATR >= 0.7 x its 30-day median"
+ },
+ "atr_ratio>=0.9": {
+  "group": "T3 chop",
+  "rule": "ATR >= 0.9 x its 30-day median"
+ },
+ "atr_ratio>=1.1": {
+  "group": "T3 chop",
+  "rule": "ATR >= 1.1 x its 30-day median"
+ },
+ "atr_ratio<=1.5": {
+  "group": "T3 chop",
+  "rule": "ATR <= 1.5 x its 30-day median"
+ },
+ "atr_ratio<=2.0": {
+  "group": "T3 chop",
+  "rule": "ATR <= 2.0 x its 30-day median"
+ },
+ "adx>25": {
+  "group": "T3 chop",
+  "rule": "ADX > 25"
+ },
+ "adx>30": {
+  "group": "T3 chop",
+  "rule": "ADX > 30"
+ },
+ "adx_rising": {
+  "group": "T3 chop",
+  "rule": "ADX higher than 5 bars ago"
+ },
+ "bbw_atr>=1.0": {
+  "group": "T3 chop",
+  "rule": "Bollinger width >= 1.0 x ATR"
+ },
+ "bbw_atr>=1.5": {
+  "group": "T3 chop",
+  "rule": "Bollinger width >= 1.5 x ATR"
+ },
+ "opp_candles5<=2": {
+  "group": "T3 chop",
+  "rule": "at most 2 of the last 5 candles against the signal"
+ },
+ "opp_candles5<=3": {
+  "group": "T3 chop",
+  "rule": "at most 3 of the last 5 candles against the signal"
+ },
+ "dist_prev_sig>=1.0": {
+  "group": "T4 chop",
+  "rule": "price >= 1.0 x ATR from the previous signal"
+ },
+ "dist_prev_sig>=2.0": {
+  "group": "T4 chop",
+  "rule": "price >= 2.0 x ATR from the previous signal"
+ },
+ "stop_atr1.0": {
+  "group": "T5 stop",
+  "rule": "SL = 1.0 x ATR from the signal close"
+ },
+ "stop_atr1.5": {
+  "group": "T5 stop",
+  "rule": "SL = 1.5 x ATR from the signal close"
+ },
+ "stop_atr2.0": {
+  "group": "T5 stop",
+  "rule": "SL = 2.0 x ATR from the signal close"
+ },
+ "stop_atr3.0": {
+  "group": "T5 stop",
+  "rule": "SL = 3.0 x ATR from the signal close"
+ },
+ "stop_hybrid0.75_cap3.0": {
+  "group": "T5 stop",
+  "rule": "SL = max(structure, 0.75 x ATR), skip if > 3.0 x ATR"
+ },
+ "stop_hybrid1.0_cap3.0": {
+  "group": "T5 stop",
+  "rule": "SL = max(structure, 1.0 x ATR), skip if > 3.0 x ATR"
+ },
+ "stop_hybrid1.0_cap4.0": {
+  "group": "T5 stop",
+  "rule": "SL = max(structure, 1.0 x ATR), skip if > 4.0 x ATR"
+ },
+ "stop_hybrid1.5_cap4.0": {
+  "group": "T5 stop",
+  "rule": "SL = max(structure, 1.5 x ATR), skip if > 4.0 x ATR"
+ },
+ "stop_pivot_cap2.0": {
+  "group": "T5 stop",
+  "rule": "shipped stop, skip if > 2.0 x ATR"
+ },
+ "stop_pivot_cap3.0": {
+  "group": "T5 stop",
+  "rule": "shipped stop, skip if > 3.0 x ATR"
+ },
+ "stop_pivot_cap4.0": {
+  "group": "T5 stop",
+  "rule": "shipped stop, skip if > 4.0 x ATR"
+ },
+ "stop_purple": {
+  "group": "T5 stop",
+  "rule": "SL = purple line from the first tick"
+ },
+ "rev_reverse": {
+  "group": "T10 reversal",
+  "rule": "close AND reverse on the opposite signal (your tester setting)"
+ },
+ "rev_modelA_close": {
+  "group": "T10 reversal",
+  "rule": "Model A: close on the opposite signal, never reverse"
+ },
+ "rev_modelB_confirm1": {
+  "group": "T10 reversal",
+  "rule": "Model B: close only if the opposite direction persists 1 bars"
+ },
+ "rev_modelB_confirm2": {
+  "group": "T10 reversal",
+  "rule": "Model B: close only if the opposite direction persists 2 bars"
+ },
+ "rev_modelB_confirm3": {
+  "group": "T10 reversal",
+  "rule": "Model B: close only if the opposite direction persists 3 bars"
+ },
+ "rev_modelD_adx25": {
+  "group": "T10 reversal",
+  "rule": "Model D: close only if the opposite signal's ADX > 25"
+ },
+ "rev_modelD_adx30": {
+  "group": "T10 reversal",
+  "rule": "Model D: close only if the opposite signal's ADX > 30"
+ },
+ "htf15": {
+  "group": "T9 HTF",
+  "rule": "M15 Supertrend direction agrees"
+ },
+ "htf60": {
+  "group": "T9 HTF",
+  "rule": "H1 Supertrend direction agrees"
+ },
+ "htf15_and_60": {
+  "group": "T9 HTF",
+  "rule": "M15 and H1 agree"
+ },
+ "ema50_m15": {
+  "group": "T9 HTF",
+  "rule": "M15 EMA50 slope agrees"
+ },
+ "htf15_conflict": {
+  "group": "T9 HTF",
+  "rule": "ONLY trades where M15 disagrees (control)"
+ },
+ "range_ratio<=2.0": {
+  "group": "T7 overext",
+  "rule": "signal bar range <= 2.0 x ATR"
+ },
+ "range_ratio<=3.0": {
+  "group": "T7 overext",
+  "rule": "signal bar range <= 3.0 x ATR"
+ },
+ "dist_ema<=2.0": {
+  "group": "T7 overext",
+  "rule": "|close - EMA20| <= 2.0 x ATR"
+ },
+ "dist_ema<=3.0": {
+  "group": "T7 overext",
+  "rule": "|close - EMA20| <= 3.0 x ATR"
+ },
+ "trail_at0.25R": {
+  "group": "T12 trailing",
+  "rule": "purple trail from +0.25R (instead of +360 pts)"
+ },
+ "trail_at0.5R": {
+  "group": "T12 trailing",
+  "rule": "purple trail from +0.5R (instead of +360 pts)"
+ },
+ "trail_at0.75R": {
+  "group": "T12 trailing",
+  "rule": "purple trail from +0.75R (instead of +360 pts)"
+ },
+ "trail_at1.0R": {
+  "group": "T12 trailing",
+  "rule": "purple trail from +1.0R (instead of +360 pts)"
+ },
+ "trail_at1.25R": {
+  "group": "T12 trailing",
+  "rule": "purple trail from +1.25R (instead of +360 pts)"
+ },
+ "be_at0.5R": {
+  "group": "T12 trailing",
+  "rule": "break-even + costs at +0.5R"
+ },
+ "be_at0.75R": {
+  "group": "T12 trailing",
+  "rule": "break-even + costs at +0.75R"
+ },
+ "be_at1.0R": {
+  "group": "T12 trailing",
+  "rule": "break-even + costs at +1.0R"
+ },
+ "lock_1.0R_keep0.25R": {
+  "group": "T13 protection",
+  "rule": "at +1.0R lock +0.25R and trail 1:1 with a 0.75R gap"
+ },
+ "lock_1.5R_keep0.5R": {
+  "group": "T13 protection",
+  "rule": "at +1.5R lock +0.5R and trail 1:1 with a 1.0R gap"
+ },
+ "lock_2.0R_keep0.5R": {
+  "group": "T13 protection",
+  "rule": "at +2.0R lock +0.5R and trail 1:1 with a 1.5R gap"
+ },
+ "timeexit_15m_below0.0R": {
+  "group": "T14 time exit",
+  "rule": "close after 15 min if profit < 0.0R"
+ },
+ "timeexit_30m_below0.0R": {
+  "group": "T14 time exit",
+  "rule": "close after 30 min if profit < 0.0R"
+ },
+ "timeexit_60m_below0.0R": {
+  "group": "T14 time exit",
+  "rule": "close after 60 min if profit < 0.0R"
+ },
+ "timeexit_30m_below0.25R": {
+  "group": "T14 time exit",
+  "rule": "close after 30 min if profit < 0.25R"
+ },
+ "timeexit_60m_below0.25R": {
+  "group": "T14 time exit",
+  "rule": "close after 60 min if profit < 0.25R"
+ },
+ "session_asia_02-10": {
+  "group": "T15 session",
+  "rule": "entries only 02:00-10:00 server time"
+ },
+ "session_london_10-15": {
+  "group": "T15 session",
+  "rule": "entries only 10:00-15:00 server time"
+ },
+ "session_overlap_15-20": {
+  "group": "T15 session",
+  "rule": "entries only 15:00-20:00 server time"
+ },
+ "session_ny_20-24": {
+  "group": "T15 session",
+  "rule": "entries only 20:00-24:00 server time"
+ },
+ "session_london+ny_10-20": {
+  "group": "T15 session",
+  "rule": "entries only 10:00-20:00 server time"
+ }
+}

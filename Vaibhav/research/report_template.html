@@ -1,0 +1,552 @@
+<title>SMA18 Gold Verdict</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{color-scheme:light;
+  --page:#f4f6f8;--surface:#fcfcfb;--surface-2:#eef1f4;--ink:#0b0b0b;--ink-2:#52514e;--muted:#898781;--grid:#e1e0d9;--axis:#c3c2b7;--border:rgba(11,11,11,.10);
+  --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--gray:#b8b6ae;--pos:#2a78d6;--neg:#e34948;--pos-rgb:42,120,214;--neg-rgb:227,73,72;
+  --good:#0ca30c;--warn:#fab219;--serious:#ec835a;--critical:#d03b3b;--good-text:#006300;--warn-text:#7a4f00;--serious-text:#8a3a14;--critical-text:#a12b2b;
+  --tint-good:rgba(12,163,12,.10);--tint-warn:rgba(250,178,25,.16);--tint-serious:rgba(236,131,90,.16);--tint-critical:rgba(208,59,59,.12)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --page:#0e0f11;--surface:#1b1d20;--surface-2:#23262a;--ink:#ffffff;--ink-2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--axis:#383835;--border:rgba(255,255,255,.10);
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--gray:#5a5c60;--pos:#3987e5;--neg:#e66767;--pos-rgb:57,135,229;--neg-rgb:230,103,103;
+  --good-text:#3ec13e;--warn-text:#fab219;--serious-text:#ec835a;--critical-text:#ef7070}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --page:#0e0f11;--surface:#1b1d20;--surface-2:#23262a;--ink:#ffffff;--ink-2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--axis:#383835;--border:rgba(255,255,255,.10);
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--gray:#5a5c60;--pos:#3987e5;--neg:#e66767;--pos-rgb:57,135,229;--neg-rgb:230,103,103;
+  --good-text:#3ec13e;--warn-text:#fab219;--serious-text:#ec835a;--critical-text:#ef7070}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font-family:'IBM Plex Sans',system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.5;padding-inline:clamp(16px,3vw,32px);padding-block:0 56px}
+.wrap{max-width:1180px;margin:0 auto}
+h1,h2,h3{font-family:'IBM Plex Sans Condensed','IBM Plex Sans',system-ui,sans-serif;font-weight:600;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h1{font-size:clamp(28px,4vw,40px);line-height:1.1}
+h2{font-size:26px;line-height:1.2;margin-top:6px}
+h3{font-size:17px;font-weight:600;margin:0 0 2px}
+h4{font-size:13.5px;font-weight:600;margin:0;color:var(--ink)}
+p{margin:0 0 10px;max-width:72ch}
+.lead{font-size:15.5px;color:var(--ink-2);max-width:78ch}
+.eyebrow{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+header.top{padding:34px 0 18px;display:flex;flex-direction:column;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:12px;color:var(--ink-2);background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:3px 10px}
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--page);border-bottom:1px solid var(--border);margin:0 -4px 8px;padding:8px 4px;overflow-x:auto}
+nav.toc ul{list-style:none;display:flex;gap:4px;margin:0;padding:0;white-space:nowrap}
+nav.toc a{display:inline-block;padding:5px 10px;border-radius:6px;color:var(--ink-2);text-decoration:none;font-size:13px}
+nav.toc a:hover{background:var(--surface-2);color:var(--ink)}
+section{padding:30px 0 10px;border-top:1px solid var(--border)}
+section:first-of-type{border-top:0}
+.sec-head{display:flex;flex-direction:column;gap:4px;margin-bottom:14px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));margin-bottom:14px}
+.grid-2{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));margin-bottom:14px}
+.grid-3{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));margin-bottom:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px 16px 12px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.card.wide{grid-column:1/-1}
+.card .cap{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.card .cap p{font-size:12.5px;color:var(--ink-2);margin:2px 0 0}
+.chart{position:relative;height:240px;width:100%}
+.chart.tall{height:320px}
+.chart.short{height:190px}
+.chart.xl{height:700px}
+button.tbtn{font:inherit;font-size:12px;color:var(--ink-2);background:transparent;border:1px solid var(--border);border-radius:6px;padding:3px 9px;cursor:pointer;flex-shrink:0}
+button.tbtn:hover{background:var(--surface-2);color:var(--ink)}
+button.tbtn[aria-pressed="true"]{background:var(--surface-2);color:var(--ink)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.tbl{overflow-x:auto}
+.tbl[hidden]{display:none}
+table{border-collapse:collapse;width:100%;font-size:12.5px;font-variant-numeric:tabular-nums}
+th{text-align:left;color:var(--ink-2);font-weight:500;border-bottom:1px solid var(--axis);padding:6px 8px;white-space:nowrap}
+td{padding:5px 8px;border-bottom:1px solid var(--grid);vertical-align:top}
+td.num,th.num{text-align:right;white-space:nowrap}
+tr.base td{background:var(--surface-2);font-weight:500}
+.tiles{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-bottom:14px}
+.tile{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tile .lab{font-size:12.5px;color:var(--ink-2)}
+.tile .val{font-size:30px;font-weight:600;line-height:1.1;letter-spacing:-.01em}
+.tile .val.small{font-size:22px}
+.tile .sub{font-size:12.5px;color:var(--ink-2)}
+.tile .sub b{color:var(--ink);font-weight:500}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:500;border:1px solid var(--border);white-space:nowrap;color:var(--ink-2)}
+.pill.helpful{color:var(--good-text);background:var(--tint-good)}
+.pill.harmful{color:var(--critical-text);background:var(--tint-critical)}
+.pill.neutral{color:var(--ink-2)}
+.pill.base{color:var(--ink);background:var(--surface-2)}
+.pill.critical{color:var(--critical-text);background:var(--tint-critical)}
+.pill.serious{color:var(--serious-text);background:var(--tint-serious)}
+.pill.warning{color:var(--warn-text);background:var(--tint-warn)}
+.pill.good{color:var(--good-text);background:var(--tint-good)}
+.flow{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-bottom:14px}
+.flow .step{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:12.5px;position:relative}
+.flow .step b{display:block;font-size:13px;margin-bottom:2px}
+.flow .step .n{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.facts{columns:2;column-gap:28px;font-size:13.5px;max-width:none}
+.facts li{break-inside:avoid;margin-bottom:6px}
+@media (max-width:640px){.facts{columns:1}}
+ul.tight{margin:0 0 10px;padding-left:20px}
+ul.tight li{margin-bottom:5px;max-width:78ch}
+ol.changes{margin:0 0 10px;padding-left:22px}
+ol.changes li{margin-bottom:9px;max-width:80ch}
+.note{font-size:12.5px;color:var(--ink-2);max-width:80ch}
+.notice{background:var(--tint-warn);color:var(--ink);border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin:12px 0;font-size:13px}
+.legendline{font-size:12px;color:var(--ink-2);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.legendline i{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-2px;margin-right:5px}
+code{font-family:'IBM Plex Mono',ui-monospace,Consolas,monospace;font-size:12.5px;background:var(--surface-2);padding:1px 5px;border-radius:4px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13px}
+.kv div:nth-child(odd){color:var(--ink-2)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">SimpleSMA18Bot v1.00 on XAUUSD · research report · 26 Sep 2026</div>
+  <h1>Can the 18/200 SMA breakout EA trade gold on M1, M5, M15 or D1?</h1>
+  <p class="lead">Every chart below comes from the same backtests as the written report: the untouched EA on six years of one-minute gold data (Sep 2020 to Sep 2026, D1 also from 2003) with XM GOLD costs, then filters, stops, exits, walk-forward, Monte Carlo and a $200 account check. Money is always per 0.01 lot (1 oz), so $1 of gold = $1.</p>
+  <div class="chips" id="chips"></div>
+</header>
+
+<nav class="toc" aria-label="Sections"><ul>
+<li><a href="#verdict">Verdict</a></li><li><a href="#ea">The EA</a></li><li><a href="#data">Data & costs</a></li><li><a href="#baseline">Baseline</a></li><li><a href="#account">$200 account</a></li><li><a href="#d1">D1 deep dive</a></li><li><a href="#giveback">Giveback</a></li><li><a href="#loss">Why trades lose</a></li><li><a href="#costs">Lower timeframes</a></li><li><a href="#filters">Filters</a></li><li><a href="#stops">Stops</a></li><li><a href="#exits">Exits</a></li><li><a href="#walkforward">Walk-forward</a></li><li><a href="#candidate">D1 candidate</a></li><li><a href="#changes">EA changes</a></li><li><a href="#method">Method</a></li>
+</ul></nav>
+
+<main>
+<section id="verdict">
+  <div class="sec-head"><div class="eyebrow">The answer first</div><h2>One timeframe survives, and only with a different exit</h2>
+  <p class="lead">Net result of the untouched EA, Sep 2020 to Sep 2026, realistic costs, fixed 0.01 lot. Hover any chart for the numbers; every chart has a table view.</p></div>
+  <div class="tiles" id="verdictTiles"></div>
+  <ul class="tight">
+    <li><b>M1 and M5 fail on costs, not on signal.</b> Before spread and slippage M1 is +$877 over six years (zero); XM's spread is 56% of the one-minute ATR. Nothing tested is positive in any period.</li>
+    <li><b>M15 is break-even before costs and a loser after them.</b> Single changes reach zero to +$717, but none is positive in the 2020 to 2023 development window.</li>
+    <li><b>D1 is real but conditional.</b> The reported 3x reproduces only with the 1% stop filter off; 2025 alone supplies all 23 years of profit. Volatility-scaled protection with an ADX filter roughly triples the six-year result and is positive in every split, yet is flat over 2003 to 2020.</li>
+    <li><b>Winners become losers because of the $5 break-even stop.</b> On D1 it closed 70 of 85 trades that averaged $37 of open profit; on M15, 62% of losing trades were in profit first.</li>
+  </ul>
+</section>
+
+<section id="ea">
+  <div class="sec-head"><div class="eyebrow">Step 1 · what the code does</div><h2>The EA in one pass through a bar</h2></div>
+  <div class="flow">
+    <div class="step"><span class="n">New bar</span><b>Signal check</b>18 SMA above 200 SMA, two closes above both, volume above its 20-bar mean (mirror for sells).</div>
+    <div class="step"><span class="n">Order</span><b>Buy stop</b>10 points above the last high, stop at the last confirmed swing low. No expiry; cancelled only when a close crosses the 18 SMA.</div>
+    <div class="step"><span class="n">Gate</span><b>1% rule</b>The setup is skipped if the swing-stop loss at 0.01 lot exceeds 1% of balance. On $200 that is any stop wider than $2.00.</div>
+    <div class="step"><span class="n">Every tick</span><b>Break-even</b>At +$5.00 the stop moves to entry +$0.10. Tighten-only for the rest of the trade.</div>
+    <div class="step"><span class="n">Every tick</span><b>Protection</b>Swing low minus $0.50 (default), or Chandelier, or fixed trailing; updates only while the trade is at least $5 in profit.</div>
+    <div class="step"><span class="n">New bar</span><b>MA18 exit</b>Market close when the completed bar closes through the 18 SMA.</div>
+  </div>
+  <ul class="facts">
+    <li>The lot is fixed at 0.01. The "1%" input is a gate, not position sizing.</li>
+    <li>Break-even, protection and trailing thresholds are in points and do not scale with timeframe or volatility: 500 points is 5x the M1 ATR in 2021 and a tenth of the D1 ATR in 2026.</li>
+    <li>A buy stop must sit above the ask. On M1 the 40 to 50 point spread rejects about 40% of setups as "invalid price".</li>
+    <li>Failed-breakout exit and partial close are dead code (never called).</li>
+    <li>ADX and session filters exist but ship switched off.</li>
+    <li>One pending order or one position at a time; no take-profit, no time exit.</li>
+  </ul>
+</section>
+
+<section id="data">
+  <div class="sec-head"><div class="eyebrow">Steps 2 to 4 · data and assumptions</div><h2>Six years of minutes, 23 years of days, real XM costs</h2></div>
+  <div class="tiles" id="dataTiles"></div>
+  <div class="grid-2">
+    <div id="spreadCard"></div>
+    <div class="card"><div class="cap"><div><h4>Cost scenarios used everywhere</h4><p>All three are run for the baseline; the labs use the realistic one.</p></div></div>
+      <div class="kv"><div>Low cost</div><div>25-point spread, no slippage, no swap</div><div>Realistic</div><div>XM spread by year and server hour (25 to 51 points, M1-equivalent), 10-point slippage on every execution, XM swap (long -$0.87, short +$0.20 per night per 0.01 lot, triple on Wednesday), no commission</div><div>Stress</div><div>1.5x the realistic spread, 30-point slippage, swap</div><div>Splits</div><div>DEV Sep 2020 to Aug 2023 · VAL Sep 2023 to Dec 2024 · OOS Jan 2025 to Sep 2026, declared before any run</div></div></div>
+  </div>
+</section>
+
+<section id="baseline">
+  <div class="sec-head"><div class="eyebrow">Step 5 · untouched EA</div><h2>Baseline: three lose, one wins one year</h2>
+  <p class="lead">Strategy view: fixed 0.01 lot, no 1% gate, nominal balance. The equity curves are cumulative profit in dollars per 0.01 lot; the by-year bars show where the D1 profit actually sits.</p></div>
+  <h3>Net profit by cost scenario</h3>
+  <div class="grid" id="costGrid"></div>
+  <h3>Equity curves, realistic costs</h3>
+  <div class="grid-2" id="equityGrid"></div>
+  <h3>Net profit by year</h3>
+  <div class="grid" id="yearGrid"></div>
+  <p class="note" id="worstNote"></p>
+</section>
+
+<section id="account">
+  <div class="sec-head"><div class="eyebrow">Steps 5 and 21 · the $200 account</div><h2>What $200 actually does</h2>
+  <p class="lead">Two different questions: what the EA as shipped does on $200 (the 1% gate decides), and what the strategy does to $200 when the gate is off.</p></div>
+  <div class="grid-2">
+    <div id="providedCard"></div>
+    <div id="riskCard"></div>
+  </div>
+  <h3>Balance path with the gate off, fixed 0.01 lot</h3>
+  <div class="grid" id="pathGrid"></div>
+  <div class="grid-2">
+    <div id="minAcctCard"></div>
+    <div id="ruinCard"></div>
+  </div>
+</section>
+
+<section id="d1">
+  <div class="sec-head"><div class="eyebrow">Step 16 · D1 validation</div><h2>D1 over 23 years: one rally, and the exit that matters</h2>
+  <p class="lead">The reported 3x in 1.5 years comes from a v13 tester profile with the stop filter off. Here the v1.00 rules run from 2003 on an hourly path, next to the two exit changes the labs found.</p></div>
+  <div class="grid-2">
+    <div id="eq23Card" class="card wide"></div>
+    <div id="by23Card"></div>
+    <div id="claimCard"></div>
+    <div id="windowsCard" class="card wide"></div>
+  </div>
+  <div id="exits23Card"></div>
+</section>
+
+<section id="giveback">
+  <div class="sec-head"><div class="eyebrow">Steps 6 to 8 · question 5</div><h2>Profit giveback: where winners turn into losers</h2>
+  <p class="lead">Each dot is one trade: how far it was in profit at its best (x) against what it realized (y). Dots on the diagonal kept everything; dots on the zero line gave everything back. Blue dots ended on the break-even stop.</p></div>
+  <div class="grid-2" id="scatterGrid"></div>
+  <div class="grid-2">
+    <div id="gbTotalsCard"></div>
+    <div id="p2lCard"></div>
+  </div>
+  <h3>Giveback by exit mechanism</h3>
+  <div class="grid-2" id="byExitGrid"></div>
+</section>
+
+<section id="loss">
+  <div class="sec-head"><div class="eyebrow">Step 7 · loss patterns</div><h2>Why trades lose</h2>
+  <p class="lead">Every losing trade classified by the first matching rule. Share of the total loss per category.</p></div>
+  <div class="grid" id="lossGrid"></div>
+</section>
+
+<section id="costs">
+  <div class="sec-head"><div class="eyebrow">Steps 13 to 15 · M1, M5, M15</div><h2>Lower timeframes: the spread eats a zero-edge signal</h2>
+  <p class="lead">Gross result before costs, then what spread, slippage and swap took, then the net. The sweeps below try every trailing distance, activation level, time exit and volatility threshold.</p></div>
+  <div class="grid-3" id="wfallGrid"></div>
+  <div class="tiles" id="ltfTiles"></div>
+  <h3>Trailing distance x activation (fixed trailing, no break-even, MA18 exit kept), net $</h3>
+  <div class="grid-3" id="trailGrid"></div>
+  <h3>Time exits and volatility filter</h3>
+  <div class="grid-3" id="sweepGrid"></div>
+</section>
+
+<section id="filters">
+  <div class="sec-head"><div class="eyebrow">Steps 9 and 10 · entry filters</div><h2>Entry filters, one at a time</h2>
+  <p class="lead">Cells show the change in expectancy per unit of risk versus the untouched EA in each split (blue = better, red = worse). Helpful means better expectancy and profit factor in DEV, VAL and OOS with at least 30 trades each; "(still negative)" marks variants that remain net losers.</p></div>
+  <div id="filterTables"></div>
+</section>
+
+<section id="stops">
+  <div class="sec-head"><div class="eyebrow">Step 11 · stop-loss</div><h2>The initial stop is not the problem</h2>
+  <p class="lead">Original entries and exit stack kept; only the initial stop changes. Tight ATR stops are worse everywhere; wide structural stops are marginally less bad.</p></div>
+  <div id="slTables"></div>
+</section>
+
+<section id="exits">
+  <div class="sec-head"><div class="eyebrow">Steps 12 to 15 · exits</div><h2>Chandelier vs trailing vs break-even vs hybrids</h2>
+  <p class="lead">Original entries and swing stop kept; the protection stack changes. Orange bar = the shipped EA stack. "TWK" is the previous strategy's three-stage trailing stop.</p></div>
+  <div class="grid-2" id="exitBars"></div>
+  <div id="exitTables"></div>
+</section>
+
+<section id="walkforward">
+  <div class="sec-head"><div class="eyebrow">Steps 17 to 20 · robustness</div><h2>Walk-forward, sensitivity and Monte Carlo</h2>
+  <p class="lead">A declared grid of 5 filters x 3 stops x 8 exits per timeframe, each run once and sliced into folds. Selection = best train expectancy, gated by validation expectancy above zero, scored on the untouched test year.</p></div>
+  <div class="grid-2">
+    <div id="wfShareCard"></div>
+    <div id="wfSummaryCard"></div>
+  </div>
+  <h3>Folds</h3>
+  <div id="foldTables"></div>
+  <h3>D1 candidate: parameter sensitivity (expectancy per unit of risk)</h3>
+  <div class="grid" id="sensGrid"></div>
+  <div class="tiles" id="mcTiles"></div>
+</section>
+
+<section id="candidate">
+  <div class="sec-head"><div class="eyebrow">Step 22 · candidate configurations</div><h2>M1, M5, M15: none. D1: a better exit for a regime-dependent strategy</h2></div>
+  <div class="grid-2">
+    <div class="card" id="candCard"></div>
+    <div id="eq6Card"></div>
+  </div>
+  <div class="grid-2">
+    <div id="cand6Card"></div>
+    <div id="cand23Card"></div>
+  </div>
+</section>
+
+<section id="changes">
+  <div class="sec-head"><div class="eyebrow">Step 24 · what to change</div><h2>EA changes the tests support</h2></div>
+  <ol class="changes">
+    <li><b>Protection: Chandelier from the first tick.</b> <code>ProtectionMode = PROTECTION_CHANDELIER</code>, <code>ProtectionStartMode = START_IMMEDIATELY</code>, lookback 22, ATR 22, multiplier 3.0. No code change. 2020 to 2026: +$619 becomes +$1,435; 2003 to 2026: +$121 becomes +$1,113; better in every 8-year window; stable for lookback 11 to 33 and multiplier 2.25 to 4.5.</li>
+    <li><b>Add an ATR-trailing protection mode</b> (stop = best price since entry minus 2 x ATR(22), tighten-only, every tick). 2020 to 2026 +$1,736; 2003 to 2026 +$1,530, and with ADX 25 +$1,808 with 13 of 23 years positive: the most regime-robust exit tested.</li>
+    <li><b>Enable the ADX filter on D1:</b> <code>UseADXFilter = true</code>, <code>MinimumADX = 25</code>. With Chandelier +$1,435 becomes +$1,575 and max drawdown $119 becomes $65, positive in all three splits. Small sample (21 to 28 development trades).</li>
+    <li><b>Keep break-even at 500 points.</b> 300 or 400 cut the candidate by 40%; removing it entirely is worse in both periods.</li>
+    <li><b>Never use 500-point fixed trailing or the TWK trail on D1:</b> -$74 and -$15 over six years against +$619 for the shipped stack.</li>
+    <li><b>Keep the 1% gate and make the balance requirement explicit.</b> Median D1 stop is $87 per 0.01 lot, so the rule needs about $8,700. Add a startup check that prints the implied minimum balance instead of silently skipping every setup (370 setups, zero trades, on $200).</li>
+    <li><b>Do not add entry filters on D1</b> and <b>do not change the initial stop</b>: nothing passed the declared rule on 85 trades; the v13-style 1,500-point cap looks good only in 2025.</li>
+    <li><b>ATR-scale the point thresholds eventually</b> (the only D1 exit positive in all three splits at +0.15 / +0.31 / +0.30 R was the 1-ATR break-even with 2/1-ATR trailing, but on 54 trades). Forward-test first.</li>
+    <li><b>Housekeeping:</b> remove the dead failed-breakout and partial-close code; the stop-percent check runs twice per order; buy stops inside the spread fail with "invalid price".</li>
+  </ol>
+  <p class="note"><b>Not recommended:</b> any deployment on M1, M5 or M15; the New York + volatility + ADX stack on M5 (-$128 over six years, positive only in 2025 to 2026); the volatility filter on M15 (fails the declared rule); any hybrid beyond the components above.</p>
+</section>
+
+<section id="method">
+  <div class="sec-head"><div class="eyebrow">Method and files</div><h2>How the numbers were made</h2></div>
+  <ul class="tight">
+    <li>Engine: an exact Python port of the MQL5 logic run bar by bar on M1 bars (H1 before Sep 2020) in XM server time. Entries and the MA18 exit run on the first bar of each signal bar with the two completed bars, as in OnTick; break-even, protection, trailing and stop hits are evaluated on every M1 bar with the bar's extreme as best price.</li>
+    <li>MT5 order validity is modelled: a buy stop must be above the ask, a sell stop below the bid, a stop modification on the correct side of the market; failures are retried like the real EA.</li>
+    <li>Intrabar ordering: existing stop first, then fills, then stop moves; a stop moved inside a bar is tested against the close. The "worst" ordering changes D1 by $9 and M15 by $1,700 (see the baseline note).</li>
+    <li>Prices are Dukascopy's feed, not XM's: closes differ by 5 cents at the median and the volume filters agree on 82% of bars, so the MT5 tester will differ trade by trade.</li>
+    <li>Every run is in <code>results/experiment_log.csv</code>; the written report is <code>FINAL_REPORT.md</code>; trade-level data in <code>results/trade_analysis/</code> and <code>results/research_tables.xlsx</code>; all in <code>Vaibhav/research/</code>.</li>
+  </ul>
+</section>
+</main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const DATA = __DATA__;
+const TFS = ["M1","M5","M15","D1"];
+const $ = (s, el=document) => el.querySelector(s);
+const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const T = () => ({ink:tok('--ink'),ink2:tok('--ink-2'),muted:tok('--muted'),grid:tok('--grid'),axis:tok('--axis'),surface:tok('--surface'),s1:tok('--s1'),s2:tok('--s2'),s3:tok('--s3'),gray:tok('--gray'),pos:tok('--pos'),neg:tok('--neg'),posRGB:tok('--pos-rgb'),negRGB:tok('--neg-rgb')});
+const isNum = v => typeof v === 'number' && !isNaN(v);
+const fmtN = (v, d=0) => isNum(v) ? v.toLocaleString('en-US',{minimumFractionDigits:d, maximumFractionDigits:d}) : (v==null?'–':String(v));
+const fmt$ = (v, d=0) => isNum(v) ? (v<0?'-$':'$') + fmtN(Math.abs(v), d) : '–';
+const fmtPct = (v, d=0) => isNum(v) ? fmtN(100*v, d)+'%' : '–';
+const hexA = (hex, a) => { const h=hex.replace('#',''); const n=parseInt(h.length===3?h.split('').map(c=>c+c).join(''):h,16); return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`; };
+const HAS_CHART = typeof window.Chart !== 'undefined';
+if (!HAS_CHART) { document.querySelector('main').insertAdjacentHTML('afterbegin','<div class="notice">Charts need an internet connection (Chart.js is loaded from cdnjs). All tables are shown instead.</div>'); }
+else { Chart.defaults.font.family = "'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif"; Chart.defaults.font.size = 12; Chart.defaults.animation = false; }
+const REG = [];
+
+function el(tag, cls, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function txt(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; e.textContent = text; return e; }
+
+function tableHTML(head, rows, opts={}) {
+  const tbl = el('table'); const thead = el('thead'); const trh = el('tr');
+  head.forEach((h, i) => { const th = txt('th', (opts.numCols && opts.numCols.includes(i)) ? 'num' : '', h); trh.appendChild(th); });
+  thead.appendChild(trh); tbl.appendChild(thead);
+  const tb = el('tbody');
+  rows.forEach((r, ri) => { const tr = el('tr', opts.baseRow === ri ? 'base' : ''); r.forEach((c, i) => {
+    const td = el('td'); if (c && typeof c === 'object' && c.html) { td.innerHTML = c.html; if (c.cls) td.className = c.cls; if (c.style) td.setAttribute('style', c.style); }
+    else if (isNum(c)) { td.className = 'num'; td.textContent = fmtN(c, (opts.dec && opts.dec[i] != null) ? opts.dec[i] : (Number.isInteger(c) ? 0 : 2)); }
+    else { td.textContent = c == null ? '–' : String(c); if (opts.numCols && opts.numCols.includes(i)) td.className = 'num'; }
+    tr.appendChild(td); }); tb.appendChild(tr); });
+  tbl.appendChild(tb); return tbl;
+}
+
+// A chart card: title, subtitle, Table toggle, canvas, table twin
+function card(parent, {title, sub, height, build, table, wide, cls}) {
+  const host = typeof parent === 'string' ? $(parent) : parent;
+  const c = el('figure', 'card' + (wide ? ' wide' : '') + (cls ? ' ' + cls : '')); c.style.margin = 0;
+  const cap = el('figcaption', 'cap'); const left = el('div'); left.appendChild(txt('h4', '', title)); if (sub) left.appendChild(txt('p', '', sub)); cap.appendChild(left);
+  const btn = el('button', 'tbtn', 'Table'); btn.setAttribute('aria-pressed', 'false'); cap.appendChild(btn); c.appendChild(cap);
+  const ch = el('div', 'chart' + (height ? ' ' + height : '')); const cv = document.createElement('canvas'); ch.appendChild(cv); c.appendChild(ch);
+  const tb = el('div', 'tbl'); tb.hidden = true; if (table) tb.appendChild(tableHTML(table.head, table.rows, table.opts || {})); c.appendChild(tb);
+  btn.addEventListener('click', () => { const on = tb.hidden; tb.hidden = !on; ch.hidden = on; btn.setAttribute('aria-pressed', on ? 'true' : 'false'); btn.textContent = on ? 'Chart' : 'Table'; });
+  if (!HAS_CHART) { tb.hidden = false; ch.hidden = true; btn.hidden = true; }
+  host.appendChild(c); REG.push({canvas: cv, build});
+  return c;
+}
+function tableCard(parent, {title, sub, head, rows, opts, wide}) {
+  const host = typeof parent === 'string' ? $(parent) : parent;
+  const c = el('figure', 'card' + (wide ? ' wide' : '')); c.style.margin = 0;
+  const cap = el('figcaption', 'cap'); const left = el('div'); left.appendChild(txt('h4', '', title)); if (sub) left.appendChild(txt('p', '', sub)); cap.appendChild(left); c.appendChild(cap);
+  const tb = el('div', 'tbl'); tb.appendChild(tableHTML(head, rows, opts || {})); c.appendChild(tb); host.appendChild(c); return c;
+}
+
+function tip(t, fmt, notes) {
+  return {backgroundColor: t.surface, titleColor: t.ink, bodyColor: t.ink, borderColor: t.axis, borderWidth: 1, padding: 8, boxWidth: 8, boxHeight: 8, boxPadding: 4, cornerRadius: 4,
+    callbacks: {label: ctx => { const v = ctx.parsed && (ctx.chart.options.indexAxis === 'y' ? ctx.parsed.x : ctx.parsed.y); const lab = ctx.dataset.label ? ctx.dataset.label + ': ' : ''; return lab + fmt(v); },
+      afterLabel: ctx => { const n = ctx.dataset.notes; return n && n[ctx.dataIndex] ? n[ctx.dataIndex] : ''; }}};
+}
+function scales(t, {horizontal, valFmt, catFmt, valTitle, catTitle, stacked, catLimit, valMin, valMax}) {
+  // Only keys that are actually set are written: an explicit undefined would block Chart.js's own defaults (the category label callback in particular).
+  const val = {grid: {color: t.grid, drawTicks: false}, border: {color: t.axis}, ticks: {color: t.muted, font: {size: 11}, callback: v => valFmt(v)}, stacked: !!stacked};
+  if (valTitle) val.title = {display: true, text: valTitle, color: t.ink2, font: {size: 11}};
+  if (isNum(valMin)) val.min = valMin;
+  if (isNum(valMax)) val.max = valMax;
+  const cat = {grid: {display: false}, border: {color: t.axis}, ticks: {color: t.muted, font: {size: 11}, maxRotation: 0, autoSkip: !horizontal}, stacked: !!stacked};
+  if (!horizontal) cat.ticks.maxTicksLimit = catLimit || 12;
+  if (catFmt) cat.ticks.callback = function(v, i) { return catFmt(this.getLabelForValue(v), i); };
+  if (catTitle) cat.title = {display: true, text: catTitle, color: t.ink2, font: {size: 11}};
+  return horizontal ? {x: val, y: cat} : {x: cat, y: val};
+}
+function barCfg(t, {labels, datasets, horizontal, valFmt=fmt$, valTitle, catTitle, stacked, catLimit}) {
+  return {type: 'bar', data: {labels, datasets: datasets.map(d => ({label: d.label, data: d.data, backgroundColor: d.color, notes: d.notes, maxBarThickness: 24, borderRadius: 4, categoryPercentage: 0.72, barPercentage: 0.92}))},
+    options: {indexAxis: horizontal ? 'y' : 'x', responsive: true, maintainAspectRatio: false, interaction: {mode: 'index', intersect: false, axis: horizontal ? 'y' : 'x'},
+      plugins: {legend: {display: datasets.length > 1, position: 'top', align: 'start', labels: {color: t.ink2, boxWidth: 10, boxHeight: 10, padding: 12}}, tooltip: tip(t, valFmt)},
+      scales: scales(t, {horizontal, valFmt, valTitle, catTitle, stacked, catLimit})}};
+}
+function lineCfg(t, {labels, datasets, valFmt=fmt$, valTitle, catTitle, catLimit=7, area, valMin, valMax}) {
+  return {type: 'line', data: {labels, datasets: datasets.map((d, i) => ({label: d.label, data: d.data, borderColor: d.color, backgroundColor: d.fill ? undefined : hexA(d.color, 0.10), borderWidth: d.thin ? 1 : 2, pointRadius: d.points ? 4 : 0, pointHoverRadius: 5, pointBackgroundColor: d.color, pointBorderColor: t.surface, pointBorderWidth: 2, tension: 0, spanGaps: true, notes: d.notes,
+      fill: (area && i === 0) ? {target: 'origin', above: hexA(d.color, 0.10), below: hexA(t.neg, 0.10)} : false}))},
+    options: {responsive: true, maintainAspectRatio: false, interaction: {mode: 'index', intersect: false}, plugins: {legend: {display: datasets.length > 1, position: 'top', align: 'start', labels: {color: t.ink2, boxWidth: 14, boxHeight: 3, padding: 12}}, tooltip: tip(t, valFmt)},
+      scales: scales(t, {valFmt, valTitle, catTitle, catLimit, valMin, valMax})}};
+}
+function scatterCfg(t, {series, ref, xTitle, yTitle}) {
+  const ds = series.map(s => ({type: 'scatter', label: s.label, data: s.data.map(p => ({x: p[0], y: p[1]})), backgroundColor: s.color, borderColor: t.surface, borderWidth: 1, pointRadius: s.r || 3, pointHoverRadius: 6, order: s.order || 0}));
+  if (ref) ds.push({type: 'line', label: ref.label, data: ref.data.map(p => ({x: p[0], y: p[1]})), borderColor: t.axis, borderWidth: 1, pointRadius: 0, pointHoverRadius: 0, fill: false, order: 10});
+  return {type: 'scatter', data: {datasets: ds}, options: {responsive: true, maintainAspectRatio: false, interaction: {mode: 'nearest', intersect: false},
+    plugins: {legend: {display: true, position: 'top', align: 'start', labels: {color: t.ink2, boxWidth: 10, boxHeight: 10, padding: 12, filter: it => it.text !== ref.label || true}}, tooltip: {...tip(t, v => v), callbacks: {label: ctx => `${ctx.dataset.label}: best ${fmt$(ctx.parsed.x, 2)}, realized ${fmt$(ctx.parsed.y, 2)}`}}},
+    scales: {x: {type: 'linear', grid: {color: t.grid, drawTicks: false}, border: {color: t.axis}, ticks: {color: t.muted, font: {size: 11}, callback: v => fmt$(v)}, title: {display: true, text: xTitle, color: t.ink2, font: {size: 11}}},
+             y: {type: 'linear', grid: {color: t.grid, drawTicks: false}, border: {color: t.axis}, ticks: {color: t.muted, font: {size: 11}, callback: v => fmt$(v)}, title: {display: true, text: yTitle, color: t.ink2, font: {size: 11}}}}}};
+}
+function heatCell(v, scale, dec=3) {
+  if (!isNum(v)) return {html: '–', cls: 'num'};
+  const t = T(); const a = Math.min(0.82, 0.10 + 0.72 * Math.min(1, Math.abs(v) / scale));
+  const rgb = v >= 0 ? t.posRGB : t.negRGB;
+  return {html: fmtN(v, dec), cls: 'num', style: `background:rgba(${rgb},${a.toFixed(2)})`};
+}
+function pill(cls) {
+  const s = String(cls || ''); let k = 'neutral'; if (s.startsWith('Helpful')) k = 'helpful'; else if (s.startsWith('Harmful')) k = 'harmful'; else if (s === 'base') k = 'base';
+  const glyph = k === 'helpful' ? '▲' : k === 'harmful' ? '▼' : k === 'base' ? '■' : '●';
+  return {html: `<span class="pill ${k}">${glyph} ${s}</span>`};
+}
+function splitLabel(s, n=22) { const w = String(s).split(' '); const out = []; let cur = ''; w.forEach(x => { if ((cur + ' ' + x).trim().length > n && cur) { out.push(cur); cur = x; } else cur = (cur + ' ' + x).trim(); }); if (cur) out.push(cur); return out; }
+
+function renderAll() {
+  if (!HAS_CHART) return;
+  const t = T();
+  REG.forEach(r => { const old = Chart.getChart(r.canvas); if (old) old.destroy(); new Chart(r.canvas, r.build(t)); });
+}
+
+// ------------------------------------------------------------------ build the page
+(function build() {
+  const D = DATA; const t0 = T();
+  // chips
+  $('#chips').append(...[`${fmtN(D.meta.m1_bars)} one-minute bars, ${D.meta.m1_start} to ${D.meta.m1_end}`, `D1 from ${D.meta.h1_start} (hourly path)`, `${fmtN(D.meta.runs)} logged backtests`, `XM GOLD: 0.01 lot = 1 oz, margin $4.29, swap long -$0.87/night`].map(s => txt('span', 'chip', s)));
+
+  // verdict tiles
+  D.verdict.forEach(v => {
+    const tile = el('div', 'tile');
+    tile.appendChild(el('div', 'lab', `<b style="font-size:15px;color:var(--ink)">${v.tf}</b> · net per 0.01 lot, 6 years`));
+    tile.appendChild(txt('div', 'val', fmt$(v.net)));
+    tile.appendChild(el('div', 'sub', `PF <b>${fmtN(v.pf, 2)}</b> · max DD <b>${fmt$(v.dd)}</b> · <b>${fmtN(v.trades)}</b> trades · win <b>${fmtN(v.win, 1)}%</b>`));
+    const glyph = v.level === 'critical' ? '✕' : v.level === 'serious' ? '▲' : '!';
+    tile.appendChild(el('div', '', `<span class="pill ${v.level}">${glyph} ${v.label}</span>`));
+    tile.appendChild(txt('div', 'sub', v.why));
+    $('#verdictTiles').appendChild(tile);
+  });
+
+  // data tiles
+  [['One-minute bars', fmtN(D.meta.m1_bars), `${D.meta.m1_start} to ${D.meta.m1_end}, all 73 months, 0 duplicates, 0 invalid bars`], ['XM vs Dukascopy close', fmt$(D.meta.xm_close_diff, 2), 'median difference on 99,000 M15 bars; ranges equal'], ['Volume filter agreement', fmtPct(D.meta.vol_agree), 'XM tick volume vs Dukascopy traded volume, same rule'], ['Cost model', '25 to 51 pts', 'XM spread by year and hour; 10-pt slippage; swap']].forEach(([l, v, s]) => {
+    const tile = el('div', 'tile'); tile.appendChild(txt('div', 'lab', l)); tile.appendChild(txt('div', 'val small', v)); tile.appendChild(txt('div', 'sub', s)); $('#dataTiles').appendChild(tile);
+  });
+  card('#spreadCard', {title: 'XM GOLD spread by server hour, points', sub: 'M1-equivalent median. 2022 profile is also used for the years before it.', build: t => lineCfg(t, {labels: D.meta.spread_hours.map(h => h + ':00'), datasets: [{label: '2022', data: D.meta.spread_2022, color: t.s1}, {label: '2026', data: D.meta.spread_2026, color: t.s2}], valFmt: v => fmtN(v), valTitle: 'points', catLimit: 8}),
+    table: {head: ['hour', '2022', '2026'], rows: D.meta.spread_hours.map((h, i) => [h + ':00', D.meta.spread_2022[i], D.meta.spread_2026[i]])}});
+
+  // baseline: cost bars, equity, by year
+  TFS.forEach(tf => {
+    const c = D.baseline.cost[tf];
+    card('#costGrid', {title: `${tf}: net by cost scenario`, sub: 'Fixed 0.01 lot, 2020 to 2026', height: 'short', build: t => barCfg(t, {labels: ['Low cost', 'Realistic', 'Stress'], datasets: [{label: 'net', data: [c.A_low, c.B_real, c.C_stress], color: t.s1}]}), table: {head: ['scenario', 'net $'], rows: [['Low cost', c.A_low], ['Realistic', c.B_real], ['Stress', c.C_stress]]}});
+  });
+  TFS.forEach(tf => {
+    const e = D.baseline.equity[tf];
+    card('#equityGrid', {title: `${tf}: cumulative profit`, sub: 'Realistic costs, weekly samples, $ per 0.01 lot', build: t => lineCfg(t, {labels: e.t, datasets: [{label: 'cumulative $', data: e.v, color: t.s1}], area: true}), table: {head: ['week', 'cumulative $'], rows: e.t.map((d, i) => [d, e.v[i]])}});
+  });
+  TFS.forEach(tf => {
+    const y = D.baseline.byYear[tf];
+    card('#yearGrid', {title: `${tf}: net by year`, sub: 'Hover for profit factor and trades', height: 'short', build: t => barCfg(t, {labels: y.years, datasets: [{label: 'net', data: y.net, color: t.s1, notes: y.pf.map((p, i) => `PF ${fmtN(p, 2)}, ${fmtN(y.trades[i])} trades`)}]}), table: {head: ['year', 'net $', 'PF', 'trades'], rows: y.years.map((yy, i) => [yy, y.net[i], y.pf[i], y.trades[i]])}});
+  });
+  $('#worstNote').textContent = `Intrabar ordering check ("worst" ordering: a stop moved inside a bar is hit whenever the bar's extreme reaches it): ` + TFS.map(tf => `${tf} ${fmt$(D.baseline.worst[tf])} vs ${fmt$(D.baseline.cost[tf].B_real)}`).join('; ') + `. D1 is unaffected; M15 loses more because more break-even stops trigger.`;
+
+  // $200 account
+  const prov = TFS.map(tf => { const p = D.acct.provided[tf]; const n = D.baseline.views[tf].ea_200_nofilt; return [tf, p.blocked, p.taken, p.net, p.end, n.trades, n.net_profit, n.ruin ? 'yes' : 'no']; });
+  tableCard('#providedCard', {title: 'The EA as shipped on $200 versus the gate switched off', sub: 'Realistic costs, 2020 to 2026. With the gate on, D1 never trades.', head: ['TF', 'setups blocked by 1% rule', 'trades taken', 'net $', 'end balance $', 'trades, gate off', 'net $, gate off', 'ruined'], rows: prov, opts: {numCols: [1, 2, 3, 4, 5, 6]}});
+  const rows = D.acct.rows;
+  card('#riskCard', {title: 'Median stop as a share of $200', sub: 'Risk per trade at the minimum lot (0.01). The EA cannot size smaller.', build: t => barCfg(t, {labels: rows.map(r => r.tf), datasets: [{label: 'median stop, % of $200', data: rows.map(r => r.risk_pct_of_200_median), color: t.s1, notes: rows.map(r => `p90 ${fmtN(r.risk_pct_of_200_p90, 1)}%, max ${fmt$(r.risk_usd_max)}`)}], valFmt: v => fmtN(v) + '%'}), table: {head: ['TF', 'median risk $', 'p90 risk $', 'max risk $', 'median % of $200', 'p90 %'], rows: rows.map(r => [r.tf, r.risk_usd_median, r.risk_usd_p90, r.risk_usd_max, r.risk_pct_of_200_median, r.risk_pct_of_200_p90])}});
+  TFS.forEach(tf => {
+    const p = D.acct.paths[tf];
+    card('#pathGrid', {title: `${tf}: $200 balance` + (p.ruined ? ` (ruined ${p.ruined})` : ''), sub: 'Fixed 0.01 lot, 1% gate off, realistic costs', height: 'short', build: t => lineCfg(t, {labels: p.t, datasets: [{label: 'balance $', data: p.v, color: t.s1}], valMin: 0}), table: {head: ['week', 'balance $'], rows: p.t.map((d, i) => [d, p.v[i]])}});
+  });
+  card('#minAcctCard', {title: 'Balance needed for the EA\'s own 1% rule', sub: '100 x the median stop (dark) and 100 x the 90th-percentile stop', build: t => barCfg(t, {labels: rows.map(r => r.tf), datasets: [{label: 'median trade', data: rows.map(r => r.min_account_for_1pct_rule_median_trade), color: t.s1}, {label: 'p90 trade', data: rows.map(r => r.min_account_for_1pct_rule_p90_trade), color: t.s2}]}), table: {head: ['TF', 'median trade $', 'p90 trade $'], rows: rows.map(r => [r.tf, r.min_account_for_1pct_rule_median_trade, r.min_account_for_1pct_rule_p90_trade])}});
+  card('#ruinCard', {title: 'Monte Carlo ruin probability at $200', sub: 'Trade-order shuffle and bootstrap of the six-year trade lists, fixed 0.01 lot', build: t => barCfg(t, {labels: rows.map(r => r.tf), datasets: [{label: 'shuffle', data: rows.map(r => 100 * r.mc_shuffle_p_ruin_200), color: t.s1}, {label: 'bootstrap', data: rows.map(r => 100 * r.mc_bootstrap_p_ruin_200), color: t.s2}], valFmt: v => fmtN(v) + '%', valMin: 0}), table: {head: ['TF', 'p(ruin) shuffle', 'p(ruin) bootstrap', 'historical first ruin', 'worst loss $', 'max consecutive losses'], rows: rows.map(r => [r.tf, r.mc_shuffle_p_ruin_200, r.mc_bootstrap_p_ruin_200, r.historical_first_ruin_date_200, r.worst_single_loss_usd, r.max_consecutive_losses])}});
+
+  // D1 deep dive
+  const e23 = D.d1.equity23; const names23 = Object.keys(e23); const cols = [t0.s1, t0.s2, t0.s3];
+  card('#eq23Card', {title: 'D1 cumulative profit 2003 to 2026, three exit stacks', sub: 'Hourly intrabar path before Sep 2020, one-minute after; realistic costs; $ per 0.01 lot', height: 'tall', wide: true, build: t => lineCfg(t, {labels: e23[names23[0]].t, datasets: names23.map((n, i) => ({label: n, data: e23[n].v, color: [t.s1, t.s2, t.s3][i]})), catLimit: 12}), table: {head: ['week', ...names23], rows: e23[names23[0]].t.map((d, i) => [d, ...names23.map(n => e23[n].v[i])])}});
+  const by = D.d1.byYear23;
+  card('#by23Card', {title: 'D1 net by year: shipped EA vs candidate', sub: '2025 carries the shipped rules; the candidate spreads it but stays flat before 2020', build: t => barCfg(t, {labels: by.years, datasets: [{label: 'EA v1.00', data: by.series['EA v1.00'], color: t.s1}, {label: 'Candidate', data: by.series['Candidate: ADX 25 + Chandelier'], color: t.s2}], catLimit: 24}), table: {head: ['year', ...Object.keys(by.series)], rows: by.years.map((y, i) => [y, ...Object.keys(by.series).map(k => by.series[k][i])])}});
+  const cl = D.d1.claim;
+  card('#claimCard', {title: 'Reproducing the "3x in 1.5 years", Jan 2024 to Sep 2026', sub: 'Growth of the starting balance at 0.01 lot, realistic costs. The shipped EA on $200 never trades.', build: t => barCfg(t, {labels: cl.map(c => splitLabel(c.config, 18)), datasets: [{label: 'growth', data: cl.map(c => c.growth), color: t.s1, notes: cl.map(c => `${c.trades} trades, net ${fmt$(c.net)}, ${c.blocked} setups blocked`)}], horizontal: true, valFmt: v => fmtN(v, 1) + 'x'}), table: {head: ['configuration', 'trades', 'net $', 'growth', 'blocked'], rows: cl.map(c => [c.config, c.trades, c.net, c.growth, c.blocked])}});
+  const w = D.d1.windows; const ws = D.d1.windowStats;
+  card('#windowsCard', {title: 'Every 18-month window since 2003: growth of $200 with the shipped EA', sub: `${ws.windows} windows; median ${fmtN(ws.median, 2)}x; ${fmtPct(ws.ge3)} reach 3x; ${fmtPct(ws.losing)} lose; ${fmtPct(ws.ruined)} are ruined`, wide: true, build: t => lineCfg(t, {labels: w.start, datasets: [{label: 'growth of $200 in the window', data: w.growth, color: t.s1}, {label: '1x (unchanged)', data: w.growth.map(() => 1), color: t.axis, thin: true}, {label: '3x (the claim)', data: w.growth.map(() => 3), color: t.axis, thin: true}], valFmt: v => fmtN(v, 1) + 'x', catLimit: 12}), table: {head: ['window start', 'growth', 'net $'], rows: w.start.map((s, i) => [s, w.growth[i], w.net[i]])}});
+  tableCard('#exits23Card', {title: 'D1 exit variants over 2003 to 2026', sub: 'Window cells: net $ / expectancy per unit of risk. Every exit beats the shipped one; none is positive in 2012 to 2020.', head: ['exit', 'trades', 'net $', 'PF', 'max DD $', 'positive years', 'net without 2025', '2003-2012', '2012-2020', '2020-2026'], rows: D.d1.exits23.map(r => [r.exit, r.trades, r.net, r.pf, r.dd, `${r.pos_years}/${r.years}`, r.net_ex2025, r['2003-2012'], r['2012-2020'], r['2020-2026']]), opts: {numCols: [1, 2, 3, 4, 5, 6, 7, 8, 9]}});
+
+  // giveback
+  ['D1', 'M15'].forEach(tf => {
+    const s = D.gb.scatter[tf]; const mx = Math.max(...s.be.map(p => p[0]), ...s.other.map(p => p[0]));
+    card('#scatterGrid', {title: `${tf}: best unrealized profit vs realized, every trade`, sub: tf === 'D1' ? '85 trades; the dots on the zero line under $977 of best profit are break-even exits' : '4,559 trades; most dots sit on or below the zero line', height: 'tall', build: t => scatterCfg(t, {series: [{label: 'Break-even stop exit', data: s.be, color: t.s1, order: 1, r: tf === 'D1' ? 5 : 3}, {label: 'Other exits', data: s.other, color: t.gray, order: 2, r: tf === 'D1' ? 5 : 2.5}], ref: {label: 'kept all of it', data: [[0, 0], [mx, mx]]}, xTitle: 'best unrealized profit, $', yTitle: 'realized, $'}), table: {head: ['exit', 'best unrealized $', 'realized $'], rows: [...s.be.map(p => ['break-even stop', p[0], p[1]]), ...s.other.map(p => ['other', p[0], p[1]])].slice(0, 400)}});
+  });
+  const gt = D.gb.totals;
+  card('#gbTotalsCard', {title: 'Summed best profit vs what was realized', sub: 'All trades, realistic costs. The gap is the giveback.', build: t => barCfg(t, {labels: gt.map(g => g.tf), datasets: [{label: 'best unrealized profit, summed', data: gt.map(g => g.mfe), color: t.s1}, {label: 'realized', data: gt.map(g => g.realized), color: t.s2, notes: gt.map(g => `avg giveback ${fmt$(g.avg, 2)}, median ${fmtN(g.median_pct)}% of best, worst ${fmt$(g.worst)}`)}]}), table: {head: ['TF', 'summed best profit $', 'realized $', 'avg giveback $', 'median giveback % of best', 'worst giveback $', 'share ever >= $1'], rows: gt.map(g => [g.tf, g.mfe, g.realized, g.avg, g.median_pct, g.worst, g.share_ge1])}});
+  const p2lRows = []; ['M15', 'D1'].forEach(tf => D.gb.p2l[tf].forEach(r => p2lRows.push([tf, r.th, r.trades, r.share, r.loss, r.given, r.cont])));
+  tableCard('#p2lCard', {title: 'Profitable-to-loss reversals by threshold', sub: 'Trades that were at least X in profit and closed at a loss; share of all losers; profit given up; how often price then ran a further 1R', head: ['TF', 'threshold', 'trades', 'share of losers', 'realized loss $', 'profit given up $', 'continued >= 1R'], rows: p2lRows, opts: {numCols: [2, 3, 4, 5, 6]}});
+  TFS.forEach(tf => {
+    const r = D.gb.byExit[tf];
+    tableCard('#byExitGrid', {title: `${tf}: giveback by exit mechanism`, head: ['exit', 'trades', 'net $', 'avg best profit $', 'avg giveback $', 'worst $', 'P->L >$2', 'P->L damage $'], rows: r.map(x => [x.exit, x.trades, x.net, x.avg_mfe, x.avg_giveback, x.worst_giveback, x.p2l_2usd, x.p2l_2usd_damage]), opts: {numCols: [1, 2, 3, 4, 5, 6, 7]}});
+  });
+
+  // loss categories
+  TFS.forEach(tf => {
+    const L = D.loss[tf].slice().sort((a, b) => b.share - a.share);
+    card('#lossGrid', {title: `${tf}: share of total loss by category`, sub: `${L.reduce((s, x) => s + x.trades, 0)} losing trades`, height: 'tall', build: t => barCfg(t, {labels: L.map(x => splitLabel(x.cat.replace(/^\d+ /, ''), 20)), datasets: [{label: 'share of loss', data: L.map(x => x.share), color: t.s1, notes: L.map(x => `${x.trades} trades, ${fmt$(x.loss)}`)}], horizontal: true, valFmt: v => fmtN(v) + '%'}), table: {head: ['category', 'trades', 'loss $', 'share %'], rows: L.map(x => [x.cat, x.trades, x.loss, x.share])}});
+  });
+
+  // costs waterfall + LTF
+  ['M1', 'M5', 'M15'].forEach(tf => {
+    const c = D.ltf[tf]; const vals = [c.gross, c.spread, c.slip, c.swap, c.net];
+    card('#wfallGrid', {title: `${tf}: where the money goes, 6 years`, sub: 'Gross before costs, the three costs, and the net', build: t => barCfg(t, {labels: ['Gross before costs', 'Spread', 'Slippage', 'Swap', 'Net'], datasets: [{label: '$', data: vals, color: vals.map(v => v >= 0 ? t.pos : t.neg)}], horizontal: true}), table: {head: ['item', '$'], rows: [['Gross before costs', c.gross], ['Spread', c.spread], ['Slippage', c.slip], ['Swap', c.swap], ['Net', c.net]]}});
+  });
+  ['M1', 'M5', 'M15'].forEach(tf => { const c = D.ltf[tf]; const tile = el('div', 'tile'); tile.appendChild(txt('div', 'lab', `${tf}: spread as a share of the ATR`)); tile.appendChild(txt('div', 'val', fmtN(c.spread_pct_atr) + '%')); tile.appendChild(el('div', 'sub', `spread ${fmtN(c.spread_pct_mfe)}% of the median best profit (${fmt$(c.mfe, 2)}) · median hold ${fmtN(c.hold)} min · ${fmtPct(c.ma_exit)} MA18 exits · ${fmtPct(c.never)} of trades never reach one spread of profit`)); $('#ltfTiles').appendChild(tile); });
+  ['M1', 'M5', 'M15'].forEach(tf => {
+    const sw = D.ltf[tf].trail; const dists = [...new Set(sw.map(r => r.trail_dist))]; const starts = [...new Set(sw.map(r => r.trail_start))];
+    const scale = Math.max(...sw.map(r => Math.abs(r.net)));
+    const rows = dists.map(d => [d + ' pts', ...starts.map(s => { const r = sw.find(x => x.trail_dist === d && x.trail_start === s); return heatCell(r ? r.net : null, scale, 0); })]);
+    tableCard('#trailGrid', {title: `${tf}: trailing distance (rows) x activation (columns)`, sub: 'net $ over 6 years', head: ['distance \\ start', ...starts.map(s => s + ' pts')], rows, opts: {}});
+  });
+  ['M1', 'M5', 'M15'].forEach(tf => {
+    const te = D.ltf[tf].timeExit; const vf = D.ltf[tf].vol;
+    tableCard('#sweepGrid', {title: `${tf}: time exit and volatility filter`, sub: 'Time exit closes a trade not in profit after N bars; volatility filter requires ATR / 100-bar ATR >= x', head: ['variant', 'trades', 'net $', 'PF', 'OOS net $'], rows: [...te.map(r => [`time exit ${r.time_exit_bars} bars`, r.trades, r.net, r.pf, '–']), ...vf.map(r => [`volatility >= ${r.vol_min}`, r.trades, r.net, r.pf, r.oos_net])], opts: {numCols: [1, 2, 3, 4]}});
+  });
+
+  // filters / stops / exits heat tables
+  function labTable(host, tf, lab, title, sub, extra) {
+    const b = lab.base; const scale = Math.max(0.05, ...lab.rows.map(r => Math.max(Math.abs((r.dev ?? 0) - (b ? b.dev : 0)), Math.abs((r.val ?? 0) - (b ? b.val : 0)), Math.abs((r.oos ?? 0) - (b ? b.oos : 0)))));
+    const head = ['variant', 'trades', 'net $', 'PF', ...(extra ? extra.head : []), 'Δ exp R DEV', 'Δ VAL', 'Δ OOS', 'class'];
+    const rows = []; let baseRow = null;
+    if (b && !lab.rows.some(r => r.cls === 'base')) { baseRow = 0; rows.push(['untouched EA', b.trades, b.net, b.pf, ...(extra ? extra.base : []), heatCell(0, scale), heatCell(0, scale), heatCell(0, scale), pill('base')]); }
+    lab.rows.forEach((r, i) => { if (r.cls === 'base') baseRow = rows.length; rows.push([r.name, r.trades, r.net, r.pf, ...(extra ? extra.row(r) : []), heatCell(r.cls === 'base' ? 0 : (r.dev ?? NaN) - (b ? b.dev : 0), scale), heatCell(r.cls === 'base' ? 0 : (r.val ?? NaN) - (b ? b.val : 0), scale), heatCell(r.cls === 'base' ? 0 : (r.oos ?? NaN) - (b ? b.oos : 0), scale), pill(r.cls)]); });
+    tableCard(host, {title, sub, head, rows, opts: {numCols: [1, 2, 3], baseRow, dec: {3: 2}}});
+  }
+  TFS.forEach(tf => {
+    const f = D.filters[tf];
+    labTable('#filterTables', tf, f, `${tf}: filters one at a time`, `Base: ${fmtN(f.base.trades)} trades, net ${fmt$(f.base.net)}, expectancy ${fmtN(f.base.dev, 3)} / ${fmtN(f.base.val, 3)} / ${fmtN(f.base.oos, 3)} R in DEV / VAL / OOS`);
+    if (f.combos && f.combos.length) tableCard('#filterTables', {title: `${tf}: progressive combinations of the helpful filters`, sub: 'Stacked in order of DEV gain', head: ['test', 'filters', 'trades', 'PF', 'net $', 'max DD $', 'exp R DEV / VAL / OOS', 'OOS net $', 'class'], rows: f.combos.map(c => [c.test, c.filters, c.trades, c.profit_factor, c.net_profit, c.max_dd_usd, `${fmtN(c.DEV_expR, 3)} / ${fmtN(c.VAL_expR, 3)} / ${fmtN(c.OOS_expR, 3)}`, c.OOS_net, pill(c.class)]), opts: {numCols: [2, 3, 4, 5, 7]}});
+  });
+  TFS.forEach(tf => {
+    const s = D.sl[tf]; const e = s.existing;
+    labTable('#slTables', tf, s, `${tf}: stop-loss variants`, `Existing swing stop: median ${fmt$(e.sl_distance_usd_per_0_01lot ? e.sl_distance_usd_per_0_01lot.median : e['sl_distance_usd_per_0.01lot'].median, 2)} (${fmtN(e.sl_distance_in_atr.median, 2)} ATR), hit in ${fmtN(e.sl_hit_rate_pct, 1)}% of trades = ${fmtN(e.initial_sl_share_of_losses_pct, 1)}% of losses; winners' MAE p90 ${fmtN(e.mae_before_win.p90_r, 2)} R`, {head: ['median risk $', 'SL hit %'], base: ['', ''], row: r => [r.risk, r.slhit]});
+  });
+  TFS.forEach(tf => {
+    const x = D.exits[tf]; const sorted = x.rows.slice().sort((a, b) => b.net - a.net);
+    card('#exitBars', {title: `${tf}: net $ by exit stack`, sub: 'Sorted; orange = shipped EA stack (E01)', height: 'xl', build: t => barCfg(t, {labels: sorted.map(r => splitLabel(r.name.replace(/^E\d+ /, ''), 30)), datasets: [{label: 'net $', data: sorted.map(r => r.net), color: sorted.map(r => r.name.startsWith('E01') ? t.s2 : t.s1), notes: sorted.map(r => `PF ${fmtN(r.pf, 2)}, DD ${fmt$(r.dd)}, ${fmtN(r.trades)} trades, giveback avg ${fmt$(r.giveback, 2)}`)}], horizontal: true}), table: {head: ['exit stack', 'trades', 'net $', 'PF', 'max DD $', 'giveback avg $', 'P->L >$2'], rows: sorted.map(r => [r.name, r.trades, r.net, r.pf, r.dd, r.giveback, r.p2l])}});
+  });
+  TFS.forEach(tf => { labTable('#exitTables', tf, D.exits[tf], `${tf}: exit stacks, change versus the shipped stack`, 'Original entries and swing stop kept', {head: ['giveback avg $', 'P->L >$2'], base: ['', ''], row: r => [r.giveback, r.p2l]}); });
+
+  // walk-forward
+  const wfr = TFS.map(tf => D.wf[tf]);
+  card('#wfShareCard', {title: 'Share of grid configurations that are net positive, by split', sub: 'M15 looks fine only out of sample: that window is the 2025 to 2026 rally', build: t => barCfg(t, {labels: TFS, datasets: [{label: 'DEV 2020-23', data: wfr.map(r => 100 * (r.dev ?? 0)), color: t.s1}, {label: 'VAL 2023-24', data: wfr.map(r => 100 * (r.val ?? 0)), color: t.s2}, {label: 'OOS 2025-26', data: wfr.map(r => 100 * (r.oos ?? 0)), color: t.s3}], valFmt: v => fmtN(v) + '%'}), table: {head: ['TF', 'configs', 'positive DEV', 'positive VAL', 'positive OOS', 'positive in all three'], rows: TFS.map((tf, i) => [tf, wfr[i].configs, wfr[i].dev, wfr[i].val, wfr[i].oos, wfr[i].pos3])}});
+  tableCard('#wfSummaryCard', {title: 'Overfitting audit', sub: 'Best in-sample configuration and how it did out of sample', head: ['TF', 'configs', 'positive in all splits', 'best in-sample', 'DEV R', 'VAL R', 'OOS R', 'OOS net $'], rows: TFS.map((tf, i) => { const b = wfr[i].best || {}; return [tf, wfr[i].configs, wfr[i].pos3, b.config, b.dev_expR, b.val_expR, b.oos_expR, b.oos_net]; }), opts: {numCols: [1, 2, 4, 5, 6, 7], dec: {4: 3, 5: 3, 6: 3}}});
+  TFS.forEach(tf => { const f = D.wf[tf].folds; tableCard('#foldTables', {title: `${tf}: three yearly folds`, head: ['fold', 'train', 'test', 'train-best', 'train R', 'val R', 'test R', 'passes val', 'selected (val-gated)', 'selected test net $', 'untouched EA test net $', 'share of configs positive in test'], rows: f.map(x => [x.fold, {html: x.train, style: 'white-space:nowrap'}, {html: x.test, style: 'white-space:nowrap'}, x.best, x.trainR, x.valR, x.testR, x.passes ? 'yes' : 'no', x.selected || 'none passes', x.selNet, x.eaNet, x.sharePos]), opts: {numCols: [4, 5, 6, 9, 10, 11], dec: {4: 3, 5: 3, 6: 3}}}); });
+  const cand = D.wf.D1.candidate;
+  if (cand) Object.entries(cand.sensitivity).forEach(([p, rows]) => {
+    card('#sensGrid', {title: p, sub: 'all-period vs out-of-sample expectancy per unit of risk', height: 'short', build: t => lineCfg(t, {labels: rows.map(r => String(r.value)), datasets: [{label: 'all 6 years', data: rows.map(r => r.all_expR), color: t.s1, points: true, notes: rows.map(r => `net ${fmt$(r.all_net)}, ${r.trades} trades`)}, {label: 'OOS 2025-26', data: rows.map(r => r.oos_expR), color: t.s2, points: true}], valFmt: v => fmtN(v, 2), catLimit: 6}), table: {head: [p, 'all expR', 'all net $', 'OOS expR', 'trades'], rows: rows.map(r => [r.value, r.all_expR, r.all_net, r.oos_expR, r.trades])}});
+  });
+  if (cand) { const mc = cand.monte_carlo; [['D1 candidate: ruin probability at $200', fmtPct(mc.at_200.bootstrap.p_ruin, 1), `bootstrap of the 2020-26 list; shuffle ${fmtPct(mc.at_200.shuffle.p_ruin, 1)}; 95th-percentile drawdown ${fmt$(mc.at_200.shuffle.dd_p95)}`], ['D1 candidate: ending balance from $200', fmt$(mc.at_200.bootstrap.end_median), `median; 5th to 95th percentile ${fmt$(mc.at_200.bootstrap.end_p05)} to ${fmt$(mc.at_200.bootstrap.end_p95)}`], ['With the 23-year trade list', fmtPct((D.d1.cand23.find(r => r.config.startsWith('Candidate')) || {}).mc_p_ruin_200_bootstrap, 0), 'ruin probability at $200: 2003 to 2020 is a flat stretch with runs of 16 losses'], ['Balance the 1% rule implies', fmt$(Math.max(100 * mc.median_risk_usd, 200)), `100 x the median stop (${fmt$(mc.median_risk_usd)}); ruin probability there is zero`]].forEach(([l, v, s]) => { const tile = el('div', 'tile'); tile.appendChild(txt('div', 'lab', l)); tile.appendChild(txt('div', 'val small', v)); tile.appendChild(txt('div', 'sub', s)); $('#mcTiles').appendChild(tile); }); }
+
+  // candidate
+  const cc = $('#candCard');
+  cc.appendChild(el('div', 'cap', '<div><h4>D1 candidate configuration</h4><p>Everything else stays at the v1.00 defaults. Flagged as regime-dependent: positive in all three 2020-26 splits, flat 2003-2020.</p></div>'));
+  const kv = el('div', 'kv'); [['Entry', '18/200 SMA, 2 closes, volume > 20-bar mean, stop order at high/low +/- 10 pts (unchanged)'], ['Filter', 'UseADXFilter = true, ADXPeriod 14, MinimumADX 25 (20 to 30 acceptable)'], ['Initial stop', 'swing (unchanged; the Chandelier overrides it on day one)'], ['Protection', 'PROTECTION_CHANDELIER, START_IMMEDIATELY, lookback 22, ATR 22, multiplier 3.0 (stable 2.25 to 4.5)'], ['Alternative', 'ATR trailing 2 x ATR(22) from the first tick (needs new code; best 23-year behaviour)'], ['Break-even', '500 / 10 points, keep'], ['Exit', 'MA18 close exit, keep; risk filter off; no time exit'], ['Sizing', 'LotSize 0.01; keep the 1% gate; needs about $8,700 of balance'], ['Do not', 'use FastMAPeriod 20 or above (loses 40%) or a break-even trigger under 500']].forEach(([k, v]) => { kv.appendChild(txt('div', '', k)); kv.appendChild(txt('div', '', v)); }); cc.appendChild(kv);
+  const e6 = D.d1.equity6; const n6 = Object.keys(e6);
+  card('#eq6Card', {title: 'D1 2020 to 2026: shipped EA vs candidate vs ATR-trail variant', sub: 'One-minute path, realistic costs, cumulative $ per 0.01 lot', height: 'tall', build: t => lineCfg(t, {labels: e6[n6[0]].t, datasets: n6.map((n, i) => ({label: n, data: e6[n].v, color: [t.s1, t.s2, t.s3][i]})), catLimit: 8}), table: {head: ['week', ...n6], rows: e6[n6[0]].t.map((d, i) => [d, ...n6.map(n => e6[n].v[i])])}});
+  const c6 = D.d1.cand6;
+  tableCard('#cand6Card', {title: '2020 to 2026 metrics', head: ['config', 'trades', 'net $', 'PF', 'max DD $', 'win %', 'exp R', 'avg win $', 'avg loss $', 'max losing streak', 'giveback avg $', 'P->L >$2', 'DEV net / R', 'VAL net / R', 'OOS net / R'], rows: Object.entries(c6).map(([n, m]) => [n, m.trades, m.net_profit, m.profit_factor, m.max_dd_usd, m.win_rate, m.expectancy_r, m.avg_win, m.avg_loss, m.max_consec_losses, m.giveback_avg, m.profit_to_loss_2usd, `${fmt$(m.DEV.net)} / ${fmtN(m.DEV.expR, 3)}`, `${fmt$(m.VAL.net)} / ${fmtN(m.VAL.expR, 3)}`, `${fmt$(m.OOS.net)} / ${fmtN(m.OOS.expR, 3)}`]), opts: {numCols: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], dec: {6: 3}}});
+  tableCard('#cand23Card', {title: '2003 to 2026 (hourly path)', sub: 'Window cells: net $ / expectancy R / trades', head: ['config', 'trades', 'net $', 'PF', 'max DD $', 'positive years', 'net without 2025', '2003-2012', '2012-2020', '2020-2026', 'MC p(ruin) at $200'], rows: D.d1.cand23.map(r => [r.config, r.trades, r.net, r.pf, r.dd, r.pos_years, r.net_ex2025, r['2003-2012'], r['2012-2020'], r['2020-2026'], r.mc_p_ruin_200_bootstrap]), opts: {numCols: [1, 2, 3, 4, 6, 10]}});
+
+  renderAll();
+  const mq = window.matchMedia('(prefers-color-scheme: dark)'); mq.addEventListener('change', renderAll);
+  new MutationObserver(renderAll).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+})();
+</script>

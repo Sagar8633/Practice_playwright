@@ -1,0 +1,35 @@
+- generic [ref=f31e1]:
+  - generic [ref=f31e4]:
+    - generic [ref=f31e6]:
+      - generic [ref=f31e7]:
+        - button [ref=f31e145]:
+          - heading "ZZ probe delete me" [level=2] [ref=f31e146]
+        - button "Saved" [disabled] [ref=f31e147]
+      - button "More" [ref=f31e25]
+    - code [ref=f31e74]:
+      - generic [ref=f31e75]:
+        - generic [aria-hidden] [ref=f31e77]:
+          - generic [ref=f31e78]: "1"
+          - generic [ref=f31e81]: "2"
+          - generic [ref=f31e83]: "3"
+          - generic [ref=f31e85]: "4"
+          - generic [ref=f31e87]: "5"
+          - generic [ref=f31e89]: "6"
+          - generic [ref=f31e91]: "7"
+        - generic [aria-hidden] [ref=f31e102]:
+          - generic [ref=f31e103]: // This Pine Script® code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+          - generic [ref=f31e105]: // © sagar96jadhav12
+          - generic [ref=f31e108]: //@version=6
+          - generic [ref=f31e110]: indicator("My script")
+          - generic [ref=f31e112]: plot(close)
+        - textbox "Editor content;Press Alt+F1 for Accessibility Options." [active] [ref=f31e116]: // This Pine Script® code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/ // © sagar96jadhav12 //@version=6 indicator("My script") plot(close)
+    - generic [ref=f31e52]:
+      - button [ref=f31e55]
+      - generic [ref=f31e63]:
+        - button "1 ∙ Today, 11:01" [ref=f31e155]
+        - button "Line 1, Col 1" [ref=f31e64]
+        - link "Pine Script® v6" [ref=f31e122]:
+          - /url: https://www.tradingview.com/pine-script-reference/v6
+  - generic [ref=f31e67]:
+    - alert
+    - alert

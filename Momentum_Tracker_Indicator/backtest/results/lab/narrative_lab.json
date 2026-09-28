@@ -1,0 +1,157 @@
+{
+ "bottom_line": [
+  "<strong>The automated strategy has no edge after costs, and no filter set creates one.</strong> On M3 the raw signal plus the shipped management makes about $0.80 gross per trade at 0.02 lot and pays $1.56 of spread per trade. Every filter that passes the retention rule shrinks the loss by trading less; none turns the profit factor above 1.0 in the development or validation years, and the walk-forward test years are negative in all three windows (profit factor 0.53, 0.77, 0.99).",
+  "The loss mechanisms you suspected are real and measurable, and this report ranks them. But 87% of the loss is initial-stop hits on trades whose best point was 0.15R: the entry is wrong far more often than the exit. Filters that remove those trades remove nearly as many winners, because the winners look the same at the moment of entry.",
+  "<strong>Do not automate this signal for real money.</strong> What is worth doing: run the two-filter M3 variant (signal age and distance) on demo with risk-based sizing to collect the telemetry in section 13, and answer the questionnaire in section 15 so the discretionary part of your manual trading can be tested as rules."
+ ],
+ "architecture": "The shipped Momentum EA is a straight line from one indicator to an order. Everything below was tested as a stage added between SIGNAL and ORDER, or as an option inside TRADE MANAGEMENT. The signal itself (TWK_Core: Supertrend 1.5 / ATR 10 flip, 5-bar pivots, up/down volume rows, ADX 14) was not changed.",
+ "architecture_pre": "SIGNAL GENERATION   Supertrend(1.5, 10) flip on the signal timeframe (M3 here)\n        |\nENTRY FILTERS       volume ratio >= 1.2 on the M1 row, M1 box, M3 box, ADX(14) > 20   [all derived from the same bars]\n        |\nSTOP / TARGET       SL = last 5-bar pivot (purple line if none; hard 500 pts on M1); TP = 2 x risk\n        |\nRISK                fixed 0.02 lot, no cap on the stop distance, one position per symbol\n        |\nORDER               market order at the next bar's open (ask for buys, bid for sells)\n        |\nTRADE MANAGEMENT    +360 pts: trail on the purple line | +900 pts: lock +180 and 1:1 trail with a 720-pt gap\n        |\nEXIT                SL, trailed SL, TP; opposite signals are ignored while a position is open (tester run: reverse)\n\nTested in this lab (all configurable, all off by default):\n  MARKET REGIME FILTER   ATR regime, ADX level and slope, flip count, Bollinger width, opposite candles, HTF direction\n  ENTRY QUALITY FILTER   signal age vs the opposite flip, distance from the previous signal, overextension, entry score\n  COST FILTER            spread / (RR x stop), spread / stop\n  RISK CHECK             ATR-capped stops, hybrid structure+ATR stops, risk-based lot, daily loss, streak pause\n  MANAGEMENT             cooldown after a loss, re-entry distance, trail activation in R, break-even, R-based lock, time exit, opposite-signal models A/B/D",
+ "mechanisms": [
+  "<strong>1. Spread larger than the gross edge.</strong> Baseline M3, 3,399 trades: gross before costs +$2,710, spread $5,318, net -$2,752. On M1 the median spread was 13% to 18% of the target distance in 2021 to 2024; on M3 7% to 10%; on M15 3% to 4%. Table 3.1.",
+  "<strong>2. Entries that never move.</strong> 1,686 initial-stop exits carry 87% of the gross loss. Their median best excursion is 0.15R: the market went against the signal almost immediately. Table 3.2 and 3.4.",
+  "<strong>3. Volatility spikes.</strong> Losers entered when ATR was above 1.5x its 30-day median are 27% of losers but 41% of the loss (average -$13 against -$8.6). Capping them helps in the range years and hurts in the trend years (A/B table, atr_ratio<=1.5).",
+  "<strong>4. Rapid re-flips.</strong> 524 losers came within 5 bars of the opposite signal, 25% of the loss. Requiring the opposite signal to be at least 10 bars old is the single most useful filter (PF 0.60 to 0.66 in DEV, 0.58 to 0.74 in VAL), and it is still below 1.",
+  "<strong>5. Session and time-of-day.</strong> The three worst development hours carry 19% of the loss, but the hourly sign agrees between periods only 62% to 75% of the time (correlation 0.2 to 0.4). Not stable enough to trade on.",
+  "<strong>6. Trailing that gives back.</strong> 566 losers were up 0.5R or more first (15% of the loss). Of trades reaching +1R, 13% still ended as losers. An R-based lock at +1R converts some of them but costs as many 2R targets; the net effect is about zero.",
+  "<strong>7. Post-loss re-entry: an M1 problem, not an M3 problem.</strong> On M3 trades after a loss have better expectancy (-$0.60 to -$0.79) than trades after a win (-$0.98). Cooldowns change almost nothing here; they mattered on M1 where 55% of the loss came from trades closed within 3 minutes.",
+  "<strong>8. Fixed lots.</strong> Not a source of the negative expectancy, but the reason a negative expectancy becomes ruin: fixed 0.02 lot from $1,000 ends at -$1,752 on the baseline (max drawdown 281%); 0.5% risk per trade on the same trades ends at $327, a 67% loss with no margin call. Sizing sets the speed of the loss, not its sign. Section 7."
+ ],
+ "ev_cost": "The M1 row settles the M1 question: for three of the five years the spread alone was more than a tenth of the profit target on three quarters of the signals. No filter recovers that. On M3 the ratio is half that, on M15 a quarter; the cost gate is therefore a timeframe decision more than a per-trade decision, and per-trade gating on M3 (A/B rows cost_reward, cost_stop) removed winners and losers in the same proportion.",
+ "ev_tags": "Tags overlap. The two that dominate, INITIAL_STOP and HTF_CONFLICT, are the ones that cannot be filtered without losing the winners: the winners also start as a flip that has just happened and half of them are also against the M15 trend in the range years. HIGH_ATR and RAPID_FLIP are the actionable ones.",
+ "ev_reentry": "Option E answered: BUY, stop, SELL (opposite re-entry) has a better expectancy on M3 than BUY, stop, BUY, and both are better than fresh entries. A post-loss cooldown on M3 blocks trades that are, on average, no worse than the rest. That is why every cooldown row in the A/B table moves the result by a few dollars either way.",
+ "ev_mfe": "Winners take little heat (64% never go more than 0.5R against) and losers go straight to the stop (median MAE 0.89R, median MFE 0.15R for initial-stop exits). Tightening the stop to about 0.6R of today's distance would keep most winners; the lab's ATR stops at 1.0 and 1.5 ATR did exactly that and lost more, because a tighter stop means more stops and the same spread on every one.",
+ "ev_prot": "Two thirds of trades reach +0.25R and 42% of those still lose. Trades reaching +1R are the ones to protect: 411 of 1,032 reach the 2R target and 138 end as losers. The R-based lock at +1R keeping +0.25R was tested (A/B: lock_1.0R_keep0.25R) and is neutral in DEV and VAL, slightly positive OOS.",
+ "ev_time": "The 5-to-20-minute bucket is where the money goes; trades that survive an hour are net winners. A time exit sounds right, but the engine test shows why it fails: closing a stale trade frees the slot for the next signal, which is on average another loser, and the close itself pays spread. Post-hoc the best time exit (20 minutes, below 0R) would have saved $727 of a $17,360 gross loss. Rejected.",
+ "ev_htf": "This is the clearest regime effect in the study. In the range years (2021 to 2024) the signal did better AGAINST the M15 and H1 trend (PF 0.69 versus 0.54 in DEV); in the trend years (2025 to 2026) it did better WITH it (PF 1.11 versus 0.82). A fixed HTF rule is a bet on which regime comes next. The A/B rows htf15, htf60 and htf15_and_60 are all rejected for that reason; their OOS profits are real but were not knowable in advance.",
+ "ev_hours": "The hourly expectancies do not replicate from one period to the next. The session rows in the A/B table confirm it: the London/NY overlap (15:00 to 20:00) has PF 0.66 in DEV and 0.45 in VAL. No session filter is recommended.",
+ "ev_score": "Six features have positive lift in both DEV and VAL and were scored; two of them (distance from EMA, ATR regime) reverse sign out of sample. The score threshold row (score>=4_of_6) passes the retention rule but is one of the weakest retained filters, and it adds six parameters. Not recommended on its own.",
+ "filters": [
+  "<strong>Signal age (retained).</strong> Problem: rapid re-flips (mechanism 4). Rule: skip the signal if the previous opposite signal is fewer than <code>MinOppositeSignalBars</code> bars old (10 on M3). Effect: DEV PF 0.60 to 0.66, VAL 0.58 to 0.74, trades -44%. Risk: it removes the first leg of every V-shaped reversal; in a fast trend day it removes nothing. It is the only filter whose improvement replicates in all three periods, and it is still negative.",
+  "<strong>Distance from the previous signal (retained).</strong> Problem: chop inside one price zone. Rule: skip if |close - previous signal close| < <code>MinSignalDistanceATR</code> x ATR (2.0). Effect on top of signal age: DEV loss -$673 to -$133, VAL -$213 to -$15, but trades fall to 268 / 80 / 390. Risk: over-filtering; the two together remove 78% of trades.",
+  "<strong>ATR-capped hybrid stop (retained, small).</strong> Problem: uncapped pivot stops ($58 at the 90th percentile in 2026). Rule: SL distance = max(structure, <code>StopATRFloor</code> x ATR), skip if > <code>StopATRCap</code> x ATR (1.0 and 4.0). Effect: PF 0.60 to 0.65 DEV, 0.58 to 0.66 VAL; removes the account-sized single losses. Risk: none material; this one is about survival, not edge.",
+  "<strong>Risk-based sizing (required).</strong> Not a filter. Lot = equity x <code>RiskPercent</code> / (stop distance x tick value per lot), broker min/step/max from <code>SymbolInfoDouble</code>, skip if 0.01 lot would risk more than <code>MaxStopRiskPercent</code>, pause after <code>MaxDailyLossPercent</code> or <code>MaxConsecutiveLosses</code>. Effect: converts a wipe-out into a drawdown (section 7: baseline -275% at fixed 0.02 lot versus -67% at 0.5% risk). Risk: with a $200 account most signals are skipped because 0.01 lot already exceeds the risk cap; that is the correct behaviour.",
+  "<strong>Cost gate (recommended as a guard, not as a filter).</strong> Rule: reject if spread / (RR x stop) > <code>MaxCostToReward</code> (0.10) or spread / stop > <code>MaxCostToStop</code> (0.20). Effect on M3: neutral (it removes the small-stop trades, which lose and win alike). Its value is on M1, where it rejects three quarters of signals and states the real reason M1 cannot work. Keep it as a safety rule with logging.",
+  "<strong>Spread-spike guard (recommended, untestable here).</strong> Rule: reject if current spread > <code>SpreadSpikeMultiple</code> x median spread of the last <code>SpreadWindowBars</code> bars (already in the EA as the auto spread limit). Needs tick spread history to evaluate; see section 14."
+ ],
+ "rejected": [
+  "<strong>Post-loss cooldowns (all 26 variants).</strong> On M3, trades after a loss are not worse than other trades; cooldowns move the result by single dollars. Would matter on M1, but M1 fails the cost gate anyway.",
+  "<strong>Higher-timeframe alignment (M15, H1, EMA slope).</strong> Sign flips between the range and trend regimes; the OOS gains are hindsight.",
+  "<strong>Session filters.</strong> Hourly expectancy does not replicate between periods.",
+  "<strong>Pure ATR stops (1 to 3 ATR).</strong> Tighter stops produce more stops and the same spread on each; PF falls in DEV at 1.0 and 1.5 ATR.",
+  "<strong>Trail activation at 0.25R to 0.75R and break-even at 0.5R to 1R.</strong> All worse: normal noise hits the moved stop before the trend starts (winners' median MAE is 0.37R, and 36% of winners go beyond 0.5R against before winning).",
+  "<strong>Time exits.</strong> Freeing the slot early lets the next losing signal in; post-hoc saving under 5% of the loss.",
+  "<strong>Opposite-signal models A, B, D.</strong> Closing on the opposite signal is worse than holding in every form; Model B (confirm 2 bars) is the least bad and still below the baseline. Your tester setting (reverse) is the worst of all.",
+  "<strong>Chop filters (flip count, Bollinger width, opposite candles, ADX slope).</strong> Either remove almost nothing on M3 (flip count, Bollinger width) or remove winners and losers alike.",
+  "<strong>Entry-quality score.</strong> Marginal and six-parameter; two of its features reverse out of sample.",
+  "<strong>Volatility caps (ATR ratio <= 1.5).</strong> Helps VAL, hurts OOS badly (PF 0.89): the 2025 to 2026 winners were the high-ATR trades."
+ ],
+ "entry_flow": [
+  [
+   "act",
+   "Signal bar closes on the signal timeframe (M3)"
+  ],
+  [
+   "gate",
+   "Is the previous opposite signal at least MinOppositeSignalBars old? If not, log RAPID_FLIP and skip"
+  ],
+  [
+   "gate",
+   "Is the close at least MinSignalDistanceATR x ATR from the previous signal close? If not, log CHOP and skip"
+  ],
+  [
+   "gate",
+   "Do the shipped filters pass (volume ratio, M1 box, M3 box, ADX)? If not, skip as today"
+  ],
+  [
+   "gate",
+   "Stop distance = max(structure, StopATRFloor x ATR). Is it <= StopATRCap x ATR? If not, log STOP_TOO_WIDE and skip"
+  ],
+  [
+   "gate",
+   "Is spread / (RR x stop) <= MaxCostToReward and spread <= SpreadSpikeMultiple x median spread? If not, log SPREAD and skip"
+  ],
+  [
+   "gate",
+   "Lot = equity x RiskPercent / (stop x value per lot), rounded to the broker step. Is 0.01 lot within MaxStopRiskPercent, no daily-loss or streak pause, margin available? If not, log RISK and skip"
+  ],
+  [
+   "act",
+   "Market order with SL and TP attached; log every field in section 13"
+  ]
+ ],
+ "entry_flow_note": "HTF alignment, session, cooldown, overextension and the entry score are deliberately not in the flow: each was tested and none replicated. They can stay in the code as switchable inputs, off by default, so a future dataset can re-test them without a rebuild.",
+ "exit_flow": [
+  [
+   "act",
+   "Position open with the initial SL and the 2R TP"
+  ],
+  [
+   "gate",
+   "Initial SL or TP hit: exit (SL first if both inside one bar)"
+  ],
+  [
+   "gate",
+   "Opposite signal: do nothing (holding beat every close-or-reverse model)"
+  ],
+  [
+   "gate",
+   "Open profit >= trail activation (+360 pts or +1.0R, both tested, both marginal): SL follows the purple line, never loosens"
+  ],
+  [
+   "gate",
+   "Open profit >= +1R (optional, neutral): lock +0.25R"
+  ],
+  [
+   "gate",
+   "Open profit >= +900 pts: lock +180 pts and trail 1:1 with a 720-pt gap (the profitable part of the shipped design; keep it)"
+  ],
+  [
+   "act",
+   "Exit on the trailed stop or the TP; no time exit, no break-even"
+  ]
+ ],
+ "exit_flow_note": "The exit design is the part that works: 1:1 trail exits and TPs are the only positive exit types in every period. The lab did not find a management change that beats the shipped one by more than noise; it found several that are worse.",
+ "risk_model": [
+  "Lot size from risk, never fixed: <code>lot = floor(equity x RiskPercent / (stopDistance x tickValuePerLot / tickSize) / lotStep) x lotStep</code>, with <code>SYMBOL_VOLUME_MIN/STEP/MAX</code> and <code>OrderCalcMargin</code> from the terminal.",
+  "Skip the trade if the minimum lot already risks more than <code>MaxStopRiskPercent</code> (2%); never size up to force a fill. With a $200 account and today's stops this skips most signals, which is the honest answer for that account size.",
+  "Daily stop: no new entries after <code>MaxDailyLossPercent</code> (3%) of the day's starting equity. Streak stop: no new entries for the rest of the day after <code>MaxConsecutiveLosses</code> (5).",
+  "One position per symbol (already the default); <code>MaxOpenPositions</code> and <code>MaxTotalExposureLots</code> as inputs for multi-chart use.",
+  "The table shows the effect on the same trade lists: sizing changes the drawdown and whether the account survives; it does not change the sign of the expectancy."
+ ],
+ "walk_forward": "Each window re-runs the selection rule on its training years and applies the result to a year it has not seen. The filtered strategy loses in 2024, 2025 and 2026. In two of the three windows its profit factor is below the unfiltered baseline's, because the filters that looked best on the training years were fitted to that regime. This is the test the final configuration had to pass, and it did not.",
+ "robustness": "The combined configuration is insensitive to spread and slippage only because it trades 380 times in five years. It is sensitive to the trailing activation (a 20% change moves the OOS result by $300 on 206 trades), which is a sign of noise, not of a parameter worth tuning. The Monte Carlo drawdown band is wide relative to the net.",
+ "recommendation": [
+  "Nothing here reaches positive expectancy after costs in the selection periods, so there is no configuration to recommend for real money. The configuration listed above is the least bad one the rule produced, and it is shown so the numbers are on the record, not as an endorsement.",
+  "If you want to keep working on this signal, the useful next step is not another filter. It is (1) the telemetry in section 13 on a demo account running the M3 preset with signal age 10, distance 2 ATR, hybrid stop 1.0/4.0 ATR and risk sizing at 0.5%, and (2) your answers to section 15, so the part of your manual trading that the bot does not do can be written down and tested the same way."
+ ],
+ "code_intro": "Changes are additive: new inputs default to the shipped behaviour. Each block names the function in TWK_MomentumEA.mq5 (v1.40) or TWK_Core.mqh where it goes.",
+ "code_pre": "// ---- TWK_Core.mqh: expose ATR(10) of the signal TF on the snapshot (it is already computed for the Supertrend)\nstruct TwkSnapshot { ... double atr; int prevSigAgo; double prevSigClose; ... };   // fill in CTwkEngine::Evaluate from the series\n\n// ---- TWK_MomentumEA.mq5: inputs (all off = current behaviour)\ninput group \"=== ENTRY QUALITY (filter lab) ===\"\ninput int    MinOppositeSignalBars  = 0;     // skip if the previous opposite signal is younger than this (lab: 10 on M3)\ninput double MinSignalDistanceATR   = 0.0;   // skip if |close - previous signal close| < this x ATR (lab: 2.0)\ninput double StopATRFloor           = 0.0;   // SL distance at least this x ATR (lab: 1.0)\ninput double StopATRCap             = 0.0;   // skip if the SL distance exceeds this x ATR (lab: 4.0)\ninput group \"=== COST GATE ===\"\ninput double MaxCostToReward        = 0.0;   // skip if spread / (RewardRisk x stop) > this (lab: 0.10)\ninput double MaxCostToStop          = 0.0;   // skip if spread / stop > this (lab: 0.20)\ninput double SpreadSpikeMultiple    = 2.0;   // existing auto spread limit, keep\ninput group \"=== RISK ===\"\ninput double MaxStopRiskPercent     = 2.0;   // skip if the minimum lot risks more than this\ninput double MaxDailyLossPercent    = 3.0;   // no new entries after this daily loss\ninput int    MaxConsecutiveLosses   = 5;     // no new entries for the rest of the day after this streak\n// switchable, off by default, kept for re-testing: CooldownMinutesAfterLoss, RequireHTFAlignment, SessionStartHour/EndHour,\n// TrailActivationR, LockAtR/LockKeepR, TimeExitMinutes/TimeExitBelowR, OppositeConfirmBars\n\n// ---- ValidateConditions(): after the ADX check, before the stop logic\nif(MinOppositeSignalBars > 0 && s.oppAgo >= 0 && s.oppAgo < MinOppositeSignalBars)\n   { Reject(StringFormat(\"RAPID_FLIP: opposite signal %d bars ago\", s.oppAgo)); return false; }\nif(MinSignalDistanceATR > 0 && MathAbs(s.close - s.prevSigClose) < MinSignalDistanceATR * s.atr)\n   { Reject(\"CHOP: too close to the previous signal\"); return false; }\n\n// ---- ValidateConditions(): stop distance (replaces the pivot-only choice when StopATRFloor > 0)\ndouble dist = s.slFromPivot ? MathAbs(s.close - s.sl) : MathAbs(s.close - s.purple);\nif(StopATRFloor > 0) dist = MathMax(dist, StopATRFloor * s.atr);\nif(StopATRCap  > 0 && dist > StopATRCap * s.atr) { Reject(\"STOP_TOO_WIDE\"); return false; }\nsl = isBuy ? s.close - dist : s.close + dist;  tp = isBuy ? s.close + RewardRisk * dist : s.close - RewardRisk * dist;\n\n// ---- CheckSpread(): cost gate next to the existing spread limit\nconst double spreadPx = SymbolInfoDouble(_Symbol, SYMBOL_ASK) - SymbolInfoDouble(_Symbol, SYMBOL_BID);\nif(MaxCostToReward > 0 && spreadPx / (RewardRisk * dist) > MaxCostToReward) { why = \"SPREAD_TOO_HIGH vs reward\"; return false; }\nif(MaxCostToStop   > 0 && spreadPx / dist > MaxCostToStop)                 { why = \"SPREAD_TOO_HIGH vs stop\";   return false; }\n\n// ---- CalculateLot(): risk mode becomes the default, with the skip rule\nlots = AccountInfoDouble(ACCOUNT_EQUITY) * RiskPercent / 100.0 / MathAbs(lossPerLot);       // lossPerLot from OrderCalcProfit(1.0 lot, entry, sl)\nlots = NormalizeLot(lots);\nconst double minLotLoss = MathAbs(lossPerLot) * SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MIN);\nif(lots <= 0 || minLotLoss > AccountInfoDouble(ACCOUNT_EQUITY) * MaxStopRiskPercent / 100.0) { why = \"RISK: min lot exceeds the cap\"; return 0; }\n\n// ---- ProcessSignal(): daily loss and streak pause (track g_dayStartEquity, g_dayPnL, g_consecLosses in OnTradeTransaction)\nif(g_dayPnL <= -g_dayStartEquity * MaxDailyLossPercent / 100.0) { Reject(\"RISK: daily loss limit\"); return; }\nif(g_consecLosses >= MaxConsecutiveLosses && g_pausedDay == TimeCurrent() / 86400) { Reject(\"RISK: losing streak, paused for today\"); return; }",
+ "telemetry": [
+  "Per signal (whether traded or not): time, side, close, purple, ATR, ADX, volume rows, bars since the opposite signal, distance from the previous signal in ATR, M15 and H1 direction, hour, spread at the signal and at the order, the decision, and the reject tag from section 3.2 if rejected.",
+  "Per order: requested price, fill price, slippage, execution latency, spread at fill, lot, equity before, stop distance in points and in ATR, planned reward.",
+  "Per position, every SL modification: time, old SL, new SL, source (initial, purple, lock, 1:1, break-even), open profit in R at that moment.",
+  "Per exit: exit price, reason, P&L, swap, commission, MFE and MAE in R, duration, spread at exit, whether an opposite signal occurred during the trade.",
+  "Per day: starting equity, closed P&L, number of signals, number rejected per tag, max spread seen.",
+  "Write the CSV per symbol and magic number as today, but append a run id so tester runs never overwrite each other (the current CSV is replaced on every run)."
+ ],
+ "missing": [
+  "<strong>Economic calendar.</strong> No CPI/NFP/FOMC timestamps were available offline, so the news filter (section 16 of your brief) was not tested. It needs a calendar CSV with UTC timestamps; the lab can then tag trades within +/- N minutes of releases.",
+  "<strong>Tick-level spread and slippage.</strong> XM's history serves bars only; the spread column exists on the last three months of M1 and on M15 back to 2022, so the per-year spread model is a median, not a per-trade value. Spread-spike and slippage filters need the telemetry above from a demo run.",
+  "<strong>22 of 61 months of M1 data</strong> (Dukascopy rate limit during the session). Every year is represented; the walk-forward windows are shorter than intended.",
+  "<strong>Your manual rules.</strong> The strategy 'performs reasonably well when traded manually' is a claim without a trade log. Without your manual trade history (time, side, entry, exit) the discretionary edge cannot be measured or compared with the bot's trades on the same days.",
+  "<strong>Tick data for trailing.</strong> Management is replayed on one-minute bars with a conservative path rule; tick-level trailing in the Strategy Tester exits earlier in volatile months. Every configuration here would be somewhat worse on ticks, not better."
+ ],
+ "manual": [
+  "<strong>Do you wait for the candle to close, or act mid-bar?</strong> The bot acts on the closed bar. If you act earlier, your fills are better and your signals differ from the bot's.",
+  "<strong>Do you skip the first flip after a sharp reversal and wait for the second?</strong> Signal age >= 10 bars is the mechanical version; it was the only replicating filter.",
+  "<strong>Do you skip flips that happen inside the same price zone as the last one?</strong> Distance >= 2 ATR from the previous signal is that rule.",
+  "<strong>Do you refuse trades when the stop would be 'too far'?</strong> The ATR cap (4 ATR) is that rule; you probably apply something like it by eye, and the bot never did.",
+  "<strong>Do you only trade certain hours?</strong> The data says no hour is reliably good; if you trade only London/NY, your edge is not coming from the clock.",
+  "<strong>Do you check M15 or H1 before entering?</strong> Say which way. Aligned trades won in 2025 to 2026 and lost in 2021 to 2024; if you switch between fading and following the higher timeframe by feel, that switch is the edge and needs a rule.",
+  "<strong>Do you avoid large candles or news minutes?</strong> Overextension filters removed little; the news filter is untested (missing data).",
+  "<strong>Do you stop after a bad run?</strong> On M3 the data says it does not matter; on M1 it does.",
+  "<strong>Do you take partial profits at +1R?</strong> 13% of trades that reach +1R end as losers; a partial at +1R is a reasonable rule to test with your sizing.",
+  "<strong>Do you ever add to a winner, or hold through an opposite flip?</strong> Holding through the flip beat every close model; adding was not tested.",
+  "<strong>Which trades do you not take that the bot takes?</strong> Write down the last 20 signals you skipped and why. Those reasons are the filter list that matters."
+ ]
+}

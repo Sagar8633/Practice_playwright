@@ -1,0 +1,37 @@
+{
+ "verdict": "The only rule that makes money on gold in every period after XM costs is slow, long-only breakout trend following. It earns low single digits a year at 1% risk, about 2 to 7% at 3% risk with 25% drawdowns, needs a $7,000 to $20,000 account, and trades about five times a year.",
+ "verdict_text": [
+  "Scalping was closed by the earlier work: every short-timeframe rule lost the spread in every year. So this study went where the published evidence is strongest for a single trending asset: time-series momentum and breakout trend following on daily bars, where a $0.51 spread is noise against moves of $100. Thirteen canonical rules were frozen from the literature before the run (Turtle 20/10 and 55/20, the 50/200 moving-average cross, 1/3/6/12-month time-series momentum, Faber's 10-month rule, their long-only and short-only splits) and tested on 23 years of Dukascopy daily gold with XM's spread and today's overnight swap charged on every night held, in three chronological periods.",
+  "Two rules pass the pre-declared bar (positive after costs, profit factor above 1.1 and drawdown under 40% in development, validation and out of sample, and above a random-direction control): the Turtle 20/10 and 55/20 breakouts, long only. The 55/20 system at 1% risk per trade compounds $10,000 in 2003 into $14,000 in 2026 with a worst drawdown of 10%; at 3% risk into about $23,000 with a 27% drawdown. Its profit factor is 2.6, 2.0 and 7.1 across the three periods, its win rate about 45%, and its edge is entirely the size of the winners: 2025 alone made 18% at 1% risk.",
+  "What it is not: it is not a way to grow a $200 account, it is not a scalper, and it did nothing in 2014 to 2019 when gold went sideways (0.1% a year, drawdown 9%). It makes money only when gold trends, it holds positions for weeks, and it goes months without a trade. Every short-side rule lost in every period, every vol-targeted rule lost in validation, and buying and holding a gold CFD at today's swap costs 7.4% a year, which turned gold's 9% price gain into roughly 1.6%."
+ ],
+ "why_these_rules": "Time-series momentum (Moskowitz, Ooi and Pedersen 2012) and trend following (Hurst, Ooi and Pedersen, A Century of Evidence on Trend-Following Investing, 2017) are the best-documented systematic edges across 58 futures markets including gold, with Sharpe ratios around 0.3 to 0.5 per market before costs. The Turtle rules (Dennis and Eckhardt, published by Faith) are the classic breakout implementation; Faber (2007) is the classic long-or-flat monthly rule. None of these were tuned here: the lengths, the 2 x ATR stop, the 10% vol target and the monthly rebalance are the published values. A one-market version of a portfolio strategy is expected to be weaker and lumpier than the papers' portfolio numbers.",
+ "data_costs": [
+  "Dukascopy XAUUSD daily bid candles, 2 Jan 2003 to 25 Sep 2026, UTC day boundary (XM's daily bar closes at server midnight, two or three hours later; the rules read closed bars, so the difference is which bar a signal lands on, not whether it fires).",
+  "Spread: XM medians by year where known (0.36 in 2024, 0.38 in 2025, 0.51 in 2026), 0.32 before. On a trade that holds for weeks this is under 0.5% of the average winner.",
+  "Swap: XM GOLD today, long -86.84 points per night, short +19.79, Wednesday triple, expressed as a fraction of notional (long -0.020% a night, 7.4% a year) and charged at every price level. This is harsh for 2009 to 2021 when rates were near zero, so the development and validation numbers are understated, not flattered.",
+  "No slippage on the daily open fills. Stops are checked on the daily low or high and filled at the open when the open gaps through them.",
+  "Sizing for the statistics uses fractional ounces; the XM-rounded rows use whole ounces (0.01 lot) and skip trades the account cannot size."
+ ],
+ "results_note": "Read the table for consistency across the three periods, not for the biggest number. The vol-targeted rules (SMA cross, TSMOM, Faber) post the highest out-of-sample returns and fail validation with 30 to 50% drawdowns; the Turtle long-only rules are small in every period and negative in none.",
+ "scaling_note": "Risk per trade scales the same trades linearly, so profit factor and win rate do not change; only the return and the drawdown do. At 3% the 55/20 system lost 11.5% in 2004, 10.4% in 2017 and 9% in 2023, and made 58% in 2025. The two systems on split capital behave like the average of the two.",
+ "min_account": "XM's smallest step is 0.01 lot, one ounce. The stop is 2 x ATR(20), about $200 an ounce at 2026 volatility, so one ounce risks $200: a 1% rule needs about $20,000, 2% about $10,000, 3% about $6,600. Below that the EA skips trades (it says so in the log) or, on a $2,000 account at 1% risk, takes one trade in seven years. A $200 account cannot run this at all.",
+ "ea": [
+  "File: mt5/GoldTrend_D1.mq5. Attach to GOLD, D1 chart, any timeframe works because it reads D1 bars itself. Defaults: EntryDays 55, ExitDays 20, ATRPeriod 20, StopATR 2.0, RiskPct 1.0, AllowLong true, AllowShort false.",
+  "It acts once per new daily bar: closes a long if yesterday's close is below the lowest low of the prior ExitDays days, otherwise buys if yesterday's close is above the highest high of the prior EntryDays days, with a broker-side stop at 2 ATR and lots sized to RiskPct of equity, rounded down to the lot step.",
+  "It refuses to trade on a real account (trade mode not demo, or login 450160565) unless AllowRealAccount is set to true. Leave it false until the demo log and the Strategy Tester agree with these numbers.",
+  "Cross-check before trusting it: run it in the Strategy Tester on GOLD D1, 2020 to 2026, $10,000, 1% risk. The research engine has 16 trades, +2.6% a year, drawdown 10% for that window; the tester's numbers will differ by the server-day boundary and its swap history but should be the same picture."
+ ],
+ "caveats": [
+  "Five trades a year is a small sample: 61 development trades, 14 validation, 16 out of sample for the 55/20 rule. The profit factor is stable, the return is not; a five-year stretch with no gold trend earns nothing and pays swap.",
+  "The out-of-sample period contains the 2024 to 2025 gold run, which is most of the result. That is what trend following is for, and it is also why the number will disappoint in a range.",
+  "Long-only was pre-declared as a variant, not chosen after the fact, but it does rely on gold's 23-year upward drift continuing. If it does not, the rule sits flat and pays the swap on the losers.",
+  "The swap is today's rate. If XM's swap rises further, subtract it from every long year; if rates fall, add it back."
+ ],
+ "next": [
+  "<strong>Run the EA on the demo</strong> (169426800) with RiskPct 1 and let it sit; it will place one or two trades a quarter. Compare each fill with the research trade list in results/trend/.",
+  "<strong>Strategy Tester cross-check</strong> on GOLD D1 2020-2026 as above, then 2003-2026 if XM's history goes back that far.",
+  "<strong>Fund it properly or not at all:</strong> $7,000 minimum at 3% risk, $20,000 at 1%. Do not run it at 3% on money you cannot lose a quarter of.",
+  "<strong>Do not add filters.</strong> Every filter study on this project ended the same way; the rule is the published one and its value is that it was not fitted."
+ ]
+}

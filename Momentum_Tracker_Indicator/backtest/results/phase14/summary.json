@@ -1,0 +1,453 @@
+{
+ "generated": "2026-09-26 08:12",
+ "audit": {
+  "days": 86,
+  "ticks_total": 6265326,
+  "dup_timestamps_share": 0.0,
+  "bid_gt_ask": 0,
+  "zero_or_neg_spread": 0,
+  "spread_median_usd": 0.59,
+  "spread_p99_usd": 0.905,
+  "spread_max_usd": 6.0,
+  "max_gap_s_median": 7.8,
+  "ticks_in_1530_minute_median": 396,
+  "price_decimals": 3,
+  "timezone": "Dukascopy UTC ms, shifted to XM server time (EET, EU DST) per day",
+  "symbol": "XAUUSD spot (Dukascopy), 1 lot = 1 oz quotes; sizes in millions of units",
+  "days_missing_event_hour": 0
+ },
+ "by_group": [
+  {
+   "group": "DEV 2025 Thursday",
+   "n": 44,
+   "data_insufficient": 0,
+   "ambiguous": 3,
+   "trigger_rate": 1.0,
+   "up_first": 0.975609756097561,
+   "down_first": 0.024390243902439025,
+   "both_touched": 0.9512195121951219,
+   "both_executed": 0.12195121951219512,
+   "target": 0.24390243902439024,
+   "stop": 0.7560975609756098,
+   "timeout": 0.0,
+   "gross": -0.09206138484063911,
+   "net": -0.920270062156988,
+   "pf": 0.17315719053400622,
+   "mfe_med": 0.0,
+   "mae_med": 0.9159862736304232,
+   "cost_share": NaN,
+   "spread_driven": 0.43902439024390244,
+   "t_trigger_med_ms": 92.0
+  },
+  {
+   "group": "DEV 2025 Friday",
+   "n": 42,
+   "data_insufficient": 0,
+   "ambiguous": 1,
+   "trigger_rate": 1.0,
+   "up_first": 0.8536585365853658,
+   "down_first": 0.14634146341463414,
+   "both_touched": 0.8536585365853658,
+   "both_executed": 0.04878048780487805,
+   "target": 0.21951219512195122,
+   "stop": 0.7804878048780488,
+   "timeout": 0.0,
+   "gross": 0.07028264289350962,
+   "net": -0.6080004169505875,
+   "pf": 0.24529962128012062,
+   "mfe_med": 0.0,
+   "mae_med": 0.7325900098161469,
+   "cost_share": 9.65079046432294,
+   "spread_driven": 0.6341463414634146,
+   "t_trigger_med_ms": 132.0
+  },
+  {
+   "group": "DEV 2025 All",
+   "n": 86,
+   "data_insufficient": 0,
+   "ambiguous": 4,
+   "trigger_rate": 1.0,
+   "up_first": 0.9146341463414634,
+   "down_first": 0.08536585365853659,
+   "both_touched": 0.9024390243902439,
+   "both_executed": 0.08536585365853659,
+   "target": 0.23170731707317074,
+   "stop": 0.7682926829268293,
+   "timeout": 0.0,
+   "gross": -0.010889370973564747,
+   "net": -0.7641352395537878,
+   "pf": 0.2034495528096819,
+   "mfe_med": 0.0,
+   "mae_med": 0.7871942829068388,
+   "cost_share": NaN,
+   "spread_driven": 0.5365853658536586,
+   "t_trigger_med_ms": 97.5
+  }
+ ],
+ "by_scenario": [
+  {
+   "scenario": "A trigger tick",
+   "period": "DEV 2025",
+   "days": 86,
+   "traded": 82,
+   "net": -0.7132377027008909,
+   "pf": 0.2099968770675925,
+   "gross": -0.06347149313930796
+  },
+  {
+   "scenario": "B 250 ms fill delay",
+   "period": "DEV 2025",
+   "days": 86,
+   "traded": 82,
+   "net": -0.7641352395537878,
+   "pf": 0.2034495528096819,
+   "gross": -0.010889370973564747
+  },
+  {
+   "scenario": "C worst within 1 s",
+   "period": "DEV 2025",
+   "days": 86,
+   "traded": 82,
+   "net": -0.8727265534877724,
+   "pf": 0.1681125904534503,
+   "gross": -0.0500803279468295
+  },
+  {
+   "scenario": "A, 0 ms cancel latency",
+   "period": "DEV 2025",
+   "days": 86,
+   "traded": 82,
+   "net": -0.5924169767102123,
+   "pf": 0.24244151619211657,
+   "gross": -0.06347149313930796
+  },
+  {
+   "scenario": "A, 1000 ms cancel latency",
+   "period": "DEV 2025",
+   "days": 86,
+   "traded": 82,
+   "net": -0.7254592020004049,
+   "pf": 0.2071921392055856,
+   "gross": -0.06347149313930796
+  },
+  {
+   "scenario": "B + XM spread overlay",
+   "period": "DEV 2025",
+   "days": 86,
+   "traded": 82,
+   "net": -0.7652272037983711,
+   "pf": NaN,
+   "gross": -0.010889370973564747
+  }
+ ],
+ "first_touch": [
+  {
+   "period": "DEV 2025",
+   "group": "Thursday",
+   "n": 41,
+   "up_first": 0.975609756097561,
+   "net_up": -0.9264196883297646,
+   "net_down": -0.6742850152459182,
+   "cont": 0.24390243902439024
+  },
+  {
+   "period": "DEV 2025",
+   "group": "Friday",
+   "n": 41,
+   "up_first": 0.8536585365853658,
+   "net_up": -0.6525683158637835,
+   "net_down": -0.3480210066236114,
+   "cont": 0.21951219512195122
+  },
+  {
+   "period": "DEV 2025",
+   "group": "All",
+   "n": 82,
+   "up_first": 0.9146341463414634,
+   "net_up": -0.7986223811789737,
+   "net_down": -0.3946301507125124,
+   "cont": 0.23170731707317074
+  }
+ ],
+ "windows": [
+  {
+   "bucket": "0-1 s",
+   "n": 72,
+   "net": -0.8484633473068494,
+   "pf": 0.1827057416340589,
+   "target": 0.2222222222222222
+  },
+  {
+   "bucket": "1-5 s",
+   "n": 2,
+   "net": -0.5417390238249224,
+   "pf": 0.0,
+   "target": 0.0
+  },
+  {
+   "bucket": "5-10 s",
+   "n": 1,
+   "net": 0.7501363773702876,
+   "pf": 750136377.3702875,
+   "target": 1.0
+  },
+  {
+   "bucket": "10-30 s",
+   "n": 5,
+   "net": -0.2845496641827642,
+   "pf": 0.37233412653818726,
+   "target": 0.2
+  },
+  {
+   "bucket": "30-60 s",
+   "n": 1,
+   "net": -0.5669871135502483,
+   "pf": 0.0,
+   "target": 0.0
+  },
+  {
+   "bucket": "1-5 min",
+   "n": 1,
+   "net": 0.7533484674261935,
+   "pf": 753348467.4261935,
+   "target": 1.0
+  }
+ ],
+ "toxicity": [
+  {
+   "type": "1 clean trigger",
+   "n": 11,
+   "share": 0.12790697674418605,
+   "net": -0.20498072047470206,
+   "target": 0.5454545454545454,
+   "range_med": 1.2203490793580485,
+   "spmax_med": 1.0961955098260898
+  },
+  {
+   "type": "2 immediate overshoot (resolved inside 60 s)",
+   "n": 3,
+   "share": 0.03488372093023256,
+   "net": 0.8616712396258953,
+   "target": 1.0,
+   "range_med": 2.954249044633483,
+   "spmax_med": 1.5469604708369389
+  },
+  {
+   "type": "3 both sides touched (stop inside 60 s)",
+   "n": 51,
+   "share": 0.5930232558139535,
+   "net": -1.3754750814676162,
+   "target": 0.0,
+   "range_med": 1.0857551826991085,
+   "spmax_med": 0.762509689029651
+  },
+  {
+   "type": "4 spread-driven trigger",
+   "n": 21,
+   "share": 0.2441860465116279,
+   "net": 0.0789530186624477,
+   "target": 0.47619047619047616,
+   "range_med": 0.7566223358472227,
+   "spmax_med": 0.412930699028735
+  }
+ ],
+ "plateau": [
+  {
+   "kind": "horizon",
+   "value": 30.0,
+   "n": 82,
+   "net": -0.7641352395537878,
+   "pf": 0.2034495528096819,
+   "target": 0.23170731707317074
+  },
+  {
+   "kind": "horizon",
+   "value": 60.0,
+   "n": 82,
+   "net": -0.7641352395537878,
+   "pf": 0.2034495528096819,
+   "target": 0.23170731707317074
+  },
+  {
+   "kind": "horizon",
+   "value": 100.0,
+   "n": 82,
+   "net": -0.7641352395537878,
+   "pf": 0.2034495528096819,
+   "target": 0.23170731707317074
+  },
+  {
+   "kind": "horizon",
+   "value": 150.0,
+   "n": 82,
+   "net": -0.7641352395537878,
+   "pf": 0.2034495528096819,
+   "target": 0.23170731707317074
+  },
+  {
+   "kind": "horizon",
+   "value": 300.0,
+   "n": 82,
+   "net": -0.7641352395537878,
+   "pf": 0.2034495528096819,
+   "target": 0.23170731707317074
+  },
+  {
+   "kind": "start_offset_s",
+   "value": 30.0,
+   "n": 85,
+   "net": -0.36369192729026323,
+   "pf": 0.3245446791991704,
+   "target": 0.2235294117647059
+  },
+  {
+   "kind": "start_offset_s",
+   "value": 60.0,
+   "n": 86,
+   "net": -0.4119285330967994,
+   "pf": 0.26103921422910237,
+   "target": 0.18604651162790697
+  },
+  {
+   "kind": "start_offset_s",
+   "value": 120.0,
+   "n": 85,
+   "net": -0.12497394617156544,
+   "pf": 0.6945703094534853,
+   "target": 0.36470588235294116
+  },
+  {
+   "kind": "start_offset_s",
+   "value": 300.0,
+   "n": 86,
+   "net": -0.2568091382003623,
+   "pf": 0.42488120508853383,
+   "target": 0.2441860465116279
+  },
+  {
+   "kind": "target",
+   "value": 0.5,
+   "n": 82,
+   "net": -0.7129275364728928,
+   "pf": 0.20143926184232186,
+   "target": 0.3048780487804878
+  },
+  {
+   "kind": "target",
+   "value": 0.75,
+   "n": 82,
+   "net": -0.7641352395537878,
+   "pf": 0.2034495528096819,
+   "target": 0.23170731707317074
+  },
+  {
+   "kind": "target",
+   "value": 1.0,
+   "n": 82,
+   "net": -0.8034339246909982,
+   "pf": 0.20683887496376668,
+   "target": 0.1951219512195122
+  },
+  {
+   "kind": "target",
+   "value": 1.25,
+   "n": 82,
+   "net": -0.75778707825771,
+   "pf": 0.2519020755067457,
+   "target": 0.1951219512195122
+  },
+  {
+   "kind": "target",
+   "value": 1.5,
+   "n": 82,
+   "net": -0.7113109395077049,
+   "pf": 0.2977839649383773,
+   "target": 0.1951219512195122
+  },
+  {
+   "kind": "trigger",
+   "value": 0.15,
+   "n": 80,
+   "net": -0.7805482722178491,
+   "pf": 0.1620433517765923,
+   "target": 0.175
+  },
+  {
+   "kind": "trigger",
+   "value": 0.2,
+   "n": 81,
+   "net": -0.7472794159505028,
+   "pf": 0.19246526645363884,
+   "target": 0.20987654320987653
+  },
+  {
+   "kind": "trigger",
+   "value": 0.25,
+   "n": 82,
+   "net": -0.7641352395537878,
+   "pf": 0.2034495528096819,
+   "target": 0.23170731707317074
+  },
+  {
+   "kind": "trigger",
+   "value": 0.3,
+   "n": 84,
+   "net": -0.6513320744354898,
+   "pf": 0.29551093182989363,
+   "target": 0.34523809523809523
+  },
+  {
+   "kind": "trigger",
+   "value": 0.35,
+   "n": 85,
+   "net": -0.6051327732211322,
+   "pf": 0.34182051967494786,
+   "target": 0.35294117647058826
+  },
+  {
+   "kind": "trigger",
+   "value": 0.4,
+   "n": 85,
+   "net": -0.44904763956878463,
+   "pf": 0.46461699302729026,
+   "target": 0.4470588235294118
+  }
+ ],
+ "controls": [
+  {
+   "control": "random same-day timestamp (15:20-19:00), same rules, Scenario B",
+   "period": "DEV 2025",
+   "n": 120,
+   "net": -0.14617212739833307,
+   "pf": 0.6111898182558958
+  },
+  {
+   "control": "15:30 event, Mon-Wed (no weekly-release selection)",
+   "period": "see by-group table",
+   "n": 0,
+   "net": NaN,
+   "pf": NaN
+  }
+ ],
+ "concentration": {
+  "events_traded": 82,
+  "net_total_atr": -62.66,
+  "best_event": 1.64,
+  "worst_event": -5.63,
+  "share_of_events_positive": 0.232,
+  "net_without_best_5": -67.84,
+  "net_without_worst_5": -43.06,
+  "best_week_share": "n/a (net <= 0)",
+  "weeks_positive": "9 of 44"
+ },
+ "cost": [
+  {
+   "period": "DEV 2025",
+   "gross": -0.010889370973564747,
+   "netA": -0.7132377027008909,
+   "netB": -0.7641352395537878,
+   "netXM": -0.7652272037983711,
+   "share": NaN
+  }
+ ]
+}

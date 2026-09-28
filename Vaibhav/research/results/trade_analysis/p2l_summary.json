@@ -1,0 +1,987 @@
+{
+ "M1": {
+  "1usd": {
+   "trades": 9638,
+   "share_of_all_trades": 0.1756,
+   "share_of_losers": 0.222,
+   "realized_loss": -16606.57,
+   "unrealized_profit_given_up": 26990.15,
+   "share_of_total_losses": 0.247,
+   "avg_mfe": 2.8,
+   "avg_final": -1.72,
+   "exit_mechanism_mix": {
+    "MA18_exit": 8085,
+    "SL_breakeven": 1074,
+    "SL_initial": 477,
+    "SL_swing": 2
+   },
+   "by_direction": {
+    "short": 5263,
+    "long": 4375
+   },
+   "by_session": {
+    "London/NY": 2542,
+    "NewYork": 2326,
+    "Asia": 2258,
+    "London": 2071,
+    "Sydney": 441
+   },
+   "median_bars_from_mfe_to_exit": 5.0,
+   "median_close_vs_ma18_at_mfe": -1.02,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.354
+  },
+  "2usd": {
+   "trades": 4608,
+   "share_of_all_trades": 0.0839,
+   "share_of_losers": 0.106,
+   "realized_loss": -8282.12,
+   "unrealized_profit_given_up": 19923.88,
+   "share_of_total_losses": 0.123,
+   "avg_mfe": 4.32,
+   "avg_final": -1.8,
+   "exit_mechanism_mix": {
+    "MA18_exit": 3343,
+    "SL_breakeven": 1074,
+    "SL_initial": 189,
+    "SL_swing": 2
+   },
+   "by_direction": {
+    "short": 2630,
+    "long": 1978
+   },
+   "by_session": {
+    "London/NY": 1299,
+    "NewYork": 1116,
+    "Asia": 1073,
+    "London": 926,
+    "Sydney": 194
+   },
+   "median_bars_from_mfe_to_exit": 4.0,
+   "median_close_vs_ma18_at_mfe": -1.87,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.362
+  },
+  "5usd": {
+   "trades": 1085,
+   "share_of_all_trades": 0.0198,
+   "share_of_losers": 0.025,
+   "realized_loss": -129.74,
+   "unrealized_profit_given_up": 9206.39,
+   "share_of_total_losses": 0.002,
+   "avg_mfe": 8.49,
+   "avg_final": -0.12,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 1071,
+    "SL_initial": 11,
+    "SL_swing": 2,
+    "MA18_exit": 1
+   },
+   "by_direction": {
+    "short": 654,
+    "long": 431
+   },
+   "by_session": {
+    "NewYork": 297,
+    "London/NY": 269,
+    "Asia": 265,
+    "London": 205,
+    "Sydney": 49
+   },
+   "median_bars_from_mfe_to_exit": 2.0,
+   "median_close_vs_ma18_at_mfe": -4.89,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.379
+  },
+  "10usd": {
+   "trades": 220,
+   "share_of_all_trades": 0.004,
+   "share_of_losers": 0.005,
+   "realized_loss": -60.03,
+   "unrealized_profit_given_up": 3413.76,
+   "share_of_total_losses": 0.001,
+   "avg_mfe": 15.52,
+   "avg_final": -0.27,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 215,
+    "SL_initial": 4,
+    "MA18_exit": 1
+   },
+   "by_direction": {
+    "short": 152,
+    "long": 68
+   },
+   "by_session": {
+    "NewYork": 70,
+    "Asia": 56,
+    "London/NY": 53,
+    "London": 31,
+    "Sydney": 10
+   },
+   "median_bars_from_mfe_to_exit": 2.0,
+   "median_close_vs_ma18_at_mfe": -10.07,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.377
+  },
+  "1R": {
+   "trades": 1737,
+   "share_of_all_trades": 0.0316,
+   "share_of_losers": 0.04,
+   "realized_loss": -1025.13,
+   "unrealized_profit_given_up": 6147.25,
+   "share_of_total_losses": 0.015,
+   "avg_mfe": 3.54,
+   "avg_final": -0.59,
+   "exit_mechanism_mix": {
+    "MA18_exit": 1289,
+    "SL_breakeven": 289,
+    "SL_initial": 157,
+    "SL_swing": 2
+   },
+   "by_direction": {
+    "short": 1136,
+    "long": 601
+   },
+   "by_session": {
+    "London/NY": 463,
+    "Asia": 429,
+    "London": 417,
+    "NewYork": 324,
+    "Sydney": 104
+   },
+   "median_bars_from_mfe_to_exit": 5.0,
+   "median_close_vs_ma18_at_mfe": -1.17,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.546
+  },
+  "2R": {
+   "trades": 145,
+   "share_of_all_trades": 0.0026,
+   "share_of_losers": 0.003,
+   "realized_loss": -96.15,
+   "unrealized_profit_given_up": 726.77,
+   "share_of_total_losses": 0.001,
+   "avg_mfe": 5.01,
+   "avg_final": -0.66,
+   "exit_mechanism_mix": {
+    "MA18_exit": 82,
+    "SL_breakeven": 35,
+    "SL_initial": 27,
+    "SL_swing": 1
+   },
+   "by_direction": {
+    "short": 89,
+    "long": 56
+   },
+   "by_session": {
+    "London/NY": 49,
+    "Asia": 29,
+    "London": 27,
+    "NewYork": 20,
+    "Sydney": 20
+   },
+   "median_bars_from_mfe_to_exit": 4.0,
+   "median_close_vs_ma18_at_mfe": -1.13,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.683
+  },
+  "3R": {
+   "trades": 31,
+   "share_of_all_trades": 0.0006,
+   "share_of_losers": 0.001,
+   "realized_loss": -41.49,
+   "unrealized_profit_given_up": 163.7,
+   "share_of_total_losses": 0.001,
+   "avg_mfe": 5.28,
+   "avg_final": -1.34,
+   "exit_mechanism_mix": {
+    "MA18_exit": 12,
+    "SL_initial": 11,
+    "SL_breakeven": 8
+   },
+   "by_direction": {
+    "short": 19,
+    "long": 12
+   },
+   "by_session": {
+    "London/NY": 10,
+    "NewYork": 6,
+    "Sydney": 6,
+    "Asia": 5,
+    "London": 4
+   },
+   "median_bars_from_mfe_to_exit": 3.0,
+   "median_close_vs_ma18_at_mfe": -1.13,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.71
+  }
+ },
+ "M5": {
+  "1usd": {
+   "trades": 4115,
+   "share_of_all_trades": 0.334,
+   "share_of_losers": 0.459,
+   "realized_loss": -10487.92,
+   "unrealized_profit_given_up": 16433.05,
+   "share_of_total_losses": 0.437,
+   "avg_mfe": 3.99,
+   "avg_final": -2.55,
+   "exit_mechanism_mix": {
+    "MA18_exit": 2953,
+    "SL_breakeven": 811,
+    "SL_initial": 351
+   },
+   "by_direction": {
+    "long": 2142,
+    "short": 1973
+   },
+   "by_session": {
+    "Asia": 1095,
+    "London/NY": 1083,
+    "London": 991,
+    "NewYork": 750,
+    "Sydney": 196
+   },
+   "median_bars_from_mfe_to_exit": 17.0,
+   "median_close_vs_ma18_at_mfe": 0.81,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.377
+  },
+  "2usd": {
+   "trades": 2588,
+   "share_of_all_trades": 0.2101,
+   "share_of_losers": 0.289,
+   "realized_loss": -6056.98,
+   "unrealized_profit_given_up": 14222.67,
+   "share_of_total_losses": 0.252,
+   "avg_mfe": 5.5,
+   "avg_final": -2.34,
+   "exit_mechanism_mix": {
+    "MA18_exit": 1593,
+    "SL_breakeven": 811,
+    "SL_initial": 184
+   },
+   "by_direction": {
+    "long": 1318,
+    "short": 1270
+   },
+   "by_session": {
+    "London/NY": 743,
+    "Asia": 665,
+    "London": 582,
+    "NewYork": 483,
+    "Sydney": 115
+   },
+   "median_bars_from_mfe_to_exit": 15.5,
+   "median_close_vs_ma18_at_mfe": 0.73,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.372
+  },
+  "5usd": {
+   "trades": 813,
+   "share_of_all_trades": 0.066,
+   "share_of_losers": 0.091,
+   "realized_loss": -42.56,
+   "unrealized_profit_given_up": 8709.19,
+   "share_of_total_losses": 0.002,
+   "avg_mfe": 10.71,
+   "avg_final": -0.05,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 809,
+    "SL_initial": 4
+   },
+   "by_direction": {
+    "short": 435,
+    "long": 378
+   },
+   "by_session": {
+    "Asia": 251,
+    "London/NY": 211,
+    "NewYork": 169,
+    "London": 148,
+    "Sydney": 34
+   },
+   "median_bars_from_mfe_to_exit": 4.0,
+   "median_close_vs_ma18_at_mfe": -4.57,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.371
+  },
+  "10usd": {
+   "trades": 275,
+   "share_of_all_trades": 0.0223,
+   "share_of_losers": 0.031,
+   "realized_loss": -5.22,
+   "unrealized_profit_given_up": 4980.6,
+   "share_of_total_losses": 0.0,
+   "avg_mfe": 18.11,
+   "avg_final": -0.02,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 275
+   },
+   "by_direction": {
+    "short": 154,
+    "long": 121
+   },
+   "by_session": {
+    "Asia": 82,
+    "London/NY": 81,
+    "NewYork": 63,
+    "London": 33,
+    "Sydney": 16
+   },
+   "median_bars_from_mfe_to_exit": 7.0,
+   "median_close_vs_ma18_at_mfe": -7.94,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.364
+  },
+  "1R": {
+   "trades": 474,
+   "share_of_all_trades": 0.0385,
+   "share_of_losers": 0.053,
+   "realized_loss": -392.39,
+   "unrealized_profit_given_up": 2873.19,
+   "share_of_total_losses": 0.016,
+   "avg_mfe": 6.06,
+   "avg_final": -0.83,
+   "exit_mechanism_mix": {
+    "MA18_exit": 292,
+    "SL_breakeven": 112,
+    "SL_initial": 70
+   },
+   "by_direction": {
+    "short": 255,
+    "long": 219
+   },
+   "by_session": {
+    "Asia": 154,
+    "London/NY": 134,
+    "London": 116,
+    "NewYork": 48,
+    "Sydney": 22
+   },
+   "median_bars_from_mfe_to_exit": 17.0,
+   "median_close_vs_ma18_at_mfe": -0.79,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.599
+  },
+  "2R": {
+   "trades": 35,
+   "share_of_all_trades": 0.0028,
+   "share_of_losers": 0.004,
+   "realized_loss": -15.07,
+   "unrealized_profit_given_up": 324.02,
+   "share_of_total_losses": 0.001,
+   "avg_mfe": 9.26,
+   "avg_final": -0.43,
+   "exit_mechanism_mix": {
+    "MA18_exit": 17,
+    "SL_breakeven": 13,
+    "SL_initial": 5
+   },
+   "by_direction": {
+    "short": 20,
+    "long": 15
+   },
+   "by_session": {
+    "Asia": 15,
+    "London": 7,
+    "NewYork": 6,
+    "London/NY": 5,
+    "Sydney": 2
+   },
+   "median_bars_from_mfe_to_exit": 14.0,
+   "median_close_vs_ma18_at_mfe": -0.77,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.743
+  },
+  "3R": {
+   "trades": 5,
+   "share_of_all_trades": 0.0004,
+   "share_of_losers": 0.001,
+   "realized_loss": -1.87,
+   "unrealized_profit_given_up": 93.78,
+   "share_of_total_losses": 0.0,
+   "avg_mfe": 18.76,
+   "avg_final": -0.37,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 3,
+    "SL_initial": 1,
+    "MA18_exit": 1
+   },
+   "by_direction": {
+    "short": 3,
+    "long": 2
+   },
+   "by_session": {
+    "Asia": 2,
+    "London": 1,
+    "London/NY": 1,
+    "Sydney": 1
+   },
+   "median_bars_from_mfe_to_exit": 10.0,
+   "median_close_vs_ma18_at_mfe": -0.04,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.6
+  }
+ },
+ "M15": {
+  "1usd": {
+   "trades": 1786,
+   "share_of_all_trades": 0.3918,
+   "share_of_losers": 0.619,
+   "realized_loss": -6726.34,
+   "unrealized_profit_given_up": 9605.04,
+   "share_of_total_losses": 0.561,
+   "avg_mfe": 5.38,
+   "avg_final": -3.77,
+   "exit_mechanism_mix": {
+    "MA18_exit": 1100,
+    "SL_breakeven": 481,
+    "SL_initial": 205
+   },
+   "by_direction": {
+    "long": 985,
+    "short": 801
+   },
+   "by_session": {
+    "Asia": 492,
+    "London": 490,
+    "London/NY": 428,
+    "NewYork": 307,
+    "Sydney": 69
+   },
+   "median_bars_from_mfe_to_exit": 39.0,
+   "median_close_vs_ma18_at_mfe": 1.41,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.409
+  },
+  "2usd": {
+   "trades": 1275,
+   "share_of_all_trades": 0.2797,
+   "share_of_losers": 0.442,
+   "realized_loss": -4224.11,
+   "unrealized_profit_given_up": 8850.17,
+   "share_of_total_losses": 0.352,
+   "avg_mfe": 6.94,
+   "avg_final": -3.31,
+   "exit_mechanism_mix": {
+    "MA18_exit": 688,
+    "SL_breakeven": 481,
+    "SL_initial": 106
+   },
+   "by_direction": {
+    "long": 692,
+    "short": 583
+   },
+   "by_session": {
+    "London": 337,
+    "Asia": 327,
+    "London/NY": 325,
+    "NewYork": 235,
+    "Sydney": 51
+   },
+   "median_bars_from_mfe_to_exit": 34.0,
+   "median_close_vs_ma18_at_mfe": 1.8,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.389
+  },
+  "5usd": {
+   "trades": 485,
+   "share_of_all_trades": 0.1064,
+   "share_of_losers": 0.168,
+   "realized_loss": -44.74,
+   "unrealized_profit_given_up": 6261.81,
+   "share_of_total_losses": 0.004,
+   "avg_mfe": 12.91,
+   "avg_final": -0.09,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 478,
+    "MA18_exit": 6,
+    "SL_initial": 1
+   },
+   "by_direction": {
+    "long": 251,
+    "short": 234
+   },
+   "by_session": {
+    "Asia": 131,
+    "London/NY": 121,
+    "NewYork": 105,
+    "London": 100,
+    "Sydney": 28
+   },
+   "median_bars_from_mfe_to_exit": 6.0,
+   "median_close_vs_ma18_at_mfe": 3.19,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.375
+  },
+  "10usd": {
+   "trades": 210,
+   "share_of_all_trades": 0.0461,
+   "share_of_losers": 0.073,
+   "realized_loss": -9.79,
+   "unrealized_profit_given_up": 4349.18,
+   "share_of_total_losses": 0.001,
+   "avg_mfe": 20.71,
+   "avg_final": -0.05,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 209,
+    "MA18_exit": 1
+   },
+   "by_direction": {
+    "long": 107,
+    "short": 103
+   },
+   "by_session": {
+    "London/NY": 61,
+    "Asia": 53,
+    "NewYork": 49,
+    "London": 35,
+    "Sydney": 12
+   },
+   "median_bars_from_mfe_to_exit": 14.0,
+   "median_close_vs_ma18_at_mfe": 3.56,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.357
+  },
+  "1R": {
+   "trades": 119,
+   "share_of_all_trades": 0.0261,
+   "share_of_losers": 0.041,
+   "realized_loss": -107.26,
+   "unrealized_profit_given_up": 1781.42,
+   "share_of_total_losses": 0.009,
+   "avg_mfe": 14.97,
+   "avg_final": -0.9,
+   "exit_mechanism_mix": {
+    "MA18_exit": 51,
+    "SL_breakeven": 48,
+    "SL_initial": 20
+   },
+   "by_direction": {
+    "long": 66,
+    "short": 53
+   },
+   "by_session": {
+    "Asia": 39,
+    "London": 36,
+    "London/NY": 25,
+    "Sydney": 11,
+    "NewYork": 8
+   },
+   "median_bars_from_mfe_to_exit": 45.0,
+   "median_close_vs_ma18_at_mfe": 0.98,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.639
+  },
+  "2R": {
+   "trades": 7,
+   "share_of_all_trades": 0.0015,
+   "share_of_losers": 0.002,
+   "realized_loss": -6.23,
+   "unrealized_profit_given_up": 106.12,
+   "share_of_total_losses": 0.001,
+   "avg_mfe": 15.16,
+   "avg_final": -0.89,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 3,
+    "MA18_exit": 2,
+    "SL_initial": 2
+   },
+   "by_direction": {
+    "long": 6,
+    "short": 1
+   },
+   "by_session": {
+    "Sydney": 3,
+    "London": 2,
+    "Asia": 1,
+    "London/NY": 1
+   },
+   "median_bars_from_mfe_to_exit": 40.0,
+   "median_close_vs_ma18_at_mfe": 3.19,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.857
+  },
+  "3R": {
+   "trades": 2,
+   "share_of_all_trades": 0.0004,
+   "share_of_losers": 0.001,
+   "realized_loss": -0.92,
+   "unrealized_profit_given_up": 38.71,
+   "share_of_total_losses": 0.0,
+   "avg_mfe": 19.36,
+   "avg_final": -0.46,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 1,
+    "MA18_exit": 1
+   },
+   "by_direction": {
+    "long": 2
+   },
+   "by_session": {
+    "Sydney": 1,
+    "London": 1
+   },
+   "median_bars_from_mfe_to_exit": 33.0,
+   "median_close_vs_ma18_at_mfe": 11.78,
+   "share_price_continued_favourably_after_exit_ge_1R": 1.0
+  }
+ },
+ "D1": {
+  "1usd": {
+   "trades": 38,
+   "share_of_all_trades": 0.4471,
+   "share_of_losers": 1.0,
+   "realized_loss": -318.23,
+   "unrealized_profit_given_up": 2080.84,
+   "share_of_total_losses": 1.0,
+   "avg_mfe": 54.76,
+   "avg_final": -8.37,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 33,
+    "MA18_exit": 4,
+    "SL_initial": 1
+   },
+   "by_direction": {
+    "long": 29,
+    "short": 9
+   },
+   "by_session": {
+    "Asia": 19,
+    "London/NY": 11,
+    "NewYork": 5,
+    "London": 2,
+    "Sydney": 1
+   },
+   "median_bars_from_mfe_to_exit": 584.0,
+   "median_close_vs_ma18_at_mfe": 51.95,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.342
+  },
+  "2usd": {
+   "trades": 37,
+   "share_of_all_trades": 0.4353,
+   "share_of_losers": 0.974,
+   "realized_loss": -296.21,
+   "unrealized_profit_given_up": 2079.39,
+   "share_of_total_losses": 0.931,
+   "avg_mfe": 56.2,
+   "avg_final": -8.01,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 33,
+    "MA18_exit": 3,
+    "SL_initial": 1
+   },
+   "by_direction": {
+    "long": 29,
+    "short": 8
+   },
+   "by_session": {
+    "Asia": 19,
+    "London/NY": 10,
+    "NewYork": 5,
+    "London": 2,
+    "Sydney": 1
+   },
+   "median_bars_from_mfe_to_exit": 592.0,
+   "median_close_vs_ma18_at_mfe": 52.83,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.324
+  },
+  "5usd": {
+   "trades": 33,
+   "share_of_all_trades": 0.3882,
+   "share_of_losers": 0.868,
+   "realized_loss": -88.58,
+   "unrealized_profit_given_up": 2065.17,
+   "share_of_total_losses": 0.278,
+   "avg_mfe": 62.58,
+   "avg_final": -2.68,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 33
+   },
+   "by_direction": {
+    "long": 27,
+    "short": 6
+   },
+   "by_session": {
+    "Asia": 17,
+    "London/NY": 8,
+    "NewYork": 5,
+    "London": 2,
+    "Sydney": 1
+   },
+   "median_bars_from_mfe_to_exit": 576.0,
+   "median_close_vs_ma18_at_mfe": 64.06,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.333
+  },
+  "10usd": {
+   "trades": 27,
+   "share_of_all_trades": 0.3176,
+   "share_of_losers": 0.711,
+   "realized_loss": -81.63,
+   "unrealized_profit_given_up": 2023.72,
+   "share_of_total_losses": 0.257,
+   "avg_mfe": 74.95,
+   "avg_final": -3.02,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 27
+   },
+   "by_direction": {
+    "long": 22,
+    "short": 5
+   },
+   "by_session": {
+    "Asia": 13,
+    "London/NY": 7,
+    "NewYork": 4,
+    "London": 2,
+    "Sydney": 1
+   },
+   "median_bars_from_mfe_to_exit": 807.0,
+   "median_close_vs_ma18_at_mfe": 73.99,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.37
+  },
+  "1R": {
+   "trades": 3,
+   "share_of_all_trades": 0.0353,
+   "share_of_losers": 0.079,
+   "realized_loss": -27.79,
+   "unrealized_profit_given_up": 1162.18,
+   "share_of_total_losses": 0.087,
+   "avg_mfe": 387.39,
+   "avg_final": -9.26,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 3
+   },
+   "by_direction": {
+    "long": 3
+   },
+   "by_session": {
+    "Asia": 2,
+    "NewYork": 1
+   },
+   "median_bars_from_mfe_to_exit": 2290.0,
+   "median_close_vs_ma18_at_mfe": 80.69,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.333
+  },
+  "2R": {
+   "trades": 1,
+   "share_of_all_trades": 0.0118,
+   "share_of_losers": 0.026,
+   "realized_loss": -12.16,
+   "unrealized_profit_given_up": 964.95,
+   "share_of_total_losses": 0.038,
+   "avg_mfe": 964.95,
+   "avg_final": -12.16,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 1
+   },
+   "by_direction": {
+    "long": 1
+   },
+   "by_session": {
+    "Asia": 1
+   },
+   "median_bars_from_mfe_to_exit": 2840.0,
+   "median_close_vs_ma18_at_mfe": 683.74,
+   "share_price_continued_favourably_after_exit_ge_1R": 1.0
+  },
+  "3R": {
+   "trades": 1,
+   "share_of_all_trades": 0.0118,
+   "share_of_losers": 0.026,
+   "realized_loss": -12.16,
+   "unrealized_profit_given_up": 964.95,
+   "share_of_total_losses": 0.038,
+   "avg_mfe": 964.95,
+   "avg_final": -12.16,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 1
+   },
+   "by_direction": {
+    "long": 1
+   },
+   "by_session": {
+    "Asia": 1
+   },
+   "median_bars_from_mfe_to_exit": 2840.0,
+   "median_close_vs_ma18_at_mfe": 683.74,
+   "share_price_continued_favourably_after_exit_ge_1R": 1.0
+  }
+ },
+ "D1_23y": {
+  "1usd": {
+   "trades": 167,
+   "share_of_all_trades": 0.5076,
+   "share_of_losers": 0.938,
+   "realized_loss": -1615.18,
+   "unrealized_profit_given_up": 4112.43,
+   "share_of_total_losses": 0.869,
+   "avg_mfe": 24.63,
+   "avg_final": -9.67,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 117,
+    "MA18_exit": 36,
+    "SL_swing": 8,
+    "SL_initial": 6
+   },
+   "by_direction": {
+    "long": 151,
+    "short": 16
+   },
+   "by_session": {
+    "Asia": 64,
+    "London/NY": 54,
+    "NewYork": 25,
+    "London": 21,
+    "Sydney": 3
+   },
+   "median_bars_from_mfe_to_exit": 23.0,
+   "median_close_vs_ma18_at_mfe": 24.34,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.431
+  },
+  "2usd": {
+   "trades": 158,
+   "share_of_all_trades": 0.4802,
+   "share_of_losers": 0.888,
+   "realized_loss": -1384.73,
+   "unrealized_profit_given_up": 4097.1,
+   "share_of_total_losses": 0.745,
+   "avg_mfe": 25.93,
+   "avg_final": -8.76,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 117,
+    "MA18_exit": 29,
+    "SL_swing": 8,
+    "SL_initial": 4
+   },
+   "by_direction": {
+    "long": 146,
+    "short": 12
+   },
+   "by_session": {
+    "Asia": 63,
+    "London/NY": 50,
+    "NewYork": 25,
+    "London": 17,
+    "Sydney": 3
+   },
+   "median_bars_from_mfe_to_exit": 22.5,
+   "median_close_vs_ma18_at_mfe": 26.33,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.411
+  },
+  "5usd": {
+   "trades": 130,
+   "share_of_all_trades": 0.3951,
+   "share_of_losers": 0.73,
+   "realized_loss": -487.56,
+   "unrealized_profit_given_up": 3994.08,
+   "share_of_total_losses": 0.262,
+   "avg_mfe": 30.72,
+   "avg_final": -3.75,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 117,
+    "SL_swing": 8,
+    "MA18_exit": 5
+   },
+   "by_direction": {
+    "long": 124,
+    "short": 6
+   },
+   "by_session": {
+    "Asia": 48,
+    "London/NY": 42,
+    "NewYork": 22,
+    "London": 15,
+    "Sydney": 3
+   },
+   "median_bars_from_mfe_to_exit": 15.5,
+   "median_close_vs_ma18_at_mfe": 30.98,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.392
+  },
+  "10usd": {
+   "trades": 94,
+   "share_of_all_trades": 0.2857,
+   "share_of_losers": 0.528,
+   "realized_loss": -421.56,
+   "unrealized_profit_given_up": 3747.29,
+   "share_of_total_losses": 0.227,
+   "avg_mfe": 39.86,
+   "avg_final": -4.48,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 81,
+    "SL_swing": 8,
+    "MA18_exit": 5
+   },
+   "by_direction": {
+    "long": 89,
+    "short": 5
+   },
+   "by_session": {
+    "Asia": 35,
+    "London/NY": 30,
+    "NewYork": 17,
+    "London": 9,
+    "Sydney": 3
+   },
+   "median_bars_from_mfe_to_exit": 23.0,
+   "median_close_vs_ma18_at_mfe": 35.25,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.394
+  },
+  "1R": {
+   "trades": 18,
+   "share_of_all_trades": 0.0547,
+   "share_of_losers": 0.101,
+   "realized_loss": -151.05,
+   "unrealized_profit_given_up": 1734.21,
+   "share_of_total_losses": 0.081,
+   "avg_mfe": 96.35,
+   "avg_final": -8.39,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 11,
+    "MA18_exit": 4,
+    "SL_swing": 3
+   },
+   "by_direction": {
+    "long": 18
+   },
+   "by_session": {
+    "Asia": 7,
+    "London/NY": 5,
+    "NewYork": 5,
+    "Sydney": 1
+   },
+   "median_bars_from_mfe_to_exit": 48.5,
+   "median_close_vs_ma18_at_mfe": 23.67,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.389
+  },
+  "2R": {
+   "trades": 5,
+   "share_of_all_trades": 0.0152,
+   "share_of_losers": 0.028,
+   "realized_loss": -43.08,
+   "unrealized_profit_given_up": 1089.92,
+   "share_of_total_losses": 0.023,
+   "avg_mfe": 217.98,
+   "avg_final": -8.62,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 3,
+    "MA18_exit": 2
+   },
+   "by_direction": {
+    "long": 5
+   },
+   "by_session": {
+    "London/NY": 3,
+    "Asia": 1,
+    "NewYork": 1
+   },
+   "median_bars_from_mfe_to_exit": 48.0,
+   "median_close_vs_ma18_at_mfe": 15.56,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.6
+  },
+  "3R": {
+   "trades": 3,
+   "share_of_all_trades": 0.0091,
+   "share_of_losers": 0.017,
+   "realized_loss": -28.66,
+   "unrealized_profit_given_up": 1026.87,
+   "share_of_total_losses": 0.015,
+   "avg_mfe": 342.29,
+   "avg_final": -9.55,
+   "exit_mechanism_mix": {
+    "SL_breakeven": 3
+   },
+   "by_direction": {
+    "long": 3
+   },
+   "by_session": {
+    "London/NY": 2,
+    "Asia": 1
+   },
+   "median_bars_from_mfe_to_exit": 48.0,
+   "median_close_vs_ma18_at_mfe": 58.95,
+   "share_price_continued_favourably_after_exit_ge_1R": 0.667
+  }
+ }
+}

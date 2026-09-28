@@ -1,0 +1,21 @@
+category,trades_flagged,losses,loss_pct,avg_loss,max_loss,total_loss,share_of_total_loss,max_consec,dd_window_contribution,rule
+news_driven,341,201,58.94428152492669,-1.097964656347776,-6.928703912589526,-220.690895925903,19.42627590225664,9,-215.64438259533597,"exit bar (or entry bar) inside the 08:30/10:00 ET or FOMC slot proxy, or a shock bar (range > 3 ATR) during the trade"
+false_breakout,0,0,0.0,0.0,0.0,0.0,-0.0,0,0.0,breakout trade; an M15 close came back inside the range within 8 bars of entry
+trend_continuation_against,377,291,100.0,-1.0517897120945823,-1.9267361196805421,-306.07080621952343,26.941826948959868,377,-297.97537437332926,"ping-pong trade against the impulse direction, stopped, and the exit bar closed beyond the range on the impulse side"
+range_invalidated_before_entry,178,76,100.0,-1.0456964210003308,-1.1408667768633027,-79.47292799602513,6.995590006256138,178,-74.3142419122791,stopped within one M15 bar of the fill and that bar closed outside the range
+stop_too_tight,65,37,100.0,-1.0590941817503876,-1.3507841375188558,-39.18648472476434,3.449383177810953,65,-39.18648472476434,a stop twice as far would have reached the original target; stop < 1 ATR
+range_too_narrow,129,32,68.21705426356588,-1.2860786624181004,-5.760739927826933,-41.154517197379214,3.6226188776218464,16,-41.154517197379214,"range width < 1.5 x ATR14 at entry, or spread > 20% of the stop distance"
+range_too_wide,40,15,70.0,-1.0321362168097905,-1.063846529882054,-15.482043252146857,1.3628040363198999,10,-15.482043252146857,range width > 5 x ATR14 at entry
+entry_too_late,506,112,48.22134387351779,-1.0252859405986425,-2.0929315118979788,-114.83202534704796,10.108068107873644,8,-113.82254779715089,ping-pong: fill > 35% of width from the boundary; breakout: close penetration > 1 ATR
+middle_of_range_entry,335,7,47.462686567164184,-0.9939486701928973,-1.034333483522758,-6.9576406913502815,0.6124450541191268,8,-6.9576406913502815,fill between 35% and 65% of the range height
+multiple_failed_tests,238,30,69.32773109243698,-1.0503209766596173,-1.3217653236396556,-31.50962929978852,2.773629377811032,16,-29.488685898803787,traded boundary already touched >= 3 times (ping-pong) or a breakout already failed on this range
+impulse_exhausted,192,34,73.95833333333334,-1.0538674639504868,-1.548359072196141,-35.83149377431655,3.154060710703585,13,-33.753817142821546,"impulse took >= 24 bars (6 h) from origin to extreme, or efficiency ratio < 0.5"
+impulse_not_strong_enough,329,44,56.23100303951368,-1.0609034871826963,-1.9060376466626496,-46.67975343603864,4.108976790788244,9,-44.64822508441963,impulse size below the 20th percentile of all traded impulses (in pre-impulse ATR)
+poor_vah_val_location,1186,122,64.16526138279932,-1.0881396927610796,-3.3376068967992985,-132.7530425168517,11.685562378895018,16,-130.74992131614204,traded boundary more than 3 ATR from both the weekly VAH and VAL
+high_volatility,260,17,65.0,-1.0057932308129942,-1.155048511598521,-17.0984849238209,1.5050910199405925,14,-15.07507290375557,ATR14 percentile over the trailing 60 days >= 0.90 at entry
+low_volatility,121,1,63.63636363636363,-1.046812267587465,-1.046812267587465,-1.046812267587465,0.0921454591169393,7,-1.046812267587465,ATR14 percentile over the trailing 60 days <= 0.10 at entry
+failed_pullback,0,0,0.0,0.0,0.0,0.0,-0.0,0,0.0,pullback entry stopped with MFE < 0.25R (no continuation attempt)
+breakout_without_continuation,0,0,0.0,0.0,0.0,0.0,-0.0,0,0.0,breakout trade stopped with MFE between 0.25R and 1R
+stop_too_wide,123,0,37.39837398373984,0.0,0.0,0.0,-0.0,6,0.0,stop distance > 2.5 ATR or > 75% of the range height
+bad_orderflow_proxy,621,26,66.98872785829307,-1.0194507207592614,-1.8286369524845454,-26.505718739740797,2.333161062514782,11,-25.517964700340276,PROXY ONLY: signal-bar Dukascopy volume < 0.7 x 20-bar average (no footprint data exists)
+other,32,19,59.375,-1.0932090905075802,-1.7894017966789302,-20.770972719644025,1.828361089011696,5,-20.770972719644025,no rule matched

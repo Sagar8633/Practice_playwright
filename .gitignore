@@ -30,3 +30,5 @@ business_radar/**/*.db-wal
 business_radar/**/*.db-shm
 business_radar/outbox/
 *.eml
+
+*.csv

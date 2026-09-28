@@ -1,9 +1,0 @@
-category,trades,loss,avg_loss,avg_mfe,share_of_total_loss_pct
-01 bad entry (never reached 0.25R),51,-1014.45,-19.89,5.25,54.6
-03 whipsaw (MA18 exit within 3 bars),14,-341.75,-24.41,2.51,18.4
-05 trailing/protection too tight,42,-162.19,-3.86,45.02,8.7
-06 trailing/protection too loose (gave back >60% of >=1R),13,-121.52,-9.35,46.4,6.5
-12 other,25,-109.35,-4.37,22.5,5.9
-"02 correct entry, market reversal",11,-55.18,-5.02,38.46,3.0
-09 news/volatility event,4,-53.17,-13.29,25.21,2.9
-11 spread/slippage (positive before costs),18,-0.0,-0.0,12.97,0.0

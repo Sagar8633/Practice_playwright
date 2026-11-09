@@ -510,7 +510,7 @@ function checklist(cand) {
   if (confirmed) add(cand.score >= 55, `Agreement score ${cand.score} of 100 ` + dim('(needs 55)'));
   if (cand) {                                                  // absorption is shown, not scored: 90 days of data found no edge in it
     const ref = confirmed ? cand.entry : lastPx(), tol = Math.max(minD(), Sig ? Sig.atr : 0), near = Ab.filter(a => ref >= a.bottom - tol && ref <= a.top + tol);
-    for (const a of near) add(null, `${a.kind === 'buy' ? 'Sellers absorbed buying' : 'Buyers absorbed selling'} here at ${gp(a.bottom)}–${gp(a.top)} ` + dim(`(${(a.kind !== 'buy') === up ? 'same side' : 'other side'}, not scored)`));
+    for (const a of near) add(null, `${a.kind === 'buy' ? 'Sellers absorbed' : 'Buyers absorbed'} here at ${gp(a.bottom)}–${gp(a.top)} ` + dim(`(${(a.kind !== 'buy') === up ? 'same side' : 'other side'}, not scored)`));
   }
   return items;
 }
@@ -545,7 +545,7 @@ function drawSig() {
   put('gAbs', Ab.length ? Ab.slice().sort((x, y) => y.top - x.top).map(a => {
     const up = a.kind === 'buy', disp = !up, d = up ? p - a.top : a.bottom - p;   // disp: labels and colours swapped (display only)
     return `<div class="z"><a data-act="alert" data-v="${gp(up ? a.top : a.bottom)}" data-note="absorption" title="Ring when price comes back here">+ alert</a>` +
-      `<b class="${disp ? 'buy' : 'sell'}">${gp(a.bottom)} – ${gp(a.top)}</b> <small>${disp ? 'buyers absorbed selling' : 'sellers absorbed buying'} · ${ago(a.last + 60e3)} · ` +
+      `<b class="${disp ? 'buy' : 'sell'}">${gp(a.bottom)} – ${gp(a.top)}</b> <small>${disp ? 'buyers absorbed' : 'sellers absorbed'} · ${ago(a.last + 60e3)} · ` +
       `${a.ratio.toFixed(1)} x normal volume${d > 0 ? ` · ${dd(d, true)} ${up ? 'below' : 'above'}` : ' · price is there'}</small></div>`;
   }).join('') : none(INS.feed === 'kraken' ? 'Not available for forex: Kraken does not publish buy and sell volume.' : 'None alive right now.'));
   put('gAlerts', (ALERTS.length ? ALERTS.slice().sort((x, y) => y.p - x.p).map(a =>

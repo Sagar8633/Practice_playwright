@@ -1125,12 +1125,15 @@ const alertFromInput = () => { const el = $('aPrice'), v = parseFloat(el.value.r
 $('aAdd').onclick = alertFromInput;
 $('aPrice').addEventListener('keydown', e => { if (e.key === 'Enter') alertFromInput(); });
 $('bSignals').onclick = () => set('signals', !S.signals);
-$('bAlarm').onclick = () => {                                  // on + armed -> off; otherwise switch on and play a test
-  if (S.alarm && armed()) { silence(); set('alarm', false); } else { if (!S.alarm) set('alarm', true); testAlarm(); }
+let armedBefore = false;                                       // armed() just before this click (set on pointerdown)
+$('bAlarm').onclick = () => {                                  // not armed before this click -> play a test; already armed -> off
+  if (!S.alarm) { set('alarm', true); testAlarm(); }
+  else if (armedBefore) { silence(); set('alarm', false); }
+  else testAlarm();
 };
 $('alert').onclick = dismiss;
 $('bMt5').onclick = () => { set('mt5', !S.mt5); MT.ok = false; MT.text = S.mt5 ? 'connecting…' : 'off'; syncMt5(); pollMt5(); };
-for (const type of ['pointerdown', 'keydown']) window.addEventListener(type, () => { if (S.alarm && !armed()) arm(); }, true);
+for (const type of ['pointerdown', 'keydown']) window.addEventListener(type, () => { armedBefore = armed(); if (S.alarm && !armed()) arm(); }, true);
 $('bLight').onclick = () => set('light', !S.light);
 $('bReset').onclick = fit;
 $('bHelp').onclick = () => { const h = $('help'), open = h.style.display !== 'block'; h.style.display = open ? 'block' : 'none'; $('bHelp').classList.toggle('on', open); };

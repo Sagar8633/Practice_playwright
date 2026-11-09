@@ -196,12 +196,12 @@ The page was built to look like a paid gold GEX tool. It cannot reproduce that t
 
 | On screen | What it is |
 |---|---|
-| Bars on the right | GLD gamma exposure per strike, in $ per 1 % move. Green = calls outweigh puts, red = puts outweigh calls. Dropdown: net GEX, total GEX, net open interest, net volume. `All` = every expiry, `0DTE` = the nearest expiry only |
+| Bars on the right | GLD gamma exposure per strike, in $ per 1 % move. Green = calls outweigh puts, red = puts outweigh calls. Dropdown: net GEX, total GEX, call / put open interest (two bars per strike: green = call OI, red = put OI), net volume. `All` = every expiry, `0DTE` = the nearest expiry only |
 | GLD Call Wall / Put Wall 0DTE (dashed) | Strike of the nearest expiry with the most call / put open interest (calls minus puts) within 3 % of the price; not drawn when there is none that close. Context only |
 | GLD Zero Gamma 0DTE (blue) | Price where the nearest expiry's net gamma changes sign, found by re-pricing every contract at prices within ±8 %. Context only |
 | GLD CW1-3 / PW1-3 (dotted) | Three biggest green / red strikes across all expiries, within 8 % of the price. Context only |
 | Boxes | Buy and sell zones. Red = sell zone: the candle that made a swing high (its high above the two candles before and the one after) on the 30-minute or the 1-hour chart. Green = buy zone: the same at a swing low. At most half an ATR tall, measured from the swing's extreme. Pale once price has left the zone and come back; removed when a candle of its timeframe closes through it. `30m & 1h` = both timeframes mark the same swing |
-| Thin bands | Absorption areas. Over 5 minutes the traded volume was at least 1.5 × normal, at least 15 % one-sided, and price still closed in the half of the range away from the attack. Blue = heavy selling that buyers absorbed (band at the low). Pink = heavy buying that sellers absorbed (band at the high). From the buy / sell volume of Binance XAUUSDT futures. Removed when a 1-minute candle closes through the band, or after 8 hours. Shown, not scored |
+| Thin bands | Absorption areas. Over 5 minutes the traded volume was at least 1.5 × normal, at least 15 % one-sided, and price still closed in the half of the range away from the attack. Blue = buyers absorbed, pink = sellers absorbed (the shown side is the inverse of the engine's internal kind, which is unchanged). From the buy / sell volume of Binance XAUUSDT futures. Removed when a 1-minute candle closes through the band, or after 8 hours. Shown, not scored |
 | Orange dashed lines | Price alerts you set |
 | Profile | Volume by price since 18:00 New York. Yellow = POC, purple = 70 % value area |
 

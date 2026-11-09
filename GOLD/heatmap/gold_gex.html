@@ -1,0 +1,1167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gold GEX · guide</title>
+<style>
+:root{--bg:#0b0e14;--card:#131824;--line:#232b3a;--text:#8a94a8;--strong:#d7dce6;--accent:#3b6cff;--side:0px}
+body.light{--bg:#ffffff;--card:#f3f5f9;--line:#d9dee7;--text:#5b6474;--strong:#1b2230}
+body.guide{--side:336px}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:13px system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden}
+#c{position:absolute;top:0;left:var(--side);width:calc(100% - var(--side));height:100%;display:block;cursor:crosshair}
+.bar{position:absolute;top:8px;display:flex;gap:8px;align-items:center;z-index:2}
+#top{left:calc(var(--side) + 10px);flex-wrap:wrap}
+#panelHead{right:8px;justify-content:space-between}
+.chip,.seg,select,.btn{background:var(--card);border:1px solid var(--line);border-radius:8px;color:var(--strong);height:30px;box-sizing:border-box;font:inherit}
+.chip{display:flex;align-items:center;gap:6px;padding:0 5px 0 10px;white-space:nowrap}
+.chip .sum{border-radius:6px;padding:2px 8px;color:#fff;font-weight:600}
+.seg{display:flex;padding:2px;gap:2px}
+.seg button{border:0;background:none;color:var(--text);padding:0 9px;border-radius:6px;cursor:pointer;font:inherit}
+.btn{color:var(--text);padding:0 10px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}
+.seg button.on,.btn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+select{padding:0 8px;cursor:pointer}
+#tip{position:absolute;display:none;pointer-events:none;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;color:var(--strong);z-index:3;line-height:1.55;white-space:nowrap}
+#tip span{color:var(--text)}
+#status{position:absolute;left:calc(var(--side) + 10px);bottom:3px;font-size:11px;z-index:1;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#status .warn{color:#f59e0b}
+#help{position:absolute;left:calc(var(--side) + 10px);z-index:3;display:none;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--strong);max-width:560px;line-height:1.55}
+#help p{margin:0 0 6px}#help p:last-child{margin:0;color:var(--text)}
+#help i{font-style:normal;font-weight:600}
+#sig{position:absolute;left:0;top:0;bottom:0;width:336px;box-sizing:border-box;overflow-y:auto;z-index:4;display:none;background:var(--card);border-right:1px solid var(--line);padding:10px 12px 16px;color:var(--strong);line-height:1.5;font-size:12px}
+#sig h4{margin:13px 0 4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text)}
+#sig h4 small{text-transform:none;letter-spacing:0;font-weight:400}
+#gVerdict{border:1px solid var(--line);border-left:5px solid var(--text);border-radius:8px;padding:9px 11px;background:var(--bg)}
+#gVerdict.v-buy{border-left-color:#22ab94}
+#gVerdict.v-sell{border-left-color:#f23645}
+#gVerdict.v-watch{border-left-color:#f59e0b}
+#sig .head{font-weight:700;font-size:17px;line-height:1.25}
+#sig .head small{display:block;font-weight:400;color:var(--text);font-size:11px;margin-top:2px}
+#sig .buy,#sig .pos{color:#22ab94}
+#sig .sell,#sig .neg{color:#f23645}
+#sig .watch{color:#f59e0b}
+#sig .dim{color:var(--text)}
+#sig .plan{margin-top:5px}
+#sig .plan span{color:var(--text)}
+#sig .why{display:flex;gap:8px;color:var(--text)}
+#sig .why span{min-width:26px;text-align:right;font-weight:600}
+#sig .ck{display:flex;gap:7px;align-items:baseline}
+#sig .ck i{font-style:normal;font-weight:700;width:12px;flex:none;text-align:center}
+#sig .z{padding:4px 0;border-bottom:1px solid var(--line)}
+#sig .z:last-child{border-bottom:0}
+#sig .z small{color:var(--text);font-size:11px}
+#sig .z a{float:right;font-size:11px;margin-left:8px}
+#sig .arow{display:flex;gap:6px}
+#sig input{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--strong);height:30px;box-sizing:border-box;padding:0 9px;font:inherit}
+#sig details{color:var(--text);margin-top:4px}
+#sig summary{cursor:pointer;font-size:11px}
+#sig .rec{margin-top:13px;padding-top:8px;border-top:1px solid var(--line);color:var(--text);font-size:11px}
+#sig a{color:var(--accent);cursor:pointer}
+.btn.warn{border-color:#f59e0b;color:#f59e0b}
+#sig .mt5{margin-top:6px;font-size:11px}
+#alert{position:absolute;left:50%;transform:translateX(-50%);top:58px;z-index:5;display:none;max-width:92vw;padding:12px 22px;border-radius:10px;font-size:18px;color:#fff;cursor:pointer;box-shadow:0 6px 30px rgba(0,0,0,.55);animation:flash .7s steps(2,start) infinite}
+#alert.buy{background:#0e9f6e}
+#alert.sell{background:#e02424}
+#alert.watch{background:#d97706}
+#alert span{font-size:12px;opacity:.85;margin-left:10px}
+@keyframes flash{50%{filter:brightness(1.5)}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="top" class="bar">
+  <select id="ins" title="Instrument. Gold and crypto candles come from Binance futures, forex from Kraken's fiat markets"></select>
+  <div class="chip" id="chip"><b id="cDate">--</b>·<span id="cDte">-- DTE</span>·<span id="cN">-- opts</span><span id="cSum" class="sum">Σ --</span></div>
+  <div class="seg" id="tfs"></div>
+  <button class="btn" id="bSignals" title="Guide panel on the left: enter or not, buy and sell zones, absorption, price alerts">Guide</button>
+  <button class="btn" id="bZones" title="Buy and sell zones: swing candles of the 30-minute and 1-hour charts">Zones</button>
+  <button class="btn" id="bAbs" title="Absorption areas: heavy one-sided buying or selling that price did not follow">Absorption</button>
+  <button class="btn" id="bProfile" title="Volume by price since 18:00 New York">Profile</button>
+  <button class="btn" id="bGld" title="Lines from GLD options (call wall, put wall, zero gamma). Context only, not used by the guide">GLD lines</button>
+  <button class="btn" id="bAlarm" title="Siren, banner and flashing tab title when a signal appears. Click to switch on (plays a test) or off">Alarm</button>
+  <button class="btn" id="bMt5" title="Send each new signal to MetaTrader 5 through the local agent. The EA trades it on a demo account only">MT5 off</button>
+  <button class="btn" id="bReset" title="Fit the chart again (or double-click it)">Fit</button>
+  <button class="btn" id="bLight">Light</button>
+  <button class="btn" id="bHelp">Help</button>
+  <a class="btn" href="gold_heatmap.html">Heatmap</a>
+</div>
+<div id="panelHead" class="bar">
+  <select id="metric">
+    <option value="net">Net GEX</option>
+    <option value="abs">Total GEX</option>
+    <option value="oi">Net open interest</option>
+    <option value="vol">Net volume</option>
+  </select>
+  <div class="seg"><button id="fAll">All</button><button id="fNear">0DTE</button></div>
+</div>
+<div id="help">
+  <p><i>Instrument</i> (list at the top left): gold, Bitcoin, Ether, Solana and XRP come from Binance futures, moved to the real-dollar price (spot gold, or Coinbase for crypto). EUR/USD, GBP/USD, AUD/USD, USD/CAD and USD/CHF come from Kraken's fiat markets: real dollar prices, but a small market, so a few pips off a broker at times, with no buy / sell volume (no absorption areas, a neutral tape) and 12 hours of 1-minute history. USD/JPY barely trades there and is not offered. Zones, ideas and alerts are kept per instrument. The option bars and the MT5 bridge are for gold only.</p>
+  <p><i>Bars on the right</i> (gold only): gamma exposure at each strike, from GLD (gold ETF) options, placed at the matching gold price. Green = calls outweigh puts, red = puts outweigh calls.</p>
+  <p><i>GLD Call Wall / Put Wall</i> (dashed): the strike of the nearest expiry holding the most call / put open interest (calls minus puts), within 3 % of the price; none is drawn when there is none that close. <i>CW1-3 / PW1-3</i> (dotted): the three biggest across all expiries, within 8 % of the price.</p>
+  <p><i>GLD Zero Gamma</i> (blue): the price where the nearest expiry's net gamma changes sign.</p>
+  <p><i>These option levels are GLD's.</i> They are not the COMEX gold-options levels that paid GEX tools show, and on 6 Nov 2026 the two did not agree (GLD was call-heavy where such a tool showed its put wall). They are context only: signals and MT5 trades do not use them.</p>
+  <p><i>Zones</i> (boxes): red = sell zone, the candle that made a swing high on the 30-minute or 1-hour chart; green = buy zone, the candle that made a swing low. A zone turns pale once price has left it and come back, and disappears when a candle of its timeframe closes through it.</p>
+  <p><i>Absorption</i> (thin bands): over 5 minutes one side traded much more than usual and price still did not go its way. Blue = heavy selling that buyers absorbed; pink = heavy buying that sellers absorbed. Measured from the buy and sell volume of Binance gold futures, the same tape the heatmap page shows. A band disappears when a 1-minute candle closes through it, or after 8 hours.</p>
+  <p><i>Profile</i>: volume traded at each price since 18:00 New York. Yellow = POC, the busiest price. Purple = value area, where 70 % of the volume traded.</p>
+  <p><i>Guide</i> (left): the top box says what to do now. WAIT = price is between zones. GET READY = price is at a zone, no entry yet. BUY / SELL = a 5-minute candle went into the zone and closed back out, and the checks agree. NO: SKIP = it turned, but the target is too close, the stop too wide or too little agrees. The checklist shows each point with a tick or a cross. The plan under a zone is rough: the real entry is the close of the candle that turns.</p>
+  <p><i>Price alerts</i>: type a price in the guide, hold Alt and click the chart, or right-click the chart. An orange line appears and the alarm rings once when price gets there. Right-click the line to remove it. The price is this page's price, which can differ a little from your broker's.</p>
+  <p><i>Alarm</i>: a new BUY or SELL sounds a 30-second siren (high and fast for buy, low and slow for sell), shows a flashing banner and flashes the tab title until you click the banner. A price alert sounds a fast trill, and reaching a zone a short tone. Sound only works after one click on the page, and its loudness is set by the PC volume. Keep this tab open in its own window: a hidden or sleeping tab checks late or not at all.</p>
+  <p><i>MT5</i>: with MT5 on, each new signal is passed to the GexSignalTrader EA in MetaTrader 5, which places the trade with the same stop and target distance, closes it after 4 hours, and reports back here. It needs start_gex.bat running, the EA attached to the gold chart and Algo Trading on. The EA refuses to trade on a real account.</p>
+  <p>Mouse: wheel on the chart zooms time, wheel on the price scale or bars zooms price, drag moves, double-click fits, Alt + click or right-click sets a price alert.</p>
+  <p>None of this predicts price. Tested on 5 years of gold, the BUY / SELL ideas of this guide made nothing before costs and lost 0.2 to 0.5 of the risk per trade after them (about 560 ideas a year). Absorption areas, tested on 90 days, did no better. Nothing has been tested on the other instruments. The guide is a checklist to keep you out of poor trades, not a signal service.</p>
+</div>
+<div id="sig">
+  <div id="gVerdict"></div>
+  <div id="gWhy"></div>
+  <h4>Before you enter</h4>
+  <div id="gCheck"></div>
+  <h4>Sell zones above</h4>
+  <div id="gSell"></div>
+  <h4>Buy zones below</h4>
+  <div id="gBuy"></div>
+  <h4>Price alerts</h4>
+  <div class="arow"><input id="aPrice" inputmode="decimal" autocomplete="off" placeholder="price, e.g. 4076.5"><button class="btn" id="aAdd">Add alert</button></div>
+  <div id="gAlerts"></div>
+  <h4>Absorption <small>heavy trading that price did not follow</small></h4>
+  <div id="gAbs"></div>
+  <div id="gFoot" class="rec"></div>
+</div>
+<div id="alert"></div>
+<div id="tip"></div>
+<div id="status"></div>
+
+<script src="gex_engine.js"></script>
+<script>
+'use strict';
+const E = GexEngine, $ = id => document.getElementById(id);
+const cv = $('c'), ctx = cv.getContext('2d');
+const TF = { '1m': 60e3, '5m': 300e3, '15m': 900e3, '30m': 1800e3, '1h': 3600e3 };
+const PAD = 6;                       // empty candle slots right of the last candle
+const METRICS = {
+  net: { val: r => r.cg - r.pg, unit: '$ per 1 % move' },
+  abs: { val: r => r.cg + r.pg, unit: '$ per 1 % move' },
+  oi: { val: r => r.coi - r.poi, unit: 'contracts, calls minus puts' },
+  vol: { val: r => r.cvol - r.pvol, unit: 'contracts today, calls minus puts' },
+};
+const PAL = {
+  dark: { bg: '#0b0e14', grid: '#151b27', line: '#232b3a', text: '#8a94a8', strong: '#d7dce6', up: '#22ab94', down: '#f23645',
+          green: '#0ea371', red: '#e0344f', blue: '#3b6cff', purple: '#a855f7', yellow: '#facc15', grey: '#8a94a8', cyan: '#22d3ee', pink: '#e879f9', orange: '#f59e0b',
+          vpBuy: 'rgba(92,124,250,.8)', vpSell: 'rgba(240,84,120,.8)' },
+  light: { bg: '#ffffff', grid: '#eef1f5', line: '#d9dee7', text: '#5b6474', strong: '#1b2230', up: '#089981', down: '#f23645',
+           green: '#15803d', red: '#dc2626', blue: '#2563eb', purple: '#9333ea', yellow: '#eab308', grey: '#6b7280', cyan: '#0891b2', pink: '#c026d3', orange: '#d97706',
+           vpBuy: 'rgba(59,91,219,.75)', vpSell: 'rgba(225,60,100,.75)' },
+};
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('gex.' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('gex.' + k, JSON.stringify(v)); } catch (e) { /* private window: keep the setting for this visit only */ } },
+};
+const S = { tf: store.get('tf', '5m'), metric: store.get('metric', 'net'), filter: store.get('filter', 'all'),
+            zones: store.get('zones', true), profile: store.get('profile', true), light: store.get('light', false), signals: store.get('signals', true), alarm: store.get('alarm', true), mt5: store.get('mt5', false),
+            abs: store.get('abs', true), gld: store.get('gld', false), zoneAlert: store.get('zoneAlert', true), balance: store.get('balance', 200) };
+if (!TF[S.tf]) S.tf = '5m';
+if (!METRICS[S.metric]) S.metric = 'net';
+if (!(S.balance > 0)) S.balance = 200;
+
+// Instruments. Gold and crypto candles are Binance USDT-margined futures (the busiest tape, with buy / sell
+// volume for the profile and the absorption areas); they trade a little away from the real-dollar price, so
+// the price shown = candle price minus basis (feed minus a USD reference: gold-api.com for gold, Coinbase for
+// crypto). Checked 6 Nov 2026 for gold: XAUUSDT stayed 5.9-7.9 $ above spot while PAXGUSDT, the feed used
+// before, went from 7.0 to 13.4 $ below it, with 27 x the volume. Forex candles are Kraken's fiat markets
+// (real EUR/USD etc., no shift needed), a small market next to interbank: a few pips off a broker at times,
+// no buy / sell split, only 12 hours of 1-minute history, and it keeps trading thinly at weekends.
+// USD/JPY and EUR/JPY barely trade there (0-233 units in 12 h on 7 Nov 2026), so they are left out.
+// contract = units per 1 lot at XM, used by the stop-size check (0.01 lot); quoteUsd = false when the price is
+// in another currency (USD/CAD, USD/CHF). pip set = distances are shown in pips.
+const INSTRUMENTS = {
+  XAUUSD: { group: 'Metal',  name: 'Gold',    feed: 'binance', sym: 'XAUUSDT', ref: 'gold-api', dec: 1, contract: 100, unit: 'oz', quoteUsd: true, options: true, mt5: true },
+  BTCUSD: { group: 'Crypto', name: 'Bitcoin', feed: 'binance', sym: 'BTCUSDT', ref: 'BTC-USD', dec: 0, contract: 1, unit: 'BTC', quoteUsd: true },
+  ETHUSD: { group: 'Crypto', name: 'Ether',   feed: 'binance', sym: 'ETHUSDT', ref: 'ETH-USD', dec: 1, contract: 1, unit: 'ETH', quoteUsd: true },
+  SOLUSD: { group: 'Crypto', name: 'Solana',  feed: 'binance', sym: 'SOLUSDT', ref: 'SOL-USD', dec: 2, contract: 1, unit: 'SOL', quoteUsd: true },
+  XRPUSD: { group: 'Crypto', name: 'XRP',     feed: 'binance', sym: 'XRPUSDT', ref: 'XRP-USD', dec: 4, contract: 1, unit: 'XRP', quoteUsd: true },
+  EURUSD: { group: 'Forex',  name: 'EUR/USD', feed: 'kraken',  sym: 'EURUSD', ref: null, dec: 5, contract: 1e5, unit: 'EUR', quoteUsd: true, pip: 1e-4 },
+  GBPUSD: { group: 'Forex',  name: 'GBP/USD', feed: 'kraken',  sym: 'GBPUSD', ref: null, dec: 5, contract: 1e5, unit: 'GBP', quoteUsd: true, pip: 1e-4 },
+  AUDUSD: { group: 'Forex',  name: 'AUD/USD', feed: 'kraken',  sym: 'AUDUSD', ref: null, dec: 5, contract: 1e5, unit: 'AUD', quoteUsd: true, pip: 1e-4 },
+  USDCAD: { group: 'Forex',  name: 'USD/CAD', feed: 'kraken',  sym: 'USDCAD', ref: null, dec: 5, contract: 1e5, unit: 'USD', quoteUsd: false, pip: 1e-4 },
+  USDCHF: { group: 'Forex',  name: 'USD/CHF', feed: 'kraken',  sym: 'USDCHF', ref: null, dec: 5, contract: 1e5, unit: 'USD', quoteUsd: false, pip: 1e-4 },
+};
+const INS_ID = INSTRUMENTS[store.get('instrument', 'XAUUSD')] ? store.get('instrument', 'XAUUSD') : 'XAUUSD', INS = INSTRUMENTS[INS_ID];
+const TITLE = INS.name + (INS.options ? ' GEX' : ' guide');
+const sk = k => (INS_ID === 'XAUUSD' ? k : `${k}.${INS_ID}`);   // storage key: ideas, alerts and the basis are kept per instrument (gold keeps its old keys)
+if (store.get(sk('feed'), 'PAXGUSDT') !== INS.sym) { store.set(sk('siglog'), []); store.set(sk('feed'), INS.sym); }   // stored ideas were in another feed's prices
+const D = { chart: [], m1: [], m30: [], ref: 0, basis: 0, hasBasis: !INS.ref, gex: null, gexMissing: false, feedErr: '' };
+const b0 = INS.ref ? store.get(sk('basis'), null) : null;
+if (b0 && Date.now() - b0.t < 6 * 3600e3) { D.basis = b0.v; D.hasBasis = true; }   // last known shift, used until the reference price arrives
+const view = { count: 110, offset: 0, auto: true, lo: 0, hi: 1, mx: -1, my: -1, dirty: true };
+let G = null;                        // computed gamma state (see computeGex)
+let Zs = [];                         // live buy / sell zones (30m and 1h swing boxes), feed prices
+let Ab = [];                         // live absorption areas, feed prices
+let Pf = null;                       // session volume profile, feed prices
+let Sig = null;                      // latest setup check (GexEngine.signal)
+const LOG = store.get(sk('siglog'), []);     // stored signals, oldest first: never edited except for their result
+const ALERTS = store.get(sk('alerts'), []);  // price alerts: {id, p = price as shown, up = rings when price rises to p, at, hit, note}
+
+// ------------------------------------------------------------------ helpers
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const rgba = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; };
+const pal = () => PAL[S.light ? 'light' : 'dark'];
+function fmt(v) {
+  const a = Math.abs(v), s = v < 0 ? '−' : '';
+  if (a >= 1e9) return s + (a / 1e9).toFixed(1) + 'B';
+  if (a >= 1e6) return s + (a / 1e6).toFixed(1) + 'M';
+  if (a >= 1e3) return s + Math.round(a / 1e3) + 'K';
+  return s + Math.round(a);
+}
+const lastPx = () => { const a = D.m1.length ? D.m1 : D.chart; return a.length ? a[a.length - 1].c : 0; };
+const spot = () => { const p = lastPx(); return p ? p - D.basis : D.ref; };          // the price shown: candle price moved to the USD reference
+const fp = p => p.toFixed(INS.dec);                                                  // a price in the instrument's decimals
+const gp = p => fp(p - D.basis);                                                     // candle price -> the price shown
+const dd = (x, coarse) => (INS.pip ? `${(x / INS.pip).toFixed(coarse ? 0 : 1)} pips` : `${x.toFixed(coarse ? Math.max(0, INS.dec - 1) : INS.dec)} $`);   // a distance
+// Gold's fixed dollar floors ("within 2 $ of a zone", 0.5 $ value-area rows, 1.5 $ level bands) become the same
+// share of the price on the other instruments; gold keeps the exact numbers its backtests used.
+const scaled = (gold, share) => (INS_ID === 'XAUUSD' ? gold : lastPx() * share);
+const minD = () => scaled(2, 5e-4);
+// USD made or lost per 1.0 of price at 0.01 lot (what the stop-size check assumes)
+const usdPerUnit = () => 0.01 * INS.contract / (INS.quoteUsd ? 1 : lastPx() || 1);
+// Smallest "nice" step (1, 2, 2.5, 5 x a power of ten) that is at least px pixels tall at ppd pixels per unit.
+function niceStep(ppd, px, mults) {
+  for (let e = -6; e <= 6; e++) for (const m of mults) { const s = +(m * Math.pow(10, e)).toPrecision(3); if (s * ppd >= px) return s; }
+  return 1e6;
+}
+const decOf = step => (String(step).split('.')[1] || '').length;
+
+// ------------------------------------------------------------------ data
+const KRAKEN_MIN = { '1m': 1, '5m': 5, '15m': 15, '30m': 30, '1h': 60 };
+async function klines(interval, limit) {
+  if (INS.feed === 'kraken') {
+    // Kraken always answers with the last 720 candles (12 hours of 1-minute ones), empty minutes filled in;
+    // `since` trims the answer to the newest few for the live tick. No buy / sell split: half the volume
+    // counts as buying, so the tape score and the absorption areas stay neutral.
+    const min = KRAKEN_MIN[interval], since = limit < 720 ? `&since=${Math.floor(Date.now() / 1e3) - (limit + 1) * min * 60}` : '';
+    const r = await fetch(`https://api.kraken.com/0/public/OHLC?pair=${INS.sym}&interval=${min}${since}`, { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    if (j.error && j.error.length) throw new Error(j.error[0]);
+    const key = Object.keys(j.result).find(k => k !== 'last');
+    return cleanWicks(j.result[key].map(k => ({ t: k[0] * 1e3, o: +k[1], h: +k[2], l: +k[3], c: +k[4], v: +k[6], bv: +k[6] / 2 })), interval);
+  }
+  const r = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${INS.sym}&interval=${interval}&limit=${limit}`, { cache: 'no-store' });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return (await r.json()).map(k => ({ t: k[0], o: +k[1], h: +k[2], l: +k[3], c: +k[4], v: +k[5], bv: +k[9] }));
+}
+const feedName = INS.feed === 'kraken' ? 'Kraken' : 'Binance';
+// Kraken's fiat markets are thin: single prints far from the market leave wicks of 20-90 x the ATR
+// (7 Nov 2026: EUR/USD 1.0808 while the market was at 1.11, USD/CAD 1.45, USD/CHF 0.859), which would
+// become zones, inflate the ATR and squash the chart. A wick further beyond the candle's open / close
+// than 3 x the 95th-percentile range of the series is clipped. Moves that close there are kept.
+const wickW = {};                    // per interval, from the last full download; the live 3-candle updates reuse it
+function cleanWicks(rows, interval) {
+  if (rows.length >= 100) {
+    const tr = rows.map((k, i) => (i ? Math.max(k.h - k.l, Math.abs(k.h - rows[i - 1].c), Math.abs(k.l - rows[i - 1].c)) : k.h - k.l)).sort((a, b) => a - b);
+    wickW[interval] = 3 * tr[Math.floor(tr.length * 0.95)];
+  }
+  const w = wickW[interval];
+  if (w > 0) for (const k of rows) { const top = Math.max(k.o, k.c) + w, bot = Math.min(k.o, k.c) - w; if (k.h > top) k.h = top; if (k.l < bot) k.l = bot; }
+  return rows;
+}
+function merge(arr, rows) {
+  for (const r of rows) {
+    const last = arr[arr.length - 1];
+    if (!last || r.t > last.t) arr.push(r);
+    else { const i = arr.findIndex(x => x.t === r.t); if (i >= 0) arr[i] = r; }
+  }
+}
+async function loadChart(full) {
+  const tf = S.tf;
+  try {
+    const rows = await klines(tf, full ? 600 : 3);
+    if (tf !== S.tf) return;                       // the timeframe changed while this request was on its way
+    if (full || !D.chart.length) D.chart = rows; else merge(D.chart, rows);
+    D.feedErr = ''; D.tick = Date.now();
+  } catch (e) { D.feedErr = `${INS.name} candles: ${feedName} is not reachable (${e.message})`; }
+  view.dirty = true;
+}
+async function loadM1(full) {
+  try {
+    const rows = await klines('1m', full ? 1500 : 3);
+    if (full || !D.m1.length) D.m1 = rows; else merge(D.m1, rows);
+    Pf = null;
+    if (!D.hasBasis) { rebase(); status(); }                 // the reference price arrived before the candles
+  }
+  catch (e) { /* the chart feed already reports the outage */ }
+  view.dirty = true;
+}
+async function loadM30() {
+  try { D.m30 = await klines('30m', 300); Zs = E.tradeZones(D.m30.slice(0, -1)); }     // closed candles only
+  catch (e) { /* keep the zones we have */ }
+  view.dirty = true;
+}
+// basis = futures price minus the USD reference. The gold reference (gold-api.com) is a 30-second snapshot that
+// can run a minute or two behind in a fast move, so a single sample can be several dollars off (6 Nov 2026: 7,
+// then 11, then 7 again within three minutes, which moved every zone on screen by 4 $). The median of the last
+// 5 minutes of samples ignores those; the true difference only drifts by a dollar or two over a day.
+const basisLog = D.hasBasis && INS.ref ? new Array(10).fill(D.basis) : [];
+function rebase() {
+  const last = lastPx();
+  if (!last || !D.ref) return;
+  basisLog.push(last - D.ref);
+  if (basisLog.length > 21) basisLog.shift();
+  D.basis = basisLog.slice().sort((a, b) => a - b)[basisLog.length >> 1];
+  D.hasBasis = true;
+  store.set(sk('basis'), { v: D.basis, t: Date.now() });
+}
+async function loadRef() {
+  if (!INS.ref) return;                                        // Kraken's fiat pairs are the USD price already
+  try {
+    let p = 0;
+    if (INS.ref === 'gold-api') { const j = await (await fetch('https://api.gold-api.com/price/XAU', { cache: 'no-store' })).json(); p = j && +j.price; }
+    else { const j = await (await fetch(`https://api.exchange.coinbase.com/products/${INS.ref}/ticker`, { cache: 'no-store' })).json(); p = j && +j.price; }   // Coinbase: the main real-dollar crypto market
+    if (p > 0) { D.ref = p; rebase(); }
+  } catch (e) { /* no USD reference: prices keep the last known shift, or stay futures prices; the status line says so */ }
+  status(); view.dirty = true;
+}
+function loadGex() {
+  if (!INS.options) return;                                    // the option chain is GLD's: gold only
+  const s = document.createElement('script');
+  s.src = 'gex_data.js?t=' + Date.now();
+  s.onload = () => {
+    s.remove(); D.gexMissing = false;
+    if (window.GEX_DATA && (!D.gex || D.gex.fetchedAt !== window.GEX_DATA.fetchedAt)) { D.gex = window.GEX_DATA; computeGex(); }
+    status();
+  };
+  s.onerror = () => { s.remove(); D.gexMissing = !D.gex; status(); view.dirty = true; };
+  document.head.appendChild(s);
+}
+
+// Gamma per strike at the live price. Options are on GLD, so the gold price is first turned into a GLD price.
+function computeGex() {
+  const sx = spot();
+  if (!D.gex || !sx) { G = null; return; }
+  const now = Date.now(), f = 1 / E.ozPerShare(now), sg = sx / f, exps = E.expiries(D.gex, now);   // sg = the price in GLD terms
+  if (!exps.length) { G = null; chip(); return; }
+  const nearSet = new Set([exps[0].exp]);
+  const all = E.table(D.gex, sg, now, null), t0 = E.table(D.gex, sg, now, nearSet);
+  // CW1-3 / PW1-3 use strikes within 8 % of the price: far-dated round strikes are no use on an intraday chart
+  const close = all.rows.filter(r => Math.abs(r.k / sg - 1) <= 0.08);
+  G = { f, near: exps[0], all, t0, w0: E.wallsOi(t0.rows.filter(r => Math.abs(r.k / sg - 1) <= 0.03), 1), wa: E.walls(close, 3), flip: E.gammaFlip(D.gex, sg, now, nearSet) };
+  chip(); view.dirty = true;
+}
+const shown = () => (S.filter === 'all' ? G.all : G.t0);
+
+function levels() {
+  if (!G || !S.gld) return [];
+  const d = G.near.dte + 'DTE', out = [];
+  const add = (k, text, color, dash) => {
+    const p = k * G.f, e = out.find(x => Math.abs(x.p - p) < 0.05);
+    if (e) e.text += ' · ' + text; else out.push({ p, text, color, dash });
+  };
+  // "GLD" on every label: these are the ETF's option levels, not the COMEX levels of paid GEX tools
+  if (G.w0.calls[0]) add(G.w0.calls[0].k, 'GLD Call Wall ' + d, 'green', [7, 4]);
+  if (G.w0.puts[0]) add(G.w0.puts[0].k, 'GLD Put Wall ' + d, 'red', [7, 4]);
+  if (G.flip) add(G.flip, 'GLD Zero Gamma ' + d, 'blue', [7, 4]);
+  G.wa.calls.forEach((w, i) => add(w.k, 'GLD CW' + (i + 1), 'green', [2, 3]));
+  G.wa.puts.forEach((w, i) => add(w.k, 'GLD PW' + (i + 1), 'red', [2, 3]));
+  return out;
+}
+// Up to 3 sell zones above the price and 3 buy zones below it, nearest first.
+function zoneLists() {
+  const p = lastPx();
+  return { sell: Zs.filter(z => z.type === 'supply' && z.top >= p).sort((a, b) => a.bottom - b.bottom).slice(0, 3),
+           buy: Zs.filter(z => z.type === 'demand' && z.bottom <= p).sort((a, b) => b.top - a.top).slice(0, 3) };
+}
+function zonesShown() { const z = zoneLists(); return z.sell.concat(z.buy); }
+
+// ------------------------------------------------------------------ signals
+// A setup is checked on closed 5-minute candles against the levels on screen (see GexEngine.signal).
+// A signal is stored once, at the close of its trigger candle, and never changed afterwards;
+// later 1-minute candles only decide how it ended. All prices here are candle (futures) prices.
+const SIG_LIFE = 4 * 3600e3;         // an idea that reached neither stop nor target after 4 hours is closed at the market
+// The option levels are deliberately NOT part of the signal. They come from GLD (the ETF), and on 6 Nov 2026
+// they did not resemble the COMEX gold-options levels that paid GEX tools show: GLD was call-heavy at every
+// strike near the price where such a tool showed its put wall, and a GLD "0DTE wall" lands anywhere from
+// 4030 to 4237 depending on how it is defined. Signals therefore use only what was backtested:
+// the buy / sell zones (30-minute and 1-hour swing boxes), value area, 30-minute trend, the rejection candle
+// and reward against risk. Absorption areas are shown but not scored: 90 days of data found no edge in them.
+function sigInputs() {
+  const c5 = E.aggregate(D.m1, 300e3);
+  c5.pop();                                                    // the candle still forming
+  let buy = 0, vol = 0;                                        // tape: buying minus selling over the last 15 closed minutes
+  for (const k of D.m1.slice(-16, -1)) { buy += k.bv; vol += k.v; }
+  return E.inputs({ c5, price: lastPx(), zones: Zs, lines: [], flip: null, tolMin: scaled(1.5, 3.75e-4),
+                    profile: E.profile(D.m1, E.sessionStart(Date.now()), scaled(0.5, 1.25e-4)), closes30: D.m30.slice(0, -1).map(k => k.c),
+                    tape: vol ? (2 * buy - vol) / vol : 0 });
+}
+// Decide how each open idea ended. When one candle touches both stop and target, it counts as a stop.
+function track() {
+  let changed = false;
+  for (const s of LOG) {
+    if (s.result !== 'open') continue;
+    const up = s.side === 'buy', risk = Math.abs(s.entry - s.stop);
+    if (!D.m1.length || D.m1[0].t > s.at) { s.result = 'unknown'; changed = true; continue; }   // candles no longer reach back to the entry
+    for (const k of D.m1) {
+      if (k.t < s.at) continue;
+      if (k.t >= s.at + SIG_LIFE) { s.result = 'expired'; s.r = (up ? k.o - s.entry : s.entry - k.o) / risk; s.end = k.t; break; }
+      if (up ? k.l <= s.stop : k.h >= s.stop) { s.result = 'stop'; s.r = -1; s.end = k.t; break; }
+      if (up ? k.h >= s.target : k.l <= s.target) { s.result = 'target'; s.r = s.rr; s.end = k.t; break; }
+    }
+    if (s.result === 'open') s.r = (up ? lastPx() - s.entry : s.entry - lastPx()) / risk; else { changed = true; alertResult(s); }
+  }
+  if (changed) store.set(sk('siglog'), LOG);
+}
+let absAt = 0;
+function evaluate() {
+  if (D.m1.length < 200) return;
+  track();
+  const closed = D.m1[D.m1.length - 2].t;
+  if (closed !== absAt) { absAt = closed; Ab = E.absorption(D.m1.slice(0, -1)); }      // once a minute, when a candle has closed
+  const inp = sigInputs();
+  Sig = E.signal(inp);
+  Sig.inp = inp; Sig.atr = E.atrLast(inp.c5, 14);
+  // store a new idea only if its trigger candle closed in the last 90 s (not one from before the page was open),
+  // and only one idea at a time
+  const fresh = (Sig.state === 'buy' || Sig.state === 'sell') && Date.now() - (Sig.t + 300e3) < 90e3;
+  if (fresh && !LOG.some(s => s.result === 'open' || s.t === Sig.t)) {
+    LOG.push({ t: Sig.t, at: Sig.t + 300e3, side: Sig.state, entry: Sig.entry, stop: Sig.stop, target: Sig.target, targetName: Sig.targetName,
+               rr: Sig.rr, score: Sig.score, reasons: Sig.reasons, result: 'open', r: 0 });
+    if (LOG.length > 200) LOG.splice(0, LOG.length - 200);
+    store.set(sk('siglog'), LOG);
+    alertSignal(LOG[LOG.length - 1]);
+    if (S.signals) sendToMt5(LOG[LOG.length - 1]);
+  }
+  if (Sig.state === 'watch') alertZone(Sig);
+  checkAlerts();
+  drawSig(); view.dirty = true;
+}
+const grade = s => (s >= 70 ? 'strong' : s >= 55 ? 'moderate' : 'weak');
+const hhmm = ms => new Date(ms).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+const signed = (v, d) => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(d);
+const ago = ms => { const m = Math.max(0, Math.round((Date.now() - ms) / 60e3)); return m < 90 ? m + ' min ago' : (m / 60).toFixed(1) + ' h ago'; };
+
+// ------------------------------------------------------------------ guide panel
+// What a trade from a zone would look like: entry at the near edge, stop 0.3 x ATR beyond the far edge, target =
+// the nearest level in the way (an opposite zone, a value-area edge or the POC). Rough on purpose: the real
+// entry is the close of the 5-minute candle that turns, which is usually a little worse than the edge.
+function zonePlan(z) {
+  const inp = Sig && Sig.inp;
+  if (!inp) return null;
+  const up = z.type === 'demand', entry = up ? z.top : z.bottom, stop = up ? z.bottom - 0.3 * Sig.atr : z.top + 0.3 * Sig.atr, risk = Math.abs(entry - stop);
+  const ahead = (up ? inp.resistances.map(r => ({ p: r.lo, name: r.name })) : inp.supports.map(r => ({ p: r.hi, name: r.name })))
+    .concat(inp.magnets).filter(t => (up ? t.p > entry + 0.3 * risk : t.p < entry - 0.3 * risk)).sort((x, y) => (up ? x.p - y.p : y.p - x.p));
+  const tgt = ahead[0] || { p: up ? entry + 2 * risk : entry - 2 * risk, name: 'no level in the way: 2 x the stop' };
+  return { up, entry, stop, risk, target: tgt.p, targetName: tgt.name, rr: Math.abs(tgt.p - entry) / risk };
+}
+// Usual US data times, 08:30 and 10:00 New York on weekdays, in this PC's time. Not a calendar: it does not
+// know which days have a release, only when releases usually come out.
+function usData(now) {
+  const off = E.nyOffsetHours(now), ny = new Date(now + off * 36e5), day = ny.getUTCDay(), min = ny.getUTCHours() * 60 + ny.getUTCMinutes();
+  if (day === 0 || day === 6) return { now: false, at: '', next: '' };
+  const slots = [510, 600], hit = slots.find(s => min >= s - 10 && min <= s + 20), next = slots.find(s => s - 10 > min);
+  const local = s => hhmm(Date.UTC(ny.getUTCFullYear(), ny.getUTCMonth(), ny.getUTCDate(), 0, s) - off * 36e5);
+  return { now: hit !== undefined, at: hit !== undefined ? local(hit) : '', next: next !== undefined ? local(next) : '' };
+}
+// The one-line answer at the top of the guide: what to do now.
+function verdict(open, lists) {
+  if (open) {
+    const text = open.r > 0.5 ? 'It has already moved a good way. Entering now means a worse price with the same stop: do not chase it.'
+      : open.r < -0.5 ? 'It is close to its stop. If you are not in, stay out.' : 'Price is still near the entry: it can be taken with the stop and target below.';
+    return { cls: open.side, head: `${open.side.toUpperCase()} IDEA OPEN`, small: `since ${hhmm(open.at)} · score ${open.score}/100 (${grade(open.score)}) · now ${signed(open.r, 1)} x risk`, text, plan: open };
+  }
+  if (!Sig) return { cls: 'none', head: 'LOADING…', small: 'waiting for candles', text: '' };
+  if (Sig.state === 'buy' || Sig.state === 'sell')
+    return { cls: Sig.state, head: `${Sig.state.toUpperCase()} SETUP`, small: `confirmed at ${hhmm(Sig.t + 300e3)}, before this page was open · score ${Sig.score}/100`,
+             text: 'Not counted and not sent to MT5. Take it only if price is still near the entry.', plan: Sig };
+  if (Sig.state === 'skip')
+    return { cls: 'none', head: 'NO: SKIP THIS ONE', small: `a ${Sig.side} setup formed, but`, text: Sig.note.charAt(0).toUpperCase() + Sig.note.slice(1) + '.', plan: Sig };
+  if (Sig.state === 'watch')
+    return { cls: 'watch', head: `GET READY TO ${Sig.side.toUpperCase()}`, small: 'not confirmed yet: no entry',
+             text: `Price is at ${Sig.levels.join(' + ')}. Enter only after a 5-minute candle closes back ${Sig.side === 'buy' ? 'up' : 'down'} out of it. If a candle closes through it instead, leave it.` };
+  const p = lastPx(), s = lists.sell[0], b = lists.buy[0], ds = s ? Math.max(0, s.bottom - p) : Infinity, db = b ? Math.max(0, p - b.top) : Infinity;
+  if (Math.min(ds, db) <= Math.max(minD(), Sig.atr || 0)) {
+    const sell = ds <= db;
+    return { cls: 'watch', head: 'GETTING CLOSE', small: `${sell ? 'sell' : 'buy'} zone ${dd(Math.min(ds, db))} ${sell ? 'above' : 'below'}`,
+             text: `Nothing to do yet. Watch what price does when it reaches the ${sell ? 'sell' : 'buy'} zone.` };
+  }
+  return { cls: 'none', head: 'WAIT', small: 'price is between zones',
+           text: `No trade here. ${s ? `Sell zone ${dd(ds, true)} above` : 'No sell zone above'}, ${b ? `buy zone ${dd(db, true)} below` : 'no buy zone below'}. Set an alert on a zone and let price come to you.` };
+}
+// The points to tick off before an entry. cand = the open idea, or the setup the engine is looking at, or null.
+// ok: true = tick, false = cross, null = nothing to judge yet.
+function checklist(cand) {
+  const items = [], add = (ok, text) => items.push({ ok, text }), dim = t => `<span class="dim">${t}</span>`;
+  const trend = Sig && Sig.inp ? Sig.inp.trend : 0, up = !!cand && cand.side === 'buy', confirmed = !!cand && cand.entry !== undefined;
+  const bal = S.balance, upu = usdPerUnit(), maxStop = 0.03 * bal / upu, change = ' <a data-act="balance">change</a>';
+  const lot = `1 lot = ${INS.contract.toLocaleString('en-US')} ${INS.unit}${INS_ID === 'XAUUSD' || INS.pip ? '' : ' at XM, check yours'}`;
+  if (!cand) add(false, 'Price is at a zone ' + dim('(now it is between zones)'));
+  else add(true, 'Price reached ' + (cand.levels ? cand.levels.join(' + ') : cand.reasons[0].text.replace(/^At (support|resistance): /, '')));
+  if (!cand) add(null, 'A 5-minute candle closes back out of the zone');
+  else if (!confirmed) add(false, `No 5-minute candle has closed back ${up ? 'up' : 'down'} out of it yet`);
+  else add(true, `A 5-minute candle closed back ${up ? 'up' : 'down'} out of it`);
+  if (!confirmed) add(null, 'Target at least 1.5 x the stop');
+  else add(cand.rr >= 1.5, `Target is ${cand.rr.toFixed(1)} x the stop ` + dim('(need 1.5 or more)'));
+  if (!cand) add(null, `30-minute trend is ${trend > 0 ? 'up: buys go with it' : trend < 0 ? 'down: sells go with it' : 'flat'}`);
+  else if (!trend) add(null, '30-minute trend is flat: neither for nor against');
+  else add((trend > 0) === up, `${(trend > 0) === up ? 'With' : 'Against'} the 30-minute trend (${trend > 0 ? 'up' : 'down'})`);
+  if (!confirmed) add(null, `Stop no wider than ${dd(maxStop)} ` + dim(`(3 % of ${bal.toFixed(0)} USD at 0.01 lot, ${lot})`) + change);
+  else {
+    const risk = Math.abs(cand.entry - cand.stop), usd = risk * upu;
+    add(risk <= maxStop, `Stop ${dd(risk)} = ${usd.toFixed(usd < 0.1 ? 3 : 2)} USD = ${(usd / bal * 100).toFixed(1)} % of ${bal.toFixed(0)} USD at 0.01 lot ` + dim(`(keep under 3 %, ${lot})`) + change);
+  }
+  const us = usData(Date.now());
+  add(!us.now, us.now ? `Usual US data time (${us.at}): fast moves, wide spread` : 'Not a usual US data time' + (us.next ? ' ' + dim(`(next ${us.next})`) : ''));
+  if (confirmed) add(cand.score >= 55, `Agreement score ${cand.score} of 100 ` + dim('(needs 55)'));
+  if (cand) {                                                  // absorption is shown, not scored: 90 days of data found no edge in it
+    const ref = confirmed ? cand.entry : lastPx(), tol = Math.max(minD(), Sig ? Sig.atr : 0), near = Ab.filter(a => ref >= a.bottom - tol && ref <= a.top + tol);
+    for (const a of near) add(null, `${a.kind === 'buy' ? 'Buyers absorbed selling' : 'Sellers absorbed buying'} here at ${gp(a.bottom)}–${gp(a.top)} ` + dim(`(${(a.kind === 'buy') === up ? 'same side' : 'other side'}, not scored)`));
+  }
+  return items;
+}
+
+let pressing = false;                // a click on the guide is in progress: do not replace what is being clicked
+function put(id, h) { const el = $(id); if (el.dataset.html !== h) { el.dataset.html = h; el.innerHTML = h; } }
+function drawSig() {
+  $('sig').style.display = S.signals ? 'block' : 'none';
+  const open = LOG.find(s => s.result === 'open');
+  if (!alerting) document.title = !S.signals ? TITLE : (open ? open.side.toUpperCase() + ' open · ' : Sig && Sig.state === 'watch' ? 'Get ready: ' + Sig.side + ' · ' : '') + TITLE;
+  if (!S.signals || pressing) return;
+  const lists = zoneLists(), v = verdict(open, lists), p = lastPx(), cand = open || (Sig && Sig.state !== 'none' ? Sig : null);
+  if (p && !$('aPrice').value) $('aPrice').placeholder = 'price, e.g. ' + fp(spot());
+  const why = rs => rs.map(r => `<div class="why"><span class="${r.pts >= 0 ? 'pos' : 'neg'}">${signed(r.pts, 0)}</span>${r.text}</div>`).join('');
+  const plan = s => `<div class="plan">Entry <b>${gp(s.entry)}</b> · Stop <b>${gp(s.stop)}</b> · Target <b>${gp(s.target)}</b> <span>(${s.targetName})</span><br>` +
+    `<span>Risk ${dd(Math.abs(s.entry - s.stop))} to make ${dd(Math.abs(s.target - s.entry))}${INS.pip ? '' : ' per ' + INS.unit} · 1 : ${s.rr.toFixed(1)}</span></div>`;
+  $('gVerdict').className = 'v-' + v.cls;
+  put('gVerdict', `<div class="head ${v.cls}">${v.head}<small>${v.small}</small></div>` + (v.text ? `<div class="plan">${v.text}</div>` : '') + (v.plan ? plan(v.plan) : ''));
+  put('gWhy', v.plan ? `<details><summary>How the score of ${v.plan.score} was built</summary>${why(v.plan.reasons)}</details>` : '');
+  put('gCheck', checklist(cand).map(c => `<div class="ck"><i class="${c.ok === true ? 'pos' : c.ok === false ? 'neg' : 'dim'}">${c.ok === true ? '✓' : c.ok === false ? '✗' : '·'}</i><span>${c.text}</span></div>`).join(''));
+
+  const zrow = (z, nearest) => {
+    const up = z.type === 'demand', inside = p <= z.top && p >= z.bottom, d = up ? p - z.top : z.bottom - p, pl = nearest ? zonePlan(z) : null;
+    return `<div class="z"><a data-act="alert" data-v="${gp(up ? z.top : z.bottom)}" data-note="${up ? 'buy' : 'sell'} zone" title="Ring when price reaches this zone">+ alert</a>` +
+      `<b class="${up ? 'buy' : 'sell'}">${gp(z.bottom)} – ${gp(z.top)}</b> <small>${inside ? 'price is inside' : `${dd(d, true)} ${up ? 'below' : 'above'}`} · ${z.tf} · ${z.tested ? 'tested once' : 'untouched'}</small>` +
+      (pl ? `<br><small>${up ? 'Buy' : 'Sell'} plan: stop ${gp(pl.stop)} (${dd(pl.risk)}) · target ${gp(pl.target)}, ${pl.targetName} · 1 : ${pl.rr.toFixed(1)}` +
+            (pl.rr < 1.5 ? ' <span class="neg">too little room</span>' : '') + '</small>' : '') + '</div>';
+  };
+  const none = t => `<div class="dim">${t}</div>`;
+  put('gSell', lists.sell.length ? lists.sell.slice().reverse().map((z, i, a) => zrow(z, i === a.length - 1)).join('') : none(p ? 'None above the price in the last 6 days.' : 'Loading…'));
+  put('gBuy', lists.buy.length ? lists.buy.map((z, i) => zrow(z, i === 0)).join('') : none(p ? 'None below the price in the last 6 days.' : 'Loading…'));
+  put('gAbs', Ab.length ? Ab.slice().sort((x, y) => y.top - x.top).map(a => {
+    const up = a.kind === 'buy', d = up ? p - a.top : a.bottom - p;
+    return `<div class="z"><a data-act="alert" data-v="${gp(up ? a.top : a.bottom)}" data-note="absorption" title="Ring when price comes back here">+ alert</a>` +
+      `<b class="${up ? 'buy' : 'sell'}">${gp(a.bottom)} – ${gp(a.top)}</b> <small>${up ? 'buyers absorbed selling' : 'sellers absorbed buying'} · ${ago(a.last + 60e3)} · ` +
+      `${a.ratio.toFixed(1)} x normal volume${d > 0 ? ` · ${dd(d, true)} ${up ? 'below' : 'above'}` : ' · price is there'}</small></div>`;
+  }).join('') : none(INS.feed === 'kraken' ? 'Not available for forex: Kraken does not publish buy and sell volume.' : 'None alive right now.'));
+  put('gAlerts', (ALERTS.length ? ALERTS.slice().sort((x, y) => y.p - x.p).map(a =>
+      `<div class="z"><a data-act="unalert" data-v="${a.id}">remove</a><b class="${a.hit ? 'dim' : 'watch'}">${fp(a.p)}</b> ` +
+      `<small>${a.hit ? `reached at ${hhmm(a.hit)}` : `rings when price ${a.up ? 'rises' : 'falls'} to it`}${a.note ? ' · ' + a.note : ''}</small></div>`).join('')
+    : none('None set. Type a price, or hold Alt and click the chart (right-click works too).')) +
+    `<div class="plan"><span>Short tone when price reaches a zone:</span> <a data-act="zoneAlert">${S.zoneAlert ? 'on' : 'off'}</a></div>`);
+
+  const done = LOG.filter(s => s.result !== 'open' && s.result !== 'unknown'), count = k => done.filter(s => s.result === k).length;
+  put('gFoot', (S.mt5 ? `<div class="mt5 ${MT.ok ? 'pos' : 'neg'}">MT5: ${MT.text}${MT.ok ? ' <a data-act="mt5Test">send a test trade</a>' : ''}</div>` : '') +
+    (done.length ? `Ideas so far: ${done.length} finished · ${count('target')} target · ${count('stop')} stop · ${count('expired')} timed out · total ${signed(done.reduce((a, s) => a + s.r, 0), 1)} x risk <a data-act="clear">clear</a>`
+                 : 'No finished ideas yet. Each BUY or SELL is counted here when it ends.') +
+    '<br>This guide is a checklist that keeps you out of poor spots. It does not predict. ' +
+    (INS_ID === 'XAUUSD' ? 'Tested on 5 years of gold: BUY / SELL ideas from these rules made nothing before costs and lost 0.2 to 0.5 of the risk per trade after them. Absorption areas did no better on 90 days.'
+                         : `These rules were tested on 5 years of gold only, where they made nothing before costs and lost after them. They have not been tested on ${INS.name} at all.`) +
+    ' Keep the size small. <a data-act="testAlarm">test alarm</a>');
+}
+
+// ------------------------------------------------------------------ price alerts
+// Like a TradingView alert: a price, and the alarm rings once when price gets there. Prices are the ones shown
+// on the chart. Direction is fixed when the alert is made: above the price = rings on the way up.
+function saveAlerts() { store.set(sk('alerts'), ALERTS); drawSig(); view.dirty = true; }
+function addAlert(p, note) {
+  const sp = spot();
+  if (!(p > 0) || !sp) return false;
+  if (Math.abs(p - sp) > 0.2 * sp) { alert(`${p} is more than 20 % away from ${INS.name} at ${fp(sp)}. Check the number.`); return false; }
+  const u = Math.pow(10, INS.dec);
+  p = Math.round(p * u) / u;
+  if (ALERTS.some(a => !a.hit && a.p === p)) return false;      // already set
+  ALERTS.push({ id: Date.now().toString(36) + Math.floor(Math.random() * 1e4), p, up: p > sp, at: Date.now(), hit: 0, note: note || '' });
+  if (S.alarm) arm();                                         // made by a click, so sound is allowed from here on
+  saveAlerts();
+  return true;
+}
+function removeAlert(id) { const i = ALERTS.findIndex(a => a.id === id); if (i >= 0) { ALERTS.splice(i, 1); saveAlerts(); } }
+// Every second. The newest 1-minute candles are checked too, so a spike between two checks still counts;
+// candles that began before the alert was made are left out.
+function checkAlerts() {
+  const sp = spot();
+  if (!sp || !D.hasBasis || !ALERTS.length) return;
+  let changed = false;
+  for (let i = ALERTS.length - 1; i >= 0; i--) {
+    const a = ALERTS[i];
+    if (a.hit) { if (Date.now() - a.hit > 12 * 3600e3) { ALERTS.splice(i, 1); changed = true; } continue; }
+    let hi = sp, lo = sp;
+    for (const k of D.m1.slice(-3)) if (k.t >= a.at) { hi = Math.max(hi, k.h - D.basis); lo = Math.min(lo, k.l - D.basis); }
+    if (a.up ? hi >= a.p : lo <= a.p) { a.hit = Date.now(); changed = true; alertPrice(a); }
+  }
+  if (changed) saveAlerts();
+}
+const soundNote = loud => (loud ? '' : S.alarm ? ' · sound is blocked until you click the page once' : ' · the Alarm button is off: no sound');
+function alertPrice(a) {
+  const loud = siren(20, 1760, 1175, 0.12);                    // fast trill, unlike the buy and sell sirens
+  banner('watch', 'PRICE ALERT', `${INS.name} ${a.up ? 'rose' : 'fell'} to ${fp(a.p)}${a.note ? ' (' + a.note + ')' : ''} · now ${fp(spot())}` + soundNote(loud));
+}
+// A short tone when price reaches a zone or a value-area edge: at most once per level in 30 minutes, and
+// never on top of a banner that is still waiting for a click.
+const zoneRang = {};
+function alertZone(s) {
+  if (!S.signals || !S.zoneAlert || alerting) return;
+  const key = s.side + ' ' + s.levels.join(' + ');
+  if (Date.now() - (zoneRang[key] || 0) < 30 * 60e3) return;
+  zoneRang[key] = Date.now();
+  const loud = siren(4, 1320, 990, 0.3);
+  banner('watch', `GET READY TO ${s.side.toUpperCase()}`, `price is at ${s.levels.join(' + ')} · no entry until a 5-minute candle closes back ${s.side === 'buy' ? 'up' : 'down'}` + soundNote(loud));
+}
+
+// ------------------------------------------------------------------ alarm
+// A new signal sounds a siren, shows a flashing banner and flashes the tab title until it is clicked.
+// Browsers only allow sound after one click or key press on the page, so the first click anywhere arms it.
+let audio = null, sirenOsc = null, alerting = false, blink = null;
+const armed = () => !!audio && audio.state === 'running';
+function arm() {
+  try {
+    if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
+    if (audio.state !== 'running') audio.resume().then(syncAlarm, syncAlarm);
+  } catch (e) { audio = null; }                              // no audio device: the banner still works
+  syncAlarm();
+}
+function silence() {
+  if (sirenOsc) { try { sirenOsc.stop(); } catch (e) { /* it had already ended */ } sirenOsc = null; }
+}
+// Two-tone square wave at full scale: the loudest a page can play. How loud it really is depends on the PC volume.
+function siren(seconds, a, b, beat) {
+  if (!S.alarm || !armed()) return false;
+  silence();
+  const t0 = audio.currentTime + 0.02, osc = audio.createOscillator(), gain = audio.createGain();
+  osc.type = 'square';
+  for (let t = 0; t < seconds; t += 2 * beat) { osc.frequency.setValueAtTime(a, t0 + t); osc.frequency.setValueAtTime(b, t0 + t + beat); }
+  gain.gain.value = 1;
+  osc.connect(gain); gain.connect(audio.destination);
+  osc.start(t0); osc.stop(t0 + seconds);
+  osc.onended = () => { if (sirenOsc === osc) sirenOsc = null; };
+  sirenOsc = osc;
+  return true;
+}
+function banner(cls, title, text) {
+  const el = $('alert');
+  el.className = cls; el.innerHTML = `<b>${title}</b> ${text} <span>click to silence</span>`; el.style.display = 'block';
+  alerting = true;
+  clearInterval(blink);
+  let on = false;
+  blink = setInterval(() => { on = !on; document.title = on ? `>>> ${title} <<<` : TITLE; }, 700);
+}
+function dismiss() { silence(); alerting = false; clearInterval(blink); $('alert').style.display = 'none'; drawSig(); }
+function alertSignal(s) {
+  if (!S.signals || !S.alarm) return;
+  const up = s.side === 'buy';
+  const loud = siren(30, up ? 2000 : 1100, up ? 1500 : 800, up ? 0.18 : 0.35);       // buy: high and fast; sell: low and slow
+  banner(s.side, `${s.side.toUpperCase()} SIGNAL`, `${INS.name} · entry ${gp(s.entry)} · stop ${gp(s.stop)} · target ${gp(s.target)} · score ${s.score}/100` +
+         (loud ? '' : ' · sound is blocked until you click the page once'));
+}
+function alertResult(s) {
+  if (!S.signals || !S.alarm) return;
+  const hit = s.result === 'target';
+  siren(3, hit ? 1800 : 600, hit ? 2400 : 450, 0.25);
+  banner(hit ? 'buy' : s.result === 'stop' ? 'sell' : 'watch', `${s.side.toUpperCase()} ${hit ? 'HIT ITS TARGET' : s.result === 'stop' ? 'HIT ITS STOP' : 'TIMED OUT'}`, `${signed(s.r, 1)} x risk`);
+}
+function testAlarm() {
+  arm();                                                     // called from a click, so the browser allows sound from here on
+  setTimeout(() => {
+    const loud = siren(3, 2000, 1500, 0.18);
+    banner('watch', 'ALARM TEST', loud ? 'a real signal sounds like this for 30 seconds' : 'sound is still blocked: click the page and test again');
+  }, 200);
+}
+function syncAlarm() {
+  const b = $('bAlarm');
+  b.classList.toggle('on', S.alarm && armed());
+  b.classList.toggle('warn', S.alarm && !armed());
+  b.textContent = !S.alarm ? 'Alarm off' : armed() ? 'Alarm on' : 'Alarm: click to arm';
+}
+
+// ------------------------------------------------------------------ MetaTrader 5
+// With "MT5 on", each new signal goes to the local agent (gex_agent.cjs), which hands it to the
+// GexSignalTrader EA in MT5. The agent's port and token come from gex_agent_info.js, written by the agent.
+let AG = null;
+const MT = { ok: false, text: 'off' };
+function mt5State(ok, text) { MT.ok = ok; MT.text = text; syncMt5(); drawSig(); }
+function loadAgent() {
+  const s = document.createElement('script');
+  s.src = 'gex_agent_info.js?t=' + Date.now();
+  s.onload = () => { s.remove(); AG = window.GEX_AGENT || null; if (AG) pollMt5(); };
+  s.onerror = () => { s.remove(); AG = null; mt5State(false, 'the agent is not running: start start_gex.bat'); };
+  document.head.appendChild(s);
+}
+async function pollMt5() {
+  if (!INS.mt5) return;                                        // the EA sits on the gold chart and trades that symbol only
+  if (!S.mt5) return mt5State(false, 'off');
+  if (!AG) return loadAgent();
+  try {
+    const j = await (await fetch(`http://127.0.0.1:${AG.port}/status?token=${AG.token}`, { cache: 'no-store' })).json();
+    if (j.error) { AG = null; return loadAgent(); }          // the agent was restarted: read its new token
+    const ea = j.ea, last = j.last && Date.now() - j.last.time < 12 * 3600e3 ? ' · last: ' + j.last.text : '';
+    if (ea.alive && ea.balance > 0 && ea.balance !== S.balance) { S.balance = ea.balance; store.set('balance', ea.balance); }   // the stop-size check uses the real balance
+    if (!ea.alive) mt5State(false, 'the EA is not attached: drag GexSignalTrader onto the gold chart in MT5');
+    else if (ea.mode !== 'demo') mt5State(false, 'MT5 is on a REAL account: the EA refuses to trade');
+    else if (!ea.algo && !ea.dryrun) mt5State(false, 'Algo Trading is switched off in MT5');
+    else mt5State(true, `ready, demo account, ${ea.symbol}, balance ${ea.balance.toLocaleString('en-US')}${ea.dryrun ? ' (dry run: no orders)' : ''}${last}`);
+  } catch (e) { AG = null; mt5State(false, 'the agent is not running: start start_gex.bat'); }
+}
+// s = a stored signal, or { test: 'buy' } for a small test trade. Prices go out as XAUUSD prices;
+// the EA only uses the stop and target distances, measured from its own broker price.
+async function sendToMt5(s) {
+  if (!INS.mt5 || !S.mt5 || !AG) return;
+  const b = D.basis, body = s.test ? { test: s.test }
+    : { t: s.t, side: s.side, entry: +(s.entry - b).toFixed(2), stop: +(s.stop - b).toFixed(2), target: +(s.target - b).toFixed(2), score: s.score };
+  try {
+    const j = await (await fetch(`http://127.0.0.1:${AG.port}/signal`, { method: 'POST', headers: { 'Content-Type': 'text/plain' },
+                                 body: JSON.stringify({ token: AG.token, ...body }) })).json();
+    if (!j.ok) mt5State(false, 'signal not sent: ' + j.error);
+  } catch (e) { mt5State(false, 'signal not sent: the agent is not running'); }
+  setTimeout(pollMt5, 2500);                                 // pick up the EA's answer
+}
+function syncMt5() {
+  const b = $('bMt5');
+  b.classList.toggle('on', S.mt5 && MT.ok); b.classList.toggle('warn', S.mt5 && !MT.ok);
+  b.textContent = S.mt5 ? 'MT5 on' : 'MT5 off';
+}
+
+// ------------------------------------------------------------------ header and status
+function chip() {
+  if (!INS.options) { $('chip').style.display = 'none'; return; }                  // the chip is about the GLD options: gold only
+  if (!G) { $('cDate').textContent = '--'; $('cDte').textContent = '-- DTE'; $('cN').textContent = '-- opts'; $('cSum').textContent = 'Σ --'; return; }
+  const e = G.near.exp, t = shown(), sum = t.rows.reduce((a, r) => a + METRICS[S.metric].val(r), 0);
+  $('cDate').textContent = new Date(Date.UTC(2000 + +e.slice(0, 2), +e.slice(2, 4) - 1, +e.slice(4, 6))).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', timeZone: 'UTC' });
+  $('cDte').textContent = G.near.dte + ' DTE';
+  $('cN').textContent = t.count + ' opts';
+  $('cSum').textContent = 'Σ ' + fmt(sum);
+  $('cSum').style.background = S.metric === 'abs' ? pal().blue : sum >= 0 ? pal().green : pal().red;
+  $('fNear').textContent = G.near.dte + 'DTE';
+}
+function status() {
+  const parts = [];
+  if (D.gexMissing) parts.push('<span class="warn">No options data yet. Run: node gex_fetch.cjs (or start_gex.bat)</span>');
+  else if (D.gex) {
+    const ageH = (Date.now() - D.gex.fetchedAt) / 36e5;
+    const when = new Date(D.gex.timestamp.replace(' ', 'T') + 'Z').toLocaleString([], { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+    parts.push(`Options: ${D.gex.symbol} via CBOE, 15 min delayed (${when}), open interest from the last US close`);
+    if (ageH > 20) parts.push(`<span class="warn">Options data was downloaded ${Math.round(ageH)} h ago. Run node gex_fetch.cjs to refresh it.</span>`);
+    if (G) parts.push(`gold = ${G.f.toFixed(3)} x ${D.gex.symbol} · bars in ${METRICS[S.metric].unit}`);
+  }
+  if (INS.feed === 'kraken') {
+    parts.push(`candles: Kraken ${INS.name} (a small fiat market: can sit a few pips from your broker; no buy / sell volume)`);
+    const d = new Date(), wd = d.getUTCDay(), h = d.getUTCHours();
+    if (wd === 6 || (wd === 5 && h >= 22) || (wd === 0 && h < 22)) parts.push('<span class="warn">forex is closed at brokers until Sunday 22:00 UTC; Kraken keeps trading thinly</span>');
+  } else {
+    const refName = INS.ref === 'gold-api' ? 'spot gold' : `Coinbase ${INS.ref}`;
+    parts.push(D.hasBasis ? `candles: Binance ${INS.sym} futures moved to ${refName} (${D.basis >= 0 ? '−' : '+'}${fp(Math.abs(D.basis))} $)`
+                          : `<span class="warn">No ${refName} reference yet: prices are futures prices, usually a little above spot</span>`);
+  }
+  if (D.tick) parts.push('updated ' + new Date(D.tick).toLocaleTimeString('en-GB'));
+  if (D.feedErr) parts.push(`<span class="warn">${D.feedErr}</span>`);
+  $('status').innerHTML = parts.join(' \u00b7 ');
+}
+function syncUi() {
+  document.body.classList.toggle('light', S.light);
+  document.body.classList.toggle('guide', S.signals);         // the guide takes the left 336 px; the chart starts after it
+  for (const b of $('tfs').children) b.classList.toggle('on', b.dataset.tf === S.tf);
+  $('bZones').classList.toggle('on', S.zones); $('bProfile').classList.toggle('on', S.profile); $('bSignals').classList.toggle('on', S.signals);
+  $('bAbs').classList.toggle('on', S.abs); $('bGld').classList.toggle('on', S.gld);
+  $('bGld').style.display = $('panelHead').style.display = INS.options ? '' : 'none';     // GLD options: gold only
+  $('bMt5').style.display = INS.mt5 ? '' : 'none';                                        // the EA trades gold only
+  $('bAbs').style.display = INS.feed === 'kraken' ? 'none' : '';                           // Kraken has no buy / sell volume
+  syncAlarm(); syncMt5();
+  drawSig();
+  $('bLight').textContent = S.light ? 'Dark' : 'Light';
+  $('fAll').classList.toggle('on', S.filter === 'all'); $('fNear').classList.toggle('on', S.filter === 'near');
+  $('metric').value = S.metric;
+  chip(); status(); view.dirty = true;
+}
+function set(key, value) { S[key] = value; store.set(key, value); syncUi(); if (key === 'signals') resize(); }
+
+// ------------------------------------------------------------------ drawing
+function layout() {
+  const W = cv.clientWidth, H = cv.clientHeight, axisW = INS.dec >= 4 ? 80 : 72, panelW = INS.options ? Math.round(clamp(W * (S.signals ? 0.24 : 0.3), 200, 430)) : 0;
+  const top = Math.max(48, $('top').offsetHeight + 16);
+  return { W, H, axisW, panelW, chartW: W - axisW - panelW, axisX: W - axisW - panelW, panelX: W - panelW, y0: top, y1: H - 40 };
+}
+// Candle width and the x of the right edge of the newest candle slot. The volume profile gets its own strip
+// on the right so it never covers the latest candles.
+function geom(L) {
+  const reserve = S.profile ? Math.round(L.chartW * 0.13) : 0, pad = S.profile ? 2 : PAD, cw = (L.chartW - reserve) / (view.count + pad);
+  return { cw, reserve, x1: L.chartW - reserve - pad * cw };
+}
+function resize() {
+  const d = window.devicePixelRatio || 1;
+  cv.width = Math.round(cv.clientWidth * d); cv.height = Math.round(cv.clientHeight * d);
+  ctx.setTransform(d, 0, 0, d, 0, 0);
+  const L = layout();
+  $('panelHead').style.width = (L.panelW - 16) + 'px';
+  $('top').style.maxWidth = (L.chartW - 10) + 'px';
+  $('status').style.maxWidth = (L.axisX - 20) + 'px';
+  $('help').style.top = (L.y0 + 4) + 'px';
+  view.dirty = true;
+}
+function pill(x, y, w, h, bg, text, fg, align) {
+  ctx.fillStyle = bg; ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(x, y - h / 2, w, h, 3); else ctx.rect(x, y - h / 2, w, h);
+  ctx.fill();
+  ctx.fillStyle = fg; ctx.textAlign = align || 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(text, align === 'left' ? x + 6 : x + w / 2, y + 0.5);
+  ctx.textBaseline = 'alphabetic';
+}
+function hline(x0, x1, y, color, dash, width) {
+  ctx.strokeStyle = color; ctx.lineWidth = width || 1; ctx.setLineDash(dash || []);
+  ctx.beginPath(); ctx.moveTo(x0, Math.round(y) + 0.5); ctx.lineTo(x1, Math.round(y) + 0.5); ctx.stroke(); ctx.setLineDash([]);
+}
+
+function render() {
+  const L = layout(), P = pal(), c = D.chart, n = c.length;
+  ctx.fillStyle = P.bg; ctx.fillRect(0, 0, L.W, L.H);
+  ctx.font = '12px system-ui, "Segoe UI", sans-serif';
+  if (!n) {
+    ctx.fillStyle = P.text; ctx.textAlign = 'center';
+    ctx.fillText(D.feedErr || `Loading ${INS.name} candles…`, L.chartW / 2, L.H / 2);
+    return;
+  }
+  view.offset = clamp(view.offset, 0, Math.max(0, n - 20));
+  const b = D.basis, sp = spot(), tfMs = TF[S.tf];
+  const g = geom(L), cw = g.cw, last = n - 1 - view.offset, first = Math.max(0, Math.floor(last - view.count - 1));
+  const xOf = i => g.x1 - (last - i + 0.5) * cw;
+  const xOfTime = t => xOf((t - c[0].t) / tfMs);
+  if (view.auto) {
+    let lo = sp, hi = sp;
+    for (let i = first; i <= last; i++) { lo = Math.min(lo, c[i].l - b); hi = Math.max(hi, c[i].h - b); }
+    // With the GLD lines on, wide enough to show a useful strike range; without them, close in on the candles
+    // (at least 0.5 % of the price either side on gold, as before; 0.05 % elsewhere, so quiet forex is not a flat line).
+    const mid = (lo + hi) / 2, half = S.gld ? Math.max((hi - lo) * 0.75, sp * 0.035) : Math.max((hi - lo) * 0.62, sp * (INS_ID === 'XAUUSD' ? 0.005 : 0.0005));
+    view.lo = mid - half; view.hi = mid + half;
+  }
+  const ppd = (L.y1 - L.y0) / (view.hi - view.lo);                              // pixels per dollar
+  const yOf = p => L.y0 + (view.hi - p) * ppd;
+
+  // price grid
+  const tick = niceStep(ppd, 38, [1, 2, 2.5, 5]), tickDec = decOf(tick), ticks = [];
+  for (let i = Math.ceil(view.lo / tick); i * tick <= view.hi; i++) ticks.push(+(i * tick).toFixed(tickDec));
+  for (const p of ticks) hline(0, L.chartW, yOf(p), P.grid);
+
+  ctx.save(); ctx.beginPath(); ctx.rect(0, L.y0, L.chartW, L.y1 - L.y0); ctx.clip();
+
+  // sell zones (red) and buy zones (green); paler once price has come back into them
+  const zs = S.zones ? zonesShown() : [];
+  for (const z of zs) {
+    const col = z.type === 'supply' ? P.red : P.green;
+    const x0 = clamp(xOfTime(z.t) - cw / 2, 0, L.chartW - g.reserve - 90), yT = yOf(z.top - b), yB = yOf(z.bottom - b);
+    ctx.fillStyle = rgba(col, z.tested ? 0.07 : 0.16); ctx.fillRect(x0, yT, L.chartW - x0, yB - yT);
+    ctx.strokeStyle = rgba(col, z.tested ? 0.4 : 0.7); ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+    ctx.strokeRect(Math.round(x0) + 0.5, Math.round(yT) + 0.5, L.chartW - x0, Math.max(1, Math.round(yB - yT)));
+    ctx.setLineDash([]);
+  }
+  // absorption areas: a band from the minute it formed to the profile strip, with a solid bar where it started
+  const abs = S.abs ? Ab.filter(a => yOf(a.bottom - b) > L.y0 && yOf(a.top - b) < L.y1) : [];
+  for (const a of abs) {
+    const col = a.kind === 'buy' ? P.cyan : P.pink, yT = yOf(a.top - b), h = Math.max(2, yOf(a.bottom - b) - yT);
+    const x0 = clamp(xOfTime(a.t) - cw / 2, 0, L.chartW - g.reserve - 60);
+    ctx.fillStyle = rgba(col, 0.24); ctx.fillRect(x0, yT, L.chartW - g.reserve - x0, h);
+    ctx.fillStyle = col; ctx.fillRect(x0, yT, 3, h);
+  }
+
+  // session volume profile, anchored on the right edge of the chart
+  const step = niceStep(ppd, 2, [1, 2.5, 5]);
+  if (S.profile && D.m1.length && (!Pf || Pf.step !== step)) Pf = E.profile(D.m1, E.sessionStart(Date.now()), step);
+  if (S.profile && Pf) {
+    const maxW = g.reserve - 4;
+    for (const r of Pf.rows) {
+      const y0 = yOf(r.p + Pf.step - b), h = Math.max(1, Pf.step * ppd - 0.5), wb = r.buy / Pf.max * maxW, ws = r.sell / Pf.max * maxW;
+      ctx.fillStyle = P.vpBuy; ctx.fillRect(L.chartW - wb, y0, wb, h);
+      ctx.fillStyle = P.vpSell; ctx.fillRect(L.chartW - wb - ws, y0, ws, h);
+    }
+  }
+
+  // candles
+  const bw = Math.max(1, Math.floor(cw * 0.7));
+  for (let i = first; i <= last; i++) {
+    const k = c[i], x = Math.round(xOf(i)) + 0.5, yo = yOf(k.o - b), yc = yOf(k.c - b);
+    ctx.strokeStyle = ctx.fillStyle = k.c >= k.o ? P.up : P.down; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x, yOf(k.h - b)); ctx.lineTo(x, yOf(k.l - b)); ctx.stroke();
+    ctx.fillRect(x - bw / 2, Math.min(yo, yc), bw, Math.max(1, Math.abs(yc - yo)));
+  }
+
+  // zone names, drawn over the candles so they stay readable
+  ctx.font = '10px system-ui, "Segoe UI", sans-serif'; ctx.textAlign = 'right';
+  for (const z of zs) {
+    ctx.fillStyle = rgba(z.type === 'supply' ? P.red : P.green, z.tested ? 0.7 : 0.95);
+    ctx.fillText(`${z.type === 'supply' ? 'SELL' : 'BUY'} zone ${z.tf}${z.tested ? ' (tested)' : ''}`, L.chartW - g.reserve - 6, yOf(z.top - b) + 11);
+  }
+  ctx.textAlign = 'left';
+  for (const a of abs) {
+    ctx.fillStyle = a.kind === 'buy' ? P.cyan : P.pink;
+    ctx.fillText(a.kind === 'buy' ? 'buyers absorbed' : 'sellers absorbed', clamp(xOfTime(a.t) - cw / 2, 0, L.chartW - g.reserve - 60) + 7, yOf(a.top - b) - 3);
+  }
+  ctx.font = '12px system-ui, "Segoe UI", sans-serif';
+
+  // lines: gamma levels across the chart, profile levels from the session start
+  const pills = [];
+  for (const lv of levels()) {
+    const y = yOf(lv.p);
+    if (y < L.y0 || y > L.y1) continue;
+    hline(0, L.chartW, y, P[lv.color], lv.dash, lv.dash[0] > 4 ? 1.4 : 1);
+    pills.push({ y, ly: y, text: lv.text, price: lv.p, bg: P[lv.color], fg: '#fff' });
+  }
+  for (const a of ALERTS) {                                    // price alerts that have not rung yet
+    const y = yOf(a.p);
+    if (a.hit || y < L.y0 || y > L.y1) continue;
+    hline(0, L.chartW, y, P.orange, [6, 4], 1.4);
+    pills.push({ y, ly: y, text: 'Alert' + (a.note ? ' · ' + a.note : ''), price: a.p, bg: P.orange, fg: '#111' });
+  }
+  if (S.profile && Pf) {
+    const xs = clamp(xOfTime(Pf.from), 0, L.chartW - 40);
+    for (const [p, name, col, fg] of [[Pf.poc, 'POC', P.yellow, '#111'], [Pf.vah, 'VAH', P.purple, '#fff'], [Pf.val, 'VAL', P.purple, '#fff']]) {
+      const y = yOf(p - b);
+      if (y < L.y0 || y > L.y1) continue;
+      hline(xs, L.chartW, y, col, [], 1.4);
+      pills.push({ y, ly: y, text: name, price: p - b, bg: col, fg });
+    }
+  }
+  // signals: an arrow on each trigger candle; the idea that is still open also gets entry / stop / target lines
+  if (S.signals) {
+    ctx.font = '10px system-ui, "Segoe UI", sans-serif'; ctx.textAlign = 'center';
+    for (const s of LOG) {
+      const up = s.side === 'buy', x = xOfTime(s.t), i = clamp(Math.floor((s.t - c[0].t) / tfMs), 0, n - 1);
+      if (x > 0 && x < L.chartW) {
+        const y = up ? yOf(c[i].l - b) + 6 : yOf(c[i].h - b) - 6, d = up ? 10 : -10;
+        ctx.fillStyle = up ? P.up : P.down; ctx.beginPath();
+        ctx.moveTo(x, y); ctx.lineTo(x - 6, y + d); ctx.lineTo(x + 6, y + d); ctx.closePath(); ctx.fill();
+        ctx.fillText(s.result === 'open' ? s.score : s.result === 'expired' ? 'timed out' : s.result, x, y + (up ? 22 : -14));
+      }
+      if (s.result !== 'open') continue;
+      for (const [p, col, name] of [[s.entry, P.grey, 'entry'], [s.stop, P.down, 'stop'], [s.target, P.up, 'target']]) {
+        const y = yOf(p - b);
+        if (y < L.y0 || y > L.y1) continue;
+        hline(clamp(x, 0, L.chartW - 60), L.chartW, y, col, [5, 3], 1.2);
+        pills.push({ y, ly: y, text: `${up ? 'Buy' : 'Sell'} ${name}`, price: p - b, bg: col, fg: '#fff' });
+      }
+    }
+    ctx.font = '12px system-ui, "Segoe UI", sans-serif';
+  }
+  ctx.restore();
+
+  // current price line
+  const lastC = c[n - 1], up = lastC.c >= lastC.o, ySp = yOf(sp);
+  hline(0, L.chartW, ySp, up ? P.up : P.down, [1, 3]);
+
+  // price scale
+  ctx.fillStyle = P.bg; ctx.fillRect(L.axisX, 0, L.W - L.axisX, L.H);
+  ctx.strokeStyle = P.line; ctx.lineWidth = 1; ctx.beginPath();
+  ctx.moveTo(L.axisX + 0.5, 0); ctx.lineTo(L.axisX + 0.5, L.H); ctx.moveTo(L.panelX + 0.5, 0); ctx.lineTo(L.panelX + 0.5, L.H); ctx.stroke();
+  ctx.fillStyle = P.text; ctx.textAlign = 'center';
+  for (const p of ticks) { const y = yOf(p); if (y > L.y0 + 6 && y < L.y1 - 4) ctx.fillText(p.toFixed(tickDec), L.axisX + L.axisW / 2, y + 4); }
+
+  // level pills are pushed away from the live price pill and from each other; the lines stay at the true price
+  let edge = ySp - 19;
+  for (const q of pills.filter(q => q.y <= ySp).sort((a, b2) => b2.y - a.y)) { q.ly = Math.min(q.y, edge); edge = q.ly - 19; }
+  edge = ySp + 35;                                           // below the price pill and its countdown
+  for (const q of pills.filter(q => q.y > ySp).sort((a, b2) => a.y - b2.y)) { q.ly = Math.max(q.y, edge); edge = q.ly + 19; }
+  ctx.font = '600 12px system-ui, "Segoe UI", sans-serif';
+  for (const q of pills) {
+    const w = ctx.measureText(q.text).width + 14;
+    pill(L.chartW - w - 3, q.ly, w, 18, q.bg, q.text, q.fg);
+    pill(L.axisX + 1, q.ly, L.axisW - 2, 18, q.bg, fp(q.price), q.fg);
+  }
+  // live price with the time left in the candle
+  const left = Math.max(0, lastC.t + tfMs - Date.now()), mm = Math.floor(left / 60e3), ss = Math.floor(left / 1e3) % 60;
+  pill(L.axisX + 1, ySp, L.axisW - 2, 18, up ? P.up : P.down, fp(sp), '#fff');
+  ctx.font = '11px system-ui, "Segoe UI", sans-serif';
+  pill(L.axisX + 1, ySp + 17, L.axisW - 2, 16, rgba(up ? P.up : P.down, 0.75), `${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')}`, '#fff');
+  ctx.font = '12px system-ui, "Segoe UI", sans-serif';
+
+  // gamma bars
+  let hover = null;
+  if (G) {
+    const val = METRICS[S.metric].val, rows = shown().rows.filter(r => { const y = yOf(r.k * G.f); return y > L.y0 - 4 && y < L.y1 + 4; });
+    let vmax = 1e-9, gap = Infinity;
+    rows.forEach((r, i) => { vmax = Math.max(vmax, Math.abs(val(r))); if (i) gap = Math.min(gap, (r.k - rows[i - 1].k) * G.f * ppd); });
+    const barH = clamp(gap * 0.72, 2, 18), x0 = L.panelX + 8, maxW = L.panelW - 8 - 62;
+    ctx.textAlign = 'left'; ctx.font = `${clamp(Math.round(barH + 2), 9, 12)}px system-ui, "Segoe UI", sans-serif`;
+    for (const r of rows) {
+      const v = val(r), y = yOf(r.k * G.f);
+      if (view.mx >= L.panelX && Math.abs(view.my - y) <= gap / 2) hover = { r, y };
+      if (!v) continue;
+      const w = Math.max(1.5, Math.abs(v) / vmax * maxW);
+      ctx.fillStyle = S.metric === 'abs' ? P.blue : v >= 0 ? P.green : P.red;
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(x0, y - barH / 2, w, barH, Math.min(2, barH / 2)); else ctx.rect(x0, y - barH / 2, w, barH);
+      ctx.fill();
+      if (gap >= 11 || Math.abs(v) >= 0.25 * vmax) { ctx.fillStyle = P.strong; ctx.fillText(fmt(v), x0 + w + 6, y + 4); }
+    }
+    ctx.font = '12px system-ui, "Segoe UI", sans-serif';
+  } else if (INS.options) {
+    ctx.fillStyle = P.text; ctx.textAlign = 'center';
+    const x = L.panelX + L.panelW / 2, y = (L.y0 + L.y1) / 2;
+    if (D.gexMissing) { ctx.fillText('No options data yet.', x, y - 10); ctx.fillText('Run: node gex_fetch.cjs', x, y + 10); }
+    else ctx.fillText(D.gex ? 'Waiting for the gold price…' : 'Loading options…', x, y);
+  }
+
+  // time scale
+  ctx.fillStyle = P.bg; ctx.fillRect(0, L.y1, L.axisX, L.H - L.y1);
+  ctx.fillStyle = P.text; ctx.textAlign = 'center';
+  const every = Math.max(1, Math.ceil(84 / cw));
+  let prevDay = '';
+  for (let i = first; i <= last; i++) {
+    if (Math.round(c[i].t / tfMs) % every) continue;
+    const d = new Date(c[i].t), day = d.toDateString(), x = xOf(i);
+    if (x < 24 || x > L.chartW - 24) { prevDay = day; continue; }
+    ctx.fillText(prevDay && day !== prevDay ? d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+                                            : d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }), x, L.y1 + 15);
+    prevDay = day;
+  }
+
+  // crosshair and tooltip
+  const tip = $('tip');
+  if (view.mx >= 0 && view.my > L.y0 && view.my < L.y1) {
+    const p = view.hi - (view.my - L.y0) / ppd;
+    hline(0, L.chartW, view.my, rgba(P.grey, 0.7), [4, 4]);
+    if (view.mx < L.chartW) {
+      ctx.strokeStyle = rgba(P.grey, 0.7); ctx.setLineDash([4, 4]); ctx.beginPath();
+      ctx.moveTo(Math.round(view.mx) + 0.5, L.y0); ctx.lineTo(Math.round(view.mx) + 0.5, L.y1); ctx.stroke(); ctx.setLineDash([]);
+      const i = Math.round(last - ((g.x1 - view.mx) / cw - 0.5));
+      if (i >= 0 && i < n) pill(clamp(view.mx - 52, 0, L.chartW - 104), L.y1 + 11, 104, 18, P.line,
+        new Date(c[i].t).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }), P.strong);
+    }
+    pill(L.axisX + 1, view.my, L.axisW - 2, 18, P.line, fp(p), P.strong);
+    if (hover) {
+      const r = hover.r;
+      tip.innerHTML = `<b>${(r.k * G.f).toFixed(1)}</b> <span>(${D.gex.symbol} strike ${r.k})</span><br>` +
+        `<span>Net gamma</span> ${fmt(r.cg - r.pg)} <span>= calls</span> ${fmt(r.cg)} <span>− puts</span> ${fmt(r.pg)}<br>` +
+        `<span>Open interest</span> ${r.coi.toLocaleString()} <span>calls,</span> ${r.poi.toLocaleString()} <span>puts</span><br>` +
+        `<span>Volume today</span> ${r.cvol.toLocaleString()} <span>calls,</span> ${r.pvol.toLocaleString()} <span>puts</span>`;
+      tip.style.display = 'block';
+      tip.style.left = Math.max(8, view.mx - tip.offsetWidth - 14) + 'px';
+      tip.style.top = clamp(view.my + 14, L.y0, L.H - tip.offsetHeight - 8) + 'px';
+    } else tip.style.display = 'none';
+  } else tip.style.display = 'none';
+}
+
+// ------------------------------------------------------------------ input
+let drag = null;
+cv.addEventListener('mousemove', e => {
+  view.mx = e.offsetX; view.my = e.offsetY; view.dirty = true;
+  if (!drag) return;
+  const L = layout(), dx = e.offsetX - drag.x, dy = e.offsetY - drag.y, span = drag.hi - drag.lo;
+  if (drag.onChart) {
+    view.offset = drag.offset + Math.round(dx / geom(L).cw);
+    if (Math.abs(dy) > 4 || !view.auto) { const dp = dy / (L.y1 - L.y0) * span; view.lo = drag.lo + dp; view.hi = drag.hi + dp; view.auto = false; }
+  } else {                                                   // dragging the price scale or the bars stretches the price range
+    const k = Math.exp(dy / 220), mid = (drag.lo + drag.hi) / 2;
+    view.lo = mid - span * k / 2; view.hi = mid + span * k / 2; view.auto = false;
+  }
+});
+const priceAt = (y, L) => view.hi - (y - L.y0) / (L.y1 - L.y0) * (view.hi - view.lo);
+const onPrices = (e, L) => e.offsetX < L.panelX && e.offsetY > L.y0 && e.offsetY < L.y1;      // over the chart or the price scale
+cv.addEventListener('mousedown', e => {
+  if (e.button !== 0) return;
+  const L = layout();
+  if (e.altKey && onPrices(e, L)) { addAlert(priceAt(e.offsetY, L), ''); return; }            // Alt + click: price alert at the cursor
+  drag = { x: e.offsetX, y: e.offsetY, offset: view.offset, lo: view.lo, hi: view.hi, onChart: e.offsetX < L.chartW };
+});
+// Right-click: remove the alert under the cursor, or set one at the cursor's price.
+cv.addEventListener('contextmenu', e => {
+  const L = layout();
+  if (!onPrices(e, L)) return;
+  e.preventDefault();
+  const p = priceAt(e.offsetY, L), ppd = (L.y1 - L.y0) / (view.hi - view.lo), near = ALERTS.find(a => !a.hit && Math.abs(a.p - p) * ppd <= 7);
+  if (near) removeAlert(near.id); else addAlert(p, '');
+});
+window.addEventListener('mouseup', () => { drag = null; });
+cv.addEventListener('mouseleave', () => { view.mx = view.my = -1; view.dirty = true; });
+cv.addEventListener('dblclick', fit);
+cv.addEventListener('wheel', e => {
+  e.preventDefault();
+  const L = layout(), k = e.deltaY > 0 ? 1.15 : 1 / 1.15;
+  if (e.offsetX < L.chartW && !e.shiftKey) view.count = clamp(Math.round(view.count * k), 30, 560);
+  else {
+    const p = view.hi - (e.offsetY - L.y0) / (L.y1 - L.y0) * (view.hi - view.lo);
+    view.lo = p - (p - view.lo) * k; view.hi = p + (view.hi - p) * k; view.auto = false;
+  }
+  view.dirty = true;
+}, { passive: false });
+function fit() { view.auto = true; view.offset = 0; view.count = 110; view.dirty = true; }
+
+for (const tf of Object.keys(TF)) {
+  const b = document.createElement('button');
+  b.textContent = tf; b.dataset.tf = tf;
+  b.onclick = () => { if (tf === S.tf) return; set('tf', tf); D.chart = []; fit(); loadChart(true); };
+  $('tfs').appendChild(b);
+}
+$('bZones').onclick = () => set('zones', !S.zones);
+$('bAbs').onclick = () => set('abs', !S.abs);
+$('bGld').onclick = () => set('gld', !S.gld);
+$('bProfile').onclick = () => set('profile', !S.profile);
+// Guide panel: one click handler for every link in it, because its contents are rebuilt while the page runs.
+$('sig').addEventListener('pointerdown', () => { pressing = true; });
+for (const type of ['pointerup', 'pointercancel']) window.addEventListener(type, () => { pressing = false; });
+$('sig').addEventListener('click', e => {
+  const a = e.target.closest('[data-act]');
+  if (!a) return;
+  const act = a.dataset.act;
+  if (act === 'alert') addAlert(+a.dataset.v, a.dataset.note);
+  else if (act === 'unalert') removeAlert(a.dataset.v);
+  else if (act === 'zoneAlert') set('zoneAlert', !S.zoneAlert);
+  else if (act === 'testAlarm') testAlarm();
+  else if (act === 'balance') { const v = parseFloat(prompt('Account balance in USD, for the stop-size check:', S.balance)); if (v > 0) set('balance', v); }
+  else if (act === 'mt5Test') { if (confirm('Place a small test BUY on the MT5 demo account now?\nStop 5 $ away, target 10 $ away; the EA sets the lot size.')) sendToMt5({ test: 'buy' }); }
+  else if (act === 'clear') { if (confirm('Delete the stored results?')) { LOG.length = 0; store.set(sk('siglog'), LOG); drawSig(); view.dirty = true; } }
+});
+// Instrument list. Changing it reloads the page: every feed, zone, idea and alert belongs to one instrument.
+for (const [id, ins] of Object.entries(INSTRUMENTS)) {
+  let grp = [...$('ins').children].find(g => g.label === ins.group);
+  if (!grp) { grp = document.createElement('optgroup'); grp.label = ins.group; $('ins').appendChild(grp); }
+  const o = document.createElement('option');
+  o.value = id; o.textContent = `${ins.name} (${id})`;
+  grp.appendChild(o);
+}
+$('ins').value = INS_ID;
+$('ins').onchange = e => { store.set('instrument', e.target.value); location.reload(); };
+const alertFromInput = () => { const el = $('aPrice'), v = parseFloat(el.value.replace(',', '.')); if (v > 0 && addAlert(v, '')) el.value = ''; };
+$('aAdd').onclick = alertFromInput;
+$('aPrice').addEventListener('keydown', e => { if (e.key === 'Enter') alertFromInput(); });
+$('bSignals').onclick = () => set('signals', !S.signals);
+$('bAlarm').onclick = () => {                                  // on + armed -> off; otherwise switch on and play a test
+  if (S.alarm && armed()) { silence(); set('alarm', false); } else { if (!S.alarm) set('alarm', true); testAlarm(); }
+};
+$('alert').onclick = dismiss;
+$('bMt5').onclick = () => { set('mt5', !S.mt5); MT.ok = false; MT.text = S.mt5 ? 'connecting…' : 'off'; syncMt5(); pollMt5(); };
+for (const type of ['pointerdown', 'keydown']) window.addEventListener(type, () => { if (S.alarm && !armed()) arm(); }, true);
+$('bLight').onclick = () => set('light', !S.light);
+$('bReset').onclick = fit;
+$('bHelp').onclick = () => { const h = $('help'), open = h.style.display !== 'block'; h.style.display = open ? 'block' : 'none'; $('bHelp').classList.toggle('on', open); };
+$('fAll').onclick = () => set('filter', 'all');
+$('fNear').onclick = () => set('filter', 'near');
+$('metric').onchange = e => set('metric', e.target.value);
+window.addEventListener('resize', resize);
+
+// ------------------------------------------------------------------ start
+document.title = TITLE;
+syncUi(); resize();
+loadChart(true); loadM1(true); loadM30(); loadRef(); loadGex();   // all at once: each part draws as soon as it arrives
+pollMt5();
+// Live tick, once a second (every 3 s on Kraken, which allows about one request a second): the newest candles
+// (one small request for the chart timeframe, one for 1-minute candles), then the signal check. A tick is
+// skipped while the previous one is still waiting for its answer, so a slow connection never piles requests up.
+let ticking = false;
+setInterval(async () => {
+  if (ticking) return;
+  ticking = true;
+  try { await Promise.all([loadChart(false), loadM1(false)]); evaluate(); status(); } finally { ticking = false; }
+}, INS.feed === 'kraken' ? 3e3 : 1e3);
+if (INS.options) { setInterval(computeGex, 5e3); setInterval(loadGex, 30e3); }
+if (INS.ref) setInterval(loadRef, 15e3);
+setInterval(loadM30, 60e3);
+if (INS.mt5) setInterval(pollMt5, 5e3);
+setInterval(() => { view.dirty = true; }, 1e3);            // candle countdown
+(function loop() {
+  if (view.dirty) { view.dirty = false; try { render(); } catch (e) { console.error(e); } }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

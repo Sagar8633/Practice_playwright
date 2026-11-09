@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gold Liquidity Heatmap</title>
+<style>
+:root{--bg:#0b0e14;--panel:#121722;--line:#232a3a;--fg:#dfe5f0;--mut:#8a94a8;--bull:#1fd27a;--bear:#ff4d4d;--neu:#c9a227;--hl:#1a2030}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font:12px/1.35 system-ui,Segoe UI,sans-serif;overflow:hidden}
+header{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:6px 10px;background:var(--panel);border-bottom:1px solid var(--line)}
+header label{display:inline-flex;align-items:center;gap:4px;color:var(--mut);white-space:nowrap}
+select,input,button{background:#0e1320;color:var(--fg);border:1px solid var(--line);border-radius:5px;padding:3px 6px;font-size:12px}
+input[type=range]{width:90px;padding:0}
+input[type=text]{width:92px}
+button{cursor:pointer} button:hover{border-color:#5b7cff} button.on{border-color:#5b7cff;color:#9db4ff}
+.sep{width:1px;height:20px;background:var(--line)}
+#status{color:var(--mut);white-space:nowrap}
+#status b{color:var(--fg)}
+#bias{display:flex;align-items:center;gap:8px;margin-left:auto;max-width:48%;min-width:260px}
+#badge{font-weight:800;font-size:14px;padding:2px 10px;border-radius:6px;background:#1a2030;letter-spacing:.5px}
+#badge.BULLISH{background:#0f3d28;color:var(--bull)} #badge.BEARISH{background:#4a1515;color:var(--bear)} #badge.NEUTRAL{background:#3a3012;color:var(--neu)}
+#score{width:120px;height:10px;background:#1a2030;border-radius:5px;position:relative;overflow:hidden;flex:none}
+#score i{position:absolute;top:0;bottom:0;background:var(--bull)}
+#reasons{color:var(--mut);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#replay{display:none;gap:8px;align-items:center;padding:4px 10px;background:#161c2a;border-bottom:1px solid var(--line)}
+#replay.show{display:flex}
+#replay input[type=range]{flex:1;width:auto}
+#wrap{display:flex;height:calc(100% - 44px)}
+#levels{width:340px;flex:none;overflow:auto;border-right:1px solid var(--line);background:var(--panel);padding:10px 12px;font-size:12.5px}
+#levels h3{margin:10px 0 4px;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--mut)}
+#levels .big{font-size:22px;font-weight:700;letter-spacing:.3px}
+#levels .sub{color:var(--mut);font-size:11px}
+.lv{display:grid;grid-template-columns:70px 1fr;gap:2px 8px;padding:5px 7px;border-radius:6px;margin:3px 0;background:#0e1320;border-left:3px solid var(--line)}
+.lv.ask{border-left-color:var(--bear)} .lv.bid{border-left-color:var(--bull)}
+.lv .p{font:600 14px ui-monospace,Consolas,monospace} .lv.ask .p{color:#ff7b7b} .lv.bid .p{color:#4fe3a0}
+.lv .m{color:var(--mut);font-size:11px} .lv .s{font-weight:600}
+.lv.top{background:#151c2c} .lv .star{color:#e6c84a}
+#now{margin:6px 0 2px;padding:6px 8px;border:1px dashed #3b4660;border-radius:6px;text-align:center}
+#summary{background:#0e1320;border-radius:6px;padding:8px 9px;line-height:1.45;margin-top:4px}
+#summary b.up{color:var(--bull)} #summary b.dn{color:var(--bear)}
+#refbox{background:#0e1320;border-radius:6px;padding:7px 9px;margin-top:4px}
+#refbox input[type=text]{width:80px}
+#chartwrap{flex:1;position:relative;min-width:300px}
+canvas{display:block;width:100%;height:100%;cursor:crosshair}
+#tip{position:absolute;pointer-events:none;background:rgba(10,14,22,.92);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font:11px ui-monospace,Consolas,monospace;display:none;white-space:pre;z-index:5}
+#msg{position:absolute;left:12px;top:10px;color:var(--mut);font-size:13px;pointer-events:none}
+#help{position:absolute;right:12px;bottom:6px;color:#5e6980;font-size:11px;text-align:right;pointer-events:none}
+.legend{display:flex;gap:10px;flex-wrap:wrap;color:var(--mut);font-size:11px;margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+</style>
+</head>
+<body>
+<header>
+ <label>Feed <select id="feed"></select></label>
+ <label>Symbol <input id="symbol" type="text" value="PAXGUSDT"></label>
+ <button id="connect">Connect</button>
+ <span class="sep"></span>
+ <label>Agg $<select id="agg"><option>0.01</option><option>0.05</option><option selected>0.1</option><option>0.25</option><option>0.5</option><option>1</option><option>2</option></select></label>
+ <label>Column <select id="column"><option value="250">250 ms</option><option value="500">500 ms</option><option value="1000" selected>1 s</option><option value="2000">2 s</option><option value="5000">5 s</option></select></label>
+ <label>Bars <select id="bars"><option value="15">15 s</option><option value="30">30 s</option><option value="60" selected>1 m</option><option value="300">5 m</option></select></label>
+ <label>Heat <input id="gain" type="range" min="0.3" max="3" step="0.05" value="0.85"></label>
+ <label>Bubbles ≥ <input id="bubble" type="text" value="auto" style="width:46px"></label>
+ <button id="tCandles" class="on">Candles</button><button id="tBubbles" class="on">Bubbles</button><button id="tFoot">Footprint</button><button id="tLevels" class="on">Level bands</button>
+ <button id="follow" class="on" title="Keep the last price centred (double-click the chart to re-enable)">Follow</button>
+ <span class="sep"></span>
+ <button id="save" title="Download the columns on screen as JSON">Save</button>
+ <button id="load" title="Load a Save file or a record.cjs .ndjson.gz">Load recording</button><input id="file" type="file" accept=".json,.ndjson,.gz" style="display:none">
+ <span id="status">not connected</span>
+ <div id="bias"><span id="badge">—</span><div id="score"><i></i></div><span id="reasons">bias needs about a minute of data</span></div>
+</header>
+<div id="replay"><button id="rplay">▶</button><span id="rtime" style="font-family:ui-monospace,Consolas,monospace"></span><input id="rpos" type="range" min="0" max="0" value="0"><label>speed <select id="rspeed"><option>1</option><option>2</option><option selected>5</option><option>10</option><option>30</option></select>×</label><button id="rclose">Back to live</button></div>
+<div id="wrap">
+<aside id="levels">
+ <div id="now"><div class="sub" id="nowlabel">price now</div><div class="big" id="nowprice">—</div><div class="sub" id="nowsub"></div></div>
+ <div id="refbox">
+  <div><b>XAUUSD reference</b> <span class="sub" id="refinfo">loading…</span></div>
+  <div style="margin-top:4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+   <label class="sub">show prices as</label>
+   <button id="pmNative" class="on">PAXG (exchange)</button><button id="pmXau">XAUUSD</button>
+  </div>
+  <div style="margin-top:4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+   <label class="sub">your MT5 XAUUSD <input id="refManual" type="text" placeholder="e.g. 4121.3"></label>
+   <button id="refUse">Use</button><button id="refAuto" class="on">Auto (gold-api)</button>
+  </div>
+  <div class="sub" id="basisinfo"></div>
+ </div>
+ <h3 style="display:flex;justify-content:space-between;align-items:center">Sell orders above price (resistance) <label class="sub" style="text-transform:none;letter-spacing:0">band $<select id="lwidth"><option>0.25</option><option selected>0.5</option><option>1</option><option>2</option></select></label></h3>
+ <div id="askList" class="sub">waiting for the order book…</div>
+ <div id="nowline" style="text-align:center;color:var(--mut);font-size:11px;margin:4px 0">▲ above · <b id="nowmid">—</b> · below ▼</div>
+ <h3>Buy orders below price (support)</h3>
+ <div id="bidList" class="sub"></div>
+ <h3>What it means right now</h3>
+ <div id="summary">Give it a minute of data.</div>
+ <div class="legend"><span><i style="background:#ff4d4d"></i>sell wall</span><span><i style="background:#1fd27a"></i>buy wall</span><span><i style="background:#e6c84a"></i>last price</span><span>size = ounces resting · held = how long the wall has stood</span></div>
+</aside>
+<div id="chartwrap"><canvas id="c"></canvas><div id="tip"></div><div id="msg"></div>
+<div id="help">wheel: price zoom · shift+wheel: time zoom · drag: pan · double-click: follow</div></div>
+</div>
+<script src="engine.js"></script>
+<script>
+'use strict';
+const { BookEngine, FeedClient, FEEDS, serializeColumn, parseColumn } = HeatmapEngine;
+const $ = id => document.getElementById(id);
+const canvas = $('c'), ctx = canvas.getContext('2d'), tip = $('tip');
+
+const cfg = { feed: 'binance_fut', symbol: 'PAXGUSDT', aggTick: 0.1, columnMs: 1000, barSec: 60, gain: 0.85,
+              bubbleMin: 'auto', colW: 3, rowH: 3, follow: true, candles: true, bubbles: true, footprint: false, levelBands: true,
+              wallMult: 8, levelWidth: 0.5, priceMode: 'native' };
+const view = { centerBucket: 0, scrollCols: 0, maxQ: 1, bubbleAuto: 0.5, mx: -1, my: -1, dirty: true };
+const ref = { xau: null, at: 0, manual: false, error: '' };     // XAUUSD reference price (gold-api.com or typed in)
+let engine = null, client = null, columnTimer = null, metrics = null, levels = null, lastTick = 0;
+let replay = null;          // {cols: [], idx, playing, timer}
+const rates = { t: 0, u: 0, tr: 0, ups: 0, tps: 0 };
+
+for (const [k, f] of Object.entries(FEEDS)) { const o = document.createElement('option'); o.value = k; o.textContent = `${f.name} (${f.symbol})`; $('feed').appendChild(o); }
+$('feed').onchange = () => { $('symbol').value = FEEDS[$('feed').value].symbol; };
+
+// ------------------------------------------------------------------ prices: native (exchange) vs XAUUSD-equivalent
+function nativeNow() { return engine ? (engine.lastPrice || (engine.bb ? (engine.bb + engine.ba) / 2 * engine.tick : 0)) : 0; }
+function basis() { return ref.xau && nativeNow() ? nativeNow() - ref.xau : null; }   // exchange price - XAUUSD
+function disp(p) { const b = basis(); return cfg.priceMode === 'xau' && b != null ? p - b : p; }
+function fmtP(p) { return disp(p).toFixed(2); }
+async function fetchRef() {
+  if (ref.manual) return;
+  try {
+    const r = await fetch('https://api.gold-api.com/price/XAU', { cache: 'no-store' });
+    const j = await r.json();
+    ref.xau = +j.price; ref.at = Date.parse(j.updatedAt) || Date.now(); ref.error = '';
+  } catch (e) { ref.error = 'gold-api unreachable'; }
+  view.dirty = true;
+}
+fetchRef(); setInterval(fetchRef, 15000);
+$('refUse').onclick = () => { const v = parseFloat($('refManual').value); if (!v) return; ref.xau = v; ref.at = Date.now(); ref.manual = true; $('refAuto').classList.remove('on'); view.dirty = true; };
+$('refAuto').onclick = () => { ref.manual = false; $('refAuto').classList.add('on'); fetchRef(); };
+$('pmNative').onclick = () => { cfg.priceMode = 'native'; $('pmNative').classList.add('on'); $('pmXau').classList.remove('on'); view.dirty = true; };
+$('pmXau').onclick = () => { cfg.priceMode = 'xau'; $('pmXau').classList.add('on'); $('pmNative').classList.remove('on'); view.dirty = true; };
+
+// ------------------------------------------------------------------ colours
+const LUT = (() => {
+  const stops = [[0, [11, 14, 20]], [0.10, [8, 28, 86]], [0.28, [20, 80, 200]], [0.46, [20, 190, 215]], [0.62, [230, 230, 60]],
+                 [0.78, [255, 140, 25]], [0.91, [255, 45, 45]], [1, [255, 255, 255]]];
+  const lut = new Uint32Array(256);
+  for (let i = 0; i < 256; i++) {
+    const v = i / 255; let a = stops[0], b = stops[stops.length - 1];
+    for (let s = 0; s < stops.length - 1; s++) if (v >= stops[s][0] && v <= stops[s + 1][0]) { a = stops[s]; b = stops[s + 1]; break; }
+    const f = (v - a[0]) / ((b[0] - a[0]) || 1);
+    const c = a[1].map((x, j) => Math.round(x + (b[1][j] - x) * f));
+    lut[i] = (255 << 24) | (c[2] << 16) | (c[1] << 8) | c[0];
+  }
+  return lut;
+})();
+
+// ------------------------------------------------------------------ live connection
+function connect() {
+  disconnect();
+  cfg.feed = $('feed').value; cfg.symbol = $('symbol').value.trim().toUpperCase() || FEEDS[cfg.feed].symbol;
+  cfg.aggTick = +$('agg').value; cfg.columnMs = +$('column').value;
+  engine = new BookEngine({ tick: FEEDS[cfg.feed].tick, aggTick: cfg.aggTick, columnMs: cfg.columnMs, halfRange: 400, maxColumns: 7200 });
+  metrics = null; levels = null; view.scrollCols = 0; cfg.follow = true; $('follow').classList.add('on');
+  client = new FeedClient(cfg.feed, cfg.symbol, engine, {
+    onState: (s, x) => { setMsg(s === 'live' ? '' : `feed: ${s}${x ? ' in ' + x / 1000 + ' s' : ''}`); view.dirty = true; },
+    onLog: m => console.log(m),
+  });
+  client.start();
+  columnTimer = setInterval(onColumnTick, cfg.columnMs);
+  setInterval(() => {                       // update rates once a second
+    if (!engine) return;
+    rates.ups = engine.stats.updates - rates.u; rates.tps = engine.stats.trades - rates.tr;
+    rates.u = engine.stats.updates; rates.tr = engine.stats.trades;
+  }, 1000);
+}
+function disconnect() {
+  if (client) client.stop(); client = null;
+  if (columnTimer) clearInterval(columnTimer); columnTimer = null;
+}
+function onColumnTick() {
+  if (!engine || !engine.synced) return;
+  const now = Date.now();
+  if (engine.tickColumn(now)) {
+    if (!replay) { metrics = engine.metrics(now, { wallMult: cfg.wallMult }); levels = engine.keyLevels({ widthUsd: cfg.levelWidth }); showBias(metrics); showLevels(); updateAuto(); }
+    view.dirty = true;
+  }
+}
+function setMsg(t) { $('msg').textContent = t; }
+
+// ------------------------------------------------------------------ bias panel
+function showBias(m) {
+  if (!m) return;
+  $('badge').textContent = m.bias; $('badge').className = m.bias;
+  const bar = $('score').firstElementChild, half = 60;
+  if (m.score >= 0) { bar.style.left = half + 'px'; bar.style.width = (m.score * half) + 'px'; bar.style.background = 'var(--bull)'; }
+  else { bar.style.left = (half + m.score * half) + 'px'; bar.style.width = (-m.score * half) + 'px'; bar.style.background = 'var(--bear)'; }
+  $('reasons').textContent = `${m.score.toFixed(2)} · ` + m.reasons.join(' · ');
+  $('reasons').title = m.reasons.join('\n');
+}
+
+// ------------------------------------------------------------------ key levels panel (plain language)
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function fmtHeld(s) { return s < 60 ? `${Math.round(s)} s` : s < 3600 ? `${Math.round(s / 60)} min` : `${(s / 3600).toFixed(1)} h`; }
+function levelRow(x, biggest) {
+  const trend = { growing: '▲ growing', shrinking: '▼ shrinking', steady: '= steady', new: 'new' }[x.trend] || x.trend;
+  return `<div class="lv ${x.side}${x === biggest ? ' top' : ''}"><div class="p">${fmtP(x.price)}</div>` +
+    `<div><span class="s">${fmtQ(x.size)} oz</span> <span class="m">· ${x.ratio.toFixed(0)}× a normal level${x === biggest ? ' <span class="star">★ biggest</span>' : ''}</span></div>` +
+    `<div class="m">${fmtP(x.low)}–${fmtP(x.high)}</div><div class="m">${x.distUsd.toFixed(2)} $ (${x.distPct.toFixed(2)} %) ${x.side === 'ask' ? 'above' : 'below'} · held ${fmtHeld(x.heldS)} · ${trend}</div></div>`;
+}
+function showLevels() {
+  const p = nativeNow(); if (!p) return;
+  const mode = cfg.priceMode === 'xau' ? 'XAUUSD-equivalent' : `${cfg.symbol} on ${FEEDS[cfg.feed].name}`;
+  $('nowlabel').textContent = `price now (${mode})`;
+  $('nowprice').textContent = fmtP(p);
+  const b = basis();
+  $('nowsub').textContent = b == null ? `${cfg.symbol} ${p.toFixed(2)} · XAUUSD reference not loaded`
+    : cfg.priceMode === 'xau' ? `exchange price ${p.toFixed(2)}, basis ${b >= 0 ? '+' : ''}${b.toFixed(2)} removed`
+    : `≈ XAUUSD ${(p - b).toFixed(2)} (this exchange trades ${b >= 0 ? '+' : ''}${b.toFixed(2)} vs spot gold)`;
+  $('refinfo').textContent = ref.xau ? `${ref.xau.toFixed(2)} · ${ref.manual ? 'typed by you' : 'gold-api.com, ' + Math.max(0, Math.round((Date.now() - ref.at) / 1000)) + ' s ago'}` : (ref.error || 'loading…');
+  $('basisinfo').textContent = b == null ? '' : `basis = ${cfg.symbol} − XAUUSD = ${b >= 0 ? '+' : ''}${b.toFixed(2)} $ (changes slowly; it is why the exchange price differs from your MT5 chart)`;
+  $('nowmid').textContent = fmtP(p);
+  if (!levels) return;
+  const bigA = levels.asks.reduce((m, x) => !m || x.size > m.size ? x : m, null), bigB = levels.bids.reduce((m, x) => !m || x.size > m.size ? x : m, null);
+  $('askList').innerHTML = levels.asks.length ? levels.asks.slice().sort((a, b) => b.price - a.price).map(x => levelRow(x, bigA)).join('') : '<span class="sub">no large sell orders within 1 %</span>';
+  $('bidList').innerHTML = levels.bids.length ? levels.bids.map(x => levelRow(x, bigB)).join('') : '<span class="sub">no large buy orders within 1 %</span>';
+  // plain-language summary
+  const m = metrics; const parts = [];
+  const nearA = levels.asks[0], nearB = levels.bids[0];
+  if (nearA) parts.push(`Nearest big <b class="dn">sell wall</b> at <b>${fmtP(nearA.price)}</b> (${fmtQ(nearA.size)} oz, ${nearA.distUsd.toFixed(2)} $ above, ${nearA.trend}${nearA.heldS >= 120 ? ', held ' + fmtHeld(nearA.heldS) : ''}).`);
+  if (nearB) parts.push(`Nearest big <b class="up">buy wall</b> at <b>${fmtP(nearB.price)}</b> (${fmtQ(nearB.size)} oz, ${nearB.distUsd.toFixed(2)} $ below, ${nearB.trend}${nearB.heldS >= 120 ? ', held ' + fmtHeld(nearB.heldS) : ''}).`);
+  if (bigA && bigA !== nearA) parts.push(`Biggest seller cluster ${fmtP(bigA.price)} (${fmtQ(bigA.size)} oz).`);
+  if (bigB && bigB !== nearB) parts.push(`Biggest buyer cluster ${fmtP(bigB.price)} (${fmtQ(bigB.size)} oz).`);
+  if (m) {
+    const imb = m.imbWide; parts.push(imb > 0.15 ? `More resting <b class="up">buy</b> orders than sell orders within 0.25 % (${(imb * 100).toFixed(0)} % more).` : imb < -0.15 ? `More resting <b class="dn">sell</b> orders than buy orders within 0.25 % (${(-imb * 100).toFixed(0)} % more).` : `Resting buy and sell orders near price are about balanced.`);
+    const d5 = m.buy5 - m.sell5, v5 = m.buy5 + m.sell5;
+    parts.push(v5 < 1 ? `Tape (actual trades) last 5 min: quiet.` : Math.abs(d5) < Math.max(1, v5 * 0.1) ? `Tape last 5 min: balanced (${fmtQ(v5)} oz traded, net ${fmtS(d5)}).`
+      : `Tape last 5 min: ${d5 > 0 ? '<b class="up">buyers</b> hit the offers' : '<b class="dn">sellers</b> hit the bids'} (${fmtS(d5)} oz net of ${fmtQ(v5)}).`);
+    if (m.wallAbove && m.wallAbove.pulled) parts.push(`A sell wall near ${fmtP(m.wallAbove.price)} was just <b>pulled</b> — possible fake resistance.`);
+    if (m.wallBelow && m.wallBelow.pulled) parts.push(`A buy wall near ${fmtP(m.wallBelow.price)} was just <b>pulled</b> — possible fake support.`);
+    if (m.absorption) parts.push(`${m.absorption.side === 'sellers' ? 'Sellers' : 'Buyers'} are being <b>absorbed</b> at ${fmtP(m.absorption.price)} (${m.absorption.bias}).`);
+    parts.push(`Bias: <b class="${m.bias === 'BULLISH' ? 'up' : m.bias === 'BEARISH' ? 'dn' : ''}">${m.bias}</b> (${m.score.toFixed(2)}). Walls can be pulled before price arrives — watch "held" and "growing".`);
+  }
+  $('summary').innerHTML = parts.join(' ');
+}
+$('lwidth').onchange = () => { cfg.levelWidth = +$('lwidth').value; if (engine && engine.synced) { levels = engine.keyLevels({ widthUsd: cfg.levelWidth }); showLevels(); view.dirty = true; } };
+
+// ------------------------------------------------------------------ columns source (live ring or replay)
+function cols() {
+  if (replay) return { len: replay.idx + 1, get: i => replay.cols[i] };
+  return engine ? engine.columns : { len: 0, get: () => null };
+}
+function liveLadder(lowB, highB) {                 // aggregate the live book for the visible rows
+  const bid = new Map(), ask = new Map();
+  if (!engine) return { bid, ask };
+  for (const [k, q] of engine.bids) { const b = engine.bucketOf(k); if (b >= lowB && b <= highB) bid.set(b, (bid.get(b) || 0) + q); }
+  for (const [k, q] of engine.asks) { const b = engine.bucketOf(k); if (b >= lowB && b <= highB) ask.set(b, (ask.get(b) || 0) + q); }
+  return { bid, ask };
+}
+function lastClose() {
+  const c = cols(); for (let i = c.len - 1; i >= Math.max(0, c.len - 50); i--) { const col = c.get(i); if (col && col.c != null) return col.c; }
+  return engine && engine.bb ? Math.round((engine.bb + engine.ba) / 2) : 0;
+}
+
+// ------------------------------------------------------------------ auto thresholds (once per column)
+function updateAuto() {
+  const c = cols(), n = c.len; if (!n) return;
+  const sizes = [];
+  for (let i = Math.max(0, n - Math.round(600000 / cfg.columnMs)); i < n; i++) for (const t of c.get(i).trades) sizes.push(t.q);
+  if (sizes.length > 20) { sizes.sort((a, b) => a - b); view.bubbleAuto = Math.max(0.05, sizes[Math.floor(sizes.length * 0.95)]); }
+}
+
+// ------------------------------------------------------------------ rendering
+let heatCanvas = document.createElement('canvas'), heatImg = null;
+function resize() {
+  const dpr = window.devicePixelRatio || 1, r = canvas.getBoundingClientRect();
+  canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); view.dirty = true;
+}
+window.addEventListener('resize', resize);
+
+function layout() {
+  const W = canvas.clientWidth, H = canvas.clientHeight;
+  const axisW = 72, ladderW = 150, bottomH = 110, timeH = 18;
+  return { W, H, axisW, ladderW, bottomH, timeH, x0: 0, x1: W - ladderW - axisW, y0: 0, y1: H - bottomH - timeH,
+           lx0: W - ladderW - axisW, lx1: W - axisW, by0: H - bottomH - timeH + timeH, by1: H };
+}
+
+function render() {
+  const L = layout(); if (L.x1 < 50 || L.y1 < 50) return;
+  const c = cols(), n = c.len;
+  ctx.fillStyle = '#0b0e14'; ctx.fillRect(0, 0, L.W, L.H);
+  if (!engine) { drawCentered('Choose a feed and press Connect', L); return; }
+  const agg = engine.aggTick, aggMult = engine.aggMult, tick = engine.tick;
+  const rowH = cfg.rowH, colW = cfg.colW;
+  const rows = Math.floor((L.y1 - L.y0) / rowH), colsVis = Math.floor((L.x1 - L.x0) / colW);
+  if (cfg.follow) { const lc = lastClose(); if (lc) view.centerBucket = lc / aggMult; }
+  const topBucket = Math.round(view.centerBucket + rows / 2);
+  const yOfPrice = p => L.y0 + (topBucket + 1 - p / agg) * rowH;
+  const yOfTick = k => yOfPrice(k * tick);
+  const endIdx = Math.max(0, n - view.scrollCols), count = Math.min(colsVis, endIdx);
+  const xOfIdx = i => L.x1 - (endIdx - i) * colW;      // left edge of column i
+
+  // --- heat image: one pixel per (column, row), stretched with no smoothing
+  if (count > 0 && rows > 0) {
+    if (heatCanvas.width !== count || heatCanvas.height !== rows) { heatCanvas.width = count; heatCanvas.height = rows; heatImg = null; }
+    if (!heatImg) heatImg = heatCanvas.getContext('2d').createImageData(count, rows);
+    const px = new Uint32Array(heatImg.data.buffer);
+    // log scale over a 30x dynamic range below the 98th percentile (like Bookmap's intensity)
+    const qs = view.maxQ / 30, denom = Math.log1p(view.maxQ / qs) || 1, gain = cfg.gain;
+    let sample = [], doSample = (performance.now() - lastTick) > 1000;
+    for (let j = 0; j < count; j++) {
+      const col = c.get(endIdx - count + j); const x = j;
+      for (let r = 0; r < rows; r++) {
+        const i = (topBucket - r) - col.base; let q = 0;
+        if (i >= 0 && i < col.W) q = col.bidQ[i] + col.askQ[i];
+        let v = 0;
+        if (q > 0) { v = gain * Math.log1p(q / qs) / denom; if (v > 1) v = 1; if (doSample && ((j + r) & 7) === 0) sample.push(q); }
+        px[r * count + x] = LUT[(v * 255) | 0];
+      }
+    }
+    if (doSample && sample.length > 50) { sample.sort((a, b) => a - b); view.maxQ = sample[Math.floor(sample.length * 0.98)] || 1; lastTick = performance.now(); }
+    heatCanvas.getContext('2d').putImageData(heatImg, 0, 0);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(heatCanvas, 0, 0, count, rows, xOfIdx(endIdx - count), L.y0, count * colW, rows * rowH);
+  }
+
+  ctx.save(); ctx.beginPath(); ctx.rect(L.x0, L.y0, L.x1 - L.x0, L.y1 - L.y0); ctx.clip();
+  // --- key-level bands (big resting orders), labelled with exact prices
+  if (cfg.levelBands && levels) {
+    const draw = (x, color, text, big) => {
+      const yTop = yOfPrice(x.high), yBot = yOfPrice(x.low);
+      if (yBot < L.y0 || yTop > L.y1) return;
+      ctx.fillStyle = color.replace('A', big ? '.22' : '.14'); ctx.fillRect(L.x0, yTop, L.x1 - L.x0, Math.max(2, yBot - yTop));
+      ctx.strokeStyle = color.replace('A', big ? '.9' : '.6'); ctx.lineWidth = big ? 1.5 : 1;
+      ctx.beginPath(); ctx.moveTo(L.x0, yTop); ctx.lineTo(L.x1, yTop); ctx.moveTo(L.x0, yBot); ctx.lineTo(L.x1, yBot); ctx.stroke();
+      ctx.font = `${big ? 'bold ' : ''}11px system-ui`; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      const w = ctx.measureText(text).width + 10, y = (yTop + yBot) / 2;
+      ctx.fillStyle = 'rgba(10,14,22,.85)'; ctx.fillRect(L.x0 + 6, y - 8, w, 16);
+      ctx.fillStyle = color.replace('A', '1'); ctx.fillText(text, L.x0 + 11, y);
+    };
+    const bigA = levels.asks.reduce((m, x) => !m || x.size > m.size ? x : m, null), bigB = levels.bids.reduce((m, x) => !m || x.size > m.size ? x : m, null);
+    for (const x of levels.asks) draw(x, 'rgba(255,77,77,A)', `SELL ${fmtP(x.price)} · ${fmtQ(x.size)} oz · held ${fmtHeld(x.heldS)}${x === bigA ? ' ★' : ''}`, x === bigA);
+    for (const x of levels.bids) draw(x, 'rgba(31,210,122,A)', `BUY ${fmtP(x.price)} · ${fmtQ(x.size)} oz · held ${fmtHeld(x.heldS)}${x === bigB ? ' ★' : ''}`, x === bigB);
+  }
+  // --- candles
+  if (cfg.candles && count > 0) {
+    const barMs = cfg.barSec * 1000; let bars = new Map();
+    for (let i = endIdx - count; i < endIdx; i++) {
+      const col = c.get(i); if (col.o == null) continue;
+      const key = Math.floor(col.t / barMs); let b = bars.get(key);
+      if (!b) bars.set(key, b = { i0: i, i1: i, o: col.o, h: col.h, l: col.l, c: col.c });
+      b.i1 = i; b.c = col.c; if (col.h > b.h) b.h = col.h; if (col.l < b.l) b.l = col.l;
+    }
+    for (const b of bars.values()) {
+      const x0 = xOfIdx(b.i0), x1 = xOfIdx(b.i1) + colW, up = b.c >= b.o;
+      const yo = yOfTick(b.o), yc = yOfTick(b.c), yh = yOfTick(b.h), yl = yOfTick(b.l);
+      ctx.strokeStyle = up ? 'rgba(31,210,122,.9)' : 'rgba(255,77,77,.9)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo((x0 + x1) / 2, yh); ctx.lineTo((x0 + x1) / 2, yl); ctx.stroke();
+      ctx.fillStyle = up ? 'rgba(31,210,122,.28)' : 'rgba(255,77,77,.28)';
+      const top = Math.min(yo, yc), hgt = Math.max(1, Math.abs(yc - yo));
+      ctx.fillRect(x0 + 1, top, Math.max(1, x1 - x0 - 2), hgt); ctx.strokeRect(x0 + 1, top, Math.max(1, x1 - x0 - 2), hgt);
+    }
+  }
+  // --- last-price line through the columns
+  if (count > 1) {
+    ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.lineWidth = 1; ctx.beginPath(); let started = false, last = null;
+    for (let i = endIdx - count; i < endIdx; i++) {
+      const col = c.get(i); const k = col.c != null ? col.c : (col.bb + col.ba) / 2; last = k;   // mid when nothing traded
+      const x = xOfIdx(i) + colW / 2, y = yOfTick(k);
+      if (!started) { ctx.moveTo(x, y); started = true; } else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+  // --- footprint numbers (only when cells are big enough)
+  if (cfg.footprint && colW >= 26 && rowH >= 9) {
+    ctx.font = '9px ui-monospace,Consolas,monospace'; ctx.textBaseline = 'middle';
+    for (let i = endIdx - count; i < endIdx; i++) {
+      const col = c.get(i), x = xOfIdx(i);
+      for (const [b, e] of col.fp) {
+        const y = yOfPrice((b + 0.5) * agg); if (y < L.y0 || y > L.y1) continue;
+        ctx.fillStyle = e[1] > e[0] ? '#ff9c9c' : '#9cffc9'; ctx.textAlign = 'center';
+        ctx.fillText(`${fmtQ(e[1])}×${fmtQ(e[0])}`, x + colW / 2, y);
+      }
+    }
+  }
+  // --- trade bubbles
+  const bubbleMin = cfg.bubbleMin === 'auto' ? view.bubbleAuto : +cfg.bubbleMin;
+  if (cfg.bubbles && count > 0) {
+    for (let i = endIdx - count; i < endIdx; i++) {
+      const col = c.get(i), x = xOfIdx(i) + colW / 2;
+      for (const t of col.trades) {
+        if (t.q < bubbleMin) continue;
+        const r = Math.min(22, 2 + 3 * Math.sqrt(t.q / bubbleMin)), y = yOfTick(t.k);
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = t.side === 'buy' ? 'rgba(31,210,122,.45)' : 'rgba(255,77,77,.45)'; ctx.fill();
+        ctx.strokeStyle = t.side === 'buy' ? '#1fd27a' : '#ff4d4d'; ctx.lineWidth = 1; ctx.stroke();
+        if (r >= 9) { ctx.fillStyle = '#fff'; ctx.font = '10px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(fmtQ(t.q), x, y); }
+      }
+    }
+  }
+  if (metrics && metrics.absorption) {
+    const y = yOfPrice(metrics.absorption.price); ctx.fillStyle = metrics.absorption.bias === 'bullish' ? '#1fd27a' : '#ff4d4d';
+    ctx.font = 'bold 11px system-ui'; ctx.textAlign = 'right'; ctx.textBaseline = 'bottom'; ctx.fillText(`absorption: ${metrics.absorption.side}`, L.x1 - 8, y - 2);
+  }
+  ctx.restore();
+
+  drawLadder(L, topBucket, rows, yOfPrice);
+  drawAxes(L, topBucket, rows, yOfPrice, c, endIdx, count, xOfIdx);
+  drawBottom(L, c, endIdx, count, xOfIdx);
+  drawCrosshair(L, topBucket, rows, c, endIdx, count, xOfIdx, yOfPrice);
+  drawStatus();
+}
+
+function drawLadder(L, topBucket, rows, yOfPrice) {
+  const agg = engine.aggTick, lowB = topBucket - rows + 1, highB = topBucket;
+  const { bid, ask } = liveLadder(lowB, highB);
+  ctx.fillStyle = '#0e121b'; ctx.fillRect(L.lx0, L.y0, L.lx1 - L.lx0, L.y1 - L.y0);
+  ctx.strokeStyle = '#232a3a'; ctx.beginPath(); ctx.moveTo(L.lx0 + .5, L.y0); ctx.lineTo(L.lx0 + .5, L.y1); ctx.stroke();
+  let max = 0; const all = []; for (const q of bid.values()) { all.push(q); if (q > max) max = q; } for (const q of ask.values()) { all.push(q); if (q > max) max = q; }
+  const med = HeatmapEngine.median(all) || 1e-9, wallQ = cfg.wallMult * med;
+  const barW = L.lx1 - L.lx0 - 44, rowH = cfg.rowH;
+  ctx.font = '10px ui-monospace,Consolas,monospace'; ctx.textBaseline = 'middle';
+  const draw = (map, color, bright) => {
+    for (const [b, q] of map) {
+      const y = yOfPrice((b + 1) * agg), w = Math.max(1, barW * q / max), wall = q >= wallQ;
+      ctx.fillStyle = wall ? bright : color; ctx.fillRect(L.lx0 + 2, y, w, Math.max(1, rowH - (rowH > 3 ? 1 : 0)));
+      if (rowH >= 9 || wall) { ctx.fillStyle = wall ? '#fff' : '#aeb7c8'; ctx.textAlign = 'left'; ctx.fillText(fmtQ(q), L.lx0 + 4 + w, y + rowH / 2); }
+    }
+  };
+  draw(ask, 'rgba(255,77,77,.55)', '#ff5c5c'); draw(bid, 'rgba(31,210,122,.55)', '#2bef8f');
+  ctx.fillStyle = '#5e6980'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillText(`book now · ≥ ${fmtQ(wallQ)} = wall`, L.lx0 + 4, L.y0 + 3);
+}
+
+function drawAxes(L, topBucket, rows, yOfPrice, c, endIdx, count, xOfIdx) {
+  const agg = engine.aggTick;
+  ctx.fillStyle = '#0e121b'; ctx.fillRect(L.lx1, L.y0, L.axisW, L.y1 - L.y0);
+  ctx.strokeStyle = '#232a3a'; ctx.beginPath(); ctx.moveTo(L.lx1 + .5, L.y0); ctx.lineTo(L.lx1 + .5, L.y1); ctx.stroke();
+  const stepRows = Math.max(1, Math.ceil(26 / cfg.rowH)); const dec = agg >= 1 ? 0 : agg >= 0.1 ? 1 : 2;
+  ctx.font = '11px ui-monospace,Consolas,monospace'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#aeb7c8';
+  for (let b = topBucket - (topBucket % stepRows); b > topBucket - rows; b -= stepRows) {
+    const y = yOfPrice((b + 0.5) * agg); if (y < L.y0 || y > L.y1) continue;
+    ctx.fillText(disp(b * agg).toFixed(dec), L.lx1 + 6, y);
+    ctx.fillStyle = '#232a3a'; ctx.fillRect(L.lx1, y, 4, 1); ctx.fillStyle = '#aeb7c8';
+  }
+  const lp = nativeNow();
+  if (lp) {
+    const y = yOfPrice(lp); ctx.fillStyle = '#e6c84a'; ctx.fillRect(L.lx1 + 1, y - 8, L.axisW - 2, 16);
+    ctx.fillStyle = '#000'; ctx.fillText(fmtP(lp), L.lx1 + 6, y);
+    ctx.strokeStyle = 'rgba(230,200,74,.5)'; ctx.setLineDash([2, 4]); ctx.beginPath(); ctx.moveTo(L.x0, y); ctx.lineTo(L.lx1, y); ctx.stroke(); ctx.setLineDash([]);
+  }
+  ctx.fillStyle = cfg.priceMode === 'xau' ? '#e6c84a' : '#5e6980'; ctx.font = 'bold 10px system-ui'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+  ctx.fillText(cfg.priceMode === 'xau' ? 'XAUUSD' : cfg.symbol.replace('USDT', ''), L.lx1 + 6, L.y1 - 4);
+  // time axis
+  const ty = L.y1; ctx.fillStyle = '#0e121b'; ctx.fillRect(L.x0, ty, L.W, L.timeH);
+  ctx.fillStyle = '#8a94a8'; ctx.textAlign = 'center'; ctx.font = '10px ui-monospace,Consolas,monospace';
+  const every = Math.max(1, Math.ceil(90 / cfg.colW));
+  for (let i = endIdx - count; i < endIdx; i++) {
+    if (i % every) continue; const col = c.get(i), x = xOfIdx(i) + cfg.colW / 2;
+    const d = new Date(col.t); ctx.fillText(d.toTimeString().slice(0, 8), x, ty + 9);
+    ctx.fillStyle = '#232a3a'; ctx.fillRect(x, L.y0, 1, L.y1 - L.y0); ctx.fillStyle = '#8a94a8';
+  }
+}
+
+function drawBottom(L, c, endIdx, count, xOfIdx) {
+  const y0 = L.by0, y1 = L.by1, h = y1 - y0;
+  ctx.fillStyle = '#0e121b'; ctx.fillRect(0, y0, L.W, h);
+  ctx.strokeStyle = '#232a3a'; ctx.beginPath(); ctx.moveTo(0, y0 + .5); ctx.lineTo(L.W, y0 + .5); ctx.stroke();
+  if (!count) return;
+  let maxD = 0, cmin = Infinity, cmax = -Infinity;
+  for (let i = endIdx - count; i < endIdx; i++) { const col = c.get(i); if (Math.abs(col.delta) > maxD) maxD = Math.abs(col.delta); if (col.cvd < cmin) cmin = col.cvd; if (col.cvd > cmax) cmax = col.cvd; }
+  const mid = y0 + h * 0.5, amp = h * 0.42;
+  for (let i = endIdx - count; i < endIdx; i++) {
+    const col = c.get(i), x = xOfIdx(i), bh = maxD ? col.delta / maxD * amp : 0;
+    ctx.fillStyle = col.delta >= 0 ? 'rgba(31,210,122,.6)' : 'rgba(255,77,77,.6)';
+    ctx.fillRect(x, bh >= 0 ? mid - bh : mid, Math.max(1, cfg.colW - (cfg.colW > 2 ? 1 : 0)), Math.max(1, Math.abs(bh)));
+  }
+  ctx.strokeStyle = '#e6c84a'; ctx.lineWidth = 1.2; ctx.beginPath(); const span = (cmax - cmin) || 1;
+  for (let i = endIdx - count; i < endIdx; i++) { const col = c.get(i), x = xOfIdx(i) + cfg.colW / 2, y = y1 - 6 - (col.cvd - cmin) / span * (h - 12); if (i === endIdx - count) ctx.moveTo(x, y); else ctx.lineTo(x, y); }
+  ctx.stroke(); ctx.lineWidth = 1;
+  const last = c.get(endIdx - 1);
+  ctx.fillStyle = '#8a94a8'; ctx.font = '11px system-ui'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillText(`buy − sell volume per column (bars, max ${fmtQ(maxD)}) · running total CVD (line) now ${fmtQ(last.cvd)} · range ${fmtQ(cmin)} … ${fmtQ(cmax)}`, 8, y0 + 4);
+}
+
+function drawCrosshair(L, topBucket, rows, c, endIdx, count, xOfIdx, yOfPrice) {
+  const mx = view.mx, my = view.my;
+  if (mx < 0 || my < L.y0 || my > L.y1 || mx > L.x1) { tip.style.display = 'none'; return; }
+  const agg = engine.aggTick;
+  const b = topBucket - Math.floor((my - L.y0) / cfg.rowH);
+  const j = Math.floor((L.x1 - mx) / cfg.colW), i = endIdx - 1 - j;
+  ctx.strokeStyle = 'rgba(255,255,255,.25)'; ctx.setLineDash([3, 3]); ctx.beginPath();
+  ctx.moveTo(mx + .5, L.y0); ctx.lineTo(mx + .5, L.y1); ctx.moveTo(L.x0, my + .5); ctx.lineTo(L.lx1, my + .5); ctx.stroke(); ctx.setLineDash([]);
+  let lines = [`price ${fmtP(b * agg)} – ${fmtP((b + 1) * agg)}`];
+  if (i >= 0 && i < c.len) {
+    const col = c.get(i); const bq = BookEngine.qtyAt(col, b, 'bid'), aq = BookEngine.qtyAt(col, b, 'ask');
+    lines.push(`time  ${new Date(col.t).toTimeString().slice(0, 8)}`);
+    if (bq) lines.push(`buy orders resting  ${fmtQ(bq)} oz`); if (aq) lines.push(`sell orders resting ${fmtQ(aq)} oz`);
+    const e = col.fp.get(b); if (e) lines.push(`traded here: buy ${fmtQ(e[0])} / sell ${fmtQ(e[1])}`);
+    lines.push(`column: buy ${fmtQ(col.buy)} sell ${fmtQ(col.sell)} Δ ${fmtS(col.delta)}`);
+  }
+  tip.textContent = lines.join('\n'); tip.style.display = 'block';
+  tip.style.left = (mx + 14 + 240 > L.W ? mx - 250 : mx + 14) + 'px'; tip.style.top = (my + 14 + 90 > L.H ? my - 95 : my + 14) + 'px';
+}
+
+function drawStatus() {
+  if (!engine) return;
+  const st = client ? client.state : 'replay';
+  const lat = client && client.latencyMs ? `${client.latencyMs} ms` : '';
+  const m = metrics;
+  $('status').innerHTML = `<b>${FEEDS[cfg.feed].name} ${cfg.symbol}</b> · ${st}${lat ? ' · lag ' + lat : ''} · ${rates.ups}/s book · ${rates.tps}/s trades` +
+    ` · levels ${engine.bids.size}/${engine.asks.size}` + (m ? ` · spread ${m.spread.toFixed(2)} · 1m Δ <b>${fmtS(m.buy1 - m.sell1)}</b> · 5m Δ <b>${fmtS(m.buy5 - m.sell5)}</b>` : '') +
+    ` · bubbles ≥ ${fmtQ(cfg.bubbleMin === 'auto' ? view.bubbleAuto : +cfg.bubbleMin)}`;
+}
+function drawCentered(t, L) { ctx.fillStyle = '#8a94a8'; ctx.font = '15px system-ui'; ctx.textAlign = 'center'; ctx.fillText(t, L.x1 / 2, L.y1 / 2); }
+function fmtQ(x) { x = +x || 0; const a = Math.abs(x); return a >= 1000 ? x.toFixed(0) : a >= 100 ? x.toFixed(1) : a >= 1 ? x.toFixed(2) : x.toFixed(3); }
+function fmtS(x) { return (x >= 0 ? '+' : '') + fmtQ(x); }
+
+(function loop() { if (view.dirty || view.mx >= 0) { view.dirty = false; try { render(); } catch (e) { console.error(e); } } requestAnimationFrame(loop); })();
+setInterval(() => { view.dirty = true; if (engine && engine.synced) showLevels(); }, 1000);
+
+// ------------------------------------------------------------------ interaction
+let drag = null;
+canvas.addEventListener('mousemove', e => {
+  const r = canvas.getBoundingClientRect(); view.mx = e.clientX - r.left; view.my = e.clientY - r.top; view.dirty = true;
+  if (drag) {
+    const dy = view.my - drag.y, dx = view.mx - drag.x;
+    if (Math.abs(dy) >= cfg.rowH) { view.centerBucket += dy / cfg.rowH; drag.y = view.my; cfg.follow = false; $('follow').classList.remove('on'); }
+    if (Math.abs(dx) >= cfg.colW) { view.scrollCols = Math.max(0, Math.min(cols().len - 10, view.scrollCols - Math.round(dx / cfg.colW))); drag.x = view.mx; }
+  }
+});
+canvas.addEventListener('mouseleave', () => { view.mx = view.my = -1; view.dirty = true; });
+canvas.addEventListener('mousedown', e => { drag = { x: view.mx, y: view.my }; });
+window.addEventListener('mouseup', () => { drag = null; });
+canvas.addEventListener('dblclick', () => { cfg.follow = true; view.scrollCols = 0; $('follow').classList.add('on'); view.dirty = true; });
+canvas.addEventListener('wheel', e => {
+  e.preventDefault(); if (!engine) return;
+  const L = layout();
+  if (e.shiftKey) { cfg.colW = Math.max(1, Math.min(40, cfg.colW + (e.deltaY < 0 ? 1 : -1))); }
+  else {
+    const rows = Math.floor((L.y1 - L.y0) / cfg.rowH), topBucket = Math.round(view.centerBucket + rows / 2);
+    const bucketAtMouse = topBucket - (view.my - L.y0) / cfg.rowH;
+    cfg.rowH = Math.max(1, Math.min(24, cfg.rowH + (e.deltaY < 0 ? 1 : -1)));
+    if (!cfg.follow) { const rows2 = Math.floor((L.y1 - L.y0) / cfg.rowH); view.centerBucket = bucketAtMouse + (view.my - L.y0) / cfg.rowH - rows2 / 2; }
+  }
+  view.dirty = true;
+}, { passive: false });
+
+$('connect').onclick = () => { if (replay) closeReplay(); connect(); };
+$('agg').onchange = $('column').onchange = () => { if (engine && !replay) connect(); };
+$('bars').onchange = () => { cfg.barSec = +$('bars').value; view.dirty = true; };
+$('gain').oninput = () => { cfg.gain = +$('gain').value; view.dirty = true; };
+$('bubble').onchange = () => { const v = $('bubble').value.trim(); cfg.bubbleMin = v === '' || v === 'auto' || isNaN(+v) ? 'auto' : +v; $('bubble').value = cfg.bubbleMin; view.dirty = true; };
+const toggle = (id, key) => { $(id).onclick = () => { cfg[key] = !cfg[key]; $(id).classList.toggle('on', cfg[key]); view.dirty = true; }; };
+toggle('tCandles', 'candles'); toggle('tBubbles', 'bubbles'); toggle('tFoot', 'footprint'); toggle('tLevels', 'levelBands');
+$('follow').onclick = () => { cfg.follow = !cfg.follow; if (cfg.follow) view.scrollCols = 0; $('follow').classList.toggle('on', cfg.follow); view.dirty = true; };
+
+// ------------------------------------------------------------------ save / load / replay
+$('save').onclick = () => {
+  const c = cols(); if (!c.len) return;
+  const out = [JSON.stringify({ header: 1, feed: cfg.feed, symbol: cfg.symbol, tick: engine.tick, aggTick: engine.aggTick, columnMs: cfg.columnMs, saved: new Date().toISOString() })];
+  for (let i = 0; i < c.len; i++) out.push(JSON.stringify(serializeColumn(c.get(i))));
+  const blob = new Blob([out.join('\n')], { type: 'application/x-ndjson' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `heatmap_${cfg.symbol}_${new Date().toISOString().replace(/[:.]/g, '-')}.ndjson`; a.click();
+};
+$('load').onclick = () => $('file').click();
+$('file').onchange = async () => {
+  const f = $('file').files[0]; if (!f) return;
+  try {
+    let stream = f.stream();
+    if (f.name.endsWith('.gz')) stream = stream.pipeThrough(new DecompressionStream('gzip'));
+    const text = await new Response(stream).text();
+    const lines = text.split('\n').filter(Boolean);
+    const header = JSON.parse(lines[0]); if (!header.header) throw new Error('not a heatmap recording');
+    const colsArr = lines.slice(1).map(l => parseColumn(JSON.parse(l)));
+    if (!colsArr.length) throw new Error('no columns in the file');
+    disconnect();
+    cfg.feed = header.feed in FEEDS ? header.feed : cfg.feed; cfg.symbol = header.symbol; cfg.columnMs = header.columnMs; cfg.aggTick = header.aggTick;
+    engine = new BookEngine({ tick: header.tick, aggTick: header.aggTick, columnMs: header.columnMs, halfRange: 400, maxColumns: 10 });
+    replay = { cols: colsArr, idx: colsArr.length - 1, playing: false, timer: null };
+    $('replay').classList.add('show'); $('rpos').max = colsArr.length - 1; $('rpos').value = replay.idx;
+    setMsg(`replay: ${f.name} (${colsArr.length} columns, ${new Date(colsArr[0].t).toLocaleString()} → ${new Date(colsArr[colsArr.length - 1].t).toLocaleTimeString()})`);
+    seekReplay(replay.idx);
+  } catch (e) { alert('cannot load: ' + e.message); }
+  $('file').value = '';
+};
+function seekReplay(i) {
+  replay.idx = Math.max(0, Math.min(replay.cols.length - 1, i)); $('rpos').value = replay.idx;
+  const col = replay.cols[replay.idx];
+  // rebuild a bucket-level book and the last 5 min of tape so metrics() / keyLevels() can run on history
+  engine.bids.clear(); engine.asks.clear();
+  for (let k = 0; k < col.W; k++) { if (col.bidQ[k] > 0) engine.bids.set((col.base + k) * engine.aggMult, col.bidQ[k]); if (col.askQ[k] > 0) engine.asks.set((col.base + k) * engine.aggMult, col.askQ[k]); }
+  engine.bb = col.bb; engine.ba = col.ba; engine.lastTick = col.c || Math.round((col.bb + col.ba) / 2); engine.lastPrice = engine.lastTick * engine.tick; engine.synced = true;
+  engine.recentTrades.clear(); engine.columns.clear();
+  for (let j = Math.max(0, replay.idx - Math.round(300000 / cfg.columnMs)); j <= replay.idx; j++) { for (const t of replay.cols[j].trades) engine.recentTrades.push(t); }
+  const back = Math.round(600000 / cfg.columnMs); engine.columns = new HeatmapEngine.Ring(back + 2);
+  for (let j = Math.max(0, replay.idx - back); j <= replay.idx; j++) engine.columns.push(replay.cols[j]);
+  metrics = engine.metrics(col.t, { wallMult: cfg.wallMult }); levels = engine.keyLevels({ widthUsd: cfg.levelWidth }); showBias(metrics); showLevels(); updateAuto();
+  $('rtime').textContent = new Date(col.t).toLocaleTimeString(); view.dirty = true;
+}
+$('rpos').oninput = () => seekReplay(+$('rpos').value);
+$('rplay').onclick = () => {
+  if (!replay) return; replay.playing = !replay.playing; $('rplay').textContent = replay.playing ? '❚❚' : '▶';
+  clearInterval(replay.timer);
+  if (replay.playing) replay.timer = setInterval(() => { if (replay.idx >= replay.cols.length - 1) { $('rplay').click(); return; } seekReplay(replay.idx + 1); }, cfg.columnMs / +$('rspeed').value);
+};
+$('rspeed').onchange = () => { if (replay && replay.playing) { $('rplay').click(); $('rplay').click(); } };
+$('rclose').onclick = closeReplay;
+function closeReplay() { if (replay) clearInterval(replay.timer); replay = null; $('replay').classList.remove('show'); setMsg(''); engine = null; metrics = null; levels = null; view.dirty = true; connect(); }
+
+resize();
+connect();
+</script>
+</body>
+</html>

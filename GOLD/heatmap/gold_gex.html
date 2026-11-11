@@ -66,6 +66,11 @@ select{padding:0 8px;cursor:pointer}
 #alert span{font-size:12px;opacity:.85;margin-left:10px}
 @keyframes flash{50%{filter:brightness(1.5)}}
 #bSigClose{display:none}
+.edge{position:absolute;left:0;top:50%;transform:translateY(-50%);z-index:5;width:18px;height:58px;padding:0;border:1px solid var(--line);background:var(--card);color:var(--strong);cursor:pointer;font:700 15px system-ui,sans-serif;display:flex;align-items:center;justify-content:center;opacity:.8}
+.edge:hover{opacity:1;background:var(--accent);border-color:var(--accent);color:#fff}
+#tabL{border-left:0;border-radius:0 8px 8px 0}
+#tabR{left:auto;right:0;border-right:0;border-radius:8px 0 0 8px}
+@media (max-width: 720px){.edge{width:24px;height:66px}}
 @media (max-width: 720px){
   body.guide{--side:0px}
   #c{cursor:default}
@@ -97,6 +102,7 @@ select{padding:0 8px;cursor:pointer}
   <button class="btn" id="bAlarm" title="Siren, banner and flashing tab title when a signal appears. Click to switch on (plays a test) or off">Alarm</button>
   <button class="btn" id="bMt5" title="Send each new signal to MetaTrader 5 through the local agent. The EA trades it on a demo account only">MT5 off</button>
   <button class="btn" id="bReset" title="Fit the chart again (or double-click it)">Fit</button>
+  <button class="btn" id="bFull" title="Hide both side panels and fill the screen. Esc or this button again to leave">Full screen</button>
   <button class="btn" id="bLight">Light</button>
   <button class="btn" id="bHelp">Help</button>
   <a class="btn" href="gold_heatmap.html">Heatmap</a>
@@ -123,6 +129,7 @@ select{padding:0 8px;cursor:pointer}
   <p><i>Price alerts</i>: type a price in the guide, hold Alt and click the chart, or right-click the chart. An orange line appears and the alarm rings once when price gets there. Right-click the line to remove it. The price is this page's price, which can differ a little from your broker's.</p>
   <p><i>Alarm</i>: a new BUY or SELL sounds a 30-second siren (high and fast for buy, low and slow for sell), shows a flashing banner and flashes the tab title until you click the banner. A price alert sounds a fast trill, and reaching a zone a short tone. Sound only works after one click on the page, and its loudness is set by the PC volume. Keep this tab open in its own window: a hidden or sleeping tab checks late or not at all.</p>
   <p><i>MT5</i>: with MT5 on, each new signal is passed to the GexSignalTrader EA in MetaTrader 5, which places the trade with the same stop and target distance, closes it after 4 hours, and reports back here. It needs start_gex.bat running, the EA attached to the gold chart and Algo Trading on. The EA refuses to trade on a real account.</p>
+  <p><i>Panels</i>: the arrow tab on the inner edge of the guide (left) or the option bars (right) hides that panel; when hidden, its tab waits at the screen edge to bring it back. <i>Full screen</i> hides both and fills the screen; Esc or the button again puts them back. A hidden guide still records ideas, sounds the alarm, draws the arrows and sends to MT5: switch those with the Alarm and MT5 buttons.</p>
   <p>Mouse: wheel on the chart zooms time, wheel on the price scale or bars (or Shift + wheel) zooms price, drag moves, double-click or Fit fits the candles (levels outside the screen are then pinned to its top or bottom edge with an arrow), Alt + click or right-click sets a price alert. On a phone: one finger pans, two fingers pinch to zoom time, double-tap fits; the Guide opens over the chart and closes with its Close button.</p>
   <p>None of this predicts price. Tested on 5 years of gold, the BUY / SELL ideas of this guide made nothing before costs and lose after them: with the stop used since 11 Nov 2026 (1 x ATR beyond the level, at least 2 $) about 230 ideas a year at −0.08 to −0.20 of the risk per trade after costs; with the old tight stop it was −0.2 to −0.5, and 19 % of its stops were hit before price went on to the target. Absorption areas, tested on 90 days, did no better. Nothing has been tested on the other instruments. The guide is a checklist to keep you out of poor trades, not a signal service.</p>
 </div>
@@ -144,6 +151,8 @@ select{padding:0 8px;cursor:pointer}
   <div id="gFoot" class="rec"></div>
 </div>
 <div id="alert"></div>
+<button class="edge" id="tabL"></button>
+<button class="edge" id="tabR"></button>
 <div id="tip"></div>
 <div id="status"></div>
 
@@ -174,7 +183,7 @@ const store = {
 };
 const S = { tf: store.get('tf', '5m'), metric: store.get('metric', 'net'), filter: store.get('filter', 'all'),
             zones: store.get('zones', true), profile: store.get('profile', true), light: store.get('light', false), signals: store.get('signals', window.innerWidth > 720), alarm: store.get('alarm', true), mt5: store.get('mt5', false),
-            abs: store.get('abs', true), gld: store.get('gld', false), zoneAlert: store.get('zoneAlert', true), pocAlert: store.get('pocAlert', true), balance: store.get('balance', 200) };
+            abs: store.get('abs', true), gld: store.get('gld', false), zoneAlert: store.get('zoneAlert', true), pocAlert: store.get('pocAlert', true), bars: store.get('bars', true), balance: store.get('balance', 200) };
 if (!TF[S.tf]) S.tf = '5m';
 if (!METRICS[S.metric]) S.metric = 'net';
 if (!(S.balance > 0)) S.balance = 200;
@@ -481,7 +490,7 @@ function evaluate() {
     if (LOG.length > 200) LOG.splice(0, LOG.length - 200);
     store.set(sk('siglog'), LOG);
     alertSignal(LOG[LOG.length - 1]);
-    if (S.signals) sendToMt5(LOG[LOG.length - 1]);
+    sendToMt5(LOG[LOG.length - 1]);                                // MT5 has its own on / off button
   }
   if (Sig.state === 'watch') alertZone(Sig);
   checkAlerts();
@@ -577,7 +586,7 @@ function put(id, h) { const el = $(id); if (el.dataset.html !== h) { el.dataset.
 function drawSig() {
   $('sig').style.display = S.signals ? 'block' : 'none';
   const open = LOG.find(s => s.result === 'open');
-  if (!alerting) document.title = !S.signals ? TITLE : (open ? open.side.toUpperCase() + ' open · ' : Sig && Sig.state === 'watch' ? 'Get ready: ' + Sig.side + ' · ' : '') + TITLE;
+  if (!alerting) document.title = (open ? open.side.toUpperCase() + ' open · ' : Sig && Sig.state === 'watch' ? 'Get ready: ' + Sig.side + ' · ' : '') + TITLE;
   if (!S.signals || pressing) return;
   const lists = zoneLists(), v = verdict(open, lists), p = lastPx(), cand = open || (Sig && Sig.state !== 'none' ? Sig : null);
   if (p && !$('aPrice').value) $('aPrice').placeholder = 'price, e.g. ' + fp(spot());
@@ -663,7 +672,7 @@ function alertPrice(a) {
 // never on top of a banner that is still waiting for a click.
 const zoneRang = {};
 function alertZone(s) {
-  if (!S.signals || !S.zoneAlert || alerting) return;
+  if (!S.zoneAlert || alerting) return;
   const key = s.side + ' ' + s.levels.join(' + ');
   if (Date.now() - (zoneRang[key] || 0) < 30 * 60e3) return;
   zoneRang[key] = Date.now();
@@ -720,14 +729,14 @@ function banner(cls, title, text) {
 }
 function dismiss() { silence(); alerting = false; clearInterval(blink); $('alert').style.display = 'none'; drawSig(); }
 function alertSignal(s) {
-  if (!S.signals || !S.alarm) return;
+  if (!S.alarm) return;
   const up = s.side === 'buy';
   const loud = siren(30, up ? 2000 : 1100, up ? 1500 : 800, up ? 0.18 : 0.35);       // buy: high and fast; sell: low and slow
   banner(s.side, `${s.side.toUpperCase()} SIGNAL`, `${INS.name} · entry ${gp(s.entry)} · stop ${gp(s.stop)} · target ${gp(s.target)} · score ${s.score}/100` +
          (loud ? '' : ' · sound is blocked until you click the page once'));
 }
 function alertResult(s) {
-  if (!S.signals || !S.alarm) return;
+  if (!S.alarm) return;
   const hit = s.result === 'target';
   siren(3, hit ? 1800 : 600, hit ? 2400 : 450, 0.25);
   banner(hit ? 'buy' : s.result === 'stop' ? 'sell' : 'watch', `${s.side.toUpperCase()} ${hit ? 'HIT ITS TARGET' : s.result === 'stop' ? 'HIT ITS STOP' : 'TIMED OUT'}`, `${signed(s.r, 1)} x risk`);
@@ -835,7 +844,9 @@ function syncUi() {
   for (const b of $('tfs').children) b.classList.toggle('on', b.dataset.tf === S.tf);
   $('bZones').classList.toggle('on', S.zones); $('bProfile').classList.toggle('on', S.profile); $('bSignals').classList.toggle('on', S.signals);
   $('bAbs').classList.toggle('on', S.abs); $('bGld').classList.toggle('on', S.gld);
-  $('bGld').style.display = $('panelHead').style.display = INS.options ? '' : 'none';     // GLD options: gold only
+  $('bGld').style.display = INS.options ? '' : 'none';                                      // GLD options: gold only
+  $('panelHead').style.display = INS.options && S.bars ? '' : 'none';                        // the right panel's own controls
+  $('bFull').classList.toggle('on', !!full); $('bFull').textContent = full ? 'Exit full screen' : 'Full screen';
   $('bMt5').style.display = INS.mt5 ? '' : 'none';                                        // the EA trades gold only
   $('bAbs').style.display = INS.feed === 'kraken' ? 'none' : '';                           // Kraken has no buy / sell volume
   syncAlarm(); syncMt5();
@@ -843,15 +854,31 @@ function syncUi() {
   $('bLight').textContent = S.light ? 'Dark' : 'Light';
   $('fAll').classList.toggle('on', S.filter === 'all'); $('fNear').classList.toggle('on', S.filter === 'near');
   $('metric').value = S.metric;
-  chip(); status(); view.dirty = true;
+  chip(); status(); placeTabs(); view.dirty = true;
 }
-function set(key, value) { S[key] = value; store.set(key, value); syncUi(); if (key === 'signals') resize(); }
+function set(key, value) {
+  S[key] = value; store.set(key, value);
+  if (full && key in full) full[key] = value;                  // a panel opened or closed during full screen stays so afterwards
+  syncUi(); if (key === 'signals' || key === 'bars') resize();
+}
+let full = null;                     // panel states from before "Full screen", put back when it ends
+// The two edge tabs: the arrow on the inner edge of each side panel hides it; a hidden panel's tab waits at the
+// screen edge to bring it back.
+function placeTabs(L) {
+  L = L || layout();
+  const l = $('tabL'), r = $('tabR');
+  l.style.left = (S.signals ? $('sig').offsetWidth : 0) + 'px';
+  l.textContent = S.signals ? '\u2039' : '\u203a'; l.title = S.signals ? 'Hide the guide panel' : 'Show the guide panel';
+  r.style.display = INS.options && !(L.compact && S.signals) ? '' : 'none';     // on a phone the open guide covers it
+  r.style.right = L.panelW + 'px';
+  r.textContent = S.bars ? '\u203a' : '\u2039'; r.title = S.bars ? 'Hide the option bars' : 'Show the option bars';
+}
 
 // ------------------------------------------------------------------ drawing
 function layout() {
   const W = cv.clientWidth, H = cv.clientHeight, compact = window.innerWidth <= 720;
   const axisW = compact ? 54 : INS.dec >= 4 ? 80 : 72;
-  const panelW = INS.options ? (compact ? Math.round(clamp(W * 0.36, 120, 190)) : Math.round(clamp(W * (S.signals ? 0.24 : 0.3), 200, 430))) : 0;
+  const panelW = INS.options && S.bars ? (compact ? Math.round(clamp(W * 0.36, 120, 190)) : Math.round(clamp(W * (S.signals ? 0.24 : 0.3), 200, 430))) : 0;
   const top = compact ? Math.max(52, $('top').offsetHeight + 20 + ($('panelHead').offsetHeight || 0)) : Math.max(48, $('top').offsetHeight + 16);
   return { W, H, axisW, panelW, compact, chartW: W - axisW - panelW, axisX: W - axisW - panelW, panelX: W - panelW, y0: top, y1: H - 40 };
 }
@@ -873,6 +900,7 @@ function resize() {
     $('status').style.maxWidth = (L.axisX - 20) + 'px';
   }
   $('help').style.top = (L.y0 + 4) + 'px';
+  placeTabs(L);
   view.dirty = true;
 }
 function pill(x, y, w, h, bg, text, fg, align) {
@@ -931,7 +959,7 @@ function render() {
     // bottom edge instead: the old +/- 3.5 % range with GLD lines on squeezed every level near the price together.
     let lo = sp, hi = sp;
     for (let i = first; i <= last; i++) { lo = Math.min(lo, c[i].l - b); hi = Math.max(hi, c[i].h - b); }
-    const open = S.signals && LOG.find(s => s.result === 'open');
+    const open = LOG.find(s => s.result === 'open');
     if (open) for (const p of [open.stop - b, open.target - b]) if (Math.abs(p - sp) < 0.02 * sp) { lo = Math.min(lo, p); hi = Math.max(hi, p); }
     const mid = (lo + hi) / 2, half = Math.max((hi - lo) * 0.62, sp * (INS_ID === 'XAUUSD' ? 0.005 : 0.0005));
     view.lo = mid - half; view.hi = mid + half;
@@ -1033,7 +1061,8 @@ function render() {
       level(p - b, name, col, fg, name, y => hline(xs, L.chartW, y, col, [], 1.4));
   }
   // signals: an arrow on each trigger candle; the idea that is still open also gets entry / stop / target lines
-  if (S.signals) {
+  // (drawn whether or not the guide panel is open)
+  if (LOG.length) {
     ctx.font = '10px system-ui, "Segoe UI", sans-serif'; ctx.textAlign = 'center';
     for (const s of LOG) {
       const up = s.side === 'buy', x = xOfTime(s.t), i = clamp(Math.floor((s.t - c[0].t) / tfMs), 0, n - 1);
@@ -1089,7 +1118,7 @@ function render() {
 
   // gamma bars
   let hover = null;
-  if (G) {
+  if (G && L.panelW > 0) {
     const val = METRICS[S.metric].val, rows = shown().rows.filter(r => { const y = yOf(r.k * G.f); return y > L.y0 - 4 && y < L.y1 + 4; });
     let vmax = 1e-9, gap = Infinity;
     rows.forEach((r, i) => { vmax = Math.max(vmax, S.metric === 'oi' ? Math.max(r.coi, r.poi) : Math.abs(val(r))); if (i) gap = Math.min(gap, (r.k - rows[i - 1].k) * G.f * ppd); });
@@ -1117,7 +1146,7 @@ function render() {
       if (gap >= 11 || Math.abs(v) >= 0.25 * vmax) { ctx.fillStyle = P.strong; ctx.fillText(fmt(v), x0 + w + 6, y + 4); }
     }
     ctx.font = '12px system-ui, "Segoe UI", sans-serif';
-  } else if (INS.options) {
+  } else if (INS.options && L.panelW > 0) {
     ctx.fillStyle = P.text; ctx.textAlign = 'center';
     const x = L.panelX + L.panelW / 2, y = (L.y0 + L.y1) / 2;
     if (D.gexMissing) { ctx.fillText('No options data yet.', x, y - 10); ctx.fillText('Run: node gex_fetch.cjs', x, y + 10); }
@@ -1296,6 +1325,25 @@ $('aAdd').onclick = alertFromInput;
 $('aPrice').addEventListener('keydown', e => { if (e.key === 'Enter') alertFromInput(); });
 $('bSignals').onclick = () => set('signals', !S.signals);
 $('bSigClose').onclick = () => set('signals', false);
+$('tabL').onclick = () => set('signals', !S.signals);
+$('tabR').onclick = () => set('bars', !S.bars);
+// Full screen: both side panels hidden (not stored) and the browser's full-screen mode where it has one.
+// Esc, the browser's own exit or the button again puts the panels back as they were.
+function toggleFull() {
+  if (full) return endFull();
+  full = { signals: S.signals, bars: S.bars };
+  S.signals = false; S.bars = false; syncUi(); resize();
+  const el = document.documentElement;
+  if (el.requestFullscreen && !document.fullscreenElement) el.requestFullscreen().catch(() => { /* refused: the panels stay hidden */ });
+}
+function endFull() {
+  if (!full) return;
+  S.signals = full.signals; S.bars = full.bars; full = null; syncUi(); resize();
+  if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
+}
+$('bFull').onclick = toggleFull;
+document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && full) endFull(); });
+window.addEventListener('keydown', e => { if (e.key === 'Escape' && full && !/INPUT|SELECT/.test(e.target.tagName)) endFull(); });
 let armedBefore = false;                                       // armed() just before this click (set on pointerdown)
 $('bAlarm').onclick = () => {                                  // not armed before this click -> play a test; already armed -> off
   if (!S.alarm) { set('alarm', true); testAlarm(); }

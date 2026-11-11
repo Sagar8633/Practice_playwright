@@ -205,6 +205,12 @@ The page was built to look like a paid gold GEX tool. It cannot reproduce that t
 | Orange dashed lines | Price alerts you set |
 | Profile | Volume by price since 18:00 New York. Yellow = POC, purple = 70 % value area. Fixed 0.5 $ rows from closed 1-minute candles, rebuilt once a minute: zooming does not move POC / VAH / VAL, and the guide uses the same profile. A `POC SHIFTED` banner (tone with the alarm on) when the POC moves 2 $ or more and holds for two closed minutes; quiet when the page opens and in the first 30 minutes of a session; switch under Price alerts in the guide |
 
+Side panels: the arrow tab on the inner edge of the guide (left) or the option bars (right) hides that panel
+(stored per browser); a hidden panel's tab waits at the screen edge to bring it back. `Full screen` hides both
+for the moment and uses the browser's full-screen mode; Esc or the button again restores them. Since 11 Nov
+2026 a hidden guide still records ideas, sounds the alarm, draws the arrows and sends to MT5 (before, closing
+the guide switched all of that off); use the `Alarm` and `MT5` buttons for those.
+
 `Fit` (or double-click) scales the chart to the candles on screen plus the open idea's stop and target, at
 least ±0.5 % of the price. Levels outside the screen (GLD walls, alerts, profile, the open idea) get no line,
 only a pill pinned to the top or bottom edge with an arrow. Level pills on the right are spread so none

@@ -7,7 +7,6 @@
 <style>
 :root{--bg:#0b0e14;--card:#131824;--line:#232b3a;--text:#8a94a8;--strong:#d7dce6;--accent:#3b6cff;--side:0px}
 body.light{--bg:#ffffff;--card:#f3f5f9;--line:#d9dee7;--text:#5b6474;--strong:#1b2230}
-body.guide{--side:336px}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:13px system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden}
 #c{position:absolute;top:0;left:var(--side);width:calc(100% - var(--side));height:100%;display:block;cursor:crosshair;touch-action:none}
 .bar{position:absolute;top:8px;display:flex;gap:8px;align-items:center;z-index:2}
@@ -66,10 +65,15 @@ select{padding:0 8px;cursor:pointer}
 #alert span{font-size:12px;opacity:.85;margin-left:10px}
 @keyframes flash{50%{filter:brightness(1.5)}}
 #bSigClose{display:none}
-.edge{position:absolute;left:0;top:50%;transform:translateY(-50%);z-index:5;width:18px;height:58px;padding:0;border:1px solid var(--line);background:var(--card);color:var(--strong);cursor:pointer;font:700 15px system-ui,sans-serif;display:flex;align-items:center;justify-content:center;opacity:.8}
+.split{position:absolute;top:0;bottom:0;width:10px;z-index:5;cursor:col-resize;touch-action:none}
+.split::after{content:'';position:absolute;top:0;bottom:0;left:4px;width:2px;background:transparent;transition:background .15s}
+.split:hover::after,.split.on::after{background:var(--accent)}
+.edge{position:absolute;left:0;top:50%;transform:translateY(-50%);z-index:6;touch-action:none;width:18px;height:58px;padding:0;border:1px solid var(--line);background:var(--card);color:var(--strong);cursor:pointer;font:700 15px system-ui,sans-serif;display:flex;align-items:center;justify-content:center;opacity:.8}
 .edge:hover{opacity:1;background:var(--accent);border-color:var(--accent);color:#fff}
 #tabL{border-left:0;border-radius:0 8px 8px 0}
 #tabR{left:auto;right:0;border-right:0;border-radius:8px 0 0 8px}
+#splitR{left:auto;right:0}
+#sig{will-change:transform}
 @media (max-width: 720px){.edge{width:24px;height:66px}}
 @media (max-width: 720px){
   body.guide{--side:0px}
@@ -129,7 +133,7 @@ select{padding:0 8px;cursor:pointer}
   <p><i>Price alerts</i>: type a price in the guide, hold Alt and click the chart, or right-click the chart. An orange line appears and the alarm rings once when price gets there. Right-click the line to remove it. The price is this page's price, which can differ a little from your broker's.</p>
   <p><i>Alarm</i>: a new BUY or SELL sounds a 30-second siren (high and fast for buy, low and slow for sell), shows a flashing banner and flashes the tab title until you click the banner. A price alert sounds a fast trill, and reaching a zone a short tone. Sound only works after one click on the page, and its loudness is set by the PC volume. Keep this tab open in its own window: a hidden or sleeping tab checks late or not at all.</p>
   <p><i>MT5</i>: with MT5 on, each new signal is passed to the GexSignalTrader EA in MetaTrader 5, which places the trade with the same stop and target distance, closes it after 4 hours, and reports back here. It needs start_gex.bat running, the EA attached to the gold chart and Algo Trading on. The EA refuses to trade on a real account.</p>
-  <p><i>Panels</i>: the arrow tab on the inner edge of the guide (left) or the option bars (right) hides that panel; when hidden, its tab waits at the screen edge to bring it back. <i>Full screen</i> hides both and fills the screen; Esc or the button again puts them back. A hidden guide still records ideas, sounds the alarm, draws the arrows and sends to MT5: switch those with the Alarm and MT5 buttons.</p>
+  <p><i>Panels</i>: drag the inner edge of the guide (left) or the option bars (right) to make it wider or narrower; drag it most of the way in and let go to minimise it. A minimised panel leaves an arrow tab at the screen edge: click it, or drag it back out, to open the panel again. A click on an arrow tab opens or closes its panel; a double-click on the edge restores the default width. <i>Full screen</i> hides both and fills the screen; Esc or the button again puts them back. A hidden guide still records ideas, sounds the alarm, draws the arrows and sends to MT5: switch those with the Alarm and MT5 buttons.</p>
   <p>Mouse: wheel on the chart zooms time, wheel on the price scale or bars (or Shift + wheel) zooms price, drag moves, double-click or Fit fits the candles (levels outside the screen are then pinned to its top or bottom edge with an arrow), Alt + click or right-click sets a price alert. On a phone: one finger pans, two fingers pinch to zoom time, double-tap fits; the Guide opens over the chart and closes with its Close button.</p>
   <p>None of this predicts price. Tested on 5 years of gold, the BUY / SELL ideas of this guide made nothing before costs and lose after them: with the stop used since 11 Nov 2026 (1 x ATR beyond the level, at least 2 $) about 230 ideas a year at −0.08 to −0.20 of the risk per trade after costs; with the old tight stop it was −0.2 to −0.5, and 19 % of its stops were hit before price went on to the target. Absorption areas, tested on 90 days, did no better. Nothing has been tested on the other instruments. The guide is a checklist to keep you out of poor trades, not a signal service.</p>
 </div>
@@ -151,6 +155,8 @@ select{padding:0 8px;cursor:pointer}
   <div id="gFoot" class="rec"></div>
 </div>
 <div id="alert"></div>
+<div class="split" id="splitL" title="Drag to resize the guide, most of the way in to minimise it. Double-click: default width"></div>
+<div class="split" id="splitR" title="Drag to resize the option bars, most of the way in to minimise them. Double-click: default width"></div>
 <button class="edge" id="tabL"></button>
 <button class="edge" id="tabR"></button>
 <div id="tip"></div>
@@ -183,10 +189,12 @@ const store = {
 };
 const S = { tf: store.get('tf', '5m'), metric: store.get('metric', 'net'), filter: store.get('filter', 'all'),
             zones: store.get('zones', true), profile: store.get('profile', true), light: store.get('light', false), signals: store.get('signals', window.innerWidth > 720), alarm: store.get('alarm', true), mt5: store.get('mt5', false),
-            abs: store.get('abs', true), gld: store.get('gld', false), zoneAlert: store.get('zoneAlert', true), pocAlert: store.get('pocAlert', true), bars: store.get('bars', true), balance: store.get('balance', 200) };
+            abs: store.get('abs', true), gld: store.get('gld', false), zoneAlert: store.get('zoneAlert', true), pocAlert: store.get('pocAlert', true), bars: store.get('bars', true), guideW: store.get('guideW', 336), barsW: store.get('barsW', 0), balance: store.get('balance', 200) };
 if (!TF[S.tf]) S.tf = '5m';
 if (!METRICS[S.metric]) S.metric = 'net';
 if (!(S.balance > 0)) S.balance = 200;
+if (!(S.guideW >= 240)) S.guideW = 336;
+if (!(S.barsW >= 0)) S.barsW = 0;
 
 // Instruments. Gold and crypto candles are Binance USDT-margined futures (the busiest tape, with buy / sell
 // volume for the profile and the absorption areas); they trade a little away from the real-dollar price, so
@@ -584,7 +592,7 @@ function checklist(cand) {
 let pressing = false;                // a click on the guide is in progress: do not replace what is being clicked
 function put(id, h) { const el = $(id); if (el.dataset.html !== h) { el.dataset.html = h; el.innerHTML = h; } }
 function drawSig() {
-  $('sig').style.display = S.signals ? 'block' : 'none';
+  $('sig').style.display = slide.l > 0.5 ? 'block' : 'none';
   const open = LOG.find(s => s.result === 'open');
   if (!alerting) document.title = (open ? open.side.toUpperCase() + ' open · ' : Sig && Sig.state === 'watch' ? 'Get ready: ' + Sig.side + ' · ' : '') + TITLE;
   if (!S.signals || pressing) return;
@@ -845,7 +853,6 @@ function syncUi() {
   $('bZones').classList.toggle('on', S.zones); $('bProfile').classList.toggle('on', S.profile); $('bSignals').classList.toggle('on', S.signals);
   $('bAbs').classList.toggle('on', S.abs); $('bGld').classList.toggle('on', S.gld);
   $('bGld').style.display = INS.options ? '' : 'none';                                      // GLD options: gold only
-  $('panelHead').style.display = INS.options && S.bars ? '' : 'none';                        // the right panel's own controls
   $('bFull').classList.toggle('on', !!full); $('bFull').textContent = full ? 'Exit full screen' : 'Full screen';
   $('bMt5').style.display = INS.mt5 ? '' : 'none';                                        // the EA trades gold only
   $('bAbs').style.display = INS.feed === 'kraken' ? 'none' : '';                           // Kraken has no buy / sell volume
@@ -859,26 +866,100 @@ function syncUi() {
 function set(key, value) {
   S[key] = value; store.set(key, value);
   if (full && key in full) full[key] = value;                  // a panel opened or closed during full screen stays so afterwards
-  syncUi(); if (key === 'signals' || key === 'bars') resize();
+  syncUi(); if (key === 'signals' || key === 'bars') slideTo();
 }
 let full = null;                     // panel states from before "Full screen", put back when it ends
-// The two edge tabs: the arrow on the inner edge of each side panel hides it; a hidden panel's tab waits at the
-// screen edge to bring it back.
+// ------------------------------------------------------------------ side panels: slide, drag, minimise
+// slide.l / slide.r = the width each side panel takes on screen right now. Opening or closing a panel slides it
+// (0.2 s). Dragging its inner edge (the thin strip or the arrow tab) resizes it; letting go with it dragged most
+// of the way in minimises it, and dragging a minimised panel's tab back out of the screen edge opens it at that
+// width. A click on the arrow tab opens / closes; a double-click on the strip restores the default width.
+// Widths are kept per browser (gex.guideW, gex.barsW; barsW 0 = automatic, as before).
+const GUIDE_MIN = 240, BARS_MIN = 130;
+const slide = { l: 0, r: 0, anim: 0, drag: null };
+const compactNow = () => window.innerWidth <= 720;
+function guideFull() { return Math.round(compactNow() ? Math.min(window.innerWidth * 0.88, S.guideW) : Math.min(S.guideW, window.innerWidth * 0.5)); }
+function barsFull() {
+  const W = window.innerWidth - (compactNow() || !S.signals ? 0 : guideFull());
+  if (S.barsW > 0) return Math.round(clamp(S.barsW, BARS_MIN, Math.max(BARS_MIN, W * 0.6)));
+  return compactNow() ? Math.round(clamp(W * 0.36, 120, 190)) : Math.round(clamp(W * (S.signals ? 0.24 : 0.3), 200, 430));
+}
+function applySlide() {
+  const gw = guideFull(), sig = $('sig');
+  document.body.style.setProperty('--side', (compactNow() ? 0 : Math.round(slide.l)) + 'px');   // on a phone the guide lies over the chart
+  sig.style.width = gw + 'px';
+  sig.style.transform = slide.l >= gw - 0.5 ? '' : `translateX(${Math.round(slide.l - gw)}px)`;
+  sig.style.display = slide.l > 0.5 ? 'block' : 'none';
+  resize();
+}
+function slideTo(now) {
+  cancelAnimationFrame(slide.anim);
+  const from = { l: slide.l, r: slide.r }, to = { l: S.signals ? guideFull() : 0, r: INS.options && S.bars ? barsFull() : 0 };
+  const t0 = performance.now(), ms = now ? 0 : 200;
+  const step = t => {
+    const k = ms ? clamp((t - t0) / ms, 0, 1) : 1, e = 1 - Math.pow(1 - k, 3);          // ease-out
+    slide.l = from.l + (to.l - from.l) * e; slide.r = from.r + (to.r - from.r) * e;
+    applySlide();
+    if (k < 1) slide.anim = requestAnimationFrame(step);
+  };
+  step(t0);
+}
+// Drag one panel edge. el = the strip or the tab; clickToggles = a press without movement opens / closes it.
+function dragPanel(side, e, clickToggles) {
+  if (e.button !== undefined && e.button !== 0) return;
+  e.preventDefault();
+  const el = e.currentTarget;
+  try { el.setPointerCapture(e.pointerId); } catch (err) { /* old browser: the drag still works while over the handle */ }
+  cancelAnimationFrame(slide.anim);
+  const left = side === 'l', d = slide.drag = { x: e.clientX, w0: left ? slide.l : slide.r, moved: false, g0: S.guideW, b0: S.barsW };
+  const max = left ? window.innerWidth * (compactNow() ? 0.88 : 0.5) : (window.innerWidth - (compactNow() ? 0 : slide.l)) * 0.6;
+  $(left ? 'splitL' : 'splitR').classList.add('on');
+  const move = ev => {
+    const dx = ev.clientX - d.x;
+    if (!d.moved && Math.abs(dx) < 4) return;
+    d.moved = true;
+    const w = clamp(d.w0 + (left ? dx : -dx), 0, max);
+    if (left) {
+      if (w >= GUIDE_MIN) S.guideW = Math.round(w);
+      if (!S.signals && w > 0) { S.signals = true; drawSig(); }   // pulled out of the edge: fill it now (stored on release)
+      slide.l = w;
+    } else {
+      if (w >= BARS_MIN) S.barsW = Math.round(w);
+      if (!S.bars && w > 0) S.bars = true;
+      slide.r = w;
+    }
+    applySlide();
+  };
+  const up = () => {
+    el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up);
+    $(left ? 'splitL' : 'splitR').classList.remove('on');
+    slide.drag = null;
+    if (!d.moved) { if (clickToggles) set(left ? 'signals' : 'bars', !(left ? S.signals : S.bars)); else slideTo(); return; }
+    const w = left ? slide.l : slide.r, keep = w >= 0.6 * (left ? GUIDE_MIN : BARS_MIN);   // most of the way in = minimise
+    if (!keep) { if (left) S.guideW = d.g0; else S.barsW = d.b0; }                   // minimising keeps the width it had
+    if (left) { store.set('guideW', S.guideW); set('signals', keep); }
+    else { store.set('barsW', S.barsW); set('bars', keep); }
+  };
+  el.addEventListener('pointermove', move); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+}
 function placeTabs(L) {
   L = L || layout();
-  const l = $('tabL'), r = $('tabR');
-  l.style.left = (S.signals ? $('sig').offsetWidth : 0) + 'px';
-  l.textContent = S.signals ? '\u2039' : '\u203a'; l.title = S.signals ? 'Hide the guide panel' : 'Show the guide panel';
-  r.style.display = INS.options && !(L.compact && S.signals) ? '' : 'none';     // on a phone the open guide covers it
-  r.style.right = L.panelW + 'px';
-  r.textContent = S.bars ? '\u203a' : '\u2039'; r.title = S.bars ? 'Hide the option bars' : 'Show the option bars';
+  const gl = Math.round(slide.l), gr = Math.round(L.panelW), l = $('tabL'), r = $('tabR');
+  l.style.left = gl + 'px'; $('splitL').style.left = Math.max(0, gl - 5) + 'px';
+  l.textContent = S.signals ? '\u2039' : '\u203a';
+  l.title = (S.signals ? 'Click: hide the guide' : 'Click: show the guide') + ' \u00b7 drag: resize, most of the way in to minimise';
+  const showR = INS.options && !(L.compact && S.signals);                     // on a phone the open guide covers it
+  r.style.display = $('splitR').style.display = showR ? '' : 'none';
+  r.style.right = gr + 'px'; $('splitR').style.right = Math.max(0, gr - 5) + 'px';
+  r.textContent = S.bars ? '\u203a' : '\u2039';
+  r.title = (S.bars ? 'Click: hide the option bars' : 'Click: show the option bars') + ' \u00b7 drag: resize, most of the way in to minimise';
 }
 
 // ------------------------------------------------------------------ drawing
 function layout() {
   const W = cv.clientWidth, H = cv.clientHeight, compact = window.innerWidth <= 720;
   const axisW = compact ? 54 : INS.dec >= 4 ? 80 : 72;
-  const panelW = INS.options && S.bars ? (compact ? Math.round(clamp(W * 0.36, 120, 190)) : Math.round(clamp(W * (S.signals ? 0.24 : 0.3), 200, 430))) : 0;
+  const panelW = INS.options ? Math.round(clamp(slide.r, 0, Math.max(0, W - axisW - 120))) : 0;   // follows the slide / drag
   const top = compact ? Math.max(52, $('top').offsetHeight + 20 + ($('panelHead').offsetHeight || 0)) : Math.max(48, $('top').offsetHeight + 16);
   return { W, H, axisW, panelW, compact, chartW: W - axisW - panelW, axisX: W - axisW - panelW, panelX: W - panelW, y0: top, y1: H - 40 };
 }
@@ -900,6 +981,7 @@ function resize() {
     $('status').style.maxWidth = (L.axisX - 20) + 'px';
   }
   $('help').style.top = (L.y0 + 4) + 'px';
+  $('panelHead').style.display = INS.options && S.bars && L.panelW >= (L.compact ? 110 : 150) ? '' : 'none';   // the right panel's own controls
   placeTabs(L);
   view.dirty = true;
 }
@@ -1118,7 +1200,7 @@ function render() {
 
   // gamma bars
   let hover = null;
-  if (G && L.panelW > 0) {
+  if (G && L.panelW > 20) {
     const val = METRICS[S.metric].val, rows = shown().rows.filter(r => { const y = yOf(r.k * G.f); return y > L.y0 - 4 && y < L.y1 + 4; });
     let vmax = 1e-9, gap = Infinity;
     rows.forEach((r, i) => { vmax = Math.max(vmax, S.metric === 'oi' ? Math.max(r.coi, r.poi) : Math.abs(val(r))); if (i) gap = Math.min(gap, (r.k - rows[i - 1].k) * G.f * ppd); });
@@ -1146,7 +1228,7 @@ function render() {
       if (gap >= 11 || Math.abs(v) >= 0.25 * vmax) { ctx.fillStyle = P.strong; ctx.fillText(fmt(v), x0 + w + 6, y + 4); }
     }
     ctx.font = '12px system-ui, "Segoe UI", sans-serif';
-  } else if (INS.options && L.panelW > 0) {
+  } else if (INS.options && L.panelW > 60) {
     ctx.fillStyle = P.text; ctx.textAlign = 'center';
     const x = L.panelX + L.panelW / 2, y = (L.y0 + L.y1) / 2;
     if (D.gexMissing) { ctx.fillText('No options data yet.', x, y - 10); ctx.fillText('Run: node gex_fetch.cjs', x, y + 10); }
@@ -1325,20 +1407,24 @@ $('aAdd').onclick = alertFromInput;
 $('aPrice').addEventListener('keydown', e => { if (e.key === 'Enter') alertFromInput(); });
 $('bSignals').onclick = () => set('signals', !S.signals);
 $('bSigClose').onclick = () => set('signals', false);
-$('tabL').onclick = () => set('signals', !S.signals);
-$('tabR').onclick = () => set('bars', !S.bars);
+$('tabL').addEventListener('pointerdown', e => dragPanel('l', e, true));
+$('tabR').addEventListener('pointerdown', e => dragPanel('r', e, true));
+$('splitL').addEventListener('pointerdown', e => dragPanel('l', e, false));
+$('splitR').addEventListener('pointerdown', e => dragPanel('r', e, false));
+$('splitL').addEventListener('dblclick', () => { S.guideW = 336; store.set('guideW', 336); set('signals', true); });
+$('splitR').addEventListener('dblclick', () => { S.barsW = 0; store.set('barsW', 0); set('bars', true); });
 // Full screen: both side panels hidden (not stored) and the browser's full-screen mode where it has one.
 // Esc, the browser's own exit or the button again puts the panels back as they were.
 function toggleFull() {
   if (full) return endFull();
   full = { signals: S.signals, bars: S.bars };
-  S.signals = false; S.bars = false; syncUi(); resize();
+  S.signals = false; S.bars = false; syncUi(); slideTo();
   const el = document.documentElement;
   if (el.requestFullscreen && !document.fullscreenElement) el.requestFullscreen().catch(() => { /* refused: the panels stay hidden */ });
 }
 function endFull() {
   if (!full) return;
-  S.signals = full.signals; S.bars = full.bars; full = null; syncUi(); resize();
+  S.signals = full.signals; S.bars = full.bars; full = null; syncUi(); slideTo();
   if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
 }
 $('bFull').onclick = toggleFull;
@@ -1359,11 +1445,11 @@ $('bHelp').onclick = () => { const h = $('help'), open = h.style.display !== 'bl
 $('fAll').onclick = () => set('filter', 'all');
 $('fNear').onclick = () => set('filter', 'near');
 $('metric').onchange = e => set('metric', e.target.value);
-window.addEventListener('resize', resize);
+window.addEventListener('resize', () => { if (!slide.drag) slideTo(true); });
 
 // ------------------------------------------------------------------ start
 document.title = TITLE;
-syncUi(); resize();
+syncUi(); slideTo(true);
 loadChart(true); loadM1(true); loadM30(); loadRef(); loadGex();   // all at once: each part draws as soon as it arrives
 pollMt5();
 // Live tick, once a second (every 3 s on Kraken, which allows about one request a second): the newest candles

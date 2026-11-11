@@ -203,7 +203,13 @@ The page was built to look like a paid gold GEX tool. It cannot reproduce that t
 | Boxes | Buy and sell zones. Red = sell zone: the candle that made a swing high (its high above the two candles before and the one after) on the 30-minute or the 1-hour chart. Green = buy zone: the same at a swing low. At most half an ATR tall, measured from the swing's extreme. Pale once price has left the zone and come back; removed when a candle of its timeframe closes through it. `30m & 1h` = both timeframes mark the same swing |
 | Thin bands | Absorption areas. Over 5 minutes the traded volume was at least 1.5 × normal, at least 15 % one-sided, and price still closed in the half of the range away from the attack. Blue = buyers absorbed, pink = sellers absorbed (the shown side is the inverse of the engine's internal kind, which is unchanged). From the buy / sell volume of Binance XAUUSDT futures. Removed when a 1-minute candle closes through the band, or after 8 hours. Shown, not scored |
 | Orange dashed lines | Price alerts you set |
-| Profile | Volume by price since 18:00 New York. Yellow = POC, purple = 70 % value area |
+| Profile | Volume by price since 18:00 New York. Yellow = POC, purple = 70 % value area. Fixed 0.5 $ rows from closed 1-minute candles, rebuilt once a minute: zooming does not move POC / VAH / VAL, and the guide uses the same profile. A `POC SHIFTED` banner (tone with the alarm on) when the POC moves 2 $ or more and holds for two closed minutes; quiet when the page opens and in the first 30 minutes of a session; switch under Price alerts in the guide |
+
+`Fit` (or double-click) scales the chart to the candles on screen plus the open idea's stop and target, at
+least ±0.5 % of the price. Levels outside the screen (GLD walls, alerts, profile, the open idea) get no line,
+only a pill pinned to the top or bottom edge with an arrow. Level pills on the right are spread so none
+overlap each other or the live price; a short slanted tick joins a moved pill to its line. (Until 11 Nov 2026
+Fit with GLD lines on used ±3.5 %, which squeezed every level near the price into a few pixels.)
 
 Everything follows the market while the page is open: candles, live price and the signal check every
 second, gamma bars every 5 s (gamma is re-priced at the live price, so the bars and zero gamma move with
@@ -230,8 +236,8 @@ The box at the top says what to do now, from closed 5-minute candles, whatever t
   or click `change`), not a usual US data time (08:30 and 10:00 New York; it is a clock, not a calendar),
   and the score.
 - **Sell zones above / buy zones below**: the three nearest of each, with distance, timeframe and whether
-  price has been back to them. The nearest one shows a rough plan (entry at the near edge, stop 0.3 × ATR
-  beyond the far edge, target at the next level in the way) and says when there is too little room.
+  price has been back to them. The nearest one shows a rough plan (entry at the near edge, stop 1 × ATR(5m),
+  at least 2 $, beyond the far edge, target at the next level in the way) and says when there is too little room.
   `+ alert` sets a price alert at the zone's near edge.
 - **Score** = points for each condition that agrees: levels reached (zone 30, tested zone 18, value-area edge
   12; up to 45), 30-minute trend with the trade (+10, against −10), buying or selling in the last 15 minutes

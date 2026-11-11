@@ -118,13 +118,13 @@ select{padding:0 8px;cursor:pointer}
   <p><i>These option levels are GLD's.</i> They are not the COMEX gold-options levels that paid GEX tools show, and on 6 Nov 2026 the two did not agree (GLD was call-heavy where such a tool showed its put wall). They are context only: signals and MT5 trades do not use them.</p>
   <p><i>Zones</i> (boxes): red = sell zone, the candle that made a swing high on the 30-minute or 1-hour chart; green = buy zone, the candle that made a swing low. A zone turns pale once price has left it and come back, and disappears when a candle of its timeframe closes through it.</p>
   <p><i>Absorption</i> (thin bands): over 5 minutes one side traded much more than usual and price still did not go its way. Blue = buyers absorbed; pink = sellers absorbed. Measured from the buy and sell volume of Binance gold futures, the same tape the heatmap page shows. A band disappears when a 1-minute candle closes through it, or after 8 hours.</p>
-  <p><i>Profile</i>: volume traded at each price since 18:00 New York. Yellow = POC, the busiest price. Purple = value area, where 70 % of the volume traded.</p>
-  <p><i>Guide</i> (left): the top box says what to do now. WAIT = price is between zones. GET READY = price is at a zone, no entry yet. BUY / SELL = a 5-minute candle went into the zone and closed back out, and the checks agree. NO: SKIP = it turned, but the target is too close, the stop too wide or too little agrees. The checklist shows each point with a tick or a cross. The plan under a zone is rough: the real entry is the close of the candle that turns.</p>
+  <p><i>Profile</i>: volume traded at each price since 18:00 New York. Yellow = POC, the busiest price. Purple = value area, where 70 % of the volume traded. Built on fixed 0.5 $ rows from closed 1-minute candles, so zooming does not move POC, VAH or VAL, and the guide uses the same POC. When the POC moves 2 $ or more and stays there for two minutes, a "POC SHIFTED" banner appears (with a tone when the alarm is on); switch it off under Price alerts in the guide.</p>
+  <p><i>Guide</i> (left): the top box says what to do now. The stop of an idea is 1 x the 5-minute ATR beyond the zone or the turning candle, at least 2 $ on gold. WAIT = price is between zones. GET READY = price is at a zone, no entry yet. BUY / SELL = a 5-minute candle went into the zone and closed back out, and the checks agree. NO: SKIP = it turned, but the target is too close, the stop too wide or too little agrees. The checklist shows each point with a tick or a cross. The plan under a zone is rough: the real entry is the close of the candle that turns.</p>
   <p><i>Price alerts</i>: type a price in the guide, hold Alt and click the chart, or right-click the chart. An orange line appears and the alarm rings once when price gets there. Right-click the line to remove it. The price is this page's price, which can differ a little from your broker's.</p>
   <p><i>Alarm</i>: a new BUY or SELL sounds a 30-second siren (high and fast for buy, low and slow for sell), shows a flashing banner and flashes the tab title until you click the banner. A price alert sounds a fast trill, and reaching a zone a short tone. Sound only works after one click on the page, and its loudness is set by the PC volume. Keep this tab open in its own window: a hidden or sleeping tab checks late or not at all.</p>
   <p><i>MT5</i>: with MT5 on, each new signal is passed to the GexSignalTrader EA in MetaTrader 5, which places the trade with the same stop and target distance, closes it after 4 hours, and reports back here. It needs start_gex.bat running, the EA attached to the gold chart and Algo Trading on. The EA refuses to trade on a real account.</p>
-  <p>Mouse: wheel on the chart zooms time, wheel on the price scale or bars zooms price, drag moves, double-click fits, Alt + click or right-click sets a price alert. On a phone: one finger pans, two fingers pinch to zoom time, double-tap fits; the Guide opens over the chart and closes with its Close button.</p>
-  <p>None of this predicts price. Tested on 5 years of gold, the BUY / SELL ideas of this guide made nothing before costs and lost 0.2 to 0.5 of the risk per trade after them (about 560 ideas a year). Absorption areas, tested on 90 days, did no better. Nothing has been tested on the other instruments. The guide is a checklist to keep you out of poor trades, not a signal service.</p>
+  <p>Mouse: wheel on the chart zooms time, wheel on the price scale or bars (or Shift + wheel) zooms price, drag moves, double-click or Fit fits the candles (levels outside the screen are then pinned to its top or bottom edge with an arrow), Alt + click or right-click sets a price alert. On a phone: one finger pans, two fingers pinch to zoom time, double-tap fits; the Guide opens over the chart and closes with its Close button.</p>
+  <p>None of this predicts price. Tested on 5 years of gold, the BUY / SELL ideas of this guide made nothing before costs and lose after them: with the stop used since 11 Nov 2026 (1 x ATR beyond the level, at least 2 $) about 230 ideas a year at −0.08 to −0.20 of the risk per trade after costs; with the old tight stop it was −0.2 to −0.5, and 19 % of its stops were hit before price went on to the target. Absorption areas, tested on 90 days, did no better. Nothing has been tested on the other instruments. The guide is a checklist to keep you out of poor trades, not a signal service.</p>
 </div>
 <div id="sig">
   <button class="btn" id="bSigClose" title="Close the guide">Close</button>
@@ -174,7 +174,7 @@ const store = {
 };
 const S = { tf: store.get('tf', '5m'), metric: store.get('metric', 'net'), filter: store.get('filter', 'all'),
             zones: store.get('zones', true), profile: store.get('profile', true), light: store.get('light', false), signals: store.get('signals', window.innerWidth > 720), alarm: store.get('alarm', true), mt5: store.get('mt5', false),
-            abs: store.get('abs', true), gld: store.get('gld', false), zoneAlert: store.get('zoneAlert', true), balance: store.get('balance', 200) };
+            abs: store.get('abs', true), gld: store.get('gld', false), zoneAlert: store.get('zoneAlert', true), pocAlert: store.get('pocAlert', true), balance: store.get('balance', 200) };
 if (!TF[S.tf]) S.tf = '5m';
 if (!METRICS[S.metric]) S.metric = 'net';
 if (!(S.balance > 0)) S.balance = 200;
@@ -237,6 +237,12 @@ const dd = (x, coarse) => (INS.pip ? `${(x / INS.pip).toFixed(coarse ? 0 : 1)} p
 // share of the price on the other instruments; gold keeps the exact numbers its backtests used.
 const scaled = (gold, share) => (INS_ID === 'XAUUSD' ? gold : lastPx() * share);
 const minD = () => scaled(2, 5e-4);
+const pfStep = () => scaled(0.5, 1.25e-4);                           // profile row height: 0.5 $ on gold, whatever the zoom
+// Stop of a BUY / SELL idea: this far beyond the zone edge or the turning candle's extreme (see GexEngine.setup).
+// 1 x ATR(5m), at least 2 $ on gold, since 11 Nov 2026. The old 0.3 x ATR (often under 1 $) sat inside the
+// normal wick: on 5 years of gold 62 % of ideas were stopped and 19 % of those stops still reached the target
+// within 4 hours; with this stop 6 % (GOLD/gex_signals/stop_study.cjs). It cuts the loss, it does not make one.
+const STOP = { atr: 1.0, min: 2 };
 // USD made or lost per 1.0 of price at 0.01 lot (what the stop-size check assumes)
 const usdPerUnit = () => 0.01 * INS.contract / (INS.quoteUsd ? 1 : lastPx() || 1);
 // Smallest "nice" step (1, 2, 2.5, 5 x a power of ten) that is at least px pixels tall at ppd pixels per unit.
@@ -301,7 +307,7 @@ async function loadM1(full) {
   try {
     const rows = await klines('1m', full ? 1500 : 3);
     if (full || !D.m1.length) D.m1 = rows; else merge(D.m1, rows);
-    Pf = null;
+    updateProfile();
     if (!D.hasBasis) { rebase(); status(); }                 // the reference price arrived before the candles
   }
   catch (e) { /* the chart feed already reports the outage */ }
@@ -404,8 +410,40 @@ function sigInputs() {
   let buy = 0, vol = 0;                                        // tape: buying minus selling over the last 15 closed minutes
   for (const k of D.m1.slice(-16, -1)) { buy += k.bv; vol += k.v; }
   return E.inputs({ c5, price: lastPx(), zones: Zs, lines: [], flip: null, tolMin: scaled(1.5, 3.75e-4),
-                    profile: E.profile(D.m1, E.sessionStart(Date.now()), scaled(0.5, 1.25e-4)), closes30: D.m30.slice(0, -1).map(k => k.c),
-                    tape: vol ? (2 * buy - vol) / vol : 0 });
+                    profile: Pf, closes30: D.m30.slice(0, -1).map(k => k.c), tape: vol ? (2 * buy - vol) / vol : 0,
+                    stopAtr: STOP.atr, stopMin: scaled(STOP.min, STOP.min / 4000) });
+}
+// ------------------------------------------------------------------ session profile and POC
+// One profile for the chart and the guide: fixed rows (0.5 $ on gold) from the CLOSED 1-minute candles since
+// 18:00 New York, rebuilt once a minute (as in the backtest). Until 11 Nov 2026 the chart sized its rows to the
+// zoom, so its POC, VAH and VAL jumped whenever the price scale was zoomed and could differ from the POC the
+// guide used as a target.
+let pfKey = '', pfFirst = 0;
+const POC = { ref: null, from: 0, cand: null, n: 0, last: null };    // ref = the POC last announced (candle price)
+function updateProfile() {
+  // Only from the full download: a live 3-candle update can arrive before it, and a profile of 2 candles is no
+  // profile (seen 11 Nov 2026 in testing: value area 1.5 $ wide, then a false "POC shifted" once the history came).
+  if (D.m1.length < 200) return;
+  const closed = D.m1[D.m1.length - 2].t, from = E.sessionStart(Date.now()), first = D.m1[0].t, key = `${from}:${first}:${closed}`;
+  if (Pf && key === pfKey) return;
+  const fresh = first !== pfFirst;                             // new history: nothing to compare the POC with
+  pfKey = key; pfFirst = first;
+  Pf = E.profile(D.m1.slice(0, -1), from, pfStep());
+  if (Pf) trackPoc(Pf, fresh);
+  view.dirty = true;
+}
+// A POC shift = the busiest price moved at least 2 $ (gold) from the one last announced and stayed there for two
+// closed minutes in a row (two rows with nearly the same volume can swap back and forth). Quiet when the page
+// opens, at the start of a session and for its first 30 minutes, when the profile is too thin to mean much.
+function trackPoc(pf, fresh) {
+  if (fresh || pf.from !== POC.from) { if (pf.from !== POC.from) POC.last = null; POC.from = pf.from; POC.ref = pf.poc; POC.cand = null; return; }
+  if (POC.ref === null || Date.now() - pf.from < 30 * 60e3) { POC.ref = pf.poc; POC.cand = null; return; }
+  if (Math.abs(pf.poc - POC.ref) < minD()) { POC.cand = null; return; }
+  if (POC.cand !== null && Math.abs(pf.poc - POC.cand) < minD()) POC.n++; else { POC.cand = pf.poc; POC.n = 1; }
+  if (POC.n < 2) return;
+  POC.last = { from: POC.ref, to: pf.poc, t: Date.now() };
+  POC.ref = pf.poc; POC.cand = null;
+  alertPoc(POC.last);
 }
 // Decide how each open idea ended. When one candle touches both stop and target, it counts as a stop.
 function track() {
@@ -426,6 +464,7 @@ function track() {
 }
 let absAt = 0;
 function evaluate() {
+  updateProfile();
   if (D.m1.length < 200) return;
   track();
   const closed = D.m1[D.m1.length - 2].t;
@@ -454,13 +493,13 @@ const signed = (v, d) => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(d);
 const ago = ms => { const m = Math.max(0, Math.round((Date.now() - ms) / 60e3)); return m < 90 ? m + ' min ago' : (m / 60).toFixed(1) + ' h ago'; };
 
 // ------------------------------------------------------------------ guide panel
-// What a trade from a zone would look like: entry at the near edge, stop 0.3 x ATR beyond the far edge, target =
+// What a trade from a zone would look like: entry at the near edge, stop beyond the far edge (STOP), target =
 // the nearest level in the way (an opposite zone, a value-area edge or the POC). Rough on purpose: the real
 // entry is the close of the 5-minute candle that turns, which is usually a little worse than the edge.
 function zonePlan(z) {
   const inp = Sig && Sig.inp;
   if (!inp) return null;
-  const up = z.type === 'demand', entry = up ? z.top : z.bottom, stop = up ? z.bottom - 0.3 * Sig.atr : z.top + 0.3 * Sig.atr, risk = Math.abs(entry - stop);
+  const buf = Math.max(STOP.atr * Sig.atr, scaled(STOP.min, STOP.min / 4000)), up = z.type === 'demand', entry = up ? z.top : z.bottom, stop = up ? z.bottom - buf : z.top + buf, risk = Math.abs(entry - stop);
   const ahead = (up ? inp.resistances.map(r => ({ p: r.lo, name: r.name })) : inp.supports.map(r => ({ p: r.hi, name: r.name })))
     .concat(inp.magnets).filter(t => (up ? t.p > entry + 0.3 * risk : t.p < entry - 0.3 * risk)).sort((x, y) => (up ? x.p - y.p : y.p - x.p));
   const tgt = ahead[0] || { p: up ? entry + 2 * risk : entry - 2 * risk, name: 'no level in the way: 2 x the stop' };
@@ -480,7 +519,8 @@ function verdict(open, lists) {
   if (open) {
     const text = open.r > 0.5 ? 'It has already moved a good way. Entering now means a worse price with the same stop: do not chase it.'
       : open.r < -0.5 ? 'It is close to its stop. If you are not in, stay out.' : 'Price is still near the entry: it can be taken with the stop and target below.';
-    return { cls: open.side, head: `${open.side.toUpperCase()} IDEA OPEN`, small: `since ${hhmm(open.at)} · score ${open.score}/100 (${grade(open.score)}) · now ${signed(open.r, 1)} x risk`, text, plan: open };
+    const stale = open.targetName === 'POC' && Pf && Math.abs(Pf.poc - open.target) >= minD() ? ` Its target was the POC at ${gp(open.target)}; the POC has since moved to ${gp(Pf.poc)}.` : '';
+    return { cls: open.side, head: `${open.side.toUpperCase()} IDEA OPEN`, small: `since ${hhmm(open.at)} · score ${open.score}/100 (${grade(open.score)}) · now ${signed(open.r, 1)} x risk`, text: text + stale, plan: open };
   }
   if (!Sig) return { cls: 'none', head: 'LOADING…', small: 'waiting for candles', text: '' };
   if (Sig.state === 'buy' || Sig.state === 'sell')
@@ -552,7 +592,7 @@ function drawSig() {
   const zrow = (z, nearest) => {
     const up = z.type === 'demand', inside = p <= z.top && p >= z.bottom, d = up ? p - z.top : z.bottom - p, pl = nearest ? zonePlan(z) : null;
     return `<div class="z"><a data-act="alert" data-v="${gp(up ? z.top : z.bottom)}" data-note="${up ? 'buy' : 'sell'} zone" title="Ring when price reaches this zone">+ alert</a>` +
-      `<b class="${up ? 'buy' : 'sell'}">${gp(z.bottom)} – ${gp(z.top)}</b> <small>${inside ? 'price is inside' : `${dd(d, true)} ${up ? 'below' : 'above'}`} · ${z.tf} · ${z.tested ? 'tested once' : 'untouched'}</small>` +
+      `<b class="${up ? 'buy' : 'sell'}">${gp(z.bottom)} – ${gp(z.top)}</b> <small>${inside ? 'price is inside' : `${dd(d, d >= 1 || !!INS.pip)} ${up ? 'below' : 'above'}`} · ${z.tf} · ${z.tested ? 'tested once' : 'untouched'}</small>` +
       (pl ? `<br><small>${up ? 'Buy' : 'Sell'} plan: stop ${gp(pl.stop)} (${dd(pl.risk)}) · target ${gp(pl.target)}, ${pl.targetName} · 1 : ${pl.rr.toFixed(1)}` +
             (pl.rr < 1.5 ? ' <span class="neg">too little room</span>' : '') + '</small>' : '') + '</div>';
   };
@@ -569,14 +609,15 @@ function drawSig() {
       `<div class="z"><a data-act="unalert" data-v="${a.id}">remove</a><b class="${a.hit ? 'dim' : 'watch'}">${fp(a.p)}</b> ` +
       `<small>${a.hit ? `reached at ${hhmm(a.hit)}` : `rings when price ${a.up ? 'rises' : 'falls'} to it`}${a.note ? ' · ' + a.note : ''}</small></div>`).join('')
     : none('None set. Type a price, or hold Alt and click the chart (right-click works too).')) +
-    `<div class="plan"><span>Short tone when price reaches a zone:</span> <a data-act="zoneAlert">${S.zoneAlert ? 'on' : 'off'}</a></div>`);
+    `<div class="plan"><span>Short tone when price reaches a zone:</span> <a data-act="zoneAlert">${S.zoneAlert ? 'on' : 'off'}</a></div>` +
+    `<div class="plan"><span>POC ${Pf ? gp(Pf.poc) : '--'}${POC.last ? ` · moved from ${gp(POC.last.from)} at ${hhmm(POC.last.t)}` : ''}. Banner and tone when it shifts ${dd(minD(), true)} or more:</span> <a data-act="pocAlert">${S.pocAlert ? 'on' : 'off'}</a></div>`);
 
   const done = LOG.filter(s => s.result !== 'open' && s.result !== 'unknown'), count = k => done.filter(s => s.result === k).length;
   put('gFoot', (S.mt5 ? `<div class="mt5 ${MT.ok ? 'pos' : 'neg'}">MT5: ${MT.text}${MT.ok ? ' <a data-act="mt5Test">send a test trade</a>' : ''}</div>` : '') +
     (done.length ? `Ideas so far: ${done.length} finished · ${count('target')} target · ${count('stop')} stop · ${count('expired')} timed out · total ${signed(done.reduce((a, s) => a + s.r, 0), 1)} x risk <a data-act="clear">clear</a>`
                  : 'No finished ideas yet. Each BUY or SELL is counted here when it ends.') +
     '<br>This guide is a checklist that keeps you out of poor spots. It does not predict. ' +
-    (INS_ID === 'XAUUSD' ? 'Tested on 5 years of gold: BUY / SELL ideas from these rules made nothing before costs and lost 0.2 to 0.5 of the risk per trade after them. Absorption areas did no better on 90 days.'
+    (INS_ID === 'XAUUSD' ? 'Tested on 5 years of gold: BUY / SELL ideas from these rules made nothing before costs and lost 0.1 to 0.2 of the risk per trade after them (wider stop since 11 Nov). Absorption areas did no better on 90 days.'
                          : `These rules were tested on 5 years of gold only, where they made nothing before costs and lost after them. They have not been tested on ${INS.name} at all.`) +
     ' Keep the size small. <a data-act="testAlarm">test alarm</a>');
 }
@@ -628,6 +669,16 @@ function alertZone(s) {
   zoneRang[key] = Date.now();
   const loud = siren(4, 1320, 990, 0.3);
   banner('watch', `GET READY TO ${s.side.toUpperCase()}`, `price is at ${s.levels.join(' + ')} · no entry until a 5-minute candle closes back ${s.side === 'buy' ? 'up' : 'down'}` + soundNote(loud));
+}
+
+// POC shift: a banner (and a rising two-note tone with the alarm on), never on top of a banner still waiting for a click.
+function alertPoc(x) {
+  drawSig();
+  if (!S.pocAlert || alerting) return;
+  const open = LOG.find(s => s.result === 'open'), was = open && open.targetName === 'POC' && Math.abs(open.target - x.from) < minD();
+  const loud = siren(3, 1046, 1568, 0.1);
+  banner('watch', 'POC SHIFTED', `${gp(x.from)} → ${gp(x.to)} (${x.to > x.from ? 'up' : 'down'} ${dd(Math.abs(x.to - x.from))}) · ${INS.name} now ${fp(spot())}` +
+         (was ? ` · the open ${open.side}'s target was the old POC` : '') + soundNote(loud));
 }
 
 // ------------------------------------------------------------------ alarm
@@ -832,6 +883,29 @@ function pill(x, y, w, h, bg, text, fg, align) {
   ctx.fillText(text, align === 'left' ? x + 6 : x + w / 2, y + 0.5);
   ctx.textBaseline = 'alphabetic';
 }
+// Spreads labels on a vertical axis so none overlap: items {y, up, dn, fixed} get ly. Labels that would overlap
+// are stacked as one group, placed where its members want to be on average; a fixed label (the live price) does
+// not move and its group stacks around it; groups stay between top and bottom. up / dn = the room a label needs
+// above / below its centre (9.5 px when left out).
+function dodge(items, top, bottom) {
+  const U = it => it.up || 9.5, Dn = it => it.dn || 9.5;
+  const place = g => {
+    const rel = [0], n = g.list.length;
+    for (let k = 1; k < n; k++) rel.push(rel[k - 1] + Dn(g.list[k - 1]) + U(g.list[k]));
+    const fi = g.list.findIndex(it => it.fixed);
+    let s = fi >= 0 ? g.list[fi].y - rel[fi] : g.list.reduce((a, it, k) => a + it.y - rel[k], 0) / n;
+    if (fi < 0) s = Math.max(top + U(g.list[0]), Math.min(s, bottom - rel[n - 1] - Dn(g.list[n - 1])));
+    g.rel = rel; g.s = s; g.a = s - U(g.list[0]); g.b = s + rel[n - 1] + Dn(g.list[n - 1]); g.fixed = fi >= 0;
+    return g;
+  };
+  const groups = items.slice().sort((x, y) => x.y - y.y).map(it => place({ list: [it] }));
+  for (let i = 1; i < groups.length;) {
+    const a = groups[i - 1], b = groups[i];
+    if (a.b > b.a + 0.01 && !(a.fixed && b.fixed)) { groups.splice(i - 1, 2, place({ list: a.list.concat(b.list) })); i = Math.max(1, i - 1); }
+    else i++;
+  }
+  for (const g of groups) g.list.forEach((it, k) => { it.ly = g.s + g.rel[k]; });
+}
 function hline(x0, x1, y, color, dash, width) {
   ctx.strokeStyle = color; ctx.lineWidth = width || 1; ctx.setLineDash(dash || []);
   ctx.beginPath(); ctx.moveTo(x0, Math.round(y) + 0.5); ctx.lineTo(x1, Math.round(y) + 0.5); ctx.stroke(); ctx.setLineDash([]);
@@ -852,11 +926,14 @@ function render() {
   const xOf = i => g.x1 - (last - i + 0.5) * cw;
   const xOfTime = t => xOf((t - c[0].t) / tfMs);
   if (view.auto) {
+    // Fit = the candles on screen plus the open idea's stop and target, at least 0.5 % of the price either side on
+    // gold (0.05 % elsewhere, so quiet forex is not a flat line). GLD levels further away are pinned to the top or
+    // bottom edge instead: the old +/- 3.5 % range with GLD lines on squeezed every level near the price together.
     let lo = sp, hi = sp;
     for (let i = first; i <= last; i++) { lo = Math.min(lo, c[i].l - b); hi = Math.max(hi, c[i].h - b); }
-    // With the GLD lines on, wide enough to show a useful strike range; without them, close in on the candles
-    // (at least 0.5 % of the price either side on gold, as before; 0.05 % elsewhere, so quiet forex is not a flat line).
-    const mid = (lo + hi) / 2, half = S.gld ? Math.max((hi - lo) * 0.75, sp * 0.035) : Math.max((hi - lo) * 0.62, sp * (INS_ID === 'XAUUSD' ? 0.005 : 0.0005));
+    const open = S.signals && LOG.find(s => s.result === 'open');
+    if (open) for (const p of [open.stop - b, open.target - b]) if (Math.abs(p - sp) < 0.02 * sp) { lo = Math.min(lo, p); hi = Math.max(hi, p); }
+    const mid = (lo + hi) / 2, half = Math.max((hi - lo) * 0.62, sp * (INS_ID === 'XAUUSD' ? 0.005 : 0.0005));
     view.lo = mid - half; view.hi = mid + half;
   }
   const ppd = (L.y1 - L.y0) / (view.hi - view.lo);                              // pixels per dollar
@@ -888,13 +965,20 @@ function render() {
     ctx.fillStyle = col; ctx.fillRect(x0, yT, 3, h);
   }
 
-  // session volume profile, anchored on the right edge of the chart
-  const step = niceStep(ppd, 2, [1, 2.5, 5]);
-  if (S.profile && D.m1.length && (!Pf || Pf.step !== step)) Pf = E.profile(D.m1, E.sessionStart(Date.now()), step);
+  // session volume profile, anchored on the right edge of the chart. The profile (and so POC / VAH / VAL) is
+  // built on fixed rows (updateProfile); zooming out only groups those rows into taller bars, at least 2 px each.
   if (S.profile && Pf) {
-    const maxW = g.reserve - 4;
+    const maxW = g.reserve - 4, m = Math.max(1, Math.ceil(2 / (Pf.step * ppd))), hh = m * Pf.step, bars = new Map();
     for (const r of Pf.rows) {
-      const y0 = yOf(r.p + Pf.step - b), h = Math.max(1, Pf.step * ppd - 0.5), wb = r.buy / Pf.max * maxW, ws = r.sell / Pf.max * maxW;
+      const key = Math.floor(Math.round(r.p / Pf.step) / m);
+      let e = bars.get(key);
+      if (!e) bars.set(key, e = { p: key * hh, buy: 0, sell: 0 });
+      e.buy += r.buy; e.sell += r.sell;
+    }
+    let mx = 1e-9;
+    for (const e of bars.values()) mx = Math.max(mx, e.buy + e.sell);
+    for (const e of bars.values()) {
+      const y0 = yOf(e.p + hh - b), h = Math.max(1, hh * ppd - 0.5), wb = e.buy / mx * maxW, ws = e.sell / mx * maxW;
       ctx.fillStyle = P.vpBuy; ctx.fillRect(L.chartW - wb, y0, wb, h);
       ctx.fillStyle = P.vpSell; ctx.fillRect(L.chartW - wb - ws, y0, ws, h);
     }
@@ -909,41 +993,44 @@ function render() {
     ctx.fillRect(x - bw / 2, Math.min(yo, yc), bw, Math.max(1, Math.abs(yc - yo)));
   }
 
-  // zone names, drawn over the candles so they stay readable
-  ctx.font = '10px system-ui, "Segoe UI", sans-serif'; ctx.textAlign = 'right';
+  // zone and absorption names at the left end of their box (the right side belongs to the level pills), drawn
+  // over the candles so they stay readable. A name that would overlap one already drawn moves down inside its
+  // box, or is left out.
+  ctx.font = '10px system-ui, "Segoe UI", sans-serif'; ctx.textAlign = 'left';
+  const taken = [];
+  const label = (text, x, yA, yB, color) => {
+    const w = ctx.measureText(text).width + 6;
+    for (let y = yA; y <= Math.max(yA, yB); y += 11) {
+      if (y < L.y0 + 10 || y > L.y1 - 2 || taken.some(r => x < r.x + r.w && x + w > r.x && Math.abs(y - r.y) < 11)) continue;
+      ctx.fillStyle = color; ctx.fillText(text, x, y); taken.push({ x, y, w });
+      return;
+    }
+  };
   for (const z of zs) {
-    ctx.fillStyle = rgba(z.type === 'supply' ? P.red : P.green, z.tested ? 0.7 : 0.95);
-    ctx.fillText(`${z.type === 'supply' ? 'SELL' : 'BUY'} zone ${z.tf}${z.tested ? ' (tested)' : ''}`, L.chartW - g.reserve - 6, yOf(z.top - b) + 11);
+    const x = clamp(xOfTime(z.t) - cw / 2, 0, L.chartW - g.reserve - 90) + 6, yT = yOf(z.top - b);
+    label(`${z.type === 'supply' ? 'SELL' : 'BUY'} zone ${z.tf}${z.tested ? ' (tested)' : ''}`, x, yT + 11, yOf(z.bottom - b) - 2, rgba(z.type === 'supply' ? P.red : P.green, z.tested ? 0.7 : 0.95));
   }
-  ctx.textAlign = 'left';
   for (const a of abs) {
-    ctx.fillStyle = a.kind === 'buy' ? P.pink : P.cyan;
-    ctx.fillText(a.kind === 'buy' ? 'sellers absorbed' : 'buyers absorbed', clamp(xOfTime(a.t) - cw / 2, 0, L.chartW - g.reserve - 60) + 7, yOf(a.top - b) - 3);
+    const y = yOf(a.top - b) - 3;
+    label(a.kind === 'buy' ? 'sellers absorbed' : 'buyers absorbed', clamp(xOfTime(a.t) - cw / 2, 0, L.chartW - g.reserve - 60) + 7, y, y, a.kind === 'buy' ? P.pink : P.cyan);
   }
   ctx.font = '12px system-ui, "Segoe UI", sans-serif';
 
-  // lines: gamma levels across the chart, profile levels from the session start
-  const pills = [];
-  for (const lv of levels()) {
-    const y = yOf(lv.p);
-    if (y < L.y0 || y > L.y1) continue;
-    hline(0, L.chartW, y, P[lv.color], lv.dash, lv.dash[0] > 4 ? 1.4 : 1);
-    pills.push({ y, ly: y, text: lv.text, price: lv.p, bg: P[lv.color], fg: '#fff' });
-  }
-  for (const a of ALERTS) {                                    // price alerts that have not rung yet
-    const y = yOf(a.p);
-    if (a.hit || y < L.y0 || y > L.y1) continue;
-    hline(0, L.chartW, y, P.orange, [6, 4], 1.4);
-    pills.push({ y, ly: y, text: 'Alert' + (a.note ? ' · ' + a.note : ''), price: a.p, bg: P.orange, fg: '#111' });
-  }
+  // lines: gamma levels across the chart, price alerts, profile levels from the session start, the open idea.
+  // A level off the screen gets no line, only a pill pinned to the top or bottom edge (the nearest of each kind).
+  const pills = [], pinned = {};
+  const level = (p, text, bg, fg, kind, draw) => {                 // p = the price as shown
+    const y = yOf(p);
+    if (y >= L.y0 && y <= L.y1) { draw(y); pills.push({ y, text, price: p, bg, fg }); return; }
+    const above = y < L.y0, key = kind + (above ? '+' : '-'), q = pinned[key];
+    if (!q || Math.abs(p - sp) < Math.abs(q.price - sp)) pinned[key] = { y: above ? L.y0 + 10 : L.y1 - 10, text: (above ? '▲ ' : '▼ ') + text, price: p, bg, fg, edge: true };
+  };
+  for (const lv of levels()) level(lv.p, lv.text, P[lv.color], '#fff', 'gld', y => hline(0, L.chartW, y, P[lv.color], lv.dash, lv.dash[0] > 4 ? 1.4 : 1));
+  for (const a of ALERTS) if (!a.hit) level(a.p, 'Alert' + (a.note ? ' · ' + a.note : ''), P.orange, '#111', 'alert', y => hline(0, L.chartW, y, P.orange, [6, 4], 1.4));
   if (S.profile && Pf) {
     const xs = clamp(xOfTime(Pf.from), 0, L.chartW - 40);
-    for (const [p, name, col, fg] of [[Pf.poc, 'POC', P.yellow, '#111'], [Pf.vah, 'VAH', P.purple, '#fff'], [Pf.val, 'VAL', P.purple, '#fff']]) {
-      const y = yOf(p - b);
-      if (y < L.y0 || y > L.y1) continue;
-      hline(xs, L.chartW, y, col, [], 1.4);
-      pills.push({ y, ly: y, text: name, price: p - b, bg: col, fg });
-    }
+    for (const [p, name, col, fg] of [[Pf.poc, 'POC', P.yellow, '#111'], [Pf.vah, 'VAH', P.purple, '#fff'], [Pf.val, 'VAL', P.purple, '#fff']])
+      level(p - b, name, col, fg, name, y => hline(xs, L.chartW, y, col, [], 1.4));
   }
   // signals: an arrow on each trigger candle; the idea that is still open also gets entry / stop / target lines
   if (S.signals) {
@@ -957,43 +1044,46 @@ function render() {
         ctx.fillText(s.result === 'open' ? s.score : s.result === 'expired' ? 'timed out' : s.result, x, y + (up ? 22 : -14));
       }
       if (s.result !== 'open') continue;
-      for (const [p, col, name] of [[s.entry, P.grey, 'entry'], [s.stop, P.down, 'stop'], [s.target, P.up, 'target']]) {
-        const y = yOf(p - b);
-        if (y < L.y0 || y > L.y1) continue;
-        hline(clamp(x, 0, L.chartW - 60), L.chartW, y, col, [5, 3], 1.2);
-        pills.push({ y, ly: y, text: `${up ? 'Buy' : 'Sell'} ${name}`, price: p - b, bg: col, fg: '#fff' });
-      }
+      for (const [p, col, name] of [[s.entry, P.grey, 'entry'], [s.stop, P.down, 'stop'], [s.target, P.up, 'target']])
+        level(p - b, `${up ? 'Buy' : 'Sell'} ${name}`, col, '#fff', 'idea ' + name, y => hline(clamp(x, 0, L.chartW - 60), L.chartW, y, col, [5, 3], 1.2));
     }
     ctx.font = '12px system-ui, "Segoe UI", sans-serif';
   }
   ctx.restore();
+  pills.push(...Object.values(pinned));
 
   // current price line
   const lastC = c[n - 1], up = lastC.c >= lastC.o, ySp = yOf(sp);
   hline(0, L.chartW, ySp, up ? P.up : P.down, [1, 3]);
 
-  // price scale
+  // Level pills are spread so that none overlaps another or the live price and its countdown (which stay put),
+  // each as close to its line as the others allow; a short slanted tick joins a moved pill to its line.
+  dodge(pills.concat({ y: ySp, up: 10, dn: 26, fixed: true }), L.y0 + 1, L.y1 - 1);
+
+  // price scale: a number is left out where a pill covers it
   ctx.fillStyle = P.bg; ctx.fillRect(L.axisX, 0, L.W - L.axisX, L.H);
   ctx.strokeStyle = P.line; ctx.lineWidth = 1; ctx.beginPath();
   ctx.moveTo(L.axisX + 0.5, 0); ctx.lineTo(L.axisX + 0.5, L.H); ctx.moveTo(L.panelX + 0.5, 0); ctx.lineTo(L.panelX + 0.5, L.H); ctx.stroke();
   ctx.fillStyle = P.text; ctx.textAlign = 'center';
-  for (const p of ticks) { const y = yOf(p); if (y > L.y0 + 6 && y < L.y1 - 4) ctx.fillText(p.toFixed(tickDec), L.axisX + L.axisW / 2, y + 4); }
+  const covered = y => (y > ySp - 15 && y < ySp + 31) || pills.some(q => Math.abs(q.ly - y) < 14);
+  for (const p of ticks) { const y = yOf(p); if (y > L.y0 + 6 && y < L.y1 - 4 && !covered(y)) ctx.fillText(p.toFixed(tickDec), L.axisX + L.axisW / 2, y + 4); }
 
-  // level pills are pushed away from the live price pill and from each other; the lines stay at the true price
-  let edge = ySp - 19;
-  for (const q of pills.filter(q => q.y <= ySp).sort((a, b2) => b2.y - a.y)) { q.ly = Math.min(q.y, edge); edge = q.ly - 19; }
-  edge = ySp + 35;                                           // below the price pill and its countdown
-  for (const q of pills.filter(q => q.y > ySp).sort((a, b2) => a.y - b2.y)) { q.ly = Math.max(q.y, edge); edge = q.ly + 19; }
   ctx.font = '600 12px system-ui, "Segoe UI", sans-serif';
   for (const q of pills) {
-    const w = ctx.measureText(q.text).width + 14;
-    pill(L.chartW - w - 3, q.ly, w, 18, q.bg, q.text, q.fg);
+    const w = ctx.measureText(q.text).width + 14, x = L.chartW - w - 3;
+    if (!q.edge && Math.abs(q.ly - q.y) > 1.5) {
+      ctx.strokeStyle = q.bg; ctx.lineWidth = 1; ctx.beginPath();
+      ctx.moveTo(x - 14, Math.round(q.y) + 0.5); ctx.lineTo(x, Math.round(q.ly) + 0.5); ctx.stroke();
+    }
+    pill(x, q.ly, w, 18, q.bg, q.text, q.fg);
     pill(L.axisX + 1, q.ly, L.axisW - 2, 18, q.bg, fp(q.price), q.fg);
   }
-  // live price with the time left in the candle
+  // live price with the time left in the candle; the countdown sits on an opaque base so no scale number shows
+  // through it (a hidden "4040" behind "00:11" read as "330:11")
   const left = Math.max(0, lastC.t + tfMs - Date.now()), mm = Math.floor(left / 60e3), ss = Math.floor(left / 1e3) % 60;
   pill(L.axisX + 1, ySp, L.axisW - 2, 18, up ? P.up : P.down, fp(sp), '#fff');
   ctx.font = '11px system-ui, "Segoe UI", sans-serif';
+  pill(L.axisX + 1, ySp + 17, L.axisW - 2, 16, P.bg, '', '#fff');
   pill(L.axisX + 1, ySp + 17, L.axisW - 2, 16, rgba(up ? P.up : P.down, 0.75), `${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')}`, '#fff');
   ctx.font = '12px system-ui, "Segoe UI", sans-serif';
 
@@ -1185,6 +1275,7 @@ $('sig').addEventListener('click', e => {
   if (act === 'alert') addAlert(+a.dataset.v, a.dataset.note);
   else if (act === 'unalert') removeAlert(a.dataset.v);
   else if (act === 'zoneAlert') set('zoneAlert', !S.zoneAlert);
+  else if (act === 'pocAlert') set('pocAlert', !S.pocAlert);
   else if (act === 'testAlarm') testAlarm();
   else if (act === 'balance') { const v = parseFloat(prompt('Account balance in USD, for the stop-size check:', S.balance)); if (v > 0) set('balance', v); }
   else if (act === 'mt5Test') { if (confirm('Place a small test BUY on the MT5 demo account now?\nStop 5 $ away, target 10 $ away; the EA sets the lot size.')) sendToMt5({ test: 'buy' }); }

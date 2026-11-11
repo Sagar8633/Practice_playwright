@@ -352,7 +352,10 @@
       const far = up ? z.lo : z.hi;
       if (up ? far < base && base - far <= 1.5 * a : far > base && far - base <= 1.5 * a) base = far;
     }
-    const entry = k.c, stop = up ? base - 0.3 * a : base + 0.3 * a, risk = Math.abs(entry - stop);
+    // stop buffer beyond that point: stopAtr x ATR, at least stopMin (price units). Defaults = the rule the
+    // first backtests used (0.3 x ATR, no floor); the page passes its own values through inputs().
+    const buf = Math.max((inp.stopAtr > 0 ? inp.stopAtr : 0.3) * a, inp.stopMin > 0 ? inp.stopMin : 0);
+    const entry = k.c, stop = up ? base - buf : base + buf, risk = Math.abs(entry - stop);
     // target = the nearest level in the way; a level closer than 0.3 x risk counts as the same area
     const ahead = (up ? inp.resistances.map(z => ({ p: z.lo, name: z.name })) : inp.supports.map(z => ({ p: z.hi, name: z.name })))
       .concat(inp.magnets || []).filter(t => up ? t.p > entry + 0.3 * risk : t.p < entry - 0.3 * risk).sort((x, y) => up ? x.p - y.p : y.p - x.p);
@@ -370,7 +373,7 @@
   // Turns what is on screen into the input of signal(). Used by gold_gex.html and by the backtest
   // (GOLD/gex_signals), so both judge a setup the same way. All prices are candle prices.
   // q: { c5, price, zones, lines: [{side: 'support' | 'resistance', p, w, name}], flip, profile, closes30, tape,
-  //      tolMin }  tolMin = the smallest half-width of a level band, 1.5 $ (gold) when left out; other instruments
+  //      tolMin, stopAtr, stopMin }  stopAtr / stopMin = stop buffer (see setup); tolMin = the smallest half-width of a level band, 1.5 $ (gold) when left out; other instruments
   //                pass the same share of their price, and two lines closer than tolMin / 30 count as one level.
   function inputs(q) {
     const tolMin = q.tolMin > 0 ? q.tolMin : 1.5;
@@ -391,7 +394,7 @@
     // 30-minute trend: last closed candle against its 20-candle average, and that average rising or falling
     const c = q.closes30 || [], e = c.length > 25 ? ema(c, 20) : null, n = c.length - 1;
     const trend = !e ? 0 : c[n] > e[n] && e[n] > e[n - 3] ? 1 : c[n] < e[n] && e[n] < e[n - 3] ? -1 : 0;
-    return { c5: q.c5, price: q.price, supports: sup, resistances: res, magnets, regime, trend, tape: q.tape || 0 };
+    return { c5: q.c5, price: q.price, supports: sup, resistances: res, magnets, regime, trend, tape: q.tape || 0, stopAtr: q.stopAtr, stopMin: q.stopMin };
   }
 
   // Trade idea from CLOSED 5-minute candles and the levels on screen.

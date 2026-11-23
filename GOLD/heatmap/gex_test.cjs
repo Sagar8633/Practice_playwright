@@ -92,6 +92,58 @@ const pf = E.profile([{ t: 1, l: 100, h: 100.9, v: 10, bv: 6 }, { t: 2, l: 100, 
 check('profile: POC row, buy/sell split, value area', pf.poc === 100.5 && Math.abs(pf.rows[0].buy - 6) < 1e-9 &&
       Math.abs(pf.rows[0].sell - 5) < 1e-9 && pf.val === 100 && pf.vah === 101, `poc ${pf.poc} val ${pf.val} vah ${pf.vah}`);
 
+// ---- history (Days tab): on a random walk, the history functions must give what the live functions gave
+let seed = 7;
+const rnd = () => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
+const walk = [];
+for (let i = 0, p = 4000; i < 3 * 1440; i++) {
+  const o = p, c = o + (rnd() - 0.5) * 3, h = Math.max(o, c) + rnd() * 1.5, l = Math.min(o, c) - rnd() * 1.5, v = 5 + rnd() * 40;
+  walk.push({ t: Date.UTC(2026, 10, 2, 23) + i * 60e3, o, h, l, c, v, bv: v * rnd() });
+  p = c;
+}
+const w30 = E.aggregate(walk, 1800e3), lives = E.boxLives(w30, { cap: 0.5, ms: 1800e3 }), endT = w30[w30.length - 1].t + 1800e3;
+const keyOf = z => `${z.type}:${z.t}:${z.top.toFixed(6)}:${z.bottom.toFixed(6)}:${z.tested}`;
+const liveNow = E.boxes(w30, { cap: 0.5 }).map(keyOf).sort().join(), histNow = lives.filter(z => z.shown.some(([s, e]) => s <= endT && e > endT)).map(keyOf).sort().join();
+check('history zones: the ones still listed after the last candle = boxes()', liveNow === histNow && liveNow.length > 0, `${liveNow.split(',').length} zones`);
+let zoneOk = 0, zoneBad = '';
+for (let k = 60; k < w30.length; k += 7) {                     // at many past moments: boxes() on the candles known then
+  const T = w30[k].t + 1800e3, a = E.boxes(w30.slice(0, k + 1), { cap: 0.5 }).map(z => `${z.type}:${z.t}:${z.top.toFixed(6)}`).sort().join();
+  const b = lives.filter(z => z.shown.some(([s, e]) => s <= T && e > T)).map(z => `${z.type}:${z.t}:${z.top.toFixed(6)}`).sort().join();
+  if (a === b) zoneOk++; else if (!zoneBad) zoneBad = `differs at candle ${k}`;
+}
+check('history zones: at every past moment the zones listed = boxes() on the candles known then', !zoneBad, zoneBad || `${zoneOk} moments`);
+const zl = E.zoneLives(w30, {}), tzNow = E.tradeZones(w30).filter(z => z.tf !== '1h').map(z => `${z.type}:${z.t}`).sort();
+const zlNow = zl.filter(z => z.tf !== '1h' && z.shown.some(([s, e]) => s <= endT && e > endT)).map(z => `${z.type}:${z.t}`).sort();
+check('history zones: 30-minute trade zones after the last candle = tradeZones()', tzNow.join() === zlNow.join(), `${tzNow.length} vs ${zlNow.length}`);
+const d0 = Date.UTC(2026, 10, 3, 23), d1 = d0 + 864e5, ckA = d0 + 9 * 3600e3, ckB = d0 + 14.5 * 3600e3;
+const pp = E.profilePath(walk, d0, d1, 0.5, { minD: 2, at: { asia: ckA, london: ckB } });
+const ref = E.profile(walk.filter(k => k.t >= d0 && k.t < d1), d0, 0.5);
+check('profile path: last POC / VAH / VAL = profile() of the whole day', pp.poc[pp.poc.length - 1].p === ref.poc && pp.vah[pp.vah.length - 1].p === ref.vah && pp.val[pp.val.length - 1].p === ref.val && pp.final.poc === ref.poc,
+      `poc ${ref.poc} vah ${ref.vah} val ${ref.val}, ${pp.poc.length} POC changes`);
+const valueAt = (arr, T) => { let v = null; for (const x of arr) if (x.t <= T) v = x.p; return v; };
+let pathBad = '';
+for (let m = 20; m < 1440 && !pathBad; m += 37) {              // at many minutes: profile() of the candles closed by then
+  const T = d0 + m * 60e3, pr = E.profile(walk.filter(k => k.t >= d0 && k.t + 60e3 <= T), d0, 0.5);
+  if (valueAt(pp.poc, T) !== pr.poc || valueAt(pp.vah, T) !== pr.vah || valueAt(pp.val, T) !== pr.val) pathBad = `minute ${m}`;
+}
+check('profile path: at every minute the POC and value area = profile() of the candles closed by then (no look-ahead)', !pathBad, pathBad);
+const prA = E.profile(walk.filter(k => k.t >= d0 && k.t + 60e3 <= ckA), d0, 0.5);
+check('profile path: POC at a time of day uses the candles closed by then', pp.at.asia && pp.at.asia.poc === prA.poc && pp.at.asia.px === walk.find(k => k.t + 60e3 === ckA).c && pp.at.london.t === ckB,
+      pp.at.asia && `asia ${pp.at.asia.poc} vs ${prA.poc}`);
+// the page's own trackPoc, replayed once a minute, must announce the same shifts
+let rf = null, cd = null, cn = 0;
+const want = [];
+for (let m = 1; m <= 1440; m++) {
+  const T = d0 + m * 60e3, poc = E.profile(walk.filter(k => k.t >= d0 && k.t + 60e3 <= T), d0, 0.5).poc;
+  if (rf === null || T - d0 < 30 * 60e3) { rf = poc; cd = null; continue; }
+  if (Math.abs(poc - rf) < 2) { cd = null; continue; }
+  if (cd !== null && Math.abs(poc - cd) < 2) cn++; else { cd = poc; cn = 1; }
+  if (cn < 2) continue;
+  want.push(`${T}:${rf}>${poc}`); rf = poc; cd = null;
+}
+check('profile path: POC shifts = the page\'s trackPoc replayed minute by minute', want.join() === pp.shifts.map(s => `${s.t}:${s.from}>${s.to}`).join(), `${want.length} shifts`);
+check('profile path: open / high / low / close of the day', pp.open === walk.find(k => k.t === d0).o && pp.close === walk.find(k => k.t === d1 - 60e3).c && pp.n === 1440);
+
 // walls by open interest do not move when the price does; walls by gamma follow it when expiry is hours away
 const chain = { contracts: [['261106', 0, 100, 0.2, 500, 0, 0], ['261106', 0, 110, 0.2, 3000, 0, 0], ['261106', 1, 90, 0.2, 2000, 0, 0], ['261106', 1, 100, 0.2, 100, 0, 0]] };
 const late = E.nyClose('261106') - 2 * 3600e3;                 // two hours before expiry

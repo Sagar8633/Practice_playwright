@@ -171,7 +171,15 @@
   // "tested" when price has left it and come back, and is dropped when a candle closes through its far side.
   // Same output shape as zones().
   function boxes(c, opt) {
+    const live = scanBoxes(c, opt, false).filter(z => !z.broken);
+    return live.filter((z, i) => !live.some((y, j) => j > i && y.type === z.type && y.bottom < z.top && y.top > z.bottom));
+  }
+  // Every swing box of the candles, broken or not, oldest swing first (boxes() keeps the live ones). With life,
+  // each box also gets born / testedAt / brokenAt = the close of its confirming candle, of the first candle that
+  // came back after price had left it, of the candle that closed through it (null when that never happened).
+  function scanBoxes(c, opt, life) {
     const K = (opt && opt.confirm) || 1, cap = (opt && opt.cap) || 1, n = c.length, out = [], atrs = new Array(n);
+    const ms = (opt && opt.ms) || (n > 1 ? c[1].t - c[0].t : 0);
     let atr = 0;
     for (let i = 0; i < n; i++) {
       const tr = i ? Math.max(c[i].h - c[i].l, Math.abs(c[i].h - c[i - 1].c), Math.abs(c[i].l - c[i - 1].c)) : c[i].h - c[i].l;
@@ -188,16 +196,122 @@
         let top = up ? Math.min(P.h, P.l + cap * a) : P.h, bottom = up ? P.l : Math.max(P.l, P.h - cap * a);
         if (top - bottom < 0.15 * a) { if (up) top = bottom + 0.15 * a; else bottom = top - 0.15 * a; }
         const z = { type: up ? 'demand' : 'supply', t: P.t, confirmed: c[p + K].t, top, bottom, tested: false, broken: false };
-        let left = false;                                      // price has moved fully away from the box
-        for (let j = p + K + 1; j < n && !z.broken; j++) {
-          if (up) { if (c[j].c < bottom) z.broken = true; else if (c[j].l > top) left = true; else if (left) z.tested = true; }
-          else if (c[j].c > top) z.broken = true; else if (c[j].h < bottom) left = true; else if (left) z.tested = true;
+        let left = false, ti = -1, bi = -1;                    // left = price has moved fully away from the box
+        for (let j = p + K + 1; j < n && bi < 0; j++) {
+          if (up) { if (c[j].c < bottom) bi = j; else if (c[j].l > top) left = true; else if (left && ti < 0) ti = j; }
+          else if (c[j].c > top) bi = j; else if (c[j].h < bottom) left = true; else if (left && ti < 0) ti = j;
         }
+        z.tested = ti >= 0; z.broken = bi >= 0;
+        if (life) { z.born = c[p + K].t + ms; z.testedAt = ti >= 0 ? c[ti].t + ms : null; z.brokenAt = bi >= 0 ? c[bi].t + ms : null; }
         out.push(z);
       }
     }
-    const live = out.filter(z => !z.broken);
-    return live.filter((z, i) => !live.some((y, j) => j > i && y.type === z.type && y.bottom < z.top && y.top > z.bottom));
+    return out;
+  }
+
+  // ---- history (the page's Days tab) ----------------------------------------------------------------------
+  // The swing boxes with their whole life, so a past day can be drawn as the page showed it. Besides born /
+  // testedAt / brokenAt (see scanBoxes) each box gets shown = the time spans [from, to) in which boxes() would
+  // have listed it: from its birth until a candle closed through it, minus the spans in which a newer box of the
+  // same kind over the same prices was alive (boxes() then keeps only the newer one); to = Infinity while it is
+  // still listed after the last candle. opt.window: a box also drops out this long after its swing candle (the
+  // page reads 300 thirty-minute candles, 6.25 days). opt.ms = candle length (default: first two candles' gap).
+  function boxLives(c, opt) {
+    const all = scanBoxes(c, opt, true), win = (opt && opt.window) || 0, n = c.length;
+    const endT = n ? c[n - 1].t + ((opt && opt.ms) || (n > 1 ? c[1].t - c[0].t : 0)) : 0;   // close of the last candle
+    for (const z of all) {
+      let parts = [[z.born, z.brokenAt === null ? Infinity : z.brokenAt]];
+      for (const y of all) {
+        if (!(y.t > z.t && y.type === z.type && y.bottom < z.top && y.top > z.bottom)) continue;
+        const a = y.born, b = y.brokenAt === null ? Infinity : y.brokenAt, next = [];
+        for (const [s, e] of parts) {
+          if (b <= s || a >= e) { next.push([s, e]); continue; }
+          if (a > s) next.push([s, a]);
+          if (b < e) next.push([b, e]);
+        }
+        parts = next;
+      }
+      // the window only cuts what lies before the last candle: a zone whose 6 days are not over yet is still alive
+      if (win && z.t + win <= endT) parts = parts.map(([s, e]) => [s, Math.min(e, z.t + win)]).filter(([s, e]) => e > s);
+      z.shown = parts;
+    }
+    return all.filter(z => z.shown.length);
+  }
+  // tradeZones() over time: the 30-minute and 1-hour swing boxes with their lives (boxLives). A 1-hour box that
+  // lay over a 30-minute box of the same kind while both were alive is left out and the 30-minute one is marked
+  // '30m & 1h' (tradeZones does this at each moment; here it is decided once, so a box can carry the mark for a
+  // little longer than the page showed it).
+  function zoneLives(c30, opt) {
+    if (!c30.length) return [];
+    opt = Object.assign({ cap: 0.5 }, opt);
+    const h = aggregate(c30, 3600e3);
+    if (c30[c30.length - 1].t % 3600e3 < 1800e3) h.pop();        // that hour has not closed yet
+    const life = z => [z.shown[0][0], z.shown[z.shown.length - 1][1]];
+    const out = boxLives(c30, Object.assign({}, opt, { ms: 1800e3 })).map(z => Object.assign(z, { tf: '30m' }));
+    for (const z of boxLives(h, Object.assign({}, opt, { ms: 3600e3 }))) {
+      const [za, zb] = life(z);
+      const hit = out.filter(y => { if (y.tf === '1h' || y.type !== z.type || !(y.bottom < z.top && y.top > z.bottom)) return false; const [ya, yb] = life(y); return ya < zb && za < yb; });
+      if (hit.length) hit.forEach(y => { y.tf = '30m & 1h'; }); else out.push(Object.assign(z, { tf: '1h' }));
+    }
+    return out.sort((x, y) => x.t - y.t);
+  }
+  // How one trading day's volume profile grew, from its 1-minute candles: after every candle that closed in
+  // [from, to), the POC, VAH and VAL that profile() gives for the candles so far (same rows, same value area),
+  // kept as change points [{t, p}] where t = the candle's close. So a value at time t used only what was known
+  // at t. Also:
+  //   shifts  the POC shifts the page announces: the POC moved opt.minD (default 2) or more away from the one
+  //           last announced and stayed there for two closed minutes; quiet during the first opt.quiet ms of
+  //           the day (default 30 min), when the profile is too thin to mean much
+  //   at      for each named time in opt.at = {name: ms}: {t, poc, vah, val, px = last close} after the last
+  //           candle that closed by then (left out while that time has not come)
+  //   final   profile() of the whole day; open / high / low / close of the day's candles, n = their number.
+  function profilePath(c, from, to, step, opt) {
+    const o = opt || {}, minD = o.minD || 2, quiet = o.quiet === undefined ? 30 * 60e3 : o.quiet, at = o.at || {};
+    const day = c.filter(k => k.t >= from && k.t < to);
+    const out = { from, to, step, poc: [], vah: [], val: [], shifts: [], at: {}, final: null, n: day.length, open: 0, high: 0, low: 0, close: 0 };
+    if (!day.length) return out;
+    out.open = day[0].o; out.high = -Infinity; out.low = Infinity; out.close = day[day.length - 1].c;
+    let b0 = Infinity, b1 = -Infinity;
+    for (const k of day) { out.high = Math.max(out.high, k.h); out.low = Math.min(out.low, k.l); if (k.v > 0) { b0 = Math.min(b0, Math.floor(k.l / step)); b1 = Math.max(b1, Math.floor(k.h / step)); } }
+    const size = b1 >= b0 ? b1 - b0 + 1 : 0, buy = new Float64Array(size), sell = new Float64Array(size), has = new Uint8Array(size);
+    let total = 0, cur = null, px = 0, ref = null, cand = null, cn = 0;
+    const names = Object.keys(at).sort((x, y) => at[x] - at[y]);
+    const mark = (arr, t, p) => { if (!arr.length || arr[arr.length - 1].p !== p) arr.push({ t, p }); };
+    const note = name => { if (cur) out.at[name] = { t: at[name], poc: cur.poc, vah: cur.vah, val: cur.val, px }; };
+    for (const k of day) {
+      const T = k.t + 60e3;
+      while (names.length && at[names[0]] < T) note(names.shift());
+      px = k.c;
+      if (!(k.v > 0)) continue;
+      const lo = Math.floor(k.l / step), hi = Math.floor(k.h / step), share = k.v / (hi - lo + 1), bs = k.bv / k.v;
+      for (let b = lo; b <= hi; b++) { const i = b - b0; buy[i] += share * bs; sell[i] += share * (1 - bs); has[i] = 1; }
+      total += k.v;
+      // the same POC and value area as profile(): first busiest row from the bottom, then 70 % around it,
+      // stepping over price rows that have no volume
+      let pi = -1, pv = 0;
+      for (let i = 0; i < size; i++) if (has[i]) { const v = buy[i] + sell[i]; if (pi < 0 || v > pv) { pi = i; pv = v; } }
+      let L = pi, U = pi, acc = pv;
+      const below = i => { for (let j = i - 1; j >= 0; j--) if (has[j]) return j; return -1; };
+      const above = i => { for (let j = i + 1; j < size; j++) if (has[j]) return j; return -1; };
+      let nb = below(L), na = above(U);
+      while (acc < 0.7 * total && (nb >= 0 || na >= 0)) {
+        const up = na >= 0 ? buy[na] + sell[na] : -1, dn = nb >= 0 ? buy[nb] + sell[nb] : -1;
+        if (up >= dn) { U = na; acc += up; na = above(U); } else { L = nb; acc += dn; nb = below(L); }
+      }
+      cur = { poc: (pi + b0) * step + step / 2, vah: (U + b0) * step + step, val: (L + b0) * step };
+      mark(out.poc, T, cur.poc); mark(out.vah, T, cur.vah); mark(out.val, T, cur.val);
+      // POC shift, as the page's trackPoc does it once a minute
+      if (ref === null || T - from < quiet) { ref = cur.poc; cand = null; continue; }
+      if (Math.abs(cur.poc - ref) < minD) { cand = null; continue; }
+      if (cand !== null && Math.abs(cur.poc - cand) < minD) cn++; else { cand = cur.poc; cn = 1; }
+      if (cn < 2) continue;
+      out.shifts.push({ t: T, from: ref, to: cur.poc });
+      ref = cur.poc; cand = null;
+    }
+    const lastT = day[day.length - 1].t + 60e3;
+    while (names.length && at[names[0]] <= lastT) note(names.shift());
+    out.final = profile(day, from, step);
+    return out;
   }
 
   // The buy / sell zones the page suggests: swing boxes of the closed 30-minute candles and of the 1-hour
@@ -409,5 +523,5 @@
   }
 
   return { ozPerShare, nyOffsetHours, nyClose, years, dte, sessionStart, bsGamma, expiries, table, walls, wallsOi, gammaFlip, zones, boxes,
-           tradeZones, absorption, profile, aggregate, atrLast, ema, inputs, signal };
+           tradeZones, boxLives, zoneLives, profilePath, absorption, profile, aggregate, atrLast, ema, inputs, signal };
 });

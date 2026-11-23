@@ -277,6 +277,88 @@ Like a TradingView alert: a price, and the alarm rings once when gold gets there
   The page plays at full scale, so loudness is set by the PC volume. Keep the tab in its own visible window:
   a hidden tab is checked about once a minute, and a tab the browser has put to sleep is not checked at all.
 
+### Past days (since 22 Nov 2026)
+
+The chart holds the last 30 calendar days (about 20 trading days on gold) of Binance 1-minute candles, so
+earlier days can be read the way the page showed them at the time.
+
+- **Where it comes from**: Binance keeps that history, so it is there at once, including days before the
+  feature existed. The minutes of each finished trading day (18:00 to 18:00 New York) are kept in the browser
+  (IndexedDB `gexArchive`, one entry per day) and only the missing days are fetched; a day older than 30 is
+  deleted. First load about 6-13 s (one request per day, weight 10 each), then under a second.
+- **Going back**: the day list next to the timeframes (`‹ Live ›`), the arrow keys left / right, dragging the
+  chart, or the scroll bar under the time scale (drag the thumb, click beside it, or use the wheel over it).
+  `Fit` or `Live` returns to now. The scroll bar ticks mark day starts. Zoom out reaches 3,000 candles
+  (the whole month on 1h).
+- **On the chart**: a dashed line where each day starts with its date in bold on the time scale, and at the
+  top the day's name with its POC at Asia → London → Close. Yellow step line = how that day's POC moved,
+  minute by minute; thin purple = its VAH and VAL. A **dashed arrow** at each POC shift goes from the old POC
+  to the new one (green up, red down, "POC +20.5"). Yellow dots = the POC at the three check times. Past
+  buy / sell zones are drawn from their swing candle until a candle closed through them (or a newer zone over
+  the same prices took over), pale after their first test. On a past day the profile strip on the right shows
+  that whole day's profile, labelled with its date.
+- **Days tab** (left panel, next to Guide): the day's open / high / low / last, the POC with its value area
+  and where price was at **Asia 03:00, London 08:30 and Close 17:00 New York** (13:30, 19:00 and 03:30 in
+  India in winter), every POC shift, every zone made that day (formed, tested, closed through), and the list
+  of all days (click one to open it).
+- **CSV**: `Download all days` (one row per day, the three check times with POC / VAH / VAL / price, end of
+  day levels, shift and zone counts) and `POC shifts and zones` (one row per event, time in this PC's clock
+  and UTC). Each value at a check time uses only the candles closed by then, and a zone's time is when it
+  became known (its confirming candle closed), so these columns can be used as inputs known at that moment;
+  `end_*` and `last` are only known after the day.
+- **Same rules as live**: `GexEngine.profilePath` and `zoneLives` rebuild the day; `gex_test.cjs` checks on
+  random candles that they give exactly what `profile()`, `boxes()`, `tradeZones()` and the page's POC-shift
+  rule gave at every minute (no look-ahead).
+- **Limits**: prices are the futures moved by today's shift, so an older day can sit 1-2 $ off the spot (or
+  broker) price it had then. Absorption areas and the GLD option bars are not rebuilt (the bars are today's).
+  Forex has no history (Kraken gives 12 hours). Nothing here is a tested strategy: build a rule, then
+  backtest it before trading it.
+
+### Gold market hours (since 22 Nov 2026)
+
+Binance's gold future trades around the clock, but gold (and XM) trades Sunday 18:00 to Friday 17:00 New
+York with a break from 17:00 to 18:00 every day. Candles that start while gold is closed are now dropped
+everywhere (chart, profile, zones, signals, history), the weekend shows as a grey band "closed 03:30 21 Nov –
+04:30 23 Nov", and while gold is closed the guide says MARKET CLOSED with the opening time, the countdown reads
+"closed", and no ideas, zone tones or MT5 trades happen. Holidays and early closes are not known.
+
+### Broker price from MT5 (`Price` button, since 22 Nov 2026)
+
+Update 23 Nov 2026: the user found the page's price did not match TradingView. Measured: gold-api.com (the
+reference without the agent) sat 1-3 $ above Swissquote's live quote and moves only every 30 s. The agent's
+`/price` now also carries **Swissquote's live spot bid** (its public quote feed; the browser cannot read it
+itself, no CORS header), so with the agent running the order is: MT5 bid, else Swissquote, else gold-api.com.
+The button reads `Price: GOLD.i#` / `Price: Swissquote` / `Price: gold-api`.
+
+Measured the same day over 5 minutes: futures minus Swissquote stayed at 7.0 $ (5.6-8.9), gold-api.com ran about
+90 s late (Coinbase's XAU price about 45 s) and swung from 8 $ below to 4 $ above the live quote in fast moves.
+So without the agent each gold-api price is now compared with the futures price of 75 s before its time stamp,
+each value counted once, median over 30 minutes (after warm-up 0.5 $ from Swissquote on average instead of 1.0 $;
+another run still 1.5 $ off, because gold-api's own offset moves between -2 and +2 $). Binance's index price for
+XAUUSDT is no help (5-6 $ above spot). For an exact match without the agent: **match it** (guide, under Price
+alerts) takes the price the user's own chart shows and keeps that difference for 8 hours.
+
+GLD options: CBOE answers HTTP 403 to `gex_fetch.cjs` since about 10 Nov 2026 (also to a plain PowerShell
+request); not worked around. A snapshot older than 3 days is no longer drawn (bars hidden, chip "N days old").
+The 403 is Cloudflare's bot check ("Attention Required!"), so a person can still get the file: click the GLD chip
+(page opened from this PC), save the CBOE tab with Ctrl+S as GLD.json in Downloads, and `gex_fetch.cjs --watch`
+(run by the agent) converts it within 30 s (`node gex_fetch.cjs --file <path>` does it by hand). Once a day is
+enough: open interest changes once a day and the page recomputes gamma at the live price. While blocked, the
+direct download is tried every 6 hours, not every 5 minutes, and the failure is logged once (then every 6 h).
+Free automatic sources checked 23 Nov 2026: Alpha Vantage's option functions are premium; marketdata.app's free
+plan has OI / IV / gamma (24 h delayed) but 100 credits a day at 1 credit per contract (the GLD chain has about
+5,000), so only one expiry near the price would fit; Tradier not verified.
+
+`Price: spot` (now `Price: gold-api`) moves the candles to spot gold (gold-api.com) as before. `Price: MT5` moves them to the **bid of
+the gold chart in MetaTrader 5** instead, so the price, zones and alerts on the page are at your broker's level:
+GexSignalTrader **1.01** writes `gex_price.txt` (bid, ask, tick age) to the common files folder every second,
+the agent serves it on `GET http://127.0.0.1:8791/price` (no token: read-only), and the page polls it every
+2 s. Only the level is the broker's: the candles keep Binance's shape and volume (a broker has no real volume),
+so a candle can be a few tenths off the broker's own. If MT5 or the agent stops, the page goes back to spot
+and the button turns orange. Default: on for the page opened from this PC (start_gex.bat), off on the hosted
+page (there the browser may ask once whether the page may reach this PC). After updating, the EA must be
+removed from the chart and attached again (MT5 does not reload an EA compiled from the command line).
+
 ### Trading the signals on an MT5 demo account
 
 ```

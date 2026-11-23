@@ -2,7 +2,7 @@
 //| GexSignalTrader.mq5                                              |
 //| Places the trades that the Gold GEX page (gold_gex.html) signals |
 //+------------------------------------------------------------------+
-#property version   "1.00"
+#property version   "1.01"
 #property description "Trades the BUY / SELL signals of gold_gex.html on the chart's symbol."
 #property description "The local agent (gex_agent.cjs) writes each signal to Common\\Files\\gex_signal.txt;"
 #property description "this EA reads that file once a second, places the trade with stop and target,"
@@ -23,6 +23,8 @@ input long   InpMagic        = 20261106; // Magic number of this EA's trades
 #define SIGNAL_FILE "gex_signal.txt"     // id;BUY|SELL;entry;stop;target;score;sent (UTC seconds)
 #define STATUS_FILE "gex_status.txt"     // id;state;time (UTC seconds);message
 #define ALIVE_FILE  "gex_ea.txt"         // time (UTC seconds);demo|real;server;symbol;balance;algo 1|0;dryrun 1|0
+#define PRICE_FILE  "gex_price.txt"      // time (UTC seconds);symbol;bid;ask;seconds since the last tick;server   every second
+                                         // (version 1.01, 22 Nov 2026: the page shows prices at this broker's level)
 
 CTrade   g_trade;
 long     g_lastId = 0;                   // id of the last signal this EA has dealt with
@@ -89,12 +91,27 @@ void OnDeinit(const int reason)
   {
    EventKillTimer();
    FileDelete(ALIVE_FILE, FILE_COMMON);   // the page then shows that the EA is no longer attached
+   FileDelete(PRICE_FILE, FILE_COMMON);   // and goes back to its own price reference
   }
 
 void OnTick() { }
 
+// The broker's current bid and ask for the page: it moves its candles (Binance futures) to this price level, so
+// the price on the page is the price on this chart. Tick age tells the page when the market is not moving.
+void WritePrice()
+  {
+   MqlTick t;
+   if(!SymbolInfoTick(_Symbol, t) || t.bid <= 0)
+      return;
+   int digits = (int)SymbolInfoInteger(_Symbol, SYMBOL_DIGITS);
+   long age = (long)(TimeTradeServer() - t.time);
+   WriteLine(PRICE_FILE, StringFormat("%I64d;%s;%s;%s;%I64d;%s", (long)TimeGMT(), _Symbol, DoubleToString(t.bid, digits),
+             DoubleToString(t.ask, digits), age < 0 ? 0 : age, AccountInfoString(ACCOUNT_SERVER)));
+  }
+
 void OnTimer()
   {
+   WritePrice();
    if(TimeLocal() - g_alive >= 5)
       Heartbeat();
    CheckSignal();

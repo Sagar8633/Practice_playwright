@@ -19,6 +19,7 @@ const COMMON = process.env.GEX_COMMON_DIR || path.join(process.env.APPDATA || ''
 const SIGNAL = path.join(COMMON, 'gex_signal.txt');      // id;BUY|SELL;entry;stop;target;score;sent (UTC seconds)
 const STATUS = path.join(COMMON, 'gex_status.txt');      // id;state;time (UTC seconds);message      written by the EA
 const ALIVE = path.join(COMMON, 'gex_ea.txt');           // time;demo|real;server;symbol;balance;algo;dryrun   written by the EA every 5 s
+const PRICE = path.join(COMMON, 'gex_price.txt');        // time;symbol;bid;ask;tick age (s);server            written by the EA (1.01+) every second
 const INFO = path.join(__dirname, 'gex_agent_info.js');  // port and token for the page
 const JOURNAL = path.join(__dirname, 'mt5_signals.log');
 const token = crypto.randomBytes(16).toString('hex');
@@ -31,6 +32,33 @@ function eaState() {
   if (p.length < 7) return { alive: false };
   const age = Math.round(Date.now() / 1000 - +p[0]);
   return { alive: age <= 20, age, mode: p[1], server: p[2], symbol: p[3], balance: +p[4], algo: p[5] === '1', dryrun: p[6] === '1' };
+}
+// The broker's bid / ask from the EA. fresh = the EA wrote it in the last 10 s (it is attached and running).
+function priceState() {
+  const p = read(PRICE).split(';');
+  if (p.length < 5 || !(+p[2] > 0)) return { ok: false };
+  const age = Math.round(Date.now() / 1000 - +p[0]);
+  return { ok: age <= 10, age, time: +p[0] * 1000, symbol: p[1], bid: +p[2], ask: +p[3], tickAge: +p[4], server: p[5] || '' };
+}
+// Spot gold from Swissquote's public quote feed (the one its web site shows): real time, a broker's price like
+// OANDA's on TradingView. Measured 23 Nov 2026: gold-api.com, the page's own reference, ran 1-3 $ away from it
+// and updates only every 30 s. The browser cannot read Swissquote (no CORS header), so the agent fetches it,
+// at most once every 2 s, and passes the tightest spread's bid and ask on.
+const SPOT = { at: 0, q: null, busy: null };
+function swissquote() {
+  if (SPOT.q && Date.now() - SPOT.at < 2000) return Promise.resolve(SPOT.q);
+  if (!SPOT.busy) SPOT.busy = (async () => {
+    try {
+      const r = await fetch('https://forex-data-feed.swissquote.com/public-quotes/bboquotes/instrument/XAU/USD', { signal: AbortSignal.timeout(4000) });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = await r.json(), all = j.flatMap(x => x.spreadProfilePrices.map(p => ({ ...p, ts: x.ts }))).filter(p => p.bid > 0 && p.ask > p.bid);
+      const p = all.sort((a, b) => (a.ask - a.bid) - (b.ask - b.bid))[0];
+      SPOT.q = p ? { ok: true, source: 'Swissquote', bid: p.bid, ask: p.ask, time: p.ts } : { ok: false, error: 'no quote' };
+    } catch (e) { SPOT.q = { ok: false, error: e.message }; }
+    SPOT.at = Date.now(); SPOT.busy = null;
+    return SPOT.q;
+  })();
+  return SPOT.busy;
 }
 function lastStatus() {
   const p = read(STATUS).split(';');
@@ -70,8 +98,15 @@ if (ti >= 0) {
 // ------------------------------------------------------------------ bridge
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, 'http://127.0.0.1');
-  const reply = (code, obj) => { res.writeHead(code, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type' }); res.end(JSON.stringify(obj)); };
+  const reply = (code, obj) => {
+    res.writeHead(code, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type',
+                          'Access-Control-Allow-Private-Network': 'true' });   // lets the hosted page ask this PC (Chrome's local network check)
+    res.end(JSON.stringify(obj));
+  };
   if (req.method === 'OPTIONS') return reply(204, {});
+  // the broker price (MT5) and Swissquote's spot: read-only and harmless, so no token, and the hosted page (which
+  // has no token) can use them too
+  if (req.method === 'GET' && url.pathname === '/price') { swissquote().then(spot => reply(200, Object.assign(priceState(), { spot }))); return; }
   if (req.method === 'GET' && url.pathname === '/status') {
     if (url.searchParams.get('token') !== token) return reply(403, { error: 'wrong token' });
     return reply(200, { ea: eaState(), last: lastStatus() });

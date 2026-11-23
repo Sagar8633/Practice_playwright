@@ -74,6 +74,27 @@ select{padding:0 8px;cursor:pointer}
 #tabR{left:auto;right:0;border-right:0;border-radius:8px 0 0 8px}
 #splitR{left:auto;right:0}
 #sig{will-change:transform}
+#daySeg{align-items:center}
+#daySeg select{border:0;height:24px;background:none;padding:0 4px;max-width:150px}
+#daySeg button{font-size:15px;padding:0 8px}
+#sig .tabs{display:flex;gap:2px;padding:2px;margin-bottom:10px;background:var(--bg);border:1px solid var(--line);border-radius:8px}
+#sig .tabs button{flex:1;border:0;background:none;color:var(--text);height:26px;border-radius:6px;cursor:pointer;font:inherit;font-weight:600}
+#sig .tabs button.on{background:var(--accent);color:#fff}
+#pDays{display:none}
+#sig .dhead{display:flex;align-items:center;gap:6px;font-size:16px;font-weight:700}
+#sig .dhead b{flex:1;text-align:center}
+#sig .dhead a{font-size:20px;line-height:1;padding:0 8px;text-decoration:none;border:1px solid var(--line);border-radius:6px}
+#sig .dsub{color:var(--text);font-size:11px;text-align:center;margin:2px 0 6px}
+#sig table.cp{width:100%;border-collapse:collapse;margin-top:2px}
+#sig table.cp td{padding:4px 3px;border-bottom:1px solid var(--line);vertical-align:top}
+#sig table.cp td:first-child{color:var(--text);white-space:nowrap}
+#sig .poc{color:#facc15;font-weight:700}
+body.light #sig .poc{color:#a16207}
+#sig .drow{cursor:pointer;padding:4px 6px;margin:0 -6px;border-radius:6px;border-bottom:1px solid var(--line)}
+#sig .drow:hover{background:var(--bg)}
+#sig .drow.on{background:rgba(59,108,255,.14)}
+#sig .drow.wk{opacity:.6}
+#sig .note{color:var(--text);font-size:11px;margin-top:6px}
 @media (max-width: 720px){.edge{width:24px;height:66px}}
 @media (max-width: 720px){
   body.guide{--side:0px}
@@ -98,6 +119,7 @@ select{padding:0 8px;cursor:pointer}
   <select id="ins" title="Instrument. Gold and crypto candles come from Binance futures, forex from Kraken's fiat markets"></select>
   <div class="chip" id="chip"><b id="cDate">--</b>·<span id="cDte">-- DTE</span>·<span id="cN">-- opts</span><span id="cSum" class="sum">Σ --</span></div>
   <div class="seg" id="tfs"></div>
+  <div class="seg" id="daySeg" title="Go to a past trading day (18:00 to 18:00 New York). Arrow keys left / right: day before / after"><button id="dPrev" title="Day before (left arrow key)">‹</button><select id="day"><option value="live">Live</option></select><button id="dNext" title="Day after (right arrow key)">›</button></div>
   <button class="btn" id="bSignals" title="Guide panel on the left: enter or not, buy and sell zones, absorption, price alerts">Guide</button>
   <button class="btn" id="bZones" title="Buy and sell zones: swing candles of the 30-minute and 1-hour charts">Zones</button>
   <button class="btn" id="bAbs" title="Absorption areas: heavy one-sided buying or selling that price did not follow">Absorption</button>
@@ -105,6 +127,7 @@ select{padding:0 8px;cursor:pointer}
   <button class="btn" id="bGld" title="Lines from GLD options (call wall, put wall, zero gamma). Context only, not used by the guide">GLD lines</button>
   <button class="btn" id="bAlarm" title="Siren, banner and flashing tab title when a signal appears. Click to switch on (plays a test) or off">Alarm</button>
   <button class="btn" id="bMt5" title="Send each new signal to MetaTrader 5 through the local agent. The EA trades it on a demo account only">MT5 off</button>
+  <button class="btn" id="bPx" title="Price level of the page: spot gold (gold-api.com), or your broker's (the bid of the gold chart in MetaTrader 5: needs start_gex.bat running and GexSignalTrader 1.01 attached to that chart)">Price: spot</button>
   <button class="btn" id="bReset" title="Fit the chart again (or double-click it)">Fit</button>
   <button class="btn" id="bFull" title="Hide both side panels and fill the screen. Esc or this button again to leave">Full screen</button>
   <button class="btn" id="bLight">Light</button>
@@ -129,16 +152,22 @@ select{padding:0 8px;cursor:pointer}
   <p><i>Zones</i> (boxes): red = sell zone, the candle that made a swing high on the 30-minute or 1-hour chart; green = buy zone, the candle that made a swing low. A zone turns pale once price has left it and come back, and disappears when a candle of its timeframe closes through it.</p>
   <p><i>Absorption</i> (thin bands): over 5 minutes one side traded much more than usual and price still did not go its way. Blue = buyers absorbed; pink = sellers absorbed. Measured from the buy and sell volume of Binance gold futures, the same tape the heatmap page shows. A band disappears when a 1-minute candle closes through it, or after 8 hours.</p>
   <p><i>Profile</i>: volume traded at each price since 18:00 New York. Yellow = POC, the busiest price. Purple = value area, where 70 % of the volume traded. Built on fixed 0.5 $ rows from closed 1-minute candles, so zooming does not move POC, VAH or VAL, and the guide uses the same POC. When the POC moves 2 $ or more and stays there for two minutes, a "POC SHIFTED" banner appears (with a tone when the alarm is on); switch it off under Price alerts in the guide.</p>
+  <p><i>Past days</i> (gold and crypto): the chart holds the last 30 trading days (18:00 to 18:00 New York) of Binance 1-minute candles, kept in this browser; a day older than 30 is deleted. A dashed line marks where each day starts. The yellow step line is how that day's POC moved, the thin purple lines its value area; the dots mark the POC at the end of Asia (03:00 New York), the London morning (08:30) and the close (17:00), each from the candles up to then only. Past buy / sell zones are drawn from the swing candle to the moment a candle closed through them (or a newer zone took over). Go back with the day list at the top (or the arrow keys), by dragging the chart, or with the scroll bar under the time scale. The <i>Days</i> tab of the left panel lists the day's numbers, its POC shifts and its zones, the last 30 days in one list, and downloads them as CSV. Prices are moved to spot with today's futures-to-spot shift, so an older day can sit 1-2 $ off the spot price it had then. Forex has no history: Kraken gives 12 hours only.</p>
   <p><i>Guide</i> (left): the top box says what to do now. The stop of an idea is 1 x the 5-minute ATR beyond the zone or the turning candle, at least 2 $ on gold. WAIT = price is between zones. GET READY = price is at a zone, no entry yet. BUY / SELL = a 5-minute candle went into the zone and closed back out, and the checks agree. NO: SKIP = it turned, but the target is too close, the stop too wide or too little agrees. The checklist shows each point with a tick or a cross. The plan under a zone is rough: the real entry is the close of the candle that turns.</p>
   <p><i>Price alerts</i>: type a price in the guide, hold Alt and click the chart, or right-click the chart. An orange line appears and the alarm rings once when price gets there. Right-click the line to remove it. The price is this page's price, which can differ a little from your broker's.</p>
   <p><i>Alarm</i>: a new BUY or SELL sounds a 30-second siren (high and fast for buy, low and slow for sell), shows a flashing banner and flashes the tab title until you click the banner. A price alert sounds a fast trill, and reaching a zone a short tone. Sound only works after one click on the page, and its loudness is set by the PC volume. Keep this tab open in its own window: a hidden or sleeping tab checks late or not at all.</p>
   <p><i>MT5</i>: with MT5 on, each new signal is passed to the GexSignalTrader EA in MetaTrader 5, which places the trade with the same stop and target distance, closes it after 4 hours, and reports back here. It needs start_gex.bat running, the EA attached to the gold chart and Algo Trading on. The EA refuses to trade on a real account.</p>
+  <p><i>Price</i> (button): the candles are Binance's gold future, moved down to a spot price. <i>Price: gold-api</i> uses gold-api.com, the only free spot price a browser may read; it runs about 90 seconds late and can sit 1-2 $ off a broker. With start_gex.bat running, a click on the button takes the price from this PC instead: your MetaTrader 5 gold chart's bid (GexSignalTrader 1.01 attached; button shows the symbol), or otherwise Swissquote's live spot (button shows Swissquote), both within a few tenths of your broker or TradingView. Without the agent, <i>match it</i> under Price alerts takes the price your own chart shows and keeps that difference for 8 hours. The candles keep Binance's shape and volume.</p>
+  <p><i>Market hours</i> (gold): gold trades Sunday 18:00 to Friday 17:00 New York, with a break from 17:00 to 18:00 every day. Binance's gold future also trades in between; those candles are left out everywhere, the weekend shows as a grey band, and while gold is closed the page says MARKET CLOSED and does nothing. Holidays are not known to the page.</p>
   <p><i>Panels</i>: drag the inner edge of the guide (left) or the option bars (right) to make it wider or narrower; drag it most of the way in and let go to minimise it. A minimised panel leaves an arrow tab at the screen edge: click it, or drag it back out, to open the panel again. A click on an arrow tab opens or closes its panel; a double-click on the edge restores the default width. <i>Full screen</i> hides both and fills the screen; Esc or the button again puts them back. A hidden guide still records ideas, sounds the alarm, draws the arrows and sends to MT5: switch those with the Alarm and MT5 buttons.</p>
   <p>Mouse: wheel on the chart zooms time, wheel on the price scale or bars (or Shift + wheel) zooms price, drag moves, double-click or Fit fits the candles (levels outside the screen are then pinned to its top or bottom edge with an arrow), Alt + click or right-click sets a price alert. On a phone: one finger pans, two fingers pinch to zoom time, double-tap fits; the Guide opens over the chart and closes with its Close button.</p>
   <p>None of this predicts price. Tested on 5 years of gold, the BUY / SELL ideas of this guide made nothing before costs and lose after them: with the stop used since 11 Nov 2026 (1 x ATR beyond the level, at least 2 $) about 230 ideas a year at −0.08 to −0.20 of the risk per trade after costs; with the old tight stop it was −0.2 to −0.5, and 19 % of its stops were hit before price went on to the target. Absorption areas, tested on 90 days, did no better. Nothing has been tested on the other instruments. The guide is a checklist to keep you out of poor trades, not a signal service.</p>
 </div>
 <div id="sig">
   <button class="btn" id="bSigClose" title="Close the guide">Close</button>
+  <div class="tabs" id="sigTabs"><button data-tab="guide" title="What to do now">Guide</button><button data-tab="days" title="Past days: where the POC was in the morning, afternoon and at the close, and the zones each day made">Days</button></div>
+  <div id="pDays"></div>
+  <div id="pGuide">
   <div id="gVerdict"></div>
   <div id="gWhy"></div>
   <h4>Before you enter</h4>
@@ -153,6 +182,7 @@ select{padding:0 8px;cursor:pointer}
   <h4>Absorption <small>heavy trading that price did not follow</small></h4>
   <div id="gAbs"></div>
   <div id="gFoot" class="rec"></div>
+  </div>
 </div>
 <div id="alert"></div>
 <div class="split" id="splitL" title="Drag to resize the guide, most of the way in to minimise it. Double-click: default width"></div>
@@ -189,7 +219,9 @@ const store = {
 };
 const S = { tf: store.get('tf', '5m'), metric: store.get('metric', 'net'), filter: store.get('filter', 'all'),
             zones: store.get('zones', true), profile: store.get('profile', true), light: store.get('light', false), signals: store.get('signals', window.innerWidth > 720), alarm: store.get('alarm', true), mt5: store.get('mt5', false),
-            abs: store.get('abs', true), gld: store.get('gld', false), zoneAlert: store.get('zoneAlert', true), pocAlert: store.get('pocAlert', true), bars: store.get('bars', true), guideW: store.get('guideW', 336), barsW: store.get('barsW', 0), balance: store.get('balance', 200) };
+            abs: store.get('abs', true), gld: store.get('gld', false), zoneAlert: store.get('zoneAlert', true), pocAlert: store.get('pocAlert', true), bars: store.get('bars', true), guideW: store.get('guideW', 336), barsW: store.get('barsW', 0), balance: store.get('balance', 200),
+            tab: store.get('tab', 'guide'), bpx: store.get('bpx', location.protocol === 'file:') };
+if (S.tab !== 'days') S.tab = 'guide';
 if (!TF[S.tf]) S.tf = '5m';
 if (!METRICS[S.metric]) S.metric = 'net';
 if (!(S.balance > 0)) S.balance = 200;
@@ -207,7 +239,7 @@ if (!(S.barsW >= 0)) S.barsW = 0;
 // contract = units per 1 lot at XM, used by the stop-size check (0.01 lot); quoteUsd = false when the price is
 // in another currency (USD/CAD, USD/CHF). pip set = distances are shown in pips.
 const INSTRUMENTS = {
-  XAUUSD: { group: 'Metal',  name: 'Gold',    feed: 'binance', sym: 'XAUUSDT', ref: 'gold-api', dec: 1, contract: 100, unit: 'oz', quoteUsd: true, options: true, mt5: true },
+  XAUUSD: { group: 'Metal',  name: 'Gold',    feed: 'binance', sym: 'XAUUSDT', ref: 'gold-api', dec: 1, contract: 100, unit: 'oz', quoteUsd: true, options: true, mt5: true, hours: true },
   BTCUSD: { group: 'Crypto', name: 'Bitcoin', feed: 'binance', sym: 'BTCUSDT', ref: 'BTC-USD', dec: 0, contract: 1, unit: 'BTC', quoteUsd: true },
   ETHUSD: { group: 'Crypto', name: 'Ether',   feed: 'binance', sym: 'ETHUSDT', ref: 'ETH-USD', dec: 1, contract: 1, unit: 'ETH', quoteUsd: true },
   SOLUSD: { group: 'Crypto', name: 'Solana',  feed: 'binance', sym: 'SOLUSDT', ref: 'SOL-USD', dec: 2, contract: 1, unit: 'SOL', quoteUsd: true },
@@ -222,9 +254,33 @@ const INS_ID = INSTRUMENTS[store.get('instrument', 'XAUUSD')] ? store.get('instr
 const TITLE = INS.name + (INS.options ? ' GEX' : ' guide');
 const sk = k => (INS_ID === 'XAUUSD' ? k : `${k}.${INS_ID}`);   // storage key: ideas, alerts and the basis are kept per instrument (gold keeps its old keys)
 if (store.get(sk('feed'), 'PAXGUSDT') !== INS.sym) { store.set(sk('siglog'), []); store.set(sk('feed'), INS.sym); }   // stored ideas were in another feed's prices
-const D = { chart: [], m1: [], m30: [], ref: 0, basis: 0, hasBasis: !INS.ref, gex: null, gexMissing: false, feedErr: '' };
+// Gold market hours (hours: true). Binance's gold future trades around the clock, weekends included, but gold
+// itself (and XM, and every broker) trades Sunday 18:00 to Friday 17:00 New York with a break from 17:00 to
+// 18:00 every day. The weekend prints are thin, drift away from the price gold opens at, and made the chart look
+// open on a closed market (user, 22 Nov 2026), so every candle that starts while gold is closed is dropped, and
+// while it is closed the page says so and waits. Holidays (Christmas, New Year, early US closes) are not known.
+const offMemo = new Map();
+const nyOff = t => { const k = Math.floor(t / 36e5); let v = offMemo.get(k); if (v === undefined) { v = E.nyOffsetHours(k * 36e5); offMemo.set(k, v); } return v; };
+function mktClosed(t) {
+  if (!INS.hours) return false;
+  const ny = new Date(t + nyOff(t) * 36e5), wd = ny.getUTCDay(), h = ny.getUTCHours();
+  return wd === 6 || (wd === 5 && h >= 17) || (wd === 0 && h < 18) || h === 17;
+}
+function lastClose(now) {                       // when the market closed last (it is closed at `now`)
+  let t = Math.floor(now / 36e5) * 36e5;
+  for (let i = 0; i < 100 && mktClosed(t - 60e3); i++) t -= 36e5;
+  return t;
+}
+function nextOpen(now) {                        // when it opens again
+  let t = Math.floor(now / 36e5) * 36e5 + 36e5;
+  for (let i = 0; i < 100 && mktClosed(t); i++) t += 36e5;
+  return t;
+}
+const closedNow = () => mktClosed(Date.now());
+const D = { chart: [], m1: [], m30: [], ref: 0, basis: 0, hasBasis: !INS.ref, gex: null, gexMissing: false, feedErr: '', m1Full: false };
 const b0 = INS.ref ? store.get(sk('basis'), null) : null;
-if (b0 && Date.now() - b0.t < 6 * 3600e3) { D.basis = b0.v; D.hasBasis = true; }   // last known shift, used until the reference price arrives
+// last known shift, used until the reference price arrives (while gold is closed: the one from around the close)
+if (b0 && (Date.now() - b0.t < 6 * 3600e3 || (closedNow() && b0.t > lastClose(Date.now()) - 6 * 3600e3))) { D.basis = b0.v; D.hasBasis = true; D.refSrc = b0.src || 'spot'; }
 const view = { count: 110, offset: 0, auto: true, lo: 0, hi: 1, mx: -1, my: -1, dirty: true };
 let G = null;                        // computed gamma state (see computeGex)
 let Zs = [];                         // live buy / sell zones (30m and 1h swing boxes), feed prices
@@ -246,7 +302,10 @@ function fmt(v) {
   return s + Math.round(a);
 }
 const lastPx = () => { const a = D.m1.length ? D.m1 : D.chart; return a.length ? a[a.length - 1].c : 0; };
-const spot = () => { const p = lastPx(); return p ? p - D.basis : D.ref; };          // the price shown: candle price moved to the USD reference
+// The price shown: candle price moved to the USD reference. With MT5 linked it is the broker's bid itself (read
+// every second): futures minus shift trailed the XM bid by 0.8 $ on average and 2.3 $ at worst while gold jumped
+// 3 $ in 30 s (23 Nov 2026), because the futures and the bid are read at different moments.
+const spot = () => { if (D.bk && Date.now() - D.bk.at < 3000) return D.bk.bid; const p = lastPx(); return p ? p - D.basis : D.ref; };
 const fp = p => p.toFixed(INS.dec);                                                  // a price in the instrument's decimals
 const gp = p => fp(p - D.basis);                                                     // candle price -> the price shown
 const dd = (x, coarse) => (INS.pip ? `${(x / INS.pip).toFixed(coarse ? 0 : 1)} pips` : `${x.toFixed(coarse ? Math.max(0, INS.dec - 1) : INS.dec)} $`);   // a distance
@@ -284,9 +343,13 @@ async function klines(interval, limit) {
     const key = Object.keys(j.result).find(k => k !== 'last');
     return cleanWicks(j.result[key].map(k => ({ t: k[0] * 1e3, o: +k[1], h: +k[2], l: +k[3], c: +k[4], v: +k[6], bv: +k[6] / 2 })), interval);
   }
-  const r = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${INS.sym}&interval=${interval}&limit=${limit}`, { cache: 'no-store' });
+  // gold while the market is closed: nothing new to fetch on the live tick; a full download ends where it closed
+  const now = Date.now(), shut = mktClosed(now);
+  if (shut && limit <= 3) return [];
+  const r = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${INS.sym}&interval=${interval}&limit=${limit}${shut ? `&endTime=${lastClose(now) - 1}` : ''}`, { cache: 'no-store' });
   if (!r.ok) throw new Error('HTTP ' + r.status);
-  return (await r.json()).map(k => ({ t: k[0], o: +k[1], h: +k[2], l: +k[3], c: +k[4], v: +k[5], bv: +k[9] }));
+  const rows = (await r.json()).map(k => ({ t: k[0], o: +k[1], h: +k[2], l: +k[3], c: +k[4], v: +k[5], bv: +k[9] }));
+  return INS.hours ? rows.filter(k => !mktClosed(k.t)) : rows;
 }
 const feedName = INS.feed === 'kraken' ? 'Kraken' : 'Binance';
 // Kraken's fiat markets are thin: single prints far from the market leave wicks of 20-90 x the ATR
@@ -324,6 +387,7 @@ async function loadM1(full) {
   try {
     const rows = await klines('1m', full ? 1500 : 3);
     if (full || !D.m1.length) D.m1 = rows; else merge(D.m1, rows);
+    if (full) D.m1Full = true;                                 // the history has arrived (not just a live 3-candle update)
     updateProfile();
     if (!D.hasBasis) { rebase(); status(); }                 // the reference price arrived before the candles
   }
@@ -335,27 +399,83 @@ async function loadM30() {
   catch (e) { /* keep the zones we have */ }
   view.dirty = true;
 }
-// basis = futures price minus the USD reference. The gold reference (gold-api.com) is a 30-second snapshot that
-// can run a minute or two behind in a fast move, so a single sample can be several dollars off (6 Nov 2026: 7,
-// then 11, then 7 again within three minutes, which moved every zone on screen by 4 $). The median of the last
-// 5 minutes of samples ignores those; the true difference only drifts by a dollar or two over a day.
-const basisLog = D.hasBasis && INS.ref ? new Array(10).fill(D.basis) : [];
-function rebase() {
-  const last = lastPx();
-  if (!last || !D.ref) return;
-  basisLog.push(last - D.ref);
-  if (basisLog.length > 21) basisLog.shift();
-  D.basis = basisLog.slice().sort((a, b) => a - b)[basisLog.length >> 1];
-  D.hasBasis = true;
-  store.set(sk('basis'), { v: D.basis, t: Date.now() });
+// basis = futures price minus the USD reference, taken as the median of the samples of a time window.
+// Measured 23 Nov 2026 over 5 minutes against Swissquote's live quote: futures minus spot stayed at 7.0 $
+// (5.6-8.9 between samples), but gold-api.com runs about 90 s behind (Coinbase's gold price about 45 s), so
+// "futures now minus gold-api" was 3.5 $ off on average and up to 8 $ in a fast move, the "price does not match
+// TradingView" the user saw. So each gold-api price is compared with the futures price of 75 s before its own
+// time stamp, each value is counted once, and the median runs over 30 minutes; live quotes (MT5, Swissquote via
+// the agent, Coinbase for crypto) have no delay and use 2 minutes.
+// A few minutes later gold-api.com was 3-8 $ below Swissquote while gold stood still, so it is only a fallback now:
+// gold's reference is Coinbase's XAU-USD spot (about 45 s late, -1 to +2.6 $ off Swissquote in the same minutes).
+const LAG = { coinbase: 45e3, 'gold-api': 75e3 }, WIN = { spot: INS.ref === 'gold-api' ? 30 * 60e3 : 5 * 60e3, sq: 2 * 60e3, mt5: 2 * 60e3 };
+const basisLog = D.hasBasis && INS.ref ? Array.from({ length: 5 }, () => ({ t: Date.now(), v: D.basis, key: '' })) : [];   // the last known shift, until real samples outnumber it
+// A new reference price. src = 'spot' (gold-api.com / Coinbase), 'sq' (Swissquote via the agent) or 'mt5' (the
+// broker's bid): the window starts again when the source changes, so two sources are never mixed. at = the time
+// the price is from, when the source says so.
+// via = which feed (its delay is in LAG); key = what makes a quote the same quote as the one before (asked again
+// before it changed: counted once).
+function useRef(p, src, at, via, key) {
+  if (D.refSrc !== src) { basisLog.length = 0; D.refSrc = src; }
+  D.ref = p;
+  // Just after the page opens the futures of that moment are not logged yet: the sample then uses the price of
+  // now. Skipping those instead let one bad first gold-api value (3 $ high) set the price for 2 minutes (seen in testing).
+  const fut = at ? futAt(at - (LAG[via] || 0)) : 0;
+  rebase(fut, key || '');
 }
+// The futures price of each second (live tick), for comparing a delayed reference with the futures price of its moment.
+const pxLog = [];
+function logPx() { const p = lastPx(); if (p) { pxLog.push([Date.now(), p]); if (pxLog.length > 300) pxLog.shift(); } }
+function futAt(t) {
+  let best = null;
+  for (const e of pxLog) if (!best || Math.abs(e[0] - t) < Math.abs(best[0] - t)) best = e;
+  return best && Math.abs(best[0] - t) <= 5e3 ? best[1] : 0;
+}
+function rebase(fut, key) {
+  const last = fut || lastPx();
+  if (!last || !D.ref) return;
+  // gold closed: the last candle is from the close and the spot reference may have moved on, so the shift from
+  // the close is kept. The broker's bid is frozen at the close too, so it still gives the right shift.
+  if (closedNow() && D.hasBasis && D.refSrc !== 'mt5' && D.refSrc !== 'sq') return;
+  if (key && basisLog.length && basisLog[basisLog.length - 1].key === key) return;   // the same quote again (asked every 15 s, it changes more slowly)
+  const now = Date.now();
+  basisLog.push({ t: now, v: last - D.ref, key: key || '' });
+  while (basisLog.length > 1 && basisLog[0].t < now - (WIN[D.refSrc] || 5 * 60e3)) basisLog.shift();
+  const vs = basisLog.map(e => e.v).sort((a, b) => a - b);
+  D.basis = vs.length % 2 ? vs[vs.length >> 1] : (vs[vs.length / 2 - 1] + vs[vs.length / 2]) / 2;
+  D.hasBasis = true;
+  store.set(sk('basis'), { v: D.basis, t: Date.now(), src: D.refSrc });
+}
+// "Match it": the price the user's own chart (TradingView, MT5) shows now. Without the agent the only spot prices
+// a browser may read are late (gold-api.com about 90 s, Coinbase about 45 s) and sat 2 $ above or below a
+// broker's (23 Nov 2026), while the futures-to-spot difference itself moves about 1 $ in a few hours. So the
+// difference to the typed price is kept for 8 hours, unless the agent's live price takes over.
+let MAN = store.get(sk('manual'), null);
+const manualLive = () => !!MAN && Date.now() - MAN.t < 8 * 36e5;
+function applyManual() { basisLog.length = 0; D.refSrc = 'manual'; D.basis = MAN.v; D.hasBasis = true; view.dirty = true; }
+function matchPrice() {
+  const sp = spot(), v = parseFloat(String(prompt(`The ${INS.name} price your own chart (TradingView or MT5) shows right now:`, sp ? fp(sp) : '') || '').replace(',', '.'));
+  if (!(v > 0)) return;
+  if (sp && Math.abs(v - sp) > 0.03 * sp) { alert(`${v} is more than 3 % away from ${fp(sp)}. Check the number.`); return; }
+  MAN = { v: lastPx() - v, t: Date.now(), p: v };
+  store.set(sk('manual'), MAN);
+  if (!brokerLive()) applyManual();
+  status(); drawSig();
+}
+function unmatchPrice() { MAN = null; store.set(sk('manual'), null); basisLog.length = 0; D.refSrc = ''; loadRef(); drawSig(); }
 async function loadRef() {
   if (!INS.ref) return;                                        // Kraken's fiat pairs are the USD price already
+  if (brokerLive()) return;                                    // the broker's price from MT5 is in use
+  if (manualLive()) { if (D.refSrc !== 'manual') applyManual(); status(); return; }   // the price the user typed
   try {
     let p = 0;
-    if (INS.ref === 'gold-api') { const j = await (await fetch('https://api.gold-api.com/price/XAU', { cache: 'no-store' })).json(); p = j && +j.price; }
-    else { const j = await (await fetch(`https://api.exchange.coinbase.com/products/${INS.ref}/ticker`, { cache: 'no-store' })).json(); p = j && +j.price; }   // Coinbase: the main real-dollar crypto market
-    if (p > 0) { D.ref = p; rebase(); }
+    let at = 0, via = '', key = '';
+    if (INS.ref === 'gold-api') {                              // gold: Coinbase's XAU-USD spot, gold-api.com only when Coinbase fails
+      try { const j = await (await fetch('https://api.coinbase.com/v2/prices/XAU-USD/spot', { cache: 'no-store' })).json(); p = +(j && j.data && j.data.amount); at = Date.now(); via = 'coinbase'; key = 'coinbase:' + p; }
+      catch (e) { p = 0; }
+      if (!(p > 0)) { const j = await (await fetch('https://api.gold-api.com/price/XAU', { cache: 'no-store' })).json(); p = j && +j.price; at = j && Date.parse(j.updatedAt) || 0; via = 'gold-api'; key = `gold-api:${at}:${p}`; }
+    } else { const j = await (await fetch(`https://api.exchange.coinbase.com/products/${INS.ref}/ticker`, { cache: 'no-store' })).json(); p = j && +j.price; at = j && Date.parse(j.time) || 0; key = j && `${INS.ref}:${j.trade_id}`; }   // Coinbase: the main real-dollar crypto market
+    if (p > 0 && !brokerLive()) { D.refVia = via; useRef(p, 'spot', at, via, key); }
   } catch (e) { /* no USD reference: prices keep the last known shift, or stay futures prices; the status line says so */ }
   status(); view.dirty = true;
 }
@@ -370,12 +490,29 @@ function loadGex() {
   };
   s.onerror = () => { s.remove(); D.gexMissing = !D.gex; status(); view.dirty = true; };
   document.head.appendChild(s);
+  // how the downloader's last attempt went (written by gex_fetch.cjs on this PC; not there on the hosted copy)
+  const f = document.createElement('script');
+  f.src = 'gex_fetch_status.js?t=' + Date.now();
+  f.onload = () => { f.remove(); D.fetchSt = window.GEX_FETCH || null; status(); view.dirty = true; };
+  f.onerror = () => { f.remove(); D.fetchSt = null; };
+  document.head.appendChild(f);
+}
+// Why the option data is old, in a few words: the downloader's own error when it failed in the last 15 minutes
+// (since about 10 Nov 2026 CBOE answers 403), else what to do about it.
+function gexWhy() {
+  const s = D.fetchSt;
+  if (s && !s.ok && Date.now() - s.at < 15 * 60e3)
+    return /403/.test(s.error || '') ? 'CBOE refuses the download (HTTP 403)' : /fetch failed/.test(s.error || '') ? 'CBOE does not answer the download' : `the download fails (${s.error})`;
+  return location.protocol === 'file:' ? 'run start_gex.bat to refresh it' : 'the hosted copy only has the file from its last upload';
 }
 
 // Gamma per strike at the live price. Options are on GLD, so the gold price is first turned into a GLD price.
+// A snapshot older than 3 days is not drawn: its expiries and open interest are gone, but bars at today's price
+// with a "1 DTE" chip looked current (seen 23 Nov 2026 on the hosted copy, which still had 10 Nov's file).
+const gexStale = () => !!D.gex && Date.now() - D.gex.fetchedAt > 72 * 36e5;
 function computeGex() {
   const sx = spot();
-  if (!D.gex || !sx) { G = null; return; }
+  if (!D.gex || !sx || gexStale()) { G = null; chip(); view.dirty = true; return; }
   const now = Date.now(), f = 1 / E.ozPerShare(now), sg = sx / f, exps = E.expiries(D.gex, now);   // sg = the price in GLD terms
   if (!exps.length) { G = null; chip(); return; }
   const nearSet = new Set([exps[0].exp]);
@@ -410,6 +547,150 @@ function zoneLists() {
 }
 function zonesShown() { const z = zoneLists(); return z.sell.concat(z.buy); }
 
+// ------------------------------------------------------------------ days: the last 30 trading days
+// The 1-minute Binance candles of the last 30 trading days (18:00 to 18:00 New York) are kept in this browser
+// (IndexedDB) and topped up from Binance, which keeps that history anyway; a day older than 30 is deleted. From
+// them each day is redrawn with the page's own rules: how its POC / VAH / VAL grew minute by minute, the POC at
+// three times of the day, the POC shifts the banner would have announced, and the buy / sell zones with when each
+// was formed, tested and closed through (GexEngine.profilePath / zoneLives; gex_test.cjs checks that they give
+// what the live functions gave at every minute). Prices are moved to spot with today's basis, like the rest of
+// the chart. Kraken (forex) keeps only 12 hours of candles: no history there.
+const DAYS = 30;
+const CHECKS = [{ key: 'asia', name: 'Asia', ny: [3, 0], note: 'end of the Asian session, London opens (03:00 New York)' },
+                { key: 'london', name: 'London', ny: [8, 30], note: 'London morning, before the New York data (08:30 New York)' },
+                { key: 'close', name: 'Close', ny: [17, 0], note: 'gold closes (17:00 New York)' }];
+const H = { on: INS.feed === 'binance', cur: 0, days: [], today: null, m1: [], zones: [], z30: 0, loading: false, done: 0, err: '', viewDay: null,
+            agg: [], aggKey: '', all: [], allKey: '', closed: 0 };
+const IDB = {
+  db: null,
+  open() {
+    if (!this.db) this.db = new Promise((res, rej) => {
+      const r = indexedDB.open('gexArchive', 1);
+      r.onupgradeneeded = () => r.result.createObjectStore('m1');
+      r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); r.onblocked = () => rej(new Error('blocked'));
+    });
+    return this.db;
+  },
+  async run(mode, fn) {
+    const db = await this.open();
+    return new Promise((res, rej) => {
+      const tx = db.transaction('m1', mode), q = fn(tx.objectStore('m1'));
+      tx.oncomplete = () => res(q ? q.result : undefined); tx.onerror = () => rej(tx.error); tx.onabort = () => rej(tx.error);
+    });
+  },
+  get(k) { return this.run('readonly', s => s.get(k)); },
+  put(k, v) { return this.run('readwrite', s => s.put(v, k)); },
+  keys() { return this.run('readonly', s => s.getAllKeys()); },
+  del(k) { return this.run('readwrite', s => s.delete(k)); },
+};
+// One trading day of 1-minute candles from Binance, as compact rows [t, o, h, l, c, v, bv].
+async function range1m(from, to) {
+  const out = [];
+  for (let s = from; s < to;) {
+    const r = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${INS.sym}&interval=1m&startTime=${s}&endTime=${to - 1}&limit=1500`, { cache: 'no-store' });
+    if (!r.ok) throw new Error(`Binance answered HTTP ${r.status}`);
+    const j = await r.json();
+    for (const k of j) out.push([k[0], +k[1], +k[2], +k[3], +k[4], +k[5], +k[9]]);
+    if (j.length < 1500) break;
+    s = j[j.length - 1][0] + 60e3;
+  }
+  return out;
+}
+// Date, name and the three check times of the trading day that starts at `start` (18:00 New York the evening before).
+function dayMeta(start, end) {
+  const mid = start + 12 * 36e5, ny = new Date(mid + E.nyOffsetHours(mid) * 36e5), Y = ny.getUTCFullYear(), M = ny.getUTCMonth(), Dd = ny.getUTCDate(), wd = ny.getUTCDay();
+  const at = {};
+  for (const k of CHECKS) {
+    const wall = Date.UTC(Y, M, Dd, k.ny[0], k.ny[1]);
+    let t = wall - E.nyOffsetHours(wall) * 36e5;
+    t = wall - E.nyOffsetHours(t) * 36e5;                      // again at the real moment, in case daylight saving changed in between
+    at[k.key] = t;
+  }
+  const d = new Date(Date.UTC(Y, M, Dd, 12)), pad = v => String(v).padStart(2, '0');
+  return { start, end, at, weekend: wd === 0 || wd === 6, date: `${Y}-${pad(M + 1)}-${pad(Dd)}`,
+           label: d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }),
+           long: d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) };
+}
+const findIdx = (c, t) => { let lo = 0, hi = c.length - 1, r = -1; while (lo <= hi) { const m = (lo + hi) >> 1; if (c[m].t <= t) { r = m; lo = m + 1; } else hi = m - 1; } return r; };
+const rowsIn = (c, from, to) => c.slice(findIdx(c, from - 1) + 1, findIdx(c, to - 1) + 1);
+function pathOf(rows, d) { return E.profilePath(rows, d.start, d.end, pfStep(), { minD: minD(), at: d.at }); }
+async function loadHistory() {
+  if (!H.on || H.loading) return;
+  H.loading = true; H.err = ''; H.done = 0; status();
+  const cur = E.sessionStart(Date.now()), all = [];
+  for (let s = cur, i = 0; i < DAYS; i++) { const e = s; s = E.sessionStart(s - 60e3); all.unshift({ s, e }); }
+  // gold: Saturday and Sunday have no trading day (Binance's weekend prints are dropped), so they are not fetched
+  const keep = all.filter(x => !(INS.hours && dayMeta(x.s, x.e).weekend)), starts = keep.map(x => x.s);
+  const endOf = i => keep[i].e, parts = new Array(starts.length);
+  let db = true, next = 0;
+  try { await IDB.open(); } catch (e) { db = false; }           // no IndexedDB (private window): fetch every day, keep nothing
+  const worker = async () => {
+    while (next < starts.length && !H.err) {
+      const k = next++, key = `${INS.sym}:${starts[k]}`;
+      let rows = null;
+      if (db) { try { const v = await IDB.get(key); if (v && v.end === endOf(k) && v.rows && v.rows.length) rows = v.rows; } catch (e) { db = false; } }
+      if (!rows) {
+        try { rows = await range1m(starts[k], endOf(k)); } catch (e) { H.err = e.message; break; }
+        if (db && rows.length && Date.now() - endOf(k) > 120e3) IDB.put(key, { start: starts[k], end: endOf(k), rows, saved: Date.now() }).catch(() => {});
+      }
+      parts[k] = rows; H.done++;
+      if (H.done % 5 === 0) status();
+    }
+  };
+  await Promise.all([worker(), worker(), worker()]);           // three at a time: 30 requests of weight 10, far under Binance's 2400 a minute
+  if (db) {                                                     // the archive keeps 30 days: older ones are deleted
+    try { for (const k of await IDB.keys()) { const [sym, s] = String(k).split(':'); if (sym === INS.sym && +s < all[0].s) await IDB.del(k); } }
+    catch (e) { /* nothing to clean, or no access */ }
+  }
+  for (let w = 0; !lastPx() && w < 60; w++) await new Promise(r => setTimeout(r, 500));   // profile rows are sized from the live price
+  H.cur = cur;
+  H.m1 = [];
+  for (const p of parts) if (p) for (const r of p) if (!mktClosed(r[0])) H.m1.push({ t: r[0], o: r[1], h: r[2], l: r[3], c: r[4], v: r[5], bv: r[6] });
+  H.days = starts.map((s, i) => { const d = dayMeta(s, endOf(i)); d.path = pathOf(rowsIn(H.m1, s, d.end), d); return d; });
+  H.loading = false; H.aggKey = ''; H.allKey = ''; H.z30 = 0; H.closed = 0;
+  updateToday(true);
+  fillDayList(); status(); view.dirty = true;
+}
+// Today so far (from the live 1-minute candles) and the zones of all 30 days, once a minute when a candle has closed.
+function updateToday(force) {
+  if (!H.on || !H.cur || !D.m1Full) return;
+  if (E.sessionStart(Date.now()) !== H.cur) { loadHistory(); return; }   // a new trading day began: yesterday joins the archive
+  const closed = D.m1[D.m1.length - 2].t;
+  if (!force && closed === H.closed) return;
+  H.closed = closed;
+  const d = H.today && H.today.start === H.cur ? H.today : dayMeta(H.cur, E.sessionStart(H.cur + 30 * 36e5));
+  d.live = true;
+  d.path = pathOf(D.m1.slice(0, -1).filter(k => k.t >= H.cur), d);
+  H.today = INS.hours && d.weekend ? null : d;                  // gold on a weekend: no trading day today
+  const m1 = allM1(true), c30 = E.aggregate(m1, 1800e3);
+  if (c30.length && m1[m1.length - 1].t + 60e3 < c30[c30.length - 1].t + 1800e3) c30.pop();   // that half hour has not closed yet
+  const last30 = c30.length ? c30[c30.length - 1].t : 0;
+  if (force || last30 !== H.z30) { H.z30 = last30; H.zones = E.zoneLives(c30, { window: 300 * 1800e3 }); }
+  if (S.tab === 'days') drawDays();
+  view.dirty = true;
+}
+// The archive (days before today) followed by today's 1-minute candles; closed = leave out the one still forming.
+function allM1(closed) {
+  const live = D.m1.filter(k => k.t >= H.cur);
+  if (closed && live.length) live.pop();
+  return H.m1.concat(live);
+}
+// Candles for the chart: the archive and today's minutes in the chart's timeframe, up to where the live candles
+// of that timeframe begin (on 1m those reach back only 10 hours), then the live candles.
+function chartCandles() {
+  const live = D.chart;
+  if (!H.m1.length || !live.length) return live;
+  const key = `${S.tf}:${H.m1.length}:${live[0].t}:${live[0].t > H.cur ? H.closed : ''}`;
+  if (key !== H.aggKey) {
+    const m1 = allM1(true), a = S.tf === '1m' ? m1 : E.aggregate(m1, TF[S.tf]);
+    H.agg = a.slice(0, findIdx(a, live[0].t - 1) + 1); H.aggKey = key; H.allKey = '';
+  }
+  const k2 = `${key}:${live.length}:${D.tick}`;
+  if (k2 !== H.allKey) { H.all = H.agg.concat(live); H.allKey = k2; }
+  return H.all;
+}
+const allDays = () => H.days.concat(H.today ? [H.today] : []);
+
 // ------------------------------------------------------------------ signals
 // A setup is checked on closed 5-minute candles against the levels on screen (see GexEngine.signal).
 // A signal is stored once, at the close of its trigger candle, and never changed afterwards;
@@ -440,8 +721,9 @@ const POC = { ref: null, from: 0, cand: null, n: 0, last: null };    // ref = th
 function updateProfile() {
   // Only from the full download: a live 3-candle update can arrive before it, and a profile of 2 candles is no
   // profile (seen 11 Nov 2026 in testing: value area 1.5 $ wide, then a false "POC shifted" once the history came).
-  if (D.m1.length < 200) return;
-  const closed = D.m1[D.m1.length - 2].t, from = E.sessionStart(Date.now()), first = D.m1[0].t, key = `${from}:${first}:${closed}`;
+  if (!D.m1Full || D.m1.length < 2) return;
+  const now = Date.now(), from = E.sessionStart(closedNow() ? lastClose(now) - 60e3 : now);   // gold closed: the last day it traded
+  const closed = D.m1[D.m1.length - 2].t, first = D.m1[0].t, key = `${from}:${first}:${closed}`;
   if (Pf && key === pfKey) return;
   const fresh = first !== pfFirst;                             // new history: nothing to compare the POC with
   pfKey = key; pfFirst = first;
@@ -482,7 +764,7 @@ function track() {
 let absAt = 0;
 function evaluate() {
   updateProfile();
-  if (D.m1.length < 200) return;
+  if (!D.m1Full || D.m1.length < 2) return;
   track();
   const closed = D.m1[D.m1.length - 2].t;
   if (closed !== absAt) { absAt = closed; Ab = E.absorption(D.m1.slice(0, -1)); }      // once a minute, when a candle has closed
@@ -491,7 +773,8 @@ function evaluate() {
   Sig.inp = inp; Sig.atr = E.atrLast(inp.c5, 14);
   // store a new idea only if its trigger candle closed in the last 90 s (not one from before the page was open),
   // and only one idea at a time
-  const fresh = (Sig.state === 'buy' || Sig.state === 'sell') && Date.now() - (Sig.t + 300e3) < 90e3;
+  const shut = closedNow();                                    // gold closed: no new ideas, no zone tones
+  const fresh = !shut && (Sig.state === 'buy' || Sig.state === 'sell') && Date.now() - (Sig.t + 300e3) < 90e3;
   if (fresh && !LOG.some(s => s.result === 'open' || s.t === Sig.t)) {
     LOG.push({ t: Sig.t, at: Sig.t + 300e3, side: Sig.state, entry: Sig.entry, stop: Sig.stop, target: Sig.target, targetName: Sig.targetName,
                rr: Sig.rr, score: Sig.score, reasons: Sig.reasons, result: 'open', r: 0 });
@@ -500,8 +783,9 @@ function evaluate() {
     alertSignal(LOG[LOG.length - 1]);
     sendToMt5(LOG[LOG.length - 1]);                                // MT5 has its own on / off button
   }
-  if (Sig.state === 'watch') alertZone(Sig);
+  if (Sig.state === 'watch' && !shut) alertZone(Sig);
   checkAlerts();
+  updateToday(false);
   drawSig(); view.dirty = true;
 }
 const grade = s => (s >= 70 ? 'strong' : s >= 55 ? 'moderate' : 'weak');
@@ -533,6 +817,11 @@ function usData(now) {
 }
 // The one-line answer at the top of the guide: what to do now.
 function verdict(open, lists) {
+  if (closedNow()) {
+    const now = Date.now(), at = nextOpen(now), shut = lastClose(now), hrs = (at - now) / 36e5;
+    return { cls: 'none', head: 'MARKET CLOSED', small: `closed since ${hhmm(shut)} ${shortDate(shut)} · opens ${hhmm(at)} ${shortDate(at)} your time (${hrs >= 1 ? hrs.toFixed(1) + ' h' : Math.ceil(hrs * 60) + ' min'})`,
+             text: 'Gold trades Sunday 18:00 to Friday 17:00 New York, with a break from 17:00 to 18:00 every day. The chart shows the last traded candles; nothing moves until it opens. No ideas, tones or MT5 trades meanwhile.' };
+  }
   if (open) {
     const text = open.r > 0.5 ? 'It has already moved a good way. Entering now means a worse price with the same stop: do not chase it.'
       : open.r < -0.5 ? 'It is close to its stop. If you are not in, stay out.' : 'Price is still near the entry: it can be taken with the stop and target below.';
@@ -626,6 +915,8 @@ function drawSig() {
       `<div class="z"><a data-act="unalert" data-v="${a.id}">remove</a><b class="${a.hit ? 'dim' : 'watch'}">${fp(a.p)}</b> ` +
       `<small>${a.hit ? `reached at ${hhmm(a.hit)}` : `rings when price ${a.up ? 'rises' : 'falls'} to it`}${a.note ? ' · ' + a.note : ''}</small></div>`).join('')
     : none('None set. Type a price, or hold Alt and click the chart (right-click works too).')) +
+    (INS.ref ? `<div class="plan"><span>Price ${p ? fp(spot()) : '--'} not what your chart shows?</span> <a data-act="match" title="Type the price your TradingView or MT5 chart shows now; the page keeps that difference for 8 hours">match it</a>` +
+      (MAN && manualLive() ? ` <span>· matched ${hhmm(MAN.t)}</span> <a data-act="unmatch">undo</a>` : '') + '</div>' : '') +
     `<div class="plan"><span>Short tone when price reaches a zone:</span> <a data-act="zoneAlert">${S.zoneAlert ? 'on' : 'off'}</a></div>` +
     `<div class="plan"><span>POC ${Pf ? gp(Pf.poc) : '--'}${POC.last ? ` · moved from ${gp(POC.last.from)} at ${hhmm(POC.last.t)}` : ''}. Banner and tone when it shifts ${dd(minD(), true)} or more:</span> <a data-act="pocAlert">${S.pocAlert ? 'on' : 'off'}</a></div>`);
 
@@ -637,6 +928,150 @@ function drawSig() {
     (INS_ID === 'XAUUSD' ? 'Tested on 5 years of gold: BUY / SELL ideas from these rules made nothing before costs and lost 0.1 to 0.2 of the risk per trade after them (wider stop since 11 Nov). Absorption areas did no better on 90 days.'
                          : `These rules were tested on 5 years of gold only, where they made nothing before costs and lost after them. They have not been tested on ${INS.name} at all.`) +
     ' Keep the size small. <a data-act="testAlarm">test alarm</a>');
+}
+
+// ------------------------------------------------------------------ Days tab
+const dimDiv = t => `<div class="dim">${t}</div>`;
+const shortDate = t => new Date(t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+const whenIn = (t, d) => hhmm(t) + (t < d.start || t >= d.end ? ' ' + shortDate(t) : '');      // a time, with its date when it is outside the day
+const zonesMade = d => H.zones.filter(z => z.born >= d.start && z.born < d.end).sort((a, b) => a.born - b.born);
+function zoneFate(z, d) {
+  const out = [`swing candle ${whenIn(z.t, d)}, a zone from ${whenIn(z.born, d)}`], until = z.shown[z.shown.length - 1][1];
+  if (z.testedAt) out.push(`tested ${whenIn(z.testedAt, d)}`);
+  if (until !== Infinity && !(z.brokenAt && z.brokenAt <= until)) out.push(until >= z.t + 300 * 1800e3 ? 'dropped after 6 days' : `a newer zone took over ${whenIn(until, d)}`);
+  if (z.brokenAt) out.push(`<span class="neg">closed through ${whenIn(z.brokenAt, d)}</span>`);
+  else if (until === Infinity) out.push('<span class="pos">still a zone now</span>');
+  return out.join(' · ');
+}
+function drawDays() {
+  if (pressing) return;
+  if (!H.on) { put('pDays', dimDiv(`${INS.name}: no past days. Kraken keeps only 12 hours of candles, so earlier days cannot be rebuilt for forex.`)); return; }
+  if (!H.days.length) {
+    put('pDays', dimDiv(H.err ? `Could not load the past days: ${H.err}. <a data-act="reloadDays">Try again</a>` : `Loading the last ${DAYS} days from Binance… ${H.done} / ${DAYS}`));
+    return;
+  }
+  const d = H.viewDay || H.today || H.days[H.days.length - 1], P = d.path, today = d === H.today, gold = INS_ID === 'XAUUSD';
+  let h = `<div class="dhead"><a data-act="dayPrev" title="Day before (left arrow key)">‹</a><b>${today ? 'Today' : d.label}</b><a data-act="dayNext" title="Day after (right arrow key)">›</a></div>` +
+    `<div class="dsub">${d.long}<br>${hhmm(d.start)} ${shortDate(d.start)} to ${hhmm(d.end)} ${shortDate(d.end)}, your time${today ? ' · live' : ''}</div>` +
+    (d.weekend && gold ? '<div class="note watch">Weekend: the gold market is closed. These are Binance-only trades, thin, and often away from the price gold opens at on Sunday evening.</div>' : '');
+  if (!P || !P.n) h += dimDiv(today ? 'Waiting for the first candles of the day.' : 'No candles for this day.');
+  else {
+    const ch = P.close - P.open;
+    h += `<div class="plan">Open <b>${gp(P.open)}</b> · High <b>${gp(P.high)}</b> · Low <b>${gp(P.low)}</b><br>${today ? 'Now' : 'Last'} <b>${gp(P.close)}</b> <span class="${ch >= 0 ? 'pos' : 'neg'}">${signed(ch, INS.dec)}</span> <span>· range ${dd(P.high - P.low)}</span></div>`;
+    h += '<h4>POC during the day <small>(your clock)</small></h4><table class="cp">';
+    let prev = null;
+    for (const k of CHECKS) {
+      const a = P.at[k.key];
+      if (!a) { h += `<tr title="${k.note}"><td>${k.name} ${hhmm(d.at[k.key])}</td><td class="dim" colspan="2">not yet</td></tr>`; continue; }
+      const mv = prev === null ? '' : ` <small class="${a.poc >= prev ? 'pos' : 'neg'}">${signed(a.poc - prev, INS.dec)}</small>`;
+      const where = a.px > a.vah ? 'above the value area' : a.px < a.val ? 'below the value area' : a.px >= a.poc ? 'above the POC' : 'below the POC';
+      h += `<tr title="${k.note}"><td>${k.name} ${hhmm(a.t)}</td><td><span class="poc">${gp(a.poc)}</span>${mv}<br><small>value ${gp(a.val)}–${gp(a.vah)}</small></td>` +
+           `<td><small>price ${gp(a.px)}<br>${where}</small></td></tr>`;
+      prev = a.poc;
+    }
+    h += '</table>';
+    const got = CHECKS.filter(k => P.at[k.key]), first = got.length ? P.at[got[0].key] : null, lastA = got.length ? P.at[got[got.length - 1].key] : null;
+    if (got.length >= 2) {
+      const mv = lastA.poc - first.poc, flat = Math.abs(mv) < minD();
+      h += `<div class="note">From ${got[0].name} to ${got[got.length - 1].name} the POC ${flat ? `stayed near ${gp(first.poc)}` : `moved ${mv > 0 ? 'up' : 'down'} ${dd(Math.abs(mv))}`}; ` +
+           `price was then ${dd(Math.abs(lastA.px - lastA.poc))} ${lastA.px >= lastA.poc ? 'above' : 'below'} it.</div>`;
+    }
+    if (P.final && !today) h += `<div class="note">End of the day (18:00 New York): POC ${gp(P.final.poc)}, value area ${gp(P.final.val)}–${gp(P.final.vah)}.</div>`;
+    h += `<h4>POC shifts <small>${dd(minD(), true)} or more, held 2 minutes</small></h4>` + (P.shifts.length
+      ? P.shifts.map(s => `<div class="z"><b>${hhmm(s.t)}</b> ${gp(s.from)} → <span class="poc">${gp(s.to)}</span> <small class="${s.to > s.from ? 'pos' : 'neg'}">${s.to > s.from ? 'up' : 'down'} ${dd(Math.abs(s.to - s.from))}</small></div>`).join('')
+      : dimDiv(`None: after the first 30 minutes the POC stayed within ${dd(minD(), true)}.`));
+    const zs = zonesMade(d), nb = zs.filter(z => z.type === 'demand').length;
+    h += `<h4>Zones made this day <small>${nb} buy · ${zs.length - nb} sell</small></h4>` + (zs.length
+      ? zs.map(z => `<div class="z"><b class="${z.type === 'demand' ? 'buy' : 'sell'}">${z.type === 'demand' ? 'BUY' : 'SELL'} ${gp(z.bottom)} – ${gp(z.top)}</b> <small>${z.tf}</small><br><small>${zoneFate(z, d)}</small></div>`).join('')
+      : dimDiv(H.zones.length ? 'None.' : 'Loading…'));
+  }
+  const list = allDays();
+  h += `<div class="plan" style="margin-top:10px"><a data-act="csvDays">Download all ${list.length} days (CSV)</a> · <a data-act="csvEvents">POC shifts and zones (CSV)</a></div>`;
+  h += `<h4>Last ${list.length} days <small>POC at Asia → London → Close</small></h4>` + list.slice().reverse().map(x => {
+    const p = x.path, ok = p && p.n, c = ok ? p.close - p.open : 0, wk = x.weekend && gold;
+    return `<div class="drow${x === d ? ' on' : ''}${wk ? ' wk' : ''}" data-act="day" data-v="${x.start}"><b>${x === H.today ? 'Today' : x.label}</b> ` +
+      `<small>${CHECKS.map(k => (ok && p.at[k.key] ? `<span class="poc">${gp(p.at[k.key].poc)}</span>` : '–')).join(' → ')}</small><br>` +
+      `<small>${ok ? `range ${dd(p.high - p.low, true)} · ${x === H.today ? 'so far' : 'day'} <span class="${c >= 0 ? 'pos' : 'neg'}">${signed(c, Math.max(0, INS.dec - 1))}</span> · ${p.shifts.length} POC shift${p.shifts.length === 1 ? '' : 's'}` : 'no candles'}${wk ? ' · weekend' : ''}</small></div>`;
+  }).join('');
+  h += `<div class="rec">Rebuilt from Binance 1-minute candles with this page's own rules. A POC at a time of day uses only the candles closed by then, and a zone counts from the close of the candle that confirmed it, so this is what the page could have shown at that moment. Prices are futures moved to spot by today's shift (${fp(Math.abs(D.basis))} $): an older day can sit 1-2 $ off the spot price it had then. ${DAYS} days are kept in this browser; older ones are deleted. None of this has been tested as a strategy.</div>`;
+  put('pDays', h);
+}
+function fillDayList() {
+  $('daySeg').style.display = H.on && H.days.length ? '' : 'none';
+  const gold = INS_ID === 'XAUUSD';
+  $('day').innerHTML = '<option value="live">Live</option>' + H.days.slice().reverse().map(d => `<option value="${d.start}">${d.label}${d.weekend && gold ? ' · weekend' : ''}</option>`).join('');
+  syncDaySelect();
+  if (S.tab === 'days') drawDays();
+}
+function syncDaySelect() {
+  const sel = $('day'), v = H.viewDay ? String(H.viewDay.start) : 'live';
+  if (document.activeElement !== sel && sel.value !== v) sel.value = v;
+}
+const MAXCOUNT = 3000;               // candles on screen when zoomed all the way out
+// Put one past day on the screen (with a few candles of the days around it) and show it in the Days tab.
+function showDay(start) {
+  const d = H.days.find(x => x.start === start), c = chartCandles(), n = c.length;
+  if (!d || !n) { fit(); return; }
+  const i0 = findIdx(c, d.start - 1) + 1, i1 = findIdx(c, d.end - 1);
+  if (i1 < i0) return;
+  const span = i1 - i0 + 1, pad = Math.max(2, Math.round(span * 0.04));
+  view.count = clamp(span + 2 * pad, 30, MAXCOUNT); view.offset = clamp(n - 1 - i1 - pad, 0, n - 1); view.auto = true; view.dirty = true;
+  H.pick = d; setViewDay(d);
+  if (!compactNow() && !S.signals) set('signals', true);
+  if (S.tab !== 'days') set('tab', 'days');
+}
+function setViewDay(d) {
+  if (d === H.viewDay) return;
+  H.viewDay = d; syncDaySelect();
+  if (S.tab === 'days') drawDays();
+}
+function stepDay(dir) {
+  if (!H.days.length) return;
+  const i = H.viewDay ? H.days.indexOf(H.viewDay) : H.days.length, j = i + dir;
+  if (j >= H.days.length) fit(); else showDay(H.days[Math.max(0, j)].start);
+}
+const localStamp = t => { const d = new Date(t), p = v => String(v).padStart(2, '0'); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`; };
+const utcStamp = t => new Date(t).toISOString().slice(0, 16).replace('T', ' ');
+function download(name, rows) {
+  const cell = v => (v === null || v === undefined ? '' : /[",\n]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : String(v));
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([rows.map(r => r.map(cell).join(',')).join('\r\n') + '\r\n'], { type: 'text/csv' }));
+  a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+}
+// One row per day. *_time_local = the check time on this PC's clock; prices as shown on the chart (minus_basis =
+// the futures-to-spot shift taken off). A check's POC / VAH / VAL / price use only the candles closed by then.
+function csvDays() {
+  const b = D.basis, px = v => (v - b).toFixed(INS.dec), list = allDays();
+  const head = ['date', 'weekday', 'weekend', 'day_start_local', 'day_end_local', 'complete', 'open', 'high', 'low', 'last', 'change', 'range'];
+  for (const k of CHECKS) head.push(`${k.key}_time_local`, `${k.key}_poc`, `${k.key}_vah`, `${k.key}_val`, `${k.key}_price`);
+  head.push('end_poc', 'end_vah', 'end_val', 'poc_shifts', 'buy_zones_made', 'sell_zones_made', 'minus_basis');
+  const rows = [head];
+  for (const d of list) {
+    const P = d.path || { n: 0, at: {}, shifts: [] }, ok = P.n > 0, f = P.final, zs = zonesMade(d), done = d !== H.today;
+    const r = [d.date, d.label.split(' ')[0], d.weekend ? 1 : 0, localStamp(d.start), localStamp(d.end), done ? 1 : 0,
+               ok ? px(P.open) : '', ok ? px(P.high) : '', ok ? px(P.low) : '', ok ? px(P.close) : '', ok ? (P.close - P.open).toFixed(INS.dec) : '', ok ? (P.high - P.low).toFixed(INS.dec) : ''];
+    for (const k of CHECKS) { const a = P.at[k.key]; r.push(localStamp(d.at[k.key]), a ? px(a.poc) : '', a ? px(a.vah) : '', a ? px(a.val) : '', a ? px(a.px) : ''); }
+    r.push(f && done ? px(f.poc) : '', f && done ? px(f.vah) : '', f && done ? px(f.val) : '', ok ? P.shifts.length : '',
+           zs.filter(z => z.type === 'demand').length, zs.filter(z => z.type === 'supply').length, b.toFixed(INS.dec));
+    rows.push(r);
+  }
+  download(`${INS_ID}_days_${list[0].date}_to_${list[list.length - 1].date}.csv`, rows);
+}
+// One row per POC shift and per zone, in time order. A zone's time = when it became a zone (its confirming candle closed).
+function csvEvents() {
+  const b = D.basis, px = v => (v - b).toFixed(INS.dec), list = allDays(), out = [];
+  for (const d of list) {
+    for (const s of d.path ? d.path.shifts : []) out.push([d.date, localStamp(s.t), utcStamp(s.t), 'poc_shift', px(s.from), px(s.to), '', '', '', '', '']);
+    for (const z of zonesMade(d)) {
+      const until = z.shown[z.shown.length - 1][1];
+      out.push([d.date, localStamp(z.born), utcStamp(z.born), z.type === 'demand' ? 'buy_zone' : 'sell_zone', px(z.bottom), px(z.top), z.tf, localStamp(z.t),
+                z.testedAt ? localStamp(z.testedAt) : '', z.brokenAt ? localStamp(z.brokenAt) : '', until === Infinity ? 'still a zone' : localStamp(until)]);
+    }
+  }
+  out.sort((x, y) => (x[2] < y[2] ? -1 : x[2] > y[2] ? 1 : 0));
+  download(`${INS_ID}_events_${list[0].date}_to_${list[list.length - 1].date}.csv`,
+           [['date', 'time_local', 'time_utc', 'event', 'from_or_bottom', 'to_or_top', 'zone_tf', 'swing_candle_local', 'tested_local', 'closed_through_local', 'zone_until_local']].concat(out));
 }
 
 // ------------------------------------------------------------------ price alerts
@@ -810,10 +1245,52 @@ function syncMt5() {
   b.textContent = S.mt5 ? 'MT5 on' : 'MT5 off';
 }
 
+// ------------------------------------------------------------------ broker price (MT5)
+// "Price: MT5" = the price level is the bid of the gold chart in MetaTrader 5 (GexSignalTrader 1.01 writes it
+// every second, the agent serves it on /price) instead of gold-api.com's spot: the candles (Binance futures) are
+// moved to the broker's level, so the price, zones and alerts on the page are the MT5 chart's. Only the level is
+// the broker's: the candles keep Binance's shape and volume (a broker has no real volume), so a candle can still
+// be a few tenths of a dollar off the broker's own. Default on when the page is opened from this PC (start_gex.bat);
+// on the hosted page the browser may first ask whether the page may reach this PC.
+// Through the agent the page also gets Swissquote's live spot quote (the browser cannot read it directly): a real
+// broker price, close to OANDA's on TradingView. Measured 23 Nov 2026: gold-api.com, the reference without the
+// agent, sat 1-3 $ above it and moves only every 30 s. Order: MT5 bid, then Swissquote, then gold-api.com.
+const BK = { ok: false, src: '', at: 0, retry: 0, bid: 0, ask: 0, symbol: '', server: '', tickAge: 0, text: 'off' };
+const brokerLive = () => INS.mt5 && S.bpx && BK.ok && Date.now() - BK.at < 10e3;
+async function loadBroker() {
+  if (!INS.mt5 || !S.bpx || Date.now() < BK.retry) return;
+  try {
+    const j = await (await fetch(`http://127.0.0.1:${(AG && AG.port) || 8791}/price`, { cache: 'no-store' })).json();
+    const last = lastPx(), sane = p => p > 0 && !(last && Math.abs(last - p) > 0.02 * p), sp = j.spot || {};
+    const fresh = sp.time && (Date.now() - sp.time < 120e3 || closedNow());           // a quote frozen at the close is fine while gold is closed
+    if (j.ok && sane(j.bid)) {
+      Object.assign(BK, { ok: true, src: 'mt5', at: Date.now(), bid: j.bid, ask: j.ask, symbol: j.symbol, server: j.server, tickAge: j.tickAge, text: '' });
+      D.bk = { bid: j.bid, at: BK.at };                          // the price shown is this bid while it is fresh (spot())
+      useRef(j.bid, 'mt5');
+    } else if (sp.ok && sane(sp.bid) && fresh) {
+      Object.assign(BK, { ok: true, src: 'sq', at: Date.now(), bid: sp.bid, ask: sp.ask, symbol: 'Swissquote', server: '', tickAge: 0,
+                          text: j.ok ? `${j.symbol} at ${j.bid} is not gold: attach the EA to the gold chart` : 'MT5 is not sending prices (attach GexSignalTrader 1.01 to the gold chart)' });
+      useRef(sp.bid, 'sq');
+    } else { BK.ok = false; BK.text = `no price from this PC (MT5 off, Swissquote ${sp.error || 'stale'})`; BK.retry = Date.now() + 10e3; }
+  } catch (e) { BK.ok = false; BK.text = 'the agent is not running: start start_gex.bat'; BK.retry = Date.now() + 30e3; }
+  syncBpx(); status();
+}
+function syncBpx() {
+  const b = $('bPx'), live = brokerLive();
+  b.style.display = INS.mt5 ? '' : 'none';
+  b.classList.toggle('on', live); b.classList.toggle('warn', S.bpx && !live);
+  b.textContent = !S.bpx ? `Price: ${D.refVia === 'gold-api' ? 'gold-api' : 'Coinbase'}` : live ? `Price: ${BK.src === 'mt5' ? BK.symbol || 'MT5' : 'Swissquote'}` : 'Price: this PC (no link)';
+  b.title = !S.bpx ? 'Prices are moved to the Coinbase spot gold price (gold-api.com if Coinbase fails), about 45 s late, so 1-2 $ off a broker at times. Click: take the price from this PC instead (start_gex.bat: your MT5 gold chart, or Swissquote spot)'
+    : live ? (BK.src === 'mt5' ? `Prices are at your broker's level: ${BK.symbol} bid on ${BK.server}.` : `Prices are at Swissquote's live spot bid (close to OANDA on TradingView). ${BK.text}.`) + ' Click: web spot price only'
+    : `Waiting for this PC: ${BK.text}. The web spot price (Coinbase) is used meanwhile. Click: web spot price only`;
+}
+
 // ------------------------------------------------------------------ header and status
 function chip() {
   if (!INS.options) { $('chip').style.display = 'none'; return; }                  // the chip is about the GLD options: gold only
-  if (!G) { $('cDate').textContent = '--'; $('cDte').textContent = '-- DTE'; $('cN').textContent = '-- opts'; $('cSum').textContent = 'Σ --'; return; }
+  $('chip').style.cursor = gexStale() ? 'pointer' : '';
+  $('chip').title = gexStale() ? 'Option data is old: click to open CBOE\'s GLD file in a tab and save it (Ctrl+S) to Downloads' : '';
+  if (!G) { $('cDate').textContent = gexStale() ? 'GLD data' : '--'; $('cDte').textContent = gexStale() ? `${Math.round((Date.now() - D.gex.fetchedAt) / 864e5)} days old` : '-- DTE'; $('cN').textContent = gexStale() ? 'hidden' : '-- opts'; $('cSum').textContent = 'Σ --'; $('cSum').style.background = pal().grey; return; }
   const e = G.near.exp, t = shown(), sum = t.rows.reduce((a, r) => a + METRICS[S.metric].val(r), 0);
   const coi = t.rows.reduce((a, r) => a + r.coi, 0), poi = t.rows.reduce((a, r) => a + r.poi, 0);
   $('cDate').textContent = new Date(Date.UTC(2000 + +e.slice(0, 2), +e.slice(2, 4) - 1, +e.slice(4, 6))).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', timeZone: 'UTC' });
@@ -829,22 +1306,33 @@ function status() {
   else if (D.gex) {
     const ageH = (Date.now() - D.gex.fetchedAt) / 36e5;
     const when = new Date(D.gex.timestamp.replace(' ', 'T') + 'Z').toLocaleString([], { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
-    parts.push(`Options: ${D.gex.symbol} via CBOE, 15 min delayed (${when}), open interest from the last US close`);
-    if (ageH > 20) parts.push(`<span class="warn">Options data was downloaded ${Math.round(ageH)} h ago. Run node gex_fetch.cjs to refresh it.</span>`);
-    if (G) parts.push(`gold = ${G.f.toFixed(3)} x ${D.gex.symbol} · bars in ${METRICS[S.metric].unit}`);
+    // This line is about the option bars on the right only. The hosted copy serves the gex_data.js of its last
+    // upload, so there the snapshot can be days old (seen 22 Nov 2026: 10 Nov) while candles, POC and zones are live.
+    if (gexStale()) parts.push(`<span class="warn">option bars off: GLD data ${Math.round(ageH / 24)} days old (${gexWhy()}${location.protocol === 'file:' ? '; click the GLD chip at the top to fetch it by hand' : ''})</span>`);   // short, so the price source stays readable
+    else {
+      parts.push(`Option bars (right): ${D.gex.symbol} via CBOE, snapshot of ${when}, open interest from the last US close`);
+      if (ageH > 20) parts.push(`<span class="warn">that options snapshot is ${Math.round(ageH)} h old (${gexWhy()}); candles, POC and zones are live</span>`);
+      if (G) parts.push(`gold = ${G.f.toFixed(3)} x ${D.gex.symbol} · bars in ${METRICS[S.metric].unit}`);
+    }
   }
+  if (closedNow()) { const at = nextOpen(Date.now()); parts.unshift(`<span class="warn">Gold market closed: opens ${hhmm(at)} ${shortDate(at)} your time (18:00 New York)</span>`); }
+  if (H.on) parts.push(H.loading ? `loading past days ${H.done} / ${H.days.length || '…'}` : H.err ? `<span class="warn">past days: ${H.err}</span>` : H.days.length ? `${H.days.length} past days kept in this browser` : '');
   if (INS.feed === 'kraken') {
     parts.push(`candles: Kraken ${INS.name} (a small fiat market: can sit a few pips from your broker; no buy / sell volume)`);
     const d = new Date(), wd = d.getUTCDay(), h = d.getUTCHours();
     if (wd === 6 || (wd === 5 && h >= 22) || (wd === 0 && h < 22)) parts.push('<span class="warn">forex is closed at brokers until Sunday 22:00 UTC; Kraken keeps trading thinly</span>');
   } else {
-    const refName = INS.ref === 'gold-api' ? 'spot gold' : `Coinbase ${INS.ref}`;
+    const lost = brokerLive() ? '' : ' (link lost: last shift kept)';
+    const refName = D.refSrc === 'mt5' && BK.symbol ? `your broker's ${BK.symbol} bid in MT5${lost}` : D.refSrc === 'sq' ? `Swissquote spot bid via this PC${lost}`
+      : D.refSrc === 'manual' && MAN ? `the price you matched at ${hhmm(MAN.t)} (${fp(MAN.p)})`
+      : INS.ref === 'gold-api' ? `spot gold (${D.refVia === 'gold-api' ? 'gold-api.com, Coinbase unreachable: can be several $ off' : 'Coinbase, about 45 s late: can sit 1-2 $ off a broker'})` : `Coinbase ${INS.ref}`;
+    if (INS.mt5 && S.bpx && !brokerLive() && BK.text && BK.text !== 'connecting') parts.push(`<span class="warn">MT5 price: ${BK.text}</span>`);
     parts.push(D.hasBasis ? `candles: Binance ${INS.sym} futures moved to ${refName} (${D.basis >= 0 ? '−' : '+'}${fp(Math.abs(D.basis))} $)`
                           : `<span class="warn">No ${refName} reference yet: prices are futures prices, usually a little above spot</span>`);
   }
-  if (D.tick) parts.push('updated ' + new Date(D.tick).toLocaleTimeString('en-GB'));
+  if (D.tick && !closedNow()) parts.push('updated ' + new Date(D.tick).toLocaleTimeString('en-GB'));
   if (D.feedErr) parts.push(`<span class="warn">${D.feedErr}</span>`);
-  $('status').innerHTML = parts.join(' \u00b7 ');
+  $('status').innerHTML = parts.filter(Boolean).join(' \u00b7 ');
 }
 function syncUi() {
   document.body.classList.toggle('light', S.light);
@@ -856,9 +1344,14 @@ function syncUi() {
   $('bFull').classList.toggle('on', !!full); $('bFull').textContent = full ? 'Exit full screen' : 'Full screen';
   $('bMt5').style.display = INS.mt5 ? '' : 'none';                                        // the EA trades gold only
   $('bAbs').style.display = INS.feed === 'kraken' ? 'none' : '';                           // Kraken has no buy / sell volume
-  syncAlarm(); syncMt5();
+  syncAlarm(); syncMt5(); syncBpx();
   drawSig();
   $('bLight').textContent = S.light ? 'Dark' : 'Light';
+  for (const t of $('sigTabs').children) t.classList.toggle('on', t.dataset.tab === S.tab);   // Guide / Days tabs of the left panel
+  $('pGuide').style.display = S.tab === 'guide' ? '' : 'none';
+  $('pDays').style.display = S.tab === 'days' ? 'block' : 'none';
+  if (S.tab === 'days') drawDays();
+  $('daySeg').style.display = H.on && H.days.length ? '' : 'none';
   $('fAll').classList.toggle('on', S.filter === 'all'); $('fNear').classList.toggle('on', S.filter === 'near');
   $('metric').value = S.metric;
   chip(); status(); placeTabs(); view.dirty = true;
@@ -961,8 +1454,10 @@ function layout() {
   const axisW = compact ? 54 : INS.dec >= 4 ? 80 : 72;
   const panelW = INS.options ? Math.round(clamp(slide.r, 0, Math.max(0, W - axisW - 120))) : 0;   // follows the slide / drag
   const top = compact ? Math.max(52, $('top').offsetHeight + 20 + ($('panelHead').offsetHeight || 0)) : Math.max(48, $('top').offsetHeight + 16);
-  return { W, H, axisW, panelW, compact, chartW: W - axisW - panelW, axisX: W - axisW - panelW, panelX: W - panelW, y0: top, y1: H - 40 };
+  const bar = hasHistory();                                     // room for the scroll bar under the time scale
+  return { W, H, axisW, panelW, compact, bar, chartW: W - axisW - panelW, axisX: W - axisW - panelW, panelX: W - panelW, y0: top, y1: H - (bar ? 54 : 40) };
 }
+function hasHistory() { return H.m1.length > 0; }
 // Candle width and the x of the right edge of the newest candle slot. The volume profile gets its own strip
 // on the right so it never covers the latest candles.
 function geom(L) {
@@ -1022,7 +1517,7 @@ function hline(x0, x1, y, color, dash, width) {
 }
 
 function render() {
-  const L = layout(), P = pal(), c = D.chart, n = c.length;
+  const L = layout(), P = pal(), c = chartCandles(), n = c.length;
   ctx.fillStyle = P.bg; ctx.fillRect(0, 0, L.W, L.H);
   ctx.font = '12px system-ui, "Segoe UI", sans-serif';
   if (!n) {
@@ -1030,20 +1525,36 @@ function render() {
     ctx.fillText(D.feedErr || `Loading ${INS.name} candles…`, L.chartW / 2, L.H / 2);
     return;
   }
-  view.offset = clamp(view.offset, 0, Math.max(0, n - 20));
   const b = D.basis, sp = spot(), tfMs = TF[S.tf];
+  // looking at the past: a new candle must not slide the view, so the distance to the newest candle grows with it
+  if (view.lastT && c[n - 1].t > view.lastT && view.offset > 2) view.offset += Math.round((c[n - 1].t - view.lastT) / tfMs);
+  view.lastT = c[n - 1].t;
+  view.offset = clamp(view.offset, 0, Math.max(0, n - 20));
   const g = geom(L), cw = g.cw, last = n - 1 - view.offset, first = Math.max(0, Math.floor(last - view.count - 1));
   const xOf = i => g.x1 - (last - i + 0.5) * cw;
-  const xOfTime = t => xOf((t - c[0].t) / tfMs);
+  // candles can have gaps (an outage, the archive next to the live candles), so times are found by search
+  const fracAt = t => { const i = findIdx(c, t); return i < 0 ? (t - c[0].t) / tfMs : i === n - 1 ? i + (t - c[i].t) / tfMs : i + Math.min(1, (t - c[i].t) / tfMs); };
+  const xOfTime = t => xOf(fracAt(t));                      // the middle of the candle that holds t
+  const xAt = t => xOf(fracAt(t)) - cw / 2;                 // the moment t itself
+  const liveEdge = view.offset <= 2;
+  // The day in the middle of the screen: the Days tab, the day list and the profile strip follow it. At the live
+  // edge it is today, unless a day was just picked from the list.
+  if (H.on && allDays().length) {
+    const tc = c[clamp(Math.round(last - view.count / 2), 0, n - 1)].t, mid = allDays().find(d => tc >= d.start && tc < d.end) || null;
+    setViewDay(H.pick || (liveEdge || mid === H.today ? null : mid));
+  }
+  const vDay = H.viewDay && H.viewDay.path && H.viewDay.path.final ? H.viewDay : null;   // a past day whose profile replaces today's on the right
   if (view.auto) {
     // Fit = the candles on screen plus the open idea's stop and target, at least 0.5 % of the price either side on
     // gold (0.05 % elsewhere, so quiet forex is not a flat line). GLD levels further away are pinned to the top or
     // bottom edge instead: the old +/- 3.5 % range with GLD lines on squeezed every level near the price together.
-    let lo = sp, hi = sp;
+    // Looking at a past day, only its candles count (today's price can be far away).
+    const edge = last >= n - 1;
+    let lo = edge ? sp : Infinity, hi = edge ? sp : -Infinity;
     for (let i = first; i <= last; i++) { lo = Math.min(lo, c[i].l - b); hi = Math.max(hi, c[i].h - b); }
-    const open = LOG.find(s => s.result === 'open');
+    const open = edge && LOG.find(s => s.result === 'open');
     if (open) for (const p of [open.stop - b, open.target - b]) if (Math.abs(p - sp) < 0.02 * sp) { lo = Math.min(lo, p); hi = Math.max(hi, p); }
-    const mid = (lo + hi) / 2, half = Math.max((hi - lo) * 0.62, sp * (INS_ID === 'XAUUSD' ? 0.005 : 0.0005));
+    const mid = (lo + hi) / 2, half = Math.max((hi - lo) * 0.62, mid * (INS_ID === 'XAUUSD' ? 0.005 : 0.0005));
     view.lo = mid - half; view.hi = mid + half;
   }
   const ppd = (L.y1 - L.y0) / (view.hi - view.lo);                              // pixels per dollar
@@ -1056,8 +1567,45 @@ function render() {
 
   ctx.save(); ctx.beginPath(); ctx.rect(0, L.y0, L.chartW, L.y1 - L.y0); ctx.clip();
 
+  // trading days on screen (18:00 to 18:00 New York): the picked day lightly tinted, gold's weekend days greyed
+  const tFirst = c[first].t, tLast = c[last].t + tfMs, gold = INS_ID === 'XAUUSD';
+  const visDays = allDays().filter(d => d.end > tFirst && d.start < tLast);
+  for (const d of visDays) {
+    const xa = clamp(xAt(d.start), 0, L.chartW), xb = clamp(xAt(d.end), 0, L.chartW);
+    if (d === H.viewDay) { ctx.fillStyle = rgba(P.blue, S.light ? 0.05 : 0.07); ctx.fillRect(xa, L.y0, xb - xa, L.y1 - L.y0); }
+    else if (d.weekend && gold) { ctx.fillStyle = rgba(P.grey, 0.07); ctx.fillRect(xa, L.y0, xb - xa, L.y1 - L.y0); }
+  }
+  const dayStarts = [];                                          // where a new trading day begins (also without the archive)
+  for (let s = E.sessionStart(tLast); s > tFirst && dayStarts.length < 400; s = E.sessionStart(s - 60e3))
+    if (!(INS.hours && dayMeta(s, s + 864e5).weekend)) dayStarts.push(s);   // gold: no trading day on Saturday or Sunday
+  for (const s of dayStarts) {
+    const x = Math.round(xAt(s)) + 0.5;
+    if (x <= 1 || x >= L.chartW - g.reserve) continue;
+    ctx.strokeStyle = rgba(P.grey, 0.55); ctx.lineWidth = 1; ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(x, L.y0); ctx.lineTo(x, L.y1); ctx.stroke(); ctx.setLineDash([]);
+  }
+
   // sell zones (red) and buy zones (green); paler once price has come back into them
   const zs = S.zones ? zonesShown() : [];
+  // past zones: drawn from the swing candle over the time the page listed them, paler after the first test.
+  // Zones still alive that the live list above already draws are skipped.
+  const hz = S.zones && H.zones.length ? H.zones.filter(z => z.t < tLast && z.shown[z.shown.length - 1][1] > tFirst &&
+    !(z.shown[z.shown.length - 1][1] === Infinity && zs.some(y => y.type === z.type && y.t === z.t))) : [];
+  const xRight = L.chartW - g.reserve;
+  for (const z of hz) {
+    const col = z.type === 'supply' ? P.red : P.green, yT = yOf(z.top - b), yB = yOf(z.bottom - b);
+    if (yB < L.y0 || yT > L.y1) continue;
+    z.shown.forEach(([s, e], k) => {
+      const xa = k ? xAt(s) : xOfTime(z.t) - cw / 2, xe = e === Infinity ? xRight : Math.min(xRight, xAt(e));
+      if (xe <= 0 || xa >= xRight) return;
+      const xt = z.testedAt ? clamp(xAt(z.testedAt), xa, xe) : xe;
+      ctx.fillStyle = rgba(col, 0.11); ctx.fillRect(xa, yT, xt - xa, yB - yT);
+      ctx.fillStyle = rgba(col, 0.05); ctx.fillRect(xt, yT, xe - xt, yB - yT);
+      ctx.strokeStyle = rgba(col, 0.45); ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+      ctx.strokeRect(Math.round(xa) + 0.5, Math.round(yT) + 0.5, Math.max(1, xe - xa), Math.max(1, Math.round(yB - yT)));
+      ctx.setLineDash([]);
+    });
+  }
   for (const z of zs) {
     const col = z.type === 'supply' ? P.red : P.green;
     const x0 = clamp(xOfTime(z.t) - cw / 2, 0, L.chartW - g.reserve - 90), yT = yOf(z.top - b), yB = yOf(z.bottom - b);
@@ -1077,10 +1625,12 @@ function render() {
 
   // session volume profile, anchored on the right edge of the chart. The profile (and so POC / VAH / VAL) is
   // built on fixed rows (updateProfile); zooming out only groups those rows into taller bars, at least 2 px each.
-  if (S.profile && Pf) {
-    const maxW = g.reserve - 4, m = Math.max(1, Math.ceil(2 / (Pf.step * ppd))), hh = m * Pf.step, bars = new Map();
-    for (const r of Pf.rows) {
-      const key = Math.floor(Math.round(r.p / Pf.step) / m);
+  // Looking at a past day, the strip shows that whole day's profile instead of today's.
+  const pfs = vDay ? vDay.path.final : Pf;
+  if (S.profile && pfs) {
+    const maxW = g.reserve - 4, m = Math.max(1, Math.ceil(2 / (pfs.step * ppd))), hh = m * pfs.step, bars = new Map();
+    for (const r of pfs.rows) {
+      const key = Math.floor(Math.round(r.p / pfs.step) / m);
       let e = bars.get(key);
       if (!e) bars.set(key, e = { p: key * hh, buy: 0, sell: 0 });
       e.buy += r.buy; e.sell += r.sell;
@@ -1103,19 +1653,81 @@ function render() {
     ctx.fillRect(x - bw / 2, Math.min(yo, yc), bw, Math.max(1, Math.abs(yc - yo)));
   }
 
+  // market closed between two candles (gold's weekend): a grey band where the time jumps
+  const gaps = [];
+  for (let i = Math.max(1, first); i <= last; i++) if (c[i].t - c[i - 1].t >= 6 * 36e5) {
+    const x = Math.round(xOf(i) - cw / 2);
+    ctx.fillStyle = rgba(P.grey, 0.22); ctx.fillRect(x - 2, L.y0, 4, L.y1 - L.y0);
+    gaps.push({ x, from: c[i - 1].t + tfMs, to: c[i].t });
+  }
+
+  // each day's POC as it grew (yellow steps) with its value area (thin purple), a dashed arrow at every POC shift
+  // from the old POC to the new one, and a dot at the POC of the three check times of the day
+  const dots = [], tags = [];
+  if (S.profile) for (const d of visDays) {
+    const pa = d.path;
+    if (!pa || !pa.poc.length) continue;
+    const tEnd = d === H.today ? c[n - 1].t + tfMs : d.end, wide = xAt(tEnd) - xAt(d.start) >= 170;   // room for the small labels
+    const steps = (pts, col, w, a) => {
+      ctx.strokeStyle = rgba(col, a); ctx.lineWidth = w; ctx.beginPath();
+      let y = yOf(pts[0].p - b);
+      ctx.moveTo(xAt(pts[0].t), y);
+      for (let i = 1; i < pts.length; i++) { const x = xAt(pts[i].t); ctx.lineTo(x, y); y = yOf(pts[i].p - b); ctx.lineTo(x, y); }
+      ctx.lineTo(xAt(tEnd), y); ctx.stroke();
+    };
+    steps(pa.vah, P.purple, 1, 0.55); steps(pa.val, P.purple, 1, 0.55); steps(pa.poc, P.yellow, 1.8, 0.95);
+    for (const s of pa.shifts) {
+      // a little right of the step it announces, so the two do not cover each other
+      const x = Math.round(xAt(s.t)) + 5.5, y1 = yOf(s.from - b), y2 = yOf(s.to - b), dir = y2 < y1 ? -1 : 1, col = s.to > s.from ? P.up : P.down;
+      if (x < -10 || x > L.chartW + 10) continue;
+      ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = 1.6; ctx.setLineDash([4, 3]);
+      ctx.beginPath(); ctx.moveTo(x, y1); ctx.lineTo(x, y2 - dir * 6); ctx.stroke(); ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(x, y2); ctx.lineTo(x - 4.5, y2 - dir * 8); ctx.lineTo(x + 4.5, y2 - dir * 8); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.arc(x, y1, 2.2, 0, 7); ctx.fill();
+      if (wide && Math.abs(y2 - y1) >= 12) tags.push({ x: x + 5, y: (y1 + y2) / 2 + 3, text: `POC ${signed(s.to - s.from, INS.dec)}`, color: col });
+    }
+    for (const k of CHECKS) {
+      const a = pa.at[k.key];
+      if (!a) continue;
+      const x = xAt(a.t), y = yOf(a.poc - b);
+      if (x < 0 || x > L.chartW) continue;
+      ctx.fillStyle = P.yellow; ctx.strokeStyle = P.bg; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(x, y, 4, 0, 7); ctx.stroke(); ctx.fill();
+      if (wide) dots.push({ x: x + 6, y: y - 6, text: `${k.name} ${gp(a.poc)}` });
+    }
+  }
+
   // zone and absorption names at the left end of their box (the right side belongs to the level pills), drawn
   // over the candles so they stay readable. A name that would overlap one already drawn moves down inside its
-  // box, or is left out.
+  // box, or is left out. Day names come first, at the top of each day.
   ctx.font = '10px system-ui, "Segoe UI", sans-serif'; ctx.textAlign = 'left';
   const taken = [];
-  const label = (text, x, yA, yB, color) => {
+  const label = (text, x, yA, yB, color, bg) => {
     const w = ctx.measureText(text).width + 6;
     for (let y = yA; y <= Math.max(yA, yB); y += 11) {
       if (y < L.y0 + 10 || y > L.y1 - 2 || taken.some(r => x < r.x + r.w && x + w > r.x && Math.abs(y - r.y) < 11)) continue;
+      if (bg) { ctx.fillStyle = bg; ctx.fillRect(x - 3, y - 9, w, 12); }
       ctx.fillStyle = color; ctx.fillText(text, x, y); taken.push({ x, y, w });
       return;
     }
   };
+  ctx.font = '600 11px system-ui, "Segoe UI", sans-serif';
+  for (const d of visDays) {
+    const xa = Math.max(2, xAt(d.start) + 5), xb = Math.min(L.chartW - g.reserve, xAt(d.end)), pa = d.path;
+    if (xb - xa < 40) continue;
+    let text = d === H.today ? `Today ${d.label}` : d.label;
+    const cps = pa ? CHECKS.filter(k => pa.at[k.key]).map(k => gp(pa.at[k.key].poc)) : [];
+    if (cps.length && xb - xa > ctx.measureText(text + ' · POC ' + cps.join(' → ')).width + 12) text += ' · POC ' + cps.join(' → ');
+    label(text, xa, L.y0 + 13, L.y0 + 13, d === H.viewDay ? P.blue : P.strong, rgba(P.bg, 0.75));
+  }
+  for (const gp0 of gaps) label(`closed ${hhmm(gp0.from)} ${shortDate(gp0.from)} – ${hhmm(gp0.to)} ${shortDate(gp0.to)}`, gp0.x + 5, L.y0 + 27, L.y0 + 27, P.text, rgba(P.bg, 0.75));
+  ctx.font = '10px system-ui, "Segoe UI", sans-serif';
+  for (const q of dots) label(q.text, q.x, q.y, q.y, P.yellow, rgba(P.bg, 0.7));
+  for (const q of tags) label(q.text, q.x, q.y, q.y, q.color, rgba(P.bg, 0.7));
+  for (const z of hz) {
+    const s0 = z.shown[0], x = Math.max(0, xOfTime(z.t) - cw / 2) + 4, xe = s0[1] === Infinity ? xRight : xAt(z.shown[z.shown.length - 1][1]), yT = yOf(z.top - b);
+    if (xe - x > 56 && x < xRight - 40) label(`${z.type === 'supply' ? 'SELL' : 'BUY'} ${z.tf}`, x, yT + 10, yOf(z.bottom - b) - 1, rgba(z.type === 'supply' ? P.red : P.green, 0.75));
+  }
   for (const z of zs) {
     const x = clamp(xOfTime(z.t) - cw / 2, 0, L.chartW - g.reserve - 90) + 6, yT = yOf(z.top - b);
     label(`${z.type === 'supply' ? 'SELL' : 'BUY'} zone ${z.tf}${z.tested ? ' (tested)' : ''}`, x, yT + 11, yOf(z.bottom - b) - 2, rgba(z.type === 'supply' ? P.red : P.green, z.tested ? 0.7 : 0.95));
@@ -1137,17 +1749,19 @@ function render() {
   };
   for (const lv of levels()) level(lv.p, lv.text, P[lv.color], '#fff', 'gld', y => hline(0, L.chartW, y, P[lv.color], lv.dash, lv.dash[0] > 4 ? 1.4 : 1));
   for (const a of ALERTS) if (!a.hit) level(a.p, 'Alert' + (a.note ? ' · ' + a.note : ''), P.orange, '#111', 'alert', y => hline(0, L.chartW, y, P.orange, [6, 4], 1.4));
-  if (S.profile && Pf) {
-    const xs = clamp(xOfTime(Pf.from), 0, L.chartW - 40);
-    for (const [p, name, col, fg] of [[Pf.poc, 'POC', P.yellow, '#111'], [Pf.vah, 'VAH', P.purple, '#fff'], [Pf.val, 'VAL', P.purple, '#fff']])
-      level(p - b, name, col, fg, name, y => hline(xs, L.chartW, y, col, [], 1.4));
+  if (S.profile && pfs) {
+    // the day's final levels, each line from the moment it last changed (the step line shows how it got there)
+    const dp = vDay ? vDay.path : H.today && H.today.path && H.today.path.poc.length ? H.today.path : null, tag = vDay ? ' ' + vDay.label : '';
+    const since = arr => clamp(arr && arr.length ? xAt(arr[arr.length - 1].t) : xOfTime(pfs.from), 0, L.chartW - 40);
+    for (const [p, name, col, fg, arr] of [[pfs.poc, 'POC', P.yellow, '#111', dp && dp.poc], [pfs.vah, 'VAH', P.purple, '#fff', dp && dp.vah], [pfs.val, 'VAL', P.purple, '#fff', dp && dp.val]])
+      level(p - b, name + tag, col, fg, name, y => hline(since(arr), L.chartW, y, col, [], 1.4));
   }
   // signals: an arrow on each trigger candle; the idea that is still open also gets entry / stop / target lines
   // (drawn whether or not the guide panel is open)
   if (LOG.length) {
     ctx.font = '10px system-ui, "Segoe UI", sans-serif'; ctx.textAlign = 'center';
     for (const s of LOG) {
-      const up = s.side === 'buy', x = xOfTime(s.t), i = clamp(Math.floor((s.t - c[0].t) / tfMs), 0, n - 1);
+      const up = s.side === 'buy', x = xOfTime(s.t), i = clamp(findIdx(c, s.t), 0, n - 1);
       if (x > 0 && x < L.chartW) {
         const y = up ? yOf(c[i].l - b) + 6 : yOf(c[i].h - b) - 6, d = up ? 10 : -10;
         ctx.fillStyle = up ? P.up : P.down; ctx.beginPath();
@@ -1163,9 +1777,17 @@ function render() {
   ctx.restore();
   pills.push(...Object.values(pinned));
 
-  // current price line
-  const lastC = c[n - 1], up = lastC.c >= lastC.o, ySp = yOf(sp);
-  hline(0, L.chartW, ySp, up ? P.up : P.down, [1, 3]);
+  // current price line (looking at a past day it can be off the screen: then only its pill, at the edge)
+  const lastC = c[n - 1], up = lastC.c >= lastC.o, ySp0 = yOf(sp), ySp = clamp(ySp0, L.y0 + 9, L.y1 - 26);
+  if (ySp0 === ySp) hline(0, L.chartW, ySp, up ? P.up : P.down, [1, 3]);
+  // gold closed: say so across the chart
+  if (closedNow()) {
+    const now = Date.now(), at = nextOpen(now);
+    ctx.font = '600 13px system-ui, "Segoe UI", sans-serif';
+    const text = `MARKET CLOSED · opens ${hhmm(at)} ${shortDate(at)} your time`, w = ctx.measureText(text).width + 24;
+    pill(clamp((L.chartW - g.reserve) / 2 - w / 2, 4, L.chartW - w - 4), L.y0 + 46, w, 26, rgba(P.orange, 0.92), text, '#111');
+    ctx.font = '12px system-ui, "Segoe UI", sans-serif';
+  }
 
   // Level pills are spread so that none overlaps another or the live price and its countdown (which stay put),
   // each as close to its line as the others allow; a short slanted tick joins a moved pill to its line.
@@ -1195,7 +1817,7 @@ function render() {
   pill(L.axisX + 1, ySp, L.axisW - 2, 18, up ? P.up : P.down, fp(sp), '#fff');
   ctx.font = '11px system-ui, "Segoe UI", sans-serif';
   pill(L.axisX + 1, ySp + 17, L.axisW - 2, 16, P.bg, '', '#fff');
-  pill(L.axisX + 1, ySp + 17, L.axisW - 2, 16, rgba(up ? P.up : P.down, 0.75), `${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')}`, '#fff');
+  pill(L.axisX + 1, ySp + 17, L.axisW - 2, 16, rgba(up ? P.up : P.down, 0.75), closedNow() ? 'closed' : `${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')}`, '#fff');
   ctx.font = '12px system-ui, "Segoe UI", sans-serif';
 
   // gamma bars
@@ -1232,21 +1854,52 @@ function render() {
     ctx.fillStyle = P.text; ctx.textAlign = 'center';
     const x = L.panelX + L.panelW / 2, y = (L.y0 + L.y1) / 2;
     if (D.gexMissing) { ctx.fillText('No options data yet.', x, y - 10); ctx.fillText('Run: node gex_fetch.cjs', x, y + 10); }
+    else if (gexStale()) {
+      const days = Math.round((Date.now() - D.gex.fetchedAt) / 864e5);
+      ctx.fillText('Option bars hidden:', x, y - 18); ctx.fillText(`the GLD snapshot is ${days} days old`, x, y);
+      ctx.fillText(gexWhy(), x, y + 18);
+      if (location.protocol === 'file:') { ctx.fillText('Click the GLD chip at the top:', x, y + 44); ctx.fillText('save the page it opens with Ctrl+S', x, y + 62); }
+      ctx.fillText('Prices, zones, POC and MT5 do not need it.', x, y + 88);
+    }
     else ctx.fillText(D.gex ? 'Waiting for the gold price…' : 'Loading options…', x, y);
   }
 
-  // time scale
+  // time scale: the date of each trading day under the line where it starts (bold), times in between
   ctx.fillStyle = P.bg; ctx.fillRect(0, L.y1, L.axisX, L.H - L.y1);
-  ctx.fillStyle = P.text; ctx.textAlign = 'center';
+  ctx.textAlign = 'center';
+  const marks = [];
+  ctx.font = '600 11px system-ui, "Segoe UI", sans-serif';
+  for (const s of dayStarts) {
+    const x = xAt(s);
+    if (x < 30 || x > L.chartW - 30) continue;
+    const lab = dayMeta(s, s + 864e5).label, prev = marks[marks.length - 1];
+    let t = lab, w = ctx.measureText(t).width + 10;
+    // days closer together than their names (zoomed out): the day number only, or nothing
+    if (prev && Math.abs(prev.x - x) < (prev.w + w) / 2) { t = lab.split(' ')[1]; w = ctx.measureText(t).width + 8; }
+    if (prev && Math.abs(prev.x - x) < (prev.w + w) / 2) continue;
+    ctx.fillStyle = P.strong; ctx.fillText(t, x, L.y1 + 15); marks.push({ x, w });
+  }
+  ctx.font = '12px system-ui, "Segoe UI", sans-serif'; ctx.fillStyle = P.text;
   const every = Math.max(1, Math.ceil(84 / cw));
-  let prevDay = '';
   for (let i = first; i <= last; i++) {
     if (Math.round(c[i].t / tfMs) % every) continue;
-    const d = new Date(c[i].t), day = d.toDateString(), x = xOf(i);
-    if (x < 24 || x > L.chartW - 24) { prevDay = day; continue; }
-    ctx.fillText(prevDay && day !== prevDay ? d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
-                                            : d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }), x, L.y1 + 15);
-    prevDay = day;
+    const x = xOf(i);
+    if (x < 24 || x > L.chartW - 24 || marks.some(m => Math.abs(m.x - x) < m.w / 2 + 22)) continue;
+    ctx.fillText(new Date(c[i].t).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }), x, L.y1 + 15);
+  }
+  // scroll bar under the time scale (when the archive is loaded): the whole history, the part on screen as the
+  // thumb, a tick where each day starts. Drag the thumb or click the bar; the wheel over it scrolls.
+  view.bar = null;
+  if (L.bar && n > 40) {
+    const x0 = 6, w = L.chartW - 12, by = L.y1 + 24, bh = 9, tx = i => x0 + clamp(i / n, 0, 1) * w;
+    ctx.fillStyle = rgba(P.grey, 0.16); ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x0, by, w, bh, 4); else ctx.rect(x0, by, w, bh); ctx.fill();
+    ctx.fillStyle = rgba(P.grey, 0.5);
+    for (const d of allDays()) { const i = findIdx(c, d.start - 1) + 1; if (i > 0 && i < n) ctx.fillRect(Math.round(tx(i)), by + 1, 1, bh - 2); }
+    const a = tx(last + 1 - Math.min(view.count, n)), z = tx(last + 1);
+    ctx.fillStyle = drag && drag.bar ? P.blue : rgba(P.blue, 0.65); ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(a, by, Math.max(8, z - a), bh, 4); else ctx.rect(a, by, Math.max(8, z - a), bh);
+    ctx.fill();
+    view.bar = { x0, w, y: by - 5, h: bh + 10, a, z, n };
   }
 
   // crosshair and tooltip
@@ -1277,10 +1930,21 @@ function render() {
 
 // ------------------------------------------------------------------ input
 let drag = null;
+const onBar = e => { const B = view.bar; return !!B && e.offsetY >= B.y && e.offsetY <= B.y + B.h && e.offsetX >= B.x0 - 4 && e.offsetX <= B.x0 + B.w + 4; };
+// Scroll bar: put the thumb's left edge at pixel x (grab = where in the thumb it was taken).
+function barTo(x, grab) {
+  const B = view.bar;
+  if (!B) return;
+  const cnt = Math.min(view.count, B.n), lastIdx = Math.round((x - grab - B.x0) / B.w * B.n) + cnt - 1;
+  view.offset = clamp(B.n - 1 - lastIdx, 0, Math.max(0, B.n - 20)); H.pick = null; view.dirty = true;
+}
 cv.addEventListener('mousemove', e => {
   view.mx = e.offsetX; view.my = e.offsetY; view.dirty = true;
+  cv.style.cursor = drag && drag.bar || (!drag && onBar(e)) ? 'ew-resize' : '';
   if (!drag) return;
+  if (drag.bar) { barTo(e.offsetX, drag.grab); return; }
   const L = layout(), dx = e.offsetX - drag.x, dy = e.offsetY - drag.y, span = drag.hi - drag.lo;
+  if (Math.abs(dx) > 3) H.pick = null;                        // moved by hand: the day on screen follows the view again
   if (drag.onChart) {
     view.offset = drag.offset + Math.round(dx / geom(L).cw);
     if (Math.abs(dy) > 4 || !view.auto) { const dp = dy / (L.y1 - L.y0) * span; view.lo = drag.lo + dp; view.hi = drag.hi + dp; view.auto = false; }
@@ -1295,6 +1959,12 @@ cv.addEventListener('mousedown', e => {
   if (e.button !== 0) return;
   const L = layout();
   if (e.altKey && onPrices(e, L)) { addAlert(priceAt(e.offsetY, L), ''); return; }            // Alt + click: price alert at the cursor
+  if (onBar(e)) {                                              // scroll bar: drag the thumb, or click beside it to jump there
+    const B = view.bar, inThumb = e.offsetX >= B.a && e.offsetX <= B.z;
+    drag = { bar: true, grab: inThumb ? e.offsetX - B.a : (B.z - B.a) / 2 };
+    if (!inThumb) barTo(e.offsetX, drag.grab);
+    return;
+  }
   drag = { x: e.offsetX, y: e.offsetY, offset: view.offset, lo: view.lo, hi: view.hi, onChart: e.offsetX < L.chartW };
 });
 // Right-click: remove the alert under the cursor, or set one at the cursor's price.
@@ -1311,14 +1981,19 @@ cv.addEventListener('dblclick', fit);
 cv.addEventListener('wheel', e => {
   e.preventDefault();
   const L = layout(), k = e.deltaY > 0 ? 1.15 : 1 / 1.15;
-  if (e.offsetX < L.chartW && !e.shiftKey) view.count = clamp(Math.round(view.count * k), 30, 560);
+  H.pick = null;
+  if (onBar(e)) {                                              // over the scroll bar the wheel scrolls: down = later, up = earlier
+    const B = view.bar, step = Math.max(1, Math.round(view.count * 0.2)) * (e.deltaY > 0 ? -1 : 1);
+    if (B) view.offset = clamp(view.offset + step, 0, Math.max(0, B.n - 20));
+  }
+  else if (e.offsetX < L.chartW && !e.shiftKey) view.count = clamp(Math.round(view.count * k), 30, hasHistory() ? MAXCOUNT : 560);
   else {
     const p = view.hi - (e.offsetY - L.y0) / (L.y1 - L.y0) * (view.hi - view.lo);
     view.lo = p - (p - view.lo) * k; view.hi = p + (view.hi - p) * k; view.auto = false;
   }
   view.dirty = true;
 }, { passive: false });
-function fit() { view.auto = true; view.offset = 0; view.count = 110; view.dirty = true; }
+function fit() { view.auto = true; view.offset = 0; view.count = 110; view.dirty = true; H.pick = null; }
 // Touch: one finger pans like the mouse, two fingers pinch the time axis, double-tap fits.
 let pinch = null, lastTap = 0;
 const tpos = t => { const r = cv.getBoundingClientRect(); return { x: t.clientX - r.left, y: t.clientY - r.top }; };
@@ -1343,6 +2018,7 @@ cv.addEventListener('touchmove', e => {
     view.mx = p.x; view.my = p.y;
     if (drag.onChart) {
       view.offset = drag.offset + Math.round(dx / geom(L).cw);
+      if (Math.abs(dx) > 3) H.pick = null;
       if (Math.abs(dy) > 4 || !view.auto) { const dp = dy / (L.y1 - L.y0) * span; view.lo = drag.lo + dp; view.hi = drag.hi + dp; view.auto = false; }
     } else {
       const k = Math.exp(dy / 220), mid = (drag.lo + drag.hi) / 2;
@@ -1351,7 +2027,8 @@ cv.addEventListener('touchmove', e => {
     view.dirty = true;
   } else if (e.touches.length === 2 && pinch) {
     const a = tpos(e.touches[0]), b = tpos(e.touches[1]), d = Math.hypot(a.x - b.x, a.y - b.y);
-    if (d > 0) view.count = clamp(Math.round(pinch.count * pinch.d / d), 30, 560);
+    if (d > 0) view.count = clamp(Math.round(pinch.count * pinch.d / d), 30, hasHistory() ? MAXCOUNT : 560);
+    H.pick = null;
     view.dirty = true;
   }
   e.preventDefault();
@@ -1391,6 +2068,23 @@ $('sig').addEventListener('click', e => {
   else if (act === 'balance') { const v = parseFloat(prompt('Account balance in USD, for the stop-size check:', S.balance)); if (v > 0) set('balance', v); }
   else if (act === 'mt5Test') { if (confirm('Place a small test BUY on the MT5 demo account now?\nStop 5 $ away, target 10 $ away; the EA sets the lot size.')) sendToMt5({ test: 'buy' }); }
   else if (act === 'clear') { if (confirm('Delete the stored results?')) { LOG.length = 0; store.set(sk('siglog'), LOG); drawSig(); view.dirty = true; } }
+  else if (act === 'match') matchPrice();
+  else if (act === 'unmatch') unmatchPrice();
+  else if (act === 'day') { const v = +a.dataset.v; if (H.today && v === H.today.start) fit(); else showDay(v); }
+  else if (act === 'dayPrev') stepDay(-1);
+  else if (act === 'dayNext') stepDay(1);
+  else if (act === 'csvDays') csvDays();
+  else if (act === 'csvEvents') csvEvents();
+  else if (act === 'reloadDays') loadHistory();
+});
+$('sigTabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) set('tab', b.dataset.tab); });
+$('day').onchange = e => { const v = e.target.value; e.target.blur(); if (v === 'live') fit(); else showDay(+v); };
+$('dPrev').onclick = () => stepDay(-1);
+$('dNext').onclick = () => stepDay(1);
+window.addEventListener('keydown', e => {                      // left / right arrow: day before / after
+  if (/INPUT|SELECT|TEXTAREA/.test(e.target.tagName) || e.altKey || e.ctrlKey || e.metaKey || !H.days.length) return;
+  if (e.key === 'ArrowLeft') { stepDay(-1); e.preventDefault(); }
+  else if (e.key === 'ArrowRight') { stepDay(1); e.preventDefault(); }
 });
 // Instrument list. Changing it reloads the page: every feed, zone, idea and alert belongs to one instrument.
 for (const [id, ins] of Object.entries(INSTRUMENTS)) {
@@ -1437,11 +2131,22 @@ $('bAlarm').onclick = () => {                                  // not armed befo
   else testAlarm();
 };
 $('alert').onclick = dismiss;
+$('bPx').onclick = () => { set('bpx', !S.bpx); BK.ok = false; D.bk = null; BK.retry = 0; BK.text = S.bpx ? 'connecting' : 'off'; syncBpx(); if (S.bpx) loadBroker(); else loadRef(); };
 $('bMt5').onclick = () => { set('mt5', !S.mt5); MT.ok = false; MT.text = S.mt5 ? 'connecting…' : 'off'; syncMt5(); pollMt5(); };
 for (const type of ['pointerdown', 'keydown']) window.addEventListener(type, () => { armedBefore = armed(); if (S.alarm && !armed()) arm(); }, true);
 $('bLight').onclick = () => set('light', !S.light);
 $('bReset').onclick = fit;
 $('bHelp').onclick = () => { const h = $('help'), open = h.style.display !== 'block'; h.style.display = open ? 'block' : 'none'; $('bHelp').classList.toggle('on', open); };
+// GLD chip while the option data is old: CBOE lets a person, not a script, open its file (Cloudflare bot check
+// since about 10 Nov 2026), so the chip opens it in a tab to be saved by hand; gex_fetch.cjs --watch (run by
+// the agent) picks a GLD*.json in Downloads up within 30 s, and the page reads it on its next 30-s refresh.
+$('chip').onclick = () => {
+  if (!INS.options || !gexStale()) return;
+  const msg = (t, x) => { banner('watch', t, x); clearInterval(blink); document.title = TITLE; };
+  if (location.protocol !== 'file:') { msg('OPTION DATA', 'Fetching it by hand works on the page opened from your PC (start_gex.bat), which can pick the saved file up.'); return; }
+  window.open('https://cdn.cboe.com/api/global/delayed_quotes/options/GLD.json', '_blank');
+  msg('SAVE THE OPTION CHAIN', 'In the tab that opened (tick the check box if CBOE shows one), press Ctrl+S and save it as GLD.json in Downloads. With start_gex.bat running the bars come back within a minute. Once a day is enough.');
+};
 $('fAll').onclick = () => set('filter', 'all');
 $('fNear').onclick = () => set('filter', 'near');
 $('metric').onchange = e => set('metric', e.target.value);
@@ -1450,7 +2155,7 @@ window.addEventListener('resize', () => { if (!slide.drag) slideTo(true); });
 // ------------------------------------------------------------------ start
 document.title = TITLE;
 syncUi(); slideTo(true);
-loadChart(true); loadM1(true); loadM30(); loadRef(); loadGex();   // all at once: each part draws as soon as it arrives
+loadChart(true); loadM1(true).then(loadHistory); loadM30(); loadRef(); loadGex();   // all at once: each part draws as soon as it arrives
 pollMt5();
 // Live tick, once a second (every 3 s on Kraken, which allows about one request a second): the newest candles
 // (one small request for the chart timeframe, one for 1-minute candles), then the signal check. A tick is
@@ -1459,10 +2164,11 @@ let ticking = false;
 setInterval(async () => {
   if (ticking) return;
   ticking = true;
-  try { await Promise.all([loadChart(false), loadM1(false)]); evaluate(); status(); } finally { ticking = false; }
+  try { await Promise.all([loadChart(false), loadM1(false)]); logPx(); evaluate(); status(); } finally { ticking = false; }
 }, INS.feed === 'kraken' ? 3e3 : 1e3);
 if (INS.options) { setInterval(computeGex, 5e3); setInterval(loadGex, 30e3); }
 if (INS.ref) setInterval(loadRef, 15e3);
+if (INS.mt5) { loadBroker(); setInterval(loadBroker, 1e3); }   // the broker's price, when MT5 and the agent run (the EA writes it every second)
 setInterval(loadM30, 60e3);
 if (INS.mt5) setInterval(pollMt5, 5e3);
 setInterval(() => { view.dirty = true; }, 1e3);            // candle countdown

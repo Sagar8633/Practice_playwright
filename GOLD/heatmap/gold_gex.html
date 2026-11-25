@@ -63,6 +63,19 @@ select{padding:0 8px;cursor:pointer}
 #alert.sell{background:#e02424}
 #alert.watch{background:#d97706}
 #alert span{font-size:12px;opacity:.85;margin-left:10px}
+#tradeTaken{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.58)}
+#tradeTaken.show{display:flex}
+.trade-taken-card{width:min(560px,92vw);box-sizing:border-box;padding:26px 24px;border:3px solid #facc15;border-radius:18px;background:linear-gradient(145deg,#7f1d1d,#dc2626 58%,#7f1d1d);color:#fff;text-align:center;box-shadow:0 0 0 6px rgba(250,204,21,.18),0 12px 55px rgba(0,0,0,.72);animation:tradePulse .55s steps(2,start) infinite}
+.trade-taken-kicker{font-size:13px;letter-spacing:.18em;font-weight:800;color:#fde68a}
+.trade-taken-title{font-size:clamp(30px,7vw,54px);line-height:1.08;font-weight:950;letter-spacing:.035em;margin:7px 0 13px;text-shadow:0 3px 10px rgba(0,0,0,.45)}
+#tradeTakenDetails{font-size:clamp(15px,3.5vw,20px);font-weight:700;line-height:1.45;overflow-wrap:anywhere}
+.trade-taken-vol{display:flex;align-items:center;gap:10px;justify-content:center;margin:18px auto 14px;font-size:12px;font-weight:800}
+.trade-taken-vol input{width:min(220px,42vw);accent-color:#facc15}
+.trade-taken-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.trade-taken-actions .btn{height:42px;padding:0 18px;font-size:14px;font-weight:900;color:#211300;background:#facc15;border-color:#facc15}
+.trade-taken-actions .btn.primary{background:#fff;color:#991b1b;border-color:#fff}
+#tradeTakenEnable[hidden]{display:none}
+@keyframes tradePulse{50%{filter:brightness(1.5);transform:scale(1.015)}}
 @keyframes flash{50%{filter:brightness(1.5)}}
 #bSigClose{display:none}
 .split{position:absolute;top:0;bottom:0;width:10px;z-index:5;cursor:col-resize;touch-action:none}
@@ -95,6 +108,13 @@ body.light #sig .poc{color:#a16207}
 #sig .drow.on{background:rgba(59,108,255,.14)}
 #sig .drow.wk{opacity:.6}
 #sig .note{color:var(--text);font-size:11px;margin-top:6px}
+#twkPanel{position:fixed;left:max(10px,env(safe-area-inset-left));right:auto;top:auto;bottom:max(30px,env(safe-area-inset-bottom));z-index:3;display:none;width:min(232px,calc(100vw - 20px));max-height:min(36vh,280px);overflow:auto;pointer-events:auto;border:1px solid var(--line);border-radius:7px;background:rgba(19,24,36,.94);box-shadow:0 4px 16px rgba(0,0,0,.24)}
+body.light #twkPanel{background:rgba(243,245,249,.96);box-shadow:0 6px 24px rgba(0,0,0,.12)}
+#twkTable table{border-collapse:collapse;table-layout:fixed;width:100%;font-size:7px;line-height:1.05}
+#twkTable th,#twkTable td{padding:1px 2px;border:1px solid var(--line);white-space:nowrap}
+#twkTable th{background:#2a2e39;color:#fff;font-weight:600;text-align:left}
+#twkTable td{color:#fff}
+#twkTable .twk-note{padding:3px 4px;color:var(--text);font-size:7px;line-height:1.15;white-space:normal}
 @media (max-width: 720px){.edge{width:24px;height:66px}}
 @media (max-width: 720px){
   body.guide{--side:0px}
@@ -107,6 +127,7 @@ body.light #sig .poc{color:#a16207}
   #panelHead select{max-width:118px}
   #status{left:8px;right:8px;font-size:10px}
   #help{left:6px;right:6px;top:88px;max-width:none;max-height:calc(100% - 140px);overflow-y:auto}
+  #twkPanel{left:max(6px,env(safe-area-inset-left));right:auto;top:auto;bottom:max(30px,env(safe-area-inset-bottom));width:min(220px,calc(100vw - 12px));max-height:min(38vh,240px)}
   #sig{width:min(88vw,336px);border-right:0;box-shadow:0 0 26px rgba(0,0,0,.55)}
   #bSigClose{display:inline-flex;float:right;margin:0 0 8px 8px}
   #alert{top:auto;bottom:56px}
@@ -120,14 +141,17 @@ body.light #sig .poc{color:#a16207}
   <div class="chip" id="chip"><b id="cDate">--</b>·<span id="cDte">-- DTE</span>·<span id="cN">-- opts</span><span id="cSum" class="sum">Σ --</span></div>
   <div class="seg" id="tfs"></div>
   <div class="seg" id="daySeg" title="Go to a past trading day (18:00 to 18:00 New York). Arrow keys left / right: day before / after"><button id="dPrev" title="Day before (left arrow key)">‹</button><select id="day"><option value="live">Live</option></select><button id="dNext" title="Day after (right arrow key)">›</button></div>
+  <button class="btn" id="bPast" title="Show or hide previous days' chart drawings. Today's zones and profile remain controlled by Zones and Profile">Past days on</button>
   <button class="btn" id="bSignals" title="Guide panel on the left: enter or not, buy and sell zones, absorption, price alerts">Guide</button>
   <button class="btn" id="bZones" title="Buy and sell zones: swing candles of the 30-minute and 1-hour charts">Zones</button>
   <button class="btn" id="bAbs" title="Absorption areas: heavy one-sided buying or selling that price did not follow">Absorption</button>
+  <button class="btn" id="bTwk" title="Trade with Kareena Tracker: Smart Trail, LONG/SHORT signals, volume bubbles, pivot-based stops, position boxes and the score table">TWK off</button>
   <button class="btn" id="bProfile" title="Volume by price since 18:00 New York">Profile</button>
   <button class="btn" id="bGld" title="Lines from GLD options (call wall, put wall, zero gamma). Context only, not used by the guide">GLD lines</button>
   <button class="btn" id="bAlarm" title="Siren, banner and flashing tab title when a signal appears. Click to switch on (plays a test) or off">Alarm</button>
-  <button class="btn" id="bMt5" title="Send each new signal to MetaTrader 5 through the local agent. The EA trades it on a demo account only">MT5 off</button>
-  <button class="btn" id="bPx" title="Price level of the page: spot gold (gold-api.com), or your broker's (the bid of the gold chart in MetaTrader 5: needs start_gex.bat running and GexSignalTrader 1.01 attached to that chart)">Price: spot</button>
+  <button class="btn" id="bTradeTest" title="Hear the separate trade-taken ringtone and popup; this does not place an order">Trade sound test</button>
+  <button class="btn" id="bMt5" title="Arm automatic TWK trades only: new closed 15-minute TWK signal, ADX above 20, fixed 0.01 lots. Requires the local agent and the GexSignalTrader EA on a demo account">TWK auto off</button>
+  <button class="btn" id="bPx" title="Price level of the page: spot gold (gold-api.com), or your broker's (the bid of the gold chart in MetaTrader 5: needs start_gex.bat running and GexSignalTrader 1.08 attached to that chart)">Price: spot</button>
   <button class="btn" id="bReset" title="Fit the chart again (or double-click it)">Fit</button>
   <button class="btn" id="bFull" title="Hide both side panels and fill the screen. Esc or this button again to leave">Full screen</button>
   <button class="btn" id="bLight">Light</button>
@@ -151,13 +175,16 @@ body.light #sig .poc{color:#a16207}
   <p><i>These option levels are GLD's.</i> They are not the COMEX gold-options levels that paid GEX tools show, and on 6 Nov 2026 the two did not agree (GLD was call-heavy where such a tool showed its put wall). They are context only: signals and MT5 trades do not use them.</p>
   <p><i>Zones</i> (boxes): red = sell zone, the candle that made a swing high on the 30-minute or 1-hour chart; green = buy zone, the candle that made a swing low. A zone turns pale once price has left it and come back, and disappears when a candle of its timeframe closes through it.</p>
   <p><i>Absorption</i> (thin bands): over 5 minutes one side traded much more than usual and price still did not go its way. Blue = buyers absorbed; pink = sellers absorbed. Measured from the buy and sell volume of Binance gold futures, the same tape the heatmap page shows. A band disappears when a 1-minute candle closes through it, or after 8 hours.</p>
+  <p><i>TWK</i> (button): toggles the trade_with_kareena Tracker overlay and its multi-timeframe volume / R-Factor table. It uses this page's candles and selected timeframe, so values can differ from TradingView's feed. NSE:NIFTY is not available as a benchmark here, so Sector Strength is neutral (0). Its buy / sell rows classify volume by candle direction, and its "OI / Derivatives" formula uses volume change, not open-interest data; bubbles mark relative candle volume, not participant identity. The on / off choice is saved in this browser.</p>
+  <p><i>TWK live position and alerts</i>: the latest valid 1:2 position box extends through the current bar and stays until a new valid LONG / SHORT replaces it. A confirmed 15-minute Smart Trail flip uses the page's Alarm button; this alert works even when the TWK overlay is hidden. With MT5 on, a new closed 15-minute signal with ADX(14,14) above 20 opens 0.01 lots. An opposite qualifying signal closes the open TWK trade and opens the new side; same-direction signals do not add. Stop, target, or an opposite qualifying signal exits the trade. Old signals are not replayed when the page opens.</p>
+  <p><i>Trade taken alert</i>: after MT5 confirms an order as placed, a large popup appears and a separate call-style ringtone repeats until you silence it or press Esc. The popup has its own saved volume slider. Use <i>Trade sound test</i> to hear it without sending an order. A signal alone does not trigger this alert.</p>
   <p><i>Profile</i>: volume traded at each price since 18:00 New York. Yellow = POC, the busiest price. Purple = value area, where 70 % of the volume traded. Built on fixed 0.5 $ rows from closed 1-minute candles, so zooming does not move POC, VAH or VAL, and the guide uses the same POC. When the POC moves 2 $ or more and stays there for two minutes, a "POC SHIFTED" banner appears (with a tone when the alarm is on); switch it off under Price alerts in the guide.</p>
-  <p><i>Past days</i> (gold and crypto): the chart holds the last 30 trading days (18:00 to 18:00 New York) of Binance 1-minute candles, kept in this browser; a day older than 30 is deleted. A dashed line marks where each day starts. The yellow step line is how that day's POC moved, the thin purple lines its value area; the dots mark the POC at the end of Asia (03:00 New York), the London morning (08:30) and the close (17:00), each from the candles up to then only. Past buy / sell zones are drawn from the swing candle to the moment a candle closed through them (or a newer zone took over). Go back with the day list at the top (or the arrow keys), by dragging the chart, or with the scroll bar under the time scale. The <i>Days</i> tab of the left panel lists the day's numbers, its POC shifts and its zones, the last 30 days in one list, and downloads them as CSV. Prices are moved to spot with today's futures-to-spot shift, so an older day can sit 1-2 $ off the spot price it had then. Forex has no history: Kraken gives 12 hours only.</p>
+  <p><i>Past days</i> (gold and crypto): the chart holds the last 30 trading days (18:00 to 18:00 New York) of Binance 1-minute candles, kept in this browser; a day older than 30 is deleted. The <i>Past days on / off</i> button hides or shows previous days' POC, value-area paths, expired zone history and day-start lines. Active buy / sell zones stay visible even if they formed on an earlier day. A dashed line marks where each day starts. The yellow step line is how that day's POC moved, the thin purple lines its value area; the dots mark the POC at the end of Asia (03:00 New York), the London morning (08:30) and the close (17:00), each from the candles up to then only. Past buy / sell zones are drawn from the swing candle to the moment a candle closed through them (or a newer zone took over). Go back with the day list at the top (or the arrow keys), by dragging the chart, or with the scroll bar under the time scale. The <i>Days</i> tab of the left panel lists the day's numbers, its POC shifts and its zones, the last 30 days in one list, and downloads them as CSV. Prices are moved to spot with today's futures-to-spot shift, so an older day can sit 1-2 $ off the spot price it had then. Forex has no history: Kraken gives 12 hours only.</p>
   <p><i>Guide</i> (left): the top box says what to do now. The stop of an idea is 1 x the 5-minute ATR beyond the zone or the turning candle, at least 2 $ on gold. WAIT = price is between zones. GET READY = price is at a zone, no entry yet. BUY / SELL = a 5-minute candle went into the zone and closed back out, and the checks agree. NO: SKIP = it turned, but the target is too close, the stop too wide or too little agrees. The checklist shows each point with a tick or a cross. The plan under a zone is rough: the real entry is the close of the candle that turns.</p>
   <p><i>Price alerts</i>: type a price in the guide, hold Alt and click the chart, or right-click the chart. An orange line appears and the alarm rings once when price gets there. Right-click the line to remove it. The price is this page's price, which can differ a little from your broker's.</p>
   <p><i>Alarm</i>: a new BUY or SELL sounds a 30-second siren (high and fast for buy, low and slow for sell), shows a flashing banner and flashes the tab title until you click the banner. A price alert sounds a fast trill, and reaching a zone a short tone. Sound only works after one click on the page, and its loudness is set by the PC volume. Keep this tab open in its own window: a hidden or sleeping tab checks late or not at all.</p>
-  <p><i>MT5</i>: with MT5 on, each new signal is passed to the GexSignalTrader EA in MetaTrader 5, which places the trade with the same stop and target distance, closes it after 4 hours, and reports back here. It needs start_gex.bat running, the EA attached to the gold chart and Algo Trading on. The EA refuses to trade on a real account.</p>
-  <p><i>Price</i> (button): the candles are Binance's gold future, moved down to a spot price. <i>Price: gold-api</i> uses gold-api.com, the only free spot price a browser may read; it runs about 90 seconds late and can sit 1-2 $ off a broker. With start_gex.bat running, a click on the button takes the price from this PC instead: your MetaTrader 5 gold chart's bid (GexSignalTrader 1.01 attached; button shows the symbol), or otherwise Swissquote's live spot (button shows Swissquote), both within a few tenths of your broker or TradingView. Without the agent, <i>match it</i> under Price alerts takes the price your own chart shows and keeps that difference for 8 hours. The candles keep Binance's shape and volume.</p>
+  <p><i>TWK auto</i>: when enabled, only a new, closed 15-minute TWK LONG / SHORT signal with ADX(14,14) above 20 can be sent to MetaTrader 5, at fixed 0.01 lots. GEX guide signals remain visible but never place orders. The local agent and GexSignalTrader EA must be running on a demo account with Algo Trading on. The EA reports order results here. Old signals are not replayed when the page opens.</p>
+  <p><i>Price</i> (button): the candles are Binance's gold future, moved down to a spot price. <i>Price: gold-api</i> uses gold-api.com, the only free spot price a browser may read; it runs about 90 seconds late and can sit 1-2 $ off a broker. With start_gex.bat running, a click on the button takes the price from this PC instead: your MetaTrader 5 gold chart's bid (GexSignalTrader 1.08 attached; button shows the symbol), or otherwise Swissquote's live spot (button shows Swissquote), both within a few tenths of your broker or TradingView. Without the agent, <i>match it</i> under Price alerts takes the price your own chart shows and keeps that difference for 8 hours. The candles keep Binance's shape and volume.</p>
   <p><i>Market hours</i> (gold): gold trades Sunday 18:00 to Friday 17:00 New York, with a break from 17:00 to 18:00 every day. Binance's gold future also trades in between; those candles are left out everywhere, the weekend shows as a grey band, and while gold is closed the page says MARKET CLOSED and does nothing. Holidays are not known to the page.</p>
   <p><i>Panels</i>: drag the inner edge of the guide (left) or the option bars (right) to make it wider or narrower; drag it most of the way in and let go to minimise it. A minimised panel leaves an arrow tab at the screen edge: click it, or drag it back out, to open the panel again. A click on an arrow tab opens or closes its panel; a double-click on the edge restores the default width. <i>Full screen</i> hides both and fills the screen; Esc or the button again puts them back. A hidden guide still records ideas, sounds the alarm, draws the arrows and sends to MT5: switch those with the Alarm and MT5 buttons.</p>
   <p>Mouse: wheel on the chart zooms time, wheel on the price scale or bars (or Shift + wheel) zooms price, drag moves, double-click or Fit fits the candles (levels outside the screen are then pinned to its top or bottom edge with an arrow), Alt + click or right-click sets a price alert. On a phone: one finger pans, two fingers pinch to zoom time, double-tap fits; the Guide opens over the chart and closes with its Close button.</p>
@@ -185,14 +212,28 @@ body.light #sig .poc{color:#a16207}
   </div>
 </div>
 <div id="alert"></div>
+<div id="tradeTaken" role="alertdialog" aria-modal="true" aria-live="assertive" aria-labelledby="tradeTakenTitle">
+  <div class="trade-taken-card">
+    <div class="trade-taken-kicker" id="tradeTakenKicker">MT5 CONFIRMED THE ORDER</div>
+    <div class="trade-taken-title" id="tradeTakenTitle">TRADE TAKEN</div>
+    <div id="tradeTakenDetails"></div>
+    <label class="trade-taken-vol" for="tradeTakenVolume">TRADE ALARM VOLUME <input id="tradeTakenVolume" type="range" min="0" max="100" step="1"><span id="tradeTakenVolumeValue">100%</span></label>
+    <div class="trade-taken-actions">
+      <button class="btn" id="tradeTakenEnable" type="button" hidden>ENABLE SOUND</button>
+      <button class="btn primary" id="tradeTakenSilence" type="button">SILENCE ALARM</button>
+    </div>
+  </div>
+</div>
 <div class="split" id="splitL" title="Drag to resize the guide, most of the way in to minimise it. Double-click: default width"></div>
 <div class="split" id="splitR" title="Drag to resize the option bars, most of the way in to minimise them. Double-click: default width"></div>
 <button class="edge" id="tabL"></button>
 <button class="edge" id="tabR"></button>
 <div id="tip"></div>
 <div id="status"></div>
+<div id="twkPanel"><div id="twkTable"></div></div>
 
 <script src="gex_engine.js"></script>
+<script src="twk_tracker.js"></script>
 <script>
 'use strict';
 const E = GexEngine, $ = id => document.getElementById(id);
@@ -218,13 +259,15 @@ const store = {
   set(k, v) { try { localStorage.setItem('gex.' + k, JSON.stringify(v)); } catch (e) { /* private window: keep the setting for this visit only */ } },
 };
 const S = { tf: store.get('tf', '5m'), metric: store.get('metric', 'net'), filter: store.get('filter', 'all'),
-            zones: store.get('zones', true), profile: store.get('profile', true), light: store.get('light', false), signals: store.get('signals', window.innerWidth > 720), alarm: store.get('alarm', true), mt5: store.get('mt5', false),
-            abs: store.get('abs', true), gld: store.get('gld', false), zoneAlert: store.get('zoneAlert', true), pocAlert: store.get('pocAlert', true), bars: store.get('bars', true), guideW: store.get('guideW', 336), barsW: store.get('barsW', 0), balance: store.get('balance', 200),
+            zones: store.get('zones', true), profile: store.get('profile', true), light: store.get('light', false), signals: store.get('signals', window.innerWidth > 720), alarm: store.get('alarm', true), mt5: store.get('twkAuto', false), tradeVolume: store.get('tradeVolume', 1),
+            abs: store.get('abs', true), twk: store.get('twk', false), pastDrawings: store.get('pastDrawings', true), gld: store.get('gld', false), zoneAlert: store.get('zoneAlert', true), pocAlert: store.get('pocAlert', true), bars: store.get('bars', true), guideW: store.get('guideW', 336), barsW: store.get('barsW', 0), balance: store.get('balance', 200),
             tab: store.get('tab', 'guide'), bpx: store.get('bpx', location.protocol === 'file:') };
 if (S.tab !== 'days') S.tab = 'guide';
 if (!TF[S.tf]) S.tf = '5m';
 if (!METRICS[S.metric]) S.metric = 'net';
 if (!(S.balance > 0)) S.balance = 200;
+if (!Number.isFinite(S.tradeVolume)) S.tradeVolume = 1;
+S.tradeVolume = Math.max(0, Math.min(1, S.tradeVolume));
 if (!(S.guideW >= 240)) S.guideW = 336;
 if (!(S.barsW >= 0)) S.barsW = 0;
 
@@ -762,9 +805,40 @@ function track() {
   if (changed) store.set(sk('siglog'), LOG);
 }
 let absAt = 0;
+const TWK_ALERT_TF = 15 * 60e3;
+let twkAlertLastBar = 0, twkAlertLastMinute = 0;
+function checkTwk15mAlarm() {
+  if (D.m1.length < 2) return;
+  const lastMinute = D.m1[D.m1.length - 2];
+  if (lastMinute.t === twkAlertLastMinute) return;
+  twkAlertLastMinute = lastMinute.t;
+  const closedAt = lastMinute.t + 60e3;
+  if (twkAlertLastBar) {
+    const offset = closedAt % TWK_ALERT_TF;
+    const expected = Math.floor(closedAt / TWK_ALERT_TF) * TWK_ALERT_TF - TWK_ALERT_TF;
+    if (offset > 2 * 60e3 || expected <= twkAlertLastBar) return;
+  }
+  const m1 = allM1(true);
+  if (m1.length < 15) return;
+  const countByBar = new Map();
+  for (const k of m1) {
+    const t = Math.floor(k.t / TWK_ALERT_TF) * TWK_ALERT_TF;
+    countByBar.set(t, (countByBar.get(t) || 0) + 1);
+  }
+  const bars = E.aggregate(m1, TWK_ALERT_TF).filter(k => countByBar.get(k.t) === 15 && k.t + TWK_ALERT_TF <= closedAt);
+  if (!bars.length) return;
+  const last = bars[bars.length - 1];
+  if (!twkAlertLastBar) { twkAlertLastBar = last.t; return; }   // baseline: don't sound for old history at startup
+  if (last.t <= twkAlertLastBar) return;
+  twkAlertLastBar = last.t;
+  const series = TWKTracker.chartSeries(bars), i = bars.length - 1;
+  if (series.long[i]) { alertTwk15m('long', bars[i]); sendTwk15mTrade('long', bars[i], series); }
+  else if (series.short[i]) { alertTwk15m('short', bars[i]); sendTwk15mTrade('short', bars[i], series); }
+}
 function evaluate() {
   updateProfile();
   if (!D.m1Full || D.m1.length < 2) return;
+  checkTwk15mAlarm();
   track();
   const closed = D.m1[D.m1.length - 2].t;
   if (closed !== absAt) { absAt = closed; Ab = E.absorption(D.m1.slice(0, -1)); }      // once a minute, when a candle has closed
@@ -921,7 +995,7 @@ function drawSig() {
     `<div class="plan"><span>POC ${Pf ? gp(Pf.poc) : '--'}${POC.last ? ` · moved from ${gp(POC.last.from)} at ${hhmm(POC.last.t)}` : ''}. Banner and tone when it shifts ${dd(minD(), true)} or more:</span> <a data-act="pocAlert">${S.pocAlert ? 'on' : 'off'}</a></div>`);
 
   const done = LOG.filter(s => s.result !== 'open' && s.result !== 'unknown'), count = k => done.filter(s => s.result === k).length;
-  put('gFoot', (S.mt5 ? `<div class="mt5 ${MT.ok ? 'pos' : 'neg'}">MT5: ${MT.text}${MT.ok ? ' <a data-act="mt5Test">send a test trade</a>' : ''}</div>` : '') +
+  put('gFoot', (S.mt5 ? `<div class="mt5 ${MT.ok ? 'pos' : 'neg'}">TWK auto (MT5): ${MT.text}${MT.ok ? ' · GEX orders disabled' : ''}</div>` : '') +
     (done.length ? `Ideas so far: ${done.length} finished · ${count('target')} target · ${count('stop')} stop · ${count('expired')} timed out · total ${signed(done.reduce((a, s) => a + s.r, 0), 1)} x risk <a data-act="clear">clear</a>`
                  : 'No finished ideas yet. Each BUY or SELL is counted here when it ends.') +
     '<br>This guide is a checklist that keeps you out of poor spots. It does not predict. ' +
@@ -1137,6 +1211,9 @@ function alertPoc(x) {
 // A new signal sounds a siren, shows a flashing banner and flashes the tab title until it is clicked.
 // Browsers only allow sound after one click or key press on the page, so the first click anywhere arms it.
 let audio = null, sirenOsc = null, alerting = false, blink = null;
+const tradeAudio = new Audio('trade_taken.wav');
+tradeAudio.loop = true; tradeAudio.preload = 'auto';
+let tradeAlertOpen = false;
 const armed = () => !!audio && audio.state === 'running';
 function arm() {
   try {
@@ -1171,12 +1248,56 @@ function banner(cls, title, text) {
   blink = setInterval(() => { on = !on; document.title = on ? `>>> ${title} <<<` : TITLE; }, 700);
 }
 function dismiss() { silence(); alerting = false; clearInterval(blink); $('alert').style.display = 'none'; drawSig(); }
+function stopTradeAudio() { tradeAudio.pause(); try { tradeAudio.currentTime = 0; } catch (e) { /* media metadata is not loaded yet */ } }
+async function playTradeAudio() {
+  tradeAudio.volume = S.tradeVolume;
+  try { await tradeAudio.play(); return true; } catch (e) { return false; }
+}
+function showTradeTaken(result, test = false) {
+  tradeAlertOpen = true;
+  $('tradeTakenKicker').textContent = test ? 'SOUND TEST · NO ORDER SENT' : 'MT5 CONFIRMED THE ORDER';
+  $('tradeTakenTitle').textContent = test ? 'TRADE ALERT TEST' : 'TRADE TAKEN';
+  $('tradeTakenDetails').textContent = result.text || 'The MT5 EA confirmed the order.';
+  $('tradeTaken').classList.add('show');
+  $('tradeTakenEnable').hidden = true;
+  stopTradeAudio();
+  playTradeAudio().then(playing => {
+    if (tradeAlertOpen) $('tradeTakenEnable').hidden = playing;
+  });
+}
+function dismissTradeTaken() {
+  tradeAlertOpen = false;
+  stopTradeAudio();
+  $('tradeTaken').classList.remove('show');
+}
 function alertSignal(s) {
   if (!S.alarm) return;
   const up = s.side === 'buy';
   const loud = siren(30, up ? 2000 : 1100, up ? 1500 : 800, up ? 0.18 : 0.35);       // buy: high and fast; sell: low and slow
   banner(s.side, `${s.side.toUpperCase()} SIGNAL`, `${INS.name} · entry ${gp(s.entry)} · stop ${gp(s.stop)} · target ${gp(s.target)} · score ${s.score}/100` +
          (loud ? '' : ' · sound is blocked until you click the page once'));
+}
+function alertTwk15m(side, candle) {
+  if (!S.alarm) return;
+  const up = side === 'long';
+  const loud = siren(30, up ? 2000 : 1100, up ? 1500 : 800, up ? 0.18 : 0.35);
+  const close = (candle.c - D.basis).toFixed(INS.dec);
+  banner(up ? 'buy' : 'sell', `TWK 15M ${up ? 'LONG' : 'SHORT'}`,
+    `${INS.name} · close ${close} · candle closed ${hhmm(candle.t + TWK_ALERT_TF)}` + soundNote(loud));
+}
+function sendTwk15mTrade(side, candle, series) {
+  if (!INS.mt5 || !S.mt5) return;
+  if (MT.ready === true && MT.dryrun) { mt5State(false, 'TWK order not sent: EA is in dry run'); return; }
+  const i = series.c.indexOf(candle), p = series.position;
+  if (!p || p.i !== i) { mt5State(false, 'TWK signal has no valid stop distance; order not sent'); return; }
+  const adx = series.adx && series.adx[i];
+  if (!(Number.isFinite(adx) && adx > 20)) {
+    MT.text = `TWK order skipped: 15m ADX ${Number.isFinite(adx) ? adx.toFixed(1) : 'n/a'} must be >20`;
+    syncMt5(); drawSig(); return;
+  }
+  const score = series.rFactor[i];
+  sendToMt5({ t: Date.now(), side: side === 'long' ? 'buy' : 'sell', entry: p.entry, stop: p.stop, target: p.target,
+              score: Number.isFinite(score) ? Math.round(score) : 0, lots: 0.01, source: 'TWK 15m', adx });
 }
 function alertResult(s) {
   if (!S.alarm) return;
@@ -1199,54 +1320,152 @@ function syncAlarm() {
 }
 
 // ------------------------------------------------------------------ MetaTrader 5
-// With "MT5 on", each new signal goes to the local agent (gex_agent.cjs), which hands it to the
-// GexSignalTrader EA in MT5. The agent's port and token come from gex_agent_info.js, written by the agent.
+// With "TWK auto on", only a new qualifying TWK 15m signal goes to the local agent (gex_agent.cjs),
+// which hands it to the TWK-only GexSignalTrader EA in MT5. GEX guide signals stay visual-only.
+// The agent's port and token come from gex_agent_info.js, written by the agent.
 let AG = null;
-const MT = { ok: false, text: 'off' };
-function mt5State(ok, text) { MT.ok = ok; MT.text = text; syncMt5(); drawSig(); }
+const MT = { ok: false, text: 'off', dryrun: false, ready: null, waitingId: 0 };
+const mt5Queue = [];
+let agentLoading = null, mt5Sending = false, mt5RetryTimer = 0, mt5WaitPollTimer = 0;
+let mt5StatusInitialized = false, lastMt5StatusKey = '';
+function mt5State(ok, text, dryrun) { MT.ok = ok; MT.text = text; if (dryrun !== undefined) MT.dryrun = dryrun; syncMt5(); drawSig(); }
+function scheduleMt5WaitPoll(delay = 750) {
+  if (mt5WaitPollTimer || !MT.waitingId) return;
+  mt5WaitPollTimer = setTimeout(() => {
+    mt5WaitPollTimer = 0;
+    if (MT.waitingId && S.mt5) pollMt5();
+  }, delay);
+}
+function retryMt5Queue(delay = 2500) {
+  if (mt5RetryTimer || !mt5Queue.length) return;
+  mt5RetryTimer = setTimeout(() => { mt5RetryTimer = 0; drainMt5Queue(); }, delay);
+}
 function loadAgent() {
-  const s = document.createElement('script');
-  s.src = 'gex_agent_info.js?t=' + Date.now();
-  s.onload = () => { s.remove(); AG = window.GEX_AGENT || null; if (AG) pollMt5(); };
-  s.onerror = () => { s.remove(); AG = null; mt5State(false, 'the agent is not running: start start_gex.bat'); };
-  document.head.appendChild(s);
+  if (agentLoading) return agentLoading;
+  agentLoading = new Promise(resolve => {
+    const s = document.createElement('script');
+    s.src = 'gex_agent_info.js?t=' + Date.now();
+    s.onload = () => {
+      s.remove(); AG = window.GEX_AGENT || null;
+      if (AG) { pollMt5(); resolve(AG); }
+      else { mt5State(false, 'the MT5 agent information is invalid'); resolve(null); }
+    };
+    s.onerror = () => {
+      s.remove(); AG = null; MT.ready = null;
+      mt5State(false, 'the agent is not running: start start_gex.bat');
+      retryMt5Queue(); resolve(null);
+    };
+    document.head.appendChild(s);
+  }).finally(() => { agentLoading = null; });
+  return agentLoading;
 }
 async function pollMt5() {
   if (!INS.mt5) return;                                        // the EA sits on the gold chart and trades that symbol only
-  if (!S.mt5) return mt5State(false, 'off');
-  if (!AG) return loadAgent();
+  if (!S.mt5) { MT.ready = false; mt5Queue.length = 0; return mt5State(false, 'off'); }
+  if (!AG) { MT.ready = null; return loadAgent(); }
   try {
-    const j = await (await fetch(`http://127.0.0.1:${AG.port}/status?token=${AG.token}`, { cache: 'no-store' })).json();
+    const response = await fetch(`http://127.0.0.1:${AG.port}/status?token=${AG.token}`, { cache: 'no-store' });
+    const j = await response.json();
+    if (!response.ok) throw new Error(j.error || `HTTP ${response.status}`);
     if (j.error) { AG = null; return loadAgent(); }          // the agent was restarted: read its new token
-    const ea = j.ea, last = j.last && Date.now() - j.last.time < 12 * 3600e3 ? ' · last: ' + j.last.text : '';
+    if (!mt5StatusInitialized) {
+      mt5StatusInitialized = true;
+      lastMt5StatusKey = j.last ? `${j.last.id}:${j.last.state}:${j.last.time}` : '';
+    } else if (j.last) {
+      const statusKey = `${j.last.id}:${j.last.state}:${j.last.time}`;
+      if (statusKey !== lastMt5StatusKey && j.last.state === 'placed')
+        showTradeTaken(j.last);                               // new EA-confirmed order, never a chart signal
+      lastMt5StatusKey = statusKey;
+    }
+    if (MT.waitingId && j.last && Number(j.last.id) === Number(MT.waitingId) && j.last.state !== 'ready') MT.waitingId = 0;
+    const ea = j.ea, last = j.last && j.last.state !== 'ready' && Date.now() - j.last.time < 12 * 3600e3 ? ' · last: ' + j.last.text : '';
     if (ea.alive && ea.balance > 0 && ea.balance !== S.balance) { S.balance = ea.balance; store.set('balance', ea.balance); }   // the stop-size check uses the real balance
-    if (!ea.alive) mt5State(false, 'the EA is not attached: drag GexSignalTrader onto the gold chart in MT5');
-    else if (ea.mode !== 'demo') mt5State(false, 'MT5 is on a REAL account: the EA refuses to trade');
-    else if (!ea.algo && !ea.dryrun) mt5State(false, 'Algo Trading is switched off in MT5');
-    else mt5State(true, `ready, demo account, ${ea.symbol}, balance ${ea.balance.toLocaleString('en-US')}${ea.dryrun ? ' (dry run: no orders)' : ''}${last}`);
-  } catch (e) { AG = null; mt5State(false, 'the agent is not running: start start_gex.bat'); }
+    if (!ea.alive) { MT.ready = false; mt5State(false, 'the EA is not attached: drag GexSignalTrader onto the gold chart in MT5'); }
+    else if (ea.mode !== 'demo') { MT.ready = false; mt5State(false, 'MT5 is on a REAL account: the EA refuses to trade'); }
+    else if (!ea.algo && !ea.dryrun) { MT.ready = false; mt5State(false, 'Algo Trading is switched off in MT5'); }
+    else { MT.ready = true; mt5State(true, `ready, demo account, ${ea.symbol}, balance ${ea.balance.toLocaleString('en-US')}${ea.dryrun ? ' (dry run: no orders)' : ''}${last}`, ea.dryrun); }
+    drainMt5Queue();
+    scheduleMt5WaitPoll();
+  } catch (e) {
+    AG = null; MT.ready = null; mt5State(false, 'the agent is not running: start start_gex.bat');
+    retryMt5Queue();
+    scheduleMt5WaitPoll(1500);
+  }
 }
-// s = a stored signal, or { test: 'buy' } for a small test trade. Prices go out as XAUUSD prices;
-// the EA only uses the stop and target distances, measured from its own broker price.
-async function sendToMt5(s) {
-  if (!INS.mt5 || !S.mt5 || !AG) return;
+// Only TWK 15m signals are sent. Prices go out as XAUUSD prices; the EA only uses the stop and target
+// distances, measured from its own broker price.
+function signalBody(s) {
   const b = D.basis, body = s.test ? { test: s.test }
-    : { t: s.t, side: s.side, entry: +(s.entry - b).toFixed(2), stop: +(s.stop - b).toFixed(2), target: +(s.target - b).toFixed(2), score: s.score };
+    : { t: s.t, side: s.side, entry: +(s.entry - b).toFixed(2), stop: +(s.stop - b).toFixed(2), target: +(s.target - b).toFixed(2),
+        score: s.score, ...(s.lots > 0 ? { lots: s.lots } : {}), ...(s.source ? { source: s.source } : {}), ...(Number.isFinite(s.adx) ? { adx: +s.adx.toFixed(2) } : {}) };
+  return body;
+}
+async function postMt5(body) {
+  const response = await fetch(`http://127.0.0.1:${AG.port}/signal`, { method: 'POST', headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ token: AG.token, ...body }) });
+  const j = await response.json();
+  return { response, result: j };
+}
+async function drainMt5Queue() {
+  if (mt5Sending || !mt5Queue.length) return;
+  if (!INS.mt5 || !S.mt5) { mt5Queue.length = 0; return; }
+  const task = mt5Queue[0];
+  if (Date.now() - task.queuedAt > 120e3) {
+    mt5Queue.shift();
+    mt5State(false, 'signal expired while the MT5 agent was unavailable; no order was sent');
+    return retryMt5Queue(0);
+  }
+  if (!AG || MT.ready === null) {
+    if (!AG) loadAgent(); else pollMt5();
+    return retryMt5Queue();
+  }
+  if (!MT.ready) {
+    mt5Queue.shift();
+    mt5State(false, 'signal not sent: ' + MT.text);
+    return retryMt5Queue(0);
+  }
+  mt5Sending = true;
   try {
-    const j = await (await fetch(`http://127.0.0.1:${AG.port}/signal`, { method: 'POST', headers: { 'Content-Type': 'text/plain' },
-                                 body: JSON.stringify({ token: AG.token, ...body }) })).json();
-    if (!j.ok) mt5State(false, 'signal not sent: ' + j.error);
-  } catch (e) { mt5State(false, 'signal not sent: the agent is not running'); }
-  setTimeout(pollMt5, 2500);                                 // pick up the EA's answer
+    const { response, result } = await postMt5(task.body);
+    if (result.error === 'wrong token') {
+      AG = null; MT.ready = null;
+      mt5State(false, 'agent restarted; reconnecting before sending the signal');
+      loadAgent();
+      return;
+    }
+    if (!response.ok || !result.ok) {
+      mt5Queue.shift();
+      mt5State(false, 'signal not sent: ' + (result.error || `HTTP ${response.status}`));
+      return;
+    }
+    mt5Queue.shift(); MT.waitingId = task.id;
+    mt5State(true, 'signal delivered to the agent; waiting for the EA response', MT.dryrun);
+    setTimeout(pollMt5, 800);                           // collect the EA's result promptly; keep polling while this signal is pending
+  } catch (e) {
+    AG = null; MT.ready = null;
+    mt5State(false, 'agent connection lost; holding the signal for up to 120 seconds');
+  } finally {
+    mt5Sending = false;
+    retryMt5Queue();
+  }
+}
+function sendToMt5(s) {
+  if (!INS.mt5 || !S.mt5) return;
+  if (s.test || s.source !== 'TWK 15m') return;
+  const body = signalBody(s), id = Number(body.t);
+  if (!Number.isFinite(id) || id <= 0) return mt5State(false, 'signal not sent: invalid signal ID');
+  if (MT.waitingId === id || mt5Queue.some(q => q.id === id)) return;
+  mt5Queue.push({ id, body, queuedAt: Date.now() });
+  drainMt5Queue();
 }
 function syncMt5() {
   const b = $('bMt5');
   b.classList.toggle('on', S.mt5 && MT.ok); b.classList.toggle('warn', S.mt5 && !MT.ok);
-  b.textContent = S.mt5 ? 'MT5 on' : 'MT5 off';
+  b.textContent = S.mt5 ? 'TWK auto on' : 'TWK auto off';
 }
 
 // ------------------------------------------------------------------ broker price (MT5)
-// "Price: MT5" = the price level is the bid of the gold chart in MetaTrader 5 (GexSignalTrader 1.01 writes it
+// "Price: MT5" = the price level is the bid of the gold chart in MetaTrader 5 (GexSignalTrader 1.08 writes it
 // every second, the agent serves it on /price) instead of gold-api.com's spot: the candles (Binance futures) are
 // moved to the broker's level, so the price, zones and alerts on the page are the MT5 chart's. Only the level is
 // the broker's: the candles keep Binance's shape and volume (a broker has no real volume), so a candle can still
@@ -1269,7 +1488,7 @@ async function loadBroker() {
       useRef(j.bid, 'mt5');
     } else if (sp.ok && sane(sp.bid) && fresh) {
       Object.assign(BK, { ok: true, src: 'sq', at: Date.now(), bid: sp.bid, ask: sp.ask, symbol: 'Swissquote', server: '', tickAge: 0,
-                          text: j.ok ? `${j.symbol} at ${j.bid} is not gold: attach the EA to the gold chart` : 'MT5 is not sending prices (attach GexSignalTrader 1.01 to the gold chart)' });
+                          text: j.ok ? `${j.symbol} at ${j.bid} is not gold: attach the EA to the gold chart` : 'MT5 is not sending prices (attach GexSignalTrader 1.08 to the gold chart)' });
       useRef(sp.bid, 'sq');
     } else { BK.ok = false; BK.text = `no price from this PC (MT5 off, Swissquote ${sp.error || 'stale'})`; BK.retry = Date.now() + 10e3; }
   } catch (e) { BK.ok = false; BK.text = 'the agent is not running: start start_gex.bat'; BK.retry = Date.now() + 30e3; }
@@ -1339,7 +1558,11 @@ function syncUi() {
   document.body.classList.toggle('guide', S.signals);         // the guide takes the left 336 px; the chart starts after it
   for (const b of $('tfs').children) b.classList.toggle('on', b.dataset.tf === S.tf);
   $('bZones').classList.toggle('on', S.zones); $('bProfile').classList.toggle('on', S.profile); $('bSignals').classList.toggle('on', S.signals);
+  $('bPast').classList.toggle('on', S.pastDrawings); $('bPast').textContent = S.pastDrawings ? 'Past days on' : 'Past days off';
+  $('bPast').style.display = H.on ? '' : 'none';
   $('bAbs').classList.toggle('on', S.abs); $('bGld').classList.toggle('on', S.gld);
+  $('bTwk').classList.toggle('on', S.twk); $('bTwk').textContent = S.twk ? 'TWK on' : 'TWK off';
+  $('twkPanel').style.display = S.twk ? 'block' : 'none';
   $('bGld').style.display = INS.options ? '' : 'none';                                      // GLD options: gold only
   $('bFull').classList.toggle('on', !!full); $('bFull').textContent = full ? 'Exit full screen' : 'Full screen';
   $('bMt5').style.display = INS.mt5 ? '' : 'none';                                        // the EA trades gold only
@@ -1516,6 +1739,28 @@ function hline(x0, x1, y, color, dash, width) {
   ctx.beginPath(); ctx.moveTo(x0, Math.round(y) + 0.5); ctx.lineTo(x1, Math.round(y) + 0.5); ctx.stroke(); ctx.setLineDash([]);
 }
 
+let twkChartKey = '', twkChartData = null, twkMtfKey = '', twkMtfData = null;
+function twkModel(c) {
+  if (!c.length) return null;
+  const first = c[0], last = c[c.length - 1];
+  const chartKey = [S.tf, c.length, first.t, last.t, last.o, last.h, last.l, last.c, last.v].join('|');
+  if (chartKey !== twkChartKey) {
+    twkChartKey = chartKey;
+    twkChartData = TWKTracker.chartSeries(c);
+  }
+  const closed = D.m1.length > 1 ? D.m1[D.m1.length - 2] : null;
+  const oldH = H.m1.length ? H.m1[0] : null, lastH = H.m1.length ? H.m1[H.m1.length - 1] : null;
+  const mtfKey = [H.m1.length, oldH && oldH.t, lastH && lastH.t, H.closed, D.m1.length, D.m1Full,
+    closed && closed.t, closed && closed.o, closed && closed.c, closed && closed.v].join('|');
+  if (mtfKey !== twkMtfKey) {
+    twkMtfKey = mtfKey;
+    twkMtfData = TWKTracker.mtfTable(allM1(true));
+  }
+  twkChartData.mtf = twkMtfData;
+  twkChartData.version = `${chartKey}|${mtfKey}|${S.light}`;
+  return twkChartData;
+}
+
 function render() {
   const L = layout(), P = pal(), c = chartCandles(), n = c.length;
   ctx.fillStyle = P.bg; ctx.fillRect(0, 0, L.W, L.H);
@@ -1570,15 +1815,18 @@ function render() {
   // trading days on screen (18:00 to 18:00 New York): the picked day lightly tinted, gold's weekend days greyed
   const tFirst = c[first].t, tLast = c[last].t + tfMs, gold = INS_ID === 'XAUUSD';
   const visDays = allDays().filter(d => d.end > tFirst && d.start < tLast);
+  const dayIsToday = t => !!H.today && t >= H.today.start && t < H.today.end;
+  const showDayDrawings = d => S.pastDrawings || d === H.today;
   for (const d of visDays) {
     const xa = clamp(xAt(d.start), 0, L.chartW), xb = clamp(xAt(d.end), 0, L.chartW);
-    if (d === H.viewDay) { ctx.fillStyle = rgba(P.blue, S.light ? 0.05 : 0.07); ctx.fillRect(xa, L.y0, xb - xa, L.y1 - L.y0); }
+    if (d === H.viewDay && showDayDrawings(d)) { ctx.fillStyle = rgba(P.blue, S.light ? 0.05 : 0.07); ctx.fillRect(xa, L.y0, xb - xa, L.y1 - L.y0); }
     else if (d.weekend && gold) { ctx.fillStyle = rgba(P.grey, 0.07); ctx.fillRect(xa, L.y0, xb - xa, L.y1 - L.y0); }
   }
   const dayStarts = [];                                          // where a new trading day begins (also without the archive)
   for (let s = E.sessionStart(tLast); s > tFirst && dayStarts.length < 400; s = E.sessionStart(s - 60e3))
     if (!(INS.hours && dayMeta(s, s + 864e5).weekend)) dayStarts.push(s);   // gold: no trading day on Saturday or Sunday
   for (const s of dayStarts) {
+    if (!S.pastDrawings && !dayIsToday(s)) continue;
     const x = Math.round(xAt(s)) + 0.5;
     if (x <= 1 || x >= L.chartW - g.reserve) continue;
     ctx.strokeStyle = rgba(P.grey, 0.55); ctx.lineWidth = 1; ctx.setLineDash([5, 4]);
@@ -1586,10 +1834,10 @@ function render() {
   }
 
   // sell zones (red) and buy zones (green); paler once price has come back into them
-  const zs = S.zones ? zonesShown() : [];
+  const zs = S.zones ? zonesShown() : [];                     // keep every active zone; the past-days toggle is for history only
   // past zones: drawn from the swing candle over the time the page listed them, paler after the first test.
   // Zones still alive that the live list above already draws are skipped.
-  const hz = S.zones && H.zones.length ? H.zones.filter(z => z.t < tLast && z.shown[z.shown.length - 1][1] > tFirst &&
+  const hz = S.zones && H.zones.length ? H.zones.filter(z => (S.pastDrawings || dayIsToday(z.t)) && z.t < tLast && z.shown[z.shown.length - 1][1] > tFirst &&
     !(z.shown[z.shown.length - 1][1] === Infinity && zs.some(y => y.type === z.type && y.t === z.t))) : [];
   const xRight = L.chartW - g.reserve;
   for (const z of hz) {
@@ -1627,7 +1875,9 @@ function render() {
   // built on fixed rows (updateProfile); zooming out only groups those rows into taller bars, at least 2 px each.
   // Looking at a past day, the strip shows that whole day's profile instead of today's.
   const pfs = vDay ? vDay.path.final : Pf;
-  if (S.profile && pfs) {
+  const pfsStart = vDay ? vDay.start : pfs && pfs.from;
+  const showProfile = S.profile && pfs && (S.pastDrawings || (!!H.today && pfsStart === H.today.start));
+  if (showProfile) {
     const maxW = g.reserve - 4, m = Math.max(1, Math.ceil(2 / (pfs.step * ppd))), hh = m * pfs.step, bars = new Map();
     for (const r of pfs.rows) {
       const key = Math.floor(Math.round(r.p / pfs.step) / m);
@@ -1653,6 +1903,15 @@ function render() {
     ctx.fillRect(x - bw / 2, Math.min(yo, yc), bw, Math.max(1, Math.abs(yc - yo)));
   }
 
+  // Optional port of the user's trade_with_kareena Tracker Pine indicator.
+  if (S.twk) {
+    const twk = twkModel(c);
+    if (twk) {
+      TWKTracker.draw(ctx, twk, { c, first, last, cw, xOf, yOf, basis: b, right: g.x1, dec: INS.dec });
+      TWKTracker.updateTable($('twkTable'), twk, S.light, twk.version);
+    }
+  }
+
   // market closed between two candles (gold's weekend): a grey band where the time jumps
   const gaps = [];
   for (let i = Math.max(1, first); i <= last; i++) if (c[i].t - c[i - 1].t >= 6 * 36e5) {
@@ -1665,6 +1924,7 @@ function render() {
   // from the old POC to the new one, and a dot at the POC of the three check times of the day
   const dots = [], tags = [];
   if (S.profile) for (const d of visDays) {
+    if (!showDayDrawings(d)) continue;
     const pa = d.path;
     if (!pa || !pa.poc.length) continue;
     const tEnd = d === H.today ? c[n - 1].t + tfMs : d.end, wide = xAt(tEnd) - xAt(d.start) >= 170;   // room for the small labels
@@ -1713,10 +1973,11 @@ function render() {
   };
   ctx.font = '600 11px system-ui, "Segoe UI", sans-serif';
   for (const d of visDays) {
+    if (!showDayDrawings(d)) continue;
     const xa = Math.max(2, xAt(d.start) + 5), xb = Math.min(L.chartW - g.reserve, xAt(d.end)), pa = d.path;
     if (xb - xa < 40) continue;
     let text = d === H.today ? `Today ${d.label}` : d.label;
-    const cps = pa ? CHECKS.filter(k => pa.at[k.key]).map(k => gp(pa.at[k.key].poc)) : [];
+    const cps = showDayDrawings(d) && pa ? CHECKS.filter(k => pa.at[k.key]).map(k => gp(pa.at[k.key].poc)) : [];
     if (cps.length && xb - xa > ctx.measureText(text + ' · POC ' + cps.join(' → ')).width + 12) text += ' · POC ' + cps.join(' → ');
     label(text, xa, L.y0 + 13, L.y0 + 13, d === H.viewDay ? P.blue : P.strong, rgba(P.bg, 0.75));
   }
@@ -1749,7 +2010,7 @@ function render() {
   };
   for (const lv of levels()) level(lv.p, lv.text, P[lv.color], '#fff', 'gld', y => hline(0, L.chartW, y, P[lv.color], lv.dash, lv.dash[0] > 4 ? 1.4 : 1));
   for (const a of ALERTS) if (!a.hit) level(a.p, 'Alert' + (a.note ? ' · ' + a.note : ''), P.orange, '#111', 'alert', y => hline(0, L.chartW, y, P.orange, [6, 4], 1.4));
-  if (S.profile && pfs) {
+  if (showProfile) {
     // the day's final levels, each line from the moment it last changed (the step line shows how it got there)
     const dp = vDay ? vDay.path : H.today && H.today.path && H.today.path.poc.length ? H.today.path : null, tag = vDay ? ' ' + vDay.label : '';
     const since = arr => clamp(arr && arr.length ? xAt(arr[arr.length - 1].t) : xOfTime(pfs.from), 0, L.chartW - 40);
@@ -2050,7 +2311,9 @@ for (const tf of Object.keys(TF)) {
   $('tfs').appendChild(b);
 }
 $('bZones').onclick = () => set('zones', !S.zones);
+$('bPast').onclick = () => set('pastDrawings', !S.pastDrawings);
 $('bAbs').onclick = () => set('abs', !S.abs);
+$('bTwk').onclick = () => set('twk', !S.twk);
 $('bGld').onclick = () => set('gld', !S.gld);
 $('bProfile').onclick = () => set('profile', !S.profile);
 // Guide panel: one click handler for every link in it, because its contents are rebuilt while the page runs.
@@ -2066,7 +2329,6 @@ $('sig').addEventListener('click', e => {
   else if (act === 'pocAlert') set('pocAlert', !S.pocAlert);
   else if (act === 'testAlarm') testAlarm();
   else if (act === 'balance') { const v = parseFloat(prompt('Account balance in USD, for the stop-size check:', S.balance)); if (v > 0) set('balance', v); }
-  else if (act === 'mt5Test') { if (confirm('Place a small test BUY on the MT5 demo account now?\nStop 5 $ away, target 10 $ away; the EA sets the lot size.')) sendToMt5({ test: 'buy' }); }
   else if (act === 'clear') { if (confirm('Delete the stored results?')) { LOG.length = 0; store.set(sk('siglog'), LOG); drawSig(); view.dirty = true; } }
   else if (act === 'match') matchPrice();
   else if (act === 'unmatch') unmatchPrice();
@@ -2130,9 +2392,25 @@ $('bAlarm').onclick = () => {                                  // not armed befo
   else if (armedBefore) { silence(); set('alarm', false); }
   else testAlarm();
 };
+$('bTradeTest').onclick = () => showTradeTaken({ text: 'This is only a sound test. No MT5 order was sent.' }, true);
 $('alert').onclick = dismiss;
+$('tradeTakenSilence').onclick = dismissTradeTaken;
+$('tradeTakenEnable').onclick = () => playTradeAudio().then(playing => { $('tradeTakenEnable').hidden = playing; });
+$('tradeTakenVolume').value = String(Math.round(S.tradeVolume * 100));
+$('tradeTakenVolumeValue').textContent = `${Math.round(S.tradeVolume * 100)}%`;
+$('tradeTakenVolume').addEventListener('input', e => {
+  S.tradeVolume = Math.max(0, Math.min(1, Number(e.target.value) / 100));
+  tradeAudio.volume = S.tradeVolume;
+  $('tradeTakenVolumeValue').textContent = `${Math.round(S.tradeVolume * 100)}%`;
+  store.set('tradeVolume', S.tradeVolume);
+});
+window.addEventListener('keydown', e => { if (e.key === 'Escape' && tradeAlertOpen) dismissTradeTaken(); });
 $('bPx').onclick = () => { set('bpx', !S.bpx); BK.ok = false; D.bk = null; BK.retry = 0; BK.text = S.bpx ? 'connecting' : 'off'; syncBpx(); if (S.bpx) loadBroker(); else loadRef(); };
-$('bMt5').onclick = () => { set('mt5', !S.mt5); MT.ok = false; MT.text = S.mt5 ? 'connecting…' : 'off'; syncMt5(); pollMt5(); };
+$('bMt5').onclick = () => {
+  S.mt5 = !S.mt5; store.set('twkAuto', S.mt5); MT.ok = false; MT.ready = S.mt5 ? null : false;
+  if (!S.mt5) { mt5Queue.length = 0; MT.waitingId = 0; }
+  MT.text = S.mt5 ? 'connecting…' : 'off'; syncMt5(); pollMt5();
+};
 for (const type of ['pointerdown', 'keydown']) window.addEventListener(type, () => { armedBefore = armed(); if (S.alarm && !armed()) arm(); }, true);
 $('bLight').onclick = () => set('light', !S.light);
 $('bReset').onclick = fit;

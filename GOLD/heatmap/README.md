@@ -297,6 +297,8 @@ earlier days can be read the way the page showed them at the time.
   buy / sell zones are drawn from their swing candle until a candle closed through them (or a newer zone over
   the same prices took over), pale after their first test. On a past day the profile strip on the right shows
   that whole day's profile, labelled with its date.
+- **Past drawings switch**: hiding past-day drawings does not hide an active buy / sell zone just because its
+  swing candle was on an earlier day. The live guide and the chart continue to show the same active zones.
 - **Days tab** (left panel, next to Guide): the day's open / high / low / last, the POC with its value area
   and where price was at **Asia 03:00, London 08:30 and Close 17:00 New York** (13:30, 19:00 and 03:30 in
   India in winter), every POC shift, every zone made that day (formed, tested, closed through), and the list
@@ -351,7 +353,7 @@ plan has OI / IV / gamma (24 h delayed) but 100 credits a day at 1 credit per co
 
 `Price: spot` (now `Price: gold-api`) moves the candles to spot gold (gold-api.com) as before. `Price: MT5` moves them to the **bid of
 the gold chart in MetaTrader 5** instead, so the price, zones and alerts on the page are at your broker's level:
-GexSignalTrader **1.01** writes `gex_price.txt` (bid, ask, tick age) to the common files folder every second,
+GexSignalTrader **1.08** writes `gex_price.txt` (bid, ask, tick age) to the common files folder every second,
 the agent serves it on `GET http://127.0.0.1:8791/price` (no token: read-only), and the page polls it every
 2 s. Only the level is the broker's: the candles keep Binance's shape and volume (a broker has no real volume),
 so a candle can be a few tenths off the broker's own. If MT5 or the agent stops, the page goes back to spot
@@ -366,30 +368,42 @@ gold_gex.html --POST--> gex_agent.cjs --file--> GexSignalTrader EA in MT5 --> or
               <--status--               <--file--
 ```
 
+This bridge is TWK-only: GEX guide signals remain visible but are never passed to the EA. Only a newly closed 15-minute TWK LONG / SHORT signal with ADX(14, 14) above 20 is eligible, at exactly 0.01 lots. The page, agent and EA each reject GEX and test orders. A page opened from a local file starts with TWK auto off; click **TWK auto off** only after the EA status says it is ready.
+
 One-time setup in MetaTrader 5 (the account must already be logged in; no password is needed anywhere here):
+
+Before attaching the EA, copy the updated `mt5/GexSignalTrader.mq5` into MT5's `MQL5\Experts\GEX\` folder and compile it in MetaEditor. Remove an older EA from the chart before attaching the newly compiled one.
 
 1. Navigator → Expert Advisors → GEX → drag **GexSignalTrader** onto the gold chart (GOLD, GOLD.i#, ...).
 2. In its dialog tick "Allow Algo Trading", then make sure the **Algo Trading** button in the toolbar is green.
 3. Phone alerts (optional): Tools → Options → Notifications, enter the MetaQuotes ID from the MT5 phone app.
 
-Every session: run `start_gex.bat` (page + agent), then click **MT5** on the page so it reads "MT5 on".
-The bottom of the guide panel then shows `MT5: ready, demo account, <symbol>, balance ...` and, after a signal, what the
-EA did. "send a test trade" on that line places one small BUY (stop 5 $, target 10 $) to prove the chain.
+Every session: run `start_gex.bat` (page + agent), keep the page open, and check the page says the EA is ready on a demo account with Algo Trading enabled. If the button says **TWK auto off**, click it once; confirm it reads **TWK auto on**. The choice is saved in this browser, so check the label each time. The bottom of the guide panel shows readiness and, after a qualifying setup, what the EA did. No test orders are available.
+If the agent is reconnecting when a signal appears, the page holds it for up to 120 seconds; after that it reports that
+no order was sent. Turning **TWK auto** off clears any queued signal.
 
-- **What the EA does with a signal:** market order in the signal's direction, stop and target at the same
-  distances as on the page, measured from the broker's own price (bid for a buy, ask for a sell). Lot size
-  from `InpRiskPercent` (1 % of balance by default) or `InpFixedLots`. One GEX trade at a time. Closed at the
-  market after `InpCloseHours` (4). MT5 popup + sound on every action, push to the phone if set up.
+The TWK Tracker adds its own 15-minute path: on a newly closed LONG or SHORT signal, with the page's `TWK auto` switch on,
+the EA sends a fixed 0.01-lot market order with the indicator's stop and 1:2 target distances only if the signal's
+closed 15-minute candle has Wilder ADX(14, 14) above 20. ADX at or below 20, or unavailable ADX, skips the order.
+The page, bridge, and EA all enforce this gate and reject every non-TWK signal. An opposite qualifying TWK signal closes the existing TWK position
+before opening the new side; same-direction signals do not add another position. TWK trades stay open until the stop,
+target, or opposite signal (no four-hour timeout); only one TWK trade can be open on this symbol at a time. The EA
+rejects a TWK order if the broker does not support exactly 0.01 lots.
+
+- **What the EA does with a TWK signal:** market order in the signal's direction, stop and target distances
+  from the TWK position box, anchored to the entry-side quote and adjusted from MT5's actual fill. Fixed at
+  0.01 lots; an opposite qualifying TWK signal closes and reverses the position. MT5 popup + sound on every
+  action, push to the phone if set up.
 - **What it refuses:** a real account (unless `InpAllowReal`), a signal older than 120 s, a spread above
   `InpMaxSpread` (1.00), a second trade while one is open, Algo Trading off. `InpDryRun` reports what it
   would do without placing an order.
 - **Safety:** the agent listens on 127.0.0.1 only and every request needs the token in `gex_agent_info.js`,
   which other web sites cannot read. The agent never places orders; it only writes
-  `Common\Files\gex_signal.txt` (one line: `id;BUY|SELL;entry;stop;target;score;sent`). The EA answers in
+  `Common\Files\gex_signal.txt` (one line: `id;BUY|SELL;entry;stop;target;score;sent[;lots;source;adx]`). The EA answers in
   `gex_status.txt` and writes a heartbeat to `gex_ea.txt` every 5 s. Sent signals are logged in
   `mt5_signals.log`.
-- Source: `mt5/GexSignalTrader.mq5` (copy in the terminal's `MQL5\Experts\GEX\`, compiled 0 errors).
-  `node gex_agent.cjs --test buy` sends a test signal from the command line.
+- Source: `mt5/GexSignalTrader.mq5` (copy in the terminal's `MQL5\Experts\GEX\` and compile it in MetaEditor).
+  The page and agent accept TWK 15m setup orders only; no GEX or test order can pass through.
 
 The score counts agreement. It is not a win probability.
 
